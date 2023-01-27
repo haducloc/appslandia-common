@@ -84,7 +84,7 @@ try (ConnectionImpl connScoped = new ConnectionImpl(javax.sql.DataSource)) {
 ```
 ### System.getProperty & getenv
 ```java
- String password = SYS.resolveExpr("${db.password, env.DB_PASSWORD:default_password}")
+ String password = SYS.resolve("${db.password, env.DB_PASSWORD:default_password}")
  // resolving order:  System.getProperty("db.password"),  System.getenv("DB_PASSWORD"), 'default_password'
 ```
 ### Geography

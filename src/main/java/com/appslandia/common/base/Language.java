@@ -213,7 +213,7 @@ public class Language extends InitializeObject {
 	    return __provider.get();
 	}
 	try {
-	    String implName = SYS.resolveExpr("${language_impl,env.LANGUAGE_IMPL}");
+	    String implName = SYS.resolve("${language_impl,env.LANGUAGE_IMPL}");
 	    if (implName == null) {
 		return EN_US;
 	    }

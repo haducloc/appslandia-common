@@ -74,7 +74,7 @@ public interface Config {
 
 	    // SYS
 	    if (resolvedValue == null) {
-		resolvedValue = SYS.resolveExpr(expr);
+		resolvedValue = SYS.resolve(expr);
 	    }
 	    return (resolvedValue != null) ? resolvedValue : StringFormat.MISSED_VALUE;
 	});
@@ -104,7 +104,7 @@ public interface Config {
 
 	    // SYS
 	    if (resolvedValue == null) {
-		resolvedValue = SYS.resolveExpr(expr);
+		resolvedValue = SYS.resolve(expr);
 	    }
 	    return (resolvedValue != null) ? resolvedValue : StringFormat.MISSED_VALUE;
 	});
@@ -139,7 +139,7 @@ public interface Config {
 
 	    // SYS
 	    if (resolvedValue == null) {
-		resolvedValue = SYS.resolveExpr(expr);
+		resolvedValue = SYS.resolve(expr);
 	    }
 
 	    return (resolvedValue != null) ? resolvedValue : StringFormat.MISSED_VALUE;

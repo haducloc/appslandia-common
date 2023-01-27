@@ -82,7 +82,7 @@ public class SYS {
 	}
 	return StringFormat.format(str, (p, expr) -> {
 	    // SYS
-	    String resolvedValue = resolveExpr(expr);
+	    String resolvedValue = resolve(expr);
 
 	    return (resolvedValue != null) ? resolvedValue : StringFormat.MISSED_VALUE;
 	});
@@ -98,7 +98,7 @@ public class SYS {
 
 	    // SYS
 	    if (resolvedValue == null) {
-		resolvedValue = resolveExpr(expr);
+		resolvedValue = resolve(expr);
 	    }
 	    return (resolvedValue != null) ? resolvedValue : StringFormat.MISSED_VALUE;
 	});
@@ -124,7 +124,7 @@ public class SYS {
 
 	    // SYS
 	    if (resolvedValue == null) {
-		resolvedValue = resolveExpr(expr);
+		resolvedValue = resolve(expr);
 	    }
 	    return (resolvedValue != null) ? resolvedValue : StringFormat.MISSED_VALUE;
 	});
@@ -140,7 +140,7 @@ public class SYS {
     private static final Pattern ENV_VAL_EXPR_PATTERN = Pattern.compile("[^\\s,:]+(\\s*,\\s*env.[^\\s,:]+\\s*)?(\\s*:\\s*[^\\s]+){0,1}", Pattern.CASE_INSENSITIVE);
     private static final Pattern ENV_VAL_HOLDER_PATTERN = Pattern.compile("\\$\\{[^}]*}");
 
-    public static String resolveExpr(String valueOrExpr) throws IllegalArgumentException {
+    public static String resolve(String valueOrExpr) throws IllegalArgumentException {
 	AssertUtils.assertNotNull(valueOrExpr);
 
 	if (!ENV_VAL_HOLDER_PATTERN.matcher(valueOrExpr).matches()) {
@@ -151,10 +151,10 @@ public class SYS {
 	if ((expr == null) || !ENV_VAL_EXPR_PATTERN.matcher(expr).matches())
 	    throw new IllegalArgumentException("Invalid expression: " + expr);
 
-	return resolve(expr);
+	return doResolve(expr);
     }
 
-    private static String resolve(String expr) {
+    private static String doResolve(String expr) {
 	int commaIdx = expr.indexOf(',');
 	if (commaIdx < 0) {
 	    String defaultValue = null;

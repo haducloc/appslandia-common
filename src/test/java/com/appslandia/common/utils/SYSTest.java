@@ -34,7 +34,7 @@ public class SYSTest {
     public void test_prop() {
 	try {
 	    System.setProperty("__sys__test__password__", "12345");
-	    String resolvedValue = SYS.resolveExpr("${__sys__test__password__}");
+	    String resolvedValue = SYS.resolve("${__sys__test__password__}");
 
 	    Assertions.assertNotNull(resolvedValue);
 	    Assertions.assertEquals("12345", resolvedValue);
@@ -50,7 +50,7 @@ public class SYSTest {
     @Test
     public void test_prop_novalue() {
 	try {
-	    String resolvedValue = SYS.resolveExpr("${__sys__test__password__}");
+	    String resolvedValue = SYS.resolve("${__sys__test__password__}");
 	    Assertions.assertNull(resolvedValue);
 
 	} catch (Exception ex) {
@@ -62,7 +62,7 @@ public class SYSTest {
     @Test
     public void test_prop_default() {
 	try {
-	    String resolvedValue = SYS.resolveExpr("${__sys__test__password__:12345}");
+	    String resolvedValue = SYS.resolve("${__sys__test__password__:12345}");
 
 	    Assertions.assertNotNull(resolvedValue);
 	    Assertions.assertEquals("12345", resolvedValue);
@@ -78,7 +78,7 @@ public class SYSTest {
 	    return;
 	}
 	try {
-	    String resolvedValue = SYS.resolveExpr("${env.TMP}");
+	    String resolvedValue = SYS.resolve("${env.TMP}");
 	    Assertions.assertNotNull(resolvedValue);
 
 	} catch (Exception ex) {
@@ -89,7 +89,7 @@ public class SYSTest {
     @Test
     public void test_env_novalue() {
 	try {
-	    String resolvedValue = SYS.resolveExpr("${env.__SYS__TEST__TMP__}");
+	    String resolvedValue = SYS.resolve("${env.__SYS__TEST__TMP__}");
 	    Assertions.assertNull(resolvedValue);
 
 	} catch (Exception ex) {
@@ -101,7 +101,7 @@ public class SYSTest {
     @Test
     public void test_env_default() {
 	try {
-	    String resolvedValue = SYS.resolveExpr("${env.__SYS__TEST__TMP__:/upload}");
+	    String resolvedValue = SYS.resolve("${env.__SYS__TEST__TMP__:/upload}");
 
 	    Assertions.assertNotNull(resolvedValue);
 	    Assertions.assertEquals("/upload", resolvedValue);
@@ -118,7 +118,7 @@ public class SYSTest {
 	    return;
 	}
 	try {
-	    String resolvedValue = SYS.resolveExpr("${__sys__test__tmp__,env.TMP}");
+	    String resolvedValue = SYS.resolve("${__sys__test__tmp__,env.TMP}");
 	    Assertions.assertNotNull(resolvedValue);
 
 	} catch (Exception ex) {
@@ -130,7 +130,7 @@ public class SYSTest {
     @Test
     public void test_prop_env_default() {
 	try {
-	    String resolvedValue = SYS.resolveExpr("${__sys__test__tmp__,env.__SYS__TEST__TMP__:/upload}");
+	    String resolvedValue = SYS.resolve("${__sys__test__tmp__,env.__SYS__TEST__TMP__:/upload}");
 	    Assertions.assertNotNull(resolvedValue);
 	    Assertions.assertEquals("/upload", resolvedValue);
 

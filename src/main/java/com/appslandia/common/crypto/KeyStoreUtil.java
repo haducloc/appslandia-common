@@ -140,7 +140,7 @@ public class KeyStoreUtil extends InitializeObject {
 	assertNotInitialized();
 
 	if (passwordOrEnv != null) {
-	    String resolvedValue = SYS.resolveExpr(passwordOrEnv);
+	    String resolvedValue = SYS.resolve(passwordOrEnv);
 	    this.password = resolvedValue.toCharArray();
 	}
 	return this;
@@ -170,7 +170,7 @@ public class KeyStoreUtil extends InitializeObject {
 	assertNotInitialized();
 
 	if (passwordOrEnv != null) {
-	    String resolvedValue = SYS.resolveExpr(passwordOrEnv);
+	    String resolvedValue = SYS.resolve(passwordOrEnv);
 	    this.protectionParameter = new KeyStore.PasswordProtection(resolvedValue.toCharArray());
 	}
 	return this;

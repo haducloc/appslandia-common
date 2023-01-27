@@ -127,7 +127,7 @@ public class DeployEnv {
 
     @SuppressWarnings("el-syntax")
     private static DeployEnv initDeployEnv() {
-	String env = SYS.resolveExpr("${deploy_env,env.DEPLOY_ENV:Development}");
+	String env = SYS.resolve("${deploy_env,env.DEPLOY_ENV:Development}");
 	return getDeployEnv(env);
     }
 

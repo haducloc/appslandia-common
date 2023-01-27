@@ -124,7 +124,7 @@ public class MacDigester extends InitializeObject implements Digester {
 	this.assertNotInitialized();
 
 	if (secretOrEnv != null) {
-	    String resolvedValue = SYS.resolveExpr(secretOrEnv);
+	    String resolvedValue = SYS.resolve(secretOrEnv);
 	    this.secret = resolvedValue.getBytes(StandardCharsets.UTF_8);
 	}
 	return this;

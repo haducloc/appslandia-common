@@ -103,7 +103,7 @@ public abstract class PbeObject extends InitializeObject {
 	this.assertNotInitialized();
 
 	if (passwordOrEnv != null) {
-	    String resolvedValue = SYS.resolveExpr(passwordOrEnv);
+	    String resolvedValue = SYS.resolve(passwordOrEnv);
 	    this.password = resolvedValue.toCharArray();
 	}
 	return this;
