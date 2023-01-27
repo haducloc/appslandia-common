@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 public class SYSTest {
 
     @Test
-    public void test_prop() {
+    public void test_resolve_prop() {
 	try {
 	    System.setProperty("__sys__test__password__", "12345");
 	    String resolvedValue = SYS.resolve("${__sys__test__password__}");
@@ -48,7 +48,7 @@ public class SYSTest {
     }
 
     @Test
-    public void test_prop_novalue() {
+    public void test_resolve_prop_novalue() {
 	try {
 	    String resolvedValue = SYS.resolve("${__sys__test__password__}");
 	    Assertions.assertNull(resolvedValue);
@@ -60,7 +60,7 @@ public class SYSTest {
 
     @SuppressWarnings("el-syntax")
     @Test
-    public void test_prop_default() {
+    public void test_resolve_prop_default() {
 	try {
 	    String resolvedValue = SYS.resolve("${__sys__test__password__:12345}");
 
@@ -73,7 +73,7 @@ public class SYSTest {
     }
 
     @Test
-    public void test_env() {
+    public void test_resolve_env() {
 	if (System.getenv("TMP") == null) {
 	    return;
 	}
@@ -87,7 +87,7 @@ public class SYSTest {
     }
 
     @Test
-    public void test_env_novalue() {
+    public void test_resolve_env_novalue() {
 	try {
 	    String resolvedValue = SYS.resolve("${env.__SYS__TEST__TMP__}");
 	    Assertions.assertNull(resolvedValue);
@@ -99,7 +99,7 @@ public class SYSTest {
 
     @SuppressWarnings("el-syntax")
     @Test
-    public void test_env_default() {
+    public void test_resolve_env_default() {
 	try {
 	    String resolvedValue = SYS.resolve("${env.__SYS__TEST__TMP__:/upload}");
 
@@ -113,7 +113,7 @@ public class SYSTest {
 
     @SuppressWarnings("el-syntax")
     @Test
-    public void test_prop_env() {
+    public void test_resolve_prop_env() {
 	if (System.getenv("TMP") == null) {
 	    return;
 	}
@@ -128,7 +128,7 @@ public class SYSTest {
 
     @SuppressWarnings("el-syntax")
     @Test
-    public void test_prop_env_default() {
+    public void test_resolve_prop_env_default() {
 	try {
 	    String resolvedValue = SYS.resolve("${__sys__test__tmp__,env.__SYS__TEST__TMP__:/upload}");
 	    Assertions.assertNotNull(resolvedValue);
