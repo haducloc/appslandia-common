@@ -84,6 +84,13 @@ public class NormalizeUtils {
 
     private static final Pattern[] WTSP_PATTERNS = PatternUtils.compile("\\s+");
 
+    public static String normalizeString(String simpleStr) {
+	if (simpleStr == null)
+	    return null;
+
+	return normalize(simpleStr, WTSP_PATTERNS, " ");
+    }
+
     public static String removeSp(String str) {
 	if (str == null) {
 	    return null;
