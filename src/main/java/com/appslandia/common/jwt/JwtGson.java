@@ -32,7 +32,10 @@ import com.google.gson.GsonBuilder;
 public class JwtGson {
 
     public static GsonBuilder newGsonBuilder() {
-	return GsonProcessor.newBuilder().registerTypeAdapter(JwtHeader.class, new GsonMapDeserializer<>((m) -> new JwtHeader(m))).registerTypeAdapter(JwtPayload.class,
-		new GsonMapDeserializer<>((m) -> new JwtPayload(m)));
+	// @formatter:off
+	return GsonProcessor.newBuilder()
+		.registerTypeAdapter(JwtHeader.class, new GsonMapDeserializer<>((m) -> new JwtHeader(m)))
+		.registerTypeAdapter(JwtPayload.class, new GsonMapDeserializer<>((m) -> new JwtPayload(m)));
+	// @formatter:on
     }
 }
