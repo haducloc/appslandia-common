@@ -22,7 +22,6 @@ package com.appslandia.common.junit.jpa;
 
 import java.io.Serializable;
 
-import jakarta.inject.Inject;
 import jakarta.interceptor.InvocationContext;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -35,11 +34,12 @@ import jakarta.transaction.Transactional.TxType;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
+// @Transactional(value = TxType)
+// @Interceptor
 public abstract class TestTxInterceptor implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Inject
-    protected TestEmfControl testEmfControl;
+    protected abstract TestEmfControl getTestEmfControl();
 
     public Object doTran(InvocationContext context) throws Exception {
 
@@ -197,7 +197,7 @@ public abstract class TestTxInterceptor implements Serializable {
     }
 
     protected EntityManager getEm() {
-	if (this.testEmfControl.isSharedEmf()) {
+	if (this.getTestEmfControl().isSharedEmf()) {
 	    return SharedEmfTestEntityManagerExtension.emHolder.get();
 	} else {
 	    return TestEntityManagerExtension.emHolder.get();
@@ -205,7 +205,7 @@ public abstract class TestTxInterceptor implements Serializable {
     }
 
     protected EntityManager storeNewEm() {
-	if (this.testEmfControl.isSharedEmf()) {
+	if (this.getTestEmfControl().isSharedEmf()) {
 	    return SharedEmfTestEntityManagerExtension.newEntityManager();
 	} else {
 	    return TestEntityManagerExtension.newEntityManager();
@@ -213,7 +213,7 @@ public abstract class TestTxInterceptor implements Serializable {
     }
 
     protected void setEm(EntityManager em) {
-	if (this.testEmfControl.isSharedEmf()) {
+	if (this.getTestEmfControl().isSharedEmf()) {
 	    SharedEmfTestEntityManagerExtension.emHolder.set(em);
 	} else {
 	    TestEntityManagerExtension.emHolder.set(em);
