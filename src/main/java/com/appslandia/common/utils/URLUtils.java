@@ -23,6 +23,7 @@ package com.appslandia.common.utils;
 import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -67,6 +68,18 @@ public class URLUtils {
 	    if (subVal != null) {
 		sb.append(URLEncoding.encodeParam(subVal.toString()));
 	    }
+	}
+    }
+
+    public static String validQueryOrNull(String queryString) {
+	if (queryString == null)
+	    return queryString;
+	try {
+	    Map<String, Object> params = URLUtils.parseParams(queryString, new LinkedHashMap<>());
+	    return URLUtils.toQueryParams(params);
+
+	} catch (IllegalArgumentException ex) {
+	    return null;
 	}
     }
 
