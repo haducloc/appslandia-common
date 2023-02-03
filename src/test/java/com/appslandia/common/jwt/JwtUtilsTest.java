@@ -20,13 +20,11 @@
 
 package com.appslandia.common.jwt;
 
-import java.util.Arrays;
 import java.util.Date;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.DateUtils;
 
 /**
@@ -45,31 +43,5 @@ public class JwtUtilsTest {
 
 	Assertions.assertEquals("2010-10-10T10:10:10.000", DateUtils.iso8601DateTime(restoredDate));
 	Assertions.assertEquals((dt.getTime() / 1000) * 1000, restoredDate.getTime());
-    }
-
-    @Test
-    public void test_isSupportedValue() {
-	// Basic Types
-	Assertions.assertTrue(JwtUtils.isSupportedValue(1));
-	Assertions.assertTrue(JwtUtils.isSupportedValue(1L));
-	Assertions.assertTrue(JwtUtils.isSupportedValue(1d));
-	Assertions.assertTrue(JwtUtils.isSupportedValue(true));
-	Assertions.assertTrue(JwtUtils.isSupportedValue("admin"));
-	Assertions.assertTrue(JwtUtils.isSupportedValue(new Date()));
-
-	// Array
-	Assertions.assertTrue(JwtUtils.isSupportedValue(new Object[] { 1, 1L, 1d, true, "admin", new Date() }));
-
-	// List
-	Assertions.assertTrue(JwtUtils.isSupportedValue(Arrays.asList(1, 1L, 1d, true, "admin", new Date())));
-
-	// Map
-	Assertions.assertTrue(JwtUtils.isSupportedValue(CollectionUtils.toMap("1", 1, "1L", 1L, "1d", 1d, "true", true, "admin", "admin", "date", new Date())));
-    }
-
-    @Test
-    public void test_isSupportedValue_invalidMap() {
-	// Key must be String
-	Assertions.assertFalse(JwtUtils.isSupportedValue(CollectionUtils.toMap(1, 1)));
     }
 }

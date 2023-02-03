@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -37,102 +36,6 @@ import java.util.Set;
  *
  */
 public class CollectionUtils {
-
-    public static <K, V> Map<K, V> toMap(K k1, V v1) {
-	return toMap(new HashMap<K, V>(), k1, v1);
-    }
-
-    public static <K, V> Map<K, V> toMap(K k1, V v1, K k2, V v2) {
-	return toMap(new HashMap<K, V>(), k1, v1, k2, v2);
-    }
-
-    public static <K, V> Map<K, V> toMap(K k1, V v1, K k2, V v2, K k3, V v3) {
-	return toMap(new HashMap<K, V>(), k1, v1, k2, v2, k3, v3);
-    }
-
-    public static <K, V> Map<K, V> toMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
-	return toMap(new HashMap<K, V>(), k1, v1, k2, v2, k3, v3, k4, v4);
-    }
-
-    public static <K, V> Map<K, V> toMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
-	return toMap(new HashMap<K, V>(), k1, v1, k2, v2, k3, v3, k4, v4, k5, v5);
-    }
-
-    public static <K, V> Map<K, V> toMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) {
-	return toMap(new HashMap<K, V>(), k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6);
-    }
-
-    public static <K, V> Map<K, V> toMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7) {
-	return toMap(new HashMap<K, V>(), k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7);
-    }
-
-    public static <K, V> Map<K, V> toMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8) {
-	return toMap(new HashMap<K, V>(), k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7, k8, v8);
-    }
-
-    public static <K, V> Map<K, V> toMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9) {
-	return toMap(new HashMap<K, V>(), k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7, k8, v8, k9, v9);
-    }
-
-    public static <K, V> Map<K, V> unmodifiableMap(K k1, V v1) {
-	return ObjectUtils.cast(Collections.unmodifiableMap(toMap(new HashMap<>(), k1, v1)));
-    }
-
-    public static <K, V> Map<K, V> unmodifiableMap(K k1, V v1, K k2, V v2) {
-	return ObjectUtils.cast(Collections.unmodifiableMap(toMap(new HashMap<>(), k1, v1, k2, v2)));
-    }
-
-    public static <K, V> Map<K, V> unmodifiableMap(K k1, V v1, K k2, V v2, K k3, V v3) {
-	return ObjectUtils.cast(Collections.unmodifiableMap(toMap(new HashMap<>(), k1, v1, k2, v2, k3, v3)));
-    }
-
-    public static <K, V> Map<K, V> unmodifiableMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
-	return ObjectUtils.cast(Collections.unmodifiableMap(toMap(new HashMap<>(), k1, v1, k2, v2, k3, v3, k4, v4)));
-    }
-
-    public static <K, V> Map<K, V> unmodifiableMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
-	return ObjectUtils.cast(Collections.unmodifiableMap(toMap(new HashMap<>(), k1, v1, k2, v2, k3, v3, k4, v4, k5, v5)));
-    }
-
-    public static <K, V> Map<K, V> unmodifiableMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) {
-	return ObjectUtils.cast(Collections.unmodifiableMap(toMap(new HashMap<>(), k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6)));
-    }
-
-    public static <K, V> Map<K, V> unmodifiableMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7) {
-	return ObjectUtils.cast(Collections.unmodifiableMap(toMap(new HashMap<>(), k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7)));
-    }
-
-    public static <K, V> Map<K, V> unmodifiableMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8) {
-	return ObjectUtils.cast(Collections.unmodifiableMap(toMap(new HashMap<>(), k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7, k8, v8)));
-    }
-
-    public static <K, V> Map<K, V> unmodifiableMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9) {
-	return ObjectUtils.cast(Collections.unmodifiableMap(toMap(new HashMap<>(), k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7, k8, v8, k9, v9)));
-    }
-
-    public static <K, V> Map<K, V> unmodifiableMap(Object... entries) {
-	return ObjectUtils.cast(Collections.unmodifiableMap(toMap(new HashMap<>(), entries)));
-    }
-
-    public static <K, V> Map<K, V> unmodifiableMap(Map<K, V> m, Object... entries) {
-	return ObjectUtils.cast(Collections.unmodifiableMap(toMap(m, entries)));
-    }
-
-    public static <K, V> Map<K, V> toMap(Object... entries) {
-	return toMap(new HashMap<K, V>(), entries);
-    }
-
-    public static <K, V> Map<K, V> toMap(Map<K, V> m, Object... keyValues) {
-	AssertUtils.assertTrue(keyValues.length % 2 == 0, "keyValues is invalid.");
-
-	for (int i = 0; i < keyValues.length; i += 2) {
-	    K k = ObjectUtils.cast(keyValues[i]);
-	    V v = ObjectUtils.cast(keyValues[i + 1]);
-
-	    m.put(k, v);
-	}
-	return m;
-    }
 
     @SafeVarargs
     public static <V> Set<V> unmodifiableSet(V... elements) {
