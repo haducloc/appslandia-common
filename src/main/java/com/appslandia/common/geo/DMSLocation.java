@@ -53,12 +53,12 @@ public class DMSLocation {
 	return new GeoLocation(this.latitude.toDecimalDegrees(), this.longitude.toDecimalDegrees());
     }
 
-    public String toString(int secondsDecimals) {
-	return STR.fmt("{} {}", this.latitude.toString(secondsDecimals), this.longitude.toString(secondsDecimals));
+    public String toStringDMS(int secondsDecimals) {
+	return STR.fmt("{} {}", this.latitude.toStringDMS(secondsDecimals), this.longitude.toStringDMS(secondsDecimals));
     }
 
     @Override
     public String toString() {
-	return toString(1);
+	return toStringDMS(1);
     }
 }

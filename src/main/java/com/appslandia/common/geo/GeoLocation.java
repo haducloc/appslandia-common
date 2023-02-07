@@ -53,10 +53,6 @@ public class GeoLocation {
 	return new DMSLocation(this.latitude, this.longitude);
     }
 
-    public DMLocation toDMLocation() {
-	return new DMLocation(this.latitude, this.longitude);
-    }
-
     public GeoLocation move(Direction direction, double distance, DistanceUnit unit) {
 	Asserts.notNull(direction);
 	Asserts.notNull(unit);

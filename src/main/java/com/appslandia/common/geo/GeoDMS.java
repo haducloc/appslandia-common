@@ -50,16 +50,7 @@ public class GeoDMS {
     }
 
     GeoDMS(int degrees, int minutes, double seconds, Direction direction) {
-	Asserts.isTrue(degrees >= 0);
-	Asserts.isTrue(minutes >= 0);
-	Asserts.isTrue(seconds >= 0.0d);
-
-	Asserts.notNull(direction);
-
-	this.degrees = degrees;
-	this.minutes = minutes;
-	this.seconds = seconds;
-	this.direction = direction;
+	this(GeoUtils.toDecimalDegrees(degrees, minutes, seconds), direction);
     }
 
     public int getDegrees() {
@@ -87,16 +78,14 @@ public class GeoDMS {
 	return -deg;
     }
 
-    public String toString(int secondsDecimals) {
-	Asserts.isTrue(secondsDecimals >= 0 && secondsDecimals <= 6);
-
-	String secfmt = GeoUtils.format(this.seconds, secondsDecimals);
-	return String.format("%d°%02d'%s\"%s", this.degrees, this.minutes, secfmt, this.direction.symbol());
+    public String toStringDMS(int secondsDecimals) {
+	String fmtSec = GeoUtils.format(this.seconds, secondsDecimals);
+	return String.format("%d°%02d'%s\"%s", this.degrees, this.minutes, fmtSec, this.direction.symbol());
     }
 
     @Override
     public String toString() {
-	return toString(1);
+	return toStringDMS(1);
     }
 
     public static GeoDMS toLatDMS(double latitude) {
