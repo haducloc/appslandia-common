@@ -36,11 +36,11 @@ public class DecimalUtils {
 	    return fixSign(roundedValue, value);
 
 	} catch (NumberFormatException ex) {
-	    if (Double.isInfinite(value)) {
+	    if (Double.isInfinite(value))
 		return value;
-	    } else {
+	    else
 		return Double.NaN;
-	    }
+
 	}
     }
 
@@ -50,11 +50,11 @@ public class DecimalUtils {
 	    return fixSign(roundedValue, value);
 
 	} catch (NumberFormatException ex) {
-	    if (Float.isInfinite(value)) {
+	    if (Float.isInfinite(value))
 		return value;
-	    } else {
+	    else
 		return Float.NaN;
-	    }
+
 	}
     }
 

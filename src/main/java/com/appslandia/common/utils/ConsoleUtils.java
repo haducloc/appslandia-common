@@ -54,11 +54,11 @@ public class ConsoleUtils {
 		if ((obj = __reader) == null) {
 		    Console cons = System.console();
 
-		    if (cons != null) {
+		    if (cons != null)
 			__reader = obj = new Scanner(cons.reader());
-		    } else {
+		    else
 			__reader = obj = new Scanner(System.in);
-		    }
+
 		}
 	    }
 	}
@@ -74,11 +74,11 @@ public class ConsoleUtils {
 		if ((obj = __writer) == null) {
 
 		    Console cons = System.console();
-		    if (cons != null) {
+		    if (cons != null)
 			__writer = obj = cons.writer();
-		    } else {
+		    else
 			__writer = obj = new PrintWriter(System.out, true);
-		    }
+
 		}
 	    }
 	}
@@ -129,9 +129,9 @@ public class ConsoleUtils {
 	    String longStr = String.join(" ", strings);
 	    if (longStr.isEmpty()) {
 
-		if (!required) {
+		if (!required)
 		    return null;
-		} else {
+		else {
 		    invalidValue = true;
 		    continue;
 		}
@@ -171,9 +171,9 @@ public class ConsoleUtils {
 		char[] password = cons.readPassword();
 		if (password.length == 0) {
 
-		    if (!required) {
+		    if (!required)
 			return null;
-		    } else {
+		    else {
 			invalidValue = true;
 			continue;
 		    }
@@ -189,9 +189,9 @@ public class ConsoleUtils {
 		return value;
 	    }
 
-	} else {
+	} else
 	    return readString(promptText, variableName, required, validator);
-	}
+
     }
 
     public static String readPassword2(String promptText, String variableName) {
@@ -231,9 +231,9 @@ public class ConsoleUtils {
 		}
 		return readValue;
 	    }
-	} else {
+	} else
 	    return readString2(promptText, variableName, required, validator);
-	}
+
     }
 
     public static String readString2(String promptText, String variableName) {
@@ -612,9 +612,9 @@ public class ConsoleUtils {
 
 		if (valueStr.isEmpty()) {
 
-		    if (!required) {
+		    if (!required)
 			return null;
-		    } else {
+		    else {
 			invalidValue = true;
 			continue;
 		    }

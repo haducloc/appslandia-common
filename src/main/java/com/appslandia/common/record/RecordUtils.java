@@ -104,11 +104,10 @@ public final class RecordUtils {
 		field.setNullable(nullable);
 		field.setPosition(position);
 
-		if (isKey) {
+		if (isKey)
 		    field.setKeyType(autoIncr ? FieldType.KEY_INCR : FieldType.KEY);
-		} else {
+		else
 		    field.setKeyType(genCol ? FieldType.COL_GEN : FieldType.COL);
-		}
 
 		fields.add(field);
 	    }

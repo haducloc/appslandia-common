@@ -58,11 +58,11 @@ public class DigesterImpl extends InitializeObject implements Digester {
 	Asserts.notNull(this.algorithm, "algorithm is required.");
 
 	// MessageDigest
-	if (this.provider == null) {
+	if (this.provider == null)
 	    this.digest = MessageDigest.getInstance(this.algorithm);
-	} else {
+	else
 	    this.digest = MessageDigest.getInstance(this.algorithm, this.provider);
-	}
+
     }
 
     @Override

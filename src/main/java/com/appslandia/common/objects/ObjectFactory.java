@@ -423,11 +423,11 @@ public class ObjectFactory extends InitializeObject {
 	    if (obj == null)
 		continue;
 
-	    if (inst.definition.getProducer() == null) {
+	    if (inst.definition.getProducer() == null)
 		preDestroy(obj);
-	    } else {
+	    else
 		inst.definition.getProducer().destroy(obj);
-	    }
+
 	    inst.clearInstance();
 	}
     }

@@ -55,11 +55,11 @@ public class ExceptionUtils {
 	sb.append('(');
 	sb.append("message=").append(ex.getMessage());
 	sb.append("; cause=");
-	if (ex.getCause() != null) {
+	if (ex.getCause() != null)
 	    sb.append(ex.getCause().getClass().getName());
-	} else {
+	else
 	    sb.append("null");
-	}
+
 	sb.append(')');
 	return sb.toString();
     }

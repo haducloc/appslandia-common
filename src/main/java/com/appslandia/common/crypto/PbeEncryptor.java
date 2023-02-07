@@ -77,11 +77,11 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	this.mode = trans[1].toUpperCase(Locale.ENGLISH);
 
 	// cipher
-	if (this.provider == null) {
+	if (this.provider == null)
 	    this.cipher = Cipher.getInstance(this.transformation);
-	} else {
+	else
 	    this.cipher = Cipher.getInstance(this.transformation, this.provider);
-	}
+
     }
 
     private boolean isIVSpec() {
@@ -131,11 +131,11 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 
 	try {
 	    synchronized (this.mutex) {
-		if (iv != null) {
+		if (iv != null)
 		    this.cipher.init(Cipher.DECRYPT_MODE, secretKey, buildIvParameter(iv));
-		} else {
+		else
 		    this.cipher.init(Cipher.DECRYPT_MODE, secretKey);
-		}
+
 		return this.cipher.doFinal(message, salt.length, message.length - salt.length);
 	    }
 	} catch (GeneralSecurityException ex) {
@@ -160,11 +160,11 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 
 	try {
 	    synchronized (this.mutex) {
-		if (iv != null) {
+		if (iv != null)
 		    this.cipher.init(Cipher.ENCRYPT_MODE, secretKey, buildIvParameter(iv));
-		} else {
+		else
 		    this.cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-		}
+
 		return this.cipher.doFinal(message);
 	    }
 
@@ -190,11 +190,11 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 
 	try {
 	    synchronized (this.mutex) {
-		if (iv != null) {
+		if (iv != null)
 		    this.cipher.init(Cipher.DECRYPT_MODE, secretKey, buildIvParameter(iv));
-		} else {
+		else
 		    this.cipher.init(Cipher.DECRYPT_MODE, secretKey);
-		}
+
 		return this.cipher.doFinal(message);
 	    }
 	} catch (GeneralSecurityException ex) {

@@ -121,9 +121,8 @@ public class JdbcSql extends InitializeObject implements Serializable {
 	    if (arrayLen != null) {
 		Asserts.isTrue(isArrayParam, () -> STR.fmt("Array parameter '{}' is required.", paramName));
 
-	    } else {
+	    } else
 		arrayLen = DEFAULT_ARRAY_MAX_LENGTH;
-	    }
 
 	    if (isArrayParam)
 		paramsMap.put(paramName.value, arrayLen);
@@ -142,11 +141,11 @@ public class JdbcSql extends InitializeObject implements Serializable {
 		sb.replace(paramIdx, paramEnd.value + 1, "()");
 
 		for (int subIdx = 0; subIdx < arrayLen; subIdx++) {
-		    if (subIdx == 0) {
+		    if (subIdx == 0)
 			sb.insert(paramIdx + 1, '?');
-		    } else {
+		    else
 			sb.insert(paramIdx + 1, "?, ");
-		    }
+
 		    putIndex(indexesMap, toParamName(paramName.value, subIdx), ++index);
 		}
 
@@ -158,11 +157,11 @@ public class JdbcSql extends InitializeObject implements Serializable {
 	    sb.delete(fieldIdx.value, paramEnd.value + 1);
 
 	    for (int subIdx = 0; subIdx < arrayLen; subIdx++) {
-		if (subIdx == 0) {
+		if (subIdx == 0)
 		    sb.insert(fieldIdx.value, String.format("%s LIKE ?", fieldName.value));
-		} else {
+		else
 		    sb.insert(fieldIdx.value, String.format("%s LIKE ? OR ", fieldName.value));
-		}
+
 		putIndex(indexesMap, toParamName(paramName.value, subIdx), ++index);
 	    }
 	    start = fieldIdx.value + 1;

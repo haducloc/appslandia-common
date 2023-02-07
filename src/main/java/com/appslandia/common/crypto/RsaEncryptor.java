@@ -71,21 +71,21 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 
 	// ENCRYPT
 	if (this.publicKey != null) {
-	    if (this.provider == null) {
+	    if (this.provider == null)
 		this.encrypt = Cipher.getInstance(this.transformation);
-	    } else {
+	    else
 		this.encrypt = Cipher.getInstance(this.transformation, this.provider);
-	    }
+
 	    this.encrypt.init(Cipher.ENCRYPT_MODE, this.publicKey, paramSpec);
 	}
 
 	// DECRYPT
 	if (this.privateKey != null) {
-	    if (this.provider == null) {
+	    if (this.provider == null)
 		this.decrypt = Cipher.getInstance(this.transformation);
-	    } else {
+	    else
 		this.decrypt = Cipher.getInstance(this.transformation, this.provider);
-	    }
+
 	    this.decrypt.init(Cipher.DECRYPT_MODE, this.privateKey, paramSpec);
 	}
     }

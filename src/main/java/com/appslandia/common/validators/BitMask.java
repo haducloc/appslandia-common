@@ -67,11 +67,11 @@ public @interface BitMask {
 	    int size = annotation.value();
 	    Asserts.isTrue((size >= 1) && (size <= 63), "size is out of range [1-63]");
 
-	    if (size == 63) {
+	    if (size == 63)
 		this.max = Long.MAX_VALUE;
-	    } else {
+	    else
 		this.max = (1 << size) - 1;
-	    }
+
 	}
 
 	@Override

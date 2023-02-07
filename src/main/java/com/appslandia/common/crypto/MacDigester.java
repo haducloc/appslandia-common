@@ -54,11 +54,11 @@ public class MacDigester extends InitializeObject implements Digester {
 	Asserts.notNull(this.secret, "secret is required.");
 
 	// MAC
-	if (this.provider == null) {
+	if (this.provider == null)
 	    this.mac = Mac.getInstance(this.algorithm);
-	} else {
+	else
 	    this.mac = Mac.getInstance(this.algorithm, this.provider);
-	}
+
 	this.mac.init(new SecretKeySpec(this.secret, this.algorithm));
 	CryptoUtils.clear(this.secret);
     }

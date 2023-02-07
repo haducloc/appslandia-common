@@ -68,11 +68,11 @@ public class KeyStoreUtil extends InitializeObject {
     protected void init() throws Exception {
 	Asserts.notNull(this.type, "type is required.");
 
-	if (this.provider == null) {
+	if (this.provider == null)
 	    this.keyStore = KeyStore.getInstance(this.type);
-	} else {
+	else
 	    this.keyStore = KeyStore.getInstance(this.type, this.provider);
-	}
+
 	this.keyStore.load(this.inputStream, this.password);
     }
 

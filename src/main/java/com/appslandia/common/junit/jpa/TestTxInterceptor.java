@@ -193,27 +193,27 @@ public abstract class TestTxInterceptor implements Serializable {
     }
 
     protected EntityManager getEm() {
-	if (this.getTestEmfControl().isSharedEmf()) {
+	if (this.getTestEmfControl().isSharedEmf())
 	    return SharedEmfTestEntityManagerExtension.emHolder.get();
-	} else {
+	else
 	    return TestEntityManagerExtension.emHolder.get();
-	}
+
     }
 
     protected EntityManager storeNewEm() {
-	if (this.getTestEmfControl().isSharedEmf()) {
+	if (this.getTestEmfControl().isSharedEmf())
 	    return SharedEmfTestEntityManagerExtension.newEntityManager();
-	} else {
+	else
 	    return TestEntityManagerExtension.newEntityManager();
-	}
+
     }
 
     protected void setEm(EntityManager em) {
-	if (this.getTestEmfControl().isSharedEmf()) {
+	if (this.getTestEmfControl().isSharedEmf())
 	    SharedEmfTestEntityManagerExtension.emHolder.set(em);
-	} else {
+	else
 	    TestEntityManagerExtension.emHolder.set(em);
-	}
+
     }
 
     protected boolean willRollbackOn(Exception ex, Class<?>[] rollbackOn, Class<?>[] dontRollbackOn) {

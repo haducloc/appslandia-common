@@ -171,11 +171,10 @@ public class MailerMessage {
 	// Sender
 	// Notes: msg.setSender(this.sender); throws Exception in jakarta.mail-1.6.5.jar
 
-	if (this.sender != null) {
+	if (this.sender != null)
 	    msg.setSender(this.sender);
-	} else {
+	else
 	    msg.removeHeader("Sender");
-	}
 
 	// From
 	if (this.from != null)
@@ -186,9 +185,9 @@ public class MailerMessage {
 	    msg.setReplyTo(this.replyTo.toArray(new Address[this.replyTo.size()]));
 
 	// debugToEmails?
-	if (debugToEmails != null) {
+	if (debugToEmails != null)
 	    msg.addRecipients(RecipientType.TO, InternetAddress.parse(debugToEmails));
-	} else {
+	else {
 	    // Recipients
 	    if (this.to != null)
 		msg.addRecipients(RecipientType.TO, this.to.toArray(new Address[this.to.size()]));

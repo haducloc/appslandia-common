@@ -128,11 +128,10 @@ public class WrapperClassGenerator {
 
 	    } else {
 		// Return
-		if (method.getReturnType() == void.class) {
+		if (method.getReturnType() == void.class)
 		    sb.appendtab().append(wrappedField).append(".").append(method.getName());
-		} else {
+		else
 		    sb.appendtab().append("return ").append(wrappedField).append(".").append(method.getName());
-		}
 
 		// Calling arguments
 		sb.append("(");

@@ -173,9 +173,9 @@ public class ArrayUtils {
 
 	Asserts.isTrue(arr.getClass().isArray());
 
-	if (!arr.getClass().getComponentType().isPrimitive()) {
+	if (!arr.getClass().getComponentType().isPrimitive())
 	    return (Object[]) arr;
-	} else {
+	else {
 	    Object[] wrappers = new Object[Array.getLength(arr)];
 
 	    for (int i = 0; i < wrappers.length; i++) {

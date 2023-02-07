@@ -178,9 +178,9 @@ public class URLEncoding {
 		if (type == EncodeType.URL_PARAM) {
 		    sb.append(' ');
 		    needToChange = true;
-		} else {
+		} else
 		    sb.append(c);
-		}
+
 		i++;
 		break;
 	    case '%':

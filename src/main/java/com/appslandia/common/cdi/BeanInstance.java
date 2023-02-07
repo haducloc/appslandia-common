@@ -56,11 +56,11 @@ public class BeanInstance<T> {
     public void destroy() {
 	if (this.destroyed.compareAndSet(false, true)) {
 
-	    if (this.instance != null) {
+	    if (this.instance != null)
 		this.instance.destroy(this.obj);
-	    } else {
+	    else
 		this.creationalContext.release();
-	    }
+
 	}
     }
 

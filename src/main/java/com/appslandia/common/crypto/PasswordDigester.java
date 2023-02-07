@@ -68,11 +68,11 @@ public class PasswordDigester extends TextDigester {
 	this.secretKeyAlgorithm = ValueUtils.valueOrAlt(this.secretKeyAlgorithm, "PBKDF2WithHmacSHA512");
 
 	// secretKeyFactory
-	if (this.provider == null) {
+	if (this.provider == null)
 	    this.secretKeyFactory = SecretKeyFactory.getInstance(this.secretKeyAlgorithm);
-	} else {
+	else
 	    this.secretKeyFactory = SecretKeyFactory.getInstance(this.secretKeyAlgorithm, this.provider);
-	}
+
     }
 
     @Override

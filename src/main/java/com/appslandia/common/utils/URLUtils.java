@@ -88,11 +88,10 @@ public class URLUtils {
 	    URI oldUri = new URI(url);
 	    String newQuery = oldUri.getQuery();
 
-	    if (newQuery == null) {
+	    if (newQuery == null)
 		newQuery = toQueryParams(moreParameters);
-	    } else {
+	    else
 		newQuery += '&' + toQueryParams(moreParameters);
-	    }
 
 	    URI newUri = new URI(oldUri.getScheme(), oldUri.getAuthority(), oldUri.getPath(), newQuery, oldUri.getFragment());
 	    return newUri.toString();
@@ -154,11 +153,11 @@ public class URLUtils {
 	} else {
 	    Object addedValue = params.get(name);
 
-	    if ((addedValue == null) || (addedValue.getClass() == String.class)) {
+	    if ((addedValue == null) || (addedValue.getClass() == String.class))
 		params.put(name, new String[] { (String) addedValue, decodedVal });
-	    } else {
+	    else
 		params.put(name, ArrayUtils.append((String[]) addedValue, new String[] { decodedVal }));
-	    }
+
 	}
 	return true;
     }

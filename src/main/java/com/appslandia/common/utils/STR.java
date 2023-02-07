@@ -83,11 +83,10 @@ public class STR {
 	while (matcher.find()) {
 
 	    // Non parameter
-	    if (prevEnd == 0) {
+	    if (prevEnd == 0)
 		out.append(str.substring(0, matcher.start()));
-	    } else {
+	    else
 		out.append(str.substring(prevEnd, matcher.start()));
-	    }
 
 	    // ${paramName}
 	    String parameterGroup = matcher.group();
@@ -107,9 +106,9 @@ public class STR {
 
 		} else if (parameterValue.getClass().isArray()) {
 		    out.append(ObjectUtils.asString(parameterValue));
-		} else {
+		} else
 		    out.append(parameterValue.toString());
-		}
+
 	    }
 
 	    prevEnd = matcher.end();
@@ -133,11 +132,10 @@ public class STR {
 	while (matcher.find()) {
 
 	    // Non entry
-	    if (prevEnd == 0) {
+	    if (prevEnd == 0)
 		out.append(str.substring(0, matcher.start()));
-	    } else {
+	    else
 		out.append(str.substring(prevEnd, matcher.start()));
-	    }
 
 	    // {}
 	    index++;
@@ -154,9 +152,9 @@ public class STR {
 
 		} else if (entryValue.getClass().isArray()) {
 		    out.append(ObjectUtils.asString(entryValue));
-		} else {
+		} else
 		    out.append(entryValue.toString());
-		}
+
 	    }
 
 	    prevEnd = matcher.end();

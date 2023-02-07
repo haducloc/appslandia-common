@@ -59,11 +59,11 @@ public class CertificateFactoryUtil extends InitializeObject {
     protected void init() throws Exception {
 	this.type = ValueUtils.valueOrAlt(this.type, "X.509");
 
-	if (this.provider == null) {
+	if (this.provider == null)
 	    this.certificateFactory = CertificateFactory.getInstance(this.type);
-	} else {
+	else
 	    this.certificateFactory = CertificateFactory.getInstance(this.type, provider);
-	}
+
     }
 
     public X509Certificate toCertificate(InputStream certInDer) throws CryptoException {

@@ -100,9 +100,9 @@ public class GroupFormat {
 	    if (group.length > 0) {
 		sb.append(str.substring(pos, group.length + pos));
 		pos += group.length;
-	    } else {
+	    } else
 		sb.append(group.text);
-	    }
+
 	}
 	return sb.toString();
     }

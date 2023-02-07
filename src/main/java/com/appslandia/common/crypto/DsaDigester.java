@@ -54,21 +54,21 @@ public class DsaDigester extends InitializeObject implements Digester {
 
 	// Sign
 	if (this.privateKey != null) {
-	    if (this.provider == null) {
+	    if (this.provider == null)
 		this.sign = Signature.getInstance(this.algorithm);
-	    } else {
+	    else
 		this.sign = Signature.getInstance(this.algorithm, this.provider);
-	    }
+
 	    this.sign.initSign(this.privateKey);
 	}
 
 	// Verify
 	if (this.publicKey != null) {
-	    if (this.provider == null) {
+	    if (this.provider == null)
 		this.ver = Signature.getInstance(this.algorithm);
-	    } else {
+	    else
 		this.ver = Signature.getInstance(this.algorithm, this.provider);
-	    }
+
 	    this.ver.initVerify(this.publicKey);
 	}
     }

@@ -265,11 +265,10 @@ public class ToStringBuilder {
 		if (this.tsDecision.tsExcluded(field))
 		    continue;
 
-		if (!isFirst) {
+		if (!isFirst)
 		    builder.append(",");
-		} else {
+		else
 		    isFirst = false;
-		}
 
 		appendln(builder, false);
 		appendtab(builder, level + this.identTabs, false);
@@ -279,15 +278,15 @@ public class ToStringBuilder {
 		    field.setAccessible(true);
 		    Object fieldVal = field.get(obj);
 
-		    if (fieldVal == null) {
+		    if (fieldVal == null)
 			builder.append("null");
-		    } else {
+		    else {
 			if (this.tsDecision.tsIdHash(fieldVal, field)) {
 			    builder.append(ObjectUtils.toIdHash(fieldVal));
 
-			} else {
+			} else
 			    this.toStringObject(fieldVal, level + 1, builder);
-			}
+
 		    }
 
 		} catch (Exception ex) {
@@ -297,9 +296,9 @@ public class ToStringBuilder {
 	    clazz = clazz.getSuperclass();
 	}
 
-	if (isFirst) {
+	if (isFirst)
 	    builder.append(" no fields ]");
-	} else {
+	else {
 	    appendln(builder, false);
 	    appendtab(builder, level - 1 + this.identTabs, false).append("]");
 	}
@@ -321,28 +320,28 @@ public class ToStringBuilder {
 		break;
 	    }
 
-	    if (!isFirst) {
+	    if (!isFirst)
 		builder.append(",");
-	    } else {
+	    else
 		isFirst = false;
-	    }
+
 	    appendln(builder, iterator.isCompact());
 	    appendtab(builder, level + this.identTabs, iterator.isCompact());
 
-	    if (element == null) {
+	    if (element == null)
 		builder.append("null");
-	    } else {
+	    else {
 		if (this.tsDecision.tsIdHash(element, null)) {
 		    builder.append(ObjectUtils.toIdHash(element));
 
-		} else {
+		} else
 		    this.toStringObject(element, level + 1, builder);
-		}
+
 	    }
 	}
-	if (isFirst) {
+	if (isFirst)
 	    builder.append(" no elements ]");
-	} else {
+	else {
 	    appendln(builder, iterator.isCompact());
 	    appendtab(builder, level - 1 + this.identTabs, iterator.isCompact()).append("] (").append(iterator.getComputedLen()).append(")");
 	}
@@ -357,31 +356,31 @@ public class ToStringBuilder {
 	boolean isFirst = true;
 
 	for (Object key : map.keySet()) {
-	    if (!isFirst) {
+	    if (!isFirst)
 		builder.append(",");
-	    } else {
+	    else
 		isFirst = false;
-	    }
+
 	    appendln(builder, false);
 	    appendtab(builder, level + this.identTabs, false);
 
 	    builder.append(key).append(": ");
 	    Object entryVal = map.get(key);
-	    if (entryVal == null) {
+	    if (entryVal == null)
 		builder.append("null");
-	    } else {
+	    else {
 		if (this.tsDecision.tsIdHash(entryVal, null)) {
 		    builder.append(ObjectUtils.toIdHash(entryVal));
 
-		} else {
+		} else
 		    this.toStringObject(entryVal, level + 1, builder);
-		}
+
 	    }
 	}
 
-	if (isFirst) {
+	if (isFirst)
 	    builder.append(" no entries ]");
-	} else {
+	else {
 	    appendln(builder, false);
 	    appendtab(builder, level - 1 + this.identTabs, false).append("] (").append(map.size()).append(")");
 	}
@@ -392,29 +391,29 @@ public class ToStringBuilder {
 	boolean isFirst = true;
 
 	for (String attribute : attributes) {
-	    if (!isFirst) {
+	    if (!isFirst)
 		builder.append(",");
-	    } else {
+	    else
 		isFirst = false;
-	    }
+
 	    appendln(builder, false);
 	    appendtab(builder, level + this.identTabs, false);
 	    builder.append(attribute).append(": ");
 
 	    try {
 		Object element = getAttributeMethod.invoke(obj, attribute);
-		if (element == null) {
+		if (element == null)
 		    builder.append("null");
-		} else {
+		else {
 		    if ("jakarta.servlet.error.exception".equals(attribute) || "javax.servlet.error.exception".equals(attribute)) {
 			builder.append(ExceptionUtils.buildMessage((Throwable) element));
 
 		    } else if (this.tsDecision.tsIdHash(element, null)) {
 			builder.append(ObjectUtils.toIdHash(element));
 
-		    } else {
+		    } else
 			this.toStringObject(element, level + 1, builder);
-		    }
+
 		}
 
 	    } catch (Exception ex) {
@@ -422,9 +421,9 @@ public class ToStringBuilder {
 	    }
 	}
 
-	if (isFirst) {
+	if (isFirst)
 	    builder.append(" no elements ]");
-	} else {
+	else {
 	    appendln(builder, false);
 	    appendtab(builder, level - 1 + this.identTabs, false).append("]");
 	}

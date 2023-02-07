@@ -52,11 +52,11 @@ public class PbeDigester extends PbeObject implements Digester {
 	Asserts.notNull(this.algorithm, "algorithm is required.");
 
 	// MAC
-	if (this.provider == null) {
+	if (this.provider == null)
 	    this.mac = Mac.getInstance(this.algorithm);
-	} else {
+	else
 	    this.mac = Mac.getInstance(this.algorithm, this.provider);
-	}
+
     }
 
     @Override
