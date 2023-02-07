@@ -20,6 +20,8 @@
 
 package com.appslandia.common.base;
 
+import com.appslandia.common.utils.Asserts;
+
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
@@ -36,11 +38,8 @@ public class Out<T> {
 	this.value = value;
     }
 
-    public T val() throws IllegalStateException {
-	if (this.value == null) {
-	    throw new IllegalStateException("No value.");
-	}
-	return this.value;
+    public T val() throws AssertException {
+	return Asserts.notNull(this.value, "value is required.");
     }
 
     public T orElse(T defaultValue) {

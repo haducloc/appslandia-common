@@ -39,8 +39,8 @@ public class ModelUtils {
 		    continue;
 		}
 
-		AssertUtils.assertNotNull(dpd.getWriteMethod());
-		AssertUtils.assertNotNull(dpd.getReadMethod());
+		Asserts.notNull(dpd.getWriteMethod());
+		Asserts.notNull(dpd.getReadMethod());
 
 		dpd.getWriteMethod().invoke(dest, dpd.getReadMethod().invoke(src));
 	    }
@@ -62,7 +62,7 @@ public class ModelUtils {
 		if (!forProps.apply(dpd.getName())) {
 		    continue;
 		}
-		AssertUtils.assertNotNull(dpd.getWriteMethod());
+		Asserts.notNull(dpd.getWriteMethod());
 
 		PropertyDescriptor spd = null;
 		for (PropertyDescriptor dp : Introspector.getBeanInfo(src.getClass()).getPropertyDescriptors()) {
@@ -71,8 +71,8 @@ public class ModelUtils {
 			break;
 		    }
 		}
-		AssertUtils.assertNotNull(spd);
-		AssertUtils.assertNotNull(spd.getReadMethod());
+		Asserts.notNull(spd);
+		Asserts.notNull(spd.getReadMethod());
 
 		dpd.getWriteMethod().invoke(dest, spd.getReadMethod().invoke(src));
 	    }

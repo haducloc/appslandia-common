@@ -29,11 +29,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.ReflectionUtils;
+import com.appslandia.common.utils.STR;
 import com.appslandia.common.utils.SYS;
-import com.appslandia.common.utils.StringFormat;
 
 /**
  *
@@ -53,7 +53,7 @@ public class Language extends InitializeObject {
 
     @Override
     protected void init() throws Exception {
-	AssertUtils.assertNotNull(this.locale, "locale is required.");
+	Asserts.notNull(this.locale, "locale is required.");
 
 	if (this.languageId == null)
 	    this.languageId = this.locale.getLanguage();
@@ -61,16 +61,14 @@ public class Language extends InitializeObject {
 	String datePattern = this.temporalPatterns.get(DateUtils.ISO8601_DATE);
 	if (datePattern != null) {
 
-	    AssertUtils.assertNotNull(datePattern.length() == 10 && datePattern.contains("yyyy") && datePattern.contains("MM") && datePattern.contains("dd"),
-		    StringFormat.fmt("datePattern '{}' is invalid (10 length, use yyyy, MM, and dd).", datePattern));
+	    Asserts.isTrue(datePattern.length() == 10 && datePattern.contains("yyyy") && datePattern.contains("MM") && datePattern.contains("dd"),
+		    STR.fmt("datePattern '{}' is invalid (10 length, use yyyy, MM, and dd).", datePattern));
 	}
 
 	if (datePattern == null) {
-	    datePattern = parseDatePattern(locale);
+	    datePattern = parseDatePattern(this.locale);
+	    Asserts.notNull(datePattern, () -> STR.fmt("Couldn't determine datePattern for the locale '{}'.", this.locale));
 
-	    if (datePattern == null) {
-		throw new InitializeException("Couldn't determine datePattern for the locale: " + locale);
-	    }
 	    this.temporalPatterns.put(DateUtils.ISO8601_DATE, datePattern);
 	}
 
@@ -84,12 +82,12 @@ public class Language extends InitializeObject {
 	this.temporalPatterns.put(DateUtils.ISO8601_TIME, DateUtils.ISO8601_TIME);
 	this.temporalPatterns.put(DateUtils.ISO8601_TIME_Z, DateUtils.ISO8601_TIME_Z);
 
-	this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_M, StringFormat.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_M));
-	this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_MZ, StringFormat.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_MZ));
-	this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_S, StringFormat.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_S));
-	this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_SZ, StringFormat.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_SZ));
-	this.temporalPatterns.put(DateUtils.ISO8601_DATETIME, StringFormat.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME));
-	this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_Z, StringFormat.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_Z));
+	this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_M, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_M));
+	this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_MZ, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_MZ));
+	this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_S, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_S));
+	this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_SZ, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_SZ));
+	this.temporalPatterns.put(DateUtils.ISO8601_DATETIME, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME));
+	this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_Z, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_Z));
 
 	this.temporalPatterns = Collections.unmodifiableMap(this.temporalPatterns);
 
@@ -133,7 +131,7 @@ public class Language extends InitializeObject {
 
     public String getTemporalPattern(String isoPattern) {
 	this.initialize();
-	return AssertUtils.assertNotNull(this.temporalPatterns.get(isoPattern));
+	return Asserts.notNull(this.temporalPatterns.get(isoPattern));
     }
 
     public Language setTemporalPattern(String isoPattern, String localizedPattern) {
@@ -189,6 +187,8 @@ public class Language extends InitializeObject {
     }
 
     public static void setDefault(Language impl) {
+	Asserts.isNull(__default, "Language.__default must be null.");
+
 	if (__default == null) {
 	    synchronized (MUTEX) {
 		if (__default == null) {
@@ -197,13 +197,12 @@ public class Language extends InitializeObject {
 		}
 	    }
 	}
-	throw new IllegalStateException("Language.__default must be null.");
     }
 
     private static Supplier<Language> __provider;
 
     public static void setProvider(Supplier<Language> provider) {
-	AssertUtils.assertNull(__default);
+	Asserts.isNull(__default);
 	__provider = provider;
     }
 

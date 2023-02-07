@@ -30,7 +30,7 @@ import javax.crypto.SecretKey;
 
 import com.appslandia.common.base.Out;
 import com.appslandia.common.utils.ArrayUtils;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.RandomUtils;
 
 /**
@@ -49,7 +49,7 @@ public class PbeDigester extends PbeObject implements Digester {
     protected void init() throws Exception {
 	super.init();
 
-	AssertUtils.assertNotNull(this.algorithm, "algorithm is required.");
+	Asserts.notNull(this.algorithm, "algorithm is required.");
 
 	// MAC
 	if (this.provider == null) {
@@ -62,7 +62,7 @@ public class PbeDigester extends PbeObject implements Digester {
     @Override
     public byte[] digest(byte[] message) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(message, "message is required.");
+	Asserts.notNull(message, "message is required.");
 
 	Out<byte[]> salt = new Out<>();
 	byte[] msgMac = digest(message, salt);
@@ -74,9 +74,9 @@ public class PbeDigester extends PbeObject implements Digester {
     public boolean verify(byte[] message, byte[] saltHmac) throws CryptoException {
 	this.initialize();
 
-	AssertUtils.assertNotNull(message, "message is required.");
-	AssertUtils.assertNotNull(saltHmac, "saltHmac is required.");
-	AssertUtils.assertTrue(saltHmac.length > this.saltSize, "digested is invalid.");
+	Asserts.notNull(message, "message is required.");
+	Asserts.notNull(saltHmac, "saltHmac is required.");
+	Asserts.isTrue(saltHmac.length > this.saltSize, "digested is invalid.");
 
 	byte[] salt = new byte[this.saltSize];
 	ArrayUtils.copy(saltHmac, salt);
@@ -100,8 +100,8 @@ public class PbeDigester extends PbeObject implements Digester {
     @Override
     public byte[] digest(byte[] message, Out<byte[]> salt) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(message, "message is required.");
-	AssertUtils.assertNotNull(salt, "salt is required.");
+	Asserts.notNull(message, "message is required.");
+	Asserts.notNull(salt, "salt is required.");
 
 	salt.value = RandomUtils.nextBytes(this.saltSize, this.random);
 	SecretKey secretKey = buildSecretKey(salt.value, this.algorithm);
@@ -125,9 +125,9 @@ public class PbeDigester extends PbeObject implements Digester {
     public boolean verify(byte[] message, byte[] hmac, byte[] salt) throws CryptoException {
 	this.initialize();
 
-	AssertUtils.assertNotNull(message, "message is required.");
-	AssertUtils.assertNotNull(hmac, "hmac is required.");
-	AssertUtils.assertNotNull(salt, "salt is required.");
+	Asserts.notNull(message, "message is required.");
+	Asserts.notNull(hmac, "hmac is required.");
+	Asserts.notNull(salt, "salt is required.");
 
 	SecretKey secretKey = buildSecretKey(salt, this.algorithm);
 	try {

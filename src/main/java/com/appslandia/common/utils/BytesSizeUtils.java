@@ -32,17 +32,13 @@ public class BytesSizeUtils {
 
     private static final Pattern BYTES_SIZE_PATTERN = Pattern.compile("((\\d+.\\d+|\\d+)(TB|GB|MB|KB|B)\\s*)+", Pattern.CASE_INSENSITIVE);
 
-    public static long translateToBytes(String sizeAmt) throws IllegalArgumentException {
+    public static long translateToBytes(String sizeAmt) {
 	return translateToBytes(sizeAmt, false);
     }
 
-    public static long translateToBytes(String sizeAmt, boolean base10) throws IllegalArgumentException {
-	sizeAmt = StringUtils.trimToNull(sizeAmt);
-	AssertUtils.assertNotNull(sizeAmt, "sizeAmt is required.");
-
-	if (!BYTES_SIZE_PATTERN.matcher(sizeAmt).matches()) {
-	    throw new IllegalArgumentException("sizeAmt is invalid (value=" + sizeAmt + ")");
-	}
+    public static long translateToBytes(String sizeAmt, boolean base10) {
+	Asserts.notNull(sizeAmt, "sizeAmt is required.");
+	Asserts.isTrue(BYTES_SIZE_PATTERN.matcher(sizeAmt).matches(), () -> STR.fmt("sizeAmt '{}' is invalid.", sizeAmt));
 
 	double result = 0L;
 	int i = 0;

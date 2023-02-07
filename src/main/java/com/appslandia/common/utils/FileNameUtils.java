@@ -31,16 +31,16 @@ import com.appslandia.common.base.UUIDGenerator;
  */
 public class FileNameUtils {
 
-    public static String toFileNameNow(String fileName) throws IllegalArgumentException {
+    public static String toFileNameNow(String fileName) {
 	return toFileName(fileName, DateUtils.format(new Date(), "yyyyMMdd-HHmmss-SSS"));
     }
 
-    public static String toFileNameUUID(String fileName) throws IllegalArgumentException {
+    public static String toFileNameUUID(String fileName) {
 	return toFileName(fileName, UUIDGenerator.INSTANCE.generate());
     }
 
-    public static String toFileName(String fileName, Object extra) throws IllegalArgumentException {
-	AssertUtils.assertNotNull(fileName);
+    public static String toFileName(String fileName, Object extra) {
+	Asserts.notNull(fileName);
 
 	// No extension
 	var dotIdx = fileName.lastIndexOf('.');

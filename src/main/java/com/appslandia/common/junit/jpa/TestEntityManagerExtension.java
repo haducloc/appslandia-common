@@ -27,7 +27,7 @@ import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 import com.appslandia.common.threading.ThreadLocalStorage;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -68,11 +68,11 @@ public abstract class TestEntityManagerExtension implements BeforeEachCallback, 
     @Override
     public void afterEach(ExtensionContext context) throws Exception {
 	EntityManager em = emHolder.remove();
-	AssertUtils.assertStateNotNull(em);
+	Asserts.notNull(em);
 	em.close();
 
 	EntityManagerFactory emf = emfHolder.remove();
-	AssertUtils.assertStateNotNull(emf);
+	Asserts.notNull(emf);
 	emf.close();
     }
 

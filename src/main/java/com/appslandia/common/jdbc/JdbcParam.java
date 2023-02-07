@@ -20,7 +20,7 @@
 
 package com.appslandia.common.jdbc;
 
-import com.appslandia.common.utils.StringFormat;
+import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -61,6 +61,6 @@ public class JdbcParam {
 
     @Override
     public String toString() {
-	return StringFormat.fmt("value={}, sqlType={}, scaleOrLength={}", this.value, this.sqlType, this.scaleOrLength);
+	return STR.fmt("value={}, sqlType={}, scaleOrLength={}", this.value, this.sqlType, this.scaleOrLength);
     }
 }

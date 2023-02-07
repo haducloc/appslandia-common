@@ -25,7 +25,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -42,8 +42,8 @@ public abstract class ThreadSafeTester extends InitializeObject {
 
     @Override
     protected void init() throws Exception {
-	AssertUtils.assertTrue(this.tasks > 0);
-	AssertUtils.assertTrue(this.threads > 0);
+	Asserts.isTrue(this.tasks > 0);
+	Asserts.isTrue(this.threads > 0);
 
 	this.executorService = Executors.newFixedThreadPool(this.threads);
 	this.countDownLatch = new CountDownLatch(this.tasks);

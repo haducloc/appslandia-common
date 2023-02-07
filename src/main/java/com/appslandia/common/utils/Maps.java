@@ -48,13 +48,9 @@ public class Maps {
 	}
 
 	public <K, V> Map<K, V> toReadonlyMap() {
-	    return toReadonlyMap(new HashMap<>());
-	}
+	    Map<K, V> map = new HashMap<>();
+	    this.entries.stream().forEach(e -> map.put((K) e.key, (V) e.value));
 
-	public <K, V> Map<K, V> toReadonlyMap(Map<K, V> map) {
-	    for (MapEntry entry : this.entries) {
-		map.put((K) entry.key, (V) entry.value);
-	    }
 	    return Collections.unmodifiableMap(map);
 	}
     }

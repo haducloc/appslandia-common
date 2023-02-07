@@ -23,7 +23,7 @@ package com.appslandia.common.jdbc;
 import java.util.stream.IntStream;
 
 import com.appslandia.common.utils.ArrayUtils;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.StringUtils;
 
 /**
@@ -38,7 +38,7 @@ public class SqlLikeEscaper {
     final char[] charsToEscape;
 
     public SqlLikeEscaper(char escapeSignChar, char[] charsToEscape) {
-	AssertUtils.assertNotNull(charsToEscape);
+	Asserts.notNull(charsToEscape);
 
 	this.escapeSignChar = escapeSignChar;
 	this.charsToEscape = charsToEscape.clone();
@@ -94,6 +94,8 @@ public class SqlLikeEscaper {
     }
 
     public static void setDefault(SqlLikeEscaper impl) {
+	Asserts.isNull(__default, "SqlLikeEscaper.__default must be null.");
+
 	if (__default == null) {
 	    synchronized (MUTEX) {
 		if (__default == null) {
@@ -102,7 +104,6 @@ public class SqlLikeEscaper {
 		}
 	    }
 	}
-	throw new IllegalStateException("SqlLikeEscaper.__default must be null.");
     }
 
     public static char getEscapeSignChar() {
@@ -118,15 +119,16 @@ public class SqlLikeEscaper {
     }
 
     public static void setEscapeSignChar(char impl) {
-	if (__escapeSignChar == (char) 0) {
+	Asserts.isTrue(__escapeSignChar == 0, "SqlLikeEscaper.__escapeSignChar must be unset.");
+
+	if (__escapeSignChar == 0) {
 	    synchronized (MUTEX) {
-		if (__escapeSignChar == (char) 0) {
+		if (__escapeSignChar == 0) {
 		    __escapeSignChar = impl;
 		    return;
 		}
 	    }
 	}
-	throw new IllegalStateException("SqlLikeEscaper.__escapeSignChar must be null.");
     }
 
     public static char[] getCharsToEscape() {
@@ -142,6 +144,8 @@ public class SqlLikeEscaper {
     }
 
     public static void setCharsToEscape(char[] impl) {
+	Asserts.isNull(__charsToEscape, "SqlLikeEscaper.__charsToEscape must be unset.");
+
 	if (__charsToEscape == null) {
 	    synchronized (MUTEX) {
 		if (__charsToEscape == null) {
@@ -150,11 +154,10 @@ public class SqlLikeEscaper {
 		}
 	    }
 	}
-	throw new IllegalStateException("SqlLikeEscaper.__charsToEscape must be null.");
     }
 
     public static String toLikePattern(String value, LikeType likeType) {
-	AssertUtils.assertNotNull(likeType);
+	Asserts.notNull(likeType);
 
 	if (StringUtils.isNullOrEmpty(value)) {
 	    return value;

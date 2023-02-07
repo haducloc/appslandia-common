@@ -24,7 +24,7 @@ import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
 import com.appslandia.common.base.RoundRobinPool;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ValueUtils;
 
 /**
@@ -53,7 +53,7 @@ public class PoolDigester extends InitializeObject implements Digester {
 
     @Override
     protected void init() throws Exception {
-	AssertUtils.assertNotNull(this.digester, "digester is required.");
+	Asserts.notNull(this.digester, "digester is required.");
 
 	this.poolSize = ValueUtils.valueOrMin(this.poolSize, Runtime.getRuntime().availableProcessors());
 	this.digesters = new Digester[this.poolSize];
@@ -77,15 +77,15 @@ public class PoolDigester extends InitializeObject implements Digester {
     @Override
     public byte[] digest(byte[] message) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(message, "message is required.");
+	Asserts.notNull(message, "message is required.");
 	return this.digesterPool.next().digest(message);
     }
 
     @Override
     public boolean verify(byte[] message, byte[] digested) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(message, "message is required.");
-	AssertUtils.assertNotNull(digested, "digested is required.");
+	Asserts.notNull(message, "message is required.");
+	Asserts.notNull(digested, "digested is required.");
 
 	return this.digesterPool.next().verify(message, digested);
     }
@@ -93,8 +93,8 @@ public class PoolDigester extends InitializeObject implements Digester {
     @Override
     public byte[] digest(byte[] message, Out<byte[]> salt) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(message, "message is required.");
-	AssertUtils.assertNotNull(salt, "salt is required.");
+	Asserts.notNull(message, "message is required.");
+	Asserts.notNull(salt, "salt is required.");
 
 	return this.digesterPool.next().digest(message, salt);
     }
@@ -102,9 +102,9 @@ public class PoolDigester extends InitializeObject implements Digester {
     @Override
     public boolean verify(byte[] message, byte[] digested, byte[] salt) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(message, "message is required.");
-	AssertUtils.assertNotNull(digested, "digested is required.");
-	AssertUtils.assertNotNull(salt, "salt is required.");
+	Asserts.notNull(message, "message is required.");
+	Asserts.notNull(digested, "digested is required.");
+	Asserts.notNull(salt, "salt is required.");
 
 	return this.digesterPool.next().verify(message, digested, salt);
     }

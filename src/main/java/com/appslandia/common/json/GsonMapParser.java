@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -41,7 +41,7 @@ import com.google.gson.JsonPrimitive;
 public class GsonMapParser {
 
     public Map<String, Object> parseMap(JsonObject jsonObject, Supplier<Map<String, Object>> newMap, boolean makeReadonly) {
-	AssertUtils.assertTrue(jsonObject.isJsonObject());
+	Asserts.isTrue(jsonObject.isJsonObject());
 
 	Map<String, Object> map = newMap.get();
 	for (String key : jsonObject.keySet()) {
@@ -104,6 +104,6 @@ public class GsonMapParser {
 	    }
 	    return makeReadonly ? Collections.unmodifiableMap(map) : map;
 	}
-	throw new IllegalStateException();
+	throw new Error();
     }
 }

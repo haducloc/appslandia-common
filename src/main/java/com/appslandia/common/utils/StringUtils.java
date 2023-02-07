@@ -132,8 +132,8 @@ public class StringUtils {
     }
 
     public static boolean startsWith(String str, String substrIgnoreCase) {
-	AssertUtils.assertNotNull(str);
-	AssertUtils.assertNotNull(substrIgnoreCase);
+	Asserts.notNull(str);
+	Asserts.notNull(substrIgnoreCase);
 
 	if (substrIgnoreCase.isEmpty()) {
 	    return true;
@@ -145,8 +145,8 @@ public class StringUtils {
     }
 
     public static boolean endsWith(String str, String substrIgnoreCase) {
-	AssertUtils.assertNotNull(str);
-	AssertUtils.assertNotNull(substrIgnoreCase);
+	Asserts.notNull(str);
+	Asserts.notNull(substrIgnoreCase);
 
 	if (substrIgnoreCase.isEmpty()) {
 	    return true;
@@ -158,8 +158,8 @@ public class StringUtils {
     }
 
     public static boolean contains(String str, String substrIgnoreCase) {
-	AssertUtils.assertNotNull(str);
-	AssertUtils.assertNotNull(substrIgnoreCase);
+	Asserts.notNull(str);
+	Asserts.notNull(substrIgnoreCase);
 
 	if (substrIgnoreCase.isEmpty()) {
 	    return true;

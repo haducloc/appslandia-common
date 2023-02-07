@@ -30,7 +30,8 @@ import com.appslandia.common.base.InitializeException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
 import com.appslandia.common.jdbc.JdbcSql;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -61,13 +62,13 @@ public class JpaSql extends InitializeObject implements Serializable {
 
     @Override
     protected void init() throws Exception {
-	AssertUtils.assertNotNull(this.pSql, "pSql is required.");
+	Asserts.notNull(this.pSql, "pSql is required.");
 	translateSql();
     }
 
     public JpaSql arrayLen(String parameterName, int maxLength) {
 	assertNotInitialized();
-	AssertUtils.assertTrue(maxLength > 0, "maxLength is required.");
+	Asserts.isTrue(maxLength > 0, "maxLength is required.");
 
 	if (this.arrayLens == null) {
 	    this.arrayLens = new HashMap<>();
@@ -115,9 +116,7 @@ public class JpaSql extends InitializeObject implements Serializable {
 	    Integer arrayLen = (this.arrayLens != null) ? this.arrayLens.get(paramName.value) : null;
 
 	    if (arrayLen != null) {
-		if (!isArrayParam) {
-		    throw new IllegalArgumentException("Array parameter is not found (name=" + paramName + ")");
-		}
+		Asserts.isTrue(isArrayParam, () -> STR.fmt("Array parameter '{}' is not found.", paramName));
 	    } else {
 		arrayLen = DEFAULT_ARRAY_MAX_LENGTH;
 	    }
@@ -205,9 +204,7 @@ public class JpaSql extends InitializeObject implements Serializable {
     public int getArrayLen(String parameterName) {
 	initialize();
 	Integer len = this.paramsMap.get(parameterName);
-	if (len == null) {
-	    throw new IllegalArgumentException("Array parameter is not found (name=" + parameterName + ")");
-	}
-	return len;
+
+	return Asserts.notNull(len, () -> STR.fmt("Array parameter '{}' is not found.", parameterName));
     }
 }

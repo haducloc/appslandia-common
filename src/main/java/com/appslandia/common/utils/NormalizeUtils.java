@@ -41,7 +41,7 @@ public class NormalizeUtils {
     private static DecomposedCharacterConverter decomposedCharacterConverter;
 
     public static void setDecomposedCharacterConverter(DecomposedCharacterConverter converter) {
-	AssertUtils.assertNull(decomposedCharacterConverter);
+	Asserts.isNull(decomposedCharacterConverter);
 	decomposedCharacterConverter = converter;
     }
 
@@ -135,7 +135,7 @@ public class NormalizeUtils {
     }
 
     public static String valuesAsID(Object... values) {
-	AssertUtils.assertHasElements(values);
+	Asserts.hasElements(values);
 
 	return Arrays.stream(values).map(v -> {
 	    return stringAsID(String.valueOf(v));

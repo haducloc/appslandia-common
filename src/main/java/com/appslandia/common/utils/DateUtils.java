@@ -326,13 +326,9 @@ public class DateUtils {
     // 1w 2d 3h 4m 50s 500ms
     private static final Pattern TEMPORAL_AMT_PATTERN = Pattern.compile("((\\d+.\\d+|\\d+)(w|d|h|m|s|ms)\\s*)+", Pattern.CASE_INSENSITIVE);
 
-    public static long translateToMs(String temporalAmt) throws IllegalArgumentException {
-	temporalAmt = StringUtils.trimToNull(temporalAmt);
-	AssertUtils.assertNotNull(temporalAmt, "temporalAmt is required.");
-
-	if (!TEMPORAL_AMT_PATTERN.matcher(temporalAmt).matches()) {
-	    throw new IllegalArgumentException("temporalAmt is invalid (value=" + temporalAmt + ")");
-	}
+    public static long translateToMs(String temporalAmt) {
+	Asserts.notNull(temporalAmt, "temporalAmt is required.");
+	Asserts.isTrue(TEMPORAL_AMT_PATTERN.matcher(temporalAmt).matches(), () -> STR.fmt("temporalAmt '{}' is invalid.", temporalAmt));
 
 	double result = 0l;
 	int i = 0;
@@ -378,7 +374,7 @@ public class DateUtils {
     }
 
     public static Map<TimeUnit, Long> parseUnits(long duration, TimeUnit unit, TimeUnit highUnit, TimeUnit lowUnit) {
-	AssertUtils.assertTrue(highUnit.compareTo(lowUnit) >= 0, "highUnit must be gte lowUnit.");
+	Asserts.isTrue(highUnit.compareTo(lowUnit) >= 0, "highUnit must be gte lowUnit.");
 	Map<TimeUnit, Long> res = new EnumMap<>(TimeUnit.class);
 
 	duration = lowUnit.convert(duration, unit);

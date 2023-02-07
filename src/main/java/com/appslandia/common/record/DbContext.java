@@ -41,7 +41,9 @@ import com.appslandia.common.jdbc.ResultSetImpl;
 import com.appslandia.common.jdbc.ResultSetMapper;
 import com.appslandia.common.jdbc.StatementImpl;
 import com.appslandia.common.jdbc.UncheckedSQLException;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ObjectUtils;
+import com.appslandia.common.utils.STR;
 import com.appslandia.common.utils.StringUtils;
 
 /**
@@ -84,10 +86,9 @@ public class DbContext implements AutoCloseable {
 	    if (field.getKeyType() != FieldType.KEY_INCR && field.getKeyType() != FieldType.COL_GEN) {
 
 		Object val = record.get(field.getName());
-		if (!field.isNullable()) {
 
-		    if (val == null)
-			throw new IllegalArgumentException("The field '" + field.getName() + "' is required.");
+		if (!field.isNullable()) {
+		    Asserts.notNull(val, () -> STR.fmt("The field '{}' is required.", field.getName()));
 		}
 		stat.setObject(field.getName(), new JdbcParam(val, field.getSqlType(), field.getScaleOrLength()));
 	    }
@@ -147,10 +148,9 @@ public class DbContext implements AutoCloseable {
 	    if (field.getKeyType() != FieldType.COL_GEN) {
 
 		Object val = record.get(field.getName());
-		if (!field.isNullable()) {
 
-		    if (val == null)
-			throw new IllegalArgumentException("The field '" + field.getName() + "' is required.");
+		if (!field.isNullable()) {
+		    Asserts.notNull(val, () -> STR.fmt("The field '{}' is required.", field.getName()));
 		}
 		stat.setObject(field.getName(), new JdbcParam(val, field.getSqlType(), field.getScaleOrLength()));
 	    }
@@ -196,8 +196,7 @@ public class DbContext implements AutoCloseable {
 	    if (field.getKeyType() == FieldType.KEY || field.getKeyType() == FieldType.KEY_INCR) {
 
 		Object val = key.get(field.getName());
-		if (val == null)
-		    throw new IllegalArgumentException("The field '" + field.getName() + "' is required.");
+		Asserts.notNull(val, () -> STR.fmt("The field '{}' is required.", field.getName()));
 
 		stat.setObject(field.getName(), new JdbcParam(val, field.getSqlType(), field.getScaleOrLength()));
 	    }
@@ -239,8 +238,7 @@ public class DbContext implements AutoCloseable {
 	    if (field.getKeyType() == FieldType.KEY || field.getKeyType() == FieldType.KEY_INCR) {
 
 		Object val = key.get(field.getName());
-		if (val == null)
-		    throw new IllegalArgumentException("The field '" + field.getName() + "' is required.");
+		Asserts.notNull(val, () -> STR.fmt("The field '{}' is required.", field.getName()));
 
 		stat.setObject(field.getName(), new JdbcParam(val, field.getSqlType(), field.getScaleOrLength()));
 	    }
@@ -275,8 +273,7 @@ public class DbContext implements AutoCloseable {
 	    if (field.getKeyType() == FieldType.KEY || field.getKeyType() == FieldType.KEY_INCR) {
 
 		Object val = key.get(field.getName());
-		if (val == null)
-		    throw new IllegalArgumentException("The field '" + field.getName() + "' is required.");
+		Asserts.notNull(val, () -> STR.fmt("The field '{}' is required.", field.getName()));
 
 		stat.setObject(field.getName(), new JdbcParam(val, field.getSqlType(), field.getScaleOrLength()));
 	    }
@@ -310,7 +307,8 @@ public class DbContext implements AutoCloseable {
 	}
 
 	// Parameters
-	JdbcUtils.setParameters(stat, sql, params);
+	if (params != null)
+	    JdbcUtils.setParameters(stat, sql, params);
 	return stat;
     }
 

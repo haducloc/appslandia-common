@@ -27,7 +27,7 @@ import com.appslandia.common.crypto.CryptoException;
 import com.appslandia.common.crypto.Digester;
 import com.appslandia.common.crypto.DsaDigester;
 import com.appslandia.common.crypto.MacDigester;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -46,16 +46,16 @@ public class JwtSigner extends InitializeObject {
 
     @Override
     protected void init() throws Exception {
-	AssertUtils.assertNotNull(this.alg, "alg is required.");
+	Asserts.notNull(this.alg, "alg is required.");
 
 	if (this != NONE) {
-	    AssertUtils.assertNotNull(this.signer, "signer is required.");
+	    Asserts.notNull(this.signer, "signer is required.");
 	}
     }
 
     public byte[] sign(byte[] message) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(message, "message is required.");
+	Asserts.notNull(message, "message is required.");
 
 	if (this == NONE) {
 	    return EMPTY_SIG;
@@ -65,8 +65,8 @@ public class JwtSigner extends InitializeObject {
 
     public boolean verify(byte[] message, byte[] signature) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(message, "message is required.");
-	AssertUtils.assertNotNull(signature, "signature is required.");
+	Asserts.notNull(message, "message is required.");
+	Asserts.notNull(signature, "signature is required.");
 
 	if (this == NONE) {
 	    return Arrays.equals(signature, EMPTY_SIG);

@@ -31,7 +31,8 @@ import java.util.Map;
 import com.appslandia.common.base.InitializeException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -62,13 +63,13 @@ public class JdbcSql extends InitializeObject implements Serializable {
 
     @Override
     protected void init() throws Exception {
-	AssertUtils.assertNotNull(this.pSql, "pSql is required.");
+	Asserts.notNull(this.pSql, "pSql is required.");
 	translateSql();
     }
 
     public JdbcSql arrayLen(String parameterName, int maxLength) {
 	assertNotInitialized();
-	AssertUtils.assertTrue(maxLength > 0, "maxLength is required.");
+	Asserts.isTrue(maxLength > 0, "maxLength is required.");
 
 	if (this.arrayLens == null) {
 	    this.arrayLens = new HashMap<>();
@@ -118,9 +119,8 @@ public class JdbcSql extends InitializeObject implements Serializable {
 	    Integer arrayLen = (this.arrayLens != null) ? this.arrayLens.get(paramName.value) : null;
 
 	    if (arrayLen != null) {
-		if (!isArrayParam) {
-		    throw new IllegalArgumentException("Array parameter is not found (name=" + paramName + ")");
-		}
+		Asserts.isTrue(isArrayParam, () -> STR.fmt("Array parameter '{}' is required.", paramName));
+
 	    } else {
 		arrayLen = DEFAULT_ARRAY_MAX_LENGTH;
 	    }
@@ -216,10 +216,8 @@ public class JdbcSql extends InitializeObject implements Serializable {
     public List<Integer> getIndexes(String parameterName) {
 	initialize();
 	List<Integer> indexes = this.indexesMap.get(parameterName);
-	if (indexes == null) {
-	    throw new IllegalArgumentException("Parameter is not found (name=" + parameterName + ")");
-	}
-	return indexes;
+
+	return Asserts.notNull(indexes, () -> STR.fmt("Parameter '{}' is not found.", parameterName));
     }
 
     public boolean isArrayParam(String parameterName) {
@@ -230,10 +228,8 @@ public class JdbcSql extends InitializeObject implements Serializable {
     public int getArrayLen(String parameterName) {
 	initialize();
 	Integer len = this.paramsMap.get(parameterName);
-	if (len == null) {
-	    throw new IllegalArgumentException("Array parameter is not found (name=" + parameterName + ")");
-	}
-	return len;
+
+	return Asserts.notNull(len, () -> STR.fmt("Array parameter '{}' is not found.", parameterName));
     }
 
     public static boolean isContext(StringBuilder sb, int paramIdx, String context, Out<Integer> fieldIdx, Out<String> fieldName) {
@@ -302,9 +298,9 @@ public class JdbcSql extends InitializeObject implements Serializable {
 
     public static char getParamPrefix() {
 	char chr = __paramPrefix;
-	if (chr == (char) 0) {
+	if (chr == 0) {
 	    synchronized (MUTEX) {
-		if ((chr = __paramPrefix) == (char) 0) {
+		if ((chr = __paramPrefix) == 0) {
 		    __paramPrefix = chr = ':';
 		}
 	    }
@@ -313,14 +309,15 @@ public class JdbcSql extends InitializeObject implements Serializable {
     }
 
     public static void setParamPrefix(char impl) {
-	if (__paramPrefix == (char) 0) {
+	Asserts.isTrue(__paramPrefix == 0, "JdbcSql.__paramPrefix must be unset.");
+
+	if (__paramPrefix == 0) {
 	    synchronized (MUTEX) {
-		if (__paramPrefix == (char) 0) {
+		if (__paramPrefix == 0) {
 		    __paramPrefix = impl;
 		    return;
 		}
 	    }
 	}
-	throw new IllegalStateException("JdbcSql.__paramPrefix must be null.");
     }
 }

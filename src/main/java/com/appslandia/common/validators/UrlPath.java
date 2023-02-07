@@ -39,11 +39,11 @@ import jakarta.validation.Payload;
  */
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = { PathComp.ConstraintValidatorImpl.class })
+@Constraint(validatedBy = { UrlPath.ConstraintValidatorImpl.class })
 @Documented
-public @interface PathComp {
+public @interface UrlPath {
 
-    String message() default "{com.appslandia.common.validators.PathComp.message}";
+    String message() default "{com.appslandia.common.validators.UrlPath.message}";
 
     Class<?>[] groups() default {};
 
@@ -53,15 +53,15 @@ public @interface PathComp {
     @Retention(RetentionPolicy.RUNTIME)
     @Documented
     @interface List {
-	PathComp[] value();
+	UrlPath[] value();
     }
 
-    static final Pattern PATH_COMPONENT_PATTERN = Pattern.compile("[a-z\\d-]+", Pattern.CASE_INSENSITIVE);
+    static final Pattern URL_PATH_PATTERN = Pattern.compile("[a-z\\d-]+", Pattern.CASE_INSENSITIVE);
 
-    public static class ConstraintValidatorImpl implements ConstraintValidator<PathComp, String> {
+    public static class ConstraintValidatorImpl implements ConstraintValidator<UrlPath, String> {
 
 	@Override
-	public void initialize(PathComp annotation) {
+	public void initialize(UrlPath annotation) {
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public @interface PathComp {
 	    if (value == null) {
 		return true;
 	    }
-	    return PATH_COMPONENT_PATTERN.matcher(value).matches();
+	    return URL_PATH_PATTERN.matcher(value).matches();
 	}
     }
 }

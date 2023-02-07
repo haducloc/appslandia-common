@@ -171,7 +171,7 @@ public class ArrayUtils {
 	if (arr == null)
 	    return null;
 
-	AssertUtils.assertTrue(arr.getClass().isArray());
+	Asserts.isTrue(arr.getClass().isArray());
 
 	if (!arr.getClass().getComponentType().isPrimitive()) {
 	    return (Object[]) arr;
@@ -203,7 +203,7 @@ public class ArrayUtils {
     }
 
     public static int min(int[] arr) {
-	AssertUtils.assertNotNull(arr);
+	Asserts.notNull(arr);
 	if (arr.length == 0)
 	    throw new NoSuchElementException("min: arr is empty.");
 
@@ -215,7 +215,7 @@ public class ArrayUtils {
     }
 
     public static int max(int[] arr) {
-	AssertUtils.assertNotNull(arr);
+	Asserts.notNull(arr);
 	if (arr.length == 0)
 	    throw new NoSuchElementException("max: arr is empty.");
 
@@ -227,7 +227,7 @@ public class ArrayUtils {
     }
 
     public static <T> T min(T[] arr, Comparator<T> comparator) {
-	AssertUtils.assertNotNull(arr);
+	Asserts.notNull(arr);
 	if (arr.length == 0)
 	    throw new NoSuchElementException("min: arr is empty.");
 
@@ -239,7 +239,7 @@ public class ArrayUtils {
     }
 
     public static <T> T max(T[] arr, Comparator<T> comparator) {
-	AssertUtils.assertNotNull(arr);
+	Asserts.notNull(arr);
 	if (arr.length == 0)
 	    throw new NoSuchElementException("max: arr is empty.");
 
@@ -251,7 +251,7 @@ public class ArrayUtils {
     }
 
     public static Iterator<Object> iterator(Object array) {
-	AssertUtils.assertNotNull(array);
+	Asserts.notNull(array);
 
 	return new Iterator<Object>() {
 

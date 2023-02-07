@@ -23,7 +23,8 @@ package com.appslandia.common.geo;
 import java.util.Locale;
 import java.util.concurrent.ThreadLocalRandom;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -80,7 +81,7 @@ public enum Direction {
     }
 
     public static Direction parseValue(String symbol) {
-	AssertUtils.assertNotNull(symbol);
+	Asserts.notNull(symbol);
 	symbol = symbol.toUpperCase(Locale.ENGLISH);
 
 	switch (symbol) {
@@ -93,7 +94,7 @@ public enum Direction {
 	case "W":
 	    return WEST;
 	default:
-	    throw new IllegalArgumentException("symbol is invalid (value=" + symbol + ")");
+	    throw new IllegalArgumentException(STR.fmt("symbol '{}' is invalid.", symbol));
 	}
     }
 

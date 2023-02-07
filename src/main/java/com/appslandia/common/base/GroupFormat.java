@@ -25,7 +25,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -42,7 +43,7 @@ public class GroupFormat {
     private int outputLength;
 
     public GroupFormat(String format) {
-	this.format = AssertUtils.assertNotNull(format, "format is required.");
+	this.format = Asserts.notNull(format, "format is required.");
 	this.parseFormat(format);
     }
 
@@ -66,9 +67,8 @@ public class GroupFormat {
 	    // {d+}
 	    String sizeGroup = matcher.group();
 	    int size = Integer.parseInt(sizeGroup.substring(1, sizeGroup.length() - 1).trim());
-	    if (size == 0) {
-		throw new IllegalArgumentException("format is invalid (format=" + format + ")");
-	    }
+
+	    Asserts.isTrue(size > 0, () -> STR.fmt("The format '{}' is invalid.", format));
 
 	    inputLength += size;
 	    outputLength += size;
@@ -76,9 +76,8 @@ public class GroupFormat {
 	    list.add(new Group(null, size));
 	    lastEnd = matcher.end();
 	}
-	if (list.isEmpty()) {
-	    throw new IllegalArgumentException("No group found (format=" + format + ")");
-	}
+	Asserts.isTrue(!list.isEmpty(), () -> STR.fmt("The format '{}' is invalid.", format));
+
 	this.groups = list.toArray(new Group[list.size()]);
 	this.inputLength = inputLength;
 	this.outputLength = outputLength;

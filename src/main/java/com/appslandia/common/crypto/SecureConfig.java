@@ -26,7 +26,7 @@ import java.io.InputStream;
 import java.io.Reader;
 
 import com.appslandia.common.base.PropertyConfig;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.StringUtils;
 
 /**
@@ -40,22 +40,22 @@ public class SecureConfig extends PropertyConfig {
     final TextEncryptor textEncryptor;
 
     public SecureConfig(char[] password) {
-	AssertUtils.assertNotNull(password);
+	Asserts.notNull(password);
 	this.textEncryptor = new TextEncryptor(new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(32).setPassword(password));
     }
 
     public SecureConfig(String password) {
-	AssertUtils.assertNotNull(password);
+	Asserts.notNull(password);
 	this.textEncryptor = new TextEncryptor(new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(32).setPassword(password));
     }
 
     public SecureConfig(Encryptor encryptor) {
-	AssertUtils.assertNotNull(encryptor);
+	Asserts.notNull(encryptor);
 	this.textEncryptor = new TextEncryptor(encryptor);
     }
 
     public SecureConfig(TextEncryptor textEncryptor) {
-	AssertUtils.assertNotNull(textEncryptor);
+	Asserts.notNull(textEncryptor);
 	this.textEncryptor = textEncryptor;
     }
 

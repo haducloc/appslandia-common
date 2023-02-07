@@ -24,8 +24,10 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.appslandia.common.base.AssertException;
 import com.appslandia.common.base.MapWrapper;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -45,22 +47,17 @@ public abstract class JwtClaims extends MapWrapper<String, Object> {
 
     @Override
     public Object put(String key, Object value) {
-	AssertUtils.assertNotNull(key);
+	Asserts.notNull(key);
 
 	if (value == null) {
 	    return this.remove(key);
 	}
-	AssertUtils.assertTrue(JwtUtils.isSupportedValue(value), "value is unsupported.");
+	Asserts.isTrue(JwtUtils.isSupportedValue(value), "value is unsupported.");
 	return super.put(key, value);
     }
 
     public JwtClaims set(String key, Object value) {
 	put(key, value);
-	return this;
-    }
-
-    public JwtClaims setArray(String key, Object... values) {
-	put(key, values);
 	return this;
     }
 
@@ -79,9 +76,7 @@ public abstract class JwtClaims extends MapWrapper<String, Object> {
 
     public Object getRequired(String key) {
 	Object obj = this.get(key);
-	if (obj == null)
-	    throw new IllegalArgumentException("No value associated with key: " + key);
-	return obj;
+	return Asserts.notNull(obj, () -> STR.fmt("No value associated with key '{}'.", key));
     }
 
     public Date getDate(String key) {
@@ -95,6 +90,6 @@ public abstract class JwtClaims extends MapWrapper<String, Object> {
 	if (d.getClass() == Long.class) {
 	    return new Date((Long) d);
 	}
-	throw new IllegalArgumentException("Date conversion failed.");
+	throw new AssertException("Date conversion failed.");
     }
 }

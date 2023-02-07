@@ -51,9 +51,7 @@ public class CharUtils {
 
 	    char from = range.charAt(0);
 	    char to = range.charAt(2);
-	    if (from > to) {
-		throw new IllegalArgumentException("invalid charRanges (value=" + charRanges + ")");
-	    }
+	    Asserts.isTrue(from <= to, () -> STR.fmt("invalid charRanges expression '{}'.", charRanges));
 
 	    char[] newChars = new char[to - from + 1];
 	    for (int i = 0; i < newChars.length; i++) {

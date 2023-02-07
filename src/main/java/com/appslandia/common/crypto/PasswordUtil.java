@@ -24,7 +24,7 @@ import java.security.SecureRandom;
 import java.util.Random;
 import java.util.regex.Pattern;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CharUtils;
 import com.appslandia.common.utils.RandomUtils;
 
@@ -52,15 +52,15 @@ public class PasswordUtil {
     final Random random = new SecureRandom();
 
     public char[] generatePassword(int minLength, int maxLength) {
-	AssertUtils.assertTrue(minLength <= maxLength, "minLength <= maxLength");
-	AssertUtils.assertTrue(minLength >= 8, "minLength >= 8");
+	Asserts.isTrue(minLength <= maxLength, "minLength <= maxLength");
+	Asserts.isTrue(minLength >= 8, "minLength >= 8");
 
 	int length = RandomUtils.nextInt(minLength, maxLength, this.random);
 	return CharUtils.randomChars(length, ALPHABET, this.random);
     }
 
     public static boolean isValid(String password) {
-	AssertUtils.assertNotNull(password);
+	Asserts.notNull(password);
 	return PASSWORD_PATTERN.matcher(password).matches();
     }
 

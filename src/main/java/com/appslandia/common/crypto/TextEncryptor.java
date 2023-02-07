@@ -25,7 +25,7 @@ import java.nio.charset.StandardCharsets;
 
 import com.appslandia.common.base.BaseEncoder;
 import com.appslandia.common.base.DestroyException;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ValueUtils;
 
 /**
@@ -45,7 +45,7 @@ public class TextEncryptor extends TextBasedCrypto {
 
     @Override
     protected void init() throws Exception {
-	AssertUtils.assertNotNull(this.encryptor, "encryptor is required.");
+	Asserts.notNull(this.encryptor, "encryptor is required.");
 
 	this.textCharset = ValueUtils.valueOrAlt(this.textCharset, StandardCharsets.UTF_8);
 	this.baseEncoder = ValueUtils.valueOrAlt(this.baseEncoder, BaseEncoder.BASE64);
@@ -53,14 +53,14 @@ public class TextEncryptor extends TextBasedCrypto {
 
     public String encrypt(String message) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(message, "message is required.");
+	Asserts.notNull(message, "message is required.");
 
 	return this.baseEncoder.encode(this.encryptor.encrypt(message.getBytes(this.textCharset)));
     }
 
     public String decrypt(String message) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(message, "message is required.");
+	Asserts.notNull(message, "message is required.");
 
 	return new String(this.encryptor.decrypt(this.baseEncoder.decode(message)), this.textCharset);
     }

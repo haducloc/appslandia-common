@@ -26,7 +26,6 @@ import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -35,6 +34,7 @@ import com.appslandia.common.base.InitializeException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.MemoryStream;
 import com.appslandia.common.base.StringWriter;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ObjectUtils;
 import com.appslandia.common.utils.ReflectionUtils;
 
@@ -52,10 +52,6 @@ public abstract class JsonProcessor extends InitializeObject {
     public abstract <T> T read(Reader reader, Type type) throws JsonException;
 
     public <V> Map<String, V> readAsMap(Reader reader) throws JsonException {
-	return ObjectUtils.cast(read(reader, HashMap.class));
-    }
-
-    public <V> Map<String, V> readAsLinkedMap(Reader reader) throws JsonException {
 	return ObjectUtils.cast(read(reader, LinkedHashMap.class));
     }
 
@@ -92,6 +88,8 @@ public abstract class JsonProcessor extends InitializeObject {
     }
 
     public static void setDefault(JsonProcessor impl) {
+	Asserts.isNull(__default, "JsonProcessor.__default must be null.");
+
 	if (__default == null) {
 	    synchronized (MUTEX) {
 		if (__default == null) {
@@ -100,12 +98,13 @@ public abstract class JsonProcessor extends InitializeObject {
 		}
 	    }
 	}
-	throw new IllegalStateException("JsonProcessor.__default must be null.");
     }
 
     private static Supplier<JsonProcessor> __provider;
 
     public static void setProvider(Supplier<JsonProcessor> impl) {
+	Asserts.isNull(__default, "JsonProcessor.__default must be null.");
+
 	if (__default == null) {
 	    synchronized (MUTEX) {
 		if (__default == null) {
@@ -114,7 +113,6 @@ public abstract class JsonProcessor extends InitializeObject {
 		}
 	    }
 	}
-	throw new IllegalStateException("JsonProcessor.__default must be null.");
     }
 
     private static JsonProcessor initJsonProcessor() {

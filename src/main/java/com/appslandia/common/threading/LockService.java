@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -42,7 +42,7 @@ public class LockService<K> extends InitializeObject {
     }
 
     public ReentrantLock getLock(K key) {
-	AssertUtils.assertNotNull(key);
+	Asserts.notNull(key);
 
 	ReentrantLock lock = this.lockMap.get(key);
 	if (lock == null) {

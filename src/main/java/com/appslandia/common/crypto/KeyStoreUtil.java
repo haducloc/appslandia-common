@@ -30,7 +30,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.SYS;
 
 /**
@@ -66,7 +66,7 @@ public class KeyStoreUtil extends InitializeObject {
 
     @Override
     protected void init() throws Exception {
-	AssertUtils.assertNotNull(this.type, "type is required.");
+	Asserts.notNull(this.type, "type is required.");
 
 	if (this.provider == null) {
 	    this.keyStore = KeyStore.getInstance(this.type);
@@ -136,7 +136,7 @@ public class KeyStoreUtil extends InitializeObject {
 	return this;
     }
 
-    public KeyStoreUtil setPassword(String passwordOrEnv) throws IllegalArgumentException {
+    public KeyStoreUtil setPassword(String passwordOrEnv) {
 	assertNotInitialized();
 
 	if (passwordOrEnv != null) {
@@ -166,7 +166,7 @@ public class KeyStoreUtil extends InitializeObject {
 	return this;
     }
 
-    public KeyStoreUtil setProtectionParameter(String passwordOrEnv) throws IllegalArgumentException {
+    public KeyStoreUtil setProtectionParameter(String passwordOrEnv) {
 	assertNotInitialized();
 
 	if (passwordOrEnv != null) {
@@ -177,6 +177,6 @@ public class KeyStoreUtil extends InitializeObject {
     }
 
     protected KeyStore.ProtectionParameter getProtectionParameter() {
-	return AssertUtils.assertNotNull(this.protectionParameter, "protectionParameter is required.");
+	return Asserts.notNull(this.protectionParameter, "protectionParameter is required.");
     }
 }

@@ -24,9 +24,9 @@ import java.util.Iterator;
 import java.util.Map;
 
 import com.appslandia.common.utils.ParseUtils;
+import com.appslandia.common.utils.STR;
 import com.appslandia.common.utils.SYS;
 import com.appslandia.common.utils.SplitUtils;
-import com.appslandia.common.utils.StringFormat;
 import com.appslandia.common.utils.StringUtils;
 
 /**
@@ -47,7 +47,7 @@ public interface Config {
 	return (value != null) ? value : defaultValue;
     }
 
-    default public String getRequiredString(String key) throws IllegalArgumentException {
+    default public String getRequiredString(String key) {
 	String value = getString(key);
 	if (value == null) {
 	    throw toNoValueException(key);
@@ -63,12 +63,12 @@ public interface Config {
 	return SplitUtils.split(value, ',');
     }
 
-    default public String getFormatted(String key) throws IllegalArgumentException {
+    default public String getFormatted(String key) {
 	String value = getString(key);
 	if (value == null) {
 	    return null;
 	}
-	return StringFormat.format(value, (pname, expr) -> {
+	return STR.format(value, (pname, expr) -> {
 	    // CONFIG
 	    String resolvedValue = getString(pname);
 
@@ -76,11 +76,11 @@ public interface Config {
 	    if (resolvedValue == null) {
 		resolvedValue = SYS.resolve(expr);
 	    }
-	    return (resolvedValue != null) ? resolvedValue : StringFormat.MISSED_VALUE;
+	    return (resolvedValue != null) ? resolvedValue : STR.MISSED_VALUE;
 	});
     }
 
-    default public String getRequiredFormatted(String key) throws IllegalArgumentException {
+    default public String getRequiredFormatted(String key) {
 	String value = getFormatted(key);
 	if (value == null) {
 	    throw toNoValueException(key);
@@ -88,12 +88,12 @@ public interface Config {
 	return value;
     }
 
-    default public String getFormatted(String key, Map<String, Object> parameters) throws IllegalArgumentException {
+    default public String getFormatted(String key, Map<String, Object> parameters) {
 	String value = getString(key);
 	if (value == null) {
 	    return null;
 	}
-	return StringFormat.format(value, (pname, expr) -> {
+	return STR.format(value, (pname, expr) -> {
 	    // Parameters
 	    Object resolvedValue = parameters.get(pname);
 
@@ -106,11 +106,11 @@ public interface Config {
 	    if (resolvedValue == null) {
 		resolvedValue = SYS.resolve(expr);
 	    }
-	    return (resolvedValue != null) ? resolvedValue : StringFormat.MISSED_VALUE;
+	    return (resolvedValue != null) ? resolvedValue : STR.MISSED_VALUE;
 	});
     }
 
-    default public String getRequiredFormatted(String key, Map<String, Object> parameters) throws IllegalArgumentException {
+    default public String getRequiredFormatted(String key, Map<String, Object> parameters) {
 	String value = getFormatted(key, parameters);
 	if (value == null) {
 	    throw toNoValueException(key);
@@ -118,12 +118,12 @@ public interface Config {
 	return value;
     }
 
-    default public String getFormatted(String key, Object... parameters) throws IllegalArgumentException {
+    default public String getFormatted(String key, Object... parameters) {
 	String value = getString(key);
 	if (value == null) {
 	    return null;
 	}
-	return StringFormat.format(value, (pname, expr) -> {
+	return STR.format(value, (pname, expr) -> {
 
 	    Object resolvedValue = null;
 	    try {
@@ -142,11 +142,11 @@ public interface Config {
 		resolvedValue = SYS.resolve(expr);
 	    }
 
-	    return (resolvedValue != null) ? resolvedValue : StringFormat.MISSED_VALUE;
+	    return (resolvedValue != null) ? resolvedValue : STR.MISSED_VALUE;
 	});
     }
 
-    default public String getRequiredFormatted(String key, Object... parameters) throws IllegalArgumentException {
+    default public String getRequiredFormatted(String key, Object... parameters) {
 	String value = getFormatted(key, parameters);
 	if (value == null) {
 	    throw toNoValueException(key);
@@ -159,7 +159,7 @@ public interface Config {
 	return ParseUtils.parseBool(value, defaultValue);
     }
 
-    default public boolean getRequiredBool(String key) throws IllegalArgumentException {
+    default public boolean getRequiredBool(String key) {
 	String value = getString(key);
 	if (value == null) {
 	    throw toNoValueException(key);
@@ -181,7 +181,7 @@ public interface Config {
 	return ParseUtils.parseInt(value, defaultValue);
     }
 
-    default public int getRequiredInt(String key) throws IllegalArgumentException {
+    default public int getRequiredInt(String key) {
 	String value = getString(key);
 	if (value == null) {
 	    throw toNoValueException(key);
@@ -197,7 +197,7 @@ public interface Config {
 	return ParseUtils.parseLong(value, defaultValue);
     }
 
-    default public long getRequiredLong(String key) throws IllegalArgumentException {
+    default public long getRequiredLong(String key) {
 	String value = getString(key);
 	if (value == null) {
 	    throw toNoValueException(key);
@@ -213,7 +213,7 @@ public interface Config {
 	return ParseUtils.parseDouble(value, defaultValue);
     }
 
-    default public double getRequiredDouble(String key) throws IllegalArgumentException {
+    default public double getRequiredDouble(String key) {
 	String value = getString(key);
 	if (value == null) {
 	    throw toNoValueException(key);
@@ -221,7 +221,7 @@ public interface Config {
 	return Double.parseDouble(value);
     }
 
-    private static IllegalArgumentException toNoValueException(String key) {
-	return new IllegalArgumentException("No value associated with key: " + key);
+    private static AssertException toNoValueException(String key) {
+	return new AssertException(STR.fmt("No value associated with key '{}'.", key));
     }
 }

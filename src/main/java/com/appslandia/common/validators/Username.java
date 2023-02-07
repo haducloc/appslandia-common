@@ -27,7 +27,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.regex.Pattern;
 
-import com.appslandia.common.validators.UserName.ConstraintValidatorImpl;
+import com.appslandia.common.validators.Username.ConstraintValidatorImpl;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
@@ -43,9 +43,9 @@ import jakarta.validation.Payload;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = { ConstraintValidatorImpl.class })
 @Documented
-public @interface UserName {
+public @interface Username {
 
-    String message() default "{com.appslandia.common.validators.UserName.message}";
+    String message() default "{com.appslandia.common.validators.Username.message}";
 
     Class<?>[] groups() default {};
 
@@ -55,7 +55,7 @@ public @interface UserName {
     @Retention(RetentionPolicy.RUNTIME)
     @Documented
     @interface List {
-	UserName[] value();
+	Username[] value();
     }
 
     // allow characters: a-zA-Z0-9.
@@ -65,9 +65,9 @@ public @interface UserName {
 
     static final Pattern USERNAME_PATTERN = Pattern.compile("(?=.{6,128}$)(?!.*\\.\\.)(?!.*\\.$)[a-z][a-z\\d.]+", Pattern.CASE_INSENSITIVE);
 
-    public static class ConstraintValidatorImpl implements ConstraintValidator<UserName, CharSequence> {
+    public static class ConstraintValidatorImpl implements ConstraintValidator<Username, CharSequence> {
 
-	public void initialize(UserName annotation) {
+	public void initialize(Username annotation) {
 	}
 
 	public boolean isValid(CharSequence value, ConstraintValidatorContext context) {

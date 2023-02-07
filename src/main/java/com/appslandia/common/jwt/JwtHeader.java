@@ -49,12 +49,6 @@ public class JwtHeader extends JwtClaims {
     }
 
     @Override
-    public JwtHeader setArray(String key, Object... values) {
-	super.setArray(key, values);
-	return this;
-    }
-
-    @Override
     public JwtHeader setNumericDate(String key, Date value) {
 	super.setNumericDate(key, value);
 	return this;

@@ -69,6 +69,6 @@ public class ByteConverter extends NumberConverter<Byte> {
 	} catch (NumberFormatException ex) {
 	}
 
-	throw toParsingError(str);
+	throw toParsingError(str, getTargetType().getName());
     }
 }

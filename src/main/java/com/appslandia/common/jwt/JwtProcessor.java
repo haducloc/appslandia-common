@@ -29,7 +29,8 @@ import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.crypto.CryptoException;
 import com.appslandia.common.json.JsonException;
 import com.appslandia.common.json.JsonProcessor;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.STR;
 import com.appslandia.common.utils.ValueUtils;
 
 /**
@@ -45,7 +46,7 @@ public class JwtProcessor extends InitializeObject {
 
     @Override
     protected void init() throws Exception {
-	AssertUtils.assertNotNull(this.jsonProcessor, "jsonProcessor is required.");
+	Asserts.notNull(this.jsonProcessor, "jsonProcessor is required.");
 
 	this.jwtSigner = ValueUtils.valueOrAlt(this.jwtSigner, JwtSigner.NONE);
     }
@@ -72,9 +73,9 @@ public class JwtProcessor extends InitializeObject {
 
     public String toJwt(JwtToken jwt) throws CryptoException, JsonException, JwtException {
 	this.initialize();
-	AssertUtils.assertNotNull(jwt);
-	AssertUtils.assertNotNull(jwt.getHeader());
-	AssertUtils.assertNotNull(jwt.getPayload());
+	Asserts.notNull(jwt);
+	Asserts.notNull(jwt.getHeader());
+	Asserts.notNull(jwt.getPayload());
 
 	// Header
 	String base64Header = BaseEncoder.BASE64_URL.encode(this.jsonProcessor.toByteArray(jwt.getHeader()));
@@ -95,30 +96,29 @@ public class JwtProcessor extends InitializeObject {
 	return newBuilder(base64Header, base64Payload, 1 + base64Sig.length()).append(".").append(base64Sig).toString();
     }
 
-    public JwtToken parseJwt(String jwt) throws IllegalArgumentException, CryptoException, JsonException, JwtException {
+    public JwtToken parseJwt(String jwt) throws CryptoException, JsonException, JwtException {
 	this.initialize();
-	AssertUtils.assertNotNull(jwt);
+	Asserts.notNull(jwt);
 
 	String[] parts = JwtUtils.parseParts(jwt);
-	if (parts == null) {
-	    throw new JwtException("JWT token is invalid format.");
-	}
+	Asserts.notNull(parts, () -> STR.fmt("The jwt '{}' is invalid format.", jwt));
 
-	// No ALG
+	// Verify Signature
+
 	if (parts[2] == null) {
 	    if (this.jwtSigner != JwtSigner.NONE) {
-		throw new JwtException("JWT signature is required.");
+		throw new JwtException("JWT signature verification failed.");
 	    }
 	} else {
 	    if (this.jwtSigner == JwtSigner.NONE) {
-		throw new JwtException("jwtSigner is required.");
+		throw new JwtException("JWT signature verification failed.");
 	    }
 
 	    // ALG
 	    String dataToSign = newBuilder(parts[0], parts[1], 0).toString();
 
 	    if (!this.jwtSigner.verify(dataToSign.getBytes(StandardCharsets.UTF_8), BaseEncoder.BASE64_URL.decode(parts[2]))) {
-		throw new JwtException("JWT signature is invalid.");
+		throw new JwtException("JWT signature verification failed.");
 	    }
 	}
 

@@ -68,6 +68,6 @@ public class BooleanConverter implements Converter<Boolean> {
 	if (VALUE_FALSE.equals(val)) {
 	    return Boolean.FALSE;
 	}
-	throw toParsingError(str);
+	throw toParsingError(str, getTargetType().getName());
     }
 }

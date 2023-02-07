@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class StringFormat {
+public class STR {
 
     public static final Object MISSED_VALUE = new Object() {
     };
@@ -38,7 +38,7 @@ public class StringFormat {
     // ${paramName}
     private static final Pattern PARAM_HOLDER_PATTERN = Pattern.compile("\\$\\{[^}]*}", Pattern.CASE_INSENSITIVE);
 
-    public static String format(String str, Map<String, Object> parameters) throws IllegalArgumentException {
+    public static String format(String str, Map<String, Object> parameters) {
 	if (str == null) {
 	    return null;
 	}
@@ -47,7 +47,7 @@ public class StringFormat {
 	});
     }
 
-    public static String format(String str, Object... parameters) throws IllegalArgumentException {
+    public static String format(String str, Object... parameters) {
 	if (str == null) {
 	    return null;
 	}
@@ -63,7 +63,7 @@ public class StringFormat {
 	});
     }
 
-    public static String format(String str, BiFunction<String, String, Object> parameters) throws IllegalArgumentException {
+    public static String format(String str, BiFunction<String, String, Object> parameters) {
 	if (str == null) {
 	    return null;
 	}
@@ -73,8 +73,8 @@ public class StringFormat {
 	return sb.toString();
     }
 
-    public static void format(String str, BiFunction<String, String, Object> parameters, StringBuilder out) throws IllegalArgumentException {
-	AssertUtils.assertNotNull(str);
+    public static void format(String str, BiFunction<String, String, Object> parameters, StringBuilder out) {
+	Asserts.notNull(str);
 
 	// ${paramName}
 	Matcher matcher = PARAM_HOLDER_PATTERN.matcher(str);
@@ -92,16 +92,13 @@ public class StringFormat {
 	    // ${paramName}
 	    String parameterGroup = matcher.group();
 	    String parameterName = parameterGroup.substring(parameterGroup.indexOf('{') + 1, parameterGroup.length() - 1).trim();
-
-	    if (parameterName.isEmpty())
-		throw new IllegalArgumentException("Invalid expression: " + parameterGroup);
+	    Asserts.isTrue(!parameterName.isEmpty(), () -> STR.fmt("Invalid expression '{}'.", parameterGroup));
 
 	    Object parameterValue = parameters.apply(parameterName, parameterGroup);
+	    if (parameterValue == MISSED_VALUE)
+		parameterValue = parameterGroup;
 
-	    if (parameterValue == MISSED_VALUE) {
-		throw new IllegalArgumentException("Missing value for expression: " + parameterGroup);
-
-	    } else if (parameterValue == null) {
+	    if (parameterValue == null) {
 		out.append("null");
 
 	    } else {
@@ -124,7 +121,7 @@ public class StringFormat {
 
     private static final Pattern SEQ_HOLDER_PATTERN = Pattern.compile("\\{}");
 
-    public static String fmt(String str, Object... entries) throws IllegalArgumentException {
+    public static String fmt(String str, Object... entries) {
 	if (str == null) {
 	    return null;
 	}
@@ -145,11 +142,10 @@ public class StringFormat {
 	    // {}
 	    index++;
 	    Object entryValue = ((0 <= index) && (index < entries.length)) ? entries[index] : MISSED_VALUE;
+	    if (entryValue == MISSED_VALUE)
+		entryValue = "{}";
 
-	    if (entryValue == MISSED_VALUE) {
-		throw new IllegalArgumentException("Missing value for expression {}.");
-
-	    } else if (entryValue == null) {
+	    if (entryValue == null) {
 		out.append("null");
 
 	    } else {

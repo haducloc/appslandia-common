@@ -54,7 +54,7 @@ public class ConfigWrapper implements Config {
     }
 
     @Override
-    public String getRequiredString(String key) throws IllegalArgumentException {
+    public String getRequiredString(String key) {
 	return this.cfg.getRequiredString(key);
     }
 
@@ -64,32 +64,32 @@ public class ConfigWrapper implements Config {
     }
 
     @Override
-    public String getFormatted(String key) throws IllegalArgumentException {
+    public String getFormatted(String key) {
 	return this.cfg.getFormatted(key);
     }
 
     @Override
-    public String getRequiredFormatted(String key) throws IllegalArgumentException {
+    public String getRequiredFormatted(String key) {
 	return this.cfg.getRequiredFormatted(key);
     }
 
     @Override
-    public String getFormatted(String key, Map<String, Object> parameters) throws IllegalArgumentException {
+    public String getFormatted(String key, Map<String, Object> parameters) {
 	return this.cfg.getFormatted(key, parameters);
     }
 
     @Override
-    public String getRequiredFormatted(String key, Map<String, Object> parameters) throws IllegalArgumentException {
+    public String getRequiredFormatted(String key, Map<String, Object> parameters) {
 	return this.cfg.getRequiredFormatted(key, parameters);
     }
 
     @Override
-    public String getFormatted(String key, Object... parameters) throws IllegalArgumentException {
+    public String getFormatted(String key, Object... parameters) {
 	return this.cfg.getFormatted(key, parameters);
     }
 
     @Override
-    public String getRequiredFormatted(String key, Object... parameters) throws IllegalArgumentException {
+    public String getRequiredFormatted(String key, Object... parameters) {
 	return this.cfg.getRequiredFormatted(key, parameters);
     }
 
@@ -99,7 +99,7 @@ public class ConfigWrapper implements Config {
     }
 
     @Override
-    public boolean getRequiredBool(String key) throws IllegalArgumentException {
+    public boolean getRequiredBool(String key) {
 	return this.cfg.getRequiredBool(key);
     }
 
@@ -109,7 +109,7 @@ public class ConfigWrapper implements Config {
     }
 
     @Override
-    public int getRequiredInt(String key) throws IllegalArgumentException {
+    public int getRequiredInt(String key) {
 	return this.cfg.getRequiredInt(key);
     }
 
@@ -119,7 +119,7 @@ public class ConfigWrapper implements Config {
     }
 
     @Override
-    public long getRequiredLong(String key) throws IllegalArgumentException {
+    public long getRequiredLong(String key) {
 	return this.cfg.getRequiredLong(key);
     }
 
@@ -129,7 +129,7 @@ public class ConfigWrapper implements Config {
     }
 
     @Override
-    public double getRequiredDouble(String key) throws IllegalArgumentException {
+    public double getRequiredDouble(String key) {
 	return this.cfg.getRequiredDouble(key);
     }
 }

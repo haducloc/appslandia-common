@@ -61,7 +61,7 @@ public abstract class InitializeObject implements InitializeSupport {
 
     protected void assertNotInitialized() {
 	if (this.initialized) {
-	    throw new IllegalStateException("initialized.");
+	    throw new AssertException("initialized.");
 	}
     }
 }

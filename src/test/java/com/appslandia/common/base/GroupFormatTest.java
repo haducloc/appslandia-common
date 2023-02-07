@@ -65,7 +65,6 @@ public class GroupFormatTest {
 	    Assertions.fail();
 
 	} catch (Exception ex) {
-	    Assertions.assertTrue(ex instanceof IllegalArgumentException);
 	}
     }
 

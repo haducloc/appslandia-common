@@ -22,7 +22,7 @@ package com.appslandia.common.base;
 
 import java.util.UUID;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -49,7 +49,7 @@ public class UUIDGenerator implements TextGenerator {
 
     @Override
     public boolean verify(String value) {
-	AssertUtils.assertNotNull(value);
+	Asserts.notNull(value);
 	if (value.length() != 32) {
 	    return false;
 	}

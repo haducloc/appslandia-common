@@ -23,7 +23,7 @@ package com.appslandia.common.geo;
 import java.text.DecimalFormat;
 import java.util.stream.IntStream;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 
 public class GeoUtils {
 
@@ -36,16 +36,16 @@ public class GeoUtils {
     public static final double EQUATOR_CIRCUMFERENCE_MILES = 24_901.461;
 
     public static double toDecimalDegrees(int degrees, double minutes) {
-	AssertUtils.assertNonNegative(degrees);
-	AssertUtils.assertNonNegative(minutes);
+	Asserts.isTrue(degrees >= 0);
+	Asserts.isTrue(minutes >= 0.0d);
 
 	return degrees + minutes / 60;
     }
 
     public static double toDecimalDegrees(int degrees, int minutes, double seconds) {
-	AssertUtils.assertNonNegative(degrees);
-	AssertUtils.assertNonNegative(minutes);
-	AssertUtils.assertNonNegative(seconds);
+	Asserts.isTrue(degrees >= 0);
+	Asserts.isTrue(minutes >= 0.0d);
+	Asserts.isTrue(seconds >= 0.0d);
 
 	return degrees + minutes / 60.0 + seconds / 3600;
     }

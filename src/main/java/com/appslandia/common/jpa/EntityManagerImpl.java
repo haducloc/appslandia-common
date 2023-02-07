@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.appslandia.common.base.Params;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 
 import jakarta.persistence.Cache;
 import jakarta.persistence.EntityGraph;
@@ -54,7 +54,7 @@ public class EntityManagerImpl implements EntityManager {
     }
 
     public EntityManagerImpl(EntityManager em) {
-	AssertUtils.assertTrue(!(em instanceof EntityManagerImpl));
+	Asserts.isTrue(!(em instanceof EntityManagerImpl));
 	this.em = em;
     }
 

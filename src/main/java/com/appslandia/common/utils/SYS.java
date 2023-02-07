@@ -57,10 +57,7 @@ public class SYS {
 
     public static String getRequiredProp(String key) {
 	String value = getProp(key, null);
-	if (value == null) {
-	    throw new IllegalArgumentException("No value associated with property: " + key);
-	}
-	return value;
+	return Asserts.notNull(value, () -> STR.fmt("No value associated with property '{}'.", key));
     }
 
     public static String getEnv(String key, String defaultValue) {
@@ -70,29 +67,26 @@ public class SYS {
 
     public static String getRequiredEnv(String key) {
 	String value = getEnv(key, null);
-	if (value == null) {
-	    throw new IllegalArgumentException("No value associated with env: " + key);
-	}
-	return value;
+	return Asserts.notNull(value, () -> STR.fmt("No value associated with env '{}'.", key));
     }
 
-    public static String resolveString(String str) throws IllegalArgumentException {
+    public static String resolveString(String str) {
 	if (str == null) {
 	    return null;
 	}
-	return StringFormat.format(str, (p, expr) -> {
+	return STR.format(str, (p, expr) -> {
 	    // SYS
 	    String resolvedValue = resolve(expr);
 
-	    return (resolvedValue != null) ? resolvedValue : StringFormat.MISSED_VALUE;
+	    return (resolvedValue != null) ? resolvedValue : STR.MISSED_VALUE;
 	});
     }
 
-    public static String resolveString(String str, Map<String, Object> parameters) throws IllegalArgumentException {
+    public static String resolveString(String str, Map<String, Object> parameters) {
 	if (str == null) {
 	    return null;
 	}
-	return StringFormat.format(str, (pname, expr) -> {
+	return STR.format(str, (pname, expr) -> {
 	    // Parameters
 	    Object resolvedValue = parameters.get(pname);
 
@@ -100,15 +94,15 @@ public class SYS {
 	    if (resolvedValue == null) {
 		resolvedValue = resolve(expr);
 	    }
-	    return (resolvedValue != null) ? resolvedValue : StringFormat.MISSED_VALUE;
+	    return (resolvedValue != null) ? resolvedValue : STR.MISSED_VALUE;
 	});
     }
 
-    public static String resolveString(String str, Object... parameters) throws IllegalArgumentException {
+    public static String resolveString(String str, Object... parameters) {
 	if (str == null) {
 	    return null;
 	}
-	return StringFormat.format(str, (pname, expr) -> {
+	return STR.format(str, (pname, expr) -> {
 
 	    Object resolvedValue = null;
 	    try {
@@ -126,7 +120,7 @@ public class SYS {
 	    if (resolvedValue == null) {
 		resolvedValue = resolve(expr);
 	    }
-	    return (resolvedValue != null) ? resolvedValue : StringFormat.MISSED_VALUE;
+	    return (resolvedValue != null) ? resolvedValue : STR.MISSED_VALUE;
 	});
     }
 
@@ -140,16 +134,16 @@ public class SYS {
     private static final Pattern ENV_VAL_EXPR_PATTERN = Pattern.compile("[^\\s,:]+(\\s*,\\s*env.[^\\s,:]+\\s*)?(\\s*:\\s*[^\\s]+){0,1}", Pattern.CASE_INSENSITIVE);
     private static final Pattern ENV_VAL_HOLDER_PATTERN = Pattern.compile("\\$\\{[^}]*}");
 
-    public static String resolve(String valueOrExpr) throws IllegalArgumentException {
-	AssertUtils.assertNotNull(valueOrExpr);
+    public static String resolve(String valueOrExpr) {
+	Asserts.notNull(valueOrExpr);
 
 	if (!ENV_VAL_HOLDER_PATTERN.matcher(valueOrExpr).matches()) {
 	    return valueOrExpr;
 	}
 	String expr = StringUtils.trimToNull(valueOrExpr.substring(2, valueOrExpr.length() - 1));
 
-	if ((expr == null) || !ENV_VAL_EXPR_PATTERN.matcher(expr).matches())
-	    throw new IllegalArgumentException("Invalid expression: " + expr);
+	Asserts.notNull(expr);
+	Asserts.isTrue(ENV_VAL_EXPR_PATTERN.matcher(expr).matches(), () -> STR.fmt("Invalid expression '{}'.", expr));
 
 	return doResolve(expr);
     }

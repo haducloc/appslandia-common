@@ -45,11 +45,6 @@ public class Params extends FluentMap<String, Object> {
 	return this;
     }
 
-    public Params setArray(String key, Object... values) {
-	this.map.put(key, values);
-	return this;
-    }
-
     public static Params of(String key, Object value) {
 	return new Params(new HashMap<>(1)).set(key, value);
     }

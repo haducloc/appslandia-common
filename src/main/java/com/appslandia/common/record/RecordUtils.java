@@ -37,10 +37,10 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.ReflectionException;
-import com.appslandia.common.utils.StringFormat;
+import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -76,7 +76,7 @@ public final class RecordUtils {
     public static Table loadTable(Connection conn, String catalog, String schema, String tableName) throws SQLException {
 	// tableName
 	if (!checkTable(conn, catalog, schema, tableName)) {
-	    throw new IllegalArgumentException(StringFormat.fmt("catalog={},schema={},tableName={} is not found.", catalog, schema, tableName));
+	    throw new IllegalArgumentException(STR.fmt("catalog={}, schema={}, tableName={} is not found.", catalog, schema, tableName));
 	}
 
 	// fields
@@ -127,8 +127,8 @@ public final class RecordUtils {
 			continue;
 		    }
 
-		    AssertUtils.assertNotNull(dpd.getReadMethod());
-		    AssertUtils.assertNotNull(dpd.getWriteMethod());
+		    Asserts.notNull(dpd.getReadMethod());
+		    Asserts.notNull(dpd.getWriteMethod());
 
 		    r.put(field.getName(), dpd.getReadMethod().invoke(entity));
 		}
@@ -143,13 +143,13 @@ public final class RecordUtils {
 	}
     }
 
-    public static Key toKey(Table table, Object pk) throws IllegalArgumentException, ReflectionException {
-	AssertUtils.assertNotNull(pk);
-	AssertUtils.assertTrue(PK_JAVA_TYPES.contains(pk.getClass()), "pk is invalid.");
+    public static Key toKey(Table table, Object pk) throws ReflectionException {
+	Asserts.notNull(pk);
+	Asserts.isTrue(PK_JAVA_TYPES.contains(pk.getClass()), "pk is invalid.");
 
 	List<Field> keyFields = table.getFields().stream().filter(f -> f.getKeyType() == FieldType.KEY || f.getKeyType() == FieldType.KEY_INCR).collect(Collectors.toList());
 
-	AssertUtils.assertTrue(keyFields.size() == 1, "table is invalid.");
+	Asserts.isTrue(keyFields.size() == 1, "table is invalid.");
 
 	return new Key().set(keyFields.get(0).getName(), pk);
     }

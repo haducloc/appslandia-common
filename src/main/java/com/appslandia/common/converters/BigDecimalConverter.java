@@ -85,6 +85,6 @@ public class BigDecimalConverter extends NumberConverter<BigDecimal> {
 	    return (number instanceof BigDecimal) ? (BigDecimal) number : new BigDecimal(number.toString());
 	}
 
-	throw toParsingError(str);
+	throw toParsingError(str, getTargetType().getName());
     }
 }

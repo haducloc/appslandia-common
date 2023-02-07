@@ -20,6 +20,8 @@
 
 package com.appslandia.common.base;
 
+import com.appslandia.common.utils.Asserts;
+
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
@@ -28,11 +30,9 @@ package com.appslandia.common.base;
 public class UncheckedException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
-    public UncheckedException(Throwable cause) {
-	super(cause);
+    public UncheckedException(Throwable throwable) {
+	super(throwable);
 
-	if (cause instanceof RuntimeException) {
-	    throw new IllegalArgumentException("Error or Checked Exception is required.");
-	}
+	Asserts.isTrue(!(throwable instanceof RuntimeException), "The throwable must be java.lang.Error or check exception.");
     }
 }

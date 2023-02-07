@@ -28,6 +28,7 @@ import java.security.cert.CertificateEncodingException;
 
 import com.appslandia.common.base.BaseEncoder;
 import com.appslandia.common.base.StringWriter;
+import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -36,36 +37,42 @@ import com.appslandia.common.base.StringWriter;
  */
 public class PKIUtils {
 
-    public static byte[] toDerEncoded(String pem) throws IllegalArgumentException {
+    public static byte[] toDerEncoded(String pem) {
 	pem = removeBeginEnd(pem);
 	return BaseEncoder.BASE64_MIME.decode(pem);
     }
 
-    public static String removeBeginEnd(String pem) throws IllegalArgumentException {
+    public static String removeBeginEnd(String pem) {
 	// Remove -----BEGIN .+ -----
 	int idx = pem.indexOf("-----BEGIN ");
-	if (idx != 0)
-	    throw toInvalidPEMException(pem);
+	boolean valid = true;
 
-	idx = pem.indexOf("-----", 11);
 	if (idx < 0)
-	    throw toInvalidPEMException(pem);
-	pem = pem.substring(idx + 5);
+	    valid = false;
+
+	if (valid) {
+	    idx = pem.indexOf("-----", idx + 11);
+	    if (idx < 0)
+		valid = false;
+	    else
+		pem = pem.substring(idx + 5);
+	}
 
 	// Remove -----END .+ -----
-	idx = pem.lastIndexOf("-----");
-	if (idx < 0)
-	    throw toInvalidPEMException(pem);
+	if (valid) {
+	    idx = pem.lastIndexOf("-----");
+	    if (idx < 0)
+		valid = false;
+	}
 
-	idx = pem.lastIndexOf("-----END ", idx);
-	if (idx < 0)
-	    throw toInvalidPEMException(pem);
+	if (valid) {
+	    idx = pem.lastIndexOf("-----END ", idx - 9);
+	    if (idx < 0)
+		valid = false;
+	}
+	Asserts.isTrue(valid, "The pem is invalid.");
 
 	return pem.substring(0, idx).trim();
-    }
-
-    static IllegalArgumentException toInvalidPEMException(String pem) {
-	return new IllegalArgumentException("The given pem is invalid: " + pem);
     }
 
     // PEM: Privacy-enhanced Electronic Mail

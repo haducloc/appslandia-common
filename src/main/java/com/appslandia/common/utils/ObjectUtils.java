@@ -77,7 +77,7 @@ public class ObjectUtils {
 
     public static String asString(Object array) {
 	if (array != null) {
-	    AssertUtils.assertTrue(array.getClass().isArray());
+	    Asserts.isTrue(array.getClass().isArray());
 	}
 	if (array == null) {
 	    return NULL_STR;

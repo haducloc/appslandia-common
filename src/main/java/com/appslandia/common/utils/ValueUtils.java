@@ -88,7 +88,7 @@ public class ValueUtils {
     }
 
     public static <T> T valueOrNull(T checkValue, T[] validValues) {
-	AssertUtils.assertHasElements(validValues);
+	Asserts.hasElements(validValues);
 
 	if (checkValue == null) {
 	    return null;
@@ -100,7 +100,7 @@ public class ValueUtils {
     }
 
     public static Integer valueOrNull(Integer checkValue, int[] validValues) {
-	AssertUtils.assertTrue((validValues != null) && (validValues.length > 0));
+	Asserts.isTrue((validValues != null) && (validValues.length > 0));
 
 	if (checkValue == null) {
 	    return null;

@@ -24,7 +24,7 @@ import java.lang.annotation.Annotation;
 import java.util.Arrays;
 
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ReflectionUtils;
 import com.appslandia.common.utils.ValueUtils;
 
@@ -44,9 +44,9 @@ public class ObjectDefinition extends InitializeObject {
 
     @Override
     protected void init() throws Exception {
-	AssertUtils.assertNotNull(this.types);
-	AssertUtils.assertNotNull(this.scope);
-	AssertUtils.assertTrue((this.implClass != null) || (this.producer != null));
+	Asserts.notNull(this.types);
+	Asserts.notNull(this.scope);
+	Asserts.isTrue((this.implClass != null) || (this.producer != null));
 
 	this.qualifiers = ValueUtils.valueOrAlt(this.qualifiers, ReflectionUtils.EMPTY_ANNOTATIONS);
     }

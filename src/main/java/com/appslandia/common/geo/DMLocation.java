@@ -20,8 +20,8 @@
 
 package com.appslandia.common.geo;
 
-import com.appslandia.common.utils.AssertUtils;
-import com.appslandia.common.utils.StringFormat;
+import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -34,8 +34,8 @@ public class DMLocation {
     final GeoDM longitude;
 
     public DMLocation(double latitude, double longitude) {
-	AssertUtils.assertTrue((latitude >= -90.0) && (latitude <= 90.0), "latitude is invalid.");
-	AssertUtils.assertTrue((longitude >= -180.0) && (longitude <= 180.0), "longitude is invalid.");
+	Asserts.isTrue((latitude >= -90.0) && (latitude <= 90.0), "latitude is invalid.");
+	Asserts.isTrue((longitude >= -180.0) && (longitude <= 180.0), "longitude is invalid.");
 
 	this.latitude = GeoDM.toLatDM(latitude);
 	this.longitude = GeoDM.toLongDM(longitude);
@@ -54,7 +54,7 @@ public class DMLocation {
     }
 
     public String toString(int minutesDecimals) {
-	return StringFormat.fmt("{} {}", this.latitude.toString(minutesDecimals), this.longitude.toString(minutesDecimals));
+	return STR.fmt("{} {}", this.latitude.toString(minutesDecimals), this.longitude.toString(minutesDecimals));
     }
 
     @Override

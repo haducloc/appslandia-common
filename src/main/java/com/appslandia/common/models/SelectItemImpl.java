@@ -22,7 +22,7 @@ package com.appslandia.common.models;
 
 import java.util.Objects;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.StringUtils;
 
 /**
@@ -49,7 +49,7 @@ public class SelectItemImpl implements SelectItem {
     }
 
     public int intValue() {
-	return (Integer) AssertUtils.assertNotNull(this.value);
+	return (Integer) Asserts.notNull(this.value);
     }
 
     @Override

@@ -59,12 +59,6 @@ public class JwtPayload extends JwtClaims {
     }
 
     @Override
-    public JwtPayload setArray(String key, Object... values) {
-	super.setArray(key, values);
-	return this;
-    }
-
-    @Override
     public JwtPayload setNumericDate(String key, Date value) {
 	super.setNumericDate(key, value);
 	return this;

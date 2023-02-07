@@ -18,32 +18,21 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.validators;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import com.appslandia.common.utils.Asserts;
+package com.appslandia.common.base;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public abstract class ModelValidator<T> {
+public class AssertException extends RuntimeException {
+    private static final long serialVersionUID = 1L;
 
-    public abstract boolean validate(T model);
-
-    private static final Map<String, ModelValidator<?>> VALIDATORS = new HashMap<String, ModelValidator<?>>();
-
-    public static void addValidator(String key, ModelValidator<?> modelValidator) {
-	Asserts.isTrue(!VALIDATORS.containsKey(key));
-	VALIDATORS.put(key, modelValidator);
+    public AssertException(String message) {
+	super(message);
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T> ModelValidator<T> getValidator(String key) {
-	ModelValidator<T> validator = (ModelValidator<T>) VALIDATORS.get(key);
-	return Asserts.notNull(validator);
+    public AssertException(String message, Throwable cause) {
+	super(message, cause);
     }
 }

@@ -24,7 +24,7 @@ import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
 import com.appslandia.common.base.RoundRobinPool;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ValueUtils;
 
 /**
@@ -53,7 +53,7 @@ public class PoolEncryptor extends InitializeObject implements Encryptor {
 
     @Override
     protected void init() throws Exception {
-	AssertUtils.assertNotNull(this.encryptor, "encryptor is required.");
+	Asserts.notNull(this.encryptor, "encryptor is required.");
 
 	this.poolSize = ValueUtils.valueOrMin(this.poolSize, Runtime.getRuntime().availableProcessors());
 	this.encryptors = new Encryptor[this.poolSize];
@@ -77,22 +77,22 @@ public class PoolEncryptor extends InitializeObject implements Encryptor {
     @Override
     public byte[] encrypt(byte[] message) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(message, "message is required.");
+	Asserts.notNull(message, "message is required.");
 	return this.encryptorPool.next().encrypt(message);
     }
 
     @Override
     public byte[] decrypt(byte[] message) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(message, "message is required.");
+	Asserts.notNull(message, "message is required.");
 	return this.encryptorPool.next().decrypt(message);
     }
 
     @Override
     public byte[] encrypt(byte[] message, Out<byte[]> salt) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(message, "message is required.");
-	AssertUtils.assertNotNull(salt, "salt is required.");
+	Asserts.notNull(message, "message is required.");
+	Asserts.notNull(salt, "salt is required.");
 
 	return this.encryptorPool.next().encrypt(message, salt);
     }
@@ -100,8 +100,8 @@ public class PoolEncryptor extends InitializeObject implements Encryptor {
     @Override
     public byte[] decrypt(byte[] message, byte[] salt) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(message, "message is required.");
-	AssertUtils.assertNotNull(salt, "salt is required.");
+	Asserts.notNull(message, "message is required.");
+	Asserts.notNull(salt, "salt is required.");
 
 	return this.encryptorPool.next().decrypt(message, salt);
     }

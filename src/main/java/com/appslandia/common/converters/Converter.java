@@ -21,6 +21,7 @@
 package com.appslandia.common.converters;
 
 import com.appslandia.common.base.FormatProvider;
+import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -89,15 +90,11 @@ public interface Converter<T> {
 
     T parse(String str, FormatProvider formatProvider) throws ConverterException;
 
-    default ConverterException toParsingError(String str) {
-	return toParsingError(str, getTargetType().getName());
-    }
-
     default ConverterException toParsingError(String str, String targetName) {
-	return new ConverterException("An error occurred while parsing '" + str + "' to " + targetName, getErrorMsgKey());
+	return new ConverterException(STR.fmt("An error occurred while parsing '{}' to {}.", str, targetName), getErrorMsgKey());
     }
 
     default ConverterException toNumberOverflowError(String str) {
-	return new ConverterException("A number overflow occurred while parsing '" + str + "' to " + getTargetType().getName(), getErrorMsgKey());
+	return new ConverterException(STR.fmt("A number overflow occurred while parsing '{}' to {}.", str, getTargetType().getName()), getErrorMsgKey());
     }
 }

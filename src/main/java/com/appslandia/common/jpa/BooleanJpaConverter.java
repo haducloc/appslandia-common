@@ -21,6 +21,7 @@
 package com.appslandia.common.jpa;
 
 import com.appslandia.common.utils.BitBool;
+import com.appslandia.common.utils.STR;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
@@ -52,6 +53,6 @@ public class BooleanJpaConverter implements AttributeConverter<Boolean, Integer>
 	if (dbData == BitBool.TRUE) {
 	    return Boolean.TRUE;
 	}
-	throw new IllegalStateException("Can't convert dbData to Boolean (value=" + dbData + ")");
+	throw new IllegalArgumentException(STR.fmt("Can't convert '{}' to Boolean.", dbData));
     }
 }

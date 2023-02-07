@@ -28,7 +28,7 @@ import java.security.Signature;
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -49,8 +49,8 @@ public class DsaDigester extends InitializeObject implements Digester {
 
     @Override
     protected void init() throws Exception {
-	AssertUtils.assertNotNull(this.algorithm, "algorithm is required.");
-	AssertUtils.assertTrue((this.privateKey != null) || (this.publicKey != null), "No key is provided.");
+	Asserts.notNull(this.algorithm, "algorithm is required.");
+	Asserts.isTrue((this.privateKey != null) || (this.publicKey != null), "No key is provided.");
 
 	// Sign
 	if (this.privateKey != null) {
@@ -81,8 +81,8 @@ public class DsaDigester extends InitializeObject implements Digester {
     @Override
     public byte[] digest(byte[] message) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(message, "message is required.");
-	AssertUtils.assertNotNull(this.sign, "privateKey is required.");
+	Asserts.notNull(message, "message is required.");
+	Asserts.notNull(this.sign, "privateKey is required.");
 
 	try {
 	    synchronized (this.sigMutex) {
@@ -97,9 +97,9 @@ public class DsaDigester extends InitializeObject implements Digester {
     @Override
     public boolean verify(byte[] message, byte[] signature) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(message, "message is required.");
-	AssertUtils.assertNotNull(signature, "signature is required.");
-	AssertUtils.assertNotNull(this.ver, "publicKey is required.");
+	Asserts.notNull(message, "message is required.");
+	Asserts.notNull(signature, "signature is required.");
+	Asserts.notNull(this.ver, "publicKey is required.");
 
 	try {
 	    synchronized (this.verMutex) {

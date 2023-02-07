@@ -38,7 +38,7 @@ import java.util.Set;
 
 import com.appslandia.common.base.Config;
 import com.appslandia.common.base.StringWriter;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.StringUtils;
 
 /**
@@ -52,22 +52,22 @@ public class SecureProps extends Properties implements Config {
     final TextEncryptor textEncryptor;
 
     public SecureProps(char[] password) {
-	AssertUtils.assertNotNull(password);
+	Asserts.notNull(password);
 	this.textEncryptor = new TextEncryptor(new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(32).setPassword(password));
     }
 
     public SecureProps(String password) {
-	AssertUtils.assertNotNull(password);
+	Asserts.notNull(password);
 	this.textEncryptor = new TextEncryptor(new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(32).setPassword(password));
     }
 
     public SecureProps(Encryptor encryptor) {
-	AssertUtils.assertNotNull(encryptor);
+	Asserts.notNull(encryptor);
 	this.textEncryptor = new TextEncryptor(encryptor);
     }
 
     public SecureProps(TextEncryptor textEncryptor) {
-	AssertUtils.assertNotNull(textEncryptor);
+	Asserts.notNull(textEncryptor);
 	this.textEncryptor = textEncryptor;
     }
 

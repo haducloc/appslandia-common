@@ -102,11 +102,11 @@ public class URLUtils {
 	}
     }
 
-    public static Map<String, Object> parseParams(String queryString, Map<String, Object> params) throws IllegalArgumentException {
+    public static Map<String, Object> parseParams(String queryString, Map<String, Object> params) {
 	return parseParams(queryString, params, true);
     }
 
-    public static Map<String, Object> parseParams(String queryString, Map<String, Object> params, boolean parseArray) throws IllegalArgumentException {
+    public static Map<String, Object> parseParams(String queryString, Map<String, Object> params, boolean parseArray) {
 	if (queryString == null) {
 	    return params;
 	}
@@ -117,7 +117,7 @@ public class URLUtils {
 	    String pair = queryString.substring(startIdx, endIdx);
 
 	    if (!parsePair(pair, params, parseArray)) {
-		throw new IllegalArgumentException(StringFormat.fmt("queryString is invalid: {}", queryString));
+		throw new IllegalArgumentException(STR.fmt("queryString '{}' is invalid.", queryString));
 	    }
 	    startIdx = endIdx + 1;
 	}
@@ -126,7 +126,7 @@ public class URLUtils {
 	    String pair = queryString.substring(startIdx);
 
 	    if (!parsePair(pair, params, parseArray)) {
-		throw new IllegalArgumentException(StringFormat.fmt("queryString is invalid: {}", queryString));
+		throw new IllegalArgumentException(STR.fmt("queryString '{}' is invalid.", queryString));
 	    }
 	}
 	return params;

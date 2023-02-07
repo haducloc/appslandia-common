@@ -20,7 +20,7 @@
 
 package com.appslandia.common.geo;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -34,8 +34,8 @@ public class GeoDM {
     final Direction direction;
 
     GeoDM(double decimalDegrees, Direction direction) {
-	AssertUtils.assertNonNegative(decimalDegrees);
-	AssertUtils.assertNotNull(direction);
+	Asserts.isTrue(decimalDegrees >= 0.0d);
+	Asserts.notNull(direction);
 
 	int d = (int) decimalDegrees;
 	double m = decimalDegrees * 60 - d * 60;
@@ -47,10 +47,9 @@ public class GeoDM {
     }
 
     GeoDM(int degrees, double minutes, Direction direction) {
-	AssertUtils.assertNonNegative(degrees);
-	AssertUtils.assertNonNegative(minutes);
-
-	AssertUtils.assertNotNull(direction);
+	Asserts.isTrue(degrees >= 0);
+	Asserts.isTrue(minutes >= 0.0d);
+	Asserts.notNull(direction);
 
 	this.degrees = degrees;
 	this.minutes = minutes;
@@ -79,7 +78,7 @@ public class GeoDM {
     }
 
     public String toString(int minutesDecimals) {
-	AssertUtils.assertTrue(minutesDecimals >= 0 && minutesDecimals <= 7);
+	Asserts.isTrue(minutesDecimals >= 0 && minutesDecimals <= 7);
 
 	String minfmt = GeoUtils.format(this.minutes, minutesDecimals);
 	return String.format("%d°%s'%s", this.degrees, minfmt, this.direction.symbol());
@@ -91,13 +90,13 @@ public class GeoDM {
     }
 
     public static GeoDM toLatDM(double latitude) {
-	AssertUtils.assertTrue((latitude >= -90.0) && (latitude <= 90.0), "latitude is invalid.");
+	Asserts.isTrue((latitude >= -90.0) && (latitude <= 90.0), "latitude is invalid.");
 
 	return new GeoDM(Math.abs(latitude), Double.compare(latitude, 0.0) >= 0 ? Direction.NORTH : Direction.SOUTH);
     }
 
     public static GeoDM toLongDM(double longitude) {
-	AssertUtils.assertTrue((longitude >= -180.0) && (longitude <= 180.0), "longitude is invalid.");
+	Asserts.isTrue((longitude >= -180.0) && (longitude <= 180.0), "longitude is invalid.");
 
 	return new GeoDM(Math.abs(longitude), Double.compare(longitude, 0.0) >= 0 ? Direction.EAST : Direction.WEST);
     }

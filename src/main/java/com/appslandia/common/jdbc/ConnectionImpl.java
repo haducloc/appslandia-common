@@ -29,8 +29,9 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import com.appslandia.common.base.AssertException;
 import com.appslandia.common.threading.ThreadLocalStorage;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ObjectUtils;
 
 /**
@@ -54,7 +55,7 @@ public class ConnectionImpl implements Connection {
 	    this.outer = outer;
 	}
 	this.conn = dataSource.getConnection();
-	this.dsName = AssertUtils.assertNotNull(dsName, "dsName must be not null.");
+	this.dsName = Asserts.notNull(dsName, "dsName must be not null.");
 
 	CONNECTION_HOLDER.set(this);
     }
@@ -108,7 +109,8 @@ public class ConnectionImpl implements Connection {
     public int executeUpdate(String pSql, Map<String, Object> params) throws java.sql.SQLException {
 	JdbcSql sql = new JdbcSql(pSql);
 	try (StatementImpl stat = prepareStatement(sql)) {
-	    JdbcUtils.setParameters(stat, sql, params);
+	    if (params != null)
+		JdbcUtils.setParameters(stat, sql, params);
 
 	    return stat.executeUpdate();
 	}
@@ -133,7 +135,8 @@ public class ConnectionImpl implements Connection {
 	    throws java.sql.SQLException {
 	JdbcSql sql = new JdbcSql(pSql);
 	try (StatementImpl stat = prepareStatement(sql)) {
-	    JdbcUtils.setParameters(stat, sql, params);
+	    if (params != null)
+		JdbcUtils.setParameters(stat, sql, params);
 
 	    try (ResultSetImpl rs = stat.executeQuery()) {
 		return JdbcUtils.executeMap(rs, keyMapper, valueMapper, map);
@@ -157,7 +160,8 @@ public class ConnectionImpl implements Connection {
     public <K, V> Map<K, V> executeMap(String pSql, Map<String, Object> params, String keyColumn, String valueColumn, Map<K, V> map) throws java.sql.SQLException {
 	JdbcSql sql = new JdbcSql(pSql);
 	try (StatementImpl stat = prepareStatement(sql)) {
-	    JdbcUtils.setParameters(stat, sql, params);
+	    if (params != null)
+		JdbcUtils.setParameters(stat, sql, params);
 
 	    try (ResultSetImpl rs = stat.executeQuery()) {
 		return JdbcUtils.executeMap(rs, keyColumn, valueColumn, map);
@@ -181,7 +185,8 @@ public class ConnectionImpl implements Connection {
     public <T> List<T> executeList(String pSql, Map<String, Object> params, ResultSetMapper<T> mapper, List<T> list) throws java.sql.SQLException {
 	JdbcSql sql = new JdbcSql(pSql);
 	try (StatementImpl stat = prepareStatement(sql)) {
-	    JdbcUtils.setParameters(stat, sql, params);
+	    if (params != null)
+		JdbcUtils.setParameters(stat, sql, params);
 
 	    try (ResultSetImpl rs = stat.executeQuery()) {
 		return JdbcUtils.executeList(rs, mapper, list);
@@ -205,7 +210,8 @@ public class ConnectionImpl implements Connection {
     public <T> T executeSingle(String pSql, Map<String, Object> params, ResultSetMapper<T> mapper) throws java.sql.SQLException {
 	JdbcSql sql = new JdbcSql(pSql);
 	try (StatementImpl stat = prepareStatement(sql)) {
-	    JdbcUtils.setParameters(stat, sql, params);
+	    if (params != null)
+		JdbcUtils.setParameters(stat, sql, params);
 
 	    try (ResultSetImpl rs = stat.executeQuery()) {
 		return JdbcUtils.executeSingle(rs, mapper);
@@ -241,7 +247,8 @@ public class ConnectionImpl implements Connection {
     public boolean executeExists(String pSql, Map<String, Object> params) throws java.sql.SQLException {
 	JdbcSql sql = new JdbcSql(pSql);
 	try (StatementImpl stat = prepareStatement(sql)) {
-	    JdbcUtils.setParameters(stat, sql, params);
+	    if (params != null)
+		JdbcUtils.setParameters(stat, sql, params);
 
 	    try (ResultSetImpl rs = stat.executeQuery()) {
 		return JdbcUtils.executeExists(rs);
@@ -267,7 +274,8 @@ public class ConnectionImpl implements Connection {
     public void executeQuery(String pSql, Map<String, Object> params, ResultSetHandler handler) throws Exception {
 	JdbcSql sql = new JdbcSql(pSql);
 	try (StatementImpl stat = prepareStatement(sql)) {
-	    JdbcUtils.setParameters(stat, sql, params);
+	    if (params != null)
+		JdbcUtils.setParameters(stat, sql, params);
 
 	    try (ResultSetImpl rs = stat.executeQuery()) {
 		while (rs.next()) {
@@ -293,7 +301,8 @@ public class ConnectionImpl implements Connection {
     public void executeStream(String pSql, Map<String, Object> params, String streamLabel, OutputStream out, ResultSetHandler handler) throws Exception {
 	JdbcSql sql = new JdbcSql(pSql);
 	try (StatementImpl stat = prepareStatement(sql)) {
-	    JdbcUtils.setParameters(stat, sql, params);
+	    if (params != null)
+		JdbcUtils.setParameters(stat, sql, params);
 
 	    try (ResultSetImpl rs = stat.executeQuery()) {
 		JdbcUtils.executeStream(rs, streamLabel, out, handler);
@@ -317,7 +326,8 @@ public class ConnectionImpl implements Connection {
     public void executeStream(String pSql, Map<String, Object> params, String streamLabel, Writer out, ResultSetHandler handler) throws Exception {
 	JdbcSql sql = new JdbcSql(pSql);
 	try (StatementImpl stat = prepareStatement(sql)) {
-	    JdbcUtils.setParameters(stat, sql, params);
+	    if (params != null)
+		JdbcUtils.setParameters(stat, sql, params);
 
 	    try (ResultSetImpl rs = stat.executeQuery()) {
 		JdbcUtils.executeStream(rs, streamLabel, out, handler);
@@ -341,7 +351,8 @@ public class ConnectionImpl implements Connection {
     public void executeNStream(String pSql, Map<String, Object> params, String streamLabel, Writer out, ResultSetHandler handler) throws Exception {
 	JdbcSql sql = new JdbcSql(pSql);
 	try (StatementImpl stat = prepareStatement(sql)) {
-	    JdbcUtils.setParameters(stat, sql, params);
+	    if (params != null)
+		JdbcUtils.setParameters(stat, sql, params);
 
 	    try (ResultSetImpl rs = stat.executeQuery()) {
 		JdbcUtils.executeNStream(rs, streamLabel, out, handler);
@@ -642,12 +653,9 @@ public class ConnectionImpl implements Connection {
 
     private static final ThreadLocalStorage<ConnectionImpl> CONNECTION_HOLDER = new ThreadLocalStorage<>();
 
-    public static ConnectionImpl getCurrent() throws IllegalStateException {
+    public static ConnectionImpl getCurrent() throws AssertException {
 	ConnectionImpl conn = CONNECTION_HOLDER.get();
-	if (conn == null) {
-	    throw new IllegalStateException("No connection found in the current thread.");
-	}
-	return conn;
+	return Asserts.notNull(conn, "No connection found in the current thread.");
     }
 
     public static boolean hasCurrent() {

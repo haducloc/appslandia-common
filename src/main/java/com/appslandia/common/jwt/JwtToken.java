@@ -22,7 +22,7 @@ package com.appslandia.common.jwt;
 
 import java.io.Serializable;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -36,8 +36,8 @@ public class JwtToken implements Serializable {
     final JwtPayload payload;
 
     public JwtToken(JwtHeader header, JwtPayload payload) {
-	this.header = AssertUtils.assertNotNull(header);
-	this.payload = AssertUtils.assertNotNull(payload);
+	this.header = Asserts.notNull(header);
+	this.payload = Asserts.notNull(payload);
     }
 
     public JwtHeader getHeader() {

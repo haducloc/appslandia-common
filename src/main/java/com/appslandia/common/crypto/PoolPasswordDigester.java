@@ -24,7 +24,7 @@ import java.nio.charset.Charset;
 
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.RoundRobinPool;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ValueUtils;
 
 /**
@@ -53,7 +53,7 @@ public class PoolPasswordDigester extends PasswordDigester {
 
     @Override
     protected void init() throws Exception {
-	AssertUtils.assertNotNull(this.digester, "digester is required.");
+	Asserts.notNull(this.digester, "digester is required.");
 
 	this.poolSize = ValueUtils.valueOrMin(this.poolSize, Runtime.getRuntime().availableProcessors());
 	this.digesters = new PasswordDigester[this.poolSize];
@@ -77,15 +77,15 @@ public class PoolPasswordDigester extends PasswordDigester {
     @Override
     public String digest(String password) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(password, "password is required.");
+	Asserts.notNull(password, "password is required.");
 	return this.digesterPool.next().digest(password);
     }
 
     @Override
     public boolean verify(String password, String digested) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(password, "password is required.");
-	AssertUtils.assertNotNull(digested, "digested is required.");
+	Asserts.notNull(password, "password is required.");
+	Asserts.notNull(digested, "digested is required.");
 
 	return this.digesterPool.next().verify(password, digested);
     }

@@ -47,7 +47,7 @@ public class URLUtilsTest {
 
     @Test
     public void test_toQueryParams_array() {
-	Map<String, Object> params = new Params(new LinkedHashMap<>()).setArray("p1", "val11", null).setArray("p2", "val2");
+	Map<String, Object> params = new Params(new LinkedHashMap<>()).set("p1", new String[] { "val11", null }).set("p2", "val2");
 	String queryString = URLUtils.toQueryParams(params);
 
 	Assertions.assertEquals("p1=val11&p1=&p2=val2", queryString);
@@ -69,7 +69,7 @@ public class URLUtilsTest {
 
     @Test
     public void test_parseParams_array() {
-	Map<String, Object> params = new Params(new LinkedHashMap<>()).setArray("p1", "val11", null, null).setArray("p2", null, null);
+	Map<String, Object> params = new Params(new LinkedHashMap<>()).set("p1", new String[] { "val11", null, null }).set("p2", new String[] { null, null });
 	String queryString = URLUtils.toQueryParams(params);
 
 	Map<String, Object> decodedMap = URLUtils.parseParams(queryString, new HashMap<>());

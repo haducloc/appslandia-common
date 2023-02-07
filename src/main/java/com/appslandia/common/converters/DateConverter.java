@@ -63,7 +63,7 @@ public abstract class DateConverter<T extends java.util.Date> implements Convert
 	if (parsedValue != null) {
 	    return parsedValue;
 	}
-	throw toParsingError(str);
+	throw toParsingError(str, getTargetType().getName());
     }
 
     private static java.util.Date parseDate(String str, DateFormat dateFormat) {

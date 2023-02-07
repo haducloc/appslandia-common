@@ -20,6 +20,9 @@
 
 package com.appslandia.common.threading;
 
+import com.appslandia.common.base.AssertException;
+import com.appslandia.common.utils.Asserts;
+
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
@@ -49,12 +52,9 @@ public class ThreadLocalStorage<T> {
 	return this.holder.get();
     }
 
-    public T val() throws IllegalStateException {
-	T t = this.holder.get();
-	if (t == null) {
-	    throw new IllegalStateException("No current value found in the current thread.");
-	}
-	return t;
+    public T val() throws AssertException {
+	T val = this.holder.get();
+	return Asserts.notNull(val, "No current value found in the current thread.");
     }
 
     public void set(T value) {

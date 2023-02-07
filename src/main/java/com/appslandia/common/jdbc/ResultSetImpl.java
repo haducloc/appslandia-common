@@ -29,7 +29,7 @@ import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.util.Arrays;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.NormalizeUtils;
 
 /**
@@ -42,12 +42,12 @@ public class ResultSetImpl implements ResultSet {
     protected final ResultSet rs;
 
     public ResultSetImpl(ResultSet rs) {
-	AssertUtils.assertTrue(!(rs instanceof ResultSetImpl));
-	this.rs = AssertUtils.assertNotNull(rs);
+	Asserts.isTrue(!(rs instanceof ResultSetImpl));
+	this.rs = Asserts.notNull(rs);
     }
 
     public String valuesAsID(String... columnLabels) throws UncheckedSQLException {
-	AssertUtils.assertHasElements(columnLabels);
+	Asserts.hasElements(columnLabels);
 
 	Object[] values = Arrays.stream(columnLabels).map(l -> {
 	    try {

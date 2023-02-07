@@ -94,7 +94,7 @@ public class ConsoleUtils {
     }
 
     public static String readLongString(String promptText, String variableName, boolean required, Function<String, Boolean> validator) {
-	AssertUtils.assertNotNull(promptText);
+	Asserts.notNull(promptText);
 
 	writer().println(promptText);
 	boolean invalidValue = false;
@@ -154,7 +154,7 @@ public class ConsoleUtils {
     }
 
     public static String readPassword(String promptText, String variableName, boolean required, Function<String, Boolean> validator) {
-	AssertUtils.assertNotNull(promptText);
+	Asserts.notNull(promptText);
 
 	Console cons = System.console();
 	if (cons != null) {
@@ -203,8 +203,8 @@ public class ConsoleUtils {
     }
 
     public static String readPassword2(String promptText, String variableName, boolean required, Function<String, Boolean> validator) {
-	AssertUtils.assertNotNull(promptText);
-	AssertUtils.assertNotNull(variableName);
+	Asserts.notNull(promptText);
+	Asserts.notNull(variableName);
 
 	Console cons = System.console();
 	if (cons != null) {
@@ -245,8 +245,8 @@ public class ConsoleUtils {
     }
 
     public static String readString2(String promptText, String variableName, boolean required, Function<String, Boolean> validator) {
-	AssertUtils.assertNotNull(promptText);
-	AssertUtils.assertNotNull(variableName);
+	Asserts.notNull(promptText);
+	Asserts.notNull(variableName);
 
 	boolean unmatchedValues = false;
 	while (true) {
@@ -279,8 +279,8 @@ public class ConsoleUtils {
     }
 
     public static Boolean readBoolean2(String promptText, String variableName, boolean required) {
-	AssertUtils.assertNotNull(promptText);
-	AssertUtils.assertNotNull(variableName);
+	Asserts.notNull(promptText);
+	Asserts.notNull(variableName);
 
 	boolean unmatchedValues = false;
 	while (true) {
@@ -327,8 +327,8 @@ public class ConsoleUtils {
     }
 
     public static Integer readInteger2(String promptText, String variableName, boolean required, Function<Integer, Boolean> validator) {
-	AssertUtils.assertNotNull(promptText);
-	AssertUtils.assertNotNull(variableName);
+	Asserts.notNull(promptText);
+	Asserts.notNull(variableName);
 
 	boolean unmatchedValues = false;
 	while (true) {
@@ -375,8 +375,8 @@ public class ConsoleUtils {
     }
 
     public static Double readDouble2(String promptText, String variableName, boolean required, Function<Double, Boolean> validator) {
-	AssertUtils.assertNotNull(promptText);
-	AssertUtils.assertNotNull(variableName);
+	Asserts.notNull(promptText);
+	Asserts.notNull(variableName);
 
 	boolean unmatchedValues = false;
 	while (true) {
@@ -423,9 +423,9 @@ public class ConsoleUtils {
     }
 
     public static Date readDate2(String promptText, String variableName, String pattern, boolean required, Function<Date, Boolean> validator) {
-	AssertUtils.assertNotNull(promptText);
-	AssertUtils.assertNotNull(variableName);
-	AssertUtils.assertNotNull(pattern);
+	Asserts.notNull(promptText);
+	Asserts.notNull(variableName);
+	Asserts.notNull(pattern);
 
 	boolean unmatchedValues = false;
 	while (true) {
@@ -602,7 +602,7 @@ public class ConsoleUtils {
     }
 
     public static <T> T read(String promptText, String variableName, boolean required, Function<String, T> converter, Function<T, Boolean> validator) {
-	AssertUtils.assertNotNull(promptText);
+	Asserts.notNull(promptText);
 
 	writer().println(promptText);
 	boolean invalidValue = false;

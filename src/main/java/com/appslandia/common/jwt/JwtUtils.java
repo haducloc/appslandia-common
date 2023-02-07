@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -41,7 +41,7 @@ public class JwtUtils {
     private static final Pattern JWT_SEP_PATTERN = Pattern.compile("\\.");
 
     public static String[] parseParts(String token) {
-	AssertUtils.assertNotNull(token);
+	Asserts.notNull(token);
 	String[] parts = JWT_SEP_PATTERN.split(token);
 
 	if (parts.length == 2) {
@@ -86,7 +86,7 @@ public class JwtUtils {
     }
 
     public static boolean isSupportedValue(Object value) {
-	AssertUtils.assertNotNull(value);
+	Asserts.notNull(value);
 
 	if (value instanceof List) {
 	    return validateList((List<?>) value);

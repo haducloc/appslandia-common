@@ -38,7 +38,7 @@ public class PatternValidator extends InitializeObject {
 
     @Override
     protected void init() throws Exception {
-	AssertUtils.assertHasElements(this.allowPatterns, "allowPatterns is required.");
+	Asserts.hasElements(this.allowPatterns, "allowPatterns is required.");
 
 	this.allowPatterns = Collections.unmodifiableList(this.allowPatterns);
     }
@@ -57,7 +57,7 @@ public class PatternValidator extends InitializeObject {
 
     public boolean validate(String value) {
 	this.initialize();
-	AssertUtils.assertNotNull(value);
+	Asserts.notNull(value);
 
 	return PatternUtils.matches(this.allowPatterns, value);
     }

@@ -22,7 +22,7 @@ package com.appslandia.common.jpa;
 
 import java.util.Map;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 
 import jakarta.persistence.Cache;
 import jakarta.persistence.EntityGraph;
@@ -46,7 +46,7 @@ public class EntityManagerFactoryImpl implements EntityManagerFactory {
     }
 
     public EntityManagerFactoryImpl(EntityManagerFactory emf) {
-	AssertUtils.assertTrue(!(emf instanceof EntityManagerFactoryImpl));
+	Asserts.isTrue(!(emf instanceof EntityManagerFactoryImpl));
 	this.emf = emf;
     }
 

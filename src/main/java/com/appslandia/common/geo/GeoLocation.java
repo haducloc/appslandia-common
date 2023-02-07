@@ -20,8 +20,8 @@
 
 package com.appslandia.common.geo;
 
-import com.appslandia.common.utils.AssertUtils;
-import com.appslandia.common.utils.StringFormat;
+import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -34,8 +34,8 @@ public class GeoLocation {
     final double longitude;
 
     public GeoLocation(double latitude, double longitude) {
-	AssertUtils.assertTrue((latitude >= -90.0) && (latitude <= 90.0), "latitude is invalid.");
-	AssertUtils.assertTrue((longitude >= -180.0) && (longitude <= 180.0), "longitude is invalid.");
+	Asserts.isTrue((latitude >= -90.0) && (latitude <= 90.0), "latitude is invalid.");
+	Asserts.isTrue((longitude >= -180.0) && (longitude <= 180.0), "longitude is invalid.");
 
 	this.latitude = latitude;
 	this.longitude = longitude;
@@ -58,8 +58,8 @@ public class GeoLocation {
     }
 
     public GeoLocation move(Direction direction, double distance, DistanceUnit unit) {
-	AssertUtils.assertNotNull(direction);
-	AssertUtils.assertNotNull(unit);
+	Asserts.notNull(direction);
+	Asserts.notNull(unit);
 
 	double perdegLong = 360.0 / GeoUtils.POLAR_CIRCUMFERENCE_MILES;
 	double perdegLat = 360.0 / (Math.cos(Math.toRadians(this.latitude)) * GeoUtils.EQUATOR_CIRCUMFERENCE_MILES);
@@ -82,8 +82,8 @@ public class GeoLocation {
     }
 
     public double distanceTo(GeoLocation to, DistanceUnit unit) {
-	AssertUtils.assertNotNull(to);
-	AssertUtils.assertNotNull(unit);
+	Asserts.notNull(to);
+	Asserts.notNull(unit);
 
 	double rlt1 = Math.toRadians(this.latitude);
 	double rlt2 = Math.toRadians(to.latitude);
@@ -99,9 +99,9 @@ public class GeoLocation {
     }
 
     public String toString(int scale) {
-	AssertUtils.assertTrue(scale >= 0 && scale <= 8);
+	Asserts.isTrue(scale >= 0 && scale <= 8);
 
-	String fmt = StringFormat.fmt("%.{}f, %.{}f", scale, scale);
+	String fmt = STR.fmt("%.{}f, %.{}f", scale, scale);
 	return String.format(fmt, this.latitude, this.longitude);
     }
 

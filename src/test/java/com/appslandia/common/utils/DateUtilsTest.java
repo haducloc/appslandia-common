@@ -118,7 +118,6 @@ public class DateUtilsTest {
 	    DateUtils.translateToMs("1d 4hr 8min");
 	    Assertions.fail();
 	} catch (Exception ex) {
-	    Assertions.assertTrue(ex instanceof IllegalArgumentException);
 	}
     }
 

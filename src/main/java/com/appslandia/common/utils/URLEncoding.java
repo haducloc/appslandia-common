@@ -84,7 +84,7 @@ public class URLEncoding {
 	return encode(s, spaceToPlus ? URL_PARAM_NOT_ENCODED : URL_PARAM_NOT_ENCODED_SP);
     }
 
-    public static String decodeParam(String s) throws IllegalArgumentException {
+    public static String decodeParam(String s) {
 	if (s == null) {
 	    return null;
 	}
@@ -98,7 +98,7 @@ public class URLEncoding {
 	return encode(s, URL_PATH_NOT_ENCODED);
     }
 
-    public static String decodePath(String s) throws IllegalArgumentException {
+    public static String decodePath(String s) {
 	if (s == null) {
 	    return null;
 	}
@@ -163,7 +163,7 @@ public class URLEncoding {
 	return (needToChange ? out.toString() : s);
     }
 
-    static String decode(String s, EncodeType type) throws IllegalArgumentException {
+    static String decode(String s, EncodeType type) {
 	boolean needToChange = false;
 	int numChars = s.length();
 	StringBuilder sb = new StringBuilder(numChars > 500 ? numChars / 2 : numChars);

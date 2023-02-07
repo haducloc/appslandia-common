@@ -27,7 +27,7 @@ import java.util.function.Consumer;
 
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.crypto.SecureProps;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.ExceptionUtils;
 import com.appslandia.common.utils.ParseUtils;
@@ -50,7 +50,7 @@ public class SmtpMailer extends InitializeObject {
 
     @Override
     protected void init() throws Exception {
-	AssertUtils.assertNotNull(this.props, "props is required.");
+	Asserts.notNull(this.props, "props is required.");
 
 	this.session = Session.getInstance(this.props);
     }
@@ -71,17 +71,17 @@ public class SmtpMailer extends InitializeObject {
 
     public void send(List<MailerMessage> messages) throws MessagingException {
 	initialize();
-	AssertUtils.assertNotNull(messages);
+	Asserts.notNull(messages);
 
 	try (Transport transport = this.session.getTransport("smtp")) {
 
-	    String user = AssertUtils.assertNotNull(this.props.get("mail.smtp.user"), "mail.smtp.user is required.");
-	    String password = AssertUtils.assertNotNull(this.props.get("mail.smtp.password"), "mail.smtp.password is required.");
+	    String user = Asserts.notNull(this.props.get("mail.smtp.user"), "mail.smtp.user is required.");
+	    String password = Asserts.notNull(this.props.get("mail.smtp.password"), "mail.smtp.password is required.");
 	    transport.connect(user, password);
 
 	    String debugToEmails = null;
 	    if (ParseUtils.isTrueValue(this.props.get("mail.smtp.debug.enabled"))) {
-		debugToEmails = AssertUtils.assertNotNull(this.props.get("mail.smtp.debug.to_emails"), "mail.smtp.debug.to_emails is required.");
+		debugToEmails = Asserts.notNull(this.props.get("mail.smtp.debug.to_emails"), "mail.smtp.debug.to_emails is required.");
 	    }
 
 	    for (MailerMessage mailerMessage : messages) {
@@ -99,8 +99,8 @@ public class SmtpMailer extends InitializeObject {
 
     public void sendAsync(List<MailerMessage> messages, Executor executor, Consumer<Exception> errorHandler) {
 	initialize();
-	AssertUtils.assertNotNull(messages);
-	AssertUtils.assertNotNull(executor);
+	Asserts.notNull(messages);
+	Asserts.notNull(executor);
 
 	executor.execute(new Runnable() {
 

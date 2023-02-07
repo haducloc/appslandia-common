@@ -24,7 +24,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -37,7 +37,7 @@ public abstract class TaskMutexService<K> extends MutexService<K> {
 
     public <V> Future<V> execute(final K mutexKey, final Callable<V> task) throws Exception {
 	this.initialize();
-	AssertUtils.assertNotNull(mutexKey);
+	Asserts.notNull(mutexKey);
 
 	return this.getExecutorService().submit(new Callable<V>() {
 
@@ -52,7 +52,7 @@ public abstract class TaskMutexService<K> extends MutexService<K> {
 
     public void execute(final K mutexKey, final Runnable task) throws Exception {
 	this.initialize();
-	AssertUtils.assertNotNull(mutexKey);
+	Asserts.notNull(mutexKey);
 
 	this.getExecutorService().submit(new Runnable() {
 
@@ -67,7 +67,7 @@ public abstract class TaskMutexService<K> extends MutexService<K> {
 
     public <V> Future<V> execute(final K mutexKey, final Runnable task, V result) throws Exception {
 	this.initialize();
-	AssertUtils.assertNotNull(mutexKey);
+	Asserts.notNull(mutexKey);
 
 	return this.getExecutorService().submit(new Runnable() {
 

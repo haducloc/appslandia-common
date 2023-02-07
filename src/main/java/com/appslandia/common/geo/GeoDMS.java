@@ -20,7 +20,7 @@
 
 package com.appslandia.common.geo;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -35,8 +35,8 @@ public class GeoDMS {
     final Direction direction;
 
     GeoDMS(double decimalDegrees, Direction direction) {
-	AssertUtils.assertNonNegative(decimalDegrees);
-	AssertUtils.assertNotNull(direction);
+	Asserts.isTrue(decimalDegrees >= 0.0d);
+	Asserts.notNull(direction);
 
 	int d = (int) decimalDegrees;
 	int m = (int) ((decimalDegrees - d) * 60);
@@ -50,11 +50,11 @@ public class GeoDMS {
     }
 
     GeoDMS(int degrees, int minutes, double seconds, Direction direction) {
-	AssertUtils.assertNonNegative(degrees);
-	AssertUtils.assertNonNegative(minutes);
-	AssertUtils.assertNonNegative(seconds);
+	Asserts.isTrue(degrees >= 0);
+	Asserts.isTrue(minutes >= 0);
+	Asserts.isTrue(seconds >= 0.0d);
 
-	AssertUtils.assertNotNull(direction);
+	Asserts.notNull(direction);
 
 	this.degrees = degrees;
 	this.minutes = minutes;
@@ -88,7 +88,7 @@ public class GeoDMS {
     }
 
     public String toString(int secondsDecimals) {
-	AssertUtils.assertTrue(secondsDecimals >= 0 && secondsDecimals <= 6);
+	Asserts.isTrue(secondsDecimals >= 0 && secondsDecimals <= 6);
 
 	String secfmt = GeoUtils.format(this.seconds, secondsDecimals);
 	return String.format("%d°%02d'%s\"%s", this.degrees, this.minutes, secfmt, this.direction.symbol());
@@ -100,13 +100,13 @@ public class GeoDMS {
     }
 
     public static GeoDMS toLatDMS(double latitude) {
-	AssertUtils.assertTrue((latitude >= -90.0) && (latitude <= 90.0), "latitude is invalid.");
+	Asserts.isTrue((latitude >= -90.0) && (latitude <= 90.0), "latitude is invalid.");
 
 	return new GeoDMS(Math.abs(latitude), Double.compare(latitude, 0.0) >= 0 ? Direction.NORTH : Direction.SOUTH);
     }
 
     public static GeoDMS toLongDMS(double longitude) {
-	AssertUtils.assertTrue((longitude >= -180.0) && (longitude <= 180.0), "longitude is invalid.");
+	Asserts.isTrue((longitude >= -180.0) && (longitude <= 180.0), "longitude is invalid.");
 
 	return new GeoDMS(Math.abs(longitude), Double.compare(longitude, 0.0) >= 0 ? Direction.EAST : Direction.WEST);
     }

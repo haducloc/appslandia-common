@@ -30,9 +30,9 @@ import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ObjectUtils;
-import com.appslandia.common.utils.StringFormat;
+import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -53,7 +53,7 @@ public class MemoryStream extends OutputStream implements Serializable {
     }
 
     public MemoryStream(int blockSize) {
-	AssertUtils.assertTrue(blockSize > 0);
+	Asserts.isTrue(blockSize > 0);
 
 	this.blockSize = blockSize;
 	this.nodeList = new NodeList(new byte[this.blockSize]);
@@ -183,7 +183,7 @@ public class MemoryStream extends OutputStream implements Serializable {
 
     @Override
     public String toString() {
-	return StringFormat.fmt("{}: size={}, blockSize={}, nodeCount={}", ObjectUtils.toIdHash(this), this.count, this.blockSize, this.getNodeCount());
+	return STR.fmt("{}: size={}, blockSize={}, nodeCount={}", ObjectUtils.toIdHash(this), this.count, this.blockSize, this.getNodeCount());
     }
 
     public int getBlockSize() {

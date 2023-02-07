@@ -28,8 +28,8 @@ import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-import com.appslandia.common.utils.AssertUtils;
-import com.appslandia.common.utils.StringFormat;
+import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -56,12 +56,12 @@ public class Resources {
     }
 
     public static void initBundle(ResourceBundle bundle) {
-	AssertUtils.assertNull(Resources.bundle);
+	Asserts.isNull(Resources.bundle);
 	Resources.bundle = new ResourceBundleImpl(bundle, LBundle);
     }
 
     public static void initBundle(Map<String, Object> bundle) {
-	AssertUtils.assertNull(Resources.bundle);
+	Asserts.isNull(Resources.bundle);
 	Resources.bundle = new ResourceBundleImpl(bundle, LBundle);
     }
 
@@ -70,7 +70,7 @@ public class Resources {
     }
 
     public static String getString(String key, Object... params) {
-	return StringFormat.format(getBundle().getString(key), params);
+	return STR.format(getBundle().getString(key), params);
     }
 
     static class ResourceBundleImpl extends ResourceBundle {
@@ -78,17 +78,17 @@ public class Resources {
 
 	public ResourceBundleImpl(ResourceBundle bundle, ResourceBundle parent) {
 	    this.lookup = toMap(bundle);
-	    this.parent = AssertUtils.assertNotNull(parent);
+	    this.parent = Asserts.notNull(parent);
 	}
 
 	public ResourceBundleImpl(Map<String, Object> bundle, ResourceBundle parent) {
 	    this.lookup = new HashMap<>(bundle);
-	    this.parent = AssertUtils.assertNotNull(parent);
+	    this.parent = Asserts.notNull(parent);
 	}
 
 	@Override
 	public Object handleGetObject(String key) {
-	    AssertUtils.assertNotNull(key);
+	    Asserts.notNull(key);
 	    return this.lookup.get(key);
 	}
 

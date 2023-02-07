@@ -28,7 +28,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.ObjectUtils;
 
@@ -108,7 +108,7 @@ public class InstanceImpl<T> implements Instance<T> {
 
     @Override
     public <U extends T> Instance<U> select(Class<U> subtype, Annotation... qualifiers) {
-	AssertUtils.assertNotNull(subtype);
+	Asserts.notNull(subtype);
 
 	if ((this.type == subtype) && (qualifiers.length == 0)) {
 	    return ObjectUtils.cast(this);
@@ -143,7 +143,7 @@ public class InstanceImpl<T> implements Instance<T> {
 
     @Override
     public void destroy(T instance) {
-	AssertUtils.assertNotNull(instance);
+	Asserts.notNull(instance);
 	ObjectFactoryUtils.destroy(instance);
     }
 

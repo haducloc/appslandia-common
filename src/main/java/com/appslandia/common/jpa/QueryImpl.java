@@ -26,7 +26,7 @@ import java.util.Optional;
 import com.appslandia.common.jdbc.JdbcSql;
 import com.appslandia.common.jdbc.LikeType;
 import com.appslandia.common.jdbc.SqlLikeEscaper;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ObjectUtils;
 
 import jakarta.persistence.FlushModeType;
@@ -51,13 +51,13 @@ public class QueryImpl implements Query {
     }
 
     public QueryImpl(Query query, JpaSql sql) {
-	AssertUtils.assertTrue(!(query instanceof QueryImpl));
+	Asserts.isTrue(!(query instanceof QueryImpl));
 	this.query = query;
 	this.sql = sql;
     }
 
     protected JpaSql getSql() {
-	return AssertUtils.assertStateNotNull(this.sql, "sql is required.");
+	return Asserts.notNull(this.sql, "sql is required.");
     }
 
     public <T> T getFirstOrNull() {
@@ -75,7 +75,7 @@ public class QueryImpl implements Query {
 
     public int getIntResult() {
 	Number val = (Number) this.query.getSingleResult();
-	AssertUtils.assertStateNotNull(val);
+	Asserts.notNull(val);
 	return val.intValue();
     }
 
@@ -119,7 +119,7 @@ public class QueryImpl implements Query {
 
     public QueryImpl setLikeAny(String parameterName, String[] values, LikeType likeType, String falsePattern) {
 	int arrayLen = this.getSql().getArrayLen(parameterName);
-	AssertUtils.assertTrue(values.length <= arrayLen);
+	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
 	    setParameter(JdbcSql.toParamName(parameterName, i), (i < values.length) ? SqlLikeEscaper.toLikePattern(values[i], likeType) : falsePattern);
@@ -132,7 +132,7 @@ public class QueryImpl implements Query {
 
     public QueryImpl setObjectArray(String parameterName, Object[] values) {
 	int arrayLen = this.getSql().getArrayLen(parameterName);
-	AssertUtils.assertTrue(values.length <= arrayLen);
+	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
 	    setParameter(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -142,7 +142,7 @@ public class QueryImpl implements Query {
 
     public QueryImpl setDateArray(String parameterName, java.util.Date[] values, TemporalType temporalType) {
 	int arrayLen = this.getSql().getArrayLen(parameterName);
-	AssertUtils.assertTrue(values.length <= arrayLen);
+	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
 	    setParameter(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null, temporalType);

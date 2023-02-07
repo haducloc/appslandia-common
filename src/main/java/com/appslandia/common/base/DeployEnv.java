@@ -23,7 +23,7 @@ package com.appslandia.common.base;
 import java.util.Arrays;
 import java.util.Locale;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.SYS;
 
 /**
@@ -41,7 +41,7 @@ public class DeployEnv {
     final String name;
 
     private DeployEnv(String name) {
-	this.name = AssertUtils.assertNotNull(name);
+	this.name = Asserts.notNull(name);
     }
 
     public boolean isStagingOrProduction() {
@@ -110,6 +110,8 @@ public class DeployEnv {
     }
 
     public static void setCurrent(DeployEnv env) {
+	Asserts.isNull(env, "DeployEnv.__current must be null.");
+
 	if (__current == null) {
 	    synchronized (MUTEX) {
 		if (__current == null) {
@@ -118,7 +120,6 @@ public class DeployEnv {
 		}
 	    }
 	}
-	throw new IllegalStateException("DeployEnv.__current must be null.");
     }
 
     public static void setCurrent(String env) {

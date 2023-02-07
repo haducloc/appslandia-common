@@ -54,7 +54,7 @@ public class ObjectFactoryInstanceTest {
 	    factory.register(TestService.class, TestService.class);
 
 	    TestService service = factory.getObject(TestService.class);
-	    Assertions.assertNotNull(service.testDaos);
+	    Assertions.notNull(service.testDaos);
 
 	    InstanceImpl<TestDao> sub = ObjectUtils.cast(service.testDaos.select());
 	    Assertions.assertTrue(sub.getCount() == 1);
@@ -79,7 +79,7 @@ public class ObjectFactoryInstanceTest {
 	    factory.register(TestService1.class, TestService1.class);
 
 	    TestService1 service = factory.getObject(TestService1.class);
-	    Assertions.assertNotNull(service.testDaos);
+	    Assertions.notNull(service.testDaos);
 
 	    InstanceImpl<TestDao> sub = ObjectUtils.cast(service.testDaos.select());
 	    Assertions.assertTrue(sub.getCount() == 3);

@@ -25,7 +25,7 @@ import java.util.Arrays;
 
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -55,7 +55,7 @@ public class DigesterImpl extends InitializeObject implements Digester {
 
     @Override
     protected void init() throws Exception {
-	AssertUtils.assertNotNull(this.algorithm, "algorithm is required.");
+	Asserts.notNull(this.algorithm, "algorithm is required.");
 
 	// MessageDigest
 	if (this.provider == null) {
@@ -68,7 +68,7 @@ public class DigesterImpl extends InitializeObject implements Digester {
     @Override
     public byte[] digest(byte[] message) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(message, "message is required.");
+	Asserts.notNull(message, "message is required.");
 
 	synchronized (this.mutex) {
 	    return this.digest.digest(message);
@@ -78,8 +78,8 @@ public class DigesterImpl extends InitializeObject implements Digester {
     @Override
     public boolean verify(byte[] message, byte[] hash) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(message, "message is required.");
-	AssertUtils.assertNotNull(hash, "hash is required.");
+	Asserts.notNull(message, "message is required.");
+	Asserts.notNull(hash, "hash is required.");
 
 	byte[] digest = null;
 	synchronized (this.mutex) {

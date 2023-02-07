@@ -29,7 +29,7 @@ import java.sql.Types;
 import java.util.List;
 import java.util.Map;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ObjectUtils;
 
 /**
@@ -47,13 +47,13 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public StatementImpl(PreparedStatement stat, JdbcSql sql) {
-	AssertUtils.assertTrue(!(stat instanceof StatementImpl));
+	Asserts.isTrue(!(stat instanceof StatementImpl));
 	this.stat = stat;
 	this.sql = sql;
     }
 
     protected JdbcSql getSql() {
-	return AssertUtils.assertStateNotNull(this.sql, "sql is required.");
+	return Asserts.notNull(this.sql, "sql is required.");
     }
 
     // Update utilities
@@ -74,7 +74,8 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public long executeGeneratedKey(Map<String, Object> params) throws java.sql.SQLException {
-	JdbcUtils.setParameters(this, getSql(), params);
+	if (params != null)
+	    JdbcUtils.setParameters(this, getSql(), params);
 	this.stat.executeUpdate();
 
 	try (ResultSet rs = this.stat.getGeneratedKeys()) {
@@ -90,7 +91,8 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public int executeUpdate(Map<String, Object> params) throws java.sql.SQLException {
-	JdbcUtils.setParameters(this, getSql(), params);
+	if (params != null)
+	    JdbcUtils.setParameters(this, getSql(), params);
 
 	return this.stat.executeUpdate();
     }
@@ -108,7 +110,8 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public <K, V> Map<K, V> executeMap(Map<String, Object> params, ResultSetMapper<K> keyMapper, ResultSetMapper<V> valueMapper, Map<K, V> map) throws java.sql.SQLException {
-	JdbcUtils.setParameters(this, getSql(), params);
+	if (params != null)
+	    JdbcUtils.setParameters(this, getSql(), params);
 
 	try (ResultSetImpl rs = executeQuery()) {
 	    return JdbcUtils.executeMap(rs, keyMapper, valueMapper, map);
@@ -126,7 +129,8 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public <K, V> Map<K, V> executeMap(Map<String, Object> params, String keyColumn, String valueColumn, Map<K, V> map) throws java.sql.SQLException {
-	JdbcUtils.setParameters(this, getSql(), params);
+	if (params != null)
+	    JdbcUtils.setParameters(this, getSql(), params);
 
 	try (ResultSetImpl rs = executeQuery()) {
 	    return JdbcUtils.executeMap(rs, keyColumn, valueColumn, map);
@@ -144,7 +148,8 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public <T> List<T> executeList(Map<String, Object> params, ResultSetMapper<T> mapper, List<T> list) throws java.sql.SQLException {
-	JdbcUtils.setParameters(this, getSql(), params);
+	if (params != null)
+	    JdbcUtils.setParameters(this, getSql(), params);
 
 	try (ResultSetImpl rs = executeQuery()) {
 	    return JdbcUtils.executeList(rs, mapper, list);
@@ -162,7 +167,8 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public <T> T executeSingle(Map<String, Object> params, ResultSetMapper<T> mapper) throws java.sql.SQLException {
-	JdbcUtils.setParameters(this, getSql(), params);
+	if (params != null)
+	    JdbcUtils.setParameters(this, getSql(), params);
 
 	try (ResultSetImpl rs = executeQuery()) {
 	    return JdbcUtils.executeSingle(rs, mapper);
@@ -192,7 +198,8 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public boolean executeExists(Map<String, Object> params) throws java.sql.SQLException {
-	JdbcUtils.setParameters(this, getSql(), params);
+	if (params != null)
+	    JdbcUtils.setParameters(this, getSql(), params);
 
 	try (ResultSetImpl rs = executeQuery()) {
 	    return JdbcUtils.executeExists(rs);
@@ -212,7 +219,8 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public void executeQuery(Map<String, Object> params, ResultSetHandler handler) throws Exception {
-	JdbcUtils.setParameters(this, getSql(), params);
+	if (params != null)
+	    JdbcUtils.setParameters(this, getSql(), params);
 
 	try (ResultSetImpl rs = executeQuery()) {
 	    while (rs.next()) {
@@ -232,7 +240,8 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public void executeStream(Map<String, Object> params, String streamLabel, OutputStream out, ResultSetHandler handler) throws Exception {
-	JdbcUtils.setParameters(this, getSql(), params);
+	if (params != null)
+	    JdbcUtils.setParameters(this, getSql(), params);
 
 	try (ResultSetImpl rs = executeQuery()) {
 	    JdbcUtils.executeStream(rs, streamLabel, out, handler);
@@ -250,7 +259,8 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public void executeStream(Map<String, Object> params, String streamLabel, Writer out, ResultSetHandler handler) throws Exception {
-	JdbcUtils.setParameters(this, getSql(), params);
+	if (params != null)
+	    JdbcUtils.setParameters(this, getSql(), params);
 
 	try (ResultSetImpl rs = executeQuery()) {
 	    JdbcUtils.executeStream(rs, streamLabel, out, handler);
@@ -268,7 +278,8 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public void executeNStream(Map<String, Object> params, String streamLabel, Writer out, ResultSetHandler handler) throws Exception {
-	JdbcUtils.setParameters(this, getSql(), params);
+	if (params != null)
+	    JdbcUtils.setParameters(this, getSql(), params);
 
 	try (ResultSetImpl rs = executeQuery()) {
 	    JdbcUtils.executeNStream(rs, streamLabel, out, handler);
@@ -320,7 +331,7 @@ public class StatementImpl implements PreparedStatement {
 
     public void setLikeAny(String parameterName, String[] values, LikeType likeType, String falsePattern) throws java.sql.SQLException {
 	int arrayLen = this.getSql().getArrayLen(parameterName);
-	AssertUtils.assertTrue(values.length <= arrayLen);
+	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
 	    setString(JdbcSql.toParamName(parameterName, i), (i < values.length) ? SqlLikeEscaper.toLikePattern(values[i], likeType) : falsePattern);
@@ -341,7 +352,7 @@ public class StatementImpl implements PreparedStatement {
 
     public void setNLikeAny(String parameterName, String[] values, LikeType likeType, String falsePattern) throws java.sql.SQLException {
 	int arrayLen = this.getSql().getArrayLen(parameterName);
-	AssertUtils.assertTrue(values.length <= arrayLen);
+	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
 	    setNString(JdbcSql.toParamName(parameterName, i), (i < values.length) ? SqlLikeEscaper.toLikePattern(values[i], likeType) : falsePattern);
@@ -353,7 +364,7 @@ public class StatementImpl implements PreparedStatement {
 
     public void setStringArray(String parameterName, String[] values) throws java.sql.SQLException {
 	int arrayLen = this.getSql().getArrayLen(parameterName);
-	AssertUtils.assertTrue(values.length <= arrayLen);
+	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
 	    setString(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -362,7 +373,7 @@ public class StatementImpl implements PreparedStatement {
 
     public void setNStringArray(String parameterName, String[] values) throws java.sql.SQLException {
 	int arrayLen = this.getSql().getArrayLen(parameterName);
-	AssertUtils.assertTrue(values.length <= arrayLen);
+	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
 	    setNString(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -371,7 +382,7 @@ public class StatementImpl implements PreparedStatement {
 
     public void setBoolArray(String parameterName, boolean[] values) throws java.sql.SQLException {
 	int arrayLen = this.getSql().getArrayLen(parameterName);
-	AssertUtils.assertTrue(values.length <= arrayLen);
+	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
 	    if (i < values.length) {
@@ -384,7 +395,7 @@ public class StatementImpl implements PreparedStatement {
 
     public void setByteArray(String parameterName, byte[] values) throws java.sql.SQLException {
 	int arrayLen = this.getSql().getArrayLen(parameterName);
-	AssertUtils.assertTrue(values.length <= arrayLen);
+	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
 	    if (i < values.length) {
@@ -397,7 +408,7 @@ public class StatementImpl implements PreparedStatement {
 
     public void setShortArray(String parameterName, short[] values) throws java.sql.SQLException {
 	int arrayLen = this.getSql().getArrayLen(parameterName);
-	AssertUtils.assertTrue(values.length <= arrayLen);
+	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
 	    if (i < values.length) {
@@ -410,7 +421,7 @@ public class StatementImpl implements PreparedStatement {
 
     public void setIntArray(String parameterName, int[] values) throws java.sql.SQLException {
 	int arrayLen = this.getSql().getArrayLen(parameterName);
-	AssertUtils.assertTrue(values.length <= arrayLen);
+	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
 	    if (i < values.length) {
@@ -423,7 +434,7 @@ public class StatementImpl implements PreparedStatement {
 
     public void setLongArray(String parameterName, long[] values) throws java.sql.SQLException {
 	int arrayLen = this.getSql().getArrayLen(parameterName);
-	AssertUtils.assertTrue(values.length <= arrayLen);
+	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
 	    if (i < values.length) {
@@ -436,7 +447,7 @@ public class StatementImpl implements PreparedStatement {
 
     public void setFloatArray(String parameterName, float[] values) throws java.sql.SQLException {
 	int arrayLen = this.getSql().getArrayLen(parameterName);
-	AssertUtils.assertTrue(values.length <= arrayLen);
+	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
 	    if (i < values.length) {
@@ -449,7 +460,7 @@ public class StatementImpl implements PreparedStatement {
 
     public void setDoubleArray(String parameterName, double[] values) throws java.sql.SQLException {
 	int arrayLen = this.getSql().getArrayLen(parameterName);
-	AssertUtils.assertTrue(values.length <= arrayLen);
+	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
 	    if (i < values.length) {
@@ -462,7 +473,7 @@ public class StatementImpl implements PreparedStatement {
 
     public void setBigDecimalArray(String parameterName, java.math.BigDecimal[] values) throws java.sql.SQLException {
 	int arrayLen = this.getSql().getArrayLen(parameterName);
-	AssertUtils.assertTrue(values.length <= arrayLen);
+	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
 	    setBigDecimal(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -471,7 +482,7 @@ public class StatementImpl implements PreparedStatement {
 
     public void setDateArray(String parameterName, java.sql.Date[] values) throws java.sql.SQLException {
 	int arrayLen = this.getSql().getArrayLen(parameterName);
-	AssertUtils.assertTrue(values.length <= arrayLen);
+	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
 	    setDate(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -480,7 +491,7 @@ public class StatementImpl implements PreparedStatement {
 
     public void setTimestampArray(String parameterName, java.sql.Timestamp[] values) throws java.sql.SQLException {
 	int arrayLen = this.getSql().getArrayLen(parameterName);
-	AssertUtils.assertTrue(values.length <= arrayLen);
+	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
 	    setTimestamp(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -489,7 +500,7 @@ public class StatementImpl implements PreparedStatement {
 
     public void setTimeArray(String parameterName, java.sql.Time[] values) throws java.sql.SQLException {
 	int arrayLen = this.getSql().getArrayLen(parameterName);
-	AssertUtils.assertTrue(values.length <= arrayLen);
+	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
 	    setTime(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -498,7 +509,7 @@ public class StatementImpl implements PreparedStatement {
 
     public void setObjectArray(String parameterName, Object[] values) throws java.sql.SQLException {
 	int arrayLen = this.getSql().getArrayLen(parameterName);
-	AssertUtils.assertTrue(values.length <= arrayLen);
+	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
 	    setObject(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);

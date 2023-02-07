@@ -23,8 +23,9 @@ package com.appslandia.common.base;
 import java.io.Serializable;
 import java.util.regex.Pattern;
 
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.DateUtils;
-import com.appslandia.common.utils.StringFormat;
+import com.appslandia.common.utils.STR;
 
 /**
  * 
@@ -57,26 +58,20 @@ public class RateLimit implements Serializable {
 
     @Override
     public String toString() {
-	return StringFormat.fmt("RateLimit: accesses={}, windowsMs={}", this.accesses, this.windowsMs);
+	return STR.fmt("RateLimit: accesses={}, windowsMs={}", this.accesses, this.windowsMs);
     }
 
     static final Pattern RATE_LIMIT_PATTERN = Pattern.compile("(\\d+.\\d+|\\d+)\\s*/\\s*\\d+(w|d|h|m|s|ms)", Pattern.CASE_INSENSITIVE);
 
-    public static RateLimit parse(String rateLimit) throws IllegalArgumentException {
-	if (!RATE_LIMIT_PATTERN.matcher(rateLimit).matches()) {
-	    throw new IllegalArgumentException("rateLimit is invalid (value=" + rateLimit + ")");
-	}
+    public static RateLimit parse(String rateLimit) {
+	Asserts.notNull(rateLimit);
+	Asserts.isTrue(RATE_LIMIT_PATTERN.matcher(rateLimit).matches(), () -> STR.fmt("rateLimit '{}' is invalid.", rateLimit));
+
 	int idx = rateLimit.indexOf('/');
 
 	double accesses = Double.parseDouble(rateLimit.substring(0, idx).trim());
 	long windowsMs = DateUtils.translateToMs(rateLimit.substring(idx + 1).trim());
 
-	if (accesses == 0.0) {
-	    throw new IllegalArgumentException("accesses must be positive (rateLimit=" + rateLimit + ")");
-	}
-	if (windowsMs == 0) {
-	    throw new IllegalArgumentException("windowsMs must be positive (rateLimit=" + rateLimit + ")");
-	}
 	return new RateLimit(accesses, windowsMs);
     }
 }

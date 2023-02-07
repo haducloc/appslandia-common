@@ -36,7 +36,7 @@ import javax.crypto.spec.PSource;
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -59,15 +59,15 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
     @Override
     protected void init() throws Exception {
 	// Algorithm
-	AssertUtils.assertNotNull(this.transformation, "transformation is required.");
+	Asserts.notNull(this.transformation, "transformation is required.");
 
 	String[] trans = this.transformation.split("/");
-	AssertUtils.assertTrue("RSA".equalsIgnoreCase(trans[0]), "RSA algorithm is required.");
+	Asserts.isTrue("RSA".equalsIgnoreCase(trans[0]), "RSA algorithm is required.");
 
 	String padding = (trans.length == 3) ? trans[2] : null;
 	AlgorithmParameterSpec paramSpec = (padding != null) ? parseParamSpec(padding) : null;
 
-	AssertUtils.assertTrue((this.privateKey != null) || (this.publicKey != null), "No key is provided.");
+	Asserts.isTrue((this.privateKey != null) || (this.publicKey != null), "No key is provided.");
 
 	// ENCRYPT
 	if (this.publicKey != null) {
@@ -98,8 +98,8 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
     @Override
     public byte[] encrypt(byte[] message) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(message, "message is required.");
-	AssertUtils.assertNotNull(this.encrypt, "publicKey is required.");
+	Asserts.notNull(message, "message is required.");
+	Asserts.notNull(this.encrypt, "publicKey is required.");
 
 	try {
 	    synchronized (this.encMutex) {
@@ -113,8 +113,8 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
     @Override
     public byte[] decrypt(byte[] message) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(message, "message is required.");
-	AssertUtils.assertNotNull(this.decrypt, "privateKey is required.");
+	Asserts.notNull(message, "message is required.");
+	Asserts.notNull(this.decrypt, "privateKey is required.");
 
 	try {
 	    synchronized (this.decMutex) {

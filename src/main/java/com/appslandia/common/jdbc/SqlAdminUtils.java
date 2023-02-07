@@ -26,8 +26,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.appslandia.common.utils.AssertUtils;
-import com.appslandia.common.utils.StringFormat;
+import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -38,19 +38,19 @@ public class SqlAdminUtils {
 
     public static long fixIdSeq(Connection conn, String tableName, String idPkCol, boolean idPkInt, String idPkAlter1, String idPkAlter2, String idPkAlter3) throws SQLException {
 
-	AssertUtils.assertNotNull(tableName);
-	AssertUtils.assertNotNull(idPkCol);
+	Asserts.notNull(tableName);
+	Asserts.notNull(idPkCol);
 
 	long seq = 0;
 	try (Statement stat = conn.createStatement()) {
 
 	    // Add tempIdPkCol
 	    String tempIdPkCol = idPkCol + "_temp";
-	    stat.executeUpdate(StringFormat.fmt("ALTER TABLE {} ADD {} {}", tableName, tempIdPkCol, (idPkInt ? "INT" : "BIGINT")));
+	    stat.executeUpdate(STR.fmt("ALTER TABLE {} ADD {} {}", tableName, tempIdPkCol, (idPkInt ? "INT" : "BIGINT")));
 
 	    // Update tempIdPkCol
-	    try (PreparedStatement updStat = conn.prepareStatement(StringFormat.fmt("UPDATE {} SET {}=? WHERE {}=?", tableName, tempIdPkCol, idPkCol))) {
-		try (ResultSet rs = stat.executeQuery(StringFormat.fmt("SELECT {} FROM {} ORDER BY {}", idPkCol, tableName, idPkCol))) {
+	    try (PreparedStatement updStat = conn.prepareStatement(STR.fmt("UPDATE {} SET {}=? WHERE {}=?", tableName, tempIdPkCol, idPkCol))) {
+		try (ResultSet rs = stat.executeQuery(STR.fmt("SELECT {} FROM {} ORDER BY {}", idPkCol, tableName, idPkCol))) {
 
 		    while (rs.next()) {
 			seq++;
@@ -73,22 +73,22 @@ public class SqlAdminUtils {
 	    }
 
 	    // Re-create idPkCol
-	    stat.executeUpdate(StringFormat.fmt("ALTER TABLE {} DROP COLUMN {}", tableName, idPkCol));
-	    stat.executeUpdate(StringFormat.fmt("ALTER TABLE {} ADD {} {}", tableName, idPkCol, (idPkInt ? "INT" : "BIGINT")));
-	    stat.executeUpdate(StringFormat.fmt("UPDATE {} SET {}={}", tableName, idPkCol, tempIdPkCol));
+	    stat.executeUpdate(STR.fmt("ALTER TABLE {} DROP COLUMN {}", tableName, idPkCol));
+	    stat.executeUpdate(STR.fmt("ALTER TABLE {} ADD {} {}", tableName, idPkCol, (idPkInt ? "INT" : "BIGINT")));
+	    stat.executeUpdate(STR.fmt("UPDATE {} SET {}={}", tableName, idPkCol, tempIdPkCol));
 
 	    // Execute Alters
 	    if (idPkAlter1 != null)
-		stat.executeUpdate(StringFormat.fmt("ALTER TABLE {} {}", tableName, idPkAlter1));
+		stat.executeUpdate(STR.fmt("ALTER TABLE {} {}", tableName, idPkAlter1));
 
 	    if (idPkAlter2 != null)
-		stat.executeUpdate(StringFormat.fmt("ALTER TABLE {} {}", tableName, idPkAlter2));
+		stat.executeUpdate(STR.fmt("ALTER TABLE {} {}", tableName, idPkAlter2));
 
 	    if (idPkAlter3 != null)
-		stat.executeUpdate(StringFormat.fmt("ALTER TABLE {} {}", tableName, idPkAlter3));
+		stat.executeUpdate(STR.fmt("ALTER TABLE {} {}", tableName, idPkAlter3));
 
 	    // Drop tempIdPkCol
-	    stat.executeUpdate(StringFormat.fmt("ALTER TABLE {} DROP COLUMN {}", tableName, tempIdPkCol));
+	    stat.executeUpdate(STR.fmt("ALTER TABLE {} DROP COLUMN {}", tableName, tempIdPkCol));
 
 	    return seq;
 	}

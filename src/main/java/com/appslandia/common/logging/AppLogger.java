@@ -24,7 +24,7 @@ import java.util.function.Supplier;
 
 import com.appslandia.common.base.ExceptionBlock;
 import com.appslandia.common.utils.ExceptionUtils;
-import com.appslandia.common.utils.StringFormat;
+import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -72,7 +72,7 @@ public interface AppLogger {
     }
 
     default void log(Level level, String format, Object... entries) {
-	log(level, StringFormat.fmt(format, entries));
+	log(level, STR.fmt(format, entries));
     }
 
     default void trace(String format, Object... entries) {

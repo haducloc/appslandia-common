@@ -22,7 +22,7 @@ package com.appslandia.common.objects;
 
 import java.lang.reflect.Method;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ReflectionException;
 import com.appslandia.common.utils.ReflectionUtils;
 
@@ -36,7 +36,7 @@ import jakarta.annotation.PreDestroy;
 public class ObjectFactoryUtils {
 
     public static void destroy(Object obj) throws ObjectException {
-	AssertUtils.assertNotNull(obj);
+	Asserts.notNull(obj);
 
 	ReflectionUtils.traverse(obj.getClass(), new ReflectionUtils.MethodHandler() {
 	    @Override

@@ -35,9 +35,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.appslandia.common.utils.ArrayUtils;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.IOUtils;
 import com.appslandia.common.utils.ObjectUtils;
+import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -71,26 +72,22 @@ public class JdbcUtils {
     }
 
     public static void setParameters(StatementImpl stat, JdbcSql sql, Map<String, Object> params) throws SQLException {
-	if (!sql.getParamsMap().isEmpty())
-	    AssertUtils.assertNotNull(params, "params is required.");
-
 	for (Map.Entry<String, Integer> np : sql.getParamsMap().entrySet()) {
-	    if (!params.containsKey(np.getKey())) {
-		throw new IllegalArgumentException("The parameter '" + np.getKey() + "' must be provided.");
-	    }
+	    Asserts.isTrue(params.containsKey(np.getKey()), () -> STR.fmt("parameter '{}' is required.", np.getKey()));
 
+	    // Non-array parameter
 	    if (np.getValue() == null) {
 		stat.setObject(np.getKey(), params.get(np.getKey()));
 
 	    } else {
 		// Array Parameter
 		Object pv = params.get(np.getKey());
-		AssertUtils.assertNotNull(pv, "Array parameter must be required.");
+		Asserts.notNull(pv, () -> STR.fmt("Array parameter '{}' is required.", np.getKey()));
 
 		boolean isArray = pv.getClass().isArray();
 		boolean isCollection = !isArray && Collection.class.isAssignableFrom(pv.getClass());
 
-		AssertUtils.assertTrue(isArray || isCollection, "Array parameter value must be an array or a collection.");
+		Asserts.isTrue(isArray || isCollection, () -> STR.fmt("Array parameter '{}' must be array/collection.", np.getKey()));
 
 		Object[] values = isArray ? ArrayUtils.toArray(pv) : ((Collection<?>) pv).toArray();
 		stat.setObjectArray(np.getKey(), values);

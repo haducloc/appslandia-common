@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -41,7 +41,7 @@ public class MutexService<K> extends InitializeObject {
     }
 
     public Object getMutex(K key) {
-	AssertUtils.assertNotNull(key);
+	Asserts.notNull(key);
 
 	Object mutex = this.mutexMap.get(key);
 	if (mutex == null) {

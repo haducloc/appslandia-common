@@ -35,11 +35,12 @@ import java.util.List;
 import java.util.Set;
 
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.ObjectUtils;
 import com.appslandia.common.utils.ReflectionException;
 import com.appslandia.common.utils.ReflectionUtils;
+import com.appslandia.common.utils.STR;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.inject.Instance;
@@ -102,11 +103,10 @@ public class ObjectFactory extends InitializeObject {
 		    }
 		    int count = countMatchesForInject(type, qualifiers);
 		    if (count == 0) {
-			throw new ObjectException(
-				"Unsatisfied dependency (type=" + type + ", qualifiers=" + Arrays.toString(qualifiers) + ", member=" + toMemberInfo(member) + ")");
+			throw new ObjectException(STR.fmt("Unsatisfied dependency: type={}, qualifiers={}, member={}.", type, Arrays.toString(qualifiers), toMemberInfo(member)));
 		    }
 		    if (count > 1) {
-			throw new ObjectException("Ambiguous dependency (type=" + type + ", qualifiers=" + Arrays.toString(qualifiers) + ", member=" + toMemberInfo(member) + ")");
+			throw new ObjectException(STR.fmt("Ambiguous dependency: type={}, qualifiers={}, member={}.", type, Arrays.toString(qualifiers), toMemberInfo(member)));
 		    }
 		}
 
@@ -147,8 +147,8 @@ public class ObjectFactory extends InitializeObject {
     protected ObjectFactory register(Class<?>[] types, ObjectProducer<?> producer, ObjectScope scope, Annotation[] qualifiers) {
 	assertNotInitialized();
 
-	AssertUtils.assertNotNull(types);
-	AssertUtils.assertNotNull(producer);
+	Asserts.notNull(types);
+	Asserts.notNull(producer);
 
 	if (scope == null) {
 	    scope = AnnotationUtils.parseScope(producer);
@@ -185,8 +185,8 @@ public class ObjectFactory extends InitializeObject {
 
     protected ObjectFactory register(Class<?>[] types, Class<?> implClass, ObjectScope scope, Annotation[] qualifiers) {
 	assertNotInitialized();
-	AssertUtils.assertNotNull(types);
-	AssertUtils.assertNotNull(implClass);
+	Asserts.notNull(types);
+	Asserts.notNull(implClass);
 
 	Set<Class<?>> expTypes = CollectionUtils.toSet(types);
 	expTypes.add(implClass);
@@ -212,8 +212,8 @@ public class ObjectFactory extends InitializeObject {
 
     public ObjectFactory unregister(Class<?> type, Annotation... qualifiers) {
 	assertNotInitialized();
-	AssertUtils.assertNotNull(type);
-	AssertUtils.assertNotNull(qualifiers);
+	Asserts.notNull(type);
+	Asserts.notNull(qualifiers);
 
 	Iterator<ObjectInstance> iter = this.instances.iterator();
 	while (iter.hasNext()) {
@@ -227,7 +227,7 @@ public class ObjectFactory extends InitializeObject {
     }
 
     public <T> ObjectFactory unregister(Class<T> type, Class<? extends T> implClass) {
-	AssertUtils.assertNotNull(implClass);
+	Asserts.notNull(implClass);
 	return unregister(type, AnnotationUtils.parseQualifiers(implClass));
     }
 
@@ -238,7 +238,7 @@ public class ObjectFactory extends InitializeObject {
 
     public ObjectFactory inject(final Object obj) throws ObjectException {
 	initialize();
-	AssertUtils.assertNotNull(obj);
+	Asserts.notNull(obj);
 
 	new InjectTraverser() {
 
@@ -266,9 +266,9 @@ public class ObjectFactory extends InitializeObject {
 		    }
 
 		    // @Inject @Instance<T>
-		    AssertUtils.assertTrue(field.getGenericType() instanceof ParameterizedType);
+		    Asserts.isTrue(field.getGenericType() instanceof ParameterizedType);
 		    Type argType = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
-		    AssertUtils.assertTrue(argType instanceof Class);
+		    Asserts.isTrue(argType instanceof Class);
 		    Class<?> type = (Class<?>) argType;
 
 		    // InstanceImpl
@@ -325,7 +325,7 @@ public class ObjectFactory extends InitializeObject {
 		}
 	    }
 	    if ((injectCtor == null) && (emptyCtor == null)) {
-		throw new ObjectException("Could not instantiate (implClass=" + definition.getImplClass() + ")");
+		throw new ObjectException(STR.fmt("Couldn't instantiate '{}'.", definition.getImplClass()));
 	    }
 	    Object instance = null;
 	    if (injectCtor != null) {
@@ -360,7 +360,7 @@ public class ObjectFactory extends InitializeObject {
 	for (ObjectInstance inst : this.instances) {
 	    if ((inst.definition.hasType(type) || (type == Object.class)) && AnnotationUtils.equals(inst.definition.getQualifiers(), qualifiers)) {
 		if (obj != null) {
-		    throw new ObjectException("Ambiguous dependency (type=" + type + ", qualifiers=" + Arrays.toString(qualifiers));
+		    throw new ObjectException(STR.fmt("Ambiguous dependency: type={}, qualifiers={}.", type, Arrays.toString(qualifiers)));
 		}
 		obj = inst;
 	    }
@@ -374,8 +374,8 @@ public class ObjectFactory extends InitializeObject {
 
     public <T, I extends T> I getObject(Class<T> type, Annotation... qualifiers) throws ObjectException {
 	initialize();
-	AssertUtils.assertNotNull(type);
-	AssertUtils.assertNotNull(qualifiers);
+	Asserts.notNull(type);
+	Asserts.notNull(qualifiers);
 
 	if (ObjectFactory.class.isAssignableFrom(type)) {
 	    return ObjectUtils.cast(this);
@@ -383,14 +383,14 @@ public class ObjectFactory extends InitializeObject {
 
 	ObjectInstance inst = getObjectInst(type, qualifiers);
 	if (inst == null) {
-	    throw new ObjectException("Unsatisfied dependency (type=" + type + ", qualifiers=" + Arrays.toString(qualifiers));
+	    throw new ObjectException(STR.fmt("Unsatisfied dependency: type={}, qualifiers={}.", type, Arrays.toString(qualifiers)));
 	}
 	return ObjectUtils.cast(inst.getInstance());
     }
 
     public <T> T postConstruct(T obj) throws ObjectException {
 	initialize();
-	AssertUtils.assertNotNull(obj);
+	Asserts.notNull(obj);
 	ReflectionUtils.traverse(obj.getClass(), new ReflectionUtils.MethodHandler() {
 
 	    @Override
@@ -416,7 +416,7 @@ public class ObjectFactory extends InitializeObject {
 
     public <T> T preDestroy(T obj) throws ObjectException {
 	initialize();
-	AssertUtils.assertNotNull(obj);
+	Asserts.notNull(obj);
 	ObjectFactoryUtils.destroy(obj);
 	return obj;
     }

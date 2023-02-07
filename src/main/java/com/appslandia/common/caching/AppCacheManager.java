@@ -20,6 +20,8 @@
 
 package com.appslandia.common.caching;
 
+import com.appslandia.common.utils.Asserts;
+
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
@@ -29,12 +31,10 @@ public interface AppCacheManager {
 
     <K, V> AppCache<K, V> getCache(String cacheName);
 
-    default <K, V> AppCache<K, V> getRequiredCache(String cacheName) throws IllegalArgumentException {
+    default <K, V> AppCache<K, V> getRequiredCache(String cacheName) {
 	AppCache<K, V> cache = getCache(cacheName);
-	if (cache == null) {
-	    throw new IllegalArgumentException("cache is required (name=" + cacheName + ")");
-	}
-	return cache;
+
+	return Asserts.notNull(cache);
     }
 
     boolean clearCache(String cacheName);

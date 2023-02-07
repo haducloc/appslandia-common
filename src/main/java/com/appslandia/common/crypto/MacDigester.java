@@ -32,7 +32,7 @@ import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
 import com.appslandia.common.utils.ArrayUtils;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.SYS;
 
 /**
@@ -50,8 +50,8 @@ public class MacDigester extends InitializeObject implements Digester {
 
     @Override
     protected void init() throws Exception {
-	AssertUtils.assertNotNull(this.algorithm, "algorithm is required.");
-	AssertUtils.assertNotNull(this.secret, "secret is required.");
+	Asserts.notNull(this.algorithm, "algorithm is required.");
+	Asserts.notNull(this.secret, "secret is required.");
 
 	// MAC
 	if (this.provider == null) {
@@ -70,7 +70,7 @@ public class MacDigester extends InitializeObject implements Digester {
     @Override
     public byte[] digest(byte[] message) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(message, "message is required.");
+	Asserts.notNull(message, "message is required.");
 
 	synchronized (this.mutex) {
 	    return this.mac.doFinal(message);
@@ -80,8 +80,8 @@ public class MacDigester extends InitializeObject implements Digester {
     @Override
     public boolean verify(byte[] message, byte[] hmac) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(message, "message is required.");
-	AssertUtils.assertNotNull(hmac, "hmac is required.");
+	Asserts.notNull(message, "message is required.");
+	Asserts.notNull(hmac, "hmac is required.");
 
 	byte[] msgMac = null;
 	synchronized (this.mutex) {
@@ -120,7 +120,7 @@ public class MacDigester extends InitializeObject implements Digester {
 	return this;
     }
 
-    public MacDigester setSecret(String secretOrEnv) throws IllegalArgumentException {
+    public MacDigester setSecret(String secretOrEnv) {
 	this.assertNotInitialized();
 
 	if (secretOrEnv != null) {

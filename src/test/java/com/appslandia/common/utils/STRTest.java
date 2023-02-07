@@ -30,77 +30,87 @@ import com.appslandia.common.base.Params;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class StringFormatTest {
+public class STRTest {
 
     @Test
     public void test_map() {
-	String msg = StringFormat.format("this is ${p1} and ${p2}", new Params().set("p1", "v1").set("p2", null));
+	String msg = STR.format("this is ${p1} and ${p2}", new Params().set("p1", "v1").set("p2", null));
 	Assertions.assertEquals("this is v1 and null", msg);
 
-	msg = StringFormat.format("this is ${p1} and ${p2}", new Params().set("p1", "v1").set("p2", "v2"));
+	msg = STR.format("this is ${p1} and ${p2}", new Params().set("p1", "v1").set("p2", "v2"));
 	Assertions.assertEquals("this is v1 and v2", msg);
     }
 
     @Test
     public void test_map_missing() {
 	try {
-	    StringFormat.format("this is ${p1} and ${p2}", new Params().set("p1", "v1"));
-	    Assertions.fail();
+	    String msg = STR.format("this is ${p1} and ${p2}", new Params().set("p1", "v1"));
+	    Assertions.assertEquals("this is v1 and ${p2}", msg);
+
 	} catch (Exception ex) {
+	    Assertions.fail(ex.getMessage());
 	}
     }
 
     @Test
     public void test_array() {
-	String msg = StringFormat.format("this is ${0} and ${1}", "v1", null);
+	String msg = STR.format("this is ${0} and ${1}", "v1", null);
 	Assertions.assertEquals("this is v1 and null", msg);
 
-	msg = StringFormat.format("this is ${0} and ${1}", "v1", "v2");
+	msg = STR.format("this is ${0} and ${1}", "v1", "v2");
 	Assertions.assertEquals("this is v1 and v2", msg);
     }
 
     @Test
     public void test_array_missing() {
 	try {
-	    StringFormat.format("this is ${0} and ${1}", "v1");
-	    Assertions.fail();
+	    String msg = STR.format("this is ${0} and ${1}", "v1");
+	    Assertions.assertEquals("this is v1 and ${1}", msg);
+
 	} catch (Exception ex) {
+	    Assertions.fail(ex.getMessage());
 	}
     }
 
     @Test
     public void test_env_missing() {
 	try {
-	    StringFormat.format("Temp Dir=${env.__SYS__TEST__TMP__}");
-	    Assertions.fail();
+	    String val = STR.format("Temp Dir=${env.__SYS__TEST__TMP__}");
+	    Assertions.assertEquals("Temp Dir=${env.__SYS__TEST__TMP__}", val);
+
 	} catch (Exception ex) {
+	    Assertions.fail(ex.getMessage());
 	}
     }
 
     @Test
     public void test_prop_missing() {
 	try {
-	    StringFormat.format("Temp Dir=${env.__sys__test__tmp__}");
-	    Assertions.fail();
+	    String val = STR.format("Temp Dir=${env.__sys__test__tmp__}");
+	    Assertions.assertEquals("Temp Dir=${env.__sys__test__tmp__}", val);
+
 	} catch (Exception ex) {
+	    Assertions.fail(ex.getMessage());
 	}
     }
 
     @Test
     public void test_fmt() {
-	String msg = StringFormat.fmt("this is {} and {}", "v1", null);
+	String msg = STR.fmt("this is {} and {}", "v1", null);
 	Assertions.assertEquals("this is v1 and null", msg);
 
-	msg = StringFormat.fmt("this is {} and {}", "v1", "v2");
+	msg = STR.fmt("this is {} and {}", "v1", "v2");
 	Assertions.assertEquals("this is v1 and v2", msg);
     }
 
     @Test
     public void test_fmt_missing() {
 	try {
-	    StringFormat.fmt("this is {} and {}", "v1");
-	    Assertions.fail();
+	    String msg = STR.fmt("this is {} and {}", "v1");
+	    Assertions.assertEquals("this is v1 and {}", msg);
+
 	} catch (Exception ex) {
+	    Assertions.fail(ex.getMessage());
 	}
     }
 }

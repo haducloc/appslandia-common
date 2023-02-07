@@ -30,7 +30,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.IOUtils;
 
 /**
@@ -62,7 +62,7 @@ public class KeyFactoryUtil extends InitializeObject {
 
     @Override
     protected void init() throws Exception {
-	AssertUtils.assertNotNull(this.algorithm, "algorithm is required.");
+	Asserts.notNull(this.algorithm, "algorithm is required.");
 
 	// keyFactory
 	if (this.provider == null) {
@@ -125,7 +125,7 @@ public class KeyFactoryUtil extends InitializeObject {
 
     public PrivateKey copy(PrivateKey key) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertTrue("PKCS#8".equals(key.getFormat()), "key is not PKCS#8 format.");
+	Asserts.isTrue("PKCS#8".equals(key.getFormat()), "key is not PKCS#8 format.");
 
 	byte[] der = key.getEncoded();
 	try {
@@ -141,7 +141,7 @@ public class KeyFactoryUtil extends InitializeObject {
 
     public PublicKey copy(PublicKey key) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertTrue("X.509".equals(key.getFormat()), "key is not X.509 format.");
+	Asserts.isTrue("X.509".equals(key.getFormat()), "key is not X.509 format.");
 
 	try {
 	    synchronized (this.mutex) {

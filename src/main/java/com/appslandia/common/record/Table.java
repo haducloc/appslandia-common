@@ -27,7 +27,7 @@ import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.TextBuilder;
 import com.appslandia.common.base.ToStringBuilder.TSExcluded;
 import com.appslandia.common.jdbc.JdbcSql;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -54,8 +54,8 @@ public class Table extends InitializeObject implements Serializable {
 
     @Override
     protected void init() throws Exception {
-	AssertUtils.assertNotNull(this.name, "name is required.");
-	AssertUtils.assertHasElements(this.fields, "fields are required.");
+	Asserts.notNull(this.name, "name is required.");
+	Asserts.hasElements(this.fields, "fields are required.");
 
 	int keyCount = 0;
 	for (Field field : this.fields) {
@@ -64,7 +64,7 @@ public class Table extends InitializeObject implements Serializable {
 		keyCount++;
 
 		if (field.getKeyType() == FieldType.KEY_INCR) {
-		    AssertUtils.assertNull(this.keyIncr, "keyIncr duplicated.");
+		    Asserts.isNull(this.keyIncr, "keyIncr duplicated.");
 
 		    this.keyIncr = field;
 		}

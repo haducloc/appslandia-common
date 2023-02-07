@@ -28,7 +28,7 @@ package com.appslandia.common.utils;
 public class MathUtils {
 
     public static int digitCount(long n) {
-	AssertUtils.assertTrue(n >= 0);
+	Asserts.isTrue(n >= 0);
 
 	if (n == 0)
 	    return 1;
@@ -43,8 +43,8 @@ public class MathUtils {
     }
 
     public static int ceil(int n, int base) {
-	AssertUtils.assertTrue(n >= 0);
-	AssertUtils.assertTrue(base > 0);
+	Asserts.isTrue(n >= 0);
+	Asserts.isTrue(base > 0);
 	return ((n + base - 1) / base) * base;
     }
 
@@ -89,7 +89,7 @@ public class MathUtils {
     }
 
     public static byte[] toByteArray(int begin, int end) {
-	AssertUtils.assertTrue(begin <= end);
+	Asserts.isTrue(begin <= end);
 
 	byte[] byteArray = new byte[end - begin + 1];
 	for (int i = begin; i <= end; i++) {

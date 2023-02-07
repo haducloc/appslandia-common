@@ -27,7 +27,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.SYS;
 import com.appslandia.common.utils.ValueUtils;
 
@@ -47,12 +47,12 @@ public abstract class PbeObject extends InitializeObject {
 
     @Override
     protected void init() throws Exception {
-	AssertUtils.assertTrue(this.keySize > 0, "keySize is required.");
+	Asserts.isTrue(this.keySize > 0, "keySize is required.");
 
 	this.saltSize = ValueUtils.valueOrMin(this.saltSize, this.keySize);
 	this.iterationCount = ValueUtils.valueOrMin(this.iterationCount, 10_000);
 
-	AssertUtils.assertNotNull(this.password, "password is required.");
+	Asserts.notNull(this.password, "password is required.");
 
 	if (this.secretKeyGenerator == null) {
 	    this.secretKeyGenerator = new SecretKeyGenerator();
@@ -99,7 +99,7 @@ public abstract class PbeObject extends InitializeObject {
 	return this;
     }
 
-    public PbeObject setPassword(String passwordOrEnv) throws IllegalArgumentException {
+    public PbeObject setPassword(String passwordOrEnv) {
 	this.assertNotInitialized();
 
 	if (passwordOrEnv != null) {

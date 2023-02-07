@@ -24,8 +24,8 @@ import java.io.Serializable;
 
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.jdbc.JdbcSql;
-import com.appslandia.common.utils.AssertUtils;
-import com.appslandia.common.utils.StringFormat;
+import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -45,8 +45,8 @@ public class Field extends InitializeObject implements Serializable {
 
     @Override
     protected void init() throws Exception {
-	AssertUtils.assertNotNull(this.name, "name is required.");
-	AssertUtils.assertNotNull(this.keyType, "keyType is required.");
+	Asserts.notNull(this.name, "name is required.");
+	Asserts.notNull(this.keyType, "keyType is required.");
     }
 
     public String getParamName() {
@@ -122,7 +122,7 @@ public class Field extends InitializeObject implements Serializable {
     @Override
     public String toString() {
 	this.initialize();
-	return StringFormat.fmt("name={}, sqlType={}, scaleOrLength={}, nullable={}, position={}, keyType={}", this.name, this.sqlType, this.scaleOrLength, this.nullable,
-		this.position, this.keyType);
+	return STR.fmt("name={}, sqlType={}, scaleOrLength={}, nullable={}, position={}, keyType={}", this.name, this.sqlType, this.scaleOrLength, this.nullable, this.position,
+		this.keyType);
     }
 }

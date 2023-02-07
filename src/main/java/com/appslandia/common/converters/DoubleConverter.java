@@ -90,7 +90,7 @@ public class DoubleConverter extends NumberConverter<Double> {
 	    return (number instanceof Double) ? (Double) number : number.doubleValue();
 	}
 
-	throw toParsingError(str);
+	throw toParsingError(str, getTargetType().getName());
     }
 
 }

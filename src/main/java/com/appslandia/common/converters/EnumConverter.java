@@ -23,7 +23,7 @@ package com.appslandia.common.converters;
 import java.util.Locale;
 
 import com.appslandia.common.base.FormatProvider;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.StringUtils;
 
 /**
@@ -36,7 +36,7 @@ public class EnumConverter<T extends Enum<T>> implements Converter<T> {
     final Class<T> type;
 
     public EnumConverter(Class<T> type) {
-	this.type = AssertUtils.assertNotNull(type);
+	this.type = Asserts.notNull(type);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class EnumConverter<T extends Enum<T>> implements Converter<T> {
 	    return Enum.valueOf(this.type, str.toUpperCase(Locale.ENGLISH));
 
 	} catch (IllegalArgumentException ex) {
-	    throw toParsingError(str);
+	    throw toParsingError(str, getTargetType().getName());
 	}
     }
 }

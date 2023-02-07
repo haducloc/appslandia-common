@@ -26,7 +26,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
@@ -65,7 +65,7 @@ public @interface BitMask {
 	@Override
 	public void initialize(BitMask annotation) {
 	    int size = annotation.value();
-	    AssertUtils.assertTrue((size >= 1) && (size <= 63), "size is out of range [1-63]");
+	    Asserts.isTrue((size >= 1) && (size <= 63), "size is out of range [1-63]");
 
 	    if (size == 63) {
 		this.max = Long.MAX_VALUE;

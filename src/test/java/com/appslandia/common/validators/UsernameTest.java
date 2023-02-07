@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class UserNameTest {
+public class UsernameTest {
 
     @Test
     public void test() {
@@ -39,23 +39,23 @@ public class UserNameTest {
 	Set<?> errors = ValidatorUtils.getValidator().validate(m);
 	Assertions.assertTrue(errors.isEmpty());
 
-	m.userName = "user.name";
+	m.username = "user.name";
 	errors = ValidatorUtils.getValidator().validate(m);
 	Assertions.assertTrue(errors.isEmpty());
 
-	m.userName = "user.name.m";
+	m.username = "user.name.m";
 	errors = ValidatorUtils.getValidator().validate(m);
 	Assertions.assertTrue(errors.isEmpty());
 
-	m.userName = "user.name2";
+	m.username = "user.name2";
 	errors = ValidatorUtils.getValidator().validate(m);
 	Assertions.assertTrue(errors.isEmpty());
 
-	m.userName = "user2.name";
+	m.username = "user2.name";
 	errors = ValidatorUtils.getValidator().validate(m);
 	Assertions.assertTrue(errors.isEmpty());
 
-	m.userName = "user2.user2.user2.user2";
+	m.username = "user2.user2.user2.user2";
 	errors = ValidatorUtils.getValidator().validate(m);
 	Assertions.assertTrue(errors.isEmpty());
     }
@@ -67,46 +67,46 @@ public class UserNameTest {
 	Set<?> errors = null;
 
 	// >= 6 length
-	m.userName = "usern";
+	m.username = "usern";
 	errors = ValidatorUtils.getValidator().validate(m);
 	Assertions.assertFalse(errors.isEmpty());
 
-	m.userName = "user name";
+	m.username = "user name";
 	errors = ValidatorUtils.getValidator().validate(m);
 	Assertions.assertFalse(errors.isEmpty());
 
-	m.userName = "user-name";
+	m.username = "user-name";
 	errors = ValidatorUtils.getValidator().validate(m);
 	Assertions.assertFalse(errors.isEmpty());
 
-	m.userName = "user.name.";
+	m.username = "user.name.";
 	errors = ValidatorUtils.getValidator().validate(m);
 	Assertions.assertFalse(errors.isEmpty());
 
-	m.userName = ".user.name";
+	m.username = ".user.name";
 	errors = ValidatorUtils.getValidator().validate(m);
 	Assertions.assertFalse(errors.isEmpty());
 
-	m.userName = "user_name";
+	m.username = "user_name";
 	errors = ValidatorUtils.getValidator().validate(m);
 	Assertions.assertFalse(errors.isEmpty());
 
-	m.userName = "1user.name";
+	m.username = "1user.name";
 	errors = ValidatorUtils.getValidator().validate(m);
 	Assertions.assertFalse(errors.isEmpty());
 
-	m.userName = "user..name";
+	m.username = "user..name";
 	errors = ValidatorUtils.getValidator().validate(m);
 	Assertions.assertFalse(errors.isEmpty());
 
-	m.userName = "username1.username1.username1.username1.username1.username1.username1.username1.username1.username1.username1.username1.username1";
+	m.username = "username1.username1.username1.username1.username1.username1.username1.username1.username1.username1.username1.username1.username1";
 	errors = ValidatorUtils.getValidator().validate(m);
 	Assertions.assertFalse(errors.isEmpty());
     }
 
     private static class TestModel {
 
-	@UserName
-	public String userName;
+	@Username
+	public String username;
     }
 }

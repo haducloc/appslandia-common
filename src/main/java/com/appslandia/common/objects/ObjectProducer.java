@@ -20,7 +20,7 @@
 
 package com.appslandia.common.objects;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -33,7 +33,7 @@ public interface ObjectProducer<T> {
     T produce(ObjectFactory factory) throws ObjectException;
 
     default void destroy(Object obj) throws ObjectException {
-	AssertUtils.assertNotNull(obj);
+	Asserts.notNull(obj);
 	ObjectFactoryUtils.destroy(obj);
     }
 }

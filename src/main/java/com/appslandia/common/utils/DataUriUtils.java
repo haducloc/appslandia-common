@@ -33,7 +33,7 @@ import com.appslandia.common.base.BaseEncoder;
 public class DataUriUtils {
 
     public static String toDataUriBase64(String mediaType, byte[] data) {
-	AssertUtils.assertNotNull(mediaType);
+	Asserts.notNull(mediaType);
 
 	StringBuilder sb = new StringBuilder();
 	sb.append("data:");

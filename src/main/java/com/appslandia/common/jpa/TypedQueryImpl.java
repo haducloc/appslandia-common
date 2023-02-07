@@ -23,7 +23,7 @@ package com.appslandia.common.jpa;
 import com.appslandia.common.jdbc.JdbcSql;
 import com.appslandia.common.jdbc.LikeType;
 import com.appslandia.common.jdbc.SqlLikeEscaper;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 
 import jakarta.persistence.FlushModeType;
 import jakarta.persistence.LockModeType;
@@ -47,13 +47,13 @@ public class TypedQueryImpl<X> implements TypedQuery<X> {
     }
 
     public TypedQueryImpl(TypedQuery<X> query, JpaSql sql) {
-	AssertUtils.assertTrue(!(query instanceof TypedQueryImpl));
+	Asserts.isTrue(!(query instanceof TypedQueryImpl));
 	this.query = query;
 	this.sql = sql;
     }
 
     protected JpaSql getSql() {
-	return AssertUtils.assertStateNotNull(this.sql, "sql is required.");
+	return Asserts.notNull(this.sql, "sql is required.");
     }
 
     public X getFirstOrNull() {
@@ -70,7 +70,7 @@ public class TypedQueryImpl<X> implements TypedQuery<X> {
 
     public int getIntResult() {
 	Number val = (Number) this.query.getSingleResult();
-	AssertUtils.assertStateNotNull(val);
+	Asserts.notNull(val);
 	return val.intValue();
     }
 
@@ -115,7 +115,7 @@ public class TypedQueryImpl<X> implements TypedQuery<X> {
 
     public TypedQueryImpl<X> setLikeAny(String parameterName, String[] values, LikeType likeType, String falsePattern) {
 	int arrayLen = this.getSql().getArrayLen(parameterName);
-	AssertUtils.assertTrue(values.length <= arrayLen);
+	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
 	    setParameter(JdbcSql.toParamName(parameterName, i), (i < values.length) ? SqlLikeEscaper.toLikePattern(values[i], likeType) : falsePattern);
@@ -128,7 +128,7 @@ public class TypedQueryImpl<X> implements TypedQuery<X> {
 
     public TypedQueryImpl<X> setObjectArray(String parameterName, Object[] values) {
 	int arrayLen = this.getSql().getArrayLen(parameterName);
-	AssertUtils.assertTrue(values.length <= arrayLen);
+	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
 	    setParameter(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -138,7 +138,7 @@ public class TypedQueryImpl<X> implements TypedQuery<X> {
 
     public TypedQueryImpl<X> setDateArray(String parameterName, java.util.Date[] values, TemporalType temporalType) {
 	int arrayLen = this.getSql().getArrayLen(parameterName);
-	AssertUtils.assertTrue(values.length <= arrayLen);
+	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
 	    setParameter(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null, temporalType);

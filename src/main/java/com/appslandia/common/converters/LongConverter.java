@@ -63,6 +63,6 @@ public class LongConverter extends NumberConverter<Long> {
 	} catch (NumberFormatException ex) {
 	}
 
-	throw toParsingError(str);
+	throw toParsingError(str, getTargetType().getName());
     }
 }

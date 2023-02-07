@@ -101,6 +101,6 @@ public class FloatConverter extends NumberConverter<Float> {
 	    return (float) value;
 	}
 
-	throw toParsingError(str);
+	throw toParsingError(str, getTargetType().getName());
     }
 }

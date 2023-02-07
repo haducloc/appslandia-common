@@ -44,7 +44,7 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ExceptionUtils;
 import com.appslandia.common.utils.ObjectUtils;
 import com.appslandia.common.utils.ReflectionUtils;
@@ -73,7 +73,7 @@ public class ToStringBuilder {
     public static class ToStringDecision {
 
 	public boolean tsIdHash(Object value, Field field) {
-	    AssertUtils.assertNotNull(value);
+	    Asserts.notNull(value);
 
 	    return checkAnnotation(value, field, TSIdHash.class);
 	}
@@ -441,7 +441,7 @@ public class ToStringBuilder {
 	try {
 	    Set<String> attributes = getAttributeNames(obj, "getAttributeNames");
 	    Method method = ReflectionUtils.findMethod(obj.getClass(), "getAttribute");
-	    AssertUtils.assertNotNull(method);
+	    Asserts.notNull(method);
 
 	    builder.append(ObjectUtils.toIdHash(obj)).append("-attributes");
 	    toStringAttributes(obj, method, attributes, 1, builder);
@@ -461,7 +461,7 @@ public class ToStringBuilder {
 	try {
 	    Set<String> attributes = getAttributeNames(obj, "getHeaderNames");
 	    Method method = ReflectionUtils.findMethod(obj.getClass(), "getHeaders");
-	    AssertUtils.assertNotNull(method);
+	    Asserts.notNull(method);
 
 	    builder.append(ObjectUtils.toIdHash(obj)).append("-headers");
 	    toStringAttributes(obj, method, attributes, 1, builder);
@@ -473,7 +473,7 @@ public class ToStringBuilder {
 
     private static Set<String> getAttributeNames(Object obj, String methodName) throws Exception {
 	Method method = ReflectionUtils.findMethod(obj.getClass(), methodName);
-	AssertUtils.assertNotNull(method);
+	Asserts.notNull(method);
 
 	Object attrs = method.invoke(obj);
 	Set<String> names = new TreeSet<>();

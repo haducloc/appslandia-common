@@ -35,7 +35,7 @@ import javax.crypto.spec.IvParameterSpec;
 
 import com.appslandia.common.base.Out;
 import com.appslandia.common.utils.ArrayUtils;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.RandomUtils;
 import com.appslandia.common.utils.ValueUtils;
 
@@ -64,14 +64,14 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	super.init();
 
 	// transformation
-	AssertUtils.assertNotNull(this.transformation, "transformation is required.");
+	Asserts.notNull(this.transformation, "transformation is required.");
 
 	String[] trans = this.transformation.split("/");
-	AssertUtils.assertTrue(trans.length == 3, "transformation is required.");
+	Asserts.isTrue(trans.length == 3, "transformation is required.");
 
 	// algorithm
 	this.algorithm = trans[0].toUpperCase(Locale.ENGLISH);
-	AssertUtils.assertTrue(!"RSA".equals(this.algorithm), "RSA algorithm is not supported.");
+	Asserts.isTrue(!"RSA".equals(this.algorithm), "RSA algorithm is not supported.");
 
 	// mode
 	this.mode = trans[1].toUpperCase(Locale.ENGLISH);
@@ -107,7 +107,7 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
     @Override
     public byte[] encrypt(byte[] message) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(message, "message is required.");
+	Asserts.notNull(message, "message is required.");
 
 	Out<byte[]> salt = new Out<>();
 	byte[] encMsg = encrypt(message, salt);
@@ -118,8 +118,8 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
     public byte[] decrypt(byte[] message) throws CryptoException {
 	this.initialize();
 
-	AssertUtils.assertNotNull(message, "message is required.");
-	AssertUtils.assertTrue(message.length > this.saltSize, "message is invalid.");
+	Asserts.notNull(message, "message is required.");
+	Asserts.isTrue(message.length > this.saltSize, "message is invalid.");
 
 	byte[] salt = new byte[this.saltSize];
 	ArrayUtils.copy(message, salt);
@@ -149,8 +149,8 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
     @Override
     public byte[] encrypt(byte[] message, Out<byte[]> salt) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(message, "message is required.");
-	AssertUtils.assertNotNull(salt, "salt is required.");
+	Asserts.notNull(message, "message is required.");
+	Asserts.notNull(salt, "salt is required.");
 
 	salt.value = RandomUtils.nextBytes(this.saltSize, this.random);
 	SecretKey secretKey = buildSecretKey(salt.value, this.algorithm);
@@ -180,10 +180,10 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
     @Override
     public byte[] decrypt(byte[] message, byte[] salt) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(message, "message is required.");
-	AssertUtils.assertNotNull(salt, "salt is required.");
+	Asserts.notNull(message, "message is required.");
+	Asserts.notNull(salt, "salt is required.");
 
-	AssertUtils.assertTrue(salt.length == this.saltSize, "salt is invalid.");
+	Asserts.isTrue(salt.length == this.saltSize, "salt is invalid.");
 	SecretKey secretKey = buildSecretKey(salt, this.algorithm);
 
 	byte[] iv = null;

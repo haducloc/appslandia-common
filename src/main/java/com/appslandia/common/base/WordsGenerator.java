@@ -24,7 +24,7 @@ import java.security.SecureRandom;
 import java.util.Random;
 import java.util.regex.Pattern;
 
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CharUtils;
 import com.appslandia.common.utils.ValueUtils;
 
@@ -55,7 +55,7 @@ public class WordsGenerator extends InitializeObject implements TextGenerator {
 
     @Override
     protected void init() throws Exception {
-	AssertUtils.assertTrue(this.length > 0, "length is required.");
+	Asserts.isTrue(this.length > 0, "length is required.");
 	this.alphabet = ValueUtils.valueOrAlt(this.alphabet, Alphabet.DIGITS_AZ);
     }
 
@@ -89,7 +89,7 @@ public class WordsGenerator extends InitializeObject implements TextGenerator {
 
     @Override
     public boolean verify(String value) {
-	AssertUtils.assertNotNull(value);
+	Asserts.notNull(value);
 	if (value.length() != this.length) {
 	    return false;
 	}

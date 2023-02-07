@@ -32,7 +32,7 @@ import javax.crypto.spec.PBEKeySpec;
 
 import com.appslandia.common.base.BaseEncoder;
 import com.appslandia.common.utils.ArrayUtils;
-import com.appslandia.common.utils.AssertUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.RandomUtils;
 import com.appslandia.common.utils.ValueUtils;
 
@@ -78,7 +78,7 @@ public class PasswordDigester extends TextDigester {
     @Override
     public String digest(String password) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(password, "password is required.");
+	Asserts.notNull(password, "password is required.");
 
 	byte[] salt = RandomUtils.nextBytes(this.saltSize, this.random);
 	char[] pwdChars = password.toCharArray();
@@ -93,11 +93,11 @@ public class PasswordDigester extends TextDigester {
     @Override
     public boolean verify(String password, String digested) throws CryptoException {
 	this.initialize();
-	AssertUtils.assertNotNull(password, "password is required.");
-	AssertUtils.assertNotNull(digested, "digested is required.");
+	Asserts.notNull(password, "password is required.");
+	Asserts.notNull(digested, "digested is required.");
 
 	byte[] dg = this.baseEncoder.decode(digested);
-	AssertUtils.assertTrue(dg.length > this.saltSize, "digested is invalid.");
+	Asserts.isTrue(dg.length > this.saltSize, "digested is invalid.");
 
 	byte[] salt = new byte[this.saltSize];
 	byte[] secKey = new byte[dg.length - this.saltSize];
