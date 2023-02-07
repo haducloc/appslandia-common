@@ -35,9 +35,9 @@ public class ExceptionUtils {
 
     public static Exception tryUnwrap(InvocationTargetException ex) {
 	Throwable te = ex.getTargetException();
-	if (te instanceof Exception) {
+	if (te instanceof Exception)
 	    return (Exception) te;
-	}
+
 	return ex;
     }
 
@@ -65,9 +65,9 @@ public class ExceptionUtils {
     }
 
     public static RuntimeException toUncheckedException(Throwable ex) {
-	if (ex instanceof RuntimeException) {
+	if (ex instanceof RuntimeException)
 	    return (RuntimeException) ex;
-	}
+
 	return new UncheckedException(ex);
     }
 }

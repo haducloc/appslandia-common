@@ -71,9 +71,9 @@ public class GeoDM {
     public double toDecimalDegrees() {
 	double deg = GeoUtils.toDecimalDegrees(this.degrees, this.minutes);
 
-	if (this.direction == Direction.NORTH || this.direction == Direction.EAST) {
+	if (this.direction == Direction.NORTH || this.direction == Direction.EAST)
 	    return deg;
-	}
+
 	return -deg;
     }
 

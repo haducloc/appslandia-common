@@ -47,9 +47,9 @@ public class Resources {
 	ResourceBundle obj = bundle;
 	if (obj == null) {
 	    synchronized (MUTEX) {
-		if ((obj = bundle) == null) {
+		if ((obj = bundle) == null)
 		    bundle = obj = LBundle;
-		}
+
 	    }
 	}
 	return obj;
@@ -134,9 +134,9 @@ public class Resources {
 		} else {
 		    while (this.next == null && this.parentKeys.hasMoreElements()) {
 			this.next = this.parentKeys.nextElement();
-			if (this.keySet.contains(this.next)) {
+			if (this.keySet.contains(this.next))
 			    this.next = null;
-			}
+
 		    }
 		}
 	    }

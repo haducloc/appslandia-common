@@ -44,9 +44,9 @@ public class Log4JAppLoggerManager extends AppLoggerManager {
 
     @Override
     public void close() {
-	if (this.shutdownOnClose) {
+	if (this.shutdownOnClose)
 	    LogManager.shutdown();
-	}
+
     }
 
     @Override
@@ -70,54 +70,54 @@ public class Log4JAppLoggerManager extends AppLoggerManager {
 	@Override
 	public void log(Level level, String message) {
 	    org.apache.logging.log4j.Level l = toImplLevel(level);
-	    if (isLoggable(l)) {
+	    if (isLoggable(l))
 		this.logger.log(l, message);
-	    }
+
 	}
 
 	@Override
 	public void log(Level level, String message, Throwable exception) {
 	    org.apache.logging.log4j.Level l = toImplLevel(level);
-	    if (isLoggable(l)) {
+	    if (isLoggable(l))
 		this.logger.log(l, message, exception);
-	    }
+
 	}
 
 	@Override
 	public void log(Level level, Supplier<String> msgSupplier) {
 	    org.apache.logging.log4j.Level l = toImplLevel(level);
-	    if (isLoggable(l)) {
+	    if (isLoggable(l))
 		this.logger.log(l, msgSupplier);
-	    }
+
 	}
 
 	@Override
 	public void log(Level level, Supplier<String> msgSupplier, Throwable exception) {
 	    org.apache.logging.log4j.Level l = toImplLevel(level);
-	    if (isLoggable(l)) {
+	    if (isLoggable(l))
 		this.logger.log(l, msgSupplier, exception);
-	    }
+
 	}
 
 	private boolean isLoggable(org.apache.logging.log4j.Level level) {
-	    if (level == org.apache.logging.log4j.Level.ALL) {
+	    if (level == org.apache.logging.log4j.Level.ALL)
 		return true;
-	    }
-	    if (level == org.apache.logging.log4j.Level.TRACE) {
+
+	    if (level == org.apache.logging.log4j.Level.TRACE)
 		return this.logger.isTraceEnabled();
-	    }
-	    if (level == org.apache.logging.log4j.Level.DEBUG) {
+
+	    if (level == org.apache.logging.log4j.Level.DEBUG)
 		return this.logger.isDebugEnabled();
-	    }
-	    if (level == org.apache.logging.log4j.Level.INFO) {
+
+	    if (level == org.apache.logging.log4j.Level.INFO)
 		return this.logger.isInfoEnabled();
-	    }
-	    if (level == org.apache.logging.log4j.Level.WARN) {
+
+	    if (level == org.apache.logging.log4j.Level.WARN)
 		return this.logger.isWarnEnabled();
-	    }
-	    if (level == org.apache.logging.log4j.Level.ERROR) {
+
+	    if (level == org.apache.logging.log4j.Level.ERROR)
 		return this.logger.isErrorEnabled();
-	    }
+
 	    // OFF
 	    return false;
 	}

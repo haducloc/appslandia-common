@@ -124,9 +124,9 @@ public class PoolDigester extends InitializeObject implements Digester {
     @Override
     public PoolDigester copy() {
 	PoolDigester impl = new PoolDigester().setPoolSize(this.poolSize);
-	if (this.digester != null) {
+	if (this.digester != null)
 	    impl.digester = this.digester.copy();
-	}
+
 	return impl;
     }
 }

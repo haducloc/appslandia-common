@@ -48,25 +48,24 @@ public class DbTagsConverter implements Converter<String> {
 
     @Override
     public String format(String obj, FormatProvider formatProvider, boolean localize) {
-	if (obj == null) {
+	if (obj == null)
 	    return null;
-	}
+
 	return TagUtils.toDispTags(obj);
     }
 
     @Override
     public String parse(String str, FormatProvider formatProvider) throws ConverterException {
 	str = StringUtils.trimToNull(str);
-	if (str == null) {
+	if (str == null)
 	    return null;
-	}
 
 	Out<Boolean> isValid = new Out<Boolean>();
 	List<String> tags = TagUtils.toTags(str, isValid);
 
-	if (!isValid.val()) {
+	if (!isValid.val())
 	    throw toParsingError(str, "DbTags");
-	}
+
 	return !tags.isEmpty() ? TagUtils.toDbTags(tags) : null;
     }
 }

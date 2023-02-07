@@ -64,9 +64,8 @@ public class JsonEscaper {
     }
 
     public static String escape(String value) {
-	if (value == null) {
+	if (value == null)
 	    return "null";
-	}
 
 	if (value.isEmpty())
 	    return "\"\"";
@@ -86,9 +85,8 @@ public class JsonEscaper {
 		if (escaped != null) {
 
 		    // add un_escaped portion
-		    if (start < i) {
+		    if (start < i)
 			out.append(srcChars, start, i - start);
-		    }
 
 		    // add escaped
 		    out.append(escaped);
@@ -98,9 +96,8 @@ public class JsonEscaper {
 	}
 
 	// add rest of un_escaped portion
-	if (start < length) {
+	if (start < length)
 	    out.append(srcChars, start, length - start);
-	}
 
 	out.append('"');
 	return out.toString();

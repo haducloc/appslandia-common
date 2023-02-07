@@ -51,33 +51,33 @@ public class JulAppLoggerManager extends AppLoggerManager {
 	@Override
 	public void log(Level level, String message) {
 	    java.util.logging.Level l = toImplLevel(level);
-	    if (this.logger.isLoggable(l)) {
+	    if (this.logger.isLoggable(l))
 		this.logger.log(l, message);
-	    }
+
 	}
 
 	@Override
 	public void log(Level level, String message, Throwable exception) {
 	    java.util.logging.Level l = toImplLevel(level);
-	    if (this.logger.isLoggable(l)) {
+	    if (this.logger.isLoggable(l))
 		this.logger.log(l, message, exception);
-	    }
+
 	}
 
 	@Override
 	public void log(Level level, Supplier<String> msgSupplier) {
 	    java.util.logging.Level l = toImplLevel(level);
-	    if (this.logger.isLoggable(l)) {
+	    if (this.logger.isLoggable(l))
 		this.logger.log(l, msgSupplier);
-	    }
+
 	}
 
 	@Override
 	public void log(Level level, Supplier<String> msgSupplier, Throwable exception) {
 	    java.util.logging.Level l = toImplLevel(level);
-	    if (this.logger.isLoggable(l)) {
+	    if (this.logger.isLoggable(l))
 		this.logger.log(l, exception, msgSupplier);
-	    }
+
 	}
 
 	static java.util.logging.Level toImplLevel(Level level) {

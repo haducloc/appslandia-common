@@ -83,15 +83,14 @@ public class CsvEscaper extends InitializeObject {
 	for (int i = 0; i < length; i++) {
 	    char c = srcChars[i];
 
-	    if (!useWrap) {
+	    if (!useWrap)
 		useWrap = c == '"' || c == '\r' || c == '\n' || c == this.separator;
-	    }
 
 	    if (c == '"') {
 		// add un_escaped portion
-		if (start < i) {
+		if (start < i)
 		    out.append(srcChars, start, i - start);
-		}
+
 		// add escaped
 		out.append("\"\"");
 		start = i + 1;
@@ -99,9 +98,9 @@ public class CsvEscaper extends InitializeObject {
 	    } else if (this.escCrLf && (c == '\r' || c == '\n')) {
 
 		// add un_escaped portion
-		if (start < i) {
+		if (start < i)
 		    out.append(srcChars, start, i - start);
-		}
+
 		// add escaped
 		out.append("\\").append(c == '\r' ? 'r' : 'n');
 		start = i + 1;
@@ -109,9 +108,8 @@ public class CsvEscaper extends InitializeObject {
 	}
 
 	// add rest of un_escaped portion
-	if (start < length) {
+	if (start < length)
 	    out.append(srcChars, start, length - start);
-	}
 
 	out.append('"');
 	return useWrap ? out.toString() : value;

@@ -37,9 +37,9 @@ public class ValidateTest {
 
 	    @Override
 	    public boolean validate(ResetPasswordModel model) {
-		if (model.password == null || model.confirmPassword == null) {
+		if (model.password == null || model.confirmPassword == null)
 		    return true;
-		}
+
 		return model.confirmPassword.equals(model.password);
 	    }
 	});

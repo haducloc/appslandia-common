@@ -57,9 +57,8 @@ public class DoubleConverter extends NumberConverter<Double> {
 
     @Override
     public String format(Double obj, FormatProvider formatProvider, boolean localize) {
-	if (obj == null) {
+	if (obj == null)
 	    return null;
-	}
 
 	if (localize) {
 	    NumberFormat nf = formatProvider.getNumberFormat(this.fractionDigits, this.roundingMode, false);
@@ -75,9 +74,8 @@ public class DoubleConverter extends NumberConverter<Double> {
     @Override
     public Double parse(String str, FormatProvider formatProvider) throws ConverterException {
 	str = StringUtils.trimToNull(str);
-	if (str == null) {
+	if (str == null)
 	    return null;
-	}
 
 	try {
 	    return Double.parseDouble(str);
@@ -86,9 +84,8 @@ public class DoubleConverter extends NumberConverter<Double> {
 	}
 
 	Number number = this.parseNumber(str, formatProvider.getNumberParser());
-	if (number != null) {
+	if (number != null)
 	    return (number instanceof Double) ? (Double) number : number.doubleValue();
-	}
 
 	throw toParsingError(str, getTargetType().getName());
     }

@@ -79,9 +79,9 @@ public abstract class JsonProcessor extends InitializeObject {
 	JsonProcessor obj = __default;
 	if (obj == null) {
 	    synchronized (MUTEX) {
-		if ((obj = __default) == null) {
+		if ((obj = __default) == null)
 		    __default = obj = initJsonProcessor();
-		}
+
 	    }
 	}
 	return obj;
@@ -116,9 +116,9 @@ public abstract class JsonProcessor extends InitializeObject {
     }
 
     private static JsonProcessor initJsonProcessor() {
-	if (__provider != null) {
+	if (__provider != null)
 	    return __provider.get();
-	}
+
 	try {
 	    Class<? extends JsonProcessor> implClass = ReflectionUtils.loadClass("com.appslandia.common.json.GsonProcessor", null);
 	    return ReflectionUtils.newInstance(implClass);

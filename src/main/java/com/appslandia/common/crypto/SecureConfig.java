@@ -86,12 +86,12 @@ public class SecureConfig extends PropertyConfig {
     @Override
     public String getString(String key) {
 	String value = super.getString(key);
-	if (value == null) {
+	if (value == null)
 	    return null;
-	}
-	if (!CryptoUtils.isEncValue(value)) {
+
+	if (!CryptoUtils.isEncValue(value))
 	    return value;
-	}
+
 	return this.textEncryptor.decrypt(CryptoUtils.parseEncValue(value));
     }
 

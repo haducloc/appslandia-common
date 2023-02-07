@@ -71,9 +71,9 @@ public class JdbcSql extends InitializeObject implements Serializable {
 	assertNotInitialized();
 	Asserts.isTrue(maxLength > 0, "maxLength is required.");
 
-	if (this.arrayLens == null) {
+	if (this.arrayLens == null)
 	    this.arrayLens = new HashMap<>();
-	}
+
 	this.arrayLens.put(parameterName, maxLength);
 	return this;
     }
@@ -125,9 +125,8 @@ public class JdbcSql extends InitializeObject implements Serializable {
 		arrayLen = DEFAULT_ARRAY_MAX_LENGTH;
 	    }
 
-	    if (isArrayParam) {
+	    if (isArrayParam)
 		paramsMap.put(paramName.value, arrayLen);
-	    }
 
 	    // Normal parameter?
 	    if (!isArrayParam) {
@@ -244,9 +243,8 @@ public class JdbcSql extends InitializeObject implements Serializable {
 	while (j >= 0 && !Character.isWhitespace(sb.charAt(j))) {
 	    j--;
 	}
-	if (!sb.substring(j + 1, i + 1).equalsIgnoreCase(context)) {
+	if (!sb.substring(j + 1, i + 1).equalsIgnoreCase(context))
 	    return false;
-	}
 
 	if (j < 0)
 	    return false;
@@ -275,9 +273,8 @@ public class JdbcSql extends InitializeObject implements Serializable {
 	if (k == sb.length())
 	    return false;
 
-	if (!Character.isDigit(sb.charAt(k)) && !Character.isJavaIdentifierStart(sb.charAt(k))) {
+	if (!Character.isDigit(sb.charAt(k)) && !Character.isJavaIdentifierStart(sb.charAt(k)))
 	    return false;
-	}
 
 	k++;
 	while (k < sb.length() && Character.isJavaIdentifierPart(sb.charAt(k))) {
@@ -300,9 +297,9 @@ public class JdbcSql extends InitializeObject implements Serializable {
 	char chr = __paramPrefix;
 	if (chr == 0) {
 	    synchronized (MUTEX) {
-		if ((chr = __paramPrefix) == 0) {
+		if ((chr = __paramPrefix) == 0)
 		    __paramPrefix = chr = ':';
-		}
+
 	    }
 	}
 	return chr;

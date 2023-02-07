@@ -130,9 +130,9 @@ public class KeyStoreUtil extends InitializeObject {
 
     public KeyStoreUtil setPassword(char[] password) {
 	assertNotInitialized();
-	if (password != null) {
+	if (password != null)
 	    this.password = Arrays.copyOf(password, password.length);
-	}
+
 	return this;
     }
 
@@ -160,9 +160,9 @@ public class KeyStoreUtil extends InitializeObject {
 
     public KeyStoreUtil setProtectionParameter(char[] password) {
 	assertNotInitialized();
-	if (password != null) {
+	if (password != null)
 	    this.protectionParameter = new KeyStore.PasswordProtection(password);
-	}
+
 	return this;
     }
 

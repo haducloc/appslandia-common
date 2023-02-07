@@ -74,12 +74,12 @@ public class SecureProps extends Properties implements Config {
     @Override
     public String getString(String key) {
 	String value = (String) super.get(key);
-	if (value == null) {
+	if (value == null)
 	    return null;
-	}
-	if (!CryptoUtils.isEncValue(value)) {
+
+	if (!CryptoUtils.isEncValue(value))
 	    return value;
-	}
+
 	return this.textEncryptor.decrypt(CryptoUtils.parseEncValue(value));
     }
 
@@ -157,9 +157,9 @@ public class SecureProps extends Properties implements Config {
 	    bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
 	    store(bw, comments);
 	} finally {
-	    if (bw != null) {
+	    if (bw != null)
 		bw.close();
-	    }
+
 	}
     }
 

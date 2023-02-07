@@ -90,19 +90,19 @@ public class JwtPayload extends JwtClaims {
 
     public List<String> getAudiences() {
 	Object value = this.get(AUD);
-	if (value == null) {
+	if (value == null)
 	    return null;
-	}
-	if (value.getClass() == String.class) {
+
+	if (value.getClass() == String.class)
 	    return CollectionUtils.toList(new ArrayList<String>(1), (String) value);
-	}
+
 	return ObjectUtils.cast(value);
     }
 
     public JwtPayload setAudiences(String... values) {
-	if (values.length == 0) {
+	if (values.length == 0)
 	    return this;
-	}
+
 	this.put(AUD, (values.length == 1) ? values[0] : CollectionUtils.toList(values));
 	return this;
     }

@@ -132,9 +132,9 @@ public class JdbcUtils {
 	boolean rsRead = false;
 
 	while (rs.next()) {
-	    if (rsRead) {
+	    if (rsRead)
 		throw new NonUniqueSQLException();
-	    }
+
 	    rsRead = true;
 	    t = mapper.map(rs);
 	}
@@ -152,9 +152,9 @@ public class JdbcUtils {
 	boolean rsRead = false;
 	while (rs.next()) {
 
-	    if (rsRead) {
+	    if (rsRead)
 		throw new NonUniqueSQLException();
-	    }
+
 	    rsRead = true;
 
 	    if (handler != null)
@@ -170,9 +170,9 @@ public class JdbcUtils {
 	boolean rsRead = false;
 	while (rs.next()) {
 
-	    if (rsRead) {
+	    if (rsRead)
 		throw new NonUniqueSQLException();
-	    }
+
 	    rsRead = true;
 
 	    if (handler != null)
@@ -188,9 +188,9 @@ public class JdbcUtils {
 	boolean rsRead = false;
 	while (rs.next()) {
 
-	    if (rsRead) {
+	    if (rsRead)
 		throw new NonUniqueSQLException();
-	    }
+
 	    rsRead = true;
 
 	    if (handler != null)

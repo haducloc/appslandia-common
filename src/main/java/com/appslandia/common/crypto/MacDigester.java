@@ -114,9 +114,9 @@ public class MacDigester extends InitializeObject implements Digester {
 
     public MacDigester setSecret(byte[] secret) {
 	this.assertNotInitialized();
-	if (secret != null) {
+	if (secret != null)
 	    this.secret = ArrayUtils.copy(secret);
-	}
+
 	return this;
     }
 

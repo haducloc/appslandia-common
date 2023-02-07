@@ -51,9 +51,9 @@ public class ConnectionImpl implements Connection {
 
     public ConnectionImpl(DataSource dataSource, String dsName) throws java.sql.SQLException {
 	ConnectionImpl outer = CONNECTION_HOLDER.get();
-	if (outer != null) {
+	if (outer != null)
 	    this.outer = outer;
-	}
+
 	this.conn = dataSource.getConnection();
 	this.dsName = Asserts.notNull(dsName, "dsName must be not null.");
 

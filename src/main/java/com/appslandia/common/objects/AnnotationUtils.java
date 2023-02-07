@@ -43,28 +43,28 @@ import jakarta.inject.Qualifier;
 public class AnnotationUtils {
 
     public static boolean equals(Annotation[] anns1, Annotation[] anns2) {
-	if (anns2.length != anns1.length) {
+	if (anns2.length != anns1.length)
 	    return false;
-	}
-	if (anns2.length == 0) {
+
+	if (anns2.length == 0)
 	    return true;
-	}
+
 	return Arrays.stream(anns2).allMatch(ann2 -> Arrays.stream(anns1).anyMatch(ann1 -> ann1.equals(ann2)));
     }
 
     public static boolean hasAnnotations(Annotation[] src, Annotation[] annotations) {
-	if (annotations.length == 0) {
+	if (annotations.length == 0)
 	    return src.length == 0;
-	}
+
 	return Arrays.stream(annotations).allMatch(ann -> Arrays.stream(src).anyMatch(srcAnn -> srcAnn.equals(ann)));
     }
 
     public static Annotation[] parseQualifiers(Annotation[] annotations) {
 	List<Annotation> qualifiers = new ArrayList<>(3);
 	for (Annotation ann : annotations) {
-	    if (ann.annotationType().getDeclaredAnnotation(Qualifier.class) != null) {
+	    if (ann.annotationType().getDeclaredAnnotation(Qualifier.class) != null)
 		qualifiers.add(ann);
-	    }
+
 	}
 	return !qualifiers.isEmpty() ? qualifiers.toArray(new Annotation[qualifiers.size()]) : ReflectionUtils.EMPTY_ANNOTATIONS;
     }
@@ -84,15 +84,15 @@ public class AnnotationUtils {
     }
 
     public static ObjectScope parseScope(AnnotatedElement element) {
-	if (element.getDeclaredAnnotation(ApplicationScoped.class) != null) {
+	if (element.getDeclaredAnnotation(ApplicationScoped.class) != null)
 	    return ObjectScope.SINGLETON;
-	}
-	if (element.getDeclaredAnnotation(Dependent.class) != null) {
+
+	if (element.getDeclaredAnnotation(Dependent.class) != null)
 	    return ObjectScope.PROTOTYPE;
-	}
-	if (element.getDeclaredAnnotation(SessionScoped.class) != null || element.getDeclaredAnnotation(RequestScoped.class) != null) {
+
+	if (element.getDeclaredAnnotation(SessionScoped.class) != null || element.getDeclaredAnnotation(RequestScoped.class) != null)
 	    throw new IllegalArgumentException("SessionScoped/RequestScoped is unsupported.");
-	}
+
 	return ObjectScope.SINGLETON;
     }
 }

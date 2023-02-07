@@ -34,9 +34,9 @@ public class PatternUtils {
     public static final Pattern[] EMPTY_PATTERNS = {};
 
     public static Pattern[] compile(String... regexs) {
-	if (regexs.length == 0) {
+	if (regexs.length == 0)
 	    return EMPTY_PATTERNS;
-	}
+
 	return Arrays.stream(regexs).map(regex -> Pattern.compile(regex)).toArray(Pattern[]::new);
     }
 

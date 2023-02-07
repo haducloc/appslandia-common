@@ -71,37 +71,37 @@ public class URLEncoding {
     }
 
     public static String encodeParam(String s) {
-	if (s == null) {
+	if (s == null)
 	    return null;
-	}
+
 	return encodeParam(s, true);
     }
 
     public static String encodeParam(String s, boolean spaceToPlus) {
-	if (s == null) {
+	if (s == null)
 	    return null;
-	}
+
 	return encode(s, spaceToPlus ? URL_PARAM_NOT_ENCODED : URL_PARAM_NOT_ENCODED_SP);
     }
 
     public static String decodeParam(String s) {
-	if (s == null) {
+	if (s == null)
 	    return null;
-	}
+
 	return decode(s, EncodeType.URL_PARAM);
     }
 
     public static String encodePath(String s) {
-	if (s == null) {
+	if (s == null)
 	    return null;
-	}
+
 	return encode(s, URL_PATH_NOT_ENCODED);
     }
 
     public static String decodePath(String s) {
-	if (s == null) {
+	if (s == null)
 	    return null;
-	}
+
 	return decode(s, EncodeType.URL_PATH);
     }
 
@@ -145,14 +145,14 @@ public class URLEncoding {
 		    char ch = Character.forDigit((ba[j] >> 4) & 0xF, 16);
 
 		    // Use UPPERCASE
-		    if (Character.isLetter(ch)) {
+		    if (Character.isLetter(ch))
 			ch -= caseDiff;
-		    }
+
 		    out.append(ch);
 		    ch = Character.forDigit(ba[j] & 0xF, 16);
-		    if (Character.isLetter(ch)) {
+		    if (Character.isLetter(ch))
 			ch -= caseDiff;
-		    }
+
 		    out.append(ch);
 		}
 		charArrayWriter.reset();

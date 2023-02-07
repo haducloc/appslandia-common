@@ -126,9 +126,8 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	SecretKey secretKey = buildSecretKey(salt, this.algorithm);
 
 	byte[] iv = null;
-	if (isIVSpec()) {
+	if (isIVSpec())
 	    iv = ZERO_IV_CACHE.computeIfAbsent(getIVSize(), s -> new byte[s]);
-	}
 
 	try {
 	    synchronized (this.mutex) {
@@ -156,9 +155,8 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	SecretKey secretKey = buildSecretKey(salt.value, this.algorithm);
 
 	byte[] iv = null;
-	if (isIVSpec()) {
+	if (isIVSpec())
 	    iv = ZERO_IV_CACHE.computeIfAbsent(getIVSize(), s -> new byte[s]);
-	}
 
 	try {
 	    synchronized (this.mutex) {
@@ -187,9 +185,8 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	SecretKey secretKey = buildSecretKey(salt, this.algorithm);
 
 	byte[] iv = null;
-	if (isIVSpec()) {
+	if (isIVSpec())
 	    iv = ZERO_IV_CACHE.computeIfAbsent(getIVSize(), s -> new byte[s]);
-	}
 
 	try {
 	    synchronized (this.mutex) {
@@ -272,12 +269,12 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	PbeEncryptor impl = new PbeEncryptor().setTransformation(this.transformation).setProvider(this.provider);
 	impl.setSaltSize(this.saltSize).setIterationCount(this.iterationCount).setKeySize(this.keySize);
 
-	if (this.password != null) {
+	if (this.password != null)
 	    impl.setPassword(this.password);
-	}
-	if (this.secretKeyGenerator != null) {
+
+	if (this.secretKeyGenerator != null)
 	    impl.secretKeyGenerator = this.secretKeyGenerator.copy();
-	}
+
 	impl.ivSize = this.ivSize;
 	impl.tagSize = this.tagSize;
 	return impl;

@@ -80,9 +80,9 @@ public class PropertyConfig extends ConfigMap {
 	    br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
 	    return load(br);
 	} finally {
-	    if (br != null) {
+	    if (br != null)
 		br.close();
-	    }
+
 	}
     }
 
@@ -95,9 +95,9 @@ public class PropertyConfig extends ConfigMap {
 	    String key = (String) prop;
 	    String value = (String) props.get(key);
 
-	    if (!key.isEmpty()) {
+	    if (!key.isEmpty())
 		this.map.put(key, !value.isEmpty() ? value : null);
-	    }
+
 	}
     }
 
@@ -107,9 +107,9 @@ public class PropertyConfig extends ConfigMap {
 	    bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
 	    store(bw, comments);
 	} finally {
-	    if (bw != null) {
+	    if (bw != null)
 		bw.close();
-	    }
+
 	}
     }
 

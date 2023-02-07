@@ -51,12 +51,12 @@ public class PropertyUtils {
 
 		@Override
 		public boolean matches(Method m) {
-		    if (!Modifier.isPublic(m.getModifiers()) || Modifier.isStatic(m.getModifiers())) {
+		    if (!Modifier.isPublic(m.getModifiers()) || Modifier.isStatic(m.getModifiers()))
 			return false;
-		    }
-		    if (m.getParameterCount() != 1) {
+
+		    if (m.getParameterCount() != 1)
 			return false;
-		    }
+
 		    return m.getName().equals(propertyName);
 		}
 
@@ -76,15 +76,15 @@ public class PropertyUtils {
 
 		@Override
 		public boolean matches(Method m) {
-		    if (!Modifier.isPublic(m.getModifiers()) || Modifier.isStatic(m.getModifiers())) {
+		    if (!Modifier.isPublic(m.getModifiers()) || Modifier.isStatic(m.getModifiers()))
 			return false;
-		    }
-		    if (m.getParameterCount() != 1) {
+
+		    if (m.getParameterCount() != 1)
 			return false;
-		    }
-		    if (!m.getName().startsWith("set")) {
+
+		    if (!m.getName().startsWith("set"))
 			return false;
-		    }
+
 		    return m.getName().substring(3).equalsIgnoreCase(propertyName);
 		}
 
@@ -107,9 +107,8 @@ public class PropertyUtils {
 
 	    String propertyName = keyIter.next();
 	    Method m = propertyStrategy.find(obj.getClass(), propertyName);
-	    if (m == null) {
+	    if (m == null)
 		continue;
-	    }
 
 	    // converter
 	    Class<?> parameterType = m.getParameterTypes()[0];

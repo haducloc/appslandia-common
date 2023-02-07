@@ -62,9 +62,9 @@ public class ObjectFactory extends InitializeObject {
 
     private void validateFactory() throws ObjectException {
 	for (ObjectInstance inst : this.instances) {
-	    if (inst.definition.getProducer() != null) {
+	    if (inst.definition.getProducer() != null)
 		continue;
-	    }
+
 	    new InjectTraverser() {
 
 		@Override
@@ -88,26 +88,26 @@ public class ObjectFactory extends InitializeObject {
 		}
 
 		private String toMemberInfo(AnnotatedElement member) {
-		    if (member instanceof Parameter) {
+		    if (member instanceof Parameter)
 			return ((Parameter) member).getDeclaringExecutable().toString();
-		    }
+
 		    return member.toString();
 		}
 
 		private void validateInject(Class<?> type, Annotation[] qualifiers, AnnotatedElement member) throws ObjectException {
-		    if (ObjectFactory.class.isAssignableFrom(type)) {
+		    if (ObjectFactory.class.isAssignableFrom(type))
 			return;
-		    }
-		    if (type == Instance.class) {
+
+		    if (type == Instance.class)
 			return;
-		    }
+
 		    int count = countMatchesForInject(type, qualifiers);
-		    if (count == 0) {
+		    if (count == 0)
 			throw new ObjectException(STR.fmt("Unsatisfied dependency: type={}, qualifiers={}, member={}.", type, Arrays.toString(qualifiers), toMemberInfo(member)));
-		    }
-		    if (count > 1) {
+
+		    if (count > 1)
 			throw new ObjectException(STR.fmt("Ambiguous dependency: type={}, qualifiers={}, member={}.", type, Arrays.toString(qualifiers), toMemberInfo(member)));
-		    }
+
 		}
 
 	    }.traverse(inst.definition.getImplClass());
@@ -117,9 +117,9 @@ public class ObjectFactory extends InitializeObject {
     private int countMatchesForInject(Class<?> type, Annotation[] qualifiers) {
 	int count = 0;
 	for (ObjectInstance inst : this.instances) {
-	    if ((inst.definition.hasType(type) || (type == Object.class)) && AnnotationUtils.equals(inst.definition.getQualifiers(), qualifiers)) {
+	    if ((inst.definition.hasType(type) || (type == Object.class)) && AnnotationUtils.equals(inst.definition.getQualifiers(), qualifiers))
 		count++;
-	    }
+
 	}
 	return count;
     }
@@ -150,13 +150,11 @@ public class ObjectFactory extends InitializeObject {
 	Asserts.notNull(types);
 	Asserts.notNull(producer);
 
-	if (scope == null) {
+	if (scope == null)
 	    scope = AnnotationUtils.parseScope(producer);
-	}
 
-	if (qualifiers == null) {
+	if (qualifiers == null)
 	    qualifiers = AnnotationUtils.parseQualifiers(producer);
-	}
 
 	ObjectInstance inst = new ObjectInstance(new ObjectDefinition().setTypes(types).setQualifiers(qualifiers).setScope(scope).setProducer(producer), (d) -> produceObject(d));
 	this.instances.add(inst);
@@ -191,13 +189,11 @@ public class ObjectFactory extends InitializeObject {
 	Set<Class<?>> expTypes = CollectionUtils.toSet(types);
 	expTypes.add(implClass);
 
-	if (scope == null) {
+	if (scope == null)
 	    scope = AnnotationUtils.parseScope(implClass);
-	}
 
-	if (qualifiers == null) {
+	if (qualifiers == null)
 	    qualifiers = AnnotationUtils.parseQualifiers(implClass);
-	}
 
 	ObjectInstance inst = new ObjectInstance(
 		new ObjectDefinition().setTypes(expTypes.toArray(new Class<?>[expTypes.size()])).setQualifiers(qualifiers).setScope(scope).setImplClass(implClass),
@@ -219,9 +215,9 @@ public class ObjectFactory extends InitializeObject {
 	while (iter.hasNext()) {
 	    ObjectInstance inst = iter.next();
 
-	    if ((inst.definition.hasType(type) || (type == Object.class)) && AnnotationUtils.equals(inst.definition.getQualifiers(), qualifiers)) {
+	    if ((inst.definition.hasType(type) || (type == Object.class)) && AnnotationUtils.equals(inst.definition.getQualifiers(), qualifiers))
 		iter.remove();
-	    }
+
 	}
 	return this;
     }
@@ -310,9 +306,9 @@ public class ObjectFactory extends InitializeObject {
     private Object produceObject(ObjectDefinition definition) throws ObjectException {
 	try {
 	    // Producer
-	    if (definition.getProducer() != null) {
+	    if (definition.getProducer() != null)
 		return definition.getProducer().produce(this);
-	    }
+
 	    // Constructor
 	    Constructor<?> emptyCtor = null, injectCtor = null;
 	    for (Constructor<?> ctor : definition.getImplClass().getDeclaredConstructors()) {
@@ -320,13 +316,13 @@ public class ObjectFactory extends InitializeObject {
 		    injectCtor = ctor;
 		    break;
 		}
-		if (ctor.getParameterCount() == 0) {
+		if (ctor.getParameterCount() == 0)
 		    emptyCtor = ctor;
-		}
+
 	    }
-	    if ((injectCtor == null) && (emptyCtor == null)) {
+	    if ((injectCtor == null) && (emptyCtor == null))
 		throw new ObjectException(STR.fmt("Couldn't instantiate '{}'.", definition.getImplClass()));
-	    }
+
 	    Object instance = null;
 	    if (injectCtor != null) {
 		injectCtor.setAccessible(true);
@@ -348,9 +344,9 @@ public class ObjectFactory extends InitializeObject {
 	List<ObjectInstance> insts = new ArrayList<>();
 	for (ObjectInstance inst : this.instances) {
 
-	    if ((inst.definition.hasType(type) || (type == Object.class)) && AnnotationUtils.hasAnnotations(inst.definition.getQualifiers(), subQualifiers)) {
+	    if ((inst.definition.hasType(type) || (type == Object.class)) && AnnotationUtils.hasAnnotations(inst.definition.getQualifiers(), subQualifiers))
 		insts.add(inst);
-	    }
+
 	}
 	return insts;
     }
@@ -359,9 +355,9 @@ public class ObjectFactory extends InitializeObject {
 	ObjectInstance obj = null;
 	for (ObjectInstance inst : this.instances) {
 	    if ((inst.definition.hasType(type) || (type == Object.class)) && AnnotationUtils.equals(inst.definition.getQualifiers(), qualifiers)) {
-		if (obj != null) {
+		if (obj != null)
 		    throw new ObjectException(STR.fmt("Ambiguous dependency: type={}, qualifiers={}.", type, Arrays.toString(qualifiers)));
-		}
+
 		obj = inst;
 	    }
 	}
@@ -377,14 +373,13 @@ public class ObjectFactory extends InitializeObject {
 	Asserts.notNull(type);
 	Asserts.notNull(qualifiers);
 
-	if (ObjectFactory.class.isAssignableFrom(type)) {
+	if (ObjectFactory.class.isAssignableFrom(type))
 	    return ObjectUtils.cast(this);
-	}
 
 	ObjectInstance inst = getObjectInst(type, qualifiers);
-	if (inst == null) {
+	if (inst == null)
 	    throw new ObjectException(STR.fmt("Unsatisfied dependency: type={}, qualifiers={}.", type, Arrays.toString(qualifiers)));
-	}
+
 	return ObjectUtils.cast(inst.getInstance());
     }
 
@@ -425,9 +420,9 @@ public class ObjectFactory extends InitializeObject {
     public void destroy() throws ObjectException {
 	for (ObjectInstance inst : this.instances) {
 	    Object obj = inst.getInstance();
-	    if (obj == null) {
+	    if (obj == null)
 		continue;
-	    }
+
 	    if (inst.definition.getProducer() == null) {
 		preDestroy(obj);
 	    } else {
@@ -502,9 +497,9 @@ public class ObjectFactory extends InitializeObject {
 	    while (clazz != Object.class) {
 		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
-		    if (field.getDeclaredAnnotation(Inject.class) != null) {
+		    if (field.getDeclaredAnnotation(Inject.class) != null)
 			onField(field);
-		    }
+
 		}
 		clazz = clazz.getSuperclass();
 	    }
@@ -515,9 +510,9 @@ public class ObjectFactory extends InitializeObject {
 		while (clazz != Object.class) {
 		    Method[] methods = clazz.getDeclaredMethods();
 		    for (Method method : methods) {
-			if (method.getDeclaredAnnotation(Inject.class) != null) {
+			if (method.getDeclaredAnnotation(Inject.class) != null)
 			    onMethod(method);
-			}
+
 		    }
 		    clazz = clazz.getSuperclass();
 		}

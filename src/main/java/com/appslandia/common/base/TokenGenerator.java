@@ -65,9 +65,9 @@ public class TokenGenerator extends InitializeObject implements TextGenerator {
     @Override
     public boolean verify(String value) {
 	Asserts.notNull(value);
-	if (value.length() != this.length) {
+	if (value.length() != this.length)
 	    return false;
-	}
+
 	return BASE64_URL_NP_PATTERN.matcher(value).matches();
     }
 

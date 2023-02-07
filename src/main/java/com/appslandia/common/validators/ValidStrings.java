@@ -68,13 +68,13 @@ public @interface ValidStrings {
 
 	@Override
 	public boolean isValid(String value, ConstraintValidatorContext context) {
-	    if (value == null) {
+	    if (value == null)
 		return true;
-	    }
+
 	    for (String validValue : this.validValues) {
-		if (validValue.equalsIgnoreCase(value)) {
+		if (validValue.equalsIgnoreCase(value))
 		    return true;
-		}
+
 	    }
 	    return false;
 	}

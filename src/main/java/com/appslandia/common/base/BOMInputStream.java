@@ -42,12 +42,12 @@ public class BOMInputStream extends InputStream {
 	int count = this.in.read(bb);
 	this.bom = BOM.parse(bb, count);
 
-	if (count > 0) {
+	if (count > 0)
 	    this.in.unread(bb, 0, count);
-	}
-	if (this.bom != null) {
+
+	if (this.bom != null)
 	    this.in.skip(this.bom.length());
-	}
+
     }
 
     public BOM getBOM() {

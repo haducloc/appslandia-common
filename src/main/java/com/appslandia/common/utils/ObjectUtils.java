@@ -53,9 +53,9 @@ public class ObjectUtils {
     }
 
     public static String toIdHash(Object obj) {
-	if (obj == null) {
+	if (obj == null)
 	    return NULL_STR;
-	}
+
 	return obj.getClass().getName() + "@" + Integer.toHexString(System.identityHashCode(obj));
     }
 
@@ -69,40 +69,40 @@ public class ObjectUtils {
     }
 
     public static String asString(Object[] array) {
-	if (array == null) {
+	if (array == null)
 	    return NULL_STR;
-	}
+
 	return Arrays.stream(array).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
     }
 
     public static String asString(Object array) {
-	if (array != null) {
+	if (array != null)
 	    Asserts.isTrue(array.getClass().isArray());
-	}
-	if (array == null) {
+
+	if (array == null)
 	    return NULL_STR;
-	}
+
 	return StreamUtils.stream(ArrayUtils.iterator(array)).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
     }
 
     public static String asString(Iterable<?> iterable) {
-	if (iterable == null) {
+	if (iterable == null)
 	    return NULL_STR;
-	}
+
 	return StreamUtils.stream(iterable.iterator()).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
     }
 
     public static String asString(Iterator<?> iterator) {
-	if (iterator == null) {
+	if (iterator == null)
 	    return NULL_STR;
-	}
+
 	return StreamUtils.stream(iterator).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
     }
 
     public static String asString(Enumeration<?> enumeration) {
-	if (enumeration == null) {
+	if (enumeration == null)
 	    return NULL_STR;
-	}
+
 	return StreamUtils.stream(enumeration).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
     }
 }

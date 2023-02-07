@@ -155,9 +155,9 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 
     public RsaEncryptor setPrivateKey(String privateKeyPem) {
 	assertNotInitialized();
-	if (privateKeyPem != null) {
+	if (privateKeyPem != null)
 	    this.privateKey = KeyFactoryUtil.RSA.toPrivateKey(privateKeyPem);
-	}
+
 	return this;
     }
 
@@ -169,9 +169,9 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 
     public RsaEncryptor setPublicKey(String publicKeyPem) {
 	assertNotInitialized();
-	if (publicKeyPem != null) {
+	if (publicKeyPem != null)
 	    this.publicKey = KeyFactoryUtil.RSA.toPublicKey(publicKeyPem);
-	}
+
 	return this;
     }
 
@@ -179,38 +179,38 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
     public RsaEncryptor copy() {
 	RsaEncryptor impl = new RsaEncryptor().setTransformation(this.transformation).setProvider(this.provider);
 
-	if (this.privateKey != null) {
+	if (this.privateKey != null)
 	    impl.privateKey = new KeyFactoryUtil(this.privateKey.getAlgorithm()).copy(this.privateKey);
-	}
+
 	impl.publicKey = this.publicKey;
 	return impl;
     }
 
     static AlgorithmParameterSpec parseParamSpec(String padding) throws NoSuchPaddingException {
-	if (padding.equalsIgnoreCase("NoPadding") || padding.equalsIgnoreCase("PKCS1Padding")) {
+	if (padding.equalsIgnoreCase("NoPadding") || padding.equalsIgnoreCase("PKCS1Padding"))
 	    return null;
-	}
-	if (padding.equalsIgnoreCase("OAEPPadding")) {
+
+	if (padding.equalsIgnoreCase("OAEPPadding"))
 	    return OAEPParameterSpec.DEFAULT;
-	}
-	if (padding.equalsIgnoreCase("OAEPWithMD5AndMGF1Padding")) {
+
+	if (padding.equalsIgnoreCase("OAEPWithMD5AndMGF1Padding"))
 	    return new OAEPParameterSpec("MD5", "MGF1", new MGF1ParameterSpec("MD5"), PSource.PSpecified.DEFAULT);
-	}
-	if (padding.equalsIgnoreCase("OAEPWithSHA-1AndMGF1Padding")) {
+
+	if (padding.equalsIgnoreCase("OAEPWithSHA-1AndMGF1Padding"))
 	    return new OAEPParameterSpec("SHA-1", "MGF1", MGF1ParameterSpec.SHA1, PSource.PSpecified.DEFAULT);
-	}
-	if (padding.equalsIgnoreCase("OAEPWithSHA-224AndMGF1Padding")) {
+
+	if (padding.equalsIgnoreCase("OAEPWithSHA-224AndMGF1Padding"))
 	    return new OAEPParameterSpec("SHA-224", "MGF1", MGF1ParameterSpec.SHA224, PSource.PSpecified.DEFAULT);
-	}
-	if (padding.equalsIgnoreCase("OAEPWithSHA-256AndMGF1Padding")) {
+
+	if (padding.equalsIgnoreCase("OAEPWithSHA-256AndMGF1Padding"))
 	    return new OAEPParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA256, PSource.PSpecified.DEFAULT);
-	}
-	if (padding.equalsIgnoreCase("OAEPWithSHA-384AndMGF1Padding")) {
+
+	if (padding.equalsIgnoreCase("OAEPWithSHA-384AndMGF1Padding"))
 	    return new OAEPParameterSpec("SHA-384", "MGF1", MGF1ParameterSpec.SHA384, PSource.PSpecified.DEFAULT);
-	}
-	if (padding.equalsIgnoreCase("OAEPWithSHA-512AndMGF1Padding")) {
+
+	if (padding.equalsIgnoreCase("OAEPWithSHA-512AndMGF1Padding"))
 	    return new OAEPParameterSpec("SHA-512", "MGF1", MGF1ParameterSpec.SHA512, PSource.PSpecified.DEFAULT);
-	}
+
 	throw new NoSuchPaddingException(padding + " unavailable with RSA.");
     }
 }

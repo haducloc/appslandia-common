@@ -35,12 +35,12 @@ public abstract class EntityBase implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-	if (this == obj) {
+	if (this == obj)
 	    return true;
-	}
-	if (!(obj instanceof EntityBase)) {
+
+	if (!(obj instanceof EntityBase))
 	    return false;
-	}
+
 	EntityBase another = (EntityBase) obj;
 	return Objects.equals(this.getPk(), another.getPk());
     }

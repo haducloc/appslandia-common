@@ -73,9 +73,9 @@ public class FileNameUtils {
     }
 
     public static String toUnixPath(String path) {
-	if (path == null || path.indexOf('\\') == -1) {
+	if (path == null || path.indexOf('\\') == -1)
 	    return path;
-	}
+
 	return path.replace('\\', '/');
     }
 }

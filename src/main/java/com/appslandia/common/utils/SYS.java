@@ -71,9 +71,9 @@ public class SYS {
     }
 
     public static String resolveString(String str) {
-	if (str == null) {
+	if (str == null)
 	    return null;
-	}
+
 	return STR.format(str, (p, expr) -> {
 	    // SYS
 	    String resolvedValue = resolve(expr);
@@ -83,25 +83,25 @@ public class SYS {
     }
 
     public static String resolveString(String str, Map<String, Object> parameters) {
-	if (str == null) {
+	if (str == null)
 	    return null;
-	}
+
 	return STR.format(str, (pname, expr) -> {
 	    // Parameters
 	    Object resolvedValue = parameters.get(pname);
 
 	    // SYS
-	    if (resolvedValue == null) {
+	    if (resolvedValue == null)
 		resolvedValue = resolve(expr);
-	    }
+
 	    return (resolvedValue != null) ? resolvedValue : STR.MISSED_VALUE;
 	});
     }
 
     public static String resolveString(String str, Object... parameters) {
-	if (str == null) {
+	if (str == null)
 	    return null;
-	}
+
 	return STR.format(str, (pname, expr) -> {
 
 	    Object resolvedValue = null;
@@ -109,17 +109,16 @@ public class SYS {
 		int index = Integer.parseInt(pname);
 
 		// Parameters
-		if ((0 <= index) && (index < parameters.length)) {
+		if ((0 <= index) && (index < parameters.length))
 		    resolvedValue = parameters[index];
-		}
 
 	    } catch (NumberFormatException ex) {
 	    }
 
 	    // SYS
-	    if (resolvedValue == null) {
+	    if (resolvedValue == null)
 		resolvedValue = resolve(expr);
-	    }
+
 	    return (resolvedValue != null) ? resolvedValue : STR.MISSED_VALUE;
 	});
     }
@@ -137,9 +136,9 @@ public class SYS {
     public static String resolve(String valueOrExpr) {
 	Asserts.notNull(valueOrExpr);
 
-	if (!ENV_VAL_HOLDER_PATTERN.matcher(valueOrExpr).matches()) {
+	if (!ENV_VAL_HOLDER_PATTERN.matcher(valueOrExpr).matches())
 	    return valueOrExpr;
-	}
+
 	String expr = StringUtils.trimToNull(valueOrExpr.substring(2, valueOrExpr.length() - 1));
 
 	Asserts.notNull(expr);

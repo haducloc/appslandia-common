@@ -91,9 +91,9 @@ public class Language extends InitializeObject {
 
 	this.temporalPatterns = Collections.unmodifiableMap(this.temporalPatterns);
 
-	if (this.attributes != null) {
+	if (this.attributes != null)
 	    this.attributes = Collections.unmodifiableMap(this.attributes);
-	}
+
     }
 
     @Override
@@ -147,9 +147,9 @@ public class Language extends InitializeObject {
 
     public Language setAttribute(String name, String value) {
 	this.assertNotInitialized();
-	if (this.attributes == null) {
+	if (this.attributes == null)
 	    this.attributes = new HashMap<>();
-	}
+
 	this.attributes.put(name, value);
 	return this;
     }
@@ -161,12 +161,12 @@ public class Language extends InitializeObject {
 
     @Override
     public boolean equals(Object obj) {
-	if (this == obj) {
+	if (this == obj)
 	    return true;
-	}
-	if (!(obj instanceof Language)) {
+
+	if (!(obj instanceof Language))
 	    return false;
-	}
+
 	Language another = (Language) obj;
 	return this.getLanguageId().equals(another.getLanguageId());
     }
@@ -178,9 +178,9 @@ public class Language extends InitializeObject {
 	Language obj = __default;
 	if (obj == null) {
 	    synchronized (MUTEX) {
-		if ((obj = __default) == null) {
+		if ((obj = __default) == null)
 		    __default = obj = initLanguage();
-		}
+
 	    }
 	}
 	return obj;
@@ -208,14 +208,14 @@ public class Language extends InitializeObject {
 
     @SuppressWarnings("el-syntax")
     private static Language initLanguage() {
-	if (__provider != null) {
+	if (__provider != null)
 	    return __provider.get();
-	}
+
 	try {
 	    String implName = SYS.resolve("${language_impl,env.LANGUAGE_IMPL}");
-	    if (implName == null) {
+	    if (implName == null)
 		return EN_US;
-	    }
+
 	    Class<? extends Language> implClass = ReflectionUtils.loadClass(implName, null);
 	    return ReflectionUtils.newInstance(implClass);
 

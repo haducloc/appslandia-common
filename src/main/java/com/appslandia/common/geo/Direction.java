@@ -74,9 +74,9 @@ public enum Direction {
 	// 0:N, 1:E, 2:S, 3:W
 	int next = (this.ordinal() + n) % 4;
 
-	if (next < 0) {
+	if (next < 0)
 	    next = (next + 4) % 4;
-	}
+
 	return DIRECTIONS[next];
     }
 

@@ -31,24 +31,24 @@ import java.util.Locale;
 public class CharsetUtils {
 
     public static String parseCharset(String contentType) {
-	if (contentType == null) {
+	if (contentType == null)
 	    return StandardCharsets.UTF_8.name();
-	}
+
 	return parseCharset(contentType, StandardCharsets.UTF_8.name());
     }
 
     public static String parseCharset(String contentType, String defaultValue) {
-	if (contentType == null) {
+	if (contentType == null)
 	    return defaultValue;
-	}
+
 	String[] items = SplitUtils.split(contentType, ';');
 
 	for (int i = items.length - 1; i >= 0; i--) {
 	    String item = items[i];
 
-	    if (item.toLowerCase(Locale.ENGLISH).startsWith("charset=")) {
+	    if (item.toLowerCase(Locale.ENGLISH).startsWith("charset="))
 		return item.substring(8);
-	    }
+
 	}
 	return defaultValue;
     }

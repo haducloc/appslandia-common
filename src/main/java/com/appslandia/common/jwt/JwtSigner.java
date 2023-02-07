@@ -48,18 +48,18 @@ public class JwtSigner extends InitializeObject {
     protected void init() throws Exception {
 	Asserts.notNull(this.alg, "alg is required.");
 
-	if (this != NONE) {
+	if (this != NONE)
 	    Asserts.notNull(this.signer, "signer is required.");
-	}
+
     }
 
     public byte[] sign(byte[] message) throws CryptoException {
 	this.initialize();
 	Asserts.notNull(message, "message is required.");
 
-	if (this == NONE) {
+	if (this == NONE)
 	    return EMPTY_SIG;
-	}
+
 	return this.signer.digest(message);
     }
 
@@ -68,9 +68,9 @@ public class JwtSigner extends InitializeObject {
 	Asserts.notNull(message, "message is required.");
 	Asserts.notNull(signature, "signature is required.");
 
-	if (this == NONE) {
+	if (this == NONE)
 	    return Arrays.equals(signature, EMPTY_SIG);
-	}
+
 	return this.signer.verify(message, signature);
     }
 
@@ -114,14 +114,14 @@ public class JwtSigner extends InitializeObject {
     }
 
     public JwtSigner copy() {
-	if (this == NONE) {
+	if (this == NONE)
 	    return NONE;
-	}
+
 	JwtSigner impl = new JwtSigner();
 	impl.alg = this.alg;
-	if (this.signer != null) {
+	if (this.signer != null)
 	    impl.signer = this.signer.copy();
-	}
+
 	impl.kid = this.kid;
 	return impl;
     }

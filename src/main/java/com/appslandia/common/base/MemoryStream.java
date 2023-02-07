@@ -91,9 +91,9 @@ public class MemoryStream extends OutputStream implements Serializable {
 	} else {
 	    int addLen = len - lenAv;
 	    int addBlk = addLen / (this.blockSize);
-	    if (addBlk * this.blockSize < addLen) {
+	    if (addBlk * this.blockSize < addLen)
 		addBlk++;
-	    }
+
 	    this.nodeList.insert(new byte[addBlk * this.blockSize]);
 
 	    if (lenAv == 0) {

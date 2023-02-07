@@ -38,9 +38,9 @@ public class EmailUtils {
     private static final Pattern EMAIL_PATTERN = Pattern.compile("(?=.{6,255}$)[_a-z\\d-\\+]+(\\.[_a-z\\d-]+)*@[a-z\\d-]+(\\.[a-z\\d-]+)*(\\.[a-z]{2,})", Pattern.CASE_INSENSITIVE);
 
     public static boolean isValid(CharSequence email) {
-	if (email == null) {
+	if (email == null)
 	    return true;
-	}
+
 	return EMAIL_PATTERN.matcher(email).matches();
     }
 

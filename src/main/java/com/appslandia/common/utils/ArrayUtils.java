@@ -95,27 +95,27 @@ public class ArrayUtils {
     }
 
     public static String[] copy(String[] src) {
-	if ((src == null) || (src.length == 0)) {
+	if ((src == null) || (src.length == 0))
 	    return src;
-	}
+
 	String[] arr = new String[src.length];
 	System.arraycopy(src, 0, arr, 0, src.length);
 	return arr;
     }
 
     public static byte[] copy(byte[] src) {
-	if ((src == null) || (src.length == 0)) {
+	if ((src == null) || (src.length == 0))
 	    return src;
-	}
+
 	byte[] arr = new byte[src.length];
 	System.arraycopy(src, 0, arr, 0, src.length);
 	return arr;
     }
 
     public static char[] copy(char[] src) {
-	if ((src == null) || (src.length == 0)) {
+	if ((src == null) || (src.length == 0))
 	    return src;
-	}
+
 	char[] arr = new char[src.length];
 	System.arraycopy(src, 0, arr, 0, src.length);
 	return arr;

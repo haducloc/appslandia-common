@@ -88,12 +88,12 @@ public class GroupFormat {
     }
 
     public String format(String str) {
-	if (str == null) {
+	if (str == null)
 	    return null;
-	}
-	if (str.length() != this.inputLength) {
+
+	if (str.length() != this.inputLength)
 	    return str;
-	}
+
 	StringBuilder sb = new StringBuilder(this.outputLength);
 	int pos = 0;
 	for (Group group : this.groups) {

@@ -68,9 +68,9 @@ public class TextDigester extends TextBasedCrypto {
 
     @Override
     public void destroy() throws DestroyException {
-	if (this.digester != null) {
+	if (this.digester != null)
 	    this.digester.destroy();
-	}
+
     }
 
     public TextDigester setDigester(Digester digester) {
@@ -100,9 +100,9 @@ public class TextDigester extends TextBasedCrypto {
     public TextDigester copy() {
 	TextDigester impl = new TextDigester();
 	impl.setTextCharset(this.textCharset).setBaseEncoder(this.baseEncoder);
-	if (this.digester != null) {
+	if (this.digester != null)
 	    impl.digester = this.digester.copy();
-	}
+
 	return impl;
     }
 }

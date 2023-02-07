@@ -51,22 +51,22 @@ public class TagList implements Iterable<String> {
     }
 
     public boolean add(String tag) {
-	if (tag == null) {
+	if (tag == null)
 	    return false;
-	}
-	if (this.preTags.contains(tag)) {
+
+	if (this.preTags.contains(tag))
 	    return false;
-	}
+
 	return this.tags.add(tag);
     }
 
     public boolean remove(String tag) {
-	if (tag == null) {
+	if (tag == null)
 	    return false;
-	}
-	if (this.preTags.contains(tag)) {
+
+	if (this.preTags.contains(tag))
 	    return false;
-	}
+
 	return this.tags.remove(tag);
     }
 

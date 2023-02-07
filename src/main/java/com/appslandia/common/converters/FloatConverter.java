@@ -58,9 +58,8 @@ public class FloatConverter extends NumberConverter<Float> {
 
     @Override
     public String format(Float obj, FormatProvider formatProvider, boolean localize) {
-	if (obj == null) {
+	if (obj == null)
 	    return null;
-	}
 
 	if (localize) {
 	    NumberFormat nf = formatProvider.getNumberFormat(this.fractionDigits, this.roundingMode, false);
@@ -76,9 +75,8 @@ public class FloatConverter extends NumberConverter<Float> {
     @Override
     public Float parse(String str, FormatProvider formatProvider) throws ConverterException {
 	str = StringUtils.trimToNull(str);
-	if (str == null) {
+	if (str == null)
 	    return null;
-	}
 
 	try {
 	    double value = Double.parseDouble(str);

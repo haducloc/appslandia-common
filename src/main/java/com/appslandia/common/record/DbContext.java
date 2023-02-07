@@ -87,9 +87,9 @@ public class DbContext implements AutoCloseable {
 
 		Object val = record.get(field.getName());
 
-		if (!field.isNullable()) {
+		if (!field.isNullable())
 		    Asserts.notNull(val, () -> STR.fmt("The field '{}' is required.", field.getName()));
-		}
+
 		stat.setObject(field.getName(), new JdbcParam(val, field.getSqlType(), field.getScaleOrLength()));
 	    }
 	}
@@ -149,9 +149,9 @@ public class DbContext implements AutoCloseable {
 
 		Object val = record.get(field.getName());
 
-		if (!field.isNullable()) {
+		if (!field.isNullable())
 		    Asserts.notNull(val, () -> STR.fmt("The field '{}' is required.", field.getName()));
-		}
+
 		stat.setObject(field.getName(), new JdbcParam(val, field.getSqlType(), field.getScaleOrLength()));
 	    }
 	}
@@ -281,12 +281,12 @@ public class DbContext implements AutoCloseable {
 
 	// Execute
 	Number count = stat.executeScalar();
-	if (count == null) {
+	if (count == null)
 	    return false;
-	}
-	if (count.longValue() > 1) {
+
+	if (count.longValue() > 1)
 	    throw new SQLException("Duplicated keys.");
-	}
+
 	return true;
     }
 
@@ -579,9 +579,9 @@ public class DbContext implements AutoCloseable {
     }
 
     protected void assertTransactional() throws java.sql.SQLException {
-	if (this.conn.getAutoCommit()) {
+	if (this.conn.getAutoCommit())
 	    throw new SQLException("transactional must be enabled.");
-	}
+
     }
 
     private void closeStatements() throws java.sql.SQLException {
@@ -606,9 +606,9 @@ public class DbContext implements AutoCloseable {
 
     protected String buildDataSourceID() throws UncheckedSQLException {
 	try {
-	    if (!StringUtils.isNullOrEmpty(this.conn.getDsName())) {
+	    if (!StringUtils.isNullOrEmpty(this.conn.getDsName()))
 		return this.conn.getDsName();
-	    }
+
 	    return this.conn.getMetaData().getURL();
 
 	} catch (SQLException ex) {

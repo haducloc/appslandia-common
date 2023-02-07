@@ -66,9 +66,9 @@ public @interface CardCVC {
 
 	@Override
 	public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
-	    if (value == null) {
+	    if (value == null)
 		return true;
-	    }
+
 	    return CVC_PATTERN.matcher(value).matches();
 	}
     }

@@ -34,9 +34,9 @@ public abstract class NumberConverter<T extends Number> implements Converter<T> 
 	ParsePosition pos = new ParsePosition(0);
 	Number parsedValue = numberFormat.parse(str, pos);
 
-	if ((pos.getErrorIndex() < 0) && (pos.getIndex() == str.length()) && (parsedValue != null)) {
+	if ((pos.getErrorIndex() < 0) && (pos.getIndex() == str.length()) && (parsedValue != null))
 	    return parsedValue;
-	}
+
 	return null;
     }
 }

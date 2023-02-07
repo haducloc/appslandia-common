@@ -39,18 +39,18 @@ public class STR {
     private static final Pattern PARAM_HOLDER_PATTERN = Pattern.compile("\\$\\{[^}]*}", Pattern.CASE_INSENSITIVE);
 
     public static String format(String str, Map<String, Object> parameters) {
-	if (str == null) {
+	if (str == null)
 	    return null;
-	}
+
 	return format(str, (pname, expr) -> {
 	    return parameters.containsKey(pname) ? parameters.get(pname) : MISSED_VALUE;
 	});
     }
 
     public static String format(String str, Object... parameters) {
-	if (str == null) {
+	if (str == null)
 	    return null;
-	}
+
 	return format(str, (pname, expr) -> {
 
 	    int index = -1;
@@ -64,9 +64,9 @@ public class STR {
     }
 
     public static String format(String str, BiFunction<String, String, Object> parameters) {
-	if (str == null) {
+	if (str == null)
 	    return null;
-	}
+
 	StringBuilder sb = new StringBuilder((int) (1.5 * str.length()));
 
 	format(str, parameters, sb);
@@ -114,17 +114,17 @@ public class STR {
 
 	    prevEnd = matcher.end();
 	}
-	if (prevEnd < str.length()) {
+	if (prevEnd < str.length())
 	    out.append(str.substring(prevEnd));
-	}
+
     }
 
     private static final Pattern SEQ_HOLDER_PATTERN = Pattern.compile("\\{}");
 
     public static String fmt(String str, Object... entries) {
-	if (str == null) {
+	if (str == null)
 	    return null;
-	}
+
 	StringBuilder out = new StringBuilder(str.length() + entries.length * 16);
 	Matcher matcher = SEQ_HOLDER_PATTERN.matcher(str);
 
@@ -161,9 +161,9 @@ public class STR {
 
 	    prevEnd = matcher.end();
 	}
-	if (prevEnd < str.length()) {
+	if (prevEnd < str.length())
 	    out.append(str.substring(prevEnd));
-	}
+
 	return out.toString();
     }
 }

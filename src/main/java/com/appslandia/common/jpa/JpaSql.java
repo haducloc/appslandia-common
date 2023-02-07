@@ -70,9 +70,9 @@ public class JpaSql extends InitializeObject implements Serializable {
 	assertNotInitialized();
 	Asserts.isTrue(maxLength > 0, "maxLength is required.");
 
-	if (this.arrayLens == null) {
+	if (this.arrayLens == null)
 	    this.arrayLens = new HashMap<>();
-	}
+
 	this.arrayLens.put(parameterName, maxLength);
 	return this;
     }
@@ -121,9 +121,8 @@ public class JpaSql extends InitializeObject implements Serializable {
 		arrayLen = DEFAULT_ARRAY_MAX_LENGTH;
 	    }
 
-	    if (isArrayParam) {
+	    if (isArrayParam)
 		paramsMap.put(paramName.value, arrayLen);
-	    }
 
 	    // Normal parameter?
 	    if (!isArrayParam) {

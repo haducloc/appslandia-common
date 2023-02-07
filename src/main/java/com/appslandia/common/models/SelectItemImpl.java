@@ -74,12 +74,12 @@ public class SelectItemImpl implements SelectItem {
 
     @Override
     public boolean equals(Object obj) {
-	if (this == obj) {
+	if (this == obj)
 	    return true;
-	}
-	if (!(obj instanceof SelectItemImpl)) {
+
+	if (!(obj instanceof SelectItemImpl))
 	    return false;
-	}
+
 	SelectItemImpl another = (SelectItemImpl) obj;
 	return Objects.equals(this.value, another.value);
     }

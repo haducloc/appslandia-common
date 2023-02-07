@@ -59,9 +59,9 @@ public class SmtpMailer extends InitializeObject {
 	MailerMessage msg = new MailerMessage();
 
 	String msgFrom = this.props.get("mail.smtp.msg.from");
-	if (msgFrom != null) {
+	if (msgFrom != null)
 	    msg.from(msgFrom);
-	}
+
 	return msg;
     }
 
@@ -80,9 +80,8 @@ public class SmtpMailer extends InitializeObject {
 	    transport.connect(user, password);
 
 	    String debugToEmails = null;
-	    if (ParseUtils.isTrueValue(this.props.get("mail.smtp.debug.enabled"))) {
+	    if (ParseUtils.isTrueValue(this.props.get("mail.smtp.debug.enabled")))
 		debugToEmails = Asserts.notNull(this.props.get("mail.smtp.debug.to_emails"), "mail.smtp.debug.to_emails is required.");
-	    }
 
 	    for (MailerMessage mailerMessage : messages) {
 		MimeMessage message = mailerMessage.toMimeMessage(this, debugToEmails);
@@ -122,9 +121,9 @@ public class SmtpMailer extends InitializeObject {
     public SmtpMailer setProps(SecureProps props) {
 	assertNotInitialized();
 
-	if (props != null) {
+	if (props != null)
 	    this.props = props.copy();
-	}
+
 	return this;
     }
 }

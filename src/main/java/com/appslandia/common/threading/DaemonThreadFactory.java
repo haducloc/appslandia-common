@@ -46,14 +46,13 @@ public class DaemonThreadFactory implements ThreadFactory {
 	Thread t = new Thread(this.group, r, this.prefix + this.seq.incrementAndGet(), 0);
 
 	// Daemon
-	if (!t.isDaemon()) {
+	if (!t.isDaemon())
 	    t.setDaemon(true);
-	}
 
 	// Normal Priority
-	if (t.getPriority() != Thread.NORM_PRIORITY) {
+	if (t.getPriority() != Thread.NORM_PRIORITY)
 	    t.setPriority(Thread.NORM_PRIORITY);
-	}
+
 	return t;
     }
 }

@@ -49,9 +49,8 @@ public class TagUtils {
 	List<String> result = new ArrayList<>();
 
 	isValid.value = true;
-	if (tags == null) {
+	if (tags == null)
 	    return result;
-	}
 
 	if (TBD_TAG.equals(tags)) {
 	    result.add(TBD_TAG);
@@ -72,40 +71,38 @@ public class TagUtils {
 	for (String tag : SplitUtils.split(tags, ',')) {
 	    tag = toTag(tag, valid);
 
-	    if ((tag != null) && !result.contains(tag)) {
+	    if ((tag != null) && !result.contains(tag))
 		result.add(tag);
-	    }
+
 	}
 
-	if (result.isEmpty()) {
+	if (result.isEmpty())
 	    isValid.value = false;
-	}
 
 	// #tbd must be first
 	// #unsorted resulting in removal of others
 	boolean hasTbd = result.remove(TBD_TAG);
 
-	if (result.contains(UNSORTED_TAG)) {
+	if (result.contains(UNSORTED_TAG))
 	    result.removeIf(t -> !t.equals(UNSORTED_TAG));
-	}
-	if (hasTbd) {
+
+	if (hasTbd)
 	    result.add(0, TBD_TAG);
-	}
+
 	return result;
     }
 
     // tag, #tag -> #tag
     public static String toTag(String tag, Out<Boolean> isValid) {
 	isValid.value = true;
-	if (tag == null) {
+	if (tag == null)
 	    return null;
-	}
-	if (TBD_TAG.equals(tag)) {
+
+	if (TBD_TAG.equals(tag))
 	    return TBD_TAG;
-	}
-	if (UNSORTED_TAG.equals(tag)) {
+
+	if (UNSORTED_TAG.equals(tag))
 	    return UNSORTED_TAG;
-	}
 
 	tag = tag.toLowerCase(Locale.ROOT);
 	String nmlTag = NormalizeUtils.normalizeLabel(tag);

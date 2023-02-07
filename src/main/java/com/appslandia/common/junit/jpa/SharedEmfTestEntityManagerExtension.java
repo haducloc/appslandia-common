@@ -57,9 +57,9 @@ public abstract class SharedEmfTestEntityManagerExtension implements BeforeEachC
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {
 	EntityManager em = emHolder.get();
-	if (em != null) {
+	if (em != null)
 	    return;
-	}
+
 	em = emf.createEntityManager();
 	emHolder.set(em);
 
@@ -88,9 +88,9 @@ public abstract class SharedEmfTestEntityManagerExtension implements BeforeEachC
     public void beforeAll(ExtensionContext context) throws Exception {
 	if (emf == null) {
 	    synchronized (MUTEX) {
-		if (emf == null) {
+		if (emf == null)
 		    emf = createEntityManagerFactory();
-		}
+
 	    }
 	}
     }

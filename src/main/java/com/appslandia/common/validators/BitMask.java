@@ -76,17 +76,17 @@ public @interface BitMask {
 
 	@Override
 	public boolean isValid(Number value, ConstraintValidatorContext context) {
-	    if (value == null) {
+	    if (value == null)
 		return true;
-	    }
+
 	    long longValue = value.longValue();
-	    if (longValue < 0) {
+	    if (longValue < 0)
 		return false;
-	    }
+
 	    if (this.max > 0) {
-		if (longValue > max) {
+		if (longValue > max)
 		    return false;
-		}
+
 	    }
 	    return true;
 	}

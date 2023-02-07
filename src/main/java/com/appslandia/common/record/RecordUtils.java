@@ -75,9 +75,8 @@ public final class RecordUtils {
 
     public static Table loadTable(Connection conn, String catalog, String schema, String tableName) throws SQLException {
 	// tableName
-	if (!checkTable(conn, catalog, schema, tableName)) {
+	if (!checkTable(conn, catalog, schema, tableName))
 	    throw new IllegalArgumentException(STR.fmt("catalog={}, schema={}, tableName={} is not found.", catalog, schema, tableName));
-	}
 
 	// fields
 	List<Field> fields = new ArrayList<>();
@@ -123,9 +122,8 @@ public final class RecordUtils {
 	    for (Field field : table.getFields()) {
 		for (PropertyDescriptor dpd : Introspector.getBeanInfo(entity.getClass()).getPropertyDescriptors()) {
 
-		    if (!field.getName().equalsIgnoreCase(dpd.getName())) {
+		    if (!field.getName().equalsIgnoreCase(dpd.getName()))
 			continue;
-		    }
 
 		    Asserts.notNull(dpd.getReadMethod());
 		    Asserts.notNull(dpd.getWriteMethod());

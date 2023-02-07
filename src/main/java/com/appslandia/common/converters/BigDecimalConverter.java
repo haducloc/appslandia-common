@@ -56,9 +56,8 @@ public class BigDecimalConverter extends NumberConverter<BigDecimal> {
 
     @Override
     public String format(BigDecimal obj, FormatProvider formatProvider, boolean localize) {
-	if (obj == null) {
+	if (obj == null)
 	    return null;
-	}
 
 	if (localize) {
 	    NumberFormat nf = formatProvider.getNumberFormat(this.fractionDigits, this.roundingMode, false);
@@ -70,9 +69,8 @@ public class BigDecimalConverter extends NumberConverter<BigDecimal> {
     @Override
     public BigDecimal parse(String str, FormatProvider formatProvider) throws ConverterException {
 	str = StringUtils.trimToNull(str);
-	if (str == null) {
+	if (str == null)
 	    return null;
-	}
 
 	try {
 	    return new BigDecimal(str);
@@ -81,9 +79,8 @@ public class BigDecimalConverter extends NumberConverter<BigDecimal> {
 	}
 
 	Number number = parseNumber(str, formatProvider.getNumberParser());
-	if (number != null) {
+	if (number != null)
 	    return (number instanceof BigDecimal) ? (BigDecimal) number : new BigDecimal(number.toString());
-	}
 
 	throw toParsingError(str, getTargetType().getName());
     }

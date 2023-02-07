@@ -52,16 +52,15 @@ public class KeywordsConverter implements Converter<String> {
     @Override
     public String parse(String str, FormatProvider formatProvider) throws ConverterException {
 	str = StringUtils.trimToNull(str);
-	if (str == null) {
+	if (str == null)
 	    return null;
-	}
 
 	Out<Boolean> isValid = new Out<Boolean>();
 	String keywords = KeywordUtils.toKeywords(str, isValid);
 
-	if (!isValid.val()) {
+	if (!isValid.val())
 	    throw new ConverterException("keywords is invalid format (keywords=" + str + ")", getErrorMsgKey());
-	}
+
 	return keywords;
     }
 }

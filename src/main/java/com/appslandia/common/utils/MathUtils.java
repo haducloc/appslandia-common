@@ -36,9 +36,9 @@ public class MathUtils {
     }
 
     public static boolean isPow2(long n) {
-	if ((n < 1) || (n > Long.MAX_VALUE / 2 + 1)) {
+	if ((n < 1) || (n > Long.MAX_VALUE / 2 + 1))
 	    return false;
-	}
+
 	return (n & (n - 1)) == 0;
     }
 

@@ -261,9 +261,8 @@ public class ConsoleUtils {
 	    writer().println(getConfirmValue(variableName));
 
 	    String confirmValue = null;
-	    if (reader().hasNextLine()) {
+	    if (reader().hasNextLine())
 		confirmValue = StringUtils.trimToNull(reader().nextLine());
-	    }
 
 	    // Compare values
 	    if (!Objects.equals(readValue, confirmValue)) {
@@ -295,9 +294,8 @@ public class ConsoleUtils {
 	    writer().println(getConfirmValue(variableName));
 
 	    String confirmValue = null;
-	    if (reader().hasNextLine()) {
+	    if (reader().hasNextLine())
 		confirmValue = StringUtils.trimToNull(reader().nextLine());
-	    }
 
 	    if (confirmValue == null) {
 		if (readValue == null)
@@ -343,9 +341,8 @@ public class ConsoleUtils {
 	    writer().println(getConfirmValue(variableName));
 
 	    String confirmValue = null;
-	    if (reader().hasNextLine()) {
+	    if (reader().hasNextLine())
 		confirmValue = StringUtils.trimToNull(reader().nextLine());
-	    }
 
 	    if (confirmValue == null) {
 		if (readValue == null)
@@ -391,9 +388,8 @@ public class ConsoleUtils {
 	    writer().println(getConfirmValue(variableName));
 
 	    String confirmValue = null;
-	    if (reader().hasNextLine()) {
+	    if (reader().hasNextLine())
 		confirmValue = StringUtils.trimToNull(reader().nextLine());
-	    }
 
 	    if (confirmValue == null) {
 		if (readValue == null)
@@ -440,9 +436,8 @@ public class ConsoleUtils {
 	    writer().println(getConfirmValue(variableName));
 
 	    String confirmValue = null;
-	    if (reader().hasNextLine()) {
+	    if (reader().hasNextLine())
 		confirmValue = StringUtils.trimToNull(reader().nextLine());
-	    }
 
 	    if (confirmValue == null) {
 		if (readValue == null)
@@ -476,9 +471,9 @@ public class ConsoleUtils {
 
 	    File dir = new File(value);
 
-	    if (dir.exists() && !dir.isHidden() && dir.isDirectory()) {
+	    if (dir.exists() && !dir.isHidden() && dir.isDirectory())
 		return dir;
-	    }
+
 	    return null;
 
 	}, validator);
@@ -497,9 +492,9 @@ public class ConsoleUtils {
 
 	    File file = new File(value);
 
-	    if (file.exists() && !file.isHidden() && file.isFile()) {
+	    if (file.exists() && !file.isHidden() && file.isFile())
 		return file;
-	    }
+
 	    return null;
 
 	}, validator);
@@ -527,12 +522,12 @@ public class ConsoleUtils {
 	    boolean isTrue = ParseUtils.isTrueValue(value);
 	    boolean isFalse = !isTrue && ParseUtils.isFalseValue(value);
 
-	    if (isTrue) {
+	    if (isTrue)
 		return true;
-	    }
-	    if (isFalse) {
+
+	    if (isFalse)
 		return false;
-	    }
+
 	    return null;
 
 	}, null);
@@ -643,9 +638,9 @@ public class ConsoleUtils {
     }
 
     static String getInvalidEnterAgain(String variableName) {
-	if (variableName == null) {
+	if (variableName == null)
 	    return Resources.getString("console_utils.invalid_enter_again");
-	}
+
 	return Resources.getString("console_utils.invalid_enter_again_varname", variableName);
     }
 

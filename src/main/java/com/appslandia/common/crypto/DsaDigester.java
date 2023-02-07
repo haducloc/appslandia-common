@@ -141,9 +141,9 @@ public class DsaDigester extends InitializeObject implements Digester {
 
     public DsaDigester setPrivateKey(String privateKeyPem) {
 	assertNotInitialized();
-	if (privateKeyPem != null) {
+	if (privateKeyPem != null)
 	    this.privateKey = KeyFactoryUtil.DSA.toPrivateKey(privateKeyPem);
-	}
+
 	return this;
     }
 
@@ -155,9 +155,9 @@ public class DsaDigester extends InitializeObject implements Digester {
 
     public DsaDigester setPublicKey(String publicKeyPem) {
 	assertNotInitialized();
-	if (publicKeyPem != null) {
+	if (publicKeyPem != null)
 	    this.publicKey = KeyFactoryUtil.DSA.toPublicKey(publicKeyPem);
-	}
+
 	return this;
     }
 
@@ -165,9 +165,9 @@ public class DsaDigester extends InitializeObject implements Digester {
     public DsaDigester copy() {
 	DsaDigester impl = new DsaDigester().setAlgorithm(this.algorithm).setProvider(this.provider);
 
-	if (this.privateKey != null) {
+	if (this.privateKey != null)
 	    impl.privateKey = new KeyFactoryUtil(this.privateKey.getAlgorithm()).copy(this.privateKey);
-	}
+
 	impl.publicKey = this.publicKey;
 	return impl;
     }

@@ -49,80 +49,79 @@ public interface Config {
 
     default public String getRequiredString(String key) {
 	String value = getString(key);
-	if (value == null) {
+	if (value == null)
 	    throw toNoValueException(key);
-	}
+
 	return value;
     }
 
     default public String[] getStringArray(String key) {
 	String value = getString(key);
-	if (value == null) {
+	if (value == null)
 	    return StringUtils.EMPTY_ARRAY;
-	}
+
 	return SplitUtils.split(value, ',');
     }
 
     default public String getFormatted(String key) {
 	String value = getString(key);
-	if (value == null) {
+	if (value == null)
 	    return null;
-	}
+
 	return STR.format(value, (pname, expr) -> {
 	    // CONFIG
 	    String resolvedValue = getString(pname);
 
 	    // SYS
-	    if (resolvedValue == null) {
+	    if (resolvedValue == null)
 		resolvedValue = SYS.resolve(expr);
-	    }
+
 	    return (resolvedValue != null) ? resolvedValue : STR.MISSED_VALUE;
 	});
     }
 
     default public String getRequiredFormatted(String key) {
 	String value = getFormatted(key);
-	if (value == null) {
+	if (value == null)
 	    throw toNoValueException(key);
-	}
+
 	return value;
     }
 
     default public String getFormatted(String key, Map<String, Object> parameters) {
 	String value = getString(key);
-	if (value == null) {
+	if (value == null)
 	    return null;
-	}
+
 	return STR.format(value, (pname, expr) -> {
 	    // Parameters
 	    Object resolvedValue = parameters.get(pname);
 
 	    // CONFIG
-	    if (resolvedValue == null) {
+	    if (resolvedValue == null)
 		resolvedValue = getString(pname);
-	    }
 
 	    // SYS
-	    if (resolvedValue == null) {
+	    if (resolvedValue == null)
 		resolvedValue = SYS.resolve(expr);
-	    }
+
 	    return (resolvedValue != null) ? resolvedValue : STR.MISSED_VALUE;
 	});
     }
 
     default public String getRequiredFormatted(String key, Map<String, Object> parameters) {
 	String value = getFormatted(key, parameters);
-	if (value == null) {
+	if (value == null)
 	    throw toNoValueException(key);
-	}
+
 	return value;
     }
 
     default public String getFormatted(String key, Object... parameters) {
 	String value = getString(key);
-	if (value == null) {
+	if (value == null)
 	    return null;
-	}
+
 	return STR.format(value, (pname, expr) -> {
 
 	    Object resolvedValue = null;
@@ -130,17 +129,15 @@ public interface Config {
 		int index = Integer.parseInt(pname);
 
 		// Parameters
-		if ((0 <= index) && (index < parameters.length)) {
+		if ((0 <= index) && (index < parameters.length))
 		    resolvedValue = parameters[index];
-		}
 
 	    } catch (NumberFormatException ex) {
 	    }
 
 	    // SYS
-	    if (resolvedValue == null) {
+	    if (resolvedValue == null)
 		resolvedValue = SYS.resolve(expr);
-	    }
 
 	    return (resolvedValue != null) ? resolvedValue : STR.MISSED_VALUE;
 	});
@@ -148,9 +145,9 @@ public interface Config {
 
     default public String getRequiredFormatted(String key, Object... parameters) {
 	String value = getFormatted(key, parameters);
-	if (value == null) {
+	if (value == null)
 	    throw toNoValueException(key);
-	}
+
 	return value;
     }
 
@@ -161,63 +158,63 @@ public interface Config {
 
     default public boolean getRequiredBool(String key) {
 	String value = getString(key);
-	if (value == null) {
+	if (value == null)
 	    throw toNoValueException(key);
-	}
-	if (ParseUtils.isTrueValue(value)) {
+
+	if (ParseUtils.isTrueValue(value))
 	    return true;
-	}
-	if (ParseUtils.isFalseValue(value)) {
+
+	if (ParseUtils.isFalseValue(value))
 	    return false;
-	}
+
 	throw new BoolFormatException(value);
     }
 
     default public int getInt(String key, int defaultValue) {
 	String value = getString(key);
-	if (value == null) {
+	if (value == null)
 	    return defaultValue;
-	}
+
 	return ParseUtils.parseInt(value, defaultValue);
     }
 
     default public int getRequiredInt(String key) {
 	String value = getString(key);
-	if (value == null) {
+	if (value == null)
 	    throw toNoValueException(key);
-	}
+
 	return Integer.parseInt(value);
     }
 
     default public long getLong(String key, long defaultValue) {
 	String value = getString(key);
-	if (value == null) {
+	if (value == null)
 	    return defaultValue;
-	}
+
 	return ParseUtils.parseLong(value, defaultValue);
     }
 
     default public long getRequiredLong(String key) {
 	String value = getString(key);
-	if (value == null) {
+	if (value == null)
 	    throw toNoValueException(key);
-	}
+
 	return Long.parseLong(value);
     }
 
     default public double getDouble(String key, double defaultValue) {
 	String value = getString(key);
-	if (value == null) {
+	if (value == null)
 	    return defaultValue;
-	}
+
 	return ParseUtils.parseDouble(value, defaultValue);
     }
 
     default public double getRequiredDouble(String key) {
 	String value = getString(key);
-	if (value == null) {
+	if (value == null)
 	    throw toNoValueException(key);
-	}
+
 	return Double.parseDouble(value);
     }
 

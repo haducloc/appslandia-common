@@ -94,37 +94,37 @@ public class ToStringBuilder {
 	}
 
 	public boolean isBasicType(Class<?> type) {
-	    if (TypeUtils.isPrimitiveOrWrapper(type)) {
+	    if (TypeUtils.isPrimitiveOrWrapper(type))
 		return true;
-	    }
-	    if (CharSequence.class.isAssignableFrom(type)) {
+
+	    if (CharSequence.class.isAssignableFrom(type))
 		return true;
-	    }
-	    if (Enum.class.isAssignableFrom(type) || (type == BigDecimal.class)) {
+
+	    if (Enum.class.isAssignableFrom(type) || (type == BigDecimal.class))
 		return true;
-	    }
+
 	    if (Date.class.isAssignableFrom(type) || Calendar.class.isAssignableFrom(type) || TimeZone.class.isAssignableFrom(type) || (type == Locale.class)
 		    || Charset.class.isAssignableFrom(type)) {
 		return true;
 	    }
-	    if (Temporal.class.isAssignableFrom(type)) {
+	    if (Temporal.class.isAssignableFrom(type))
 		return true;
-	    }
+
 	    return false;
 	}
 
 	protected boolean checkAnnotation(Object value, Field field, Class<? extends Annotation> annotationType) {
 	    // field
 	    if (field != null) {
-		if (field.getAnnotation(annotationType) != null) {
+		if (field.getAnnotation(annotationType) != null)
 		    return true;
-		}
+
 	    }
 
 	    // value type
-	    if (value.getClass().getAnnotation(annotationType) != null) {
+	    if (value.getClass().getAnnotation(annotationType) != null)
 		return true;
-	    }
+
 	    return false;
 	}
     }
@@ -152,9 +152,9 @@ public class ToStringBuilder {
     public String toString(Object obj) {
 	TextBuilder builder = new TextBuilder();
 	appendtab(builder, this.identTabs, false);
-	if (obj == null) {
+	if (obj == null)
 	    return builder.append("null").toString();
-	}
+
 	this.toStringObject(obj, 1, builder);
 	return builder.toString();
     }
@@ -162,9 +162,9 @@ public class ToStringBuilder {
     public String toStringFields(Object obj) {
 	TextBuilder builder = new TextBuilder();
 	appendtab(builder, this.identTabs, false);
-	if (obj == null) {
+	if (obj == null)
 	    return builder.append("null").toString();
-	}
+
 	this.toStringFields(obj, 1, builder);
 	return builder.toString();
     }
@@ -249,9 +249,9 @@ public class ToStringBuilder {
 
     private void toStringFields(Object obj, int level, TextBuilder builder) {
 	builder.append(ObjectUtils.toIdHash(obj));
-	if (level > this.level) {
+	if (level > this.level)
 	    return;
-	}
+
 	builder.append("[");
 	boolean isFirst = true;
 
@@ -259,12 +259,11 @@ public class ToStringBuilder {
 	while (clazz != null) {
 	    Field[] fields = clazz.getDeclaredFields();
 	    for (Field field : fields) {
-		if (field.getName().equals("serialVersionUID")) {
+		if (field.getName().equals("serialVersionUID"))
 		    continue;
-		}
-		if (this.tsDecision.tsExcluded(field)) {
+
+		if (this.tsDecision.tsExcluded(field))
 		    continue;
-		}
 
 		if (!isFirst) {
 		    builder.append(",");
@@ -308,9 +307,9 @@ public class ToStringBuilder {
 
     private void toStringIterator(Object obj, ElementIterator iterator, int level, TextBuilder builder) {
 	builder.append(ObjectUtils.toIdHash(obj));
-	if (level > this.level) {
+	if (level > this.level)
 	    return;
-	}
+
 	builder.append("[");
 	boolean isFirst = true;
 
@@ -351,9 +350,9 @@ public class ToStringBuilder {
 
     private void toStringMap(Map<?, ?> map, int level, TextBuilder builder) {
 	builder.append(ObjectUtils.toIdHash(map));
-	if (level > this.level) {
+	if (level > this.level)
 	    return;
-	}
+
 	builder.append("[");
 	boolean isFirst = true;
 
@@ -501,16 +500,16 @@ public class ToStringBuilder {
     }
 
     private TextBuilder appendln(TextBuilder builder, boolean isCompact) {
-	if (!isCompact) {
+	if (!isCompact)
 	    builder.appendln();
-	}
+
 	return builder;
     }
 
     private TextBuilder appendtab(TextBuilder builder, int n, boolean isCompact) {
-	if (isCompact) {
+	if (isCompact)
 	    return builder.appendsp();
-	}
+
 	return builder.appendsp(2 * n);
     }
 
@@ -556,9 +555,9 @@ public class ToStringBuilder {
 	public Object next() {
 	    // byte[]
 	    if (this.elementType == byte.class) {
-		if (this.index > 128) {
+		if (this.index > 128)
 		    return MORE_ELEMENTS;
-		}
+
 	    }
 	    return Array.get(this.obj, this.index++);
 	}

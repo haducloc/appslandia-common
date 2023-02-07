@@ -67,9 +67,9 @@ public class TextEncryptor extends TextBasedCrypto {
 
     @Override
     public void destroy() throws DestroyException {
-	if (this.encryptor != null) {
+	if (this.encryptor != null)
 	    this.encryptor.destroy();
-	}
+
     }
 
     public TextEncryptor setEncryptor(Encryptor encryptor) {
@@ -99,9 +99,9 @@ public class TextEncryptor extends TextBasedCrypto {
     public TextEncryptor copy() {
 	TextEncryptor impl = new TextEncryptor();
 	impl.setTextCharset(this.textCharset).setBaseEncoder(this.baseEncoder);
-	if (this.encryptor != null) {
+	if (this.encryptor != null)
 	    impl.encryptor = this.encryptor.copy();
-	}
+
 	return impl;
     }
 }

@@ -54,9 +54,9 @@ public class SqlTimestampConverter extends DateConverter<java.sql.Timestamp> {
     @Override
     public java.sql.Timestamp parse(String str, FormatProvider formatProvider) throws ConverterException {
 	str = StringUtils.trimToNull(str);
-	if (str == null) {
+	if (str == null)
 	    return null;
-	}
+
 	java.util.Date d = doParse(str, formatProvider);
 	return (d != null) ? new java.sql.Timestamp(d.getTime()) : null;
     }

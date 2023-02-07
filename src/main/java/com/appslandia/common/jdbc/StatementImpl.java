@@ -62,9 +62,9 @@ public class StatementImpl implements PreparedStatement {
 	this.stat.executeUpdate();
 
 	try (ResultSet rs = this.stat.getGeneratedKeys()) {
-	    if (rs.next()) {
+	    if (rs.next())
 		return rs.getLong(1);
-	    }
+
 	}
 	throw new SQLException("executeGeneratedKey");
     }
@@ -79,9 +79,9 @@ public class StatementImpl implements PreparedStatement {
 	this.stat.executeUpdate();
 
 	try (ResultSet rs = this.stat.getGeneratedKeys()) {
-	    if (rs.next()) {
+	    if (rs.next())
 		return rs.getLong(1);
-	    }
+
 	}
 	throw new SQLException("executeGeneratedKey");
     }

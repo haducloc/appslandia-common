@@ -38,41 +38,41 @@ public class SplitUtils {
     }
 
     public static String[] split(String str, Pattern separator) {
-	if (str == null) {
+	if (str == null)
 	    return StringUtils.EMPTY_ARRAY;
-	}
+
 	String[] items = separator.split(str);
 	List<String> list = new ArrayList<>(items.length);
 
 	for (String item : items) {
 	    item = item.trim();
-	    if (!item.isEmpty()) {
+	    if (!item.isEmpty())
 		list.add(item);
-	    }
+
 	}
 	return list.toArray(new String[list.size()]);
     }
 
     public static String[] split(String str, char separator) {
-	if (str == null) {
+	if (str == null)
 	    return StringUtils.EMPTY_ARRAY;
-	}
+
 	int startIdx = 0;
 	int endIdx;
 	List<String> list = new ArrayList<>();
 
 	while ((endIdx = str.indexOf(separator, startIdx)) != -1) {
 	    String item = str.substring(startIdx, endIdx).trim();
-	    if (!item.isEmpty()) {
+	    if (!item.isEmpty())
 		list.add(item);
-	    }
+
 	    startIdx = endIdx + 1;
 	}
 	if (startIdx < str.length()) {
 	    String item = str.substring(startIdx).trim();
-	    if (!item.isEmpty()) {
+	    if (!item.isEmpty())
 		list.add(item);
-	    }
+
 	}
 	return list.toArray(new String[list.size()]);
     }

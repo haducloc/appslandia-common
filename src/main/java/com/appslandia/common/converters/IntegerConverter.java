@@ -45,25 +45,24 @@ public class IntegerConverter extends NumberConverter<Integer> {
 
     @Override
     public String format(Integer obj, FormatProvider formatProvider, boolean localize) {
-	if (obj == null) {
+	if (obj == null)
 	    return null;
-	}
+
 	return obj.toString();
     }
 
     @Override
     public Integer parse(String str, FormatProvider formatProvider) throws ConverterException {
 	str = StringUtils.trimToNull(str);
-	if (str == null) {
+	if (str == null)
 	    return null;
-	}
 
 	try {
 	    long value = Long.parseLong(str);
 
-	    if (!ValueUtils.isIntRange(value)) {
+	    if (!ValueUtils.isIntRange(value))
 		throw toNumberOverflowError(str);
-	    }
+
 	    return Integer.valueOf((int) value);
 
 	} catch (NumberFormatException ex) {

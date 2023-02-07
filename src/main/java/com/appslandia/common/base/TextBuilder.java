@@ -41,9 +41,9 @@ public class TextBuilder implements Serializable, CharSequence {
     }
 
     public TextBuilder appendlnIfNotEmpty() {
-	if (this.sb.length() > 0) {
+	if (this.sb.length() > 0)
 	    return appendln(1);
-	}
+
 	return this;
     }
 

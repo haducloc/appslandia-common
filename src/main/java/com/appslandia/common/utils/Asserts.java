@@ -34,122 +34,122 @@ import com.appslandia.common.base.AssertException;
 public class Asserts {
 
     public static void isTrue(boolean expression) {
-	if (!expression) {
+	if (!expression)
 	    throw new AssertException("The expression must be true.");
-	}
+
     }
 
     public static void isTrue(boolean expression, String errorMessage) {
-	if (!expression) {
+	if (!expression)
 	    throw new AssertException(errorMessage);
-	}
+
     }
 
     public static void isTrue(boolean expression, Supplier<String> errorMessage) {
-	if (!expression) {
+	if (!expression)
 	    throw new AssertException(errorMessage.get());
-	}
+
     }
 
     public static <T> T notNull(T obj) {
-	if (obj == null) {
+	if (obj == null)
 	    throw new AssertException("The obj must be not null.");
-	}
+
 	return obj;
     }
 
     public static <T> T notNull(T obj, String errorMessage) {
-	if (obj == null) {
+	if (obj == null)
 	    throw new AssertException(errorMessage);
-	}
+
 	return obj;
     }
 
     public static <T> T notNull(T obj, Supplier<String> errorMessage) {
-	if (obj == null) {
+	if (obj == null)
 	    throw new AssertException(errorMessage.get());
-	}
+
 	return obj;
     }
 
     public static void isNull(Object obj) {
-	if (obj != null) {
+	if (obj != null)
 	    throw new AssertException("The obj must be null.");
-	}
+
     }
 
     public static void isNull(Object obj, String errorMessage) {
-	if (obj != null) {
+	if (obj != null)
 	    throw new AssertException(errorMessage);
-	}
+
     }
 
     public static void isNull(Object obj, Supplier<String> errorMessage) {
-	if (obj != null) {
+	if (obj != null)
 	    throw new AssertException(errorMessage.get());
-	}
+
     }
 
     public static <T> T[] hasElements(T[] array) {
-	if ((array == null) || (array.length == 0)) {
+	if ((array == null) || (array.length == 0))
 	    throw new AssertException("The array must have elements.");
-	}
+
 	return array;
     }
 
     public static <T> T[] hasElements(T[] array, String errorMessage) {
-	if ((array == null) || (array.length == 0)) {
+	if ((array == null) || (array.length == 0))
 	    throw new AssertException(errorMessage);
-	}
+
 	return array;
     }
 
     public static <T> T[] hasElements(T[] elements, Supplier<String> errorMessage) {
-	if ((elements == null) || (elements.length == 0)) {
+	if ((elements == null) || (elements.length == 0))
 	    throw new AssertException(errorMessage.get());
-	}
+
 	return elements;
     }
 
     public static <T extends Collection<?>> T hasElements(T collection) {
-	if ((collection == null) || (collection.size() == 0)) {
+	if ((collection == null) || (collection.size() == 0))
 	    throw new AssertException("The collection must have elements.");
-	}
+
 	return collection;
     }
 
     public static <T extends Collection<?>> T hasElements(T collection, String errorMessage) {
-	if ((collection == null) || (collection.size() == 0)) {
+	if ((collection == null) || (collection.size() == 0))
 	    throw new AssertException(errorMessage);
-	}
+
 	return collection;
     }
 
     public static <T extends Collection<?>> T hasElements(T collection, Supplier<String> errorMessage) {
-	if ((collection == null) || (collection.size() == 0)) {
+	if ((collection == null) || (collection.size() == 0))
 	    throw new AssertException(errorMessage.get());
-	}
+
 	return collection;
     }
 
     public static <M extends Map<?, ?>> M hasEntries(M map) {
-	if ((map == null) || (map.size() == 0)) {
+	if ((map == null) || (map.size() == 0))
 	    throw new IllegalArgumentException("The map must have entries.");
-	}
+
 	return map;
     }
 
     public static <M extends Map<?, ?>> M hasEntries(M map, String errorMessage) {
-	if ((map == null) || (map.size() == 0)) {
+	if ((map == null) || (map.size() == 0))
 	    throw new IllegalArgumentException(errorMessage);
-	}
+
 	return map;
     }
 
     public static <M extends Map<?, ?>> M hasEntries(M map, Supplier<String> errorMessage) {
-	if ((map == null) || (map.size() == 0)) {
+	if ((map == null) || (map.size() == 0))
 	    throw new IllegalArgumentException(errorMessage.get());
-	}
+
 	return map;
     }
 }

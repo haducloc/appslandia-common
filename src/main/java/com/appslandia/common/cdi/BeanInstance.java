@@ -65,9 +65,9 @@ public class BeanInstance<T> {
     }
 
     public T get() {
-	if (this.destroyed.get()) {
+	if (this.destroyed.get())
 	    throw new AssertException("The instance is already destroyed.");
-	}
+
 	return this.obj;
     }
 }

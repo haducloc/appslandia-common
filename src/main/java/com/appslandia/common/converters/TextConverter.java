@@ -51,9 +51,9 @@ public class TextConverter implements Converter<String> {
     @Override
     public String parse(String str, FormatProvider formatProvider) throws ConverterException {
 	str = StringUtils.trimToNull(str);
-	if (str == null) {
+	if (str == null)
 	    return null;
-	}
+
 	return NormalizeUtils.normalizeText(str);
     }
 }

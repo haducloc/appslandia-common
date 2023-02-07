@@ -74,9 +74,9 @@ public class SYSTest {
 
     @Test
     public void test_resolve_env() {
-	if (System.getenv("TMP") == null) {
+	if (System.getenv("TMP") == null)
 	    return;
-	}
+
 	try {
 	    String resolvedValue = SYS.resolve("${env.TMP}");
 	    Assertions.assertNotNull(resolvedValue);
@@ -114,9 +114,9 @@ public class SYSTest {
     @SuppressWarnings("el-syntax")
     @Test
     public void test_resolve_prop_env() {
-	if (System.getenv("TMP") == null) {
+	if (System.getenv("TMP") == null)
 	    return;
-	}
+
 	try {
 	    String resolvedValue = SYS.resolve("${__sys__test__tmp__,env.TMP}");
 	    Assertions.assertNotNull(resolvedValue);
