@@ -65,11 +65,10 @@ public class SimplePoolTest {
 			try {
 
 			    int n = RandomUtils.nextInt(1, 2);
-			    if (n == 1) {
+			    if (n == 1)
 				pool.put(new Object());
-			    } else {
+			    else
 				pool.get();
-			    }
 
 			} catch (Exception ex) {
 			    Assertions.fail(ex.getMessage());
