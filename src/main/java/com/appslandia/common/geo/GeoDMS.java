@@ -99,4 +99,14 @@ public class GeoDMS {
 
 	return new GeoDMS(Math.abs(longitude), Double.compare(longitude, 0.0) >= 0 ? Direction.EAST : Direction.WEST);
     }
+
+    public static GeoDMS toLatDMS(int degrees, int minutes, double seconds) {
+	double decimalDegrees = GeoUtils.toDecimalDegrees(degrees, minutes, seconds);
+	return toLatDMS(decimalDegrees);
+    }
+
+    public static GeoDMS toLongDMS(int degrees, int minutes, double seconds) {
+	double decimalDegrees = GeoUtils.toDecimalDegrees(degrees, minutes, seconds);
+	return toLongDMS(decimalDegrees);
+    }
 }
