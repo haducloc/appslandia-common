@@ -30,7 +30,10 @@ import com.appslandia.common.utils.STR;
  */
 public class DMSLocation {
 
+    // Y: -90 and +90 degrees
     final GeoDMS latitude;
+
+    // X: -180 and +180 degrees
     final GeoDMS longitude;
 
     public DMSLocation(double latitude, double longitude) {
