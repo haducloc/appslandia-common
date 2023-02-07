@@ -77,5 +77,4 @@ public @interface MaxLength {
 	    return true;
 	}
     }
-
 }

@@ -75,5 +75,4 @@ public @interface BoolType {
 	    return false;
 	}
     }
-
 }

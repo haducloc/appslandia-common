@@ -80,5 +80,4 @@ public @interface ValidInts {
 	    return false;
 	}
     }
-
 }

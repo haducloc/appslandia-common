@@ -66,5 +66,4 @@ public class UUIDGenerator implements TextGenerator {
 	long hi = 1L << (digits * 4);
 	return Long.toHexString(hi | (val & (hi - 1))).substring(1);
     }
-
 }

@@ -89,5 +89,4 @@ public class DoubleConverter extends NumberConverter<Double> {
 
 	throw toParsingError(str, getTargetType().getName());
     }
-
 }

@@ -79,5 +79,4 @@ public @interface ValidStrings {
 	    return false;
 	}
     }
-
 }

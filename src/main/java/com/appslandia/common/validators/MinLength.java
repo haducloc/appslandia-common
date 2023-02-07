@@ -77,5 +77,4 @@ public @interface MinLength {
 	    return true;
 	}
     }
-
 }
