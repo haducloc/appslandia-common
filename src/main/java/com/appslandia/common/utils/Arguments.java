@@ -130,21 +130,21 @@ public class Arguments {
 	return collection;
     }
 
-    public static <K, V> Map<K, V> hasEntries(Map<K, V> map) {
+    public static <M extends Map<?, ?>> M hasEntries(M map) {
 	if ((map == null) || (map.size() == 0)) {
 	    throw new IllegalArgumentException("The map must have entries.");
 	}
 	return map;
     }
 
-    public static <K, V> Map<K, V> hasEntries(Map<K, V> map, String errorMessage) {
+    public static <M extends Map<?, ?>> M hasEntries(M map, String errorMessage) {
 	if ((map == null) || (map.size() == 0)) {
 	    throw new IllegalArgumentException(errorMessage);
 	}
 	return map;
     }
 
-    public static <K, V> Map<K, V> hasEntries(Map<K, V> map, Supplier<String> errorMessage) {
+    public static <M extends Map<?, ?>> M hasEntries(M map, Supplier<String> errorMessage) {
 	if ((map == null) || (map.size() == 0)) {
 	    throw new IllegalArgumentException(errorMessage.get());
 	}
