@@ -95,8 +95,6 @@ public class GeoLocation {
     }
 
     public String toString(int scale) {
-	Asserts.isTrue(scale >= 0 && scale <= 8);
-
 	String fmt = STR.fmt("%.{}f, %.{}f", scale, scale);
 	return String.format(fmt, this.latitude, this.longitude);
     }
