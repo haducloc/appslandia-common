@@ -81,7 +81,6 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	    this.cipher = Cipher.getInstance(this.transformation);
 	else
 	    this.cipher = Cipher.getInstance(this.transformation, this.provider);
-
     }
 
     private boolean isIVSpec() {

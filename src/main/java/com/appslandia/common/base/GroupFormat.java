@@ -102,7 +102,6 @@ public class GroupFormat {
 		pos += group.length;
 	    } else
 		sb.append(group.text);
-
 	}
 	return sb.toString();
     }

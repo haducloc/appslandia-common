@@ -55,7 +55,6 @@ public class BitUtils {
 			this.curIterator = bitIterator(bytes[this.curIdx]);
 		    else
 			this.curIterator = Collections.emptyIterator();
-
 		}
 		return this.curIterator;
 	    }

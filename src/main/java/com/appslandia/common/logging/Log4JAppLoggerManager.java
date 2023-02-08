@@ -46,7 +46,6 @@ public class Log4JAppLoggerManager extends AppLoggerManager {
     public void close() {
 	if (this.shutdownOnClose)
 	    LogManager.shutdown();
-
     }
 
     @Override
@@ -72,7 +71,6 @@ public class Log4JAppLoggerManager extends AppLoggerManager {
 	    org.apache.logging.log4j.Level l = toImplLevel(level);
 	    if (isLoggable(l))
 		this.logger.log(l, message);
-
 	}
 
 	@Override
@@ -80,7 +78,6 @@ public class Log4JAppLoggerManager extends AppLoggerManager {
 	    org.apache.logging.log4j.Level l = toImplLevel(level);
 	    if (isLoggable(l))
 		this.logger.log(l, message, exception);
-
 	}
 
 	@Override
@@ -88,7 +85,6 @@ public class Log4JAppLoggerManager extends AppLoggerManager {
 	    org.apache.logging.log4j.Level l = toImplLevel(level);
 	    if (isLoggable(l))
 		this.logger.log(l, msgSupplier);
-
 	}
 
 	@Override
@@ -96,7 +92,6 @@ public class Log4JAppLoggerManager extends AppLoggerManager {
 	    org.apache.logging.log4j.Level l = toImplLevel(level);
 	    if (isLoggable(l))
 		this.logger.log(l, msgSupplier, exception);
-
 	}
 
 	private boolean isLoggable(org.apache.logging.log4j.Level level) {

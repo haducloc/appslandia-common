@@ -35,13 +35,11 @@ public class CryptoUtils {
     public static void clear(char[] chars) {
 	if (chars != null)
 	    Arrays.fill(chars, ('0'));
-
     }
 
     public static void clear(byte[] bytes) {
 	if (bytes != null)
 	    Arrays.fill(bytes, (byte) 0);
-
     }
 
     public static char[] toCharArray(byte[] src) {

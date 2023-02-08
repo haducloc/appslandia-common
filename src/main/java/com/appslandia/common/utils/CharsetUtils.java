@@ -48,7 +48,6 @@ public class CharsetUtils {
 
 	    if (item.toLowerCase(Locale.ENGLISH).startsWith("charset="))
 		return item.substring(8);
-
 	}
 	return defaultValue;
     }

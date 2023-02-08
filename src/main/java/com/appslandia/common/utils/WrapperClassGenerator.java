@@ -106,7 +106,6 @@ public class WrapperClassGenerator {
 		    sb.append(", ");
 		Parameter parameter = params[i];
 		sb.append(parameter.getParameterizedType().getTypeName()).append(" ").append(parameter.getName());
-
 	    }
 	    sb.append(")");
 
@@ -205,7 +204,6 @@ public class WrapperClassGenerator {
 		if (m1.getName().startsWith(priority)) {
 		    if (m2.getName().startsWith(priority) == false)
 			return -1;
-
 		}
 		if (m1.getName().startsWith(priority) == false) {
 		    if (m2.getName().startsWith(priority))
@@ -249,7 +247,6 @@ public class WrapperClassGenerator {
 	for (Entry<String, Integer> entry : namePriorityMap.entrySet()) {
 	    if (methodName.toLowerCase().contains(entry.getKey().toLowerCase()))
 		return entry.getValue();
-
 	}
 	return null;
     }

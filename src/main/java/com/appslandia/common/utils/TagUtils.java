@@ -73,7 +73,6 @@ public class TagUtils {
 
 	    if ((tag != null) && !result.contains(tag))
 		result.add(tag);
-
 	}
 
 	if (result.isEmpty())

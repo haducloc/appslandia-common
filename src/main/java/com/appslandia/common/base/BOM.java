@@ -81,12 +81,10 @@ public enum BOM {
 
 	    if (BOM.UTF_32LE.matches(bom))
 		return BOM.UTF_32LE;
-
 	}
 	if (c >= 3) {
 	    if (BOM.UTF_8.matches(bom))
 		return BOM.UTF_8;
-
 	}
 	if (c >= 2) {
 	    if (BOM.UTF_16BE.matches(bom))
@@ -94,7 +92,6 @@ public enum BOM {
 
 	    if (BOM.UTF_16LE.matches(bom))
 		return BOM.UTF_16LE;
-
 	}
 	return null;
     }

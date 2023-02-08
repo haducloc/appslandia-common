@@ -36,19 +36,16 @@ public class Asserts {
     public static void isTrue(boolean expression) {
 	if (!expression)
 	    throw new AssertException("The expression must be true.");
-
     }
 
     public static void isTrue(boolean expression, String errorMessage) {
 	if (!expression)
 	    throw new AssertException(errorMessage);
-
     }
 
     public static void isTrue(boolean expression, Supplier<String> errorMessage) {
 	if (!expression)
 	    throw new AssertException(errorMessage.get());
-
     }
 
     public static <T> T notNull(T obj) {
@@ -75,19 +72,16 @@ public class Asserts {
     public static void isNull(Object obj) {
 	if (obj != null)
 	    throw new AssertException("The obj must be null.");
-
     }
 
     public static void isNull(Object obj, String errorMessage) {
 	if (obj != null)
 	    throw new AssertException(errorMessage);
-
     }
 
     public static void isNull(Object obj, Supplier<String> errorMessage) {
 	if (obj != null)
 	    throw new AssertException(errorMessage.get());
-
     }
 
     public static <T> T[] hasElements(T[] array) {

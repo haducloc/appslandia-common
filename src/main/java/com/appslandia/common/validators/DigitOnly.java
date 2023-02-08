@@ -77,7 +77,6 @@ public @interface DigitOnly {
 	    if (this.length > 0) {
 		if (value.length() != this.length)
 		    return false;
-
 	    }
 	    return DIGITS_PATTERN.matcher(value).matches();
 	}

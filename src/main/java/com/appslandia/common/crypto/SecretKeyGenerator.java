@@ -64,7 +64,6 @@ public class SecretKeyGenerator extends InitializeObject {
 	    this.secretKeyFactory = SecretKeyFactory.getInstance(this.algorithm);
 	else
 	    this.secretKeyFactory = SecretKeyFactory.getInstance(this.algorithm, this.provider);
-
     }
 
     public byte[] generate(char[] password, byte[] salt, int iterationCount, int keySize) throws CryptoException {

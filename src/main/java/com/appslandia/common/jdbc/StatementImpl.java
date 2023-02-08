@@ -64,7 +64,6 @@ public class StatementImpl implements PreparedStatement {
 	try (ResultSet rs = this.stat.getGeneratedKeys()) {
 	    if (rs.next())
 		return rs.getLong(1);
-
 	}
 	throw new SQLException("executeGeneratedKey");
     }
@@ -81,7 +80,6 @@ public class StatementImpl implements PreparedStatement {
 	try (ResultSet rs = this.stat.getGeneratedKeys()) {
 	    if (rs.next())
 		return rs.getLong(1);
-
 	}
 	throw new SQLException("executeGeneratedKey");
     }
@@ -516,7 +514,6 @@ public class StatementImpl implements PreparedStatement {
 	    setNull(parameterName, Types.BIT);
 	else
 	    setBoolean(parameterName, value);
-
     }
 
     public void setByte2(String parameterName, Byte value) throws java.sql.SQLException {
@@ -524,7 +521,6 @@ public class StatementImpl implements PreparedStatement {
 	    setNull(parameterName, Types.TINYINT);
 	else
 	    setByte(parameterName, value);
-
     }
 
     public void setShort2(String parameterName, Short value) throws java.sql.SQLException {
@@ -532,7 +528,6 @@ public class StatementImpl implements PreparedStatement {
 	    setNull(parameterName, Types.SMALLINT);
 	else
 	    setShort(parameterName, value);
-
     }
 
     public void setInt2(String parameterName, Integer value) throws java.sql.SQLException {
@@ -540,7 +535,6 @@ public class StatementImpl implements PreparedStatement {
 	    setNull(parameterName, Types.INTEGER);
 	else
 	    setInt(parameterName, value);
-
     }
 
     public void setLong2(String parameterName, Long value) throws java.sql.SQLException {
@@ -548,7 +542,6 @@ public class StatementImpl implements PreparedStatement {
 	    setNull(parameterName, Types.BIGINT);
 	else
 	    setLong(parameterName, value);
-
     }
 
     public void setFloat2(String parameterName, Float value) throws java.sql.SQLException {
@@ -556,7 +549,6 @@ public class StatementImpl implements PreparedStatement {
 	    setNull(parameterName, Types.REAL);
 	else
 	    setFloat(parameterName, value);
-
     }
 
     public void setDouble2(String parameterName, Double value) throws java.sql.SQLException {
@@ -564,7 +556,6 @@ public class StatementImpl implements PreparedStatement {
 	    setNull(parameterName, Types.DOUBLE);
 	else
 	    setDouble(parameterName, value);
-
     }
 
     // Java 8+ Date/Time
@@ -1044,7 +1035,6 @@ public class StatementImpl implements PreparedStatement {
 	    }
 	} else
 	    this.stat.setObject(parameterIndex, x);
-
     }
 
     @Override

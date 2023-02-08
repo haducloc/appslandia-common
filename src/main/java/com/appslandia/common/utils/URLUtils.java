@@ -125,7 +125,6 @@ public class URLUtils {
 
 	    if (!parsePair(pair, params, parseArray))
 		throw new IllegalArgumentException(STR.fmt("queryString '{}' is invalid.", queryString));
-
 	}
 	return params;
     }
@@ -156,7 +155,6 @@ public class URLUtils {
 		params.put(name, new String[] { (String) addedValue, decodedVal });
 	    else
 		params.put(name, ArrayUtils.append((String[]) addedValue, new String[] { decodedVal }));
-
 	}
 	return true;
     }

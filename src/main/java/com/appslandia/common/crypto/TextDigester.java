@@ -70,7 +70,6 @@ public class TextDigester extends TextBasedCrypto {
     public void destroy() throws DestroyException {
 	if (this.digester != null)
 	    this.digester.destroy();
-
     }
 
     public TextDigester setDigester(Digester digester) {

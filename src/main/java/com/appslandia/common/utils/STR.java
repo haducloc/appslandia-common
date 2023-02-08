@@ -108,14 +108,12 @@ public class STR {
 		    out.append(ObjectUtils.asString(parameterValue));
 		} else
 		    out.append(parameterValue.toString());
-
 	    }
 
 	    prevEnd = matcher.end();
 	}
 	if (prevEnd < str.length())
 	    out.append(str.substring(prevEnd));
-
     }
 
     private static final Pattern SEQ_HOLDER_PATTERN = Pattern.compile("\\{}");
@@ -154,7 +152,6 @@ public class STR {
 		    out.append(ObjectUtils.asString(entryValue));
 		} else
 		    out.append(entryValue.toString());
-
 	    }
 
 	    prevEnd = matcher.end();

@@ -34,19 +34,16 @@ public class Arguments {
     public static void isTrue(boolean expression) {
 	if (!expression)
 	    throw new IllegalArgumentException("The expression must be true.");
-
     }
 
     public static void isTrue(boolean expression, String errorMessage) {
 	if (!expression)
 	    throw new IllegalArgumentException(errorMessage);
-
     }
 
     public static void isTrue(boolean expression, Supplier<String> errorMessage) {
 	if (!expression)
 	    throw new IllegalArgumentException(errorMessage.get());
-
     }
 
     public static <T> T notNull(T obj) {
@@ -73,19 +70,16 @@ public class Arguments {
     public static void isNull(Object obj) {
 	if (obj != null)
 	    throw new IllegalArgumentException("The obj must be null.");
-
     }
 
     public static void isNull(Object obj, String errorMessage) {
 	if (obj != null)
 	    throw new IllegalArgumentException(errorMessage);
-
     }
 
     public static void isNull(Object obj, Supplier<String> errorMessage) {
 	if (obj != null)
 	    throw new IllegalArgumentException(errorMessage.get());
-
     }
 
     public static <T> T[] hasElements(T[] array) {

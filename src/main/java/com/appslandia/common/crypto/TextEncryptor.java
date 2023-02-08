@@ -69,7 +69,6 @@ public class TextEncryptor extends TextBasedCrypto {
     public void destroy() throws DestroyException {
 	if (this.encryptor != null)
 	    this.encryptor.destroy();
-
     }
 
     public TextEncryptor setEncryptor(Encryptor encryptor) {

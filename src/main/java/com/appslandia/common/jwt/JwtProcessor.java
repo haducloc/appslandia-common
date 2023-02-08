@@ -58,7 +58,6 @@ public class JwtProcessor extends InitializeObject {
 
 	if (this.jwtSigner != null)
 	    this.jwtSigner.destroy();
-
     }
 
     public JwtHeader newHeader() {
@@ -117,7 +116,6 @@ public class JwtProcessor extends InitializeObject {
 
 	    if (!this.jwtSigner.verify(dataToSign.getBytes(StandardCharsets.UTF_8), BaseEncoder.BASE64_URL.decode(parts[2])))
 		throw new JwtException("JWT signature verification failed.");
-
 	}
 
 	// Header

@@ -71,7 +71,6 @@ public @interface BitMask {
 		this.max = Long.MAX_VALUE;
 	    else
 		this.max = (1 << size) - 1;
-
 	}
 
 	@Override
@@ -86,7 +85,6 @@ public @interface BitMask {
 	    if (this.max > 0) {
 		if (longValue > max)
 		    return false;
-
 	    }
 	    return true;
 	}

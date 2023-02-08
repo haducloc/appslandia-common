@@ -45,7 +45,6 @@ public class ThreadLocalStorage<T> {
 	    this.holder = new ThreadLocal<>();
 	else
 	    this.holder = new InheritableThreadLocal<>();
-
     }
 
     public T get() {
@@ -62,7 +61,6 @@ public class ThreadLocalStorage<T> {
 	    this.holder.remove();
 	else
 	    this.holder.set(value);
-
     }
 
     public T remove() {

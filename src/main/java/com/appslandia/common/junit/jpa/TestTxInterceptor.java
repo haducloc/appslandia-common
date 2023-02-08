@@ -182,7 +182,6 @@ public abstract class TestTxInterceptor implements Serializable {
 	    if (!inTrans) {
 		if (willRollbackOn(ex, tx.rollbackOn(), tx.dontRollbackOn()))
 		    et.rollback();
-
 	    }
 
 	    throw ex;
@@ -197,7 +196,6 @@ public abstract class TestTxInterceptor implements Serializable {
 	    return SharedEmfTestEntityManagerExtension.emHolder.get();
 	else
 	    return TestEntityManagerExtension.emHolder.get();
-
     }
 
     protected EntityManager storeNewEm() {
@@ -205,7 +203,6 @@ public abstract class TestTxInterceptor implements Serializable {
 	    return SharedEmfTestEntityManagerExtension.newEntityManager();
 	else
 	    return TestEntityManagerExtension.newEntityManager();
-
     }
 
     protected void setEm(EntityManager em) {
@@ -213,7 +210,6 @@ public abstract class TestTxInterceptor implements Serializable {
 	    SharedEmfTestEntityManagerExtension.emHolder.set(em);
 	else
 	    TestEntityManagerExtension.emHolder.set(em);
-
     }
 
     protected boolean willRollbackOn(Exception ex, Class<?>[] rollbackOn, Class<?>[] dontRollbackOn) {
@@ -234,7 +230,6 @@ public abstract class TestTxInterceptor implements Serializable {
 		    return false;
 		} else if (dontRollbackOnClass.isAssignableFrom(rollbackOnClass))
 		    return true;
-
 	    }
 	    return true;
 	}
@@ -251,7 +246,6 @@ public abstract class TestTxInterceptor implements Serializable {
 		    return false;
 		} else if (dontRollbackOnClass.isAssignableFrom(rollbackOnClass))
 		    return true;
-
 	    }
 
 	    if (rollbackOnClass.equals(ex.getClass()) || rollbackOnClass.isAssignableFrom(ex.getClass()))
@@ -265,10 +259,9 @@ public abstract class TestTxInterceptor implements Serializable {
 	Class<?> closestMatch = null;
 
 	for (Class<?> exClass : exClasses) {
-	    if (exClass.equals(exceptionClass)) {
+	    if (exClass.equals(exceptionClass))
 		return exClass;
 
-	    }
 	    if (exClass.isAssignableFrom(exceptionClass)) {
 		if (closestMatch == null || closestMatch.isAssignableFrom(exClass))
 		    closestMatch = exClass;

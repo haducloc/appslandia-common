@@ -72,7 +72,6 @@ public class PasswordDigester extends TextDigester {
 	    this.secretKeyFactory = SecretKeyFactory.getInstance(this.secretKeyAlgorithm);
 	else
 	    this.secretKeyFactory = SecretKeyFactory.getInstance(this.secretKeyAlgorithm, this.provider);
-
     }
 
     @Override

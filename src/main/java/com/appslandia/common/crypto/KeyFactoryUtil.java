@@ -69,7 +69,6 @@ public class KeyFactoryUtil extends InitializeObject {
 	    this.keyFactory = KeyFactory.getInstance(this.algorithm);
 	else
 	    this.keyFactory = KeyFactory.getInstance(this.algorithm, this.provider);
-
     }
 
     public PrivateKey toPrivateKey(String keyInPem) throws CryptoException {

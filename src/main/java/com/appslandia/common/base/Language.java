@@ -93,7 +93,6 @@ public class Language extends InitializeObject {
 
 	if (this.attributes != null)
 	    this.attributes = Collections.unmodifiableMap(this.attributes);
-
     }
 
     @Override

@@ -74,7 +74,6 @@ public @interface ValidStrings {
 	    for (String validValue : this.validValues) {
 		if (validValue.equalsIgnoreCase(value))
 		    return true;
-
 	    }
 	    return false;
 	}

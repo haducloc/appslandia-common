@@ -47,7 +47,6 @@ public class BOMInputStream extends InputStream {
 
 	if (this.bom != null)
 	    this.in.skip(this.bom.length());
-
     }
 
     public BOM getBOM() {

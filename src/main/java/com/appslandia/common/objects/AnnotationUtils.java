@@ -64,7 +64,6 @@ public class AnnotationUtils {
 	for (Annotation ann : annotations) {
 	    if (ann.annotationType().getDeclaredAnnotation(Qualifier.class) != null)
 		qualifiers.add(ann);
-
 	}
 	return !qualifiers.isEmpty() ? qualifiers.toArray(new Annotation[qualifiers.size()]) : ReflectionUtils.EMPTY_ANNOTATIONS;
     }

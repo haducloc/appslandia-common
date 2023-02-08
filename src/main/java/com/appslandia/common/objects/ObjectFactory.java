@@ -107,7 +107,6 @@ public class ObjectFactory extends InitializeObject {
 
 		    if (count > 1)
 			throw new ObjectException(STR.fmt("Ambiguous dependency: type={}, qualifiers={}, member={}.", type, Arrays.toString(qualifiers), toMemberInfo(member)));
-
 		}
 
 	    }.traverse(inst.definition.getImplClass());
@@ -119,7 +118,6 @@ public class ObjectFactory extends InitializeObject {
 	for (ObjectInstance inst : this.instances) {
 	    if ((inst.definition.hasType(type) || (type == Object.class)) && AnnotationUtils.equals(inst.definition.getQualifiers(), qualifiers))
 		count++;
-
 	}
 	return count;
     }
@@ -217,7 +215,6 @@ public class ObjectFactory extends InitializeObject {
 
 	    if ((inst.definition.hasType(type) || (type == Object.class)) && AnnotationUtils.equals(inst.definition.getQualifiers(), qualifiers))
 		iter.remove();
-
 	}
 	return this;
     }
@@ -318,7 +315,6 @@ public class ObjectFactory extends InitializeObject {
 		}
 		if (ctor.getParameterCount() == 0)
 		    emptyCtor = ctor;
-
 	    }
 	    if ((injectCtor == null) && (emptyCtor == null))
 		throw new ObjectException(STR.fmt("Couldn't instantiate '{}'.", definition.getImplClass()));
@@ -346,7 +342,6 @@ public class ObjectFactory extends InitializeObject {
 
 	    if ((inst.definition.hasType(type) || (type == Object.class)) && AnnotationUtils.hasAnnotations(inst.definition.getQualifiers(), subQualifiers))
 		insts.add(inst);
-
 	}
 	return insts;
     }
@@ -499,7 +494,6 @@ public class ObjectFactory extends InitializeObject {
 		for (Field field : fields) {
 		    if (field.getDeclaredAnnotation(Inject.class) != null)
 			onField(field);
-
 		}
 		clazz = clazz.getSuperclass();
 	    }
@@ -512,7 +506,6 @@ public class ObjectFactory extends InitializeObject {
 		    for (Method method : methods) {
 			if (method.getDeclaredAnnotation(Inject.class) != null)
 			    onMethod(method);
-
 		    }
 		    clazz = clazz.getSuperclass();
 		}

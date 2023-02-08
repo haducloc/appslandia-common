@@ -48,7 +48,6 @@ public class SplitUtils {
 	    item = item.trim();
 	    if (!item.isEmpty())
 		list.add(item);
-
 	}
 	return list.toArray(new String[list.size()]);
     }
@@ -72,7 +71,6 @@ public class SplitUtils {
 	    String item = str.substring(startIdx).trim();
 	    if (!item.isEmpty())
 		list.add(item);
-
 	}
 	return list.toArray(new String[list.size()]);
     }

@@ -189,7 +189,6 @@ public class ConsoleUtils {
 
 	} else
 	    return readString(promptText, variableName, required, validator);
-
     }
 
     public static String readPassword2(String promptText, String variableName) {
@@ -231,7 +230,6 @@ public class ConsoleUtils {
 	    }
 	} else
 	    return readString2(promptText, variableName, required, validator);
-
     }
 
     public static String readString2(String promptText, String variableName) {

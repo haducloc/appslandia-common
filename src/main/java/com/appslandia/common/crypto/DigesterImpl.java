@@ -62,7 +62,6 @@ public class DigesterImpl extends InitializeObject implements Digester {
 	    this.digest = MessageDigest.getInstance(this.algorithm);
 	else
 	    this.digest = MessageDigest.getInstance(this.algorithm, this.provider);
-
     }
 
     @Override

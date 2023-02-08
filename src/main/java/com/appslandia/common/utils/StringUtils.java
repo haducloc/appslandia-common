@@ -169,7 +169,6 @@ public class StringUtils {
 
 	    if (str.regionMatches(true, offset, substrIgnoreCase, 0, substrIgnoreCase.length()))
 		return true;
-
 	}
 	return false;
     }
@@ -181,7 +180,6 @@ public class StringUtils {
 	    Collection<? extends CharSequence> col = ObjectUtils.cast(elements);
 	    if (col.isEmpty())
 		return null;
-
 	}
 
 	String sep = new String(new char[] { delimiter });

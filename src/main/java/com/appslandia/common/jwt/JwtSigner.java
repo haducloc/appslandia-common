@@ -50,7 +50,6 @@ public class JwtSigner extends InitializeObject {
 
 	if (this != NONE)
 	    Asserts.notNull(this.signer, "signer is required.");
-
     }
 
     public byte[] sign(byte[] message) throws CryptoException {

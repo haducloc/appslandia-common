@@ -56,7 +56,6 @@ public class PbeDigester extends PbeObject implements Digester {
 	    this.mac = Mac.getInstance(this.algorithm);
 	else
 	    this.mac = Mac.getInstance(this.algorithm, this.provider);
-
     }
 
     @Override

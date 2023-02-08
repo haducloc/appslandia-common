@@ -70,7 +70,6 @@ public class ReflectionUtils {
 		if (f.getType() == boolean.class) {
 		    if (f.getName().equals("is" + StringUtils.firstUpperCase(property, Locale.ENGLISH)))
 			return true;
-
 		}
 		return false;
 	    }
@@ -171,7 +170,6 @@ public class ReflectionUtils {
 		t = interfaceClass.getAnnotation(annotationClass);
 		if (t != null)
 		    return t;
-
 	    }
 	    clazz = clazz.getSuperclass();
 	}

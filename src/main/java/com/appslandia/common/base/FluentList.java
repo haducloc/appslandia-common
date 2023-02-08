@@ -120,7 +120,6 @@ public class FluentList<E> implements List<E>, java.io.Serializable {
     void assertNotEmpty() {
 	if (this.list.isEmpty())
 	    throw new NoSuchElementException("The list is empty.");
-
     }
 
     @Override

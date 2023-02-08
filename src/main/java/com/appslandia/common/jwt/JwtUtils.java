@@ -109,7 +109,6 @@ public class JwtUtils {
 	    // Value
 	    if ((entry.getValue() != null) && !isSupportedValue(entry.getValue()))
 		return false;
-
 	}
 	return true;
     }
@@ -120,7 +119,6 @@ public class JwtUtils {
 	    // Value
 	    if ((value != null) && !isSupportedValue(value))
 		return false;
-
 	}
 	return true;
     }
@@ -133,7 +131,6 @@ public class JwtUtils {
 	    // Value
 	    if ((value != null) && !isSupportedValue(value))
 		return false;
-
 	}
 	return true;
     }

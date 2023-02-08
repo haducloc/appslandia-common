@@ -157,7 +157,6 @@ public class CDIUtils {
 
 	    if (beanManager.isStereotype(annotation.annotationType()))
 		annotations.addAll(beanManager.getStereotypeDefinition(annotation.annotationType()));
-
 	}
 	return null;
     }

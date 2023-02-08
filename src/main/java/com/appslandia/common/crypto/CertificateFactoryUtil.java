@@ -63,7 +63,6 @@ public class CertificateFactoryUtil extends InitializeObject {
 	    this.certificateFactory = CertificateFactory.getInstance(this.type);
 	else
 	    this.certificateFactory = CertificateFactory.getInstance(this.type, provider);
-
     }
 
     public X509Certificate toCertificate(InputStream certInDer) throws CryptoException {

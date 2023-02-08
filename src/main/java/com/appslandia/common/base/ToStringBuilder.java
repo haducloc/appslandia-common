@@ -118,7 +118,6 @@ public class ToStringBuilder {
 	    if (field != null) {
 		if (field.getAnnotation(annotationType) != null)
 		    return true;
-
 	    }
 
 	    // value type
@@ -286,7 +285,6 @@ public class ToStringBuilder {
 
 			} else
 			    this.toStringObject(fieldVal, level + 1, builder);
-
 		    }
 
 		} catch (Exception ex) {
@@ -411,7 +409,6 @@ public class ToStringBuilder {
 
 		    } else
 			this.toStringObject(element, level + 1, builder);
-
 		}
 
 	    } catch (Exception ex) {
@@ -554,7 +551,6 @@ public class ToStringBuilder {
 	    if (this.elementType == byte.class) {
 		if (this.index > 128)
 		    return MORE_ELEMENTS;
-
 	    }
 	    return Array.get(this.obj, this.index++);
 	}

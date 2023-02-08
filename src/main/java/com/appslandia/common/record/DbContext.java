@@ -581,7 +581,6 @@ public class DbContext implements AutoCloseable {
     protected void assertTransactional() throws java.sql.SQLException {
 	if (this.conn.getAutoCommit())
 	    throw new SQLException("transactional must be enabled.");
-
     }
 
     private void closeStatements() throws java.sql.SQLException {

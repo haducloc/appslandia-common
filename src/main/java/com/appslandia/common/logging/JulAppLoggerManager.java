@@ -53,7 +53,6 @@ public class JulAppLoggerManager extends AppLoggerManager {
 	    java.util.logging.Level l = toImplLevel(level);
 	    if (this.logger.isLoggable(l))
 		this.logger.log(l, message);
-
 	}
 
 	@Override
@@ -61,7 +60,6 @@ public class JulAppLoggerManager extends AppLoggerManager {
 	    java.util.logging.Level l = toImplLevel(level);
 	    if (this.logger.isLoggable(l))
 		this.logger.log(l, message, exception);
-
 	}
 
 	@Override
@@ -69,7 +67,6 @@ public class JulAppLoggerManager extends AppLoggerManager {
 	    java.util.logging.Level l = toImplLevel(level);
 	    if (this.logger.isLoggable(l))
 		this.logger.log(l, msgSupplier);
-
 	}
 
 	@Override
@@ -77,7 +74,6 @@ public class JulAppLoggerManager extends AppLoggerManager {
 	    java.util.logging.Level l = toImplLevel(level);
 	    if (this.logger.isLoggable(l))
 		this.logger.log(l, exception, msgSupplier);
-
 	}
 
 	static java.util.logging.Level toImplLevel(Level level) {

@@ -56,14 +56,12 @@ public abstract class PbeObject extends InitializeObject {
 
 	if (this.secretKeyGenerator == null)
 	    this.secretKeyGenerator = new SecretKeyGenerator();
-
     }
 
     @Override
     public void destroy() throws DestroyException {
 	if (this.password != null)
 	    CryptoUtils.clear(this.password);
-
     }
 
     protected SecretKey buildSecretKey(final byte[] salt, final String algorithm) throws CryptoException {

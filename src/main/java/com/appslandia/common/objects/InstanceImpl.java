@@ -102,7 +102,6 @@ public class InstanceImpl<T> implements Instance<T> {
 	for (ObjectInstance objInst : this.instances) {
 	    if (AnnotationUtils.hasAnnotations(objInst.definition.getQualifiers(), childQualifiers))
 		sub.add(objInst);
-
 	}
 	return new InstanceImpl<>(this.type, childQualifiers, sub);
     }
