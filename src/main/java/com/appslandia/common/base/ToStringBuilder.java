@@ -336,7 +336,6 @@ public class ToStringBuilder {
 
 		} else
 		    this.toStringObject(element, level + 1, builder);
-
 	    }
 	}
 	if (isFirst)
@@ -374,7 +373,6 @@ public class ToStringBuilder {
 
 		} else
 		    this.toStringObject(entryVal, level + 1, builder);
-
 	    }
 	}
 

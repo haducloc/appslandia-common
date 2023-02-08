@@ -101,7 +101,6 @@ public class Table extends InitializeObject implements Serializable {
 		    isFirst = false;
 		} else
 		    sb.append(", ").append(field.getName());
-
 	    }
 	}
 	sb.append(")");
@@ -116,7 +115,6 @@ public class Table extends InitializeObject implements Serializable {
 		    isFirst = false;
 		} else
 		    sb.append(",").append(field.getParamName());
-
 	    }
 	}
 	sb.append(")");
@@ -138,7 +136,6 @@ public class Table extends InitializeObject implements Serializable {
 		    isFirst = false;
 		} else
 		    sb.append(",").append(field.getName()).append("=").append(field.getParamName());
-
 	    }
 	}
 	sb.append(" WHERE ");
@@ -181,7 +178,6 @@ public class Table extends InitializeObject implements Serializable {
 		    isFirst = false;
 		} else
 		    sqlBuilder.append(" AND ").append(field.getName()).append("=").append(field.getParamName());
-
 	    }
 	}
     }

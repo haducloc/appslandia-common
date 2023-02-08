@@ -40,7 +40,6 @@ public class DecimalUtils {
 		return value;
 	    else
 		return Double.NaN;
-
 	}
     }
 
@@ -54,7 +53,6 @@ public class DecimalUtils {
 		return value;
 	    else
 		return Float.NaN;
-
 	}
     }
 

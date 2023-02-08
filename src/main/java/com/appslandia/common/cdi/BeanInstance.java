@@ -60,7 +60,6 @@ public class BeanInstance<T> {
 		this.instance.destroy(this.obj);
 	    else
 		this.creationalContext.release();
-
 	}
     }
 

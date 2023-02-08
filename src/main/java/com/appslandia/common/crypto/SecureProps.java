@@ -159,7 +159,6 @@ public class SecureProps extends Properties implements Config {
 	} finally {
 	    if (bw != null)
 		bw.close();
-
 	}
     }
 

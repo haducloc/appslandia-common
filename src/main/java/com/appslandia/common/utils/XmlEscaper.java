@@ -110,6 +110,5 @@ public class XmlEscaper {
 	// add rest of un_escaped portion
 	if (start < length)
 	    out.write(srcChars, start, length - start);
-
     }
 }

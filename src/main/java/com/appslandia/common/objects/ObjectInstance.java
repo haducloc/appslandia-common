@@ -55,7 +55,6 @@ public class ObjectInstance {
 	    synchronized (this.mutex) {
 		if ((obj = this.instance) == null)
 		    this.instance = obj = this.factory.apply(this.definition);
-
 	    }
 	}
 	return obj;

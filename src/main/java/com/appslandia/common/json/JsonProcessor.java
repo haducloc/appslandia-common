@@ -81,7 +81,6 @@ public abstract class JsonProcessor extends InitializeObject {
 	    synchronized (MUTEX) {
 		if ((obj = __default) == null)
 		    __default = obj = initJsonProcessor();
-
 	    }
 	}
 	return obj;

@@ -136,7 +136,6 @@ public class ReflectionUtils {
 		    matched = field;
 		    if (!handler.handle(field))
 			return matched;
-
 		}
 	    }
 	    clazz = clazz.getSuperclass();
@@ -155,7 +154,6 @@ public class ReflectionUtils {
 		    matched = m;
 		    if (!handler.handle(m))
 			return matched;
-
 		}
 	    }
 	    clazz = clazz.getSuperclass();

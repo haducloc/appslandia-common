@@ -90,7 +90,6 @@ public abstract class SharedEmfTestEntityManagerExtension implements BeforeEachC
 	    synchronized (MUTEX) {
 		if (emf == null)
 		    emf = createEntityManagerFactory();
-
 	    }
 	}
     }

@@ -103,7 +103,6 @@ public class DeployEnv {
 	    synchronized (MUTEX) {
 		if ((obj = __current) == null)
 		    __current = obj = initDeployEnv();
-
 	    }
 	}
 	return obj;

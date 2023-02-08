@@ -298,7 +298,6 @@ public class JdbcSql extends InitializeObject implements Serializable {
 	    synchronized (MUTEX) {
 		if ((chr = __paramPrefix) == 0)
 		    __paramPrefix = chr = ':';
-
 	    }
 	}
 	return chr;

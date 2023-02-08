@@ -121,7 +121,6 @@ public class InstanceImpl<T> implements Instance<T> {
 	    if (AnnotationUtils.hasAnnotations(objInst.definition.getQualifiers(), childQualifiers)) {
 		if (subtype.isInstance(objInst.getInstance()))
 		    sub.add(objInst);
-
 	    }
 	}
 	return new InstanceImpl<>(subtype, childQualifiers, sub);

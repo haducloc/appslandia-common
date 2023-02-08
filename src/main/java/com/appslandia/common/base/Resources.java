@@ -49,7 +49,6 @@ public class Resources {
 	    synchronized (MUTEX) {
 		if ((obj = bundle) == null)
 		    bundle = obj = LBundle;
-
 	    }
 	}
 	return obj;
@@ -136,7 +135,6 @@ public class Resources {
 			this.next = this.parentKeys.nextElement();
 			if (this.keySet.contains(this.next))
 			    this.next = null;
-
 		    }
 		}
 	    }
@@ -151,7 +149,6 @@ public class Resources {
 		return key;
 	    } else
 		throw new NoSuchElementException();
-
 	}
     }
 }

@@ -210,7 +210,6 @@ public class WrapperClassGenerator {
 		if (m1.getName().startsWith(priority) == false) {
 		    if (m2.getName().startsWith(priority))
 			return 1;
-
 		}
 	    }
 

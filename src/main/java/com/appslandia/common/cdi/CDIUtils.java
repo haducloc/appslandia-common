@@ -124,7 +124,6 @@ public class CDIUtils {
 	    A annotation = bean.getBeanClass().getDeclaredAnnotation(annotationClass);
 	    if (annotation != null)
 		consumer.accept(annotation, bean.getBeanClass());
-
 	}
     }
 

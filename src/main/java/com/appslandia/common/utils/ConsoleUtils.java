@@ -58,7 +58,6 @@ public class ConsoleUtils {
 			__reader = obj = new Scanner(cons.reader());
 		    else
 			__reader = obj = new Scanner(System.in);
-
 		}
 	    }
 	}
@@ -78,7 +77,6 @@ public class ConsoleUtils {
 			__writer = obj = cons.writer();
 		    else
 			__writer = obj = new PrintWriter(System.out, true);
-
 		}
 	    }
 	}

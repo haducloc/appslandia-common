@@ -145,14 +145,14 @@ public class URLEncoding {
 		    char ch = Character.forDigit((ba[j] >> 4) & 0xF, 16);
 
 		    // Use UPPERCASE
-		    if (Character.isLetter(ch)) {
+		    if (Character.isLetter(ch))
 			ch -= caseDiff;
-		    }
+
 		    out.append(ch);
 		    ch = Character.forDigit(ba[j] & 0xF, 16);
-		    if (Character.isLetter(ch)) {
+		    if (Character.isLetter(ch))
 			ch -= caseDiff;
-		    }
+
 		    out.append(ch);
 		}
 		charArrayWriter.reset();
@@ -178,9 +178,9 @@ public class URLEncoding {
 		if (type == EncodeType.URL_PARAM) {
 		    sb.append(' ');
 		    needToChange = true;
-		} else {
+		} else
 		    sb.append(c);
-		}
+
 		i++;
 		break;
 	    case '%':

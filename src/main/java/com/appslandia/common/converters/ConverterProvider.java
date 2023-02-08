@@ -131,7 +131,6 @@ public class ConverterProvider extends InitializeObject {
 	    synchronized (MUTEX) {
 		if ((obj = __default) == null)
 		    __default = obj = initConverterProvider();
-
 	    }
 	}
 	return obj;

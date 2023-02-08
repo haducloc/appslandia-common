@@ -389,7 +389,6 @@ public class StatementImpl implements PreparedStatement {
 		setBoolean(JdbcSql.toParamName(parameterName, i), values[i]);
 	    else
 		setBoolean2(JdbcSql.toParamName(parameterName, i), null);
-
 	}
     }
 
@@ -402,7 +401,6 @@ public class StatementImpl implements PreparedStatement {
 		setByte(JdbcSql.toParamName(parameterName, i), values[i]);
 	    else
 		setByte2(JdbcSql.toParamName(parameterName, i), null);
-
 	}
     }
 
@@ -415,7 +413,6 @@ public class StatementImpl implements PreparedStatement {
 		setShort(JdbcSql.toParamName(parameterName, i), values[i]);
 	    else
 		setShort2(JdbcSql.toParamName(parameterName, i), null);
-
 	}
     }
 
@@ -428,7 +425,6 @@ public class StatementImpl implements PreparedStatement {
 		setInt(JdbcSql.toParamName(parameterName, i), values[i]);
 	    else
 		setInt2(JdbcSql.toParamName(parameterName, i), null);
-
 	}
     }
 
@@ -441,7 +437,6 @@ public class StatementImpl implements PreparedStatement {
 		setLong(JdbcSql.toParamName(parameterName, i), values[i]);
 	    else
 		setLong2(JdbcSql.toParamName(parameterName, i), null);
-
 	}
     }
 
@@ -454,7 +449,6 @@ public class StatementImpl implements PreparedStatement {
 		setFloat(JdbcSql.toParamName(parameterName, i), values[i]);
 	    else
 		setFloat2(JdbcSql.toParamName(parameterName, i), null);
-
 	}
     }
 
@@ -467,7 +461,6 @@ public class StatementImpl implements PreparedStatement {
 		setDouble(JdbcSql.toParamName(parameterName, i), values[i]);
 	    else
 		setDouble2(JdbcSql.toParamName(parameterName, i), null);
-
 	}
     }
 
@@ -1047,7 +1040,6 @@ public class StatementImpl implements PreparedStatement {
 			this.stat.setObject(parameterIndex, par.getValue(), targetSqlType);
 		    else
 			this.stat.setObject(parameterIndex, par.getValue(), targetSqlType, par.getScaleOrLength());
-
 		}
 	    }
 	} else

@@ -67,7 +67,6 @@ public class URLUtils {
 	    Object subVal = Array.get(value, i);
 	    if (subVal != null)
 		sb.append(URLEncoding.encodeParam(subVal.toString()));
-
 	}
     }
 

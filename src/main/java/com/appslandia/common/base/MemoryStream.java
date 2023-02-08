@@ -78,9 +78,9 @@ public class MemoryStream extends OutputStream implements Serializable {
     public void write(byte[] b, int off, int len) throws IOException {
 	if ((off < 0) || (off > b.length) || (len < 0) || ((off + len) > b.length) || ((off + len) < 0)) {
 	    throw new IndexOutOfBoundsException();
-	} else if (len == 0) {
+	} else if (len == 0)
 	    return;
-	}
+
 	byte[] lastBuf = this.nodeList.last.buf;
 	int lenAv = lastBuf.length - this.lastLen;
 

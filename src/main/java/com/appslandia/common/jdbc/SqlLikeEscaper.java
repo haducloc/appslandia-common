@@ -87,7 +87,6 @@ public class SqlLikeEscaper {
 	    synchronized (MUTEX) {
 		if ((obj = __default) == null)
 		    __default = obj = new SqlLikeEscaper(getEscapeSignChar(), getCharsToEscape());
-
 	    }
 	}
 	return obj;
@@ -112,7 +111,6 @@ public class SqlLikeEscaper {
 	    synchronized (MUTEX) {
 		if ((chr = __escapeSignChar) == (char) 0)
 		    __escapeSignChar = chr = '\\';
-
 	    }
 	}
 	return chr;
@@ -137,7 +135,6 @@ public class SqlLikeEscaper {
 	    synchronized (MUTEX) {
 		if ((obj = __charsToEscape) == null)
 		    __charsToEscape = obj = new char[] { '%', '_' };
-
 	    }
 	}
 	return obj.clone();

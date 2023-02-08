@@ -82,7 +82,6 @@ public class PropertyConfig extends ConfigMap {
 	} finally {
 	    if (br != null)
 		br.close();
-
 	}
     }
 
@@ -97,7 +96,6 @@ public class PropertyConfig extends ConfigMap {
 
 	    if (!key.isEmpty())
 		this.map.put(key, !value.isEmpty() ? value : null);
-
 	}
     }
 
@@ -109,7 +107,6 @@ public class PropertyConfig extends ConfigMap {
 	} finally {
 	    if (bw != null)
 		bw.close();
-
 	}
     }
 

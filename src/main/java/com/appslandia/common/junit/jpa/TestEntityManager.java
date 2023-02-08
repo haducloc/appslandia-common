@@ -43,6 +43,5 @@ public class TestEntityManager extends EntityManagerImpl {
 	    return SharedEmfTestEntityManagerExtension.emHolder.val();
 	else
 	    return TestEntityManagerExtension.emHolder.val();
-
     }
 }

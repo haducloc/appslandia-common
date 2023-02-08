@@ -180,7 +180,6 @@ public class Language extends InitializeObject {
 	    synchronized (MUTEX) {
 		if ((obj = __default) == null)
 		    __default = obj = initLanguage();
-
 	    }
 	}
 	return obj;

@@ -67,7 +67,6 @@ public class JpaHints {
 	    synchronized (MUTEX) {
 		if ((obj = __hintMapper) == null)
 		    __hintMapper = obj = initHintMapper();
-
 	    }
 	}
 	return obj;
