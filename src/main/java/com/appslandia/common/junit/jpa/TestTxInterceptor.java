@@ -232,9 +232,9 @@ public abstract class TestTxInterceptor implements Serializable {
 
 		if (rollbackOnClass.isAssignableFrom(dontRollbackOnClass)) {
 		    return false;
-		} else if (dontRollbackOnClass.isAssignableFrom(rollbackOnClass)) {
+		} else if (dontRollbackOnClass.isAssignableFrom(rollbackOnClass))
 		    return true;
-		}
+
 	    }
 	    return true;
 	}
@@ -249,9 +249,9 @@ public abstract class TestTxInterceptor implements Serializable {
 
 		if (rollbackOnClass.isAssignableFrom(dontRollbackOnClass)) {
 		    return false;
-		} else if (dontRollbackOnClass.isAssignableFrom(rollbackOnClass)) {
+		} else if (dontRollbackOnClass.isAssignableFrom(rollbackOnClass))
 		    return true;
-		}
+
 	    }
 
 	    if (rollbackOnClass.equals(ex.getClass()) || rollbackOnClass.isAssignableFrom(ex.getClass()))

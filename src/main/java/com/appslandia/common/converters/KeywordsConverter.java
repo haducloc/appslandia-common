@@ -23,6 +23,7 @@ package com.appslandia.common.converters;
 import com.appslandia.common.base.FormatProvider;
 import com.appslandia.common.base.Out;
 import com.appslandia.common.utils.KeywordUtils;
+import com.appslandia.common.utils.STR;
 import com.appslandia.common.utils.StringUtils;
 
 /**
@@ -59,7 +60,7 @@ public class KeywordsConverter implements Converter<String> {
 	String keywords = KeywordUtils.toKeywords(str, isValid);
 
 	if (!isValid.val())
-	    throw new ConverterException("keywords is invalid format (keywords=" + str + ")", getErrorMsgKey());
+	    throw new ConverterException(STR.fmt("keywords '{}' is invalid.", str), getErrorMsgKey());
 
 	return keywords;
     }

@@ -31,6 +31,7 @@ import java.util.Set;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.ObjectUtils;
+import com.appslandia.common.utils.STR;
 
 import jakarta.enterprise.inject.Instance;
 import jakarta.enterprise.util.TypeLiteral;
@@ -82,10 +83,10 @@ public class InstanceImpl<T> implements Instance<T> {
     @Override
     public T get() {
 	if (isUnsatisfied())
-	    throw new ObjectException("Unsatisfied dependency (type=" + this.type + ", qualifiers=" + Arrays.toString(this.qualifiers));
+	    throw new ObjectException(STR.fmt("Unsatisfied dependency: type={}, qualifiers={}.", this.type, Arrays.toString(this.qualifiers)));
 
 	if (isAmbiguous())
-	    throw new ObjectException("Ambiguous dependency (type=" + this.type + ", qualifiers=" + Arrays.toString(this.qualifiers));
+	    throw new ObjectException(STR.fmt("Ambiguous dependency: type={}, qualifiers={}.", this.type, Arrays.toString(this.qualifiers)));
 
 	return ObjectUtils.cast(this.instances.get(0).getInstance());
     }
