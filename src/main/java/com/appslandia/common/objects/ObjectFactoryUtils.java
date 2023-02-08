@@ -57,6 +57,5 @@ public class ObjectFactoryUtils {
 		return false;
 	    }
 	});
-	// Destroy Prototypes: Not Implemented
     }
 }
