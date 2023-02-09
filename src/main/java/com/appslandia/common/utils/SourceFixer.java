@@ -98,13 +98,14 @@ public class SourceFixer {
 		    }
 		}
 
-		// Add {} to if
+		// Add {} to if/for/while
 
 		for (int i = lines.size() - 1; i >= 0; i--) {
 		    String line = lines.get(i).trim();
 
-		    // if statements
-		    if ((line.startsWith("if (") || line.startsWith("else if (") || line.startsWith("} else if (")) && !line.endsWith("{")) {
+		    // if/for/while statements
+		    if ((line.startsWith("if (") || line.startsWith("else if (") || line.startsWith("} else if (") || line.startsWith("for (") || line.startsWith("while ("))
+			    && !line.endsWith("{")) {
 
 			// Find line j from i + 1
 			// NOT: Empty OR starts with // || && , . (
