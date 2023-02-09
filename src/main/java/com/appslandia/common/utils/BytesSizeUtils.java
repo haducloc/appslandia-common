@@ -44,11 +44,13 @@ public class BytesSizeUtils {
 	int i = 0;
 	while (i < sizeAmt.length()) {
 	    int j = i;
-	    while (Character.isDigit(sizeAmt.charAt(j)) || (sizeAmt.charAt(j) == '.'))
+	    while (Character.isDigit(sizeAmt.charAt(j)) || (sizeAmt.charAt(j) == '.')) {
 		j++;
+	    }
 	    int k = j;
-	    while ((k <= sizeAmt.length() - 1) && (Character.isLetter(sizeAmt.charAt(k)) || sizeAmt.charAt(k) == (' ')))
+	    while ((k <= sizeAmt.length() - 1) && (Character.isLetter(sizeAmt.charAt(k)) || sizeAmt.charAt(k) == (' '))) {
 		k++;
+	    }
 
 	    double amt = Double.parseDouble(sizeAmt.substring(i, j));
 	    String unit = sizeAmt.substring(j, k).trim().toUpperCase(Locale.ENGLISH);

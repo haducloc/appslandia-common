@@ -195,10 +195,11 @@ public class ArrayUtils {
 	if (suffix.length + fromIndex != arr.length) {
 	    return false;
 	}
-	for (int i = 0; i < suffix.length - 1; i++)
+	for (int i = 0; i < suffix.length - 1; i++) {
 	    if (suffix[i] != arr[i + fromIndex]) {
 		return false;
 	    }
+	}
 	return true;
     }
 

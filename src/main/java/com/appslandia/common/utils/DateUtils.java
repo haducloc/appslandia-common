@@ -335,11 +335,13 @@ public class DateUtils {
 
 	while (i < temporalAmt.length()) {
 	    int j = i;
-	    while (Character.isDigit(temporalAmt.charAt(j)) || (temporalAmt.charAt(j) == '.'))
+	    while (Character.isDigit(temporalAmt.charAt(j)) || (temporalAmt.charAt(j) == '.')) {
 		j++;
+	    }
 	    int k = j;
-	    while ((k <= temporalAmt.length() - 1) && (Character.isLetter(temporalAmt.charAt(k)) || (temporalAmt.charAt(k) == (' '))))
+	    while ((k <= temporalAmt.length() - 1) && (Character.isLetter(temporalAmt.charAt(k)) || (temporalAmt.charAt(k) == (' ')))) {
 		k++;
+	    }
 
 	    double amt = Double.parseDouble(temporalAmt.substring(i, j));
 	    String unit = temporalAmt.substring(j, k).trim().toLowerCase(Locale.ENGLISH);
