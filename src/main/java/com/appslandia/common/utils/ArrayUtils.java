@@ -209,8 +209,9 @@ public class ArrayUtils {
 	    throw new NoSuchElementException("min: arr is empty.");
 	}
 	int m = arr[0];
-	for (int i = 1; i < arr.length; i++)
+	for (int i = 1; i < arr.length; i++) {
 	    m = Math.min(m, arr[i]);
+	}
 
 	return m;
     }
@@ -221,8 +222,9 @@ public class ArrayUtils {
 	    throw new NoSuchElementException("max: arr is empty.");
 	}
 	int m = arr[0];
-	for (int i = 1; i < arr.length; i++)
+	for (int i = 1; i < arr.length; i++) {
 	    m = Math.max(m, arr[i]);
+	}
 
 	return m;
     }
@@ -233,8 +235,9 @@ public class ArrayUtils {
 	    throw new NoSuchElementException("min: arr is empty.");
 	}
 	T m = arr[0];
-	for (int i = 1; i < arr.length; i++)
+	for (int i = 1; i < arr.length; i++) {
 	    m = comparator.compare(m, arr[i]) <= 0 ? m : arr[i];
+	}
 
 	return m;
     }
@@ -245,8 +248,9 @@ public class ArrayUtils {
 	    throw new NoSuchElementException("max: arr is empty.");
 	}
 	T m = arr[0];
-	for (int i = 1; i < arr.length; i++)
+	for (int i = 1; i < arr.length; i++) {
 	    m = comparator.compare(m, arr[i]) <= 0 ? arr[i] : m;
+	}
 
 	return m;
     }
