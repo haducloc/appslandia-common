@@ -67,7 +67,7 @@ public class JdbcUtils {
 
     public static Map<String, Object> toParameters(Object[] params) {
 	if (params == null) {
-	    return (Map<String, Object>) null;
+	    return ObjectUtils.castNull();
 	}
 	return IntStream.range(0, params.length).boxed().collect(Collectors.toMap(idx -> Integer.toString(idx), idx -> params[idx]));
     }

@@ -48,6 +48,10 @@ public class ObjectUtils {
 	return (T) obj;
     }
 
+    public static <T> T castNull() {
+	return (T) null;
+    }
+
     public static boolean strEquals(Object a, Object b) {
 	return Objects.equals(toStringOrNull(a), toStringOrNull(b));
     }
