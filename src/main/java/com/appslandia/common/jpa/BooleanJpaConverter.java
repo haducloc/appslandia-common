@@ -57,6 +57,6 @@ public class BooleanJpaConverter implements AttributeConverter<Boolean, Integer>
 	    return Boolean.TRUE;
 	}
 
-	throw new IllegalArgumentException(STR.fmt("Can't convert '{}' to Boolean.", dbData));
+	throw new IllegalArgumentException(STR.fmt("Couldn't convert '{}' to Boolean.", dbData));
     }
 }
