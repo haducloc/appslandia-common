@@ -33,7 +33,6 @@ public class ValueUtils {
 	if ((checkValue == null) || (checkValue < min)) {
 	    return min;
 	}
-
 	return checkValue;
     }
 
@@ -41,7 +40,6 @@ public class ValueUtils {
 	if ((checkValue == null) || (checkValue < min)) {
 	    return min;
 	}
-
 	return checkValue;
     }
 
@@ -49,7 +47,6 @@ public class ValueUtils {
 	if ((checkValue == null) || (checkValue > max)) {
 	    return max;
 	}
-
 	return checkValue;
     }
 
@@ -57,7 +54,6 @@ public class ValueUtils {
 	if ((checkValue == null) || (checkValue > max)) {
 	    return max;
 	}
-
 	return checkValue;
     }
 
@@ -65,11 +61,9 @@ public class ValueUtils {
 	if ((checkValue == null) || (checkValue < min)) {
 	    return min;
 	}
-
 	if (checkValue > max) {
 	    return max;
 	}
-
 	return checkValue;
     }
 
@@ -77,11 +71,9 @@ public class ValueUtils {
 	if ((checkValue == null) || (checkValue < min)) {
 	    return min;
 	}
-
 	if (checkValue > max) {
 	    return max;
 	}
-
 	return checkValue;
     }
 
@@ -89,11 +81,9 @@ public class ValueUtils {
 	if ((checkValue == null) || (Double.compare(checkValue, min) < 0)) {
 	    return min;
 	}
-
 	if (Double.compare(checkValue, max) > 0) {
 	    return max;
 	}
-
 	return checkValue;
     }
 
@@ -103,11 +93,9 @@ public class ValueUtils {
 	if (checkValue == null) {
 	    return null;
 	}
-
 	if (Arrays.stream(validValues).anyMatch(v -> checkValue.equals(v))) {
 	    return checkValue;
 	}
-
 	return null;
     }
 
@@ -117,11 +105,9 @@ public class ValueUtils {
 	if (checkValue == null) {
 	    return null;
 	}
-
 	if (Arrays.stream(validValues).anyMatch(v -> v == checkValue)) {
 	    return checkValue;
 	}
-
 	return null;
     }
 
@@ -143,7 +129,6 @@ public class ValueUtils {
 	if (posDouble != 0d && (posDouble < Float.MIN_VALUE || posDouble > Float.MAX_VALUE)) {
 	    return false;
 	}
-
 	return true;
     }
 
@@ -151,7 +136,6 @@ public class ValueUtils {
 	if ((value < Integer.MIN_VALUE) || (value > Integer.MAX_VALUE)) {
 	    return false;
 	}
-
 	return true;
     }
 
@@ -159,7 +143,6 @@ public class ValueUtils {
 	if ((value < Short.MIN_VALUE) || (value > Short.MAX_VALUE)) {
 	    return false;
 	}
-
 	return true;
     }
 
@@ -167,7 +150,6 @@ public class ValueUtils {
 	if ((value < Byte.MIN_VALUE) || (value > Byte.MAX_VALUE)) {
 	    return false;
 	}
-
 	return true;
     }
 }

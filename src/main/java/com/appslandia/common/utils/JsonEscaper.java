@@ -39,7 +39,6 @@ public class JsonEscaper {
 
 	    ESCAPE_JSON[ch] = sb.toString().toCharArray();
 	}
-
 	ESCAPE_JSON['"'] = "\\\"".toCharArray();
 	ESCAPE_JSON['\\'] = "\\".toCharArray();
 	ESCAPE_JSON['/'] = "\\/".toCharArray();
@@ -67,11 +66,9 @@ public class JsonEscaper {
 	if (value == null) {
 	    return "null";
 	}
-
 	if (value.isEmpty()) {
 	    return "\"\"";
 	}
-
 	StringBuilder out = new StringBuilder((int) (value.length() * 1.25f));
 	out.append('"');
 
@@ -102,7 +99,6 @@ public class JsonEscaper {
 	if (start < length) {
 	    out.append(srcChars, start, length - start);
 	}
-
 	out.append('"');
 	return out.toString();
     }

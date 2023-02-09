@@ -37,7 +37,6 @@ public class PatternUtils {
 	if (regexs.length == 0) {
 	    return EMPTY_PATTERNS;
 	}
-
 	return Arrays.stream(regexs).map(regex -> Pattern.compile(regex)).toArray(Pattern[]::new);
     }
 

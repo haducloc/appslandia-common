@@ -71,11 +71,9 @@ public @interface FixedLength {
 	    if (value == null) {
 		return true;
 	    }
-
 	    if (value.length() != this.length) {
 		return false;
 	    }
-
 	    return true;
 	}
     }

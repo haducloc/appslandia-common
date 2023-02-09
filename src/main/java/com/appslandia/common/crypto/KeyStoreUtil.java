@@ -73,7 +73,6 @@ public class KeyStoreUtil extends InitializeObject {
 	} else {
 	    this.keyStore = KeyStore.getInstance(this.type, this.provider);
 	}
-
 	this.keyStore.load(this.inputStream, this.password);
     }
 
@@ -134,7 +133,6 @@ public class KeyStoreUtil extends InitializeObject {
 	if (password != null) {
 	    this.password = Arrays.copyOf(password, password.length);
 	}
-
 	return this;
     }
 
@@ -165,7 +163,6 @@ public class KeyStoreUtil extends InitializeObject {
 	if (password != null) {
 	    this.protectionParameter = new KeyStore.PasswordProtection(password);
 	}
-
 	return this;
     }
 

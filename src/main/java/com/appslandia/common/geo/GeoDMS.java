@@ -43,7 +43,6 @@ public class GeoDMS {
 	} else {
 	    Asserts.isTrue((decimalDegrees >= -180.0) && (decimalDegrees <= 180.0), "decimalDegrees is invalid.");
 	}
-
 	int d = (int) decimalDegrees;
 	int m = (int) ((decimalDegrees - d) * 60);
 	double s = decimalDegrees * 3600 - d * 3600 - m * 60;
@@ -85,7 +84,6 @@ public class GeoDMS {
 	if ((this.direction == Direction.NORTH) || (this.direction == Direction.EAST)) {
 	    return deg;
 	}
-
 	return -deg;
     }
 

@@ -56,7 +56,6 @@ public class ProviderMap<K, V> extends HashMap<K, V> {
 	if (v != null) {
 	    return v;
 	}
-
 	v = this.factory.apply((K) key);
 	super.put((K) key, v);
 	return v;

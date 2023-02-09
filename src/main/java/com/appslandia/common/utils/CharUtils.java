@@ -46,7 +46,6 @@ public class CharUtils {
 		char[] notRange = charRanges.substring(lastEnd, matcher.start()).toCharArray();
 		chars = (chars == null) ? notRange : ArrayUtils.append(chars, notRange);
 	    }
-
 	    lastEnd = matcher.end();
 
 	    char from = range.charAt(0);
@@ -59,7 +58,6 @@ public class CharUtils {
 	    }
 	    chars = (chars == null) ? newChars : ArrayUtils.append(chars, newChars);
 	}
-
 	if (lastEnd < charRanges.length()) {
 	    char[] notRange = charRanges.substring(lastEnd).toCharArray();
 	    chars = (chars == null) ? notRange : ArrayUtils.append(chars, notRange);
@@ -78,7 +76,6 @@ public class CharUtils {
 	    if (rdLen >= len) {
 		break;
 	    }
-
 	    int rdCount = RandomUtils.nextInt(1, avgLen, random);
 
 	    for (int i = 0; i < rdCount; i++) {
@@ -93,12 +90,10 @@ public class CharUtils {
 		if (rdChars[i] != 0) {
 		    continue;
 		}
-
 		int srcIndex = random.nextInt(sources.length);
 		rdChars[i] = sources[srcIndex][random.nextInt(sources[srcIndex].length)];
 	    }
 	}
-
 	ArrayUtils.shuffle(rdChars, random);
 	return rdChars;
     }

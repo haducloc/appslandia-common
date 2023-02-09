@@ -74,7 +74,6 @@ public class SYS {
 	if (str == null) {
 	    return null;
 	}
-
 	return STR.format(str, (p, expr) -> {
 	    // SYS
 	    String resolvedValue = resolve(expr);
@@ -87,7 +86,6 @@ public class SYS {
 	if (str == null) {
 	    return null;
 	}
-
 	return STR.format(str, (pname, expr) -> {
 	    // Parameters
 	    Object resolvedValue = parameters.get(pname);
@@ -96,7 +94,6 @@ public class SYS {
 	    if (resolvedValue == null) {
 		resolvedValue = resolve(expr);
 	    }
-
 	    return (resolvedValue != null) ? resolvedValue : STR.MISSED_VALUE;
 	});
     }
@@ -105,7 +102,6 @@ public class SYS {
 	if (str == null) {
 	    return null;
 	}
-
 	return STR.format(str, (pname, expr) -> {
 
 	    Object resolvedValue = null;
@@ -116,7 +112,6 @@ public class SYS {
 		if ((0 <= index) && (index < parameters.length)) {
 		    resolvedValue = parameters[index];
 		}
-
 	    } catch (NumberFormatException ex) {
 	    }
 
@@ -124,7 +119,6 @@ public class SYS {
 	    if (resolvedValue == null) {
 		resolvedValue = resolve(expr);
 	    }
-
 	    return (resolvedValue != null) ? resolvedValue : STR.MISSED_VALUE;
 	});
     }
@@ -145,7 +139,6 @@ public class SYS {
 	if (!ENV_VAL_HOLDER_PATTERN.matcher(valueOrExpr).matches()) {
 	    return valueOrExpr;
 	}
-
 	String expr = StringUtils.trimToNull(valueOrExpr.substring(2, valueOrExpr.length() - 1));
 
 	Asserts.notNull(expr);
@@ -163,7 +156,6 @@ public class SYS {
 	    if (colonIdx >= 0) {
 		defaultValue = StringUtils.trimToNull(expr.substring(colonIdx + 1));
 	    }
-
 	    if (StringUtils.startsWith(expr, "env.")) {
 		// ENV
 		return (colonIdx >= 0) ? getEnv(expr.substring(4, colonIdx).trim(), defaultValue) : getEnv(expr.substring(4), defaultValue);
@@ -171,7 +163,6 @@ public class SYS {
 		// PROP
 		return (colonIdx >= 0) ? getProp(expr.substring(0, colonIdx).trim(), defaultValue) : getProp(expr, defaultValue);
 	    }
-
 	} else {
 	    // PROP
 	    String expr1 = expr.substring(0, commaIdx).trim();
@@ -188,7 +179,6 @@ public class SYS {
 	    if (colonIdx >= 0) {
 		defaultValue = StringUtils.trimToNull(expr2.substring(colonIdx + 1));
 	    }
-
 	    return (colonIdx >= 0) ? getEnv(expr2.substring(4, colonIdx).trim(), defaultValue) : getEnv(expr2.substring(4), defaultValue);
 	}
     }

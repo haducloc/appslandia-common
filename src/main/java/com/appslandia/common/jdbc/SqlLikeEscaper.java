@@ -48,7 +48,6 @@ public class SqlLikeEscaper {
 	if (value == null) {
 	    return null;
 	}
-
 	StringBuilder sb = new StringBuilder(value.length() + value.length() / 5);
 	sb.append(value);
 
@@ -58,7 +57,6 @@ public class SqlLikeEscaper {
 	    if (i == sb.length()) {
 		break;
 	    }
-
 	    for (char c : this.charsToEscape) {
 		if (c == sb.charAt(i)) {
 		    sb.insert(i, this.escapeSignChar);
@@ -74,7 +72,6 @@ public class SqlLikeEscaper {
 	if (value == null) {
 	    return false;
 	}
-
 	return IntStream.range(0, value.length() - 1).anyMatch(index -> value.charAt(index) == getEscapeSignChar());
     }
 
@@ -165,15 +162,12 @@ public class SqlLikeEscaper {
 	if (StringUtils.isNullOrEmpty(value)) {
 	    return value;
 	}
-
 	if (likeType == LikeType.CONTAINS) {
 	    return "%" + getDefault().escape(value) + "%";
 	}
-
 	if (likeType == LikeType.STARTS_WITH) {
 	    return getDefault().escape(value) + "%";
 	}
-
 	return "%" + getDefault().escape(value);
     }
 }

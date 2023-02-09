@@ -41,7 +41,6 @@ public class SplitUtils {
 	if (str == null) {
 	    return StringUtils.EMPTY_ARRAY;
 	}
-
 	String[] items = separator.split(str);
 	List<String> list = new ArrayList<>(items.length);
 
@@ -58,7 +57,6 @@ public class SplitUtils {
 	if (str == null) {
 	    return StringUtils.EMPTY_ARRAY;
 	}
-
 	int startIdx = 0;
 	int endIdx;
 	List<String> list = new ArrayList<>();
@@ -68,7 +66,6 @@ public class SplitUtils {
 	    if (!item.isEmpty()) {
 		list.add(item);
 	    }
-
 	    startIdx = endIdx + 1;
 	}
 	if (startIdx < str.length()) {

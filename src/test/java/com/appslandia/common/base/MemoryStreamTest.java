@@ -103,7 +103,6 @@ public class MemoryStreamTest {
 		out.write(rdBytes);
 		len += rdLen;
 	    }
-
 	    Assertions.assertEquals(len, out.size());
 	    Assertions.assertArrayEquals(merged, out.toByteArray());
 

@@ -59,7 +59,6 @@ public class MacDigester extends InitializeObject implements Digester {
 	} else {
 	    this.mac = Mac.getInstance(this.algorithm, this.provider);
 	}
-
 	this.mac.init(new SecretKeySpec(this.secret, this.algorithm));
 	CryptoUtils.clear(this.secret);
     }
@@ -118,7 +117,6 @@ public class MacDigester extends InitializeObject implements Digester {
 	if (secret != null) {
 	    this.secret = ArrayUtils.copy(secret);
 	}
-
 	return this;
     }
 

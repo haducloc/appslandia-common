@@ -37,7 +37,6 @@ public abstract class NumberConverter<T extends Number> implements Converter<T> 
 	if ((pos.getErrorIndex() < 0) && (pos.getIndex() == str.length()) && (parsedValue != null)) {
 	    return parsedValue;
 	}
-
 	return null;
     }
 }

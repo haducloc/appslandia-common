@@ -42,7 +42,6 @@ public class STR {
 	if (str == null) {
 	    return null;
 	}
-
 	return format(str, (pname, expr) -> {
 	    return parameters.containsKey(pname) ? parameters.get(pname) : MISSED_VALUE;
 	});
@@ -52,7 +51,6 @@ public class STR {
 	if (str == null) {
 	    return null;
 	}
-
 	return format(str, (pname, expr) -> {
 
 	    int index = -1;
@@ -60,7 +58,6 @@ public class STR {
 		index = Integer.parseInt(pname);
 	    } catch (NumberFormatException ex) {
 	    }
-
 	    return ((0 <= index) && (index < parameters.length)) ? parameters[index] : MISSED_VALUE;
 	});
     }
@@ -69,7 +66,6 @@ public class STR {
 	if (str == null) {
 	    return null;
 	}
-
 	StringBuilder sb = new StringBuilder((int) (1.5 * str.length()));
 
 	format(str, parameters, sb);
@@ -101,7 +97,6 @@ public class STR {
 	    if (parameterValue == MISSED_VALUE) {
 		parameterValue = parameterGroup;
 	    }
-
 	    if (parameterValue == null) {
 		out.append("null");
 
@@ -115,7 +110,6 @@ public class STR {
 		    out.append(parameterValue.toString());
 		}
 	    }
-
 	    prevEnd = matcher.end();
 	}
 	if (prevEnd < str.length()) {
@@ -129,7 +123,6 @@ public class STR {
 	if (str == null) {
 	    return null;
 	}
-
 	StringBuilder out = new StringBuilder(str.length() + entries.length * 16);
 	Matcher matcher = SEQ_HOLDER_PATTERN.matcher(str);
 
@@ -150,7 +143,6 @@ public class STR {
 	    if (entryValue == MISSED_VALUE) {
 		entryValue = "{}";
 	    }
-
 	    if (entryValue == null) {
 		out.append("null");
 
@@ -164,13 +156,11 @@ public class STR {
 		    out.append(entryValue.toString());
 		}
 	    }
-
 	    prevEnd = matcher.end();
 	}
 	if (prevEnd < str.length()) {
 	    out.append(str.substring(prevEnd));
 	}
-
 	return out.toString();
     }
 }

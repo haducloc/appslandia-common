@@ -68,7 +68,6 @@ public enum BOM {
 	if (encoding == null) {
 	    return null;
 	}
-
 	return Arrays.stream(BOM.values()).filter(bom -> bom.encoding.equalsIgnoreCase(encoding)).findFirst().orElse(null);
     }
 
@@ -80,7 +79,6 @@ public enum BOM {
 	    if (BOM.UTF_32BE.matches(bom)) {
 		return BOM.UTF_32BE;
 	    }
-
 	    if (BOM.UTF_32LE.matches(bom)) {
 		return BOM.UTF_32LE;
 	    }
@@ -94,7 +92,6 @@ public enum BOM {
 	    if (BOM.UTF_16BE.matches(bom)) {
 		return BOM.UTF_16BE;
 	    }
-
 	    if (BOM.UTF_16LE.matches(bom)) {
 		return BOM.UTF_16LE;
 	    }

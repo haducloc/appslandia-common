@@ -40,7 +40,6 @@ public class MathUtils {
 	if ((n < 1) || (n > Long.MAX_VALUE / 2 + 1)) {
 	    return false;
 	}
-
 	return (n & (n - 1)) == 0;
     }
 

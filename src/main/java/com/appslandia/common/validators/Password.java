@@ -68,7 +68,6 @@ public @interface Password {
 	    if (value == null) {
 		return true;
 	    }
-
 	    return PasswordUtil.isValid(value.toString());
 	}
     }

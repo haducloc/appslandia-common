@@ -48,7 +48,6 @@ public abstract class Java8DateConverter<T extends Temporal> implements Converte
 	if (obj == null) {
 	    return null;
 	}
-
 	if (localize) {
 	    String pattern = formatProvider.getLanguage().getTemporalPattern(this.isoPattern);
 	    return getFormatter(pattern).format(obj);
@@ -62,12 +61,10 @@ public abstract class Java8DateConverter<T extends Temporal> implements Converte
 	if (str == null) {
 	    return null;
 	}
-
 	try {
 	    return parse(str, getFormatter(this.isoPattern));
 	} catch (DateTimeParseException ex) {
 	}
-
 	try {
 	    String pattern = formatProvider.getLanguage().getTemporalPattern(this.isoPattern);
 	    return parse(str, getFormatter(pattern));

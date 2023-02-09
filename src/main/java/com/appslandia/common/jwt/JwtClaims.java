@@ -52,7 +52,6 @@ public abstract class JwtClaims extends MapWrapper<String, Object> {
 	if (value == null) {
 	    return this.remove(key);
 	}
-
 	Asserts.isTrue(JwtUtils.isSupportedValue(value), "value is unsupported.");
 	return super.put(key, value);
     }
@@ -85,15 +84,12 @@ public abstract class JwtClaims extends MapWrapper<String, Object> {
 	if (d == null) {
 	    return null;
 	}
-
 	if (d instanceof Date) {
 	    return (Date) d;
 	}
-
 	if (d.getClass() == Long.class) {
 	    return new Date((Long) d);
 	}
-
 	throw new AssertException("Date conversion failed.");
     }
 }

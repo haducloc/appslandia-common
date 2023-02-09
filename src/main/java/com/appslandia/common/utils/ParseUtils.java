@@ -37,15 +37,12 @@ public class ParseUtils {
 	if (value == null) {
 	    return defaultValue;
 	}
-
 	if (isTrueValue(value)) {
 	    return true;
 	}
-
 	if (isFalseValue(value)) {
 	    return false;
 	}
-
 	return defaultValue;
     }
 
@@ -53,7 +50,6 @@ public class ParseUtils {
 	if (value == null) {
 	    return defaultValue;
 	}
-
 	try {
 	    return Integer.parseInt(value);
 
@@ -66,7 +62,6 @@ public class ParseUtils {
 	if (value == null) {
 	    return defaultValue;
 	}
-
 	try {
 	    return Long.parseLong(value);
 
@@ -79,7 +74,6 @@ public class ParseUtils {
 	if (value == null) {
 	    return defaultValue;
 	}
-
 	try {
 	    float val = Float.parseFloat(value);
 	    return !Float.isNaN(val) ? val : defaultValue;
@@ -93,7 +87,6 @@ public class ParseUtils {
 	if (value == null) {
 	    return defaultValue;
 	}
-
 	try {
 	    double val = Double.parseDouble(value);
 	    return !Double.isNaN(val) ? val : defaultValue;
@@ -108,16 +101,13 @@ public class ParseUtils {
 	if (value == null) {
 	    return false;
 	}
-
 	valid.value = Boolean.TRUE;
 	if (isTrueValue(value)) {
 	    return true;
 	}
-
 	if (isFalseValue(value)) {
 	    return false;
 	}
-
 	valid.value = Boolean.FALSE;
 	return false;
     }
@@ -127,7 +117,6 @@ public class ParseUtils {
 	if (value == null) {
 	    return 0;
 	}
-
 	try {
 	    int val = Integer.parseInt(value);
 	    valid.value = Boolean.TRUE;
@@ -143,7 +132,6 @@ public class ParseUtils {
 	if (value == null) {
 	    return 0L;
 	}
-
 	try {
 	    long val = Long.parseLong(value);
 	    valid.value = Boolean.TRUE;
@@ -159,7 +147,6 @@ public class ParseUtils {
 	if (value == null) {
 	    return 0.0f;
 	}
-
 	try {
 	    float val = Float.parseFloat(value);
 
@@ -176,7 +163,6 @@ public class ParseUtils {
 	if (value == null) {
 	    return 0.0d;
 	}
-
 	try {
 	    double val = Double.parseDouble(value);
 
@@ -209,15 +195,12 @@ public class ParseUtils {
 	if (value == null) {
 	    return null;
 	}
-
 	if (isTrueValue(value)) {
 	    return true;
 	}
-
 	if (isFalseValue(value)) {
 	    return false;
 	}
-
 	throw new BoolFormatException(value);
     }
 

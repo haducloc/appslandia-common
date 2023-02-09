@@ -57,12 +57,10 @@ public abstract class TestEntityManagerExtension implements BeforeEachCallback, 
 	    emf = createEntityManagerFactory();
 	    emfHolder.set(emf);
 	}
-
 	EntityManager em = emHolder.get();
 	if (em != null) {
 	    return;
 	}
-
 	emHolder.set(emf.createEntityManager());
     }
 

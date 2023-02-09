@@ -41,7 +41,6 @@ public class XmlEscaper {
 	ESCAPE_XML_CONTENT['<'] = "&lt;".toCharArray();
 	ESCAPE_XML_CONTENT['>'] = "&gt;".toCharArray();
     }
-
     private static char[][] ESCAPE_XML = new char[HIGHEST_SPECIAL + 1][];
     static {
 	ESCAPE_XML['&'] = "&amp;".toCharArray();
@@ -63,7 +62,6 @@ public class XmlEscaper {
 	if (s == null) {
 	    return null;
 	}
-
 	try (StringWriter out = new StringWriter((int) (s.length() * 1.25f))) {
 	    writeEscapeXml(out, s, ESCAPE_XML_CONTENT);
 	    return out.toString();
@@ -77,7 +75,6 @@ public class XmlEscaper {
 	if (s == null) {
 	    return null;
 	}
-
 	try (StringWriter out = new StringWriter((int) (s.length() * 1.25f))) {
 	    writeEscapeXml(out, s, ESCAPE_XML);
 	    return out.toString();

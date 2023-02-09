@@ -58,14 +58,12 @@ public class Language extends InitializeObject {
 	if (this.languageId == null) {
 	    this.languageId = this.locale.getLanguage();
 	}
-
 	String datePattern = this.temporalPatterns.get(DateUtils.ISO8601_DATE);
 	if (datePattern != null) {
 
 	    Asserts.isTrue(datePattern.length() == 10 && datePattern.contains("yyyy") && datePattern.contains("MM") && datePattern.contains("dd"),
 		    STR.fmt("datePattern '{}' is invalid (10 length, use yyyy, MM, and dd).", datePattern));
 	}
-
 	if (datePattern == null) {
 	    datePattern = parseDatePattern(this.locale);
 	    Asserts.notNull(datePattern, () -> STR.fmt("Couldn't determine datePattern for the locale '{}'.", this.locale));
@@ -151,7 +149,6 @@ public class Language extends InitializeObject {
 	if (this.attributes == null) {
 	    this.attributes = new HashMap<>();
 	}
-
 	this.attributes.put(name, value);
 	return this;
     }
@@ -166,11 +163,9 @@ public class Language extends InitializeObject {
 	if (this == obj) {
 	    return true;
 	}
-
 	if (!(obj instanceof Language)) {
 	    return false;
 	}
-
 	Language another = (Language) obj;
 	return this.getLanguageId().equals(another.getLanguageId());
     }
@@ -215,13 +210,11 @@ public class Language extends InitializeObject {
 	if (__provider != null) {
 	    return __provider.get();
 	}
-
 	try {
 	    String implName = SYS.resolve("${language_impl,env.LANGUAGE_IMPL}");
 	    if (implName == null) {
 		return EN_US;
 	    }
-
 	    Class<? extends Language> implClass = ReflectionUtils.loadClass(implName, null);
 	    return ReflectionUtils.newInstance(implClass);
 
@@ -264,7 +257,6 @@ public class Language extends InitializeObject {
 		if (datePt.length() > 0) {
 		    datePt.append(separator);
 		}
-
 		datePt.append(ch);
 		datePt.append(ch);
 
@@ -283,7 +275,6 @@ public class Language extends InitializeObject {
 	if (idx == 0) {
 	    return datePattern.substring(3);
 	}
-
 	return datePattern.substring(0, idx - 1) + datePattern.substring(idx + 2);
     }
 }

@@ -59,7 +59,6 @@ public class BigDecimalConverter extends NumberConverter<BigDecimal> {
 	if (obj == null) {
 	    return null;
 	}
-
 	if (localize) {
 	    NumberFormat nf = formatProvider.getNumberFormat(this.fractionDigits, this.roundingMode, false);
 	    return nf.format(obj);
@@ -73,18 +72,15 @@ public class BigDecimalConverter extends NumberConverter<BigDecimal> {
 	if (str == null) {
 	    return null;
 	}
-
 	try {
 	    return new BigDecimal(str);
 
 	} catch (NumberFormatException ex) {
 	}
-
 	Number number = parseNumber(str, formatProvider.getNumberParser());
 	if (number != null) {
 	    return (number instanceof BigDecimal) ? (BigDecimal) number : new BigDecimal(number.toString());
 	}
-
 	throw toParsingError(str, getTargetType().getName());
     }
 }

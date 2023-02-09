@@ -64,7 +64,6 @@ public class FormatProviderImpl implements FormatProvider {
 	    if (this.numberParser instanceof DecimalFormat) {
 		((DecimalFormat) this.numberParser).setParseBigDecimal(true);
 	    }
-
 	    this.numberParser.setGroupingUsed(false);
 	}
 	return this.numberParser;
@@ -79,7 +78,6 @@ public class FormatProviderImpl implements FormatProvider {
 	if (this.numberFormats != null) {
 	    return this.numberFormats;
 	}
-
 	return this.numberFormats = new ProviderMap<NumberFormatKey, NumberFormat>((key) -> {
 	    NumberFormat impl = NumberFormat.getNumberInstance(this.language.getLocale());
 
@@ -102,7 +100,6 @@ public class FormatProviderImpl implements FormatProvider {
 	if (this.percentFormats != null) {
 	    return this.percentFormats;
 	}
-
 	return this.percentFormats = new ProviderMap<NumberFormatKey, NumberFormat>((key) -> {
 	    NumberFormat impl = NumberFormat.getPercentInstance(this.language.getLocale());
 
@@ -125,7 +122,6 @@ public class FormatProviderImpl implements FormatProvider {
 	if (this.currencyFormats != null) {
 	    return this.currencyFormats;
 	}
-
 	return this.currencyFormats = new ProviderMap<NumberFormatKey, NumberFormat>((key) -> {
 	    NumberFormat impl = NumberFormat.getCurrencyInstance(this.language.getLocale());
 
@@ -148,7 +144,6 @@ public class FormatProviderImpl implements FormatProvider {
 	if (this.dateFormats != null) {
 	    return this.dateFormats;
 	}
-
 	return this.dateFormats = new ProviderMap<String, DateFormat>((pattern) -> {
 	    SimpleDateFormat impl = new SimpleDateFormat(pattern);
 

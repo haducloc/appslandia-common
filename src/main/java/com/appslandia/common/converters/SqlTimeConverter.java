@@ -57,7 +57,6 @@ public class SqlTimeConverter extends DateConverter<java.sql.Time> {
 	if (str == null) {
 	    return null;
 	}
-
 	java.util.Date d = doParse(str, formatProvider);
 	return (d != null) ? new java.sql.Time(d.getTime()) : null;
     }

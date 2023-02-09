@@ -136,7 +136,6 @@ public class JdbcUtils {
 	    if (rsRead) {
 		throw new NonUniqueSQLException();
 	    }
-
 	    rsRead = true;
 	    t = mapper.map(rs);
 	}
@@ -157,13 +156,11 @@ public class JdbcUtils {
 	    if (rsRead) {
 		throw new NonUniqueSQLException();
 	    }
-
 	    rsRead = true;
 
 	    if (handler != null) {
 		handler.handle(rs);
 	    }
-
 	    try (InputStream is = rs.getBinaryStream(streamLabel)) {
 		IOUtils.copy(is, out);
 	    }
@@ -177,13 +174,11 @@ public class JdbcUtils {
 	    if (rsRead) {
 		throw new NonUniqueSQLException();
 	    }
-
 	    rsRead = true;
 
 	    if (handler != null) {
 		handler.handle(rs);
 	    }
-
 	    try (Reader r = rs.getCharacterStream(streamLabel)) {
 		IOUtils.copy(r, out);
 	    }
@@ -197,13 +192,11 @@ public class JdbcUtils {
 	    if (rsRead) {
 		throw new NonUniqueSQLException();
 	    }
-
 	    rsRead = true;
 
 	    if (handler != null) {
 		handler.handle(rs);
 	    }
-
 	    try (Reader r = rs.getNCharacterStream(streamLabel)) {
 		IOUtils.copy(r, out);
 	    }

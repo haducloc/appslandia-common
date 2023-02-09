@@ -51,7 +51,6 @@ public class StringWriter extends Writer {
 	} else if (len == 0) {
 	    return;
 	}
-
 	this.buf.append(cbuf, off, len);
     }
 

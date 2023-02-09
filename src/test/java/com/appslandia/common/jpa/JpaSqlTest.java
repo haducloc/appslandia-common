@@ -83,7 +83,6 @@ public class JpaSqlTest {
 	} catch (Exception ex) {
 	    Assertions.fail(ex.getMessage());
 	}
-
 	Assertions.assertTrue(sql.isParam("ids"));
 	Assertions.assertTrue(sql.isArrayParam("ids"));
     }
@@ -101,7 +100,6 @@ public class JpaSqlTest {
 	} catch (Exception ex) {
 	    Assertions.fail(ex.getMessage());
 	}
-
 	Assertions.assertTrue(sql.isParam("names"));
 	Assertions.assertTrue(sql.isArrayParam("names"));
     }

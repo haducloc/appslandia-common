@@ -52,7 +52,6 @@ public interface Config {
 	if (value == null) {
 	    throw toNoValueException(key);
 	}
-
 	return value;
     }
 
@@ -61,7 +60,6 @@ public interface Config {
 	if (value == null) {
 	    return StringUtils.EMPTY_ARRAY;
 	}
-
 	return SplitUtils.split(value, ',');
     }
 
@@ -70,7 +68,6 @@ public interface Config {
 	if (value == null) {
 	    return null;
 	}
-
 	return STR.format(value, (pname, expr) -> {
 	    // CONFIG
 	    String resolvedValue = getString(pname);
@@ -79,7 +76,6 @@ public interface Config {
 	    if (resolvedValue == null) {
 		resolvedValue = SYS.resolve(expr);
 	    }
-
 	    return (resolvedValue != null) ? resolvedValue : STR.MISSED_VALUE;
 	});
     }
@@ -89,7 +85,6 @@ public interface Config {
 	if (value == null) {
 	    throw toNoValueException(key);
 	}
-
 	return value;
     }
 
@@ -98,7 +93,6 @@ public interface Config {
 	if (value == null) {
 	    return null;
 	}
-
 	return STR.format(value, (pname, expr) -> {
 	    // Parameters
 	    Object resolvedValue = parameters.get(pname);
@@ -112,7 +106,6 @@ public interface Config {
 	    if (resolvedValue == null) {
 		resolvedValue = SYS.resolve(expr);
 	    }
-
 	    return (resolvedValue != null) ? resolvedValue : STR.MISSED_VALUE;
 	});
     }
@@ -122,7 +115,6 @@ public interface Config {
 	if (value == null) {
 	    throw toNoValueException(key);
 	}
-
 	return value;
     }
 
@@ -131,7 +123,6 @@ public interface Config {
 	if (value == null) {
 	    return null;
 	}
-
 	return STR.format(value, (pname, expr) -> {
 
 	    Object resolvedValue = null;
@@ -142,7 +133,6 @@ public interface Config {
 		if ((0 <= index) && (index < parameters.length)) {
 		    resolvedValue = parameters[index];
 		}
-
 	    } catch (NumberFormatException ex) {
 	    }
 
@@ -150,7 +140,6 @@ public interface Config {
 	    if (resolvedValue == null) {
 		resolvedValue = SYS.resolve(expr);
 	    }
-
 	    return (resolvedValue != null) ? resolvedValue : STR.MISSED_VALUE;
 	});
     }
@@ -160,7 +149,6 @@ public interface Config {
 	if (value == null) {
 	    throw toNoValueException(key);
 	}
-
 	return value;
     }
 
@@ -174,15 +162,12 @@ public interface Config {
 	if (value == null) {
 	    throw toNoValueException(key);
 	}
-
 	if (ParseUtils.isTrueValue(value)) {
 	    return true;
 	}
-
 	if (ParseUtils.isFalseValue(value)) {
 	    return false;
 	}
-
 	throw new BoolFormatException(value);
     }
 
@@ -191,7 +176,6 @@ public interface Config {
 	if (value == null) {
 	    return defaultValue;
 	}
-
 	return ParseUtils.parseInt(value, defaultValue);
     }
 
@@ -200,7 +184,6 @@ public interface Config {
 	if (value == null) {
 	    throw toNoValueException(key);
 	}
-
 	return Integer.parseInt(value);
     }
 
@@ -209,7 +192,6 @@ public interface Config {
 	if (value == null) {
 	    return defaultValue;
 	}
-
 	return ParseUtils.parseLong(value, defaultValue);
     }
 
@@ -218,7 +200,6 @@ public interface Config {
 	if (value == null) {
 	    throw toNoValueException(key);
 	}
-
 	return Long.parseLong(value);
     }
 
@@ -227,7 +208,6 @@ public interface Config {
 	if (value == null) {
 	    return defaultValue;
 	}
-
 	return ParseUtils.parseDouble(value, defaultValue);
     }
 
@@ -236,7 +216,6 @@ public interface Config {
 	if (value == null) {
 	    throw toNoValueException(key);
 	}
-
 	return Double.parseDouble(value);
     }
 

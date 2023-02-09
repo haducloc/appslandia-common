@@ -40,7 +40,6 @@ public class URLUtils {
 	    if (sb.length() > 0) {
 		sb.append('&');
 	    }
-
 	    addQueryParam(sb, param.getKey(), param.getValue());
 	}
 	return sb.toString();
@@ -64,7 +63,6 @@ public class URLUtils {
 	    if (i > 0) {
 		sb.append('&');
 	    }
-
 	    sb.append(URLEncoding.encodeParam(name)).append('=');
 	    Object subVal = Array.get(value, i);
 	    if (subVal != null) {
@@ -96,7 +94,6 @@ public class URLUtils {
 	    } else {
 		newQuery += '&' + toQueryParams(moreParameters);
 	    }
-
 	    URI newUri = new URI(oldUri.getScheme(), oldUri.getAuthority(), oldUri.getPath(), newQuery, oldUri.getFragment());
 	    return newUri.toString();
 
@@ -113,7 +110,6 @@ public class URLUtils {
 	if (queryString == null) {
 	    return params;
 	}
-
 	int startIdx = 0;
 	int endIdx;
 
@@ -123,10 +119,8 @@ public class URLUtils {
 	    if (!parsePair(pair, params, parseArray)) {
 		throw new IllegalArgumentException(STR.fmt("queryString '{}' is invalid.", queryString));
 	    }
-
 	    startIdx = endIdx + 1;
 	}
-
 	if (startIdx < queryString.length()) {
 	    String pair = queryString.substring(startIdx);
 
@@ -142,7 +136,6 @@ public class URLUtils {
 	if (idx <= 0) {
 	    return false;
 	}
-
 	String name = URLEncoding.decodeParam(pair.substring(0, idx));
 	String value = pair.substring(idx + 1);
 	String decodedVal = !value.isEmpty() ? URLEncoding.decodeParam(value) : null;

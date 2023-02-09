@@ -127,7 +127,6 @@ public class PoolDigester extends InitializeObject implements Digester {
 	if (this.digester != null) {
 	    impl.digester = this.digester.copy();
 	}
-
 	return impl;
     }
 }

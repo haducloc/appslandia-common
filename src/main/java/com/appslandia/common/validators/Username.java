@@ -74,7 +74,6 @@ public @interface Username {
 	    if (value == null) {
 		return true;
 	    }
-
 	    return USERNAME_PATTERN.matcher(value).matches();
 	}
     }

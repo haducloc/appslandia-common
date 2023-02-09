@@ -91,11 +91,9 @@ public class GroupFormat {
 	if (str == null) {
 	    return null;
 	}
-
 	if (str.length() != this.inputLength) {
 	    return str;
 	}
-
 	StringBuilder sb = new StringBuilder(this.outputLength);
 	int pos = 0;
 	for (Group group : this.groups) {

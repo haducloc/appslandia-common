@@ -69,7 +69,6 @@ public @interface CardCVC {
 	    if (value == null) {
 		return true;
 	    }
-
 	    return CVC_PATTERN.matcher(value).matches();
 	}
     }

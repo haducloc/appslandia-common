@@ -41,7 +41,6 @@ public class BitBool {
 	if (value == FALSE) {
 	    return TRUE;
 	}
-
 	throw new IllegalArgumentException("value is invalid.");
     }
 
@@ -52,7 +51,6 @@ public class BitBool {
 	if (value == FALSE) {
 	    return false;
 	}
-
 	throw new IllegalArgumentException("value is invalid.");
     }
 }

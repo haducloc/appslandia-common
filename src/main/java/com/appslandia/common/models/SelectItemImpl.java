@@ -77,11 +77,9 @@ public class SelectItemImpl implements SelectItem {
 	if (this == obj) {
 	    return true;
 	}
-
 	if (!(obj instanceof SelectItemImpl)) {
 	    return false;
 	}
-
 	SelectItemImpl another = (SelectItemImpl) obj;
 	return Objects.equals(this.value, another.value);
     }

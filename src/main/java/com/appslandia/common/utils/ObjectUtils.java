@@ -56,7 +56,6 @@ public class ObjectUtils {
 	if (obj == null) {
 	    return NULL_STR;
 	}
-
 	return obj.getClass().getName() + "@" + Integer.toHexString(System.identityHashCode(obj));
     }
 
@@ -73,7 +72,6 @@ public class ObjectUtils {
 	if (array == null) {
 	    return NULL_STR;
 	}
-
 	return Arrays.stream(array).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
     }
 
@@ -81,11 +79,9 @@ public class ObjectUtils {
 	if (array != null) {
 	    Asserts.isTrue(array.getClass().isArray());
 	}
-
 	if (array == null) {
 	    return NULL_STR;
 	}
-
 	return StreamUtils.stream(ArrayUtils.iterator(array)).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
     }
 
@@ -93,7 +89,6 @@ public class ObjectUtils {
 	if (iterable == null) {
 	    return NULL_STR;
 	}
-
 	return StreamUtils.stream(iterable.iterator()).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
     }
 
@@ -101,7 +96,6 @@ public class ObjectUtils {
 	if (iterator == null) {
 	    return NULL_STR;
 	}
-
 	return StreamUtils.stream(iterator).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
     }
 
@@ -109,7 +103,6 @@ public class ObjectUtils {
 	if (enumeration == null) {
 	    return NULL_STR;
 	}
-
 	return StreamUtils.stream(enumeration).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
     }
 }

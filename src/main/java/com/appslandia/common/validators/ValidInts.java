@@ -71,7 +71,6 @@ public @interface ValidInts {
 	    if (value == null) {
 		return true;
 	    }
-
 	    int valueToCheck = value.intValue();
 	    for (int validValue : this.validValues) {
 		if (validValue == valueToCheck) {

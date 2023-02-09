@@ -117,7 +117,6 @@ public class CDIExtension extends InitializeObject implements Extension {
 	    onExcludeClass(beanClass);
 	    return;
 	}
-
 	onRegisterClass(beanClass);
     }
 
@@ -125,7 +124,6 @@ public class CDIExtension extends InitializeObject implements Extension {
 	if (excludedClasses.isEmpty()) {
 	    return false;
 	}
-
 	return excludedClasses.contains(beanClass);
     }
 
@@ -133,7 +131,6 @@ public class CDIExtension extends InitializeObject implements Extension {
 	if (excludedPackages.isEmpty()) {
 	    return false;
 	}
-
 	return excludedPackages.contains(beanClass.getPackage().getName());
     }
 
@@ -141,7 +138,6 @@ public class CDIExtension extends InitializeObject implements Extension {
 	if (excludedAnnotations.isEmpty()) {
 	    return false;
 	}
-
 	return excludedAnnotations.stream().anyMatch(annotationClass -> beanClass.getDeclaredAnnotation(annotationClass) != null);
     }
 }

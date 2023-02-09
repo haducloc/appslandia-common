@@ -50,10 +50,8 @@ public class FileNameUtils {
 	    if (fn == null) {
 		return null;
 	    }
-
 	    return (extra != null) ? (fn + '-' + extra) : fn;
 	}
-
 	String namePart = NormalizeUtils.normalizeLabel(fileName.substring(0, dotIdx));
 	String extPart = NormalizeUtils.normalizeLabel(fileName.substring(dotIdx + 1));
 
@@ -62,7 +60,6 @@ public class FileNameUtils {
 	    if (namePart == null) {
 		return null;
 	    }
-
 	    return (extra != null) ? (namePart + '-' + extra) : namePart;
 	}
 
@@ -79,7 +76,6 @@ public class FileNameUtils {
 	if (path == null || path.indexOf('\\') == -1) {
 	    return path;
 	}
-
 	return path.replace('\\', '/');
     }
 }

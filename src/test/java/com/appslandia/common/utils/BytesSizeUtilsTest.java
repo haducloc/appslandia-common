@@ -49,13 +49,11 @@ public class BytesSizeUtilsTest {
 	    Assertions.fail();
 	} catch (Exception ex) {
 	}
-
 	try {
 	    BytesSizeUtils.translateToBytes("1GB+2M", false);
 	    Assertions.fail();
 	} catch (Exception ex) {
 	}
-
 	try {
 	    BytesSizeUtils.translateToBytes("1 GB 2M", false);
 	    Assertions.fail();

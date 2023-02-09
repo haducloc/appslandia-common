@@ -59,7 +59,6 @@ public class DsaDigester extends InitializeObject implements Digester {
 	    } else {
 		this.sign = Signature.getInstance(this.algorithm, this.provider);
 	    }
-
 	    this.sign.initSign(this.privateKey);
 	}
 
@@ -70,7 +69,6 @@ public class DsaDigester extends InitializeObject implements Digester {
 	    } else {
 		this.ver = Signature.getInstance(this.algorithm, this.provider);
 	    }
-
 	    this.ver.initVerify(this.publicKey);
 	}
     }
@@ -146,7 +144,6 @@ public class DsaDigester extends InitializeObject implements Digester {
 	if (privateKeyPem != null) {
 	    this.privateKey = KeyFactoryUtil.DSA.toPrivateKey(privateKeyPem);
 	}
-
 	return this;
     }
 
@@ -161,7 +158,6 @@ public class DsaDigester extends InitializeObject implements Digester {
 	if (publicKeyPem != null) {
 	    this.publicKey = KeyFactoryUtil.DSA.toPublicKey(publicKeyPem);
 	}
-
 	return this;
     }
 
@@ -172,7 +168,6 @@ public class DsaDigester extends InitializeObject implements Digester {
 	if (this.privateKey != null) {
 	    impl.privateKey = new KeyFactoryUtil(this.privateKey.getAlgorithm()).copy(this.privateKey);
 	}
-
 	impl.publicKey = this.publicKey;
 	return impl;
     }

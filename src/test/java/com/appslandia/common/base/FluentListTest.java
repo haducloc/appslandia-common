@@ -64,7 +64,6 @@ public class FluentListTest {
 	} catch (Exception ex) {
 	    Assertions.assertTrue(ex instanceof NoSuchElementException);
 	}
-
 	try {
 	    list.add(1);
 	    list.last(2);
@@ -87,7 +86,6 @@ public class FluentListTest {
 	} catch (Exception ex) {
 	    Assertions.assertTrue(ex instanceof NoSuchElementException);
 	}
-
 	try {
 	    list.add(1);
 	    list.add(2);
@@ -112,7 +110,6 @@ public class FluentListTest {
 	} catch (Exception ex) {
 	    Assertions.assertTrue(ex instanceof NoSuchElementException);
 	}
-
 	try {
 	    list.add(1);
 	    list.add(2);
@@ -138,7 +135,6 @@ public class FluentListTest {
 	} catch (Exception ex) {
 	    Assertions.assertTrue(ex instanceof IndexOutOfBoundsException);
 	}
-
 	try {
 	    list.ins(0, 1);
 

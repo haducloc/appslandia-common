@@ -95,7 +95,6 @@ public class StatementImpl implements PreparedStatement {
 	if (params != null) {
 	    JdbcUtils.setParameters(this, getSql(), params);
 	}
-
 	return this.stat.executeUpdate();
     }
 
@@ -115,7 +114,6 @@ public class StatementImpl implements PreparedStatement {
 	if (params != null) {
 	    JdbcUtils.setParameters(this, getSql(), params);
 	}
-
 	try (ResultSetImpl rs = executeQuery()) {
 	    return JdbcUtils.executeMap(rs, keyMapper, valueMapper, map);
 	}
@@ -135,7 +133,6 @@ public class StatementImpl implements PreparedStatement {
 	if (params != null) {
 	    JdbcUtils.setParameters(this, getSql(), params);
 	}
-
 	try (ResultSetImpl rs = executeQuery()) {
 	    return JdbcUtils.executeMap(rs, keyColumn, valueColumn, map);
 	}
@@ -155,7 +152,6 @@ public class StatementImpl implements PreparedStatement {
 	if (params != null) {
 	    JdbcUtils.setParameters(this, getSql(), params);
 	}
-
 	try (ResultSetImpl rs = executeQuery()) {
 	    return JdbcUtils.executeList(rs, mapper, list);
 	}
@@ -175,7 +171,6 @@ public class StatementImpl implements PreparedStatement {
 	if (params != null) {
 	    JdbcUtils.setParameters(this, getSql(), params);
 	}
-
 	try (ResultSetImpl rs = executeQuery()) {
 	    return JdbcUtils.executeSingle(rs, mapper);
 	}
@@ -207,7 +202,6 @@ public class StatementImpl implements PreparedStatement {
 	if (params != null) {
 	    JdbcUtils.setParameters(this, getSql(), params);
 	}
-
 	try (ResultSetImpl rs = executeQuery()) {
 	    return JdbcUtils.executeExists(rs);
 	}
@@ -229,7 +223,6 @@ public class StatementImpl implements PreparedStatement {
 	if (params != null) {
 	    JdbcUtils.setParameters(this, getSql(), params);
 	}
-
 	try (ResultSetImpl rs = executeQuery()) {
 	    while (rs.next()) {
 		handler.handle(rs);
@@ -251,7 +244,6 @@ public class StatementImpl implements PreparedStatement {
 	if (params != null) {
 	    JdbcUtils.setParameters(this, getSql(), params);
 	}
-
 	try (ResultSetImpl rs = executeQuery()) {
 	    JdbcUtils.executeStream(rs, streamLabel, out, handler);
 	}
@@ -271,7 +263,6 @@ public class StatementImpl implements PreparedStatement {
 	if (params != null) {
 	    JdbcUtils.setParameters(this, getSql(), params);
 	}
-
 	try (ResultSetImpl rs = executeQuery()) {
 	    JdbcUtils.executeStream(rs, streamLabel, out, handler);
 	}
@@ -291,7 +282,6 @@ public class StatementImpl implements PreparedStatement {
 	if (params != null) {
 	    JdbcUtils.setParameters(this, getSql(), params);
 	}
-
 	try (ResultSetImpl rs = executeQuery()) {
 	    JdbcUtils.executeNStream(rs, streamLabel, out, handler);
 	}
@@ -1050,7 +1040,6 @@ public class StatementImpl implements PreparedStatement {
 		} else {
 		    this.stat.setNull(parameterIndex, targetSqlType);
 		}
-
 	    } else {
 		if (targetSqlType == null) {
 		    this.stat.setObject(parameterIndex, par.getValue());

@@ -46,7 +46,6 @@ public abstract class TextBasedCrypto extends InitializeObject {
 	if (textCharset != null) {
 	    this.textCharset = Charset.forName(textCharset);
 	}
-
 	return this;
     }
 
@@ -61,7 +60,6 @@ public abstract class TextBasedCrypto extends InitializeObject {
 	if (baseEncoder != null) {
 	    this.baseEncoder = BaseEncoder.valueOf(baseEncoder);
 	}
-
 	return this;
     }
 }

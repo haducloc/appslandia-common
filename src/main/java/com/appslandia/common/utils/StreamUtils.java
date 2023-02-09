@@ -47,7 +47,6 @@ public class StreamUtils {
 	    public boolean hasNext() {
 		return e.hasMoreElements();
 	    }
-
 	}, Spliterator.ORDERED), false);
     }
 

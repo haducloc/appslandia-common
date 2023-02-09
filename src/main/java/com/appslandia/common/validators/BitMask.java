@@ -79,12 +79,10 @@ public @interface BitMask {
 	    if (value == null) {
 		return true;
 	    }
-
 	    long longValue = value.longValue();
 	    if (longValue < 0) {
 		return false;
 	    }
-
 	    if (this.max > 0) {
 		if (longValue > max) {
 		    return false;

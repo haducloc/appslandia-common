@@ -54,7 +54,6 @@ public class TextConverter implements Converter<String> {
 	if (str == null) {
 	    return null;
 	}
-
 	return NormalizeUtils.normalizeText(str);
     }
 }

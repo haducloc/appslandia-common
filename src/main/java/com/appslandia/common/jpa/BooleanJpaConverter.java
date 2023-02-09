@@ -39,7 +39,6 @@ public class BooleanJpaConverter implements AttributeConverter<Boolean, Integer>
 	if (attribute == null) {
 	    return null;
 	}
-
 	return attribute.booleanValue() ? BitBool.TRUE : BitBool.FALSE;
     }
 
@@ -48,15 +47,12 @@ public class BooleanJpaConverter implements AttributeConverter<Boolean, Integer>
 	if (dbData == null) {
 	    return null;
 	}
-
 	if (dbData == BitBool.FALSE) {
 	    return Boolean.FALSE;
 	}
-
 	if (dbData == BitBool.TRUE) {
 	    return Boolean.TRUE;
 	}
-
 	throw new IllegalArgumentException(STR.fmt("Couldn't convert '{}' to Boolean.", dbData));
     }
 }

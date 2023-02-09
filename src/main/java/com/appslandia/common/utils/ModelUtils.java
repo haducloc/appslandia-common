@@ -38,7 +38,6 @@ public class ModelUtils {
 		if (!forProps.apply(dpd.getName())) {
 		    continue;
 		}
-
 		Asserts.notNull(dpd.getWriteMethod());
 		Asserts.notNull(dpd.getReadMethod());
 
@@ -62,7 +61,6 @@ public class ModelUtils {
 		if (!forProps.apply(dpd.getName())) {
 		    continue;
 		}
-
 		Asserts.notNull(dpd.getWriteMethod());
 
 		PropertyDescriptor spd = null;

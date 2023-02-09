@@ -74,7 +74,6 @@ public @interface DigitOnly {
 	    if (value == null) {
 		return true;
 	    }
-
 	    if (this.length > 0) {
 		if (value.length() != this.length) {
 		    return false;

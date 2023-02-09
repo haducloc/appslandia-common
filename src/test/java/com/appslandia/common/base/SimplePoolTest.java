@@ -70,7 +70,6 @@ public class SimplePoolTest {
 			    } else {
 				pool.get();
 			    }
-
 			} catch (Exception ex) {
 			    Assertions.fail(ex.getMessage());
 			} finally {

@@ -38,11 +38,9 @@ public abstract class EntityBase implements Serializable {
 	if (this == obj) {
 	    return true;
 	}
-
 	if (!(obj instanceof EntityBase)) {
 	    return false;
 	}
-
 	EntityBase another = (EntityBase) obj;
 	return Objects.equals(this.getPk(), another.getPk());
     }

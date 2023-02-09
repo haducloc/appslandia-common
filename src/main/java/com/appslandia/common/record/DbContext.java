@@ -90,7 +90,6 @@ public class DbContext implements AutoCloseable {
 		if (!field.isNullable()) {
 		    Asserts.notNull(val, () -> STR.fmt("The field '{}' is required.", field.getName()));
 		}
-
 		stat.setObject(field.getName(), new JdbcParam(val, field.getSqlType(), field.getScaleOrLength()));
 	    }
 	}
@@ -153,7 +152,6 @@ public class DbContext implements AutoCloseable {
 		if (!field.isNullable()) {
 		    Asserts.notNull(val, () -> STR.fmt("The field '{}' is required.", field.getName()));
 		}
-
 		stat.setObject(field.getName(), new JdbcParam(val, field.getSqlType(), field.getScaleOrLength()));
 	    }
 	}
@@ -286,11 +284,9 @@ public class DbContext implements AutoCloseable {
 	if (count == null) {
 	    return false;
 	}
-
 	if (count.longValue() > 1) {
 	    throw new SQLException("Duplicated keys.");
 	}
-
 	return true;
     }
 
@@ -614,7 +610,6 @@ public class DbContext implements AutoCloseable {
 	    if (!StringUtils.isNullOrEmpty(this.conn.getDsName())) {
 		return this.conn.getDsName();
 	    }
-
 	    return this.conn.getMetaData().getURL();
 
 	} catch (SQLException ex) {

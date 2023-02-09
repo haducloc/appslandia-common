@@ -39,12 +39,10 @@ public abstract class InitializeObject implements InitializeSupport {
 	if (this.initialized) {
 	    return this;
 	}
-
 	synchronized (this.initMutex) {
 	    if (this.initialized) {
 		return this;
 	    }
-
 	    try {
 		this.init();
 		this.initialized = true;

@@ -56,14 +56,12 @@ public class KeywordsConverter implements Converter<String> {
 	if (str == null) {
 	    return null;
 	}
-
 	Out<Boolean> isValid = new Out<Boolean>();
 	String keywords = KeywordUtils.toKeywords(str, isValid);
 
 	if (!isValid.val()) {
 	    throw new ConverterException(STR.fmt("keywords '{}' is invalid.", str), getErrorMsgKey());
 	}
-
 	return keywords;
     }
 }

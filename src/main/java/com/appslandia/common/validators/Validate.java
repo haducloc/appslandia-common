@@ -77,7 +77,6 @@ public @interface Validate {
 	    if (value == null) {
 		return true;
 	    }
-
 	    boolean isValid = ModelValidator.getValidator(this.validator).validate(value);
 	    if (!isValid) {
 

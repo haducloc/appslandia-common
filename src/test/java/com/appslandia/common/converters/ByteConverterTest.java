@@ -78,7 +78,6 @@ public class ByteConverterTest {
 	} catch (Exception ex) {
 	    Assertions.assertTrue(ex instanceof ConverterException);
 	}
-
 	try {
 	    converter.parse("12.345", formatProvider);
 	    Assertions.fail();
@@ -97,7 +96,6 @@ public class ByteConverterTest {
 	} catch (Exception ex) {
 	    Assertions.fail(ex.getMessage());
 	}
-
 	try {
 	    Byte v = converter.parse(Byte.toString(Byte.MIN_VALUE), formatProvider);
 	    Assertions.assertEquals(Byte.MIN_VALUE, v.byteValue());
@@ -117,7 +115,6 @@ public class ByteConverterTest {
 	} catch (Exception ex) {
 	    Assertions.assertTrue(ex instanceof ConverterException);
 	}
-
 	try {
 	    // MIN: -128
 	    converter.parse("-129", formatProvider);

@@ -67,7 +67,6 @@ public class ReflectionUtils {
 		if (f.getName().equals(property)) {
 		    return true;
 		}
-
 		if (f.getType() == boolean.class) {
 		    if (f.getName().equals("is" + StringUtils.firstUpperCase(property, Locale.ENGLISH))) {
 			return true;
@@ -108,15 +107,12 @@ public class ReflectionUtils {
 		if (!m.getName().equals(methodName)) {
 		    return false;
 		}
-
 		if (parameterTypes.length != m.getParameterCount()) {
 		    return false;
 		}
-
 		if (parameterTypes.length == 0) {
 		    return true;
 		}
-
 		final Class<?>[] mpTypes = m.getParameterTypes();
 		return IntStream.range(0, mpTypes.length).allMatch(idx -> mpTypes[idx].isAssignableFrom(parameterTypes[idx]));
 	    }
@@ -173,7 +169,6 @@ public class ReflectionUtils {
 	    if (t != null) {
 		return t;
 	    }
-
 	    for (Class<?> interfaceClass : clazz.getInterfaces()) {
 		t = interfaceClass.getAnnotation(annotationClass);
 		if (t != null) {
@@ -213,17 +208,14 @@ public class ReflectionUtils {
 	if (!(genericType instanceof ParameterizedType)) {
 	    return null;
 	}
-
 	Type[] types = ((ParameterizedType) genericType).getActualTypeArguments();
 	if (types.length != 1) {
 	    return null;
 	}
-
 	Type type = types[0];
 	if (!(type instanceof Class)) {
 	    return null;
 	}
-
 	return (Class<?>) type;
     }
 
@@ -231,22 +223,18 @@ public class ReflectionUtils {
 	if (!(genericType instanceof ParameterizedType)) {
 	    return null;
 	}
-
 	Type[] types = ((ParameterizedType) genericType).getActualTypeArguments();
 	if (types.length != 2) {
 	    return null;
 	}
-
 	Type kt = types[0];
 	if (!(kt instanceof Class)) {
 	    return null;
 	}
-
 	Type vt = types[1];
 	if (!(vt instanceof Class)) {
 	    return null;
 	}
-
 	return new Class<?>[] { (Class<?>) kt, (Class<?>) vt };
     }
 

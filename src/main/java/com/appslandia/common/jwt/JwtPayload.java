@@ -93,11 +93,9 @@ public class JwtPayload extends JwtClaims {
 	if (value == null) {
 	    return null;
 	}
-
 	if (value.getClass() == String.class) {
 	    return CollectionUtils.toList(new ArrayList<String>(1), (String) value);
 	}
-
 	return ObjectUtils.cast(value);
     }
 
@@ -105,7 +103,6 @@ public class JwtPayload extends JwtClaims {
 	if (values.length == 0) {
 	    return this;
 	}
-
 	this.put(AUD, (values.length == 1) ? values[0] : CollectionUtils.toList(values));
 	return this;
     }

@@ -53,7 +53,6 @@ public class Arguments {
 	if (obj == null) {
 	    throw new IllegalArgumentException("The obj must be not null.");
 	}
-
 	return obj;
     }
 
@@ -61,7 +60,6 @@ public class Arguments {
 	if (obj == null) {
 	    throw new IllegalArgumentException(errorMessage);
 	}
-
 	return obj;
     }
 
@@ -69,7 +67,6 @@ public class Arguments {
 	if (obj == null) {
 	    throw new IllegalArgumentException(errorMessage.get());
 	}
-
 	return obj;
     }
 
@@ -95,7 +92,6 @@ public class Arguments {
 	if ((array == null) || (array.length == 0)) {
 	    throw new IllegalArgumentException("The array must have elements.");
 	}
-
 	return array;
     }
 
@@ -103,7 +99,6 @@ public class Arguments {
 	if ((array == null) || (array.length == 0)) {
 	    throw new IllegalArgumentException(errorMessage);
 	}
-
 	return array;
     }
 
@@ -111,7 +106,6 @@ public class Arguments {
 	if ((elements == null) || (elements.length == 0)) {
 	    throw new IllegalArgumentException(errorMessage.get());
 	}
-
 	return elements;
     }
 
@@ -119,7 +113,6 @@ public class Arguments {
 	if ((collection == null) || (collection.size() == 0)) {
 	    throw new IllegalArgumentException("The collection must have elements.");
 	}
-
 	return collection;
     }
 
@@ -127,7 +120,6 @@ public class Arguments {
 	if ((collection == null) || (collection.size() == 0)) {
 	    throw new IllegalArgumentException(errorMessage);
 	}
-
 	return collection;
     }
 
@@ -135,7 +127,6 @@ public class Arguments {
 	if ((collection == null) || (collection.size() == 0)) {
 	    throw new IllegalArgumentException(errorMessage.get());
 	}
-
 	return collection;
     }
 
@@ -143,7 +134,6 @@ public class Arguments {
 	if ((map == null) || (map.size() == 0)) {
 	    throw new IllegalArgumentException("The map must have entries.");
 	}
-
 	return map;
     }
 
@@ -151,7 +141,6 @@ public class Arguments {
 	if ((map == null) || (map.size() == 0)) {
 	    throw new IllegalArgumentException(errorMessage);
 	}
-
 	return map;
     }
 
@@ -159,7 +148,6 @@ public class Arguments {
 	if ((map == null) || (map.size() == 0)) {
 	    throw new IllegalArgumentException(errorMessage.get());
 	}
-
 	return map;
     }
 }

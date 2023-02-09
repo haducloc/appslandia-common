@@ -84,7 +84,6 @@ public class TypeUtils {
 	if (type.isPrimitive()) {
 	    return true;
 	}
-
 	return WRAPPER_PRIMITIVE_MAP.containsKey(wrap(type));
     }
 
@@ -113,7 +112,6 @@ public class TypeUtils {
 	if (!type.isPrimitive()) {
 	    return null;
 	}
-
 	return ObjectUtils.cast(PRIMITIVE_DEFAULT_MAP.get(type));
     }
 }

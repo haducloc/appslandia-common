@@ -65,7 +65,6 @@ public class ObjectFactory extends InitializeObject {
 	    if (inst.definition.getProducer() != null) {
 		continue;
 	    }
-
 	    new InjectTraverser() {
 
 		@Override
@@ -92,7 +91,6 @@ public class ObjectFactory extends InitializeObject {
 		    if (member instanceof Parameter) {
 			return ((Parameter) member).getDeclaringExecutable().toString();
 		    }
-
 		    return member.toString();
 		}
 
@@ -100,21 +98,17 @@ public class ObjectFactory extends InitializeObject {
 		    if (ObjectFactory.class.isAssignableFrom(type)) {
 			return;
 		    }
-
 		    if (type == Instance.class) {
 			return;
 		    }
-
 		    int count = countMatchesForInject(type, qualifiers);
 		    if (count == 0) {
 			throw new ObjectException(STR.fmt("Unsatisfied dependency: type={}, qualifiers={}, member={}.", type, Arrays.toString(qualifiers), toMemberInfo(member)));
 		    }
-
 		    if (count > 1) {
 			throw new ObjectException(STR.fmt("Ambiguous dependency: type={}, qualifiers={}, member={}.", type, Arrays.toString(qualifiers), toMemberInfo(member)));
 		    }
 		}
-
 	    }.traverse(inst.definition.getImplClass());
 	}
     }
@@ -158,11 +152,9 @@ public class ObjectFactory extends InitializeObject {
 	if (scope == null) {
 	    scope = AnnotationUtils.parseScope(producer);
 	}
-
 	if (qualifiers == null) {
 	    qualifiers = AnnotationUtils.parseQualifiers(producer);
 	}
-
 	ObjectInstance inst = new ObjectInstance(new ObjectDefinition().setTypes(types).setQualifiers(qualifiers).setScope(scope).setProducer(producer), (d) -> produceObject(d));
 	this.instances.add(inst);
 	return this;
@@ -199,11 +191,9 @@ public class ObjectFactory extends InitializeObject {
 	if (scope == null) {
 	    scope = AnnotationUtils.parseScope(implClass);
 	}
-
 	if (qualifiers == null) {
 	    qualifiers = AnnotationUtils.parseQualifiers(implClass);
 	}
-
 	ObjectInstance inst = new ObjectInstance(
 		new ObjectDefinition().setTypes(expTypes.toArray(new Class<?>[expTypes.size()])).setQualifiers(qualifiers).setScope(scope).setImplClass(implClass),
 		(d) -> produceObject(d));
@@ -333,7 +323,6 @@ public class ObjectFactory extends InitializeObject {
 	    if ((injectCtor == null) && (emptyCtor == null)) {
 		throw new ObjectException(STR.fmt("Couldn't instantiate '{}'.", definition.getImplClass()));
 	    }
-
 	    Object instance = null;
 	    if (injectCtor != null) {
 		injectCtor.setAccessible(true);
@@ -369,7 +358,6 @@ public class ObjectFactory extends InitializeObject {
 		if (obj != null) {
 		    throw new ObjectException(STR.fmt("Ambiguous dependency: type={}, qualifiers={}.", type, Arrays.toString(qualifiers)));
 		}
-
 		obj = inst;
 	    }
 	}
@@ -388,12 +376,10 @@ public class ObjectFactory extends InitializeObject {
 	if (ObjectFactory.class.isAssignableFrom(type)) {
 	    return ObjectUtils.cast(this);
 	}
-
 	ObjectInstance inst = getObjectInst(type, qualifiers);
 	if (inst == null) {
 	    throw new ObjectException(STR.fmt("Unsatisfied dependency: type={}, qualifiers={}.", type, Arrays.toString(qualifiers)));
 	}
-
 	return ObjectUtils.cast(inst.getInstance());
     }
 
@@ -437,13 +423,11 @@ public class ObjectFactory extends InitializeObject {
 	    if (obj == null) {
 		continue;
 	    }
-
 	    if (inst.definition.getProducer() == null) {
 		preDestroy(obj);
 	    } else {
 		inst.definition.getProducer().destroy(obj);
 	    }
-
 	    inst.clearInstance();
 	}
     }

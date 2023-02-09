@@ -78,11 +78,9 @@ public class DecimalUtils {
 	if (Double.compare(d1, d2) == 0) {
 	    return true;
 	}
-
 	if ((Math.abs(d1 - d2) <= delta)) {
 	    return true;
 	}
-
 	return false;
     }
 
@@ -90,11 +88,9 @@ public class DecimalUtils {
 	if (Float.compare(f1, f2) == 0) {
 	    return true;
 	}
-
 	if ((Math.abs(f1 - f2) <= delta)) {
 	    return true;
 	}
-
 	return false;
     }
 }

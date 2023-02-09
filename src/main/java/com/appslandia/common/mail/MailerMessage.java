@@ -64,7 +64,6 @@ public class MailerMessage {
 	if (this.from != null) {
 	    this.from.clear();
 	}
-
 	return this;
     }
 
@@ -196,11 +195,9 @@ public class MailerMessage {
 	    if (this.to != null) {
 		msg.addRecipients(RecipientType.TO, this.to.toArray(new Address[this.to.size()]));
 	    }
-
 	    if (this.cc != null) {
 		msg.addRecipients(RecipientType.CC, this.cc.toArray(new Address[this.cc.size()]));
 	    }
-
 	    if (this.bcc != null) {
 		msg.addRecipients(RecipientType.BCC, this.bcc.toArray(new Address[this.bcc.size()]));
 	    }
@@ -223,7 +220,6 @@ public class MailerMessage {
 	if (this.msgInit != null) {
 	    this.msgInit.accept(msg);
 	}
-
 	return msg;
     }
 
@@ -231,7 +227,6 @@ public class MailerMessage {
 	if (this.from == null) {
 	    this.from = new ArrayList<>();
 	}
-
 	return this.from;
     }
 
@@ -239,7 +234,6 @@ public class MailerMessage {
 	if (this.replyTo == null) {
 	    this.replyTo = new ArrayList<>();
 	}
-
 	return this.replyTo;
     }
 
@@ -247,7 +241,6 @@ public class MailerMessage {
 	if (this.to == null) {
 	    this.to = new ArrayList<>();
 	}
-
 	return this.to;
     }
 
@@ -255,7 +248,6 @@ public class MailerMessage {
 	if (this.cc == null) {
 	    this.cc = new ArrayList<>();
 	}
-
 	return this.cc;
     }
 
@@ -263,7 +255,6 @@ public class MailerMessage {
 	if (this.bcc == null) {
 	    this.bcc = new ArrayList<>();
 	}
-
 	return this.bcc;
     }
 }

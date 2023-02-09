@@ -96,7 +96,6 @@ public abstract class PbeObject extends InitializeObject {
 	if (password != null) {
 	    this.password = Arrays.copyOf(password, password.length);
 	}
-
 	return this;
     }
 

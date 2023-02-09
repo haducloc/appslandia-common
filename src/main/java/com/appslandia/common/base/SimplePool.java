@@ -50,7 +50,6 @@ public class SimplePool<T> {
 	    if (idx >= this.size - 1) {
 		return;
 	    }
-
 	    this.pool[++idx] = service;
 	    this.current = idx;
 	}
@@ -62,7 +61,6 @@ public class SimplePool<T> {
 	    if (idx < 0) {
 		return null;
 	    }
-
 	    T t = this.pool[idx];
 	    this.current = idx - 1;
 	    return t;

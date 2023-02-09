@@ -40,7 +40,6 @@ public class ValidateTest {
 		if (model.password == null || model.confirmPassword == null) {
 		    return true;
 		}
-
 		return model.confirmPassword.equals(model.password);
 	    }
 	});

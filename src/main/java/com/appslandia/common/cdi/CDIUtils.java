@@ -53,12 +53,10 @@ public class CDIUtils {
 	if (matchedBeans.isEmpty()) {
 	    return null;
 	}
-
 	Bean<?> bean = beanManager.resolve(matchedBeans);
 	if (bean == null) {
 	    return null;
 	}
-
 	CreationalContext<T> ctx = ObjectUtils.cast(beanManager.createCreationalContext(bean));
 	T t = ObjectUtils.cast(beanManager.getReference(bean, type, ctx));
 
@@ -70,12 +68,10 @@ public class CDIUtils {
 	if (matchedBeans.isEmpty()) {
 	    return null;
 	}
-
 	Bean<?> bean = beanManager.resolve(matchedBeans);
 	if (bean == null) {
 	    return null;
 	}
-
 	CreationalContext<T> ctx = ObjectUtils.cast(beanManager.createCreationalContext(bean));
 	T t = ObjectUtils.cast(beanManager.getReference(bean, bean.getBeanClass(), ctx));
 
@@ -136,11 +132,9 @@ public class CDIUtils {
 	if (annotated.getAnnotations().isEmpty()) {
 	    return null;
 	}
-
 	if (annotated.isAnnotationPresent(annotationType)) {
 	    return annotated.getAnnotation(annotationType);
 	}
-
 	Queue<Annotation> annotations = new LinkedList<>(annotated.getAnnotations());
 	return getAnnotation(beanManager, annotationType, annotations);
     }
@@ -149,7 +143,6 @@ public class CDIUtils {
 	if (annotatedClass.isAnnotationPresent(annotationType)) {
 	    return annotatedClass.getAnnotation(annotationType);
 	}
-
 	Queue<Annotation> annotations = new LinkedList<>();
 	CollectionUtils.toList(annotations, annotatedClass.getAnnotations());
 
@@ -163,7 +156,6 @@ public class CDIUtils {
 	    if (annotation.annotationType().equals(annotationType)) {
 		return annotationType.cast(annotation);
 	    }
-
 	    if (beanManager.isStereotype(annotation.annotationType())) {
 		annotations.addAll(beanManager.getStereotypeDefinition(annotation.annotationType()));
 	    }

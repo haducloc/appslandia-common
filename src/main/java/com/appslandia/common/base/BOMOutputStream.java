@@ -53,7 +53,6 @@ public class BOMOutputStream extends OutputStream {
 	if (this.bom == null) {
 	    return;
 	}
-
 	if (!this.wroteBom) {
 	    this.os.write(this.bom.getBytes());
 	    this.wroteBom = true;

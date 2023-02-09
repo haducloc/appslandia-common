@@ -52,7 +52,6 @@ public class TagUtils {
 	if (tags == null) {
 	    return result;
 	}
-
 	if (TBD_TAG.equals(tags)) {
 	    result.add(TBD_TAG);
 	    return result;
@@ -61,7 +60,6 @@ public class TagUtils {
 	    result.add(UNSORTED_TAG);
 	    return result;
 	}
-
 	if (!TAGS_PATTEN.matcher(tags).matches()) {
 	    isValid.value = false;
 	    return result;
@@ -76,7 +74,6 @@ public class TagUtils {
 		result.add(tag);
 	    }
 	}
-
 	if (result.isEmpty()) {
 	    isValid.value = false;
 	}
@@ -88,11 +85,9 @@ public class TagUtils {
 	if (result.contains(UNSORTED_TAG)) {
 	    result.removeIf(t -> !t.equals(UNSORTED_TAG));
 	}
-
 	if (hasTbd) {
 	    result.add(0, TBD_TAG);
 	}
-
 	return result;
     }
 
@@ -102,15 +97,12 @@ public class TagUtils {
 	if (tag == null) {
 	    return null;
 	}
-
 	if (TBD_TAG.equals(tag)) {
 	    return TBD_TAG;
 	}
-
 	if (UNSORTED_TAG.equals(tag)) {
 	    return UNSORTED_TAG;
 	}
-
 	tag = tag.toLowerCase(Locale.ROOT);
 	String nmlTag = NormalizeUtils.normalizeLabel(tag);
 

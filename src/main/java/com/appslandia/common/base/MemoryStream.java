@@ -81,7 +81,6 @@ public class MemoryStream extends OutputStream implements Serializable {
 	} else if (len == 0) {
 	    return;
 	}
-
 	byte[] lastBuf = this.nodeList.last.buf;
 	int lenAv = lastBuf.length - this.lastLen;
 
@@ -95,7 +94,6 @@ public class MemoryStream extends OutputStream implements Serializable {
 	    if (addBlk * this.blockSize < addLen) {
 		addBlk++;
 	    }
-
 	    this.nodeList.insert(new byte[addBlk * this.blockSize]);
 
 	    if (lenAv == 0) {
@@ -118,7 +116,6 @@ public class MemoryStream extends OutputStream implements Serializable {
 	    } else {
 		out.write(n.buf, 0, this.lastLen);
 	    }
-
 	    n = n.next;
 	}
     }
@@ -159,7 +156,6 @@ public class MemoryStream extends OutputStream implements Serializable {
 	    } else {
 		md.update(n.buf, 0, this.lastLen);
 	    }
-
 	    n = n.next;
 	}
 	return md.digest();
@@ -173,7 +169,6 @@ public class MemoryStream extends OutputStream implements Serializable {
 	    } else {
 		iterator.nextNode(n.buf, this.lastLen);
 	    }
-
 	    n = n.next;
 	}
     }
@@ -245,7 +240,6 @@ public class MemoryStream extends OutputStream implements Serializable {
 	    } else {
 		this.nodeList.insert(buf);
 	    }
-
 	    nodeCount--;
 	}
     }

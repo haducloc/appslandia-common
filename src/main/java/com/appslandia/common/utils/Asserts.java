@@ -55,7 +55,6 @@ public class Asserts {
 	if (obj == null) {
 	    throw new AssertException("The obj must be not null.");
 	}
-
 	return obj;
     }
 
@@ -63,7 +62,6 @@ public class Asserts {
 	if (obj == null) {
 	    throw new AssertException(errorMessage);
 	}
-
 	return obj;
     }
 
@@ -71,7 +69,6 @@ public class Asserts {
 	if (obj == null) {
 	    throw new AssertException(errorMessage.get());
 	}
-
 	return obj;
     }
 
@@ -97,7 +94,6 @@ public class Asserts {
 	if ((array == null) || (array.length == 0)) {
 	    throw new AssertException("The array must have elements.");
 	}
-
 	return array;
     }
 
@@ -105,7 +101,6 @@ public class Asserts {
 	if ((array == null) || (array.length == 0)) {
 	    throw new AssertException(errorMessage);
 	}
-
 	return array;
     }
 
@@ -113,7 +108,6 @@ public class Asserts {
 	if ((elements == null) || (elements.length == 0)) {
 	    throw new AssertException(errorMessage.get());
 	}
-
 	return elements;
     }
 
@@ -121,7 +115,6 @@ public class Asserts {
 	if ((collection == null) || (collection.size() == 0)) {
 	    throw new AssertException("The collection must have elements.");
 	}
-
 	return collection;
     }
 
@@ -129,7 +122,6 @@ public class Asserts {
 	if ((collection == null) || (collection.size() == 0)) {
 	    throw new AssertException(errorMessage);
 	}
-
 	return collection;
     }
 
@@ -137,7 +129,6 @@ public class Asserts {
 	if ((collection == null) || (collection.size() == 0)) {
 	    throw new AssertException(errorMessage.get());
 	}
-
 	return collection;
     }
 
@@ -145,7 +136,6 @@ public class Asserts {
 	if ((map == null) || (map.size() == 0)) {
 	    throw new IllegalArgumentException("The map must have entries.");
 	}
-
 	return map;
     }
 
@@ -153,7 +143,6 @@ public class Asserts {
 	if ((map == null) || (map.size() == 0)) {
 	    throw new IllegalArgumentException(errorMessage);
 	}
-
 	return map;
     }
 
@@ -161,7 +150,6 @@ public class Asserts {
 	if ((map == null) || (map.size() == 0)) {
 	    throw new IllegalArgumentException(errorMessage.get());
 	}
-
 	return map;
     }
 }

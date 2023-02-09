@@ -97,15 +97,12 @@ public class ToStringBuilder {
 	    if (TypeUtils.isPrimitiveOrWrapper(type)) {
 		return true;
 	    }
-
 	    if (CharSequence.class.isAssignableFrom(type)) {
 		return true;
 	    }
-
 	    if (Enum.class.isAssignableFrom(type) || (type == BigDecimal.class)) {
 		return true;
 	    }
-
 	    if (Date.class.isAssignableFrom(type) || Calendar.class.isAssignableFrom(type) || TimeZone.class.isAssignableFrom(type) || (type == Locale.class)
 		    || Charset.class.isAssignableFrom(type)) {
 		return true;
@@ -113,7 +110,6 @@ public class ToStringBuilder {
 	    if (Temporal.class.isAssignableFrom(type)) {
 		return true;
 	    }
-
 	    return false;
 	}
 
@@ -129,7 +125,6 @@ public class ToStringBuilder {
 	    if (value.getClass().getAnnotation(annotationType) != null) {
 		return true;
 	    }
-
 	    return false;
 	}
     }
@@ -160,7 +155,6 @@ public class ToStringBuilder {
 	if (obj == null) {
 	    return builder.append("null").toString();
 	}
-
 	this.toStringObject(obj, 1, builder);
 	return builder.toString();
     }
@@ -171,7 +165,6 @@ public class ToStringBuilder {
 	if (obj == null) {
 	    return builder.append("null").toString();
 	}
-
 	this.toStringFields(obj, 1, builder);
 	return builder.toString();
     }
@@ -193,7 +186,6 @@ public class ToStringBuilder {
 		builder.append("\"").append(obj).append("\"");
 		return;
 	    }
-
 	    if (obj.getClass() == Long.class) {
 		builder.append(obj).append("L");
 		return;
@@ -210,11 +202,9 @@ public class ToStringBuilder {
 		builder.append(obj).append("m");
 		return;
 	    }
-
 	    builder.append(obj);
 	    return;
 	}
-
 	if (obj instanceof Iterable) {
 	    toStringIterator(obj, new IteratorIterator(((Iterable<?>) obj).iterator()), level, builder);
 	    return;
@@ -259,7 +249,6 @@ public class ToStringBuilder {
 	if (level > this.level) {
 	    return;
 	}
-
 	builder.append("[");
 	boolean isFirst = true;
 
@@ -270,17 +259,14 @@ public class ToStringBuilder {
 		if (field.getName().equals("serialVersionUID")) {
 		    continue;
 		}
-
 		if (this.tsDecision.tsExcluded(field)) {
 		    continue;
 		}
-
 		if (!isFirst) {
 		    builder.append(",");
 		} else {
 		    isFirst = false;
 		}
-
 		appendln(builder, false);
 		appendtab(builder, level + this.identTabs, false);
 		builder.append(field.getName()).append(": ");
@@ -299,14 +285,12 @@ public class ToStringBuilder {
 			    this.toStringObject(fieldVal, level + 1, builder);
 			}
 		    }
-
 		} catch (Exception ex) {
 		    builder.append("error=").append(ExceptionUtils.buildMessage(ex));
 		}
 	    }
 	    clazz = clazz.getSuperclass();
 	}
-
 	if (isFirst) {
 	    builder.append(" no fields ]");
 	} else {
@@ -320,7 +304,6 @@ public class ToStringBuilder {
 	if (level > this.level) {
 	    return;
 	}
-
 	builder.append("[");
 	boolean isFirst = true;
 
@@ -331,13 +314,11 @@ public class ToStringBuilder {
 		builder.append(", AND MORE ...");
 		break;
 	    }
-
 	    if (!isFirst) {
 		builder.append(",");
 	    } else {
 		isFirst = false;
 	    }
-
 	    appendln(builder, iterator.isCompact());
 	    appendtab(builder, level + this.identTabs, iterator.isCompact());
 
@@ -365,7 +346,6 @@ public class ToStringBuilder {
 	if (level > this.level) {
 	    return;
 	}
-
 	builder.append("[");
 	boolean isFirst = true;
 
@@ -375,7 +355,6 @@ public class ToStringBuilder {
 	    } else {
 		isFirst = false;
 	    }
-
 	    appendln(builder, false);
 	    appendtab(builder, level + this.identTabs, false);
 
@@ -392,7 +371,6 @@ public class ToStringBuilder {
 		}
 	    }
 	}
-
 	if (isFirst) {
 	    builder.append(" no entries ]");
 	} else {
@@ -411,7 +389,6 @@ public class ToStringBuilder {
 	    } else {
 		isFirst = false;
 	    }
-
 	    appendln(builder, false);
 	    appendtab(builder, level + this.identTabs, false);
 	    builder.append(attribute).append(": ");
@@ -431,12 +408,10 @@ public class ToStringBuilder {
 			this.toStringObject(element, level + 1, builder);
 		    }
 		}
-
 	    } catch (Exception ex) {
 		builder.append("error=").append(ExceptionUtils.buildMessage(ex));
 	    }
 	}
-
 	if (isFirst) {
 	    builder.append(" no elements ]");
 	} else {
@@ -518,7 +493,6 @@ public class ToStringBuilder {
 	if (!isCompact) {
 	    builder.appendln();
 	}
-
 	return builder;
     }
 
@@ -526,7 +500,6 @@ public class ToStringBuilder {
 	if (isCompact) {
 	    return builder.appendsp();
 	}
-
 	return builder.appendsp(2 * n);
     }
 

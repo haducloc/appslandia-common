@@ -75,7 +75,6 @@ public class WrapperClassGenerator {
 	    if (skipped.apply(method)) {
 		continue;
 	    }
-
 	    String returnType = method.getGenericReturnType().getTypeName();
 	    sb.appendln(2);
 
@@ -92,7 +91,6 @@ public class WrapperClassGenerator {
 		    if (first == false) {
 			sb.append(',');
 		    }
-
 		    sb.append(tv.toString());
 		    first = false;
 		}
@@ -149,7 +147,6 @@ public class WrapperClassGenerator {
 		}
 		sb.append(");");
 	    }
-
 	    sb.appendln();
 	    sb.append("}");
 	}
@@ -180,15 +177,12 @@ public class WrapperClassGenerator {
 	    if (Modifier.isStatic(method.getModifiers())) {
 		return true;
 	    }
-
 	    if (Modifier.isPrivate(method.getModifiers())) {
 		return true;
 	    }
-
 	    if (Modifier.isFinal(method.getModifiers())) {
 		return true;
 	    }
-
 	    return false;
 	}
     };
@@ -231,11 +225,9 @@ public class WrapperClassGenerator {
 	    if ((order1 != null) && (order2 != null)) {
 		return order1.compareTo(order2);
 	    }
-
 	    if (order1 != null) {
 		return -1;
 	    }
-
 	    if (order2 != null) {
 		return 1;
 	    }
@@ -250,11 +242,9 @@ public class WrapperClassGenerator {
 	    if (m1.getParameterCount() < m2.getParameterCount()) {
 		return -1;
 	    }
-
 	    if (m1.getParameterCount() > m2.getParameterCount()) {
 		return 1;
 	    }
-
 	    return m1.toString().compareTo(m2.toString());
 	}
     }
@@ -263,7 +253,6 @@ public class WrapperClassGenerator {
 	if (namePriorityMap == null) {
 	    return null;
 	}
-
 	for (Entry<String, Integer> entry : namePriorityMap.entrySet()) {
 	    if (methodName.toLowerCase().contains(entry.getKey().toLowerCase())) {
 		return entry.getValue();

@@ -52,7 +52,6 @@ public class BooleanConverter implements Converter<Boolean> {
 	if (obj == null) {
 	    return null;
 	}
-
 	return Boolean.TRUE.equals(obj) ? VALUE_TRUE : VALUE_FALSE;
     }
 
@@ -62,16 +61,13 @@ public class BooleanConverter implements Converter<Boolean> {
 	if (str == null) {
 	    return null;
 	}
-
 	String val = str.toLowerCase(Locale.ENGLISH);
 	if (VALUE_TRUE.equals(val)) {
 	    return Boolean.TRUE;
 	}
-
 	if (VALUE_FALSE.equals(val)) {
 	    return Boolean.FALSE;
 	}
-
 	throw toParsingError(str, getTargetType().getName());
     }
 }

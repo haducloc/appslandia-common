@@ -81,7 +81,6 @@ public class JdbcSqlTest {
 	} catch (Exception ex) {
 	    Assertions.fail(ex.getMessage());
 	}
-
 	Assertions.assertEquals(Arrays.asList(1), sql.getIndexes("ids__0"));
 	Assertions.assertEquals(Arrays.asList(2), sql.getIndexes("ids__1"));
 	Assertions.assertEquals(Arrays.asList(3), sql.getIndexes("ids__2"));
@@ -100,7 +99,6 @@ public class JdbcSqlTest {
 	} catch (Exception ex) {
 	    Assertions.fail(ex.getMessage());
 	}
-
 	Assertions.assertEquals(Arrays.asList(1), sql.getIndexes("names__0"));
 	Assertions.assertEquals(Arrays.asList(2), sql.getIndexes("names__1"));
 	Assertions.assertEquals(Arrays.asList(3), sql.getIndexes("names__2"));
@@ -119,14 +117,12 @@ public class JdbcSqlTest {
 	} catch (Exception ex) {
 	    Assertions.fail(ex.getMessage());
 	}
-
 	try {
 	    int len = sql.getArrayLen("userIds");
 	    Assertions.assertEquals(2, len);
 	} catch (Exception ex) {
 	    Assertions.fail(ex.getMessage());
 	}
-
 	Assertions.assertTrue(sql.isParam("userType"));
 	Assertions.assertTrue(sql.isParam("userIds"));
 	Assertions.assertTrue(sql.isParam("names"));

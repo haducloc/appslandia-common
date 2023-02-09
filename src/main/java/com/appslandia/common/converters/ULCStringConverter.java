@@ -67,11 +67,9 @@ public class ULCStringConverter implements Converter<String> {
 	if (str == null) {
 	    return str;
 	}
-
 	if (this.locale != null) {
 	    return this.uppercase ? str.toUpperCase(this.locale) : str.toLowerCase(this.locale);
 	}
-
 	return this.uppercase ? str.toUpperCase(formatProvider.getLanguage().getLocale()) : str.toLowerCase(formatProvider.getLanguage().getLocale());
     }
 }

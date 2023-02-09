@@ -51,7 +51,6 @@ public class NormalizeUtils {
 	if (str == null) {
 	    return null;
 	}
-
 	StringBuilder decomposed = new StringBuilder(Normalizer.normalize(str, Normalizer.Form.NFD));
 	if (decomposedCharacterConverter != null) {
 	    for (int i = 0; i < decomposed.length(); i++) {
@@ -80,7 +79,6 @@ public class NormalizeUtils {
 	if (text == null) {
 	    return null;
 	}
-
 	return normalize(text, CRLF3_PATTERNS, StringUtils.DOUBLE_LINE_SEP);
     }
 
@@ -90,7 +88,6 @@ public class NormalizeUtils {
 	if (simpleStr == null) {
 	    return null;
 	}
-
 	return normalize(simpleStr, WTSP_PATTERNS, " ");
     }
 
@@ -98,7 +95,6 @@ public class NormalizeUtils {
 	if (str == null) {
 	    return null;
 	}
-
 	return normalize(str, WTSP_PATTERNS, "");
     }
 
@@ -108,7 +104,6 @@ public class NormalizeUtils {
 	if (str == null) {
 	    return null;
 	}
-
 	return normalize(str, WTSP_PUNCT_PATTERNS, "");
     }
 
@@ -118,7 +113,6 @@ public class NormalizeUtils {
 	if (str == null) {
 	    return null;
 	}
-
 	return normalize(str, NON_DIGITS_PATTERNS, "");
     }
 
@@ -126,7 +120,6 @@ public class NormalizeUtils {
 	if (str == null) {
 	    return null;
 	}
-
 	for (Pattern p : matchers) {
 	    str = p.matcher(str).replaceAll(Matcher.quoteReplacement(replacement));
 	}
@@ -137,7 +130,6 @@ public class NormalizeUtils {
 	if (str == null) {
 	    return "null";
 	}
-
 	str = removeSpPunct(str);
 	return (str != null) ? StringUtils.toLowerCase(str, Locale.ROOT) : "null";
     }

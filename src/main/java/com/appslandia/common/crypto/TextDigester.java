@@ -103,7 +103,6 @@ public class TextDigester extends TextBasedCrypto {
 	if (this.digester != null) {
 	    impl.digester = this.digester.copy();
 	}
-
 	return impl;
     }
 }

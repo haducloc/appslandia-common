@@ -124,7 +124,6 @@ public class PoolEncryptor extends InitializeObject implements Encryptor {
 	if (this.encryptor != null) {
 	    impl.encryptor = this.encryptor.copy();
 	}
-
 	return impl;
     }
 }

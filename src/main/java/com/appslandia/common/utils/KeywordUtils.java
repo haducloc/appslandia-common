@@ -39,12 +39,10 @@ public class KeywordUtils {
 	if (keywords == null) {
 	    return keywords;
 	}
-
 	if (!KEYWORDS_PATTEN.matcher(keywords).matches()) {
 	    isValid.value = false;
 	    return keywords;
 	}
-
 	String[] kws = SplitUtils.split(keywords, ',');
 	if (kws.length == 0) {
 	    isValid.value = false;

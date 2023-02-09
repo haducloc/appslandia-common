@@ -60,12 +60,10 @@ public class DoubleConverter extends NumberConverter<Double> {
 	if (obj == null) {
 	    return null;
 	}
-
 	if (localize) {
 	    NumberFormat nf = formatProvider.getNumberFormat(this.fractionDigits, this.roundingMode, false);
 	    return nf.format(obj);
 	}
-
 	double value = DecimalUtils.round(obj.doubleValue(), this.fractionDigits, this.roundingMode);
 	String str = new BigDecimal(Double.toString(value)).setScale(this.fractionDigits, this.roundingMode).toString();
 
@@ -78,18 +76,15 @@ public class DoubleConverter extends NumberConverter<Double> {
 	if (str == null) {
 	    return null;
 	}
-
 	try {
 	    return Double.parseDouble(str);
 
 	} catch (NumberFormatException ex) {
 	}
-
 	Number number = this.parseNumber(str, formatProvider.getNumberParser());
 	if (number != null) {
 	    return (number instanceof Double) ? (Double) number : number.doubleValue();
 	}
-
 	throw toParsingError(str, getTargetType().getName());
     }
 }

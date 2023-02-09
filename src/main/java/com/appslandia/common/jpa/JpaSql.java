@@ -73,7 +73,6 @@ public class JpaSql extends InitializeObject implements Serializable {
 	if (this.arrayLens == null) {
 	    this.arrayLens = new HashMap<>();
 	}
-
 	this.arrayLens.put(parameterName, maxLength);
 	return this;
     }
@@ -122,7 +121,6 @@ public class JpaSql extends InitializeObject implements Serializable {
 	    } else {
 		arrayLen = DEFAULT_ARRAY_MAX_LENGTH;
 	    }
-
 	    if (isArrayParam) {
 		paramsMap.put(paramName.value, arrayLen);
 	    }
@@ -147,7 +145,6 @@ public class JpaSql extends InitializeObject implements Serializable {
 		    } else {
 			expr = String.format(":%s, ", subParam);
 		    }
-
 		    sb.insert(paramIdx + 1, expr);
 		    start += expr.length();
 		}
@@ -166,12 +163,10 @@ public class JpaSql extends InitializeObject implements Serializable {
 		} else {
 		    expr = String.format("%s LIKE :%s OR ", fieldName.value, subParam);
 		}
-
 		sb.insert(fieldIdx.value, expr);
 		start += expr.length();
 	    }
 	}
-
 	this.translatedSql = sb.toString();
 
 	this.arrayLens = (this.arrayLens != null) ? Collections.unmodifiableMap(this.arrayLens) : null;

@@ -47,11 +47,9 @@ public class JwtUtils {
 	if (parts.length == 2) {
 	    return token.endsWith(".") ? new String[] { parts[0], parts[1], null } : null;
 	}
-
 	if (parts.length != 3) {
 	    return null;
 	}
-
 	return parts;
     }
 
@@ -61,7 +59,6 @@ public class JwtUtils {
 	if (value == null) {
 	    return null;
 	}
-
 	return value.getTime() / 1000;
     }
 
@@ -69,7 +66,6 @@ public class JwtUtils {
 	if (timeInMs == null) {
 	    return null;
 	}
-
 	return timeInMs / 1000;
     }
 
@@ -85,7 +81,6 @@ public class JwtUtils {
 	if (numericDate == null) {
 	    return null;
 	}
-
 	return new Date(numericDate * 1000);
     }
 
@@ -95,16 +90,13 @@ public class JwtUtils {
 	if (value instanceof List) {
 	    return validateList((List<?>) value);
 	}
-
 	if (value instanceof Map) {
 	    return validateMap((Map<?, ?>) value);
 	}
-
 	Class<?> type = value.getClass();
 	if (type.isArray()) {
 	    return validateArray(value);
 	}
-
 	return isBasicType(type);
     }
 

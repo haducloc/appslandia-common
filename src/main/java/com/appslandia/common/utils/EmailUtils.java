@@ -41,7 +41,6 @@ public class EmailUtils {
 	if (email == null) {
 	    return true;
 	}
-
 	return EMAIL_PATTERN.matcher(email).matches();
     }
 
@@ -64,7 +63,6 @@ public class EmailUtils {
 	if (person == null) {
 	    return email;
 	}
-
 	try {
 	    return String.format("%s <%s>", MimeUtility.encodeWord(person, StandardCharsets.UTF_8.name(), null), email);
 	} catch (UnsupportedEncodingException ex) {

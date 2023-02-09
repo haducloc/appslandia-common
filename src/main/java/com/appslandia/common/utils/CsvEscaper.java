@@ -68,11 +68,9 @@ public class CsvEscaper extends InitializeObject {
 	    }
 	    return "";
 	}
-
 	if (value.isEmpty()) {
 	    return "";
 	}
-
 	StringBuilder out = new StringBuilder((int) (value.length() * 1.25f));
 	out.append('"');
 
@@ -88,7 +86,6 @@ public class CsvEscaper extends InitializeObject {
 	    if (!useWrap) {
 		useWrap = c == '"' || c == '\r' || c == '\n' || c == this.separator;
 	    }
-
 	    if (c == '"') {
 		// add un_escaped portion
 		if (start < i) {
@@ -116,7 +113,6 @@ public class CsvEscaper extends InitializeObject {
 	if (start < length) {
 	    out.append(srcChars, start, length - start);
 	}
-
 	out.append('"');
 	return useWrap ? out.toString() : value;
     }

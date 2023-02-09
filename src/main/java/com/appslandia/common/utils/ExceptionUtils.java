@@ -38,7 +38,6 @@ public class ExceptionUtils {
 	if (te instanceof Exception) {
 	    return (Exception) te;
 	}
-
 	return ex;
     }
 
@@ -61,7 +60,6 @@ public class ExceptionUtils {
 	} else {
 	    sb.append("null");
 	}
-
 	sb.append(')');
 	return sb.toString();
     }
@@ -70,7 +68,6 @@ public class ExceptionUtils {
 	if (ex instanceof RuntimeException) {
 	    return (RuntimeException) ex;
 	}
-
 	return new UncheckedException(ex);
     }
 }

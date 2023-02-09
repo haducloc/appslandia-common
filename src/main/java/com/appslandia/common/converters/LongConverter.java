@@ -47,7 +47,6 @@ public class LongConverter extends NumberConverter<Long> {
 	if (obj == null) {
 	    return null;
 	}
-
 	return obj.toString();
     }
 
@@ -57,13 +56,11 @@ public class LongConverter extends NumberConverter<Long> {
 	if (str == null) {
 	    return null;
 	}
-
 	try {
 	    return Long.valueOf(Long.parseLong(str));
 
 	} catch (NumberFormatException ex) {
 	}
-
 	throw toParsingError(str, getTargetType().getName());
     }
 }

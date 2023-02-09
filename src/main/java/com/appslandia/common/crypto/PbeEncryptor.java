@@ -129,7 +129,6 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	if (isIVSpec()) {
 	    iv = ZERO_IV_CACHE.computeIfAbsent(getIVSize(), s -> new byte[s]);
 	}
-
 	try {
 	    synchronized (this.mutex) {
 		if (iv != null) {
@@ -137,7 +136,6 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 		} else {
 		    this.cipher.init(Cipher.DECRYPT_MODE, secretKey);
 		}
-
 		return this.cipher.doFinal(message, salt.length, message.length - salt.length);
 	    }
 	} catch (GeneralSecurityException ex) {
@@ -160,7 +158,6 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	if (isIVSpec()) {
 	    iv = ZERO_IV_CACHE.computeIfAbsent(getIVSize(), s -> new byte[s]);
 	}
-
 	try {
 	    synchronized (this.mutex) {
 		if (iv != null) {
@@ -168,10 +165,8 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 		} else {
 		    this.cipher.init(Cipher.ENCRYPT_MODE, secretKey);
 		}
-
 		return this.cipher.doFinal(message);
 	    }
-
 	} catch (GeneralSecurityException ex) {
 	    throw new CryptoException(ex);
 	} finally {
@@ -192,7 +187,6 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	if (isIVSpec()) {
 	    iv = ZERO_IV_CACHE.computeIfAbsent(getIVSize(), s -> new byte[s]);
 	}
-
 	try {
 	    synchronized (this.mutex) {
 		if (iv != null) {
@@ -200,7 +194,6 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 		} else {
 		    this.cipher.init(Cipher.DECRYPT_MODE, secretKey);
 		}
-
 		return this.cipher.doFinal(message);
 	    }
 	} catch (GeneralSecurityException ex) {
@@ -278,11 +271,9 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	if (this.password != null) {
 	    impl.setPassword(this.password);
 	}
-
 	if (this.secretKeyGenerator != null) {
 	    impl.secretKeyGenerator = this.secretKeyGenerator.copy();
 	}
-
 	impl.ivSize = this.ivSize;
 	impl.tagSize = this.tagSize;
 	return impl;

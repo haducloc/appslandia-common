@@ -54,11 +54,9 @@ public class PropertyUtils {
 		    if (!Modifier.isPublic(m.getModifiers()) || Modifier.isStatic(m.getModifiers())) {
 			return false;
 		    }
-
 		    if (m.getParameterCount() != 1) {
 			return false;
 		    }
-
 		    return m.getName().equals(propertyName);
 		}
 
@@ -81,15 +79,12 @@ public class PropertyUtils {
 		    if (!Modifier.isPublic(m.getModifiers()) || Modifier.isStatic(m.getModifiers())) {
 			return false;
 		    }
-
 		    if (m.getParameterCount() != 1) {
 			return false;
 		    }
-
 		    if (!m.getName().startsWith("set")) {
 			return false;
 		    }
-
 		    return m.getName().substring(3).equalsIgnoreCase(propertyName);
 		}
 

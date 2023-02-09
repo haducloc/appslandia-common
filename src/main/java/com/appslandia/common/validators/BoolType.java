@@ -68,12 +68,10 @@ public @interface BoolType {
 	    if (value == null) {
 		return true;
 	    }
-
 	    int bitValue = value.intValue();
 	    if ((bitValue == BitBool.FALSE) || (bitValue == BitBool.TRUE)) {
 		return true;
 	    }
-
 	    return false;
 	}
     }

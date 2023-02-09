@@ -143,7 +143,6 @@ public class PoolPasswordDigester extends PasswordDigester {
 	if (this.digester != null) {
 	    impl.digester = this.digester.copy();
 	}
-
 	return impl;
     }
 }

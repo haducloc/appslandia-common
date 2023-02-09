@@ -41,7 +41,6 @@ public class SecureConfigTest {
 	} catch (Exception ex) {
 	    Assertions.fail(ex.getMessage());
 	}
-
 	try {
 	    Assertions.assertEquals("value", config.getString("config"));
 	} catch (Exception ex) {

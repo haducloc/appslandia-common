@@ -119,7 +119,6 @@ public abstract class JsonProcessor extends InitializeObject {
 	if (__provider != null) {
 	    return __provider.get();
 	}
-
 	try {
 	    Class<? extends JsonProcessor> implClass = ReflectionUtils.loadClass("com.appslandia.common.json.GsonProcessor", null);
 	    return ReflectionUtils.newInstance(implClass);

@@ -87,11 +87,9 @@ public class DeployEnv {
 	if (this == obj) {
 	    return true;
 	}
-
 	if (!(obj instanceof DeployEnv)) {
 	    return false;
 	}
-
 	DeployEnv another = (DeployEnv) obj;
 	return this.name.equalsIgnoreCase(another.name);
     }
@@ -138,19 +136,15 @@ public class DeployEnv {
 	if (DEVELOPMENT.name.equalsIgnoreCase(env)) {
 	    return DEVELOPMENT;
 	}
-
 	if (TESTING.name.equalsIgnoreCase(env)) {
 	    return TESTING;
 	}
-
 	if (STAGING.name.equalsIgnoreCase(env)) {
 	    return STAGING;
 	}
-
 	if (PRODUCTION.name.equalsIgnoreCase(env)) {
 	    return PRODUCTION;
 	}
-
 	return new DeployEnv(env);
     }
 }

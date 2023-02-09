@@ -78,7 +78,6 @@ public class LongConverterTest {
 	} catch (Exception ex) {
 	    Assertions.assertTrue(ex instanceof ConverterException);
 	}
-
 	try {
 	    converter.parse("12345.67", formatProvider);
 	    Assertions.fail();
@@ -97,7 +96,6 @@ public class LongConverterTest {
 	} catch (Exception ex) {
 	    Assertions.fail(ex.getMessage());
 	}
-
 	try {
 	    Long v = converter.parse(Long.toString(Long.MIN_VALUE), formatProvider);
 	    Assertions.assertEquals(Long.MIN_VALUE, v.longValue());

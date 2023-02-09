@@ -48,7 +48,6 @@ public class IntegerConverter extends NumberConverter<Integer> {
 	if (obj == null) {
 	    return null;
 	}
-
 	return obj.toString();
     }
 
@@ -58,19 +57,16 @@ public class IntegerConverter extends NumberConverter<Integer> {
 	if (str == null) {
 	    return null;
 	}
-
 	try {
 	    long value = Long.parseLong(str);
 
 	    if (!ValueUtils.isIntRange(value)) {
 		throw toNumberOverflowError(str);
 	    }
-
 	    return Integer.valueOf((int) value);
 
 	} catch (NumberFormatException ex) {
 	}
-
 	throw toParsingError(str, getTargetType().getName());
     }
 }

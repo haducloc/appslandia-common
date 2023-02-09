@@ -71,11 +71,9 @@ public @interface MaxLength {
 	    if (value == null) {
 		return true;
 	    }
-
 	    if (value.length() > this.maxLength) {
 		return false;
 	    }
-
 	    return true;
 	}
     }

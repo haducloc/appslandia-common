@@ -68,7 +68,6 @@ public @interface Email {
 	    if (value == null) {
 		return true;
 	    }
-
 	    return EmailUtils.isValid(value);
 	}
     }

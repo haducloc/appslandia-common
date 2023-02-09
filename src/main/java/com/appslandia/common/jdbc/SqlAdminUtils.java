@@ -69,7 +69,6 @@ public class SqlAdminUtils {
 			}
 		    }
 		}
-
 		updStat.executeBatch();
 	    }
 
@@ -82,11 +81,9 @@ public class SqlAdminUtils {
 	    if (idPkAlter1 != null) {
 		stat.executeUpdate(STR.fmt("ALTER TABLE {} {}", tableName, idPkAlter1));
 	    }
-
 	    if (idPkAlter2 != null) {
 		stat.executeUpdate(STR.fmt("ALTER TABLE {} {}", tableName, idPkAlter2));
 	    }
-
 	    if (idPkAlter3 != null) {
 		stat.executeUpdate(STR.fmt("ALTER TABLE {} {}", tableName, idPkAlter3));
 	    }

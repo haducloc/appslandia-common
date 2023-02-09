@@ -54,7 +54,6 @@ public class ConnectionImpl implements Connection {
 	if (outer != null) {
 	    this.outer = outer;
 	}
-
 	this.conn = dataSource.getConnection();
 	this.dsName = Asserts.notNull(dsName, "dsName must be not null.");
 
@@ -113,7 +112,6 @@ public class ConnectionImpl implements Connection {
 	    if (params != null) {
 		JdbcUtils.setParameters(stat, sql, params);
 	    }
-
 	    return stat.executeUpdate();
 	}
     }
@@ -140,7 +138,6 @@ public class ConnectionImpl implements Connection {
 	    if (params != null) {
 		JdbcUtils.setParameters(stat, sql, params);
 	    }
-
 	    try (ResultSetImpl rs = stat.executeQuery()) {
 		return JdbcUtils.executeMap(rs, keyMapper, valueMapper, map);
 	    }
@@ -166,7 +163,6 @@ public class ConnectionImpl implements Connection {
 	    if (params != null) {
 		JdbcUtils.setParameters(stat, sql, params);
 	    }
-
 	    try (ResultSetImpl rs = stat.executeQuery()) {
 		return JdbcUtils.executeMap(rs, keyColumn, valueColumn, map);
 	    }
@@ -192,7 +188,6 @@ public class ConnectionImpl implements Connection {
 	    if (params != null) {
 		JdbcUtils.setParameters(stat, sql, params);
 	    }
-
 	    try (ResultSetImpl rs = stat.executeQuery()) {
 		return JdbcUtils.executeList(rs, mapper, list);
 	    }
@@ -218,7 +213,6 @@ public class ConnectionImpl implements Connection {
 	    if (params != null) {
 		JdbcUtils.setParameters(stat, sql, params);
 	    }
-
 	    try (ResultSetImpl rs = stat.executeQuery()) {
 		return JdbcUtils.executeSingle(rs, mapper);
 	    }
@@ -256,7 +250,6 @@ public class ConnectionImpl implements Connection {
 	    if (params != null) {
 		JdbcUtils.setParameters(stat, sql, params);
 	    }
-
 	    try (ResultSetImpl rs = stat.executeQuery()) {
 		return JdbcUtils.executeExists(rs);
 	    }
@@ -284,7 +277,6 @@ public class ConnectionImpl implements Connection {
 	    if (params != null) {
 		JdbcUtils.setParameters(stat, sql, params);
 	    }
-
 	    try (ResultSetImpl rs = stat.executeQuery()) {
 		while (rs.next()) {
 		    handler.handle(rs);
@@ -312,7 +304,6 @@ public class ConnectionImpl implements Connection {
 	    if (params != null) {
 		JdbcUtils.setParameters(stat, sql, params);
 	    }
-
 	    try (ResultSetImpl rs = stat.executeQuery()) {
 		JdbcUtils.executeStream(rs, streamLabel, out, handler);
 	    }
@@ -338,7 +329,6 @@ public class ConnectionImpl implements Connection {
 	    if (params != null) {
 		JdbcUtils.setParameters(stat, sql, params);
 	    }
-
 	    try (ResultSetImpl rs = stat.executeQuery()) {
 		JdbcUtils.executeStream(rs, streamLabel, out, handler);
 	    }
@@ -364,7 +354,6 @@ public class ConnectionImpl implements Connection {
 	    if (params != null) {
 		JdbcUtils.setParameters(stat, sql, params);
 	    }
-
 	    try (ResultSetImpl rs = stat.executeQuery()) {
 		JdbcUtils.executeNStream(rs, streamLabel, out, handler);
 	    }

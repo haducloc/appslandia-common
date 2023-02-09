@@ -78,7 +78,6 @@ public class IntegerConverterTest {
 	} catch (Exception ex) {
 	    Assertions.assertTrue(ex instanceof ConverterException);
 	}
-
 	try {
 	    converter.parse("12345.67", formatProvider);
 	    Assertions.fail();
@@ -97,7 +96,6 @@ public class IntegerConverterTest {
 	} catch (Exception ex) {
 	    Assertions.fail(ex.getMessage());
 	}
-
 	try {
 	    Integer v = converter.parse(Integer.toString(Integer.MIN_VALUE), formatProvider);
 	    Assertions.assertEquals(Integer.MIN_VALUE, v.intValue());
@@ -117,7 +115,6 @@ public class IntegerConverterTest {
 	} catch (Exception ex) {
 	    Assertions.assertTrue(ex instanceof ConverterException);
 	}
-
 	try {
 	    // MIN: -2147483648
 	    converter.parse("-2147483649", formatProvider);

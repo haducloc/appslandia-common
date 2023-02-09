@@ -46,11 +46,9 @@ public class AnnotationUtils {
 	if (anns2.length != anns1.length) {
 	    return false;
 	}
-
 	if (anns2.length == 0) {
 	    return true;
 	}
-
 	return Arrays.stream(anns2).allMatch(ann2 -> Arrays.stream(anns1).anyMatch(ann1 -> ann1.equals(ann2)));
     }
 
@@ -58,7 +56,6 @@ public class AnnotationUtils {
 	if (annotations.length == 0) {
 	    return src.length == 0;
 	}
-
 	return Arrays.stream(annotations).allMatch(ann -> Arrays.stream(src).anyMatch(srcAnn -> srcAnn.equals(ann)));
     }
 
@@ -90,15 +87,12 @@ public class AnnotationUtils {
 	if (element.getDeclaredAnnotation(ApplicationScoped.class) != null) {
 	    return ObjectScope.SINGLETON;
 	}
-
 	if (element.getDeclaredAnnotation(Dependent.class) != null) {
 	    return ObjectScope.PROTOTYPE;
 	}
-
 	if (element.getDeclaredAnnotation(SessionScoped.class) != null || element.getDeclaredAnnotation(RequestScoped.class) != null) {
 	    throw new IllegalArgumentException("SessionScoped/RequestScoped is unsupported.");
 	}
-
 	return ObjectScope.SINGLETON;
     }
 }

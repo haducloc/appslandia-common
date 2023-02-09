@@ -78,7 +78,6 @@ public class GsonMapParser {
 		if (str.contains(".")) {
 		    return element.getAsDouble();
 		}
-
 		return element.getAsLong();
 	    }
 	    throw new AssertionError();

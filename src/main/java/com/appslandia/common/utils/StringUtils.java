@@ -42,7 +42,6 @@ public class StringUtils {
 	if (str == null) {
 	    return null;
 	}
-
 	return str.toLowerCase(locale);
     }
 
@@ -50,7 +49,6 @@ public class StringUtils {
 	if (str == null) {
 	    return null;
 	}
-
 	return str.toUpperCase(locale);
     }
 
@@ -58,7 +56,6 @@ public class StringUtils {
 	if (str == null) {
 	    return null;
 	}
-
 	if (!str.isEmpty()) {
 	    StringBuilder sb = new StringBuilder(str.length());
 	    return sb.append(str.substring(0, 1).toLowerCase(locale)).append(str.substring(1)).toString();
@@ -70,7 +67,6 @@ public class StringUtils {
 	if (str == null) {
 	    return null;
 	}
-
 	if (!str.isEmpty()) {
 	    StringBuilder sb = new StringBuilder(str.length());
 	    return sb.append(str.substring(0, 1).toUpperCase(locale)).append(str.substring(1)).toString();
@@ -90,7 +86,6 @@ public class StringUtils {
 	if (str == null) {
 	    return defaultValue;
 	}
-
 	str = str.trim();
 	return !str.isEmpty() ? str : defaultValue;
     }
@@ -99,18 +94,15 @@ public class StringUtils {
 	if (str == null) {
 	    return null;
 	}
-
 	int start = -1;
 	while ((++start < str.length()) && (str.charAt(start) == charToTrim)) {
 	}
-
 	int end = str.length();
 	while ((--end >= 0) && (str.charAt(end) == charToTrim)) {
 	}
 	if (start > end) {
 	    return null;
 	}
-
 	return str.substring(start, end + 1);
     }
 
@@ -118,7 +110,6 @@ public class StringUtils {
 	if (str == null) {
 	    return null;
 	}
-
 	return !str.isEmpty() ? str.toLowerCase(locale) : null;
     }
 
@@ -126,7 +117,6 @@ public class StringUtils {
 	if (str == null) {
 	    return null;
 	}
-
 	return !str.isEmpty() ? str.toUpperCase(locale) : null;
     }
 
@@ -147,11 +137,9 @@ public class StringUtils {
 	if (substrIgnoreCase.isEmpty()) {
 	    return true;
 	}
-
 	if (str.regionMatches(true, 0, substrIgnoreCase, 0, substrIgnoreCase.length())) {
 	    return true;
 	}
-
 	return false;
     }
 
@@ -162,11 +150,9 @@ public class StringUtils {
 	if (substrIgnoreCase.isEmpty()) {
 	    return true;
 	}
-
 	if (str.regionMatches(true, str.length() - substrIgnoreCase.length(), substrIgnoreCase, 0, substrIgnoreCase.length())) {
 	    return true;
 	}
-
 	return false;
     }
 
@@ -177,7 +163,6 @@ public class StringUtils {
 	if (substrIgnoreCase.isEmpty()) {
 	    return true;
 	}
-
 	int maxOffset = str.length() - substrIgnoreCase.length();
 	for (int offset = 0; offset <= maxOffset; offset++) {
 
@@ -197,7 +182,6 @@ public class StringUtils {
 		return null;
 	    }
 	}
-
 	String sep = new String(new char[] { delimiter });
 	StringJoiner joiner = willWrap ? new StringJoiner(sep, sep, sep) : new StringJoiner(sep);
 
@@ -213,7 +197,6 @@ public class StringUtils {
 	if (elements.length == 0) {
 	    return null;
 	}
-
 	String sep = new String(new char[] { delimiter });
 	StringJoiner joiner = willWrap ? new StringJoiner(sep, sep, sep) : new StringJoiner(sep);
 

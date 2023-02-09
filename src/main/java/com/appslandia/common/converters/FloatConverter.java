@@ -61,12 +61,10 @@ public class FloatConverter extends NumberConverter<Float> {
 	if (obj == null) {
 	    return null;
 	}
-
 	if (localize) {
 	    NumberFormat nf = formatProvider.getNumberFormat(this.fractionDigits, this.roundingMode, false);
 	    return nf.format(obj);
 	}
-
 	float value = DecimalUtils.round(obj.floatValue(), this.fractionDigits, this.roundingMode);
 	String str = new BigDecimal(Float.toString(value)).setScale(this.fractionDigits, this.roundingMode).toString();
 
@@ -79,19 +77,16 @@ public class FloatConverter extends NumberConverter<Float> {
 	if (str == null) {
 	    return null;
 	}
-
 	try {
 	    double value = Double.parseDouble(str);
 
 	    if (!ValueUtils.isFloatRange(value)) {
 		throw toNumberOverflowError(str);
 	    }
-
 	    return (float) value;
 
 	} catch (NumberFormatException ex) {
 	}
-
 	Number number = this.parseNumber(str, formatProvider.getNumberParser());
 	if (number != null) {
 	    double value = number.doubleValue();
@@ -99,10 +94,8 @@ public class FloatConverter extends NumberConverter<Float> {
 	    if (!ValueUtils.isFloatRange(value)) {
 		throw toNumberOverflowError(str);
 	    }
-
 	    return (float) value;
 	}
-
 	throw toParsingError(str, getTargetType().getName());
     }
 }

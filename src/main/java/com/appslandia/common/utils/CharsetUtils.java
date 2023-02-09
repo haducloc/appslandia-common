@@ -34,7 +34,6 @@ public class CharsetUtils {
 	if (contentType == null) {
 	    return StandardCharsets.UTF_8.name();
 	}
-
 	return parseCharset(contentType, StandardCharsets.UTF_8.name());
     }
 
@@ -42,7 +41,6 @@ public class CharsetUtils {
 	if (contentType == null) {
 	    return defaultValue;
 	}
-
 	String[] items = SplitUtils.split(contentType, ';');
 
 	for (int i = items.length - 1; i >= 0; i--) {

@@ -51,7 +51,6 @@ public class URLEncoding {
 				.on(' ');
 		// @formatter:on
     }
-
     static final BitSet URL_PARAM_NOT_ENCODED_SP = new BitMap(URL_PARAM_NOT_ENCODED).off(' ');
 
     static final BitSet URL_PATH_NOT_ENCODED;
@@ -74,7 +73,6 @@ public class URLEncoding {
 	if (s == null) {
 	    return null;
 	}
-
 	return encodeParam(s, true);
     }
 
@@ -82,7 +80,6 @@ public class URLEncoding {
 	if (s == null) {
 	    return null;
 	}
-
 	return encode(s, spaceToPlus ? URL_PARAM_NOT_ENCODED : URL_PARAM_NOT_ENCODED_SP);
     }
 
@@ -90,7 +87,6 @@ public class URLEncoding {
 	if (s == null) {
 	    return null;
 	}
-
 	return decode(s, EncodeType.URL_PARAM);
     }
 
@@ -98,7 +94,6 @@ public class URLEncoding {
 	if (s == null) {
 	    return null;
 	}
-
 	return encode(s, URL_PATH_NOT_ENCODED);
     }
 
@@ -106,7 +101,6 @@ public class URLEncoding {
 	if (s == null) {
 	    return null;
 	}
-
 	return decode(s, EncodeType.URL_PATH);
     }
 
@@ -153,13 +147,11 @@ public class URLEncoding {
 		    if (Character.isLetter(ch)) {
 			ch -= caseDiff;
 		    }
-
 		    out.append(ch);
 		    ch = Character.forDigit(ba[j] & 0xF, 16);
 		    if (Character.isLetter(ch)) {
 			ch -= caseDiff;
 		    }
-
 		    out.append(ch);
 		}
 		charArrayWriter.reset();
@@ -188,7 +180,6 @@ public class URLEncoding {
 		} else {
 		    sb.append(c);
 		}
-
 		i++;
 		break;
 	    case '%':
@@ -218,7 +209,6 @@ public class URLEncoding {
 		    if ((i < numChars) && (c == '%')) {
 			throw new IllegalArgumentException("Incomplete trailing escape (%) pattern");
 		    }
-
 		    sb.append(new String(bytes, 0, pos, StandardCharsets.UTF_8));
 		} catch (NumberFormatException e) {
 		    throw new IllegalArgumentException("Illegal hex characters in escape (%) pattern - " + e.getMessage());

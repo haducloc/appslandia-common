@@ -50,7 +50,6 @@ public class PKIUtils {
 	if (idx < 0) {
 	    valid = false;
 	}
-
 	if (valid) {
 	    idx = pem.indexOf("-----", idx + 11);
 	    if (idx < 0) {
@@ -67,7 +66,6 @@ public class PKIUtils {
 		valid = false;
 	    }
 	}
-
 	if (valid) {
 	    idx = pem.lastIndexOf("-----END ", idx - 9);
 	    if (idx < 0) {

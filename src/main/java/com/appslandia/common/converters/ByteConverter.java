@@ -48,7 +48,6 @@ public class ByteConverter extends NumberConverter<Byte> {
 	if (obj == null) {
 	    return null;
 	}
-
 	return obj.toString();
     }
 
@@ -58,19 +57,16 @@ public class ByteConverter extends NumberConverter<Byte> {
 	if (str == null) {
 	    return null;
 	}
-
 	try {
 	    long value = Long.parseLong(str);
 
 	    if (!ValueUtils.isByteRange(value)) {
 		throw toNumberOverflowError(str);
 	    }
-
 	    return Byte.valueOf((byte) value);
 
 	} catch (NumberFormatException ex) {
 	}
-
 	throw toParsingError(str, getTargetType().getName());
     }
 }

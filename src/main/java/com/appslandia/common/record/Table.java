@@ -75,7 +75,6 @@ public class Table extends InitializeObject implements Serializable {
 	if (keyCount == 0) {
 	    throw new IllegalArgumentException("No keys found.");
 	}
-
 	this.insertSql = new JdbcSql(this.buildInsertSQL());
 	this.updateSql = new JdbcSql(this.buildUpdateSQL());
 	this.deleteSql = new JdbcSql(this.buildDeleteSQL());

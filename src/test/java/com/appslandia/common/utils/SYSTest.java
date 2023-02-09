@@ -77,7 +77,6 @@ public class SYSTest {
 	if (System.getenv("TMP") == null) {
 	    return;
 	}
-
 	try {
 	    String resolvedValue = SYS.resolve("${env.TMP}");
 	    Assertions.assertNotNull(resolvedValue);
@@ -118,7 +117,6 @@ public class SYSTest {
 	if (System.getenv("TMP") == null) {
 	    return;
 	}
-
 	try {
 	    String resolvedValue = SYS.resolve("${__sys__test__tmp__,env.TMP}");
 	    Assertions.assertNotNull(resolvedValue);

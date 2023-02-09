@@ -89,11 +89,9 @@ public class SecureConfig extends PropertyConfig {
 	if (value == null) {
 	    return null;
 	}
-
 	if (!CryptoUtils.isEncValue(value)) {
 	    return value;
 	}
-
 	return this.textEncryptor.decrypt(CryptoUtils.parseEncValue(value));
     }
 

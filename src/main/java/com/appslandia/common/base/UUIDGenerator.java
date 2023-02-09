@@ -53,7 +53,6 @@ public class UUIDGenerator implements TextGenerator {
 	if (value.length() != 32) {
 	    return false;
 	}
-
 	try {
 	    String uuid = UUID_FORMAT.format(value);
 	    UUID.fromString(uuid);

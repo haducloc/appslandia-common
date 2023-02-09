@@ -57,14 +57,12 @@ public class TagsConverter implements Converter<String> {
 	if (str == null) {
 	    return null;
 	}
-
 	Out<Boolean> isValid = new Out<Boolean>();
 	List<String> tags = TagUtils.toTags(str, isValid);
 
 	if (!isValid.val()) {
 	    throw toParsingError(str, "Tags");
 	}
-
 	return !tags.isEmpty() ? String.join(", ", tags) : null;
     }
 }

@@ -201,11 +201,9 @@ public class PbeDigester extends PbeObject implements Digester {
 	if (this.password != null) {
 	    impl.setPassword(this.password);
 	}
-
 	if (this.secretKeyGenerator != null) {
 	    impl.secretKeyGenerator = this.secretKeyGenerator.copy();
 	}
-
 	return impl;
     }
 }

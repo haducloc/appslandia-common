@@ -50,7 +50,6 @@ public class JsonbProcessor extends JsonProcessor {
 	if (this.config == null) {
 	    this.config = newConfig();
 	}
-
 	this.jsonb = JsonbBuilder.create(this.config);
     }
 
@@ -110,7 +109,6 @@ public class JsonbProcessor extends JsonProcessor {
 		if (field.getDeclaredAnnotation(JsonIgnore.class) != null) {
 		    return false;
 		}
-
 		return true;
 	    }
 

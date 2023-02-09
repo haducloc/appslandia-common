@@ -212,7 +212,6 @@ public class DateUtils {
 	if (ld == null) {
 	    return null;
 	}
-
 	return ld.getYear() * 10000 + ld.getMonthValue() * 100 + ld.getDayOfMonth();
     }
 
@@ -221,7 +220,6 @@ public class DateUtils {
 	if (ld == null) {
 	    return null;
 	}
-
 	return ld.getYear() * 100 + ld.getMonthValue();
     }
 
@@ -389,7 +387,6 @@ public class DateUtils {
 	    if (u == lowUnit) {
 		break;
 	    }
-
 	    duration -= lowUnit.convert(v, u);
 	    u = nextLowerUnit(u);
 	}

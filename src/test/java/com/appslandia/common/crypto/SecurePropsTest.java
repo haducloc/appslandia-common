@@ -41,7 +41,6 @@ public class SecurePropsTest {
 	} catch (Exception ex) {
 	    Assertions.fail(ex.getMessage());
 	}
-
 	try {
 	    Assertions.assertEquals("value", props.getString("config"));
 	} catch (Exception ex) {

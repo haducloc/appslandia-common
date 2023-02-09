@@ -86,7 +86,6 @@ public class BitUtils {
 			} else {
 			    this.curIterator = Collections.emptyIterator();
 			}
-
 		    } catch (IOException ex) {
 			throw new UncheckedIOException(ex);
 		    }

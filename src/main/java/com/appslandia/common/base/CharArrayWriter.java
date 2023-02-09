@@ -43,7 +43,6 @@ public class CharArrayWriter extends Writer {
 	if (initialSize < 0) {
 	    throw new IllegalArgumentException("initialSize");
 	}
-
 	buf = new char[initialSize];
     }
 
@@ -52,7 +51,6 @@ public class CharArrayWriter extends Writer {
 	if (newcount > buf.length) {
 	    buf = Arrays.copyOf(buf, Math.max(buf.length << 1, newcount));
 	}
-
 	buf[count] = (char) c;
 	count = newcount;
     }
@@ -63,12 +61,10 @@ public class CharArrayWriter extends Writer {
 	} else if (len == 0) {
 	    return;
 	}
-
 	int newcount = count + len;
 	if (newcount > buf.length) {
 	    buf = Arrays.copyOf(buf, Math.max(buf.length << 1, newcount));
 	}
-
 	System.arraycopy(c, off, buf, count, len);
 	count = newcount;
     }
@@ -78,7 +74,6 @@ public class CharArrayWriter extends Writer {
 	if (newcount > buf.length) {
 	    buf = Arrays.copyOf(buf, Math.max(buf.length << 1, newcount));
 	}
-
 	str.getChars(off, off + len, buf, count);
 	count = newcount;
     }

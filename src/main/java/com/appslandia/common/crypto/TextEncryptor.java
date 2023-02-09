@@ -102,7 +102,6 @@ public class TextEncryptor extends TextBasedCrypto {
 	if (this.encryptor != null) {
 	    impl.encryptor = this.encryptor.copy();
 	}
-
 	return impl;
     }
 }

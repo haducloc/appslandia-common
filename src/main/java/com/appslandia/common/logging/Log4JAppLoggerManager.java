@@ -103,23 +103,18 @@ public class Log4JAppLoggerManager extends AppLoggerManager {
 	    if (level == org.apache.logging.log4j.Level.ALL) {
 		return true;
 	    }
-
 	    if (level == org.apache.logging.log4j.Level.TRACE) {
 		return this.logger.isTraceEnabled();
 	    }
-
 	    if (level == org.apache.logging.log4j.Level.DEBUG) {
 		return this.logger.isDebugEnabled();
 	    }
-
 	    if (level == org.apache.logging.log4j.Level.INFO) {
 		return this.logger.isInfoEnabled();
 	    }
-
 	    if (level == org.apache.logging.log4j.Level.WARN) {
 		return this.logger.isWarnEnabled();
 	    }
-
 	    if (level == org.apache.logging.log4j.Level.ERROR) {
 		return this.logger.isErrorEnabled();
 	    }

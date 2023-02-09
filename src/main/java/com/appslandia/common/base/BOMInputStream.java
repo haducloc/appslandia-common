@@ -45,7 +45,6 @@ public class BOMInputStream extends InputStream {
 	if (count > 0) {
 	    this.in.unread(bb, 0, count);
 	}
-
 	if (this.bom != null) {
 	    this.in.skip(this.bom.length());
 	}

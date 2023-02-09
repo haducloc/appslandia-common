@@ -48,7 +48,6 @@ public class ShortConverter extends NumberConverter<Short> {
 	if (obj == null) {
 	    return null;
 	}
-
 	return obj.toString();
     }
 
@@ -58,14 +57,12 @@ public class ShortConverter extends NumberConverter<Short> {
 	if (str == null) {
 	    return null;
 	}
-
 	try {
 	    long value = Long.parseLong(str);
 
 	    if (!ValueUtils.isShortRange(value)) {
 		throw toNumberOverflowError(str);
 	    }
-
 	    return Short.valueOf((short) value);
 
 	} catch (NumberFormatException ex) {

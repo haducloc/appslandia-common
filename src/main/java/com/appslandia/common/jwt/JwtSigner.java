@@ -60,7 +60,6 @@ public class JwtSigner extends InitializeObject {
 	if (this == NONE) {
 	    return EMPTY_SIG;
 	}
-
 	return this.signer.digest(message);
     }
 
@@ -72,7 +71,6 @@ public class JwtSigner extends InitializeObject {
 	if (this == NONE) {
 	    return Arrays.equals(signature, EMPTY_SIG);
 	}
-
 	return this.signer.verify(message, signature);
     }
 
@@ -119,13 +117,11 @@ public class JwtSigner extends InitializeObject {
 	if (this == NONE) {
 	    return NONE;
 	}
-
 	JwtSigner impl = new JwtSigner();
 	impl.alg = this.alg;
 	if (this.signer != null) {
 	    impl.signer = this.signer.copy();
 	}
-
 	impl.kid = this.kid;
 	return impl;
     }

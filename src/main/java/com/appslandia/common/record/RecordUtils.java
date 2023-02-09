@@ -110,7 +110,6 @@ public final class RecordUtils {
 		} else {
 		    field.setKeyType(genCol ? FieldType.COL_GEN : FieldType.COL);
 		}
-
 		fields.add(field);
 	    }
 	}
@@ -126,7 +125,6 @@ public final class RecordUtils {
 		    if (!field.getName().equalsIgnoreCase(dpd.getName())) {
 			continue;
 		    }
-
 		    Asserts.notNull(dpd.getReadMethod());
 		    Asserts.notNull(dpd.getWriteMethod());
 

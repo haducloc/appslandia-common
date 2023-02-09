@@ -74,7 +74,6 @@ public class JdbcSql extends InitializeObject implements Serializable {
 	if (this.arrayLens == null) {
 	    this.arrayLens = new HashMap<>();
 	}
-
 	this.arrayLens.put(parameterName, maxLength);
 	return this;
     }
@@ -126,7 +125,6 @@ public class JdbcSql extends InitializeObject implements Serializable {
 	    } else {
 		arrayLen = DEFAULT_ARRAY_MAX_LENGTH;
 	    }
-
 	    if (isArrayParam) {
 		paramsMap.put(paramName.value, arrayLen);
 	    }
@@ -150,10 +148,8 @@ public class JdbcSql extends InitializeObject implements Serializable {
 		    } else {
 			sb.insert(paramIdx + 1, "?, ");
 		    }
-
 		    putIndex(indexesMap, toParamName(paramName.value, subIdx), ++index);
 		}
-
 		start = paramIdx + 1;
 		continue;
 	    }
@@ -167,12 +163,10 @@ public class JdbcSql extends InitializeObject implements Serializable {
 		} else {
 		    sb.insert(fieldIdx.value, String.format("%s LIKE ? OR ", fieldName.value));
 		}
-
 		putIndex(indexesMap, toParamName(paramName.value, subIdx), ++index);
 	    }
 	    start = fieldIdx.value + 1;
 	}
-
 	this.translatedSql = sb.toString();
 
 	this.arrayLens = (this.arrayLens != null) ? Collections.unmodifiableMap(this.arrayLens) : null;
@@ -187,7 +181,6 @@ public class JdbcSql extends InitializeObject implements Serializable {
 	    if (l == null) {
 		l = new ArrayList<Integer>(5);
 	    }
-
 	    l.add(index);
 	    return l;
 	});
@@ -245,7 +238,6 @@ public class JdbcSql extends InitializeObject implements Serializable {
 	if (i < 0) {
 	    return false;
 	}
-
 	int j = i;
 	while (j >= 0 && !Character.isWhitespace(sb.charAt(j))) {
 	    j--;
@@ -253,7 +245,6 @@ public class JdbcSql extends InitializeObject implements Serializable {
 	if (!sb.substring(j + 1, i + 1).equalsIgnoreCase(context)) {
 	    return false;
 	}
-
 	if (j < 0) {
 	    return false;
 	}
@@ -264,7 +255,6 @@ public class JdbcSql extends InitializeObject implements Serializable {
 	if (k < 0) {
 	    return false;
 	}
-
 	int h = k;
 	while (h >= 0 && !Character.isWhitespace(sb.charAt(h)) && sb.charAt(h) != '(') {
 	    h--;
@@ -273,7 +263,6 @@ public class JdbcSql extends InitializeObject implements Serializable {
 	if (fieldName.value.isEmpty()) {
 	    return false;
 	}
-
 	fieldIdx.value = h + 1;
 	return true;
     }
@@ -284,16 +273,13 @@ public class JdbcSql extends InitializeObject implements Serializable {
 	if (k == sb.length()) {
 	    return false;
 	}
-
 	if (!Character.isDigit(sb.charAt(k)) && !Character.isJavaIdentifierStart(sb.charAt(k))) {
 	    return false;
 	}
-
 	k++;
 	while (k < sb.length() && Character.isJavaIdentifierPart(sb.charAt(k))) {
 	    k++;
 	}
-
 	paramName.value = sb.substring(paramIdx + 1, k);
 	paramEnd.value = k - 1;
 	return true;

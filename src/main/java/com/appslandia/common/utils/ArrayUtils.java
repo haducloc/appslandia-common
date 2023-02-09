@@ -98,7 +98,6 @@ public class ArrayUtils {
 	if ((src == null) || (src.length == 0)) {
 	    return src;
 	}
-
 	String[] arr = new String[src.length];
 	System.arraycopy(src, 0, arr, 0, src.length);
 	return arr;
@@ -108,7 +107,6 @@ public class ArrayUtils {
 	if ((src == null) || (src.length == 0)) {
 	    return src;
 	}
-
 	byte[] arr = new byte[src.length];
 	System.arraycopy(src, 0, arr, 0, src.length);
 	return arr;
@@ -118,7 +116,6 @@ public class ArrayUtils {
 	if ((src == null) || (src.length == 0)) {
 	    return src;
 	}
-
 	char[] arr = new char[src.length];
 	System.arraycopy(src, 0, arr, 0, src.length);
 	return arr;
@@ -174,7 +171,6 @@ public class ArrayUtils {
 	if (arr == null) {
 	    return null;
 	}
-
 	Asserts.isTrue(arr.getClass().isArray());
 
 	if (!arr.getClass().getComponentType().isPrimitive()) {
@@ -193,20 +189,16 @@ public class ArrayUtils {
 	if (arr == suffix) {
 	    return fromIndex == 0;
 	}
-
 	if (arr == null || suffix == null) {
 	    return false;
 	}
-
 	if (suffix.length + fromIndex != arr.length) {
 	    return false;
 	}
-
 	for (int i = 0; i < suffix.length - 1; i++)
 	    if (suffix[i] != arr[i + fromIndex]) {
 		return false;
 	    }
-
 	return true;
     }
 
@@ -215,7 +207,6 @@ public class ArrayUtils {
 	if (arr.length == 0) {
 	    throw new NoSuchElementException("min: arr is empty.");
 	}
-
 	int m = arr[0];
 	for (int i = 1; i < arr.length; i++)
 	    m = Math.min(m, arr[i]);
@@ -228,7 +219,6 @@ public class ArrayUtils {
 	if (arr.length == 0) {
 	    throw new NoSuchElementException("max: arr is empty.");
 	}
-
 	int m = arr[0];
 	for (int i = 1; i < arr.length; i++)
 	    m = Math.max(m, arr[i]);
@@ -241,7 +231,6 @@ public class ArrayUtils {
 	if (arr.length == 0) {
 	    throw new NoSuchElementException("min: arr is empty.");
 	}
-
 	T m = arr[0];
 	for (int i = 1; i < arr.length; i++)
 	    m = comparator.compare(m, arr[i]) <= 0 ? m : arr[i];
@@ -254,7 +243,6 @@ public class ArrayUtils {
 	if (arr.length == 0) {
 	    throw new NoSuchElementException("max: arr is empty.");
 	}
-
 	T m = arr[0];
 	for (int i = 1; i < arr.length; i++)
 	    m = comparator.compare(m, arr[i]) <= 0 ? arr[i] : m;

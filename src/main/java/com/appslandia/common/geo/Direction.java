@@ -78,7 +78,6 @@ public enum Direction {
 	if (next < 0) {
 	    next = (next + 4) % 4;
 	}
-
 	return DIRECTIONS[next];
     }
 

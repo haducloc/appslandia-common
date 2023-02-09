@@ -85,11 +85,9 @@ public class InstanceImpl<T> implements Instance<T> {
 	if (isUnsatisfied()) {
 	    throw new ObjectException(STR.fmt("Unsatisfied dependency: type={}, qualifiers={}.", this.type, Arrays.toString(this.qualifiers)));
 	}
-
 	if (isAmbiguous()) {
 	    throw new ObjectException(STR.fmt("Ambiguous dependency: type={}, qualifiers={}.", this.type, Arrays.toString(this.qualifiers)));
 	}
-
 	return ObjectUtils.cast(this.instances.get(0).getInstance());
     }
 
@@ -98,7 +96,6 @@ public class InstanceImpl<T> implements Instance<T> {
 	if (qualifiers.length == 0) {
 	    return this;
 	}
-
 	Annotation[] childQualifiers = getChildQualifiers(qualifiers);
 	List<ObjectInstance> sub = new ArrayList<>();
 
@@ -117,7 +114,6 @@ public class InstanceImpl<T> implements Instance<T> {
 	if ((this.type == subtype) && (qualifiers.length == 0)) {
 	    return ObjectUtils.cast(this);
 	}
-
 	Annotation[] childQualifiers = getChildQualifiers(qualifiers);
 	List<ObjectInstance> sub = new ArrayList<>();
 

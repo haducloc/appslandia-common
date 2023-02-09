@@ -78,11 +78,9 @@ public abstract class ThreadSafeTester extends InitializeObject {
 	    } else {
 		this.countDownLatch.await(timeout, unit);
 	    }
-
 	} catch (InterruptedException ex) {
 	    throw new UncheckedException(ex);
 	}
-
 	this.executorService.shutdown();
 	return this;
     }

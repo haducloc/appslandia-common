@@ -50,7 +50,6 @@ public class BooleanConverterTest {
 	} catch (Exception ex) {
 	    Assertions.fail(ex.getMessage());
 	}
-
 	try {
 	    Boolean val = converter.parse("false", formatProvider);
 	    Assertions.assertFalse(val);

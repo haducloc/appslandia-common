@@ -62,7 +62,6 @@ public class SmtpMailer extends InitializeObject {
 	if (msgFrom != null) {
 	    msg.from(msgFrom);
 	}
-
 	return msg;
     }
 
@@ -84,7 +83,6 @@ public class SmtpMailer extends InitializeObject {
 	    if (ParseUtils.isTrueValue(this.props.get("mail.smtp.debug.enabled"))) {
 		debugToEmails = Asserts.notNull(this.props.get("mail.smtp.debug.to_emails"), "mail.smtp.debug.to_emails is required.");
 	    }
-
 	    for (MailerMessage mailerMessage : messages) {
 		MimeMessage message = mailerMessage.toMimeMessage(this, debugToEmails);
 		message.saveChanges();
@@ -114,7 +112,6 @@ public class SmtpMailer extends InitializeObject {
 		    if (errorHandler != null) {
 			errorHandler.accept(ex);
 		    }
-
 		    throw ExceptionUtils.toUncheckedException(ex);
 		}
 	    }
@@ -127,7 +124,6 @@ public class SmtpMailer extends InitializeObject {
 	if (props != null) {
 	    this.props = props.copy();
 	}
-
 	return this;
     }
 }

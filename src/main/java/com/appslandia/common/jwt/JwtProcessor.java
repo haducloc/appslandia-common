@@ -56,7 +56,6 @@ public class JwtProcessor extends InitializeObject {
 	if (this.jsonProcessor != null) {
 	    this.jsonProcessor.destroy();
 	}
-
 	if (this.jwtSigner != null) {
 	    this.jwtSigner.destroy();
 	}
@@ -110,7 +109,6 @@ public class JwtProcessor extends InitializeObject {
 	    if (this.jwtSigner != JwtSigner.NONE) {
 		throw new JwtException("JWT signature verification failed.");
 	    }
-
 	} else {
 	    if (this.jwtSigner == JwtSigner.NONE) {
 		throw new JwtException("JWT signature verification failed.");

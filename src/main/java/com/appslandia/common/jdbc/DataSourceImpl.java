@@ -70,7 +70,6 @@ public class DataSourceImpl extends InitializeObject implements DataSource {
 	} else {
 	    conn = DriverManager.getConnection(this.url);
 	}
-
 	return conn;
     }
 

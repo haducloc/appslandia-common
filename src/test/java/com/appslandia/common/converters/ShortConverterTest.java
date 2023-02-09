@@ -78,7 +78,6 @@ public class ShortConverterTest {
 	} catch (Exception ex) {
 	    Assertions.assertTrue(ex instanceof ConverterException);
 	}
-
 	try {
 	    converter.parse("12.345", formatProvider);
 	    Assertions.fail();
@@ -97,7 +96,6 @@ public class ShortConverterTest {
 	} catch (Exception ex) {
 	    Assertions.fail(ex.getMessage());
 	}
-
 	try {
 	    Short v = converter.parse(Short.toString(Short.MIN_VALUE), formatProvider);
 	    Assertions.assertEquals(Short.MIN_VALUE, v.shortValue());
@@ -117,7 +115,6 @@ public class ShortConverterTest {
 	} catch (Exception ex) {
 	    Assertions.assertTrue(ex instanceof ConverterException);
 	}
-
 	try {
 	    // MIN: -32768
 	    converter.parse("-32769", formatProvider);

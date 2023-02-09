@@ -51,7 +51,6 @@ public class GsonProcessor extends JsonProcessor {
 	if (this.builder == null) {
 	    this.builder = newBuilder();
 	}
-
 	this.gson = this.builder.create();
     }
 

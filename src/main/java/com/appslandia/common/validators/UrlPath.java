@@ -69,7 +69,6 @@ public @interface UrlPath {
 	    if (value == null) {
 		return true;
 	    }
-
 	    return URL_PATH_PATTERN.matcher(value).matches();
 	}
     }

@@ -66,7 +66,6 @@ public class CryptoUtils {
 	if (!(destroyable instanceof Destroyable)) {
 	    return;
 	}
-
 	Destroyable obj = (Destroyable) destroyable;
 	if (!obj.isDestroyed()) {
 	    try {

@@ -169,7 +169,6 @@ public class ConverterProvider extends InitializeObject {
 	if (__provider != null) {
 	    return __provider.get();
 	}
-
 	return new ConverterProvider();
     }
 }

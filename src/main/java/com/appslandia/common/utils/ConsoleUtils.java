@@ -114,17 +114,14 @@ public class ConsoleUtils {
 		if (valueStr.isEmpty()) {
 		    continue;
 		}
-
 		if (valueStr.endsWith("/")) {
 		    valueStr = valueStr.substring(0, valueStr.length() - 1).trim();
 
 		    if (!valueStr.isEmpty()) {
 			strings.add(valueStr);
 		    }
-
 		    break;
 		}
-
 		strings.add(valueStr);
 	    }
 
@@ -139,7 +136,6 @@ public class ConsoleUtils {
 		    continue;
 		}
 	    }
-
 	    if ((validator != null) && !validator.apply(longStr)) {
 		invalidValue = true;
 		continue;
@@ -192,7 +188,6 @@ public class ConsoleUtils {
 		}
 		return value;
 	    }
-
 	} else {
 	    return readString(promptText, variableName, required, validator);
 	}
@@ -305,16 +300,13 @@ public class ConsoleUtils {
 	    if (reader().hasNextLine()) {
 		confirmValue = StringUtils.trimToNull(reader().nextLine());
 	    }
-
 	    if (confirmValue == null) {
 		if (readValue == null) {
 		    return null;
 		}
-
 		unmatchedValues = true;
 		continue;
 	    }
-
 	    Out<Boolean> parsedValid = new Out<>();
 	    boolean confirmVal = ParseUtils.parseBool(confirmValue, parsedValid);
 
@@ -355,16 +347,13 @@ public class ConsoleUtils {
 	    if (reader().hasNextLine()) {
 		confirmValue = StringUtils.trimToNull(reader().nextLine());
 	    }
-
 	    if (confirmValue == null) {
 		if (readValue == null) {
 		    return null;
 		}
-
 		unmatchedValues = true;
 		continue;
 	    }
-
 	    Out<Boolean> parsedValid = new Out<>();
 	    int confirmVal = ParseUtils.parseInt(confirmValue, parsedValid);
 
@@ -405,16 +394,13 @@ public class ConsoleUtils {
 	    if (reader().hasNextLine()) {
 		confirmValue = StringUtils.trimToNull(reader().nextLine());
 	    }
-
 	    if (confirmValue == null) {
 		if (readValue == null) {
 		    return null;
 		}
-
 		unmatchedValues = true;
 		continue;
 	    }
-
 	    Out<Boolean> parsedValid = new Out<>();
 	    double confirmVal = ParseUtils.parseDouble(confirmValue, parsedValid);
 
@@ -456,16 +442,13 @@ public class ConsoleUtils {
 	    if (reader().hasNextLine()) {
 		confirmValue = StringUtils.trimToNull(reader().nextLine());
 	    }
-
 	    if (confirmValue == null) {
 		if (readValue == null) {
 		    return null;
 		}
-
 		unmatchedValues = true;
 		continue;
 	    }
-
 	    Out<Boolean> parsedValid = new Out<>();
 	    Date confirmVal = ParseUtils.parseDate(confirmValue, pattern, parsedValid);
 
@@ -493,7 +476,6 @@ public class ConsoleUtils {
 	    if (dir.exists() && !dir.isHidden() && dir.isDirectory()) {
 		return dir;
 	    }
-
 	    return null;
 
 	}, validator);
@@ -515,7 +497,6 @@ public class ConsoleUtils {
 	    if (file.exists() && !file.isHidden() && file.isFile()) {
 		return file;
 	    }
-
 	    return null;
 
 	}, validator);
@@ -546,11 +527,9 @@ public class ConsoleUtils {
 	    if (isTrue) {
 		return true;
 	    }
-
 	    if (isFalse) {
 		return false;
 	    }
-
 	    return null;
 
 	}, null);
@@ -573,7 +552,6 @@ public class ConsoleUtils {
 	    } catch (NumberFormatException ex) {
 		return null;
 	    }
-
 	}, validator);
     }
 
@@ -594,7 +572,6 @@ public class ConsoleUtils {
 	    } catch (NumberFormatException ex) {
 		return null;
 	    }
-
 	}, validator);
     }
 
@@ -615,7 +592,6 @@ public class ConsoleUtils {
 	    } catch (DateFormatException ex) {
 		return null;
 	    }
-
 	}, validator);
     }
 
@@ -630,7 +606,6 @@ public class ConsoleUtils {
 	    if (invalidValue) {
 		writer().println(getInvalidEnterAgain(variableName));
 	    }
-
 	    if (reader().hasNextLine()) {
 		String valueStr = reader().nextLine().trim();
 
@@ -651,7 +626,6 @@ public class ConsoleUtils {
 		    invalidValue = true;
 		    continue;
 		}
-
 		if ((validator != null) && !validator.apply(value)) {
 		    invalidValue = true;
 		    continue;
@@ -665,7 +639,6 @@ public class ConsoleUtils {
 	if (variableName == null) {
 	    return Resources.getString("console_utils.invalid_enter_again");
 	}
-
 	return Resources.getString("console_utils.invalid_enter_again_varname", variableName);
     }
 

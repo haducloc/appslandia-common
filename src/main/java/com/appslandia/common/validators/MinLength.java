@@ -71,11 +71,9 @@ public @interface MinLength {
 	    if (value == null) {
 		return true;
 	    }
-
 	    if (value.length() < this.minLength) {
 		return false;
 	    }
-
 	    return true;
 	}
     }

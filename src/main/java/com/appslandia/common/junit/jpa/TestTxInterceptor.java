@@ -48,7 +48,6 @@ public abstract class TestTxInterceptor implements Serializable {
 	if (tx == null) {
 	    tx = context.getTarget().getClass().getAnnotation(Transactional.class);
 	}
-
 	TxType type = tx.value();
 
 	// NEVER
@@ -151,7 +150,6 @@ public abstract class TestTxInterceptor implements Serializable {
 		if (willRollbackOn(ex, tx.rollbackOn(), tx.dontRollbackOn())) {
 		    et.rollback();
 		}
-
 		throw ex;
 	    } finally {
 		newEm.close();
@@ -168,21 +166,18 @@ public abstract class TestTxInterceptor implements Serializable {
 	if (startNew) {
 	    curEm = storeNewEm();
 	}
-
 	EntityTransaction et = curEm.getTransaction();
 	boolean inTrans = et.isActive();
 
 	if (!inTrans) {
 	    et.begin();
 	}
-
 	try {
 	    Object obj = context.proceed();
 
 	    if (!inTrans) {
 		et.commit();
 	    }
-
 	    return obj;
 
 	} catch (Exception ex) {
@@ -191,7 +186,6 @@ public abstract class TestTxInterceptor implements Serializable {
 		    et.rollback();
 		}
 	    }
-
 	    throw ex;
 	} finally {
 	    if (startNew) {
@@ -232,11 +226,9 @@ public abstract class TestTxInterceptor implements Serializable {
 	    if (dontRollbackOnClass == null) {
 		return true;
 	    }
-
 	    if (dontRollbackOnClass.equals(ex.getClass()) || dontRollbackOnClass.isAssignableFrom(ex.getClass())) {
 		return false;
 	    }
-
 	    Class<?> rollbackOnClass = getClosestMatchOrNull(rollbackOn, ex.getClass());
 	    if (rollbackOnClass != null) {
 
@@ -254,7 +246,6 @@ public abstract class TestTxInterceptor implements Serializable {
 	    if (rollbackOnClass == null) {
 		return false;
 	    }
-
 	    Class<?> dontRollbackOnClass = getClosestMatchOrNull(dontRollbackOn, ex.getClass());
 	    if (dontRollbackOnClass != null) {
 
@@ -264,11 +255,9 @@ public abstract class TestTxInterceptor implements Serializable {
 		    return true;
 		}
 	    }
-
 	    if (rollbackOnClass.equals(ex.getClass()) || rollbackOnClass.isAssignableFrom(ex.getClass())) {
 		return true;
 	    }
-
 	    return false;
 	}
     }
@@ -280,7 +269,6 @@ public abstract class TestTxInterceptor implements Serializable {
 	    if (exClass.equals(exceptionClass)) {
 		return exClass;
 	    }
-
 	    if (exClass.isAssignableFrom(exceptionClass)) {
 		if (closestMatch == null || closestMatch.isAssignableFrom(exClass)) {
 		    closestMatch = exClass;

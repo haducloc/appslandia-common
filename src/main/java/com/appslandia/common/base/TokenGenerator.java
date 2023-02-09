@@ -68,7 +68,6 @@ public class TokenGenerator extends InitializeObject implements TextGenerator {
 	if (value.length() != this.length) {
 	    return false;
 	}
-
 	return BASE64_URL_NP_PATTERN.matcher(value).matches();
     }
 

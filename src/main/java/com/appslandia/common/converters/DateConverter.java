@@ -43,7 +43,6 @@ public abstract class DateConverter<T extends java.util.Date> implements Convert
 	if (obj == null) {
 	    return null;
 	}
-
 	if (localize) {
 	    String pattern = formatProvider.getLanguage().getTemporalPattern(this.isoPattern);
 	    return formatProvider.getDateFormat(pattern).format(obj);
@@ -56,14 +55,12 @@ public abstract class DateConverter<T extends java.util.Date> implements Convert
 	if (parsedValue != null) {
 	    return parsedValue;
 	}
-
 	String pattern = formatProvider.getLanguage().getTemporalPattern(this.isoPattern);
 
 	parsedValue = parseDate(str, formatProvider.getDateFormat(pattern));
 	if (parsedValue != null) {
 	    return parsedValue;
 	}
-
 	throw toParsingError(str, getTargetType().getName());
     }
 
@@ -74,7 +71,6 @@ public abstract class DateConverter<T extends java.util.Date> implements Convert
 	if ((pos.getErrorIndex() < 0) && (pos.getIndex() == str.length()) && (parsedValue != null)) {
 	    return parsedValue;
 	}
-
 	return null;
     }
 }

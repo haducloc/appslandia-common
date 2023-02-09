@@ -70,7 +70,6 @@ public @interface Nickname {
 	    if (value == null) {
 		return true;
 	    }
-
 	    return NICKNAME_PATTERN.matcher(value).matches();
 	}
     }

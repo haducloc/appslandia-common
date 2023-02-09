@@ -60,7 +60,6 @@ public abstract class SharedEmfTestEntityManagerExtension implements BeforeEachC
 	if (em != null) {
 	    return;
 	}
-
 	em = emf.createEntityManager();
 	emHolder.set(em);
 
