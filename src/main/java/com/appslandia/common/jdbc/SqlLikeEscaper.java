@@ -144,7 +144,7 @@ public class SqlLikeEscaper {
     }
 
     public static void setCharsToEscape(char[] impl) {
-	Asserts.isNull(__charsToEscape, "SqlLikeEscaper.__charsToEscape must be unset.");
+	Asserts.isNull(__charsToEscape, "SqlLikeEscaper.__charsToEscape must be null.");
 
 	if (__charsToEscape == null) {
 	    synchronized (MUTEX) {
