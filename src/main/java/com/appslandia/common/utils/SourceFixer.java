@@ -101,47 +101,43 @@ public class SourceFixer {
 		// Add {} to if
 
 		for (int i = lines.size() - 1; i >= 0; i--) {
-		    int i1 = i - 1;
+		    String line = lines.get(i).trim();
 
-		    if (i1 >= 0) {
-			String line1 = lines.get(i1).trim();
+		    // if statements
+		    if ((line.startsWith("if (") || line.startsWith("else if (") || line.startsWith("} else if (")) && !line.endsWith("{")) {
 
-			// if statements
+			// Find line j from i + 1
+			// NOT: Empty OR starts with // || && , . (
 
-			if ((line1.startsWith("if (") || line1.startsWith("else if (") || line1.startsWith("} else if (")) && !line1.endsWith("{")) {
+			int j = i + 1;
+			while ((j < lines.size()) && (lines.get(j).trim().isEmpty() || lines.get(j).trim().startsWith("//") || lines.get(j).trim().startsWith("||")
+				|| lines.get(j).trim().startsWith("&&") || lines.get(j).trim().startsWith(",") || lines.get(j).trim().startsWith(".")
+				|| lines.get(j).trim().startsWith("(")))
+			    j++;
 
-			    // Find line j from i
-			    // NOT: Empty OR starts with // || && , .
+			// The line j-1 is still belonging to line i
+			// if lines[j-1] doesn't end with {
+			// Will add {}
 
-			    int j = i;
-			    while ((j < lines.size()) && (lines.get(j).trim().isEmpty() || lines.get(j).trim().startsWith("//") || lines.get(j).trim().startsWith("||")
-				    || lines.get(j).trim().startsWith("&&") || lines.get(j).trim().startsWith(",") || lines.get(j).trim().startsWith(".")))
-				j++;
+			if ((j - 1 < lines.size()) && !lines.get(j - 1).trim().endsWith("{")) {
 
-			    // The line j-1 is still belonging to line1
-			    // if lines[j-1] doesn't end with {
-			    // Will add {}
+			    // Find line k to add {
+			    int k = j - 1;
+			    while ((k >= 0) && (lines.get(k).trim().isEmpty() || lines.get(k).trim().startsWith("//")))
+				k--;
 
-			    if ((j - 1 < lines.size()) && !lines.get(j - 1).trim().endsWith("{")) {
+			    if ((k >= 0) && !lines.get(k + 1).trim().startsWith("HtmlUtils.")) {
 
-				// Find line k to add {
-				int k = j - 1;
-				while ((k >= 0) && (lines.get(k).trim().isEmpty() || lines.get(k).trim().startsWith("//")))
-				    k--;
+				// Add {
+				lines.set(k, lines.get(k) + " {");
 
-				if ((k >= 0) && !lines.get(k + 1).trim().startsWith("HtmlUtils.")) {
+				// Find line l to add }
+				int l = j;
+				while ((l < lines.size()) && (lines.get(l).trim().isEmpty() || lines.get(l).trim().startsWith("//")))
+				    l++;
 
-				    // Add {
-				    lines.set(k, lines.get(k) + " { ");
-
-				    // Find line l to add }
-				    int l = j;
-				    while ((l < lines.size()) && (lines.get(l).trim().isEmpty() || lines.get(l).trim().startsWith("//")))
-					l++;
-
-				    // Add }
-				    lines.add(l + 1, "}");
-				}
+				// Add }
+				lines.add(l + 1, "}");
 			    }
 			}
 		    }
@@ -150,27 +146,26 @@ public class SourceFixer {
 		// Add {} to else
 
 		for (int i = lines.size() - 1; i >= 0; i--) {
-		    int i1 = i - 1;
+		    String line = lines.get(i).trim();
 
-		    if (i1 >= 0) {
-			String line1 = lines.get(i1).trim();
+		    // else statements
+		    if (line.equals("} else") || line.equals("else")) {
 
-			if (line1.equals("} else") || line1.equals("else")) {
+			// Add {
+			lines.set(i, line + " {");
 
-			    // Add {
-			    lines.set(i1, line1 + " { ");
+			// Find line l to add }
+			int j = i + 1;
+			while ((j < lines.size()) && (lines.get(j).trim().isEmpty() || lines.get(j).trim().startsWith("//")))
+			    j++;
 
-			    int j = i;
-			    while ((j < lines.size()) && (lines.get(j).trim().isEmpty() || lines.get(j).trim().startsWith("//")))
-				j++;
-
-			    // Add }
-			    lines.add(j + 1, "}");
-			}
+			// Add }
+			lines.add(j + 1, "}");
 		    }
 		}
 
-		// Remove the last blank line. Files.write will add it.
+		// Remove the last blank line.
+		// Files.write will add it.
 
 		if (lines.get(lines.size() - 1).strip().isBlank()) {
 		    lines.remove(lines.size() - 1);
