@@ -118,7 +118,7 @@ public class JpaSql extends InitializeObject implements Serializable {
 	    Integer arrayLen = (this.arrayLens != null) ? this.arrayLens.get(paramName.value) : null;
 
 	    if (arrayLen != null) {
-		Asserts.isTrue(isArrayParam, () -> STR.fmt("Array parameter '{}' is not found.", paramName));
+		Asserts.isTrue(isArrayParam, () -> STR.fmt("Array parameter '{}' is required.", paramName));
 	    } else {
 		arrayLen = DEFAULT_ARRAY_MAX_LENGTH;
 	    }
