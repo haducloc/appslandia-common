@@ -108,12 +108,23 @@ public class SourceFixer {
 			    && !line.endsWith("{")) {
 
 			// Find line j from i + 1
-			// NOT: Empty OR starts with // || && , . (
+			// NOT: Empty OR starts with special markers
 
 			int j = i + 1;
 			while ((j < lines.size()) && (lines.get(j).trim().isEmpty() || lines.get(j).trim().startsWith("//") || lines.get(j).trim().startsWith("||")
 				|| lines.get(j).trim().startsWith("&&") || lines.get(j).trim().startsWith(",") || lines.get(j).trim().startsWith(".")
-				|| lines.get(j).trim().startsWith("(")))
+				|| lines.get(j).trim().startsWith("(") || lines.get(j).trim().startsWith(")")
+
+				|| lines.get(j).trim().startsWith("==") || lines.get(j).trim().startsWith("!=") || lines.get(j).trim().startsWith(">=")
+				|| lines.get(j).trim().startsWith("<=") || lines.get(j).trim().startsWith(">") || lines.get(j).trim().startsWith("<")
+
+				|| lines.get(j).trim().startsWith("+") || lines.get(j).trim().startsWith("-") || lines.get(j).trim().startsWith("*")
+				|| lines.get(j).trim().startsWith("/") || lines.get(j).trim().startsWith("^")
+
+				|| lines.get(j).trim().startsWith("%") || lines.get(j).trim().startsWith("?") || lines.get(j).trim().startsWith(":")
+				|| lines.get(j).trim().startsWith("!") || lines.get(j).trim().startsWith("~")
+
+				|| lines.get(j).trim().startsWith(">>") || lines.get(j).trim().startsWith("<<") || lines.get(j).trim().startsWith(">>>")))
 			    j++;
 
 			// The line j-1 is still belonging to line i
