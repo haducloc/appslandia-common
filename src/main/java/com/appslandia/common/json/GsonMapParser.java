@@ -80,7 +80,7 @@ public class GsonMapParser {
 		}
 		return element.getAsLong();
 	    }
-	    throw new AssertionError();
+	    throw new Error();
 	}
 
 	// Array
