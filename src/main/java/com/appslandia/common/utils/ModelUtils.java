@@ -35,8 +35,9 @@ public class ModelUtils {
     public static <T> void copy(T dest, T src, Function<String, Boolean> forProps) throws ReflectionException {
 	try {
 	    for (PropertyDescriptor dpd : Introspector.getBeanInfo(dest.getClass()).getPropertyDescriptors()) {
-		if (!forProps.apply(dpd.getName()))
+		if (!forProps.apply(dpd.getName())) {
 		    continue;
+		}
 
 		Asserts.notNull(dpd.getWriteMethod());
 		Asserts.notNull(dpd.getReadMethod());
@@ -58,8 +59,9 @@ public class ModelUtils {
     public static <D, S> void copyProps(D dest, S src, Function<String, Boolean> forProps) throws ReflectionException {
 	try {
 	    for (PropertyDescriptor dpd : Introspector.getBeanInfo(dest.getClass()).getPropertyDescriptors()) {
-		if (!forProps.apply(dpd.getName()))
+		if (!forProps.apply(dpd.getName())) {
 		    continue;
+		}
 
 		Asserts.notNull(dpd.getWriteMethod());
 

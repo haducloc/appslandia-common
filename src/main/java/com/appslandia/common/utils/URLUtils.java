@@ -37,8 +37,9 @@ public class URLUtils {
     public static String toQueryParams(Map<String, Object> parameterMap) {
 	StringBuilder sb = new StringBuilder(parameterMap.size() * 16);
 	for (Map.Entry<String, Object> param : parameterMap.entrySet()) {
-	    if (sb.length() > 0)
+	    if (sb.length() > 0) {
 		sb.append('&');
+	    }
 
 	    addQueryParam(sb, param.getKey(), param.getValue());
 	}
@@ -60,19 +61,22 @@ public class URLUtils {
 	// Array
 	int len = Array.getLength(value);
 	for (int i = 0; i < len; i++) {
-	    if (i > 0)
+	    if (i > 0) {
 		sb.append('&');
+	    }
 
 	    sb.append(URLEncoding.encodeParam(name)).append('=');
 	    Object subVal = Array.get(value, i);
-	    if (subVal != null)
+	    if (subVal != null) {
 		sb.append(URLEncoding.encodeParam(subVal.toString()));
+	    }
 	}
     }
 
     public static String validQueryOrNull(String queryString) {
-	if (queryString == null)
+	if (queryString == null) {
 	    return queryString;
+	}
 	try {
 	    Map<String, Object> params = URLUtils.parseParams(queryString, new LinkedHashMap<>());
 	    return URLUtils.toQueryParams(params);
@@ -87,10 +91,11 @@ public class URLUtils {
 	    URI oldUri = new URI(url);
 	    String newQuery = oldUri.getQuery();
 
-	    if (newQuery == null)
+	    if (newQuery == null) {
 		newQuery = toQueryParams(moreParameters);
-	    else
+	    } else {
 		newQuery += '&' + toQueryParams(moreParameters);
+	    }
 
 	    URI newUri = new URI(oldUri.getScheme(), oldUri.getAuthority(), oldUri.getPath(), newQuery, oldUri.getFragment());
 	    return newUri.toString();
@@ -105,8 +110,9 @@ public class URLUtils {
     }
 
     public static Map<String, Object> parseParams(String queryString, Map<String, Object> params, boolean parseArray) {
-	if (queryString == null)
+	if (queryString == null) {
 	    return params;
+	}
 
 	int startIdx = 0;
 	int endIdx;
@@ -114,8 +120,9 @@ public class URLUtils {
 	while ((endIdx = queryString.indexOf('&', startIdx)) != -1) {
 	    String pair = queryString.substring(startIdx, endIdx);
 
-	    if (!parsePair(pair, params, parseArray))
+	    if (!parsePair(pair, params, parseArray)) {
 		throw new IllegalArgumentException(STR.fmt("queryString '{}' is invalid.", queryString));
+	    }
 
 	    startIdx = endIdx + 1;
 	}
@@ -123,16 +130,18 @@ public class URLUtils {
 	if (startIdx < queryString.length()) {
 	    String pair = queryString.substring(startIdx);
 
-	    if (!parsePair(pair, params, parseArray))
+	    if (!parsePair(pair, params, parseArray)) {
 		throw new IllegalArgumentException(STR.fmt("queryString '{}' is invalid.", queryString));
+	    }
 	}
 	return params;
     }
 
     private static boolean parsePair(String pair, Map<String, Object> params, boolean parseArray) {
 	int idx = pair.indexOf('=');
-	if (idx <= 0)
+	if (idx <= 0) {
 	    return false;
+	}
 
 	String name = URLEncoding.decodeParam(pair.substring(0, idx));
 	String value = pair.substring(idx + 1);
@@ -151,10 +160,11 @@ public class URLUtils {
 	} else {
 	    Object addedValue = params.get(name);
 
-	    if ((addedValue == null) || (addedValue.getClass() == String.class))
+	    if ((addedValue == null) || (addedValue.getClass() == String.class)) {
 		params.put(name, new String[] { (String) addedValue, decodedVal });
-	    else
+	    } else {
 		params.put(name, ArrayUtils.append((String[]) addedValue, new String[] { decodedVal }));
+	    }
 	}
 	return true;
     }

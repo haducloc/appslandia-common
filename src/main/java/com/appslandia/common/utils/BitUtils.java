@@ -51,10 +51,11 @@ public class BitUtils {
 		if ((this.curIterator == null) || !this.curIterator.hasNext()) {
 		    this.curIdx++;
 
-		    if (this.curIdx < bytes.length)
+		    if (this.curIdx < bytes.length) {
 			this.curIterator = bitIterator(bytes[this.curIdx]);
-		    else
+		    } else {
 			this.curIterator = Collections.emptyIterator();
+		    }
 		}
 		return this.curIterator;
 	    }
@@ -80,10 +81,11 @@ public class BitUtils {
 		if ((this.curIterator == null) || !this.curIterator.hasNext()) {
 		    try {
 			int v = value.read();
-			if (v != -1)
+			if (v != -1) {
 			    this.curIterator = bitIterator((byte) v);
-			else
+			} else {
 			    this.curIterator = Collections.emptyIterator();
+			}
 
 		    } catch (IOException ex) {
 			throw new UncheckedIOException(ex);

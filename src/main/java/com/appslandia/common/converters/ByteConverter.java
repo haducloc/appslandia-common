@@ -45,8 +45,9 @@ public class ByteConverter extends NumberConverter<Byte> {
 
     @Override
     public String format(Byte obj, FormatProvider formatProvider, boolean localize) {
-	if (obj == null)
+	if (obj == null) {
 	    return null;
+	}
 
 	return obj.toString();
     }
@@ -54,14 +55,16 @@ public class ByteConverter extends NumberConverter<Byte> {
     @Override
     public Byte parse(String str, FormatProvider formatProvider) throws ConverterException {
 	str = StringUtils.trimToNull(str);
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	try {
 	    long value = Long.parseLong(str);
 
-	    if (!ValueUtils.isByteRange(value))
+	    if (!ValueUtils.isByteRange(value)) {
 		throw toNumberOverflowError(str);
+	    }
 
 	    return Byte.valueOf((byte) value);
 

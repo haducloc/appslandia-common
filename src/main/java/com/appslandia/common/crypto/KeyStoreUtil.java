@@ -68,10 +68,11 @@ public class KeyStoreUtil extends InitializeObject {
     protected void init() throws Exception {
 	Asserts.notNull(this.type, "type is required.");
 
-	if (this.provider == null)
+	if (this.provider == null) {
 	    this.keyStore = KeyStore.getInstance(this.type);
-	else
+	} else {
 	    this.keyStore = KeyStore.getInstance(this.type, this.provider);
+	}
 
 	this.keyStore.load(this.inputStream, this.password);
     }
@@ -130,8 +131,9 @@ public class KeyStoreUtil extends InitializeObject {
 
     public KeyStoreUtil setPassword(char[] password) {
 	assertNotInitialized();
-	if (password != null)
+	if (password != null) {
 	    this.password = Arrays.copyOf(password, password.length);
+	}
 
 	return this;
     }
@@ -160,8 +162,9 @@ public class KeyStoreUtil extends InitializeObject {
 
     public KeyStoreUtil setProtectionParameter(char[] password) {
 	assertNotInitialized();
-	if (password != null)
+	if (password != null) {
 	    this.protectionParameter = new KeyStore.PasswordProtection(password);
+	}
 
 	return this;
     }

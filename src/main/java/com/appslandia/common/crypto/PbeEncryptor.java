@@ -77,10 +77,11 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	this.mode = trans[1].toUpperCase(Locale.ENGLISH);
 
 	// cipher
-	if (this.provider == null)
+	if (this.provider == null) {
 	    this.cipher = Cipher.getInstance(this.transformation);
-	else
+	} else {
 	    this.cipher = Cipher.getInstance(this.transformation, this.provider);
+	}
     }
 
     private boolean isIVSpec() {
@@ -125,15 +126,17 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	SecretKey secretKey = buildSecretKey(salt, this.algorithm);
 
 	byte[] iv = null;
-	if (isIVSpec())
+	if (isIVSpec()) {
 	    iv = ZERO_IV_CACHE.computeIfAbsent(getIVSize(), s -> new byte[s]);
+	}
 
 	try {
 	    synchronized (this.mutex) {
-		if (iv != null)
+		if (iv != null) {
 		    this.cipher.init(Cipher.DECRYPT_MODE, secretKey, buildIvParameter(iv));
-		else
+		} else {
 		    this.cipher.init(Cipher.DECRYPT_MODE, secretKey);
+		}
 
 		return this.cipher.doFinal(message, salt.length, message.length - salt.length);
 	    }
@@ -154,15 +157,17 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	SecretKey secretKey = buildSecretKey(salt.value, this.algorithm);
 
 	byte[] iv = null;
-	if (isIVSpec())
+	if (isIVSpec()) {
 	    iv = ZERO_IV_CACHE.computeIfAbsent(getIVSize(), s -> new byte[s]);
+	}
 
 	try {
 	    synchronized (this.mutex) {
-		if (iv != null)
+		if (iv != null) {
 		    this.cipher.init(Cipher.ENCRYPT_MODE, secretKey, buildIvParameter(iv));
-		else
+		} else {
 		    this.cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+		}
 
 		return this.cipher.doFinal(message);
 	    }
@@ -184,15 +189,17 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	SecretKey secretKey = buildSecretKey(salt, this.algorithm);
 
 	byte[] iv = null;
-	if (isIVSpec())
+	if (isIVSpec()) {
 	    iv = ZERO_IV_CACHE.computeIfAbsent(getIVSize(), s -> new byte[s]);
+	}
 
 	try {
 	    synchronized (this.mutex) {
-		if (iv != null)
+		if (iv != null) {
 		    this.cipher.init(Cipher.DECRYPT_MODE, secretKey, buildIvParameter(iv));
-		else
+		} else {
 		    this.cipher.init(Cipher.DECRYPT_MODE, secretKey);
+		}
 
 		return this.cipher.doFinal(message);
 	    }
@@ -268,11 +275,13 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	PbeEncryptor impl = new PbeEncryptor().setTransformation(this.transformation).setProvider(this.provider);
 	impl.setSaltSize(this.saltSize).setIterationCount(this.iterationCount).setKeySize(this.keySize);
 
-	if (this.password != null)
+	if (this.password != null) {
 	    impl.setPassword(this.password);
+	}
 
-	if (this.secretKeyGenerator != null)
+	if (this.secretKeyGenerator != null) {
 	    impl.secretKeyGenerator = this.secretKeyGenerator.copy();
+	}
 
 	impl.ivSize = this.ivSize;
 	impl.tagSize = this.tagSize;

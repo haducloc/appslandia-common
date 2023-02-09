@@ -68,11 +68,13 @@ public @interface MaxLength {
 
 	@Override
 	public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
-	    if (value == null)
+	    if (value == null) {
 		return true;
+	    }
 
-	    if (value.length() > this.maxLength)
+	    if (value.length() > this.maxLength) {
 		return false;
+	    }
 
 	    return true;
 	}

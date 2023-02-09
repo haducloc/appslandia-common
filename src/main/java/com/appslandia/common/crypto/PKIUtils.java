@@ -47,28 +47,32 @@ public class PKIUtils {
 	int idx = pem.indexOf("-----BEGIN ");
 	boolean valid = true;
 
-	if (idx < 0)
+	if (idx < 0) {
 	    valid = false;
+	}
 
 	if (valid) {
 	    idx = pem.indexOf("-----", idx + 11);
-	    if (idx < 0)
+	    if (idx < 0) {
 		valid = false;
-	    else
+	    } else {
 		pem = pem.substring(idx + 5);
+	    }
 	}
 
 	// Remove -----END .+ -----
 	if (valid) {
 	    idx = pem.lastIndexOf("-----");
-	    if (idx < 0)
+	    if (idx < 0) {
 		valid = false;
+	    }
 	}
 
 	if (valid) {
 	    idx = pem.lastIndexOf("-----END ", idx - 9);
-	    if (idx < 0)
+	    if (idx < 0) {
 		valid = false;
+	    }
 	}
 	Asserts.isTrue(valid, "The pem is invalid.");
 

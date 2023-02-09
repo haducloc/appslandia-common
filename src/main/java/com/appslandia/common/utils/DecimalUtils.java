@@ -36,10 +36,11 @@ public class DecimalUtils {
 	    return fixSign(roundedValue, value);
 
 	} catch (NumberFormatException ex) {
-	    if (Double.isInfinite(value))
+	    if (Double.isInfinite(value)) {
 		return value;
-	    else
+	    } else {
 		return Double.NaN;
+	    }
 	}
     }
 
@@ -49,10 +50,11 @@ public class DecimalUtils {
 	    return fixSign(roundedValue, value);
 
 	} catch (NumberFormatException ex) {
-	    if (Float.isInfinite(value))
+	    if (Float.isInfinite(value)) {
 		return value;
-	    else
+	    } else {
 		return Float.NaN;
+	    }
 	}
     }
 
@@ -73,21 +75,25 @@ public class DecimalUtils {
     }
 
     public static boolean equals(double d1, double d2, double delta) {
-	if (Double.compare(d1, d2) == 0)
+	if (Double.compare(d1, d2) == 0) {
 	    return true;
+	}
 
-	if ((Math.abs(d1 - d2) <= delta))
+	if ((Math.abs(d1 - d2) <= delta)) {
 	    return true;
+	}
 
 	return false;
     }
 
     public static boolean equals(float f1, float f2, float delta) {
-	if (Float.compare(f1, f2) == 0)
+	if (Float.compare(f1, f2) == 0) {
 	    return true;
+	}
 
-	if ((Math.abs(f1 - f2) <= delta))
+	if ((Math.abs(f1 - f2) <= delta)) {
 	    return true;
+	}
 
 	return false;
     }

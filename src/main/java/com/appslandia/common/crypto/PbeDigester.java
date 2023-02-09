@@ -52,10 +52,11 @@ public class PbeDigester extends PbeObject implements Digester {
 	Asserts.notNull(this.algorithm, "algorithm is required.");
 
 	// MAC
-	if (this.provider == null)
+	if (this.provider == null) {
 	    this.mac = Mac.getInstance(this.algorithm);
-	else
+	} else {
 	    this.mac = Mac.getInstance(this.algorithm, this.provider);
+	}
     }
 
     @Override
@@ -197,11 +198,13 @@ public class PbeDigester extends PbeObject implements Digester {
 	PbeDigester impl = new PbeDigester().setAlgorithm(this.algorithm).setProvider(this.provider);
 	impl.setSaltSize(this.saltSize).setIterationCount(this.iterationCount).setKeySize(this.keySize);
 
-	if (this.password != null)
+	if (this.password != null) {
 	    impl.setPassword(this.password);
+	}
 
-	if (this.secretKeyGenerator != null)
+	if (this.secretKeyGenerator != null) {
 	    impl.secretKeyGenerator = this.secretKeyGenerator.copy();
+	}
 
 	return impl;
     }

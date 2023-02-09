@@ -36,8 +36,9 @@ public class KeywordUtils {
     public static String toKeywords(String keywords, Out<Boolean> isValid) {
 	isValid.value = true;
 
-	if (keywords == null)
+	if (keywords == null) {
 	    return keywords;
+	}
 
 	if (!KEYWORDS_PATTEN.matcher(keywords).matches()) {
 	    isValid.value = false;

@@ -94,21 +94,25 @@ public class ToStringBuilder {
 	}
 
 	public boolean isBasicType(Class<?> type) {
-	    if (TypeUtils.isPrimitiveOrWrapper(type))
+	    if (TypeUtils.isPrimitiveOrWrapper(type)) {
 		return true;
+	    }
 
-	    if (CharSequence.class.isAssignableFrom(type))
+	    if (CharSequence.class.isAssignableFrom(type)) {
 		return true;
+	    }
 
-	    if (Enum.class.isAssignableFrom(type) || (type == BigDecimal.class))
+	    if (Enum.class.isAssignableFrom(type) || (type == BigDecimal.class)) {
 		return true;
+	    }
 
 	    if (Date.class.isAssignableFrom(type) || Calendar.class.isAssignableFrom(type) || TimeZone.class.isAssignableFrom(type) || (type == Locale.class)
 		    || Charset.class.isAssignableFrom(type)) {
 		return true;
 	    }
-	    if (Temporal.class.isAssignableFrom(type))
+	    if (Temporal.class.isAssignableFrom(type)) {
 		return true;
+	    }
 
 	    return false;
 	}
@@ -116,13 +120,15 @@ public class ToStringBuilder {
 	protected boolean checkAnnotation(Object value, Field field, Class<? extends Annotation> annotationType) {
 	    // field
 	    if (field != null) {
-		if (field.getAnnotation(annotationType) != null)
+		if (field.getAnnotation(annotationType) != null) {
 		    return true;
+		}
 	    }
 
 	    // value type
-	    if (value.getClass().getAnnotation(annotationType) != null)
+	    if (value.getClass().getAnnotation(annotationType) != null) {
 		return true;
+	    }
 
 	    return false;
 	}
@@ -151,8 +157,9 @@ public class ToStringBuilder {
     public String toString(Object obj) {
 	TextBuilder builder = new TextBuilder();
 	appendtab(builder, this.identTabs, false);
-	if (obj == null)
+	if (obj == null) {
 	    return builder.append("null").toString();
+	}
 
 	this.toStringObject(obj, 1, builder);
 	return builder.toString();
@@ -161,8 +168,9 @@ public class ToStringBuilder {
     public String toStringFields(Object obj) {
 	TextBuilder builder = new TextBuilder();
 	appendtab(builder, this.identTabs, false);
-	if (obj == null)
+	if (obj == null) {
 	    return builder.append("null").toString();
+	}
 
 	this.toStringFields(obj, 1, builder);
 	return builder.toString();
@@ -248,8 +256,9 @@ public class ToStringBuilder {
 
     private void toStringFields(Object obj, int level, TextBuilder builder) {
 	builder.append(ObjectUtils.toIdHash(obj));
-	if (level > this.level)
+	if (level > this.level) {
 	    return;
+	}
 
 	builder.append("[");
 	boolean isFirst = true;
@@ -258,16 +267,19 @@ public class ToStringBuilder {
 	while (clazz != null) {
 	    Field[] fields = clazz.getDeclaredFields();
 	    for (Field field : fields) {
-		if (field.getName().equals("serialVersionUID"))
+		if (field.getName().equals("serialVersionUID")) {
 		    continue;
+		}
 
-		if (this.tsDecision.tsExcluded(field))
+		if (this.tsDecision.tsExcluded(field)) {
 		    continue;
+		}
 
-		if (!isFirst)
+		if (!isFirst) {
 		    builder.append(",");
-		else
+		} else {
 		    isFirst = false;
+		}
 
 		appendln(builder, false);
 		appendtab(builder, level + this.identTabs, false);
@@ -277,14 +289,15 @@ public class ToStringBuilder {
 		    field.setAccessible(true);
 		    Object fieldVal = field.get(obj);
 
-		    if (fieldVal == null)
+		    if (fieldVal == null) {
 			builder.append("null");
-		    else {
+		    } else {
 			if (this.tsDecision.tsIdHash(fieldVal, field)) {
 			    builder.append(ObjectUtils.toIdHash(fieldVal));
 
-			} else
+			} else {
 			    this.toStringObject(fieldVal, level + 1, builder);
+			}
 		    }
 
 		} catch (Exception ex) {
@@ -294,9 +307,9 @@ public class ToStringBuilder {
 	    clazz = clazz.getSuperclass();
 	}
 
-	if (isFirst)
+	if (isFirst) {
 	    builder.append(" no fields ]");
-	else {
+	} else {
 	    appendln(builder, false);
 	    appendtab(builder, level - 1 + this.identTabs, false).append("]");
 	}
@@ -304,8 +317,9 @@ public class ToStringBuilder {
 
     private void toStringIterator(Object obj, ElementIterator iterator, int level, TextBuilder builder) {
 	builder.append(ObjectUtils.toIdHash(obj));
-	if (level > this.level)
+	if (level > this.level) {
 	    return;
+	}
 
 	builder.append("[");
 	boolean isFirst = true;
@@ -318,27 +332,29 @@ public class ToStringBuilder {
 		break;
 	    }
 
-	    if (!isFirst)
+	    if (!isFirst) {
 		builder.append(",");
-	    else
+	    } else {
 		isFirst = false;
+	    }
 
 	    appendln(builder, iterator.isCompact());
 	    appendtab(builder, level + this.identTabs, iterator.isCompact());
 
-	    if (element == null)
+	    if (element == null) {
 		builder.append("null");
-	    else {
+	    } else {
 		if (this.tsDecision.tsIdHash(element, null)) {
 		    builder.append(ObjectUtils.toIdHash(element));
 
-		} else
+		} else {
 		    this.toStringObject(element, level + 1, builder);
+		}
 	    }
 	}
-	if (isFirst)
+	if (isFirst) {
 	    builder.append(" no elements ]");
-	else {
+	} else {
 	    appendln(builder, iterator.isCompact());
 	    appendtab(builder, level - 1 + this.identTabs, iterator.isCompact()).append("] (").append(iterator.getComputedLen()).append(")");
 	}
@@ -346,37 +362,40 @@ public class ToStringBuilder {
 
     private void toStringMap(Map<?, ?> map, int level, TextBuilder builder) {
 	builder.append(ObjectUtils.toIdHash(map));
-	if (level > this.level)
+	if (level > this.level) {
 	    return;
+	}
 
 	builder.append("[");
 	boolean isFirst = true;
 
 	for (Object key : map.keySet()) {
-	    if (!isFirst)
+	    if (!isFirst) {
 		builder.append(",");
-	    else
+	    } else {
 		isFirst = false;
+	    }
 
 	    appendln(builder, false);
 	    appendtab(builder, level + this.identTabs, false);
 
 	    builder.append(key).append(": ");
 	    Object entryVal = map.get(key);
-	    if (entryVal == null)
+	    if (entryVal == null) {
 		builder.append("null");
-	    else {
+	    } else {
 		if (this.tsDecision.tsIdHash(entryVal, null)) {
 		    builder.append(ObjectUtils.toIdHash(entryVal));
 
-		} else
+		} else {
 		    this.toStringObject(entryVal, level + 1, builder);
+		}
 	    }
 	}
 
-	if (isFirst)
+	if (isFirst) {
 	    builder.append(" no entries ]");
-	else {
+	} else {
 	    appendln(builder, false);
 	    appendtab(builder, level - 1 + this.identTabs, false).append("] (").append(map.size()).append(")");
 	}
@@ -387,10 +406,11 @@ public class ToStringBuilder {
 	boolean isFirst = true;
 
 	for (String attribute : attributes) {
-	    if (!isFirst)
+	    if (!isFirst) {
 		builder.append(",");
-	    else
+	    } else {
 		isFirst = false;
+	    }
 
 	    appendln(builder, false);
 	    appendtab(builder, level + this.identTabs, false);
@@ -398,17 +418,18 @@ public class ToStringBuilder {
 
 	    try {
 		Object element = getAttributeMethod.invoke(obj, attribute);
-		if (element == null)
+		if (element == null) {
 		    builder.append("null");
-		else {
+		} else {
 		    if ("jakarta.servlet.error.exception".equals(attribute) || "javax.servlet.error.exception".equals(attribute)) {
 			builder.append(ExceptionUtils.buildMessage((Throwable) element));
 
 		    } else if (this.tsDecision.tsIdHash(element, null)) {
 			builder.append(ObjectUtils.toIdHash(element));
 
-		    } else
+		    } else {
 			this.toStringObject(element, level + 1, builder);
+		    }
 		}
 
 	    } catch (Exception ex) {
@@ -416,9 +437,9 @@ public class ToStringBuilder {
 	    }
 	}
 
-	if (isFirst)
+	if (isFirst) {
 	    builder.append(" no elements ]");
-	else {
+	} else {
 	    appendln(builder, false);
 	    appendtab(builder, level - 1 + this.identTabs, false).append("]");
 	}
@@ -494,15 +515,17 @@ public class ToStringBuilder {
     }
 
     private TextBuilder appendln(TextBuilder builder, boolean isCompact) {
-	if (!isCompact)
+	if (!isCompact) {
 	    builder.appendln();
+	}
 
 	return builder;
     }
 
     private TextBuilder appendtab(TextBuilder builder, int n, boolean isCompact) {
-	if (isCompact)
+	if (isCompact) {
 	    return builder.appendsp();
+	}
 
 	return builder.appendsp(2 * n);
     }
@@ -549,8 +572,9 @@ public class ToStringBuilder {
 	public Object next() {
 	    // byte[]
 	    if (this.elementType == byte.class) {
-		if (this.index > 128)
+		if (this.index > 128) {
 		    return MORE_ELEMENTS;
+		}
 	    }
 	    return Array.get(this.obj, this.index++);
 	}

@@ -35,19 +35,23 @@ public class BitBool {
     }
 
     public static int not(int value) {
-	if (value == TRUE)
+	if (value == TRUE) {
 	    return FALSE;
-	if (value == FALSE)
+	}
+	if (value == FALSE) {
 	    return TRUE;
+	}
 
 	throw new IllegalArgumentException("value is invalid.");
     }
 
     public static boolean toBool(int value) {
-	if (value == TRUE)
+	if (value == TRUE) {
 	    return true;
-	if (value == FALSE)
+	}
+	if (value == FALSE) {
 	    return false;
+	}
 
 	throw new IllegalArgumentException("value is invalid.");
     }

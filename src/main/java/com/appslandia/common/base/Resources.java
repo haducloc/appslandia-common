@@ -47,8 +47,9 @@ public class Resources {
 	ResourceBundle obj = bundle;
 	if (obj == null) {
 	    synchronized (MUTEX) {
-		if ((obj = bundle) == null)
+		if ((obj = bundle) == null) {
 		    bundle = obj = LBundle;
+		}
 	    }
 	}
 	return obj;
@@ -128,13 +129,14 @@ public class Resources {
 	@Override
 	public boolean hasMoreElements() {
 	    if (this.next == null) {
-		if (this.keys.hasNext())
+		if (this.keys.hasNext()) {
 		    this.next = this.keys.next();
-		else {
+		} else {
 		    while (this.next == null && this.parentKeys.hasMoreElements()) {
 			this.next = this.parentKeys.nextElement();
-			if (this.keySet.contains(this.next))
+			if (this.keySet.contains(this.next)) {
 			    this.next = null;
+			}
 		    }
 		}
 	    }
@@ -147,8 +149,9 @@ public class Resources {
 		String key = this.next;
 		this.next = null;
 		return key;
-	    } else
+	    } else {
 		throw new NoSuchElementException();
+	    }
 	}
     }
 }

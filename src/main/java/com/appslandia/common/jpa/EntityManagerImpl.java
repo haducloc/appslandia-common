@@ -79,20 +79,23 @@ public class EntityManagerImpl implements EntityManager {
 
     public void evictCache() {
 	Cache cache = em().getEntityManagerFactory().getCache();
-	if (cache != null)
+	if (cache != null) {
 	    cache.evictAll();
+	}
     }
 
     public void evictCache(Class<?> type) {
 	Cache cache = em().getEntityManagerFactory().getCache();
-	if (cache != null)
+	if (cache != null) {
 	    cache.evict(type);
+	}
     }
 
     public void evictCache(Class<?> type, Object primaryKey) {
 	Cache cache = em().getEntityManagerFactory().getCache();
-	if (cache != null)
+	if (cache != null) {
 	    cache.evict(type, primaryKey);
+	}
     }
 
     public <T> T findFetch(Class<T> entityClass, Object primaryKey, String graphName) {

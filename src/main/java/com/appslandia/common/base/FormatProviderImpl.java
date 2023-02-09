@@ -61,8 +61,9 @@ public class FormatProviderImpl implements FormatProvider {
 	if (this.numberParser == null) {
 	    this.numberParser = NumberFormat.getNumberInstance(this.language.getLocale());
 
-	    if (this.numberParser instanceof DecimalFormat)
+	    if (this.numberParser instanceof DecimalFormat) {
 		((DecimalFormat) this.numberParser).setParseBigDecimal(true);
+	    }
 
 	    this.numberParser.setGroupingUsed(false);
 	}
@@ -75,8 +76,9 @@ public class FormatProviderImpl implements FormatProvider {
     }
 
     protected ProviderMap<NumberFormatKey, NumberFormat> getDecimalFormats() {
-	if (this.numberFormats != null)
+	if (this.numberFormats != null) {
 	    return this.numberFormats;
+	}
 
 	return this.numberFormats = new ProviderMap<NumberFormatKey, NumberFormat>((key) -> {
 	    NumberFormat impl = NumberFormat.getNumberInstance(this.language.getLocale());
@@ -97,8 +99,9 @@ public class FormatProviderImpl implements FormatProvider {
     }
 
     protected ProviderMap<NumberFormatKey, NumberFormat> getPercentFormats() {
-	if (this.percentFormats != null)
+	if (this.percentFormats != null) {
 	    return this.percentFormats;
+	}
 
 	return this.percentFormats = new ProviderMap<NumberFormatKey, NumberFormat>((key) -> {
 	    NumberFormat impl = NumberFormat.getPercentInstance(this.language.getLocale());
@@ -119,8 +122,9 @@ public class FormatProviderImpl implements FormatProvider {
     }
 
     protected ProviderMap<NumberFormatKey, NumberFormat> getCurrencyFormats() {
-	if (this.currencyFormats != null)
+	if (this.currencyFormats != null) {
 	    return this.currencyFormats;
+	}
 
 	return this.currencyFormats = new ProviderMap<NumberFormatKey, NumberFormat>((key) -> {
 	    NumberFormat impl = NumberFormat.getCurrencyInstance(this.language.getLocale());
@@ -141,8 +145,9 @@ public class FormatProviderImpl implements FormatProvider {
     }
 
     protected ProviderMap<String, DateFormat> getDateFormats() {
-	if (this.dateFormats != null)
+	if (this.dateFormats != null) {
 	    return this.dateFormats;
+	}
 
 	return this.dateFormats = new ProviderMap<String, DateFormat>((pattern) -> {
 	    SimpleDateFormat impl = new SimpleDateFormat(pattern);

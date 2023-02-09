@@ -47,8 +47,9 @@ public class JsonbProcessor extends JsonProcessor {
 
     @Override
     protected void init() throws Exception {
-	if (this.config == null)
+	if (this.config == null) {
 	    this.config = newConfig();
+	}
 
 	this.jsonb = JsonbBuilder.create(this.config);
     }
@@ -106,8 +107,9 @@ public class JsonbProcessor extends JsonProcessor {
 
 	    @Override
 	    public boolean isVisible(Field field) {
-		if (field.getDeclaredAnnotation(JsonIgnore.class) != null)
+		if (field.getDeclaredAnnotation(JsonIgnore.class) != null) {
 		    return false;
+		}
 
 		return true;
 	    }

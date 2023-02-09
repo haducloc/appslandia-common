@@ -53,11 +53,13 @@ public class JwtProcessor extends InitializeObject {
 
     @Override
     public void destroy() throws DestroyException {
-	if (this.jsonProcessor != null)
+	if (this.jsonProcessor != null) {
 	    this.jsonProcessor.destroy();
+	}
 
-	if (this.jwtSigner != null)
+	if (this.jwtSigner != null) {
 	    this.jwtSigner.destroy();
+	}
     }
 
     public JwtHeader newHeader() {
@@ -83,8 +85,9 @@ public class JwtProcessor extends InitializeObject {
 	String base64Payload = BaseEncoder.BASE64_URL.encode(this.jsonProcessor.toByteArray(jwt.getPayload()));
 
 	// No ALG
-	if (this.jwtSigner == JwtSigner.NONE)
+	if (this.jwtSigner == JwtSigner.NONE) {
 	    return newBuilder(base64Header, base64Payload, 1).append(".").toString();
+	}
 
 	// Signature
 	String dataToSign = newBuilder(base64Header, base64Payload, 0).toString();
@@ -104,18 +107,21 @@ public class JwtProcessor extends InitializeObject {
 	// Verify Signature
 
 	if (parts[2] == null) {
-	    if (this.jwtSigner != JwtSigner.NONE)
+	    if (this.jwtSigner != JwtSigner.NONE) {
 		throw new JwtException("JWT signature verification failed.");
+	    }
 
 	} else {
-	    if (this.jwtSigner == JwtSigner.NONE)
+	    if (this.jwtSigner == JwtSigner.NONE) {
 		throw new JwtException("JWT signature verification failed.");
+	    }
 
 	    // ALG
 	    String dataToSign = newBuilder(parts[0], parts[1], 0).toString();
 
-	    if (!this.jwtSigner.verify(dataToSign.getBytes(StandardCharsets.UTF_8), BaseEncoder.BASE64_URL.decode(parts[2])))
+	    if (!this.jwtSigner.verify(dataToSign.getBytes(StandardCharsets.UTF_8), BaseEncoder.BASE64_URL.decode(parts[2]))) {
 		throw new JwtException("JWT signature verification failed.");
+	    }
 	}
 
 	// Header

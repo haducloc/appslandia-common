@@ -54,7 +54,8 @@ public class UncheckedSQLException extends RuntimeException {
     private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
 	s.defaultReadObject();
 	Throwable cause = super.getCause();
-	if (!(cause instanceof SQLException))
+	if (!(cause instanceof SQLException)) {
 	    throw new InvalidObjectException("Cause must be an SQLException");
+	}
     }
 }

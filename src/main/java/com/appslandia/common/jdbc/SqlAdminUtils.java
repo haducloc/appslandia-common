@@ -64,8 +64,9 @@ public class SqlAdminUtils {
 			}
 			updStat.addBatch();
 
-			if (seq % 50 == 0)
+			if (seq % 50 == 0) {
 			    updStat.executeBatch();
+			}
 		    }
 		}
 
@@ -78,14 +79,17 @@ public class SqlAdminUtils {
 	    stat.executeUpdate(STR.fmt("UPDATE {} SET {}={}", tableName, idPkCol, tempIdPkCol));
 
 	    // Execute Alters
-	    if (idPkAlter1 != null)
+	    if (idPkAlter1 != null) {
 		stat.executeUpdate(STR.fmt("ALTER TABLE {} {}", tableName, idPkAlter1));
+	    }
 
-	    if (idPkAlter2 != null)
+	    if (idPkAlter2 != null) {
 		stat.executeUpdate(STR.fmt("ALTER TABLE {} {}", tableName, idPkAlter2));
+	    }
 
-	    if (idPkAlter3 != null)
+	    if (idPkAlter3 != null) {
 		stat.executeUpdate(STR.fmt("ALTER TABLE {} {}", tableName, idPkAlter3));
+	    }
 
 	    // Drop tempIdPkCol
 	    stat.executeUpdate(STR.fmt("ALTER TABLE {} DROP COLUMN {}", tableName, tempIdPkCol));

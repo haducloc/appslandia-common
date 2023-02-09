@@ -38,8 +38,9 @@ public enum DistanceUnit {
     }
 
     public double convert(double distance, DistanceUnit distUnit) {
-	if (this == distUnit)
+	if (this == distUnit) {
 	    return distance;
+	}
 
 	return distance * distUnit.unitInMeter / this.unitInMeter;
     }

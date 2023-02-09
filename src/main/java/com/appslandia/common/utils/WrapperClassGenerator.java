@@ -72,8 +72,9 @@ public class WrapperClassGenerator {
 	Arrays.sort(declaredMethods, comparator);
 
 	for (Method method : declaredMethods) {
-	    if (skipped.apply(method))
+	    if (skipped.apply(method)) {
 		continue;
+	    }
 
 	    String returnType = method.getGenericReturnType().getTypeName();
 	    sb.appendln(2);
@@ -88,8 +89,9 @@ public class WrapperClassGenerator {
 		boolean first = true;
 		sb.append('<');
 		for (TypeVariable<?> tv : typeVars) {
-		    if (first == false)
+		    if (first == false) {
 			sb.append(',');
+		    }
 
 		    sb.append(tv.toString());
 		    first = false;
@@ -102,8 +104,9 @@ public class WrapperClassGenerator {
 	    sb.append("(");
 	    Parameter[] params = method.getParameters();
 	    for (int i = 0; i < params.length; i++) {
-		if (i > 0)
+		if (i > 0) {
 		    sb.append(", ");
+		}
 		Parameter parameter = params[i];
 		sb.append(parameter.getParameterizedType().getTypeName()).append(" ").append(parameter.getName());
 	    }
@@ -111,12 +114,14 @@ public class WrapperClassGenerator {
 
 	    // Exceptions
 	    Class<?>[] exceptionTypes = method.getExceptionTypes();
-	    if (exceptionTypes.length > 0)
+	    if (exceptionTypes.length > 0) {
 		sb.append(" throws ");
+	    }
 	    for (int i = 0; i < exceptionTypes.length; i++) {
 		sb.append(exceptionTypes[i].getCanonicalName());
-		if (i < exceptionTypes.length - 1)
+		if (i < exceptionTypes.length - 1) {
 		    sb.append(", ");
+		}
 	    }
 	    sb.append(" {");
 	    sb.appendln();
@@ -127,16 +132,18 @@ public class WrapperClassGenerator {
 
 	    } else {
 		// Return
-		if (method.getReturnType() == void.class)
+		if (method.getReturnType() == void.class) {
 		    sb.appendtab().append(wrappedField).append(".").append(method.getName());
-		else
+		} else {
 		    sb.appendtab().append("return ").append(wrappedField).append(".").append(method.getName());
+		}
 
 		// Calling arguments
 		sb.append("(");
 		for (int i = 0; i < params.length; i++) {
-		    if (i > 0)
+		    if (i > 0) {
 			sb.append(", ");
+		    }
 		    Parameter parameter = params[i];
 		    sb.append(parameter.getName());
 		}
@@ -148,8 +155,9 @@ public class WrapperClassGenerator {
 	}
 
 	// Super
-	if (clazz.getSuperclass() != null && clazz.getSuperclass() != Object.class)
+	if (clazz.getSuperclass() != null && clazz.getSuperclass() != Object.class) {
 	    generateWrapper(clazz.getSuperclass(), wrappedField, sb, comparator, unsupported, skipped);
+	}
 
 	// Interfaces
 	for (Class<?> interfaceClazz : clazz.getInterfaces()) {
@@ -169,14 +177,17 @@ public class WrapperClassGenerator {
 
 	@Override
 	public boolean apply(Method method) {
-	    if (Modifier.isStatic(method.getModifiers()))
+	    if (Modifier.isStatic(method.getModifiers())) {
 		return true;
+	    }
 
-	    if (Modifier.isPrivate(method.getModifiers()))
+	    if (Modifier.isPrivate(method.getModifiers())) {
 		return true;
+	    }
 
-	    if (Modifier.isFinal(method.getModifiers()))
+	    if (Modifier.isFinal(method.getModifiers())) {
 		return true;
+	    }
 
 	    return false;
 	}
@@ -202,12 +213,14 @@ public class WrapperClassGenerator {
 	    // priority
 	    for (String priority : this.priorities) {
 		if (m1.getName().startsWith(priority)) {
-		    if (m2.getName().startsWith(priority) == false)
+		    if (m2.getName().startsWith(priority) == false) {
 			return -1;
+		    }
 		}
 		if (m1.getName().startsWith(priority) == false) {
-		    if (m2.getName().startsWith(priority))
+		    if (m2.getName().startsWith(priority)) {
 			return 1;
+		    }
 		}
 	    }
 
@@ -215,38 +228,46 @@ public class WrapperClassGenerator {
 	    Integer order1 = findMethodOrder(m1.getName(), this.namePriorityMap);
 	    Integer order2 = findMethodOrder(m2.getName(), this.namePriorityMap);
 
-	    if ((order1 != null) && (order2 != null))
+	    if ((order1 != null) && (order2 != null)) {
 		return order1.compareTo(order2);
+	    }
 
-	    if (order1 != null)
+	    if (order1 != null) {
 		return -1;
+	    }
 
-	    if (order2 != null)
+	    if (order2 != null) {
 		return 1;
+	    }
 
 	    // getName?
 	    int compare = m1.getName().compareTo(m2.getName());
-	    if (compare != 0)
+	    if (compare != 0) {
 		return compare;
+	    }
 
 	    // getParameterCount
-	    if (m1.getParameterCount() < m2.getParameterCount())
+	    if (m1.getParameterCount() < m2.getParameterCount()) {
 		return -1;
+	    }
 
-	    if (m1.getParameterCount() > m2.getParameterCount())
+	    if (m1.getParameterCount() > m2.getParameterCount()) {
 		return 1;
+	    }
 
 	    return m1.toString().compareTo(m2.toString());
 	}
     }
 
     private static Integer findMethodOrder(String methodName, Map<String, Integer> namePriorityMap) {
-	if (namePriorityMap == null)
+	if (namePriorityMap == null) {
 	    return null;
+	}
 
 	for (Entry<String, Integer> entry : namePriorityMap.entrySet()) {
-	    if (methodName.toLowerCase().contains(entry.getKey().toLowerCase()))
+	    if (methodName.toLowerCase().contains(entry.getKey().toLowerCase())) {
 		return entry.getValue();
+	    }
 	}
 	return null;
     }

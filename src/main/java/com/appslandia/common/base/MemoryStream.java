@@ -78,8 +78,9 @@ public class MemoryStream extends OutputStream implements Serializable {
     public void write(byte[] b, int off, int len) throws IOException {
 	if ((off < 0) || (off > b.length) || (len < 0) || ((off + len) > b.length) || ((off + len) < 0)) {
 	    throw new IndexOutOfBoundsException();
-	} else if (len == 0)
+	} else if (len == 0) {
 	    return;
+	}
 
 	byte[] lastBuf = this.nodeList.last.buf;
 	int lenAv = lastBuf.length - this.lastLen;
@@ -91,8 +92,9 @@ public class MemoryStream extends OutputStream implements Serializable {
 	} else {
 	    int addLen = len - lenAv;
 	    int addBlk = addLen / (this.blockSize);
-	    if (addBlk * this.blockSize < addLen)
+	    if (addBlk * this.blockSize < addLen) {
 		addBlk++;
+	    }
 
 	    this.nodeList.insert(new byte[addBlk * this.blockSize]);
 
@@ -111,10 +113,11 @@ public class MemoryStream extends OutputStream implements Serializable {
     public void writeTo(OutputStream out) throws IOException {
 	Node n = this.nodeList.first;
 	while (n != null) {
-	    if (n != this.nodeList.last)
+	    if (n != this.nodeList.last) {
 		out.write(n.buf, 0, n.buf.length);
-	    else
+	    } else {
 		out.write(n.buf, 0, this.lastLen);
+	    }
 
 	    n = n.next;
 	}
@@ -151,10 +154,11 @@ public class MemoryStream extends OutputStream implements Serializable {
 	MessageDigest md = MessageDigest.getInstance(algorithm);
 	Node n = this.nodeList.first;
 	while (n != null) {
-	    if (n != this.nodeList.last)
+	    if (n != this.nodeList.last) {
 		md.update(n.buf, 0, n.buf.length);
-	    else
+	    } else {
 		md.update(n.buf, 0, this.lastLen);
+	    }
 
 	    n = n.next;
 	}
@@ -164,10 +168,11 @@ public class MemoryStream extends OutputStream implements Serializable {
     public void iterate(NodeIterator iterator) throws IOException {
 	Node n = this.nodeList.first;
 	while (n != null) {
-	    if (n != this.nodeList.last)
+	    if (n != this.nodeList.last) {
 		iterator.nextNode(n.buf, n.buf.length);
-	    else
+	    } else {
 		iterator.nextNode(n.buf, this.lastLen);
+	    }
 
 	    n = n.next;
 	}
@@ -235,10 +240,11 @@ public class MemoryStream extends OutputStream implements Serializable {
 	    byte[] buf = new byte[in.readInt()];
 	    in.readFully(buf, 0, buf.length);
 
-	    if (this.nodeList == null)
+	    if (this.nodeList == null) {
 		this.nodeList = new NodeList(buf);
-	    else
+	    } else {
 		this.nodeList.insert(buf);
+	    }
 
 	    nodeCount--;
 	}

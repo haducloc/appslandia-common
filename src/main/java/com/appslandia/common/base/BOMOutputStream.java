@@ -50,8 +50,9 @@ public class BOMOutputStream extends OutputStream {
     }
 
     protected void writeBOM() throws IOException {
-	if (this.bom == null)
+	if (this.bom == null) {
 	    return;
+	}
 
 	if (!this.wroteBom) {
 	    this.os.write(this.bom.getBytes());

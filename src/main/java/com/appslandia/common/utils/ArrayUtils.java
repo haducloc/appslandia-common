@@ -95,8 +95,9 @@ public class ArrayUtils {
     }
 
     public static String[] copy(String[] src) {
-	if ((src == null) || (src.length == 0))
+	if ((src == null) || (src.length == 0)) {
 	    return src;
+	}
 
 	String[] arr = new String[src.length];
 	System.arraycopy(src, 0, arr, 0, src.length);
@@ -104,8 +105,9 @@ public class ArrayUtils {
     }
 
     public static byte[] copy(byte[] src) {
-	if ((src == null) || (src.length == 0))
+	if ((src == null) || (src.length == 0)) {
 	    return src;
+	}
 
 	byte[] arr = new byte[src.length];
 	System.arraycopy(src, 0, arr, 0, src.length);
@@ -113,8 +115,9 @@ public class ArrayUtils {
     }
 
     public static char[] copy(char[] src) {
-	if ((src == null) || (src.length == 0))
+	if ((src == null) || (src.length == 0)) {
 	    return src;
+	}
 
 	char[] arr = new char[src.length];
 	System.arraycopy(src, 0, arr, 0, src.length);
@@ -168,14 +171,15 @@ public class ArrayUtils {
     }
 
     public static Object[] toArray(Object arr) {
-	if (arr == null)
+	if (arr == null) {
 	    return null;
+	}
 
 	Asserts.isTrue(arr.getClass().isArray());
 
-	if (!arr.getClass().getComponentType().isPrimitive())
+	if (!arr.getClass().getComponentType().isPrimitive()) {
 	    return (Object[]) arr;
-	else {
+	} else {
 	    Object[] wrappers = new Object[Array.getLength(arr)];
 
 	    for (int i = 0; i < wrappers.length; i++) {
@@ -186,26 +190,31 @@ public class ArrayUtils {
     }
 
     public static boolean endsWith(byte[] arr, byte[] suffix, int fromIndex) {
-	if (arr == suffix)
+	if (arr == suffix) {
 	    return fromIndex == 0;
+	}
 
-	if (arr == null || suffix == null)
+	if (arr == null || suffix == null) {
 	    return false;
+	}
 
-	if (suffix.length + fromIndex != arr.length)
+	if (suffix.length + fromIndex != arr.length) {
 	    return false;
+	}
 
 	for (int i = 0; i < suffix.length - 1; i++)
-	    if (suffix[i] != arr[i + fromIndex])
+	    if (suffix[i] != arr[i + fromIndex]) {
 		return false;
+	    }
 
 	return true;
     }
 
     public static int min(int[] arr) {
 	Asserts.notNull(arr);
-	if (arr.length == 0)
+	if (arr.length == 0) {
 	    throw new NoSuchElementException("min: arr is empty.");
+	}
 
 	int m = arr[0];
 	for (int i = 1; i < arr.length; i++)
@@ -216,8 +225,9 @@ public class ArrayUtils {
 
     public static int max(int[] arr) {
 	Asserts.notNull(arr);
-	if (arr.length == 0)
+	if (arr.length == 0) {
 	    throw new NoSuchElementException("max: arr is empty.");
+	}
 
 	int m = arr[0];
 	for (int i = 1; i < arr.length; i++)
@@ -228,8 +238,9 @@ public class ArrayUtils {
 
     public static <T> T min(T[] arr, Comparator<T> comparator) {
 	Asserts.notNull(arr);
-	if (arr.length == 0)
+	if (arr.length == 0) {
 	    throw new NoSuchElementException("min: arr is empty.");
+	}
 
 	T m = arr[0];
 	for (int i = 1; i < arr.length; i++)
@@ -240,8 +251,9 @@ public class ArrayUtils {
 
     public static <T> T max(T[] arr, Comparator<T> comparator) {
 	Asserts.notNull(arr);
-	if (arr.length == 0)
+	if (arr.length == 0) {
 	    throw new NoSuchElementException("max: arr is empty.");
+	}
 
 	T m = arr[0];
 	for (int i = 1; i < arr.length; i++)

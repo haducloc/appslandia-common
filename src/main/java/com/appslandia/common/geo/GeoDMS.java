@@ -38,10 +38,11 @@ public class GeoDMS {
 	Asserts.isTrue(decimalDegrees >= 0.0d);
 	Asserts.notNull(direction);
 
-	if (direction == Direction.NORTH || direction == Direction.SOUTH)
+	if (direction == Direction.NORTH || direction == Direction.SOUTH) {
 	    Asserts.isTrue((decimalDegrees >= -90.0) && (decimalDegrees <= 90.0), "decimalDegrees is invalid.");
-	else
+	} else {
 	    Asserts.isTrue((decimalDegrees >= -180.0) && (decimalDegrees <= 180.0), "decimalDegrees is invalid.");
+	}
 
 	int d = (int) decimalDegrees;
 	int m = (int) ((decimalDegrees - d) * 60);
@@ -81,8 +82,9 @@ public class GeoDMS {
     public double toDecimalDegrees() {
 	double deg = GeoUtils.toDecimalDegrees(this.degrees, this.minutes, this.seconds);
 
-	if ((this.direction == Direction.NORTH) || (this.direction == Direction.EAST))
+	if ((this.direction == Direction.NORTH) || (this.direction == Direction.EAST)) {
 	    return deg;
+	}
 
 	return -deg;
     }

@@ -71,8 +71,9 @@ public class JdbcSql extends InitializeObject implements Serializable {
 	assertNotInitialized();
 	Asserts.isTrue(maxLength > 0, "maxLength is required.");
 
-	if (this.arrayLens == null)
+	if (this.arrayLens == null) {
 	    this.arrayLens = new HashMap<>();
+	}
 
 	this.arrayLens.put(parameterName, maxLength);
 	return this;
@@ -92,8 +93,9 @@ public class JdbcSql extends InitializeObject implements Serializable {
 	    while (paramIdx < sb.length() - 1 && sb.charAt(paramIdx) != getParamPrefix()) {
 		paramIdx++;
 	    }
-	    if (paramIdx >= sb.length() - 1)
+	    if (paramIdx >= sb.length() - 1) {
 		break;
+	    }
 
 	    // Parse parameter
 	    Out<Integer> paramEnd = new Out<Integer>();
@@ -121,11 +123,13 @@ public class JdbcSql extends InitializeObject implements Serializable {
 	    if (arrayLen != null) {
 		Asserts.isTrue(isArrayParam, () -> STR.fmt("Array parameter '{}' is required.", paramName));
 
-	    } else
+	    } else {
 		arrayLen = DEFAULT_ARRAY_MAX_LENGTH;
+	    }
 
-	    if (isArrayParam)
+	    if (isArrayParam) {
 		paramsMap.put(paramName.value, arrayLen);
+	    }
 
 	    // Normal parameter?
 	    if (!isArrayParam) {
@@ -141,10 +145,11 @@ public class JdbcSql extends InitializeObject implements Serializable {
 		sb.replace(paramIdx, paramEnd.value + 1, "()");
 
 		for (int subIdx = 0; subIdx < arrayLen; subIdx++) {
-		    if (subIdx == 0)
+		    if (subIdx == 0) {
 			sb.insert(paramIdx + 1, '?');
-		    else
+		    } else {
 			sb.insert(paramIdx + 1, "?, ");
+		    }
 
 		    putIndex(indexesMap, toParamName(paramName.value, subIdx), ++index);
 		}
@@ -157,10 +162,11 @@ public class JdbcSql extends InitializeObject implements Serializable {
 	    sb.delete(fieldIdx.value, paramEnd.value + 1);
 
 	    for (int subIdx = 0; subIdx < arrayLen; subIdx++) {
-		if (subIdx == 0)
+		if (subIdx == 0) {
 		    sb.insert(fieldIdx.value, String.format("%s LIKE ?", fieldName.value));
-		else
+		} else {
 		    sb.insert(fieldIdx.value, String.format("%s LIKE ? OR ", fieldName.value));
+		}
 
 		putIndex(indexesMap, toParamName(paramName.value, subIdx), ++index);
 	    }
@@ -178,8 +184,9 @@ public class JdbcSql extends InitializeObject implements Serializable {
 
     private void putIndex(Map<String, List<Integer>> indexesMap, String paramName, int index) {
 	indexesMap.compute(paramName, (p, l) -> {
-	    if (l == null)
+	    if (l == null) {
 		l = new ArrayList<Integer>(5);
+	    }
 
 	    l.add(index);
 	    return l;
@@ -235,32 +242,37 @@ public class JdbcSql extends InitializeObject implements Serializable {
 	while (i >= 0 && Character.isWhitespace(sb.charAt(i))) {
 	    i--;
 	}
-	if (i < 0)
+	if (i < 0) {
 	    return false;
+	}
 
 	int j = i;
 	while (j >= 0 && !Character.isWhitespace(sb.charAt(j))) {
 	    j--;
 	}
-	if (!sb.substring(j + 1, i + 1).equalsIgnoreCase(context))
+	if (!sb.substring(j + 1, i + 1).equalsIgnoreCase(context)) {
 	    return false;
+	}
 
-	if (j < 0)
+	if (j < 0) {
 	    return false;
+	}
 	int k = j;
 	while (k >= 0 && Character.isWhitespace(sb.charAt(k))) {
 	    k--;
 	}
-	if (k < 0)
+	if (k < 0) {
 	    return false;
+	}
 
 	int h = k;
 	while (h >= 0 && !Character.isWhitespace(sb.charAt(h)) && sb.charAt(h) != '(') {
 	    h--;
 	}
 	fieldName.value = sb.substring(h + 1, k + 1);
-	if (fieldName.value.isEmpty())
+	if (fieldName.value.isEmpty()) {
 	    return false;
+	}
 
 	fieldIdx.value = h + 1;
 	return true;
@@ -269,11 +281,13 @@ public class JdbcSql extends InitializeObject implements Serializable {
     public static boolean isParamContext(StringBuilder sb, int paramIdx, Out<Integer> paramEnd, Out<String> paramName) {
 	int k = paramIdx + 1;
 
-	if (k == sb.length())
+	if (k == sb.length()) {
 	    return false;
+	}
 
-	if (!Character.isDigit(sb.charAt(k)) && !Character.isJavaIdentifierStart(sb.charAt(k)))
+	if (!Character.isDigit(sb.charAt(k)) && !Character.isJavaIdentifierStart(sb.charAt(k))) {
 	    return false;
+	}
 
 	k++;
 	while (k < sb.length() && Character.isJavaIdentifierPart(sb.charAt(k))) {
@@ -296,8 +310,9 @@ public class JdbcSql extends InitializeObject implements Serializable {
 	char chr = __paramPrefix;
 	if (chr == 0) {
 	    synchronized (MUTEX) {
-		if ((chr = __paramPrefix) == 0)
+		if ((chr = __paramPrefix) == 0) {
 		    __paramPrefix = chr = ':';
+		}
 	    }
 	}
 	return chr;

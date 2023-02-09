@@ -68,13 +68,15 @@ public @interface ValidInts {
 
 	@Override
 	public boolean isValid(Number value, ConstraintValidatorContext context) {
-	    if (value == null)
+	    if (value == null) {
 		return true;
+	    }
 
 	    int valueToCheck = value.intValue();
 	    for (int validValue : this.validValues) {
-		if (validValue == valueToCheck)
+		if (validValue == valueToCheck) {
 		    return true;
+		}
 	    }
 	    return false;
 	}

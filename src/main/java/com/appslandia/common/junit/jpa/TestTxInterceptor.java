@@ -45,8 +45,9 @@ public abstract class TestTxInterceptor implements Serializable {
 
 	// @Transactional
 	Transactional tx = context.getMethod().getAnnotation(Transactional.class);
-	if (tx == null)
+	if (tx == null) {
 	    tx = context.getTarget().getClass().getAnnotation(Transactional.class);
+	}
 
 	TxType type = tx.value();
 
@@ -56,8 +57,9 @@ public abstract class TestTxInterceptor implements Serializable {
 	if (type == TxType.NEVER) {
 	    EntityManager curEm = getEm();
 
-	    if ((curEm != null) && curEm.getTransaction().isActive())
+	    if ((curEm != null) && curEm.getTransaction().isActive()) {
 		throw new InvalidTransactionException("TxType.NEVER - Transaction active found.");
+	    }
 
 	    // No TX
 	    setEm(null);
@@ -78,8 +80,9 @@ public abstract class TestTxInterceptor implements Serializable {
 	if (type == TxType.MANDATORY) {
 	    EntityManager curEm = getEm();
 
-	    if ((curEm == null) || !curEm.getTransaction().isActive())
+	    if ((curEm == null) || !curEm.getTransaction().isActive()) {
 		throw new InvalidTransactionException("TxType.MANDATORY - No transaction active found.");
+	    }
 
 	    // Join TX
 	    return context.proceed();
@@ -145,8 +148,9 @@ public abstract class TestTxInterceptor implements Serializable {
 		return obj;
 
 	    } catch (Exception ex) {
-		if (willRollbackOn(ex, tx.rollbackOn(), tx.dontRollbackOn()))
+		if (willRollbackOn(ex, tx.rollbackOn(), tx.dontRollbackOn())) {
 		    et.rollback();
+		}
 
 		throw ex;
 	    } finally {
@@ -161,55 +165,63 @@ public abstract class TestTxInterceptor implements Serializable {
 	EntityManager curEm = getEm();
 	boolean startNew = (curEm == null);
 
-	if (startNew)
+	if (startNew) {
 	    curEm = storeNewEm();
+	}
 
 	EntityTransaction et = curEm.getTransaction();
 	boolean inTrans = et.isActive();
 
-	if (!inTrans)
+	if (!inTrans) {
 	    et.begin();
+	}
 
 	try {
 	    Object obj = context.proceed();
 
-	    if (!inTrans)
+	    if (!inTrans) {
 		et.commit();
+	    }
 
 	    return obj;
 
 	} catch (Exception ex) {
 	    if (!inTrans) {
-		if (willRollbackOn(ex, tx.rollbackOn(), tx.dontRollbackOn()))
+		if (willRollbackOn(ex, tx.rollbackOn(), tx.dontRollbackOn())) {
 		    et.rollback();
+		}
 	    }
 
 	    throw ex;
 	} finally {
-	    if (startNew)
+	    if (startNew) {
 		setEm(null);
+	    }
 	}
     }
 
     protected EntityManager getEm() {
-	if (this.getTestEmfControl().isSharedEmf())
+	if (this.getTestEmfControl().isSharedEmf()) {
 	    return SharedEmfTestEntityManagerExtension.emHolder.get();
-	else
+	} else {
 	    return TestEntityManagerExtension.emHolder.get();
+	}
     }
 
     protected EntityManager storeNewEm() {
-	if (this.getTestEmfControl().isSharedEmf())
+	if (this.getTestEmfControl().isSharedEmf()) {
 	    return SharedEmfTestEntityManagerExtension.newEntityManager();
-	else
+	} else {
 	    return TestEntityManagerExtension.newEntityManager();
+	}
     }
 
     protected void setEm(EntityManager em) {
-	if (this.getTestEmfControl().isSharedEmf())
+	if (this.getTestEmfControl().isSharedEmf()) {
 	    SharedEmfTestEntityManagerExtension.emHolder.set(em);
-	else
+	} else {
 	    TestEntityManagerExtension.emHolder.set(em);
+	}
     }
 
     protected boolean willRollbackOn(Exception ex, Class<?>[] rollbackOn, Class<?>[] dontRollbackOn) {
@@ -217,39 +229,45 @@ public abstract class TestTxInterceptor implements Serializable {
 	if (ex instanceof RuntimeException) {
 	    Class<?> dontRollbackOnClass = getClosestMatchOrNull(dontRollbackOn, ex.getClass());
 
-	    if (dontRollbackOnClass == null)
+	    if (dontRollbackOnClass == null) {
 		return true;
+	    }
 
-	    if (dontRollbackOnClass.equals(ex.getClass()) || dontRollbackOnClass.isAssignableFrom(ex.getClass()))
+	    if (dontRollbackOnClass.equals(ex.getClass()) || dontRollbackOnClass.isAssignableFrom(ex.getClass())) {
 		return false;
+	    }
 
 	    Class<?> rollbackOnClass = getClosestMatchOrNull(rollbackOn, ex.getClass());
 	    if (rollbackOnClass != null) {
 
 		if (rollbackOnClass.isAssignableFrom(dontRollbackOnClass)) {
 		    return false;
-		} else if (dontRollbackOnClass.isAssignableFrom(rollbackOnClass))
+		} else if (dontRollbackOnClass.isAssignableFrom(rollbackOnClass)) {
 		    return true;
+		}
 	    }
 	    return true;
 	}
 	// Checked Exception
 	else {
 	    Class<?> rollbackOnClass = getClosestMatchOrNull(rollbackOn, ex.getClass());
-	    if (rollbackOnClass == null)
+	    if (rollbackOnClass == null) {
 		return false;
+	    }
 
 	    Class<?> dontRollbackOnClass = getClosestMatchOrNull(dontRollbackOn, ex.getClass());
 	    if (dontRollbackOnClass != null) {
 
 		if (rollbackOnClass.isAssignableFrom(dontRollbackOnClass)) {
 		    return false;
-		} else if (dontRollbackOnClass.isAssignableFrom(rollbackOnClass))
+		} else if (dontRollbackOnClass.isAssignableFrom(rollbackOnClass)) {
 		    return true;
+		}
 	    }
 
-	    if (rollbackOnClass.equals(ex.getClass()) || rollbackOnClass.isAssignableFrom(ex.getClass()))
+	    if (rollbackOnClass.equals(ex.getClass()) || rollbackOnClass.isAssignableFrom(ex.getClass())) {
 		return true;
+	    }
 
 	    return false;
 	}
@@ -259,12 +277,14 @@ public abstract class TestTxInterceptor implements Serializable {
 	Class<?> closestMatch = null;
 
 	for (Class<?> exClass : exClasses) {
-	    if (exClass.equals(exceptionClass))
+	    if (exClass.equals(exceptionClass)) {
 		return exClass;
+	    }
 
 	    if (exClass.isAssignableFrom(exceptionClass)) {
-		if (closestMatch == null || closestMatch.isAssignableFrom(exClass))
+		if (closestMatch == null || closestMatch.isAssignableFrom(exClass)) {
 		    closestMatch = exClass;
+		}
 	    }
 	}
 	return closestMatch;

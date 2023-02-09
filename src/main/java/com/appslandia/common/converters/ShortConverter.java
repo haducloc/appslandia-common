@@ -45,8 +45,9 @@ public class ShortConverter extends NumberConverter<Short> {
 
     @Override
     public String format(Short obj, FormatProvider formatProvider, boolean localize) {
-	if (obj == null)
+	if (obj == null) {
 	    return null;
+	}
 
 	return obj.toString();
     }
@@ -54,14 +55,16 @@ public class ShortConverter extends NumberConverter<Short> {
     @Override
     public Short parse(String str, FormatProvider formatProvider) throws ConverterException {
 	str = StringUtils.trimToNull(str);
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	try {
 	    long value = Long.parseLong(str);
 
-	    if (!ValueUtils.isShortRange(value))
+	    if (!ValueUtils.isShortRange(value)) {
 		throw toNumberOverflowError(str);
+	    }
 
 	    return Short.valueOf((short) value);
 

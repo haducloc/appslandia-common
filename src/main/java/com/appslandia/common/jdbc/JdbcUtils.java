@@ -66,8 +66,9 @@ public class JdbcUtils {
     }
 
     public static Map<String, Object> toParameters(Object[] params) {
-	if (params == null)
+	if (params == null) {
 	    return (Map<String, Object>) null;
+	}
 	return IntStream.range(0, params.length).boxed().collect(Collectors.toMap(idx -> Integer.toString(idx), idx -> params[idx]));
     }
 
@@ -132,8 +133,9 @@ public class JdbcUtils {
 	boolean rsRead = false;
 
 	while (rs.next()) {
-	    if (rsRead)
+	    if (rsRead) {
 		throw new NonUniqueSQLException();
+	    }
 
 	    rsRead = true;
 	    t = mapper.map(rs);
@@ -152,13 +154,15 @@ public class JdbcUtils {
 	boolean rsRead = false;
 	while (rs.next()) {
 
-	    if (rsRead)
+	    if (rsRead) {
 		throw new NonUniqueSQLException();
+	    }
 
 	    rsRead = true;
 
-	    if (handler != null)
+	    if (handler != null) {
 		handler.handle(rs);
+	    }
 
 	    try (InputStream is = rs.getBinaryStream(streamLabel)) {
 		IOUtils.copy(is, out);
@@ -170,13 +174,15 @@ public class JdbcUtils {
 	boolean rsRead = false;
 	while (rs.next()) {
 
-	    if (rsRead)
+	    if (rsRead) {
 		throw new NonUniqueSQLException();
+	    }
 
 	    rsRead = true;
 
-	    if (handler != null)
+	    if (handler != null) {
 		handler.handle(rs);
+	    }
 
 	    try (Reader r = rs.getCharacterStream(streamLabel)) {
 		IOUtils.copy(r, out);
@@ -188,13 +194,15 @@ public class JdbcUtils {
 	boolean rsRead = false;
 	while (rs.next()) {
 
-	    if (rsRead)
+	    if (rsRead) {
 		throw new NonUniqueSQLException();
+	    }
 
 	    rsRead = true;
 
-	    if (handler != null)
+	    if (handler != null) {
 		handler.handle(rs);
+	    }
 
 	    try (Reader r = rs.getNCharacterStream(streamLabel)) {
 		IOUtils.copy(r, out);

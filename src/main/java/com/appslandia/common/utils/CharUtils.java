@@ -75,8 +75,9 @@ public class CharUtils {
 
 	// STEP1: Fill rdChars for rdCount [1, avgLen] positions
 	for (int srcIndex = 0; srcIndex < sources.length; srcIndex++) {
-	    if (rdLen >= len)
+	    if (rdLen >= len) {
 		break;
+	    }
 
 	    int rdCount = RandomUtils.nextInt(1, avgLen, random);
 
@@ -89,8 +90,9 @@ public class CharUtils {
 	// STEP2: Fill unfilled positions
 	if (rdLen < len) {
 	    for (int i = 0; i < len; i++) {
-		if (rdChars[i] != 0)
+		if (rdChars[i] != 0) {
 		    continue;
+		}
 
 		int srcIndex = random.nextInt(sources.length);
 		rdChars[i] = sources[srcIndex][random.nextInt(sources[srcIndex].length)];

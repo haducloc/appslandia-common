@@ -60,8 +60,9 @@ public class XmlEscaper {
     }
 
     public static String escapeXmlContent(String s) {
-	if (s == null)
+	if (s == null) {
 	    return null;
+	}
 
 	try (StringWriter out = new StringWriter((int) (s.length() * 1.25f))) {
 	    writeEscapeXml(out, s, ESCAPE_XML_CONTENT);
@@ -73,8 +74,9 @@ public class XmlEscaper {
     }
 
     public static String escapeXml(String s) {
-	if (s == null)
+	if (s == null) {
 	    return null;
+	}
 
 	try (StringWriter out = new StringWriter((int) (s.length() * 1.25f))) {
 	    writeEscapeXml(out, s, ESCAPE_XML);
@@ -98,8 +100,9 @@ public class XmlEscaper {
 		if (escaped != null) {
 
 		    // add un_escaped portion
-		    if (start < i)
+		    if (start < i) {
 			out.write(srcChars, start, i - start);
+		    }
 
 		    // add escaped
 		    out.write(escaped);
@@ -108,7 +111,8 @@ public class XmlEscaper {
 	    }
 	}
 	// add rest of un_escaped portion
-	if (start < length)
+	if (start < length) {
 	    out.write(srcChars, start, length - start);
+	}
     }
 }

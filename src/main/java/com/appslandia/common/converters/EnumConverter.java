@@ -46,8 +46,9 @@ public class EnumConverter<T extends Enum<T>> implements Converter<T> {
 
     @Override
     public String format(T obj, FormatProvider formatProvider, boolean localize) {
-	if (obj == null)
+	if (obj == null) {
 	    return null;
+	}
 
 	return obj.toString();
     }
@@ -55,8 +56,9 @@ public class EnumConverter<T extends Enum<T>> implements Converter<T> {
     @Override
     public T parse(String str, FormatProvider formatProvider) throws ConverterException {
 	str = StringUtils.trimToNull(str);
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	try {
 	    return Enum.valueOf(this.type, str.toUpperCase(Locale.ENGLISH));

@@ -68,11 +68,13 @@ public @interface MinLength {
 
 	@Override
 	public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
-	    if (value == null)
+	    if (value == null) {
 		return true;
+	    }
 
-	    if (value.length() < this.minLength)
+	    if (value.length() < this.minLength) {
 		return false;
+	    }
 
 	    return true;
 	}

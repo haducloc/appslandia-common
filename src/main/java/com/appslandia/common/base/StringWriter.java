@@ -48,8 +48,9 @@ public class StringWriter extends Writer {
     public void write(char cbuf[], int off, int len) {
 	if ((off < 0) || (off > cbuf.length) || (len < 0) || ((off + len) > cbuf.length) || ((off + len) < 0)) {
 	    throw new IndexOutOfBoundsException();
-	} else if (len == 0)
+	} else if (len == 0) {
 	    return;
+	}
 
 	this.buf.append(cbuf, off, len);
     }
@@ -63,10 +64,11 @@ public class StringWriter extends Writer {
     }
 
     public StringWriter append(CharSequence csq) {
-	if (csq == null)
+	if (csq == null) {
 	    write("null");
-	else
+	} else {
 	    write(csq.toString());
+	}
 	return this;
     }
 

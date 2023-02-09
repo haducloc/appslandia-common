@@ -48,8 +48,9 @@ public class NormalizeUtils {
     private static final Pattern STRIP_ACCENTS_PATTERN = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
 
     public static String unaccent(String str) {
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	StringBuilder decomposed = new StringBuilder(Normalizer.normalize(str, Normalizer.Form.NFD));
 	if (decomposedCharacterConverter != null) {
@@ -76,8 +77,9 @@ public class NormalizeUtils {
     private static final Pattern[] CRLF3_PATTERNS = PatternUtils.compile("(\r?\n){3,}");
 
     public static String normalizeText(String text) {
-	if (text == null)
+	if (text == null) {
 	    return null;
+	}
 
 	return normalize(text, CRLF3_PATTERNS, StringUtils.DOUBLE_LINE_SEP);
     }
@@ -85,15 +87,17 @@ public class NormalizeUtils {
     private static final Pattern[] WTSP_PATTERNS = PatternUtils.compile("\\s+");
 
     public static String normalizeString(String simpleStr) {
-	if (simpleStr == null)
+	if (simpleStr == null) {
 	    return null;
+	}
 
 	return normalize(simpleStr, WTSP_PATTERNS, " ");
     }
 
     public static String removeSp(String str) {
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	return normalize(str, WTSP_PATTERNS, "");
     }
@@ -101,8 +105,9 @@ public class NormalizeUtils {
     private static final Pattern[] WTSP_PUNCT_PATTERNS = PatternUtils.compile("\\s+|\\p{Punct}+");
 
     public static String removeSpPunct(String str) {
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	return normalize(str, WTSP_PUNCT_PATTERNS, "");
     }
@@ -110,15 +115,17 @@ public class NormalizeUtils {
     private static final Pattern[] NON_DIGITS_PATTERNS = PatternUtils.compile("[^\\d]+");
 
     public static String digitOnly(String str) {
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	return normalize(str, NON_DIGITS_PATTERNS, "");
     }
 
     public static String normalize(String str, Pattern[] matchers, String replacement) {
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	for (Pattern p : matchers) {
 	    str = p.matcher(str).replaceAll(Matcher.quoteReplacement(replacement));
@@ -127,8 +134,9 @@ public class NormalizeUtils {
     }
 
     public static String stringAsID(String str) {
-	if (str == null)
+	if (str == null) {
 	    return "null";
+	}
 
 	str = removeSpPunct(str);
 	return (str != null) ? StringUtils.toLowerCase(str, Locale.ROOT) : "null";

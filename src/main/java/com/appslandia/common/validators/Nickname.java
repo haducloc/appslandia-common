@@ -67,8 +67,9 @@ public @interface Nickname {
     public static class ConstraintValidatorImpl implements ConstraintValidator<Nickname, CharSequence> {
 
 	public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
-	    if (value == null)
+	    if (value == null) {
 		return true;
+	    }
 
 	    return NICKNAME_PATTERN.matcher(value).matches();
 	}

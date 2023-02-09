@@ -64,11 +64,13 @@ public class ULCStringConverter implements Converter<String> {
     @Override
     public String parse(String str, FormatProvider formatProvider) throws ConverterException {
 	str = StringUtils.trimToNull(str);
-	if (str == null)
+	if (str == null) {
 	    return str;
+	}
 
-	if (this.locale != null)
+	if (this.locale != null) {
 	    return this.uppercase ? str.toUpperCase(this.locale) : str.toLowerCase(this.locale);
+	}
 
 	return this.uppercase ? str.toUpperCase(formatProvider.getLanguage().getLocale()) : str.toLowerCase(formatProvider.getLanguage().getLocale());
     }

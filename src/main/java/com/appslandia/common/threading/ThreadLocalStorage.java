@@ -41,10 +41,11 @@ public class ThreadLocalStorage<T> {
     }
 
     public ThreadLocalStorage(boolean inheritable) {
-	if (!inheritable)
+	if (!inheritable) {
 	    this.holder = new ThreadLocal<>();
-	else
+	} else {
 	    this.holder = new InheritableThreadLocal<>();
+	}
     }
 
     public T get() {
@@ -57,10 +58,11 @@ public class ThreadLocalStorage<T> {
     }
 
     public void set(T value) {
-	if (value == null)
+	if (value == null) {
 	    this.holder.remove();
-	else
+	} else {
 	    this.holder.set(value);
+	}
     }
 
     public T remove() {

@@ -65,8 +65,9 @@ public enum BOM {
     }
 
     public static BOM parse(String encoding) {
-	if (encoding == null)
+	if (encoding == null) {
 	    return null;
+	}
 
 	return Arrays.stream(BOM.values()).filter(bom -> bom.encoding.equalsIgnoreCase(encoding)).findFirst().orElse(null);
     }
@@ -76,22 +77,27 @@ public enum BOM {
 	Asserts.isTrue(c <= 4);
 
 	if (c == 4) {
-	    if (BOM.UTF_32BE.matches(bom))
+	    if (BOM.UTF_32BE.matches(bom)) {
 		return BOM.UTF_32BE;
+	    }
 
-	    if (BOM.UTF_32LE.matches(bom))
+	    if (BOM.UTF_32LE.matches(bom)) {
 		return BOM.UTF_32LE;
+	    }
 	}
 	if (c >= 3) {
-	    if (BOM.UTF_8.matches(bom))
+	    if (BOM.UTF_8.matches(bom)) {
 		return BOM.UTF_8;
+	    }
 	}
 	if (c >= 2) {
-	    if (BOM.UTF_16BE.matches(bom))
+	    if (BOM.UTF_16BE.matches(bom)) {
 		return BOM.UTF_16BE;
+	    }
 
-	    if (BOM.UTF_16LE.matches(bom))
+	    if (BOM.UTF_16LE.matches(bom)) {
 		return BOM.UTF_16LE;
+	    }
 	}
 	return null;
     }

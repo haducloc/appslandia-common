@@ -81,8 +81,9 @@ public class TypeUtils {
     }
 
     public static boolean isPrimitiveOrWrapper(Class<?> type) {
-	if (type.isPrimitive())
+	if (type.isPrimitive()) {
 	    return true;
+	}
 
 	return WRAPPER_PRIMITIVE_MAP.containsKey(wrap(type));
     }
@@ -109,8 +110,9 @@ public class TypeUtils {
     }
 
     public static <T> T defaultValue(Class<T> type) {
-	if (!type.isPrimitive())
+	if (!type.isPrimitive()) {
 	    return null;
+	}
 
 	return ObjectUtils.cast(PRIMITIVE_DEFAULT_MAP.get(type));
     }

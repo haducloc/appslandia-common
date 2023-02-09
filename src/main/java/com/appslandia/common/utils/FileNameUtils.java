@@ -47,8 +47,9 @@ public class FileNameUtils {
 	if (dotIdx < 0) {
 
 	    String fn = NormalizeUtils.normalizeLabel(fileName);
-	    if (fn == null)
+	    if (fn == null) {
 		return null;
+	    }
 
 	    return (extra != null) ? (fn + '-' + extra) : fn;
 	}
@@ -58,23 +59,26 @@ public class FileNameUtils {
 
 	// No extPart
 	if (extPart == null) {
-	    if (namePart == null)
+	    if (namePart == null) {
 		return null;
+	    }
 
 	    return (extra != null) ? (namePart + '-' + extra) : namePart;
 	}
 
 	// No namePart
-	if (namePart == null)
+	if (namePart == null) {
 	    return (extra != null) ? (extra.toString() + '.' + extPart) : ('.' + extPart);
+	}
 
 	// namePart & extPart
 	return (extra != null) ? (namePart + '-' + extra + '.' + extPart) : (namePart + '.' + extPart);
     }
 
     public static String toUnixPath(String path) {
-	if (path == null || path.indexOf('\\') == -1)
+	if (path == null || path.indexOf('\\') == -1) {
 	    return path;
+	}
 
 	return path.replace('\\', '/');
     }

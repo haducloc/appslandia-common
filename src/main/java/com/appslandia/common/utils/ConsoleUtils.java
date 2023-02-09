@@ -54,10 +54,11 @@ public class ConsoleUtils {
 		if ((obj = __reader) == null) {
 		    Console cons = System.console();
 
-		    if (cons != null)
+		    if (cons != null) {
 			__reader = obj = new Scanner(cons.reader());
-		    else
+		    } else {
 			__reader = obj = new Scanner(System.in);
+		    }
 		}
 	    }
 	}
@@ -73,10 +74,11 @@ public class ConsoleUtils {
 		if ((obj = __writer) == null) {
 
 		    Console cons = System.console();
-		    if (cons != null)
+		    if (cons != null) {
 			__writer = obj = cons.writer();
-		    else
+		    } else {
 			__writer = obj = new PrintWriter(System.out, true);
+		    }
 		}
 	    }
 	}
@@ -99,8 +101,9 @@ public class ConsoleUtils {
 
 	while (true) {
 
-	    if (invalidValue)
+	    if (invalidValue) {
 		writer().println(getInvalidEnterAgain(variableName));
+	    }
 
 	    // String trunks
 	    List<String> strings = new ArrayList<>();
@@ -108,14 +111,16 @@ public class ConsoleUtils {
 	    while (reader().hasNextLine()) {
 		String valueStr = reader().nextLine().trim();
 
-		if (valueStr.isEmpty())
+		if (valueStr.isEmpty()) {
 		    continue;
+		}
 
 		if (valueStr.endsWith("/")) {
 		    valueStr = valueStr.substring(0, valueStr.length() - 1).trim();
 
-		    if (!valueStr.isEmpty())
+		    if (!valueStr.isEmpty()) {
 			strings.add(valueStr);
+		    }
 
 		    break;
 		}
@@ -127,9 +132,9 @@ public class ConsoleUtils {
 	    String longStr = String.join(" ", strings);
 	    if (longStr.isEmpty()) {
 
-		if (!required)
+		if (!required) {
 		    return null;
-		else {
+		} else {
 		    invalidValue = true;
 		    continue;
 		}
@@ -162,16 +167,17 @@ public class ConsoleUtils {
 
 	    while (true) {
 
-		if (invalidValue)
+		if (invalidValue) {
 		    writer().println(getInvalidEnterAgain(variableName));
+		}
 
 		// Read Password
 		char[] password = cons.readPassword();
 		if (password.length == 0) {
 
-		    if (!required)
+		    if (!required) {
 			return null;
-		    else {
+		    } else {
 			invalidValue = true;
 			continue;
 		    }
@@ -187,8 +193,9 @@ public class ConsoleUtils {
 		return value;
 	    }
 
-	} else
+	} else {
 	    return readString(promptText, variableName, required, validator);
+	}
     }
 
     public static String readPassword2(String promptText, String variableName) {
@@ -209,8 +216,9 @@ public class ConsoleUtils {
 	    boolean unmatchedValues = false;
 	    while (true) {
 
-		if (unmatchedValues)
+		if (unmatchedValues) {
 		    writer().println(getUnmatchedValueText(variableName));
+		}
 
 		// Enter value
 		String readValue = readPassword(promptText, variableName, required, validator);
@@ -228,8 +236,9 @@ public class ConsoleUtils {
 		}
 		return readValue;
 	    }
-	} else
+	} else {
 	    return readString2(promptText, variableName, required, validator);
+	}
     }
 
     public static String readString2(String promptText, String variableName) {
@@ -247,8 +256,9 @@ public class ConsoleUtils {
 	boolean unmatchedValues = false;
 	while (true) {
 
-	    if (unmatchedValues)
+	    if (unmatchedValues) {
 		writer().println(getUnmatchedValueText(variableName));
+	    }
 
 	    // Enter value
 	    String readValue = readString(promptText, variableName, required, validator);
@@ -257,8 +267,9 @@ public class ConsoleUtils {
 	    writer().println(getConfirmValue(variableName));
 
 	    String confirmValue = null;
-	    if (reader().hasNextLine())
+	    if (reader().hasNextLine()) {
 		confirmValue = StringUtils.trimToNull(reader().nextLine());
+	    }
 
 	    // Compare values
 	    if (!Objects.equals(readValue, confirmValue)) {
@@ -280,8 +291,9 @@ public class ConsoleUtils {
 	boolean unmatchedValues = false;
 	while (true) {
 
-	    if (unmatchedValues)
+	    if (unmatchedValues) {
 		writer().println(getUnmatchedValueText(variableName));
+	    }
 
 	    // Enter value
 	    Boolean readValue = readBoolean(promptText, variableName, required);
@@ -290,12 +302,14 @@ public class ConsoleUtils {
 	    writer().println(getConfirmValue(variableName));
 
 	    String confirmValue = null;
-	    if (reader().hasNextLine())
+	    if (reader().hasNextLine()) {
 		confirmValue = StringUtils.trimToNull(reader().nextLine());
+	    }
 
 	    if (confirmValue == null) {
-		if (readValue == null)
+		if (readValue == null) {
 		    return null;
+		}
 
 		unmatchedValues = true;
 		continue;
@@ -327,8 +341,9 @@ public class ConsoleUtils {
 	boolean unmatchedValues = false;
 	while (true) {
 
-	    if (unmatchedValues)
+	    if (unmatchedValues) {
 		writer().println(getUnmatchedValueText(variableName));
+	    }
 
 	    // Enter value
 	    Integer readValue = readInteger(promptText, variableName, required, validator);
@@ -337,12 +352,14 @@ public class ConsoleUtils {
 	    writer().println(getConfirmValue(variableName));
 
 	    String confirmValue = null;
-	    if (reader().hasNextLine())
+	    if (reader().hasNextLine()) {
 		confirmValue = StringUtils.trimToNull(reader().nextLine());
+	    }
 
 	    if (confirmValue == null) {
-		if (readValue == null)
+		if (readValue == null) {
 		    return null;
+		}
 
 		unmatchedValues = true;
 		continue;
@@ -374,8 +391,9 @@ public class ConsoleUtils {
 	boolean unmatchedValues = false;
 	while (true) {
 
-	    if (unmatchedValues)
+	    if (unmatchedValues) {
 		writer().println(getUnmatchedValueText(variableName));
+	    }
 
 	    // Enter value
 	    Double readValue = readDouble(promptText, variableName, required, validator);
@@ -384,12 +402,14 @@ public class ConsoleUtils {
 	    writer().println(getConfirmValue(variableName));
 
 	    String confirmValue = null;
-	    if (reader().hasNextLine())
+	    if (reader().hasNextLine()) {
 		confirmValue = StringUtils.trimToNull(reader().nextLine());
+	    }
 
 	    if (confirmValue == null) {
-		if (readValue == null)
+		if (readValue == null) {
 		    return null;
+		}
 
 		unmatchedValues = true;
 		continue;
@@ -422,8 +442,9 @@ public class ConsoleUtils {
 	boolean unmatchedValues = false;
 	while (true) {
 
-	    if (unmatchedValues)
+	    if (unmatchedValues) {
 		writer().println(getUnmatchedValueText(variableName));
+	    }
 
 	    // Enter value
 	    Date readValue = readDate(promptText, variableName, pattern, required, validator);
@@ -432,12 +453,14 @@ public class ConsoleUtils {
 	    writer().println(getConfirmValue(variableName));
 
 	    String confirmValue = null;
-	    if (reader().hasNextLine())
+	    if (reader().hasNextLine()) {
 		confirmValue = StringUtils.trimToNull(reader().nextLine());
+	    }
 
 	    if (confirmValue == null) {
-		if (readValue == null)
+		if (readValue == null) {
 		    return null;
+		}
 
 		unmatchedValues = true;
 		continue;
@@ -467,8 +490,9 @@ public class ConsoleUtils {
 
 	    File dir = new File(value);
 
-	    if (dir.exists() && !dir.isHidden() && dir.isDirectory())
+	    if (dir.exists() && !dir.isHidden() && dir.isDirectory()) {
 		return dir;
+	    }
 
 	    return null;
 
@@ -488,8 +512,9 @@ public class ConsoleUtils {
 
 	    File file = new File(value);
 
-	    if (file.exists() && !file.isHidden() && file.isFile())
+	    if (file.exists() && !file.isHidden() && file.isFile()) {
 		return file;
+	    }
 
 	    return null;
 
@@ -518,11 +543,13 @@ public class ConsoleUtils {
 	    boolean isTrue = ParseUtils.isTrueValue(value);
 	    boolean isFalse = !isTrue && ParseUtils.isFalseValue(value);
 
-	    if (isTrue)
+	    if (isTrue) {
 		return true;
+	    }
 
-	    if (isFalse)
+	    if (isFalse) {
 		return false;
+	    }
 
 	    return null;
 
@@ -600,17 +627,18 @@ public class ConsoleUtils {
 
 	while (true) {
 
-	    if (invalidValue)
+	    if (invalidValue) {
 		writer().println(getInvalidEnterAgain(variableName));
+	    }
 
 	    if (reader().hasNextLine()) {
 		String valueStr = reader().nextLine().trim();
 
 		if (valueStr.isEmpty()) {
 
-		    if (!required)
+		    if (!required) {
 			return null;
-		    else {
+		    } else {
 			invalidValue = true;
 			continue;
 		    }
@@ -634,8 +662,9 @@ public class ConsoleUtils {
     }
 
     static String getInvalidEnterAgain(String variableName) {
-	if (variableName == null)
+	if (variableName == null) {
 	    return Resources.getString("console_utils.invalid_enter_again");
+	}
 
 	return Resources.getString("console_utils.invalid_enter_again_varname", variableName);
     }

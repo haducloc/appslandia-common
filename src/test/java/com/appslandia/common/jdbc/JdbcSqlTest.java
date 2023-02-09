@@ -85,7 +85,6 @@ public class JdbcSqlTest {
 	Assertions.assertEquals(Arrays.asList(1), sql.getIndexes("ids__0"));
 	Assertions.assertEquals(Arrays.asList(2), sql.getIndexes("ids__1"));
 	Assertions.assertEquals(Arrays.asList(3), sql.getIndexes("ids__2"));
-
     }
 
     @Test

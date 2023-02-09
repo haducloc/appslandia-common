@@ -66,8 +66,9 @@ public @interface UrlPath {
 
 	@Override
 	public boolean isValid(String value, ConstraintValidatorContext context) {
-	    if (value == null)
+	    if (value == null) {
 		return true;
+	    }
 
 	    return URL_PATH_PATTERN.matcher(value).matches();
 	}

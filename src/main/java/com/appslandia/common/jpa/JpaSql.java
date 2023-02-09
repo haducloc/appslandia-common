@@ -70,8 +70,9 @@ public class JpaSql extends InitializeObject implements Serializable {
 	assertNotInitialized();
 	Asserts.isTrue(maxLength > 0, "maxLength is required.");
 
-	if (this.arrayLens == null)
+	if (this.arrayLens == null) {
 	    this.arrayLens = new HashMap<>();
+	}
 
 	this.arrayLens.put(parameterName, maxLength);
 	return this;
@@ -89,8 +90,9 @@ public class JpaSql extends InitializeObject implements Serializable {
 	    while (paramIdx < sb.length() - 1 && sb.charAt(paramIdx) != ':') {
 		paramIdx++;
 	    }
-	    if (paramIdx >= sb.length() - 1)
+	    if (paramIdx >= sb.length() - 1) {
 		break;
+	    }
 
 	    // Parse parameter
 	    Out<Integer> paramEnd = new Out<Integer>();
@@ -115,13 +117,15 @@ public class JpaSql extends InitializeObject implements Serializable {
 	    boolean isArrayParam = isInContext || isLikeAnyContext;
 	    Integer arrayLen = (this.arrayLens != null) ? this.arrayLens.get(paramName.value) : null;
 
-	    if (arrayLen != null)
+	    if (arrayLen != null) {
 		Asserts.isTrue(isArrayParam, () -> STR.fmt("Array parameter '{}' is not found.", paramName));
-	    else
+	    } else {
 		arrayLen = DEFAULT_ARRAY_MAX_LENGTH;
+	    }
 
-	    if (isArrayParam)
+	    if (isArrayParam) {
 		paramsMap.put(paramName.value, arrayLen);
+	    }
 
 	    // Normal parameter?
 	    if (!isArrayParam) {
@@ -138,10 +142,11 @@ public class JpaSql extends InitializeObject implements Serializable {
 		    String subParam = JdbcSql.toParamName(paramName.value, subIdx);
 		    String expr = null;
 
-		    if (subIdx == arrayLen - 1)
+		    if (subIdx == arrayLen - 1) {
 			expr = String.format(":%s", subParam);
-		    else
+		    } else {
 			expr = String.format(":%s, ", subParam);
+		    }
 
 		    sb.insert(paramIdx + 1, expr);
 		    start += expr.length();
@@ -156,10 +161,11 @@ public class JpaSql extends InitializeObject implements Serializable {
 		String subParam = JdbcSql.toParamName(paramName.value, subIdx);
 		String expr = null;
 
-		if (subIdx == arrayLen - 1)
+		if (subIdx == arrayLen - 1) {
 		    expr = String.format("%s LIKE :%s", fieldName.value, subParam);
-		else
+		} else {
 		    expr = String.format("%s LIKE :%s OR ", fieldName.value, subParam);
+		}
 
 		sb.insert(fieldIdx.value, expr);
 		start += expr.length();

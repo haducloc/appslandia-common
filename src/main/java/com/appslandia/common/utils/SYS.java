@@ -71,8 +71,9 @@ public class SYS {
     }
 
     public static String resolveString(String str) {
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	return STR.format(str, (p, expr) -> {
 	    // SYS
@@ -83,24 +84,27 @@ public class SYS {
     }
 
     public static String resolveString(String str, Map<String, Object> parameters) {
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	return STR.format(str, (pname, expr) -> {
 	    // Parameters
 	    Object resolvedValue = parameters.get(pname);
 
 	    // SYS
-	    if (resolvedValue == null)
+	    if (resolvedValue == null) {
 		resolvedValue = resolve(expr);
+	    }
 
 	    return (resolvedValue != null) ? resolvedValue : STR.MISSED_VALUE;
 	});
     }
 
     public static String resolveString(String str, Object... parameters) {
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	return STR.format(str, (pname, expr) -> {
 
@@ -109,15 +113,17 @@ public class SYS {
 		int index = Integer.parseInt(pname);
 
 		// Parameters
-		if ((0 <= index) && (index < parameters.length))
+		if ((0 <= index) && (index < parameters.length)) {
 		    resolvedValue = parameters[index];
+		}
 
 	    } catch (NumberFormatException ex) {
 	    }
 
 	    // SYS
-	    if (resolvedValue == null)
+	    if (resolvedValue == null) {
 		resolvedValue = resolve(expr);
+	    }
 
 	    return (resolvedValue != null) ? resolvedValue : STR.MISSED_VALUE;
 	});
@@ -136,8 +142,9 @@ public class SYS {
     public static String resolve(String valueOrExpr) {
 	Asserts.notNull(valueOrExpr);
 
-	if (!ENV_VAL_HOLDER_PATTERN.matcher(valueOrExpr).matches())
+	if (!ENV_VAL_HOLDER_PATTERN.matcher(valueOrExpr).matches()) {
 	    return valueOrExpr;
+	}
 
 	String expr = StringUtils.trimToNull(valueOrExpr.substring(2, valueOrExpr.length() - 1));
 
@@ -153,30 +160,34 @@ public class SYS {
 	    String defaultValue = null;
 
 	    int colonIdx = expr.indexOf(':');
-	    if (colonIdx >= 0)
+	    if (colonIdx >= 0) {
 		defaultValue = StringUtils.trimToNull(expr.substring(colonIdx + 1));
+	    }
 
-	    if (StringUtils.startsWith(expr, "env."))
+	    if (StringUtils.startsWith(expr, "env.")) {
 		// ENV
 		return (colonIdx >= 0) ? getEnv(expr.substring(4, colonIdx).trim(), defaultValue) : getEnv(expr.substring(4), defaultValue);
-	    else
+	    } else {
 		// PROP
 		return (colonIdx >= 0) ? getProp(expr.substring(0, colonIdx).trim(), defaultValue) : getProp(expr, defaultValue);
+	    }
 
 	} else {
 	    // PROP
 	    String expr1 = expr.substring(0, commaIdx).trim();
 	    String resolvedValue = getProp(expr1, null);
-	    if (resolvedValue != null)
+	    if (resolvedValue != null) {
 		return resolvedValue;
+	    }
 
 	    // ENV
 	    String expr2 = expr.substring(commaIdx + 1).trim();
 	    String defaultValue = null;
 
 	    int colonIdx = expr2.indexOf(':');
-	    if (colonIdx >= 0)
+	    if (colonIdx >= 0) {
 		defaultValue = StringUtils.trimToNull(expr2.substring(colonIdx + 1));
+	    }
 
 	    return (colonIdx >= 0) ? getEnv(expr2.substring(4, colonIdx).trim(), defaultValue) : getEnv(expr2.substring(4), defaultValue);
 	}

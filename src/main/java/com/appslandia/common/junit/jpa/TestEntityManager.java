@@ -39,9 +39,10 @@ public class TestEntityManager extends EntityManagerImpl {
 
     @Override
     protected EntityManager em() {
-	if (this.isSharedEmf)
+	if (this.isSharedEmf) {
 	    return SharedEmfTestEntityManagerExtension.emHolder.val();
-	else
+	} else {
 	    return TestEntityManagerExtension.emHolder.val();
+	}
     }
 }

@@ -72,8 +72,9 @@ public class Table extends InitializeObject implements Serializable {
 	}
 
 	// No keys
-	if (keyCount == 0)
+	if (keyCount == 0) {
 	    throw new IllegalArgumentException("No keys found.");
+	}
 
 	this.insertSql = new JdbcSql(this.buildInsertSQL());
 	this.updateSql = new JdbcSql(this.buildUpdateSQL());
@@ -99,8 +100,9 @@ public class Table extends InitializeObject implements Serializable {
 		if (isFirst) {
 		    sb.append(field.getName());
 		    isFirst = false;
-		} else
+		} else {
 		    sb.append(", ").append(field.getName());
+		}
 	    }
 	}
 	sb.append(")");
@@ -113,8 +115,9 @@ public class Table extends InitializeObject implements Serializable {
 		if (isFirst) {
 		    sb.append(field.getParamName());
 		    isFirst = false;
-		} else
+		} else {
 		    sb.append(",").append(field.getParamName());
+		}
 	    }
 	}
 	sb.append(")");
@@ -134,8 +137,9 @@ public class Table extends InitializeObject implements Serializable {
 		if (isFirst) {
 		    sb.append(field.getName()).append("=").append(field.getParamName());
 		    isFirst = false;
-		} else
+		} else {
 		    sb.append(",").append(field.getName()).append("=").append(field.getParamName());
+		}
 	    }
 	}
 	sb.append(" WHERE ");
@@ -176,8 +180,9 @@ public class Table extends InitializeObject implements Serializable {
 		if (isFirst) {
 		    sqlBuilder.append(field.getName()).append("=").append(field.getParamName());
 		    isFirst = false;
-		} else
+		} else {
 		    sqlBuilder.append(" AND ").append(field.getName()).append("=").append(field.getParamName());
+		}
 	    }
 	}
     }

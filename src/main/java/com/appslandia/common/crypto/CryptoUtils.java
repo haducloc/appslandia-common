@@ -33,13 +33,15 @@ import javax.security.auth.Destroyable;
 public class CryptoUtils {
 
     public static void clear(char[] chars) {
-	if (chars != null)
+	if (chars != null) {
 	    Arrays.fill(chars, ('0'));
+	}
     }
 
     public static void clear(byte[] bytes) {
-	if (bytes != null)
+	if (bytes != null) {
 	    Arrays.fill(bytes, (byte) 0);
+	}
     }
 
     public static char[] toCharArray(byte[] src) {
@@ -61,8 +63,9 @@ public class CryptoUtils {
     }
 
     public static void destroyQuietly(Object destroyable) {
-	if (!(destroyable instanceof Destroyable))
+	if (!(destroyable instanceof Destroyable)) {
 	    return;
+	}
 
 	Destroyable obj = (Destroyable) destroyable;
 	if (!obj.isDestroyed()) {

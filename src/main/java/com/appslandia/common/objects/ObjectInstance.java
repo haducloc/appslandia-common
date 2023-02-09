@@ -46,15 +46,17 @@ public class ObjectInstance {
 
     public Object getInstance() {
 	// PROTOTYPE
-	if (this.definition.getScope() == ObjectScope.PROTOTYPE)
+	if (this.definition.getScope() == ObjectScope.PROTOTYPE) {
 	    return factory.apply(this.definition);
+	}
 
 	// SINGLETON
 	Object obj = this.instance;
 	if (obj == null) {
 	    synchronized (this.mutex) {
-		if ((obj = this.instance) == null)
+		if ((obj = this.instance) == null) {
 		    this.instance = obj = this.factory.apply(this.definition);
+		}
 	    }
 	}
 	return obj;

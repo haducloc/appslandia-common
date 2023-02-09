@@ -99,7 +99,8 @@ public class FileUtils {
 	    });
 	} else if (srcAttr.isRegularFile()) {
 	    Files.copy(src, dest);
-	} else
+	} else {
 	    throw new IllegalArgumentException("src must denote a directory or file");
+	}
     }
 }

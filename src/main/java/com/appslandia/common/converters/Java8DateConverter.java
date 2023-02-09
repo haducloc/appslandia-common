@@ -45,8 +45,9 @@ public abstract class Java8DateConverter<T extends Temporal> implements Converte
 
     @Override
     public String format(T obj, FormatProvider formatProvider, boolean localize) {
-	if (obj == null)
+	if (obj == null) {
 	    return null;
+	}
 
 	if (localize) {
 	    String pattern = formatProvider.getLanguage().getTemporalPattern(this.isoPattern);
@@ -58,8 +59,9 @@ public abstract class Java8DateConverter<T extends Temporal> implements Converte
     @Override
     public T parse(String str, FormatProvider formatProvider) throws ConverterException {
 	str = StringUtils.trimToNull(str);
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	try {
 	    return parse(str, getFormatter(this.isoPattern));

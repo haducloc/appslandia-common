@@ -54,14 +54,16 @@ public abstract class PbeObject extends InitializeObject {
 
 	Asserts.notNull(this.password, "password is required.");
 
-	if (this.secretKeyGenerator == null)
+	if (this.secretKeyGenerator == null) {
 	    this.secretKeyGenerator = new SecretKeyGenerator();
+	}
     }
 
     @Override
     public void destroy() throws DestroyException {
-	if (this.password != null)
+	if (this.password != null) {
 	    CryptoUtils.clear(this.password);
+	}
     }
 
     protected SecretKey buildSecretKey(final byte[] salt, final String algorithm) throws CryptoException {
@@ -91,8 +93,9 @@ public abstract class PbeObject extends InitializeObject {
 
     public PbeObject setPassword(char[] password) {
 	this.assertNotInitialized();
-	if (password != null)
+	if (password != null) {
 	    this.password = Arrays.copyOf(password, password.length);
+	}
 
 	return this;
     }

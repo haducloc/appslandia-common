@@ -62,8 +62,9 @@ public class StatementImpl implements PreparedStatement {
 	this.stat.executeUpdate();
 
 	try (ResultSet rs = this.stat.getGeneratedKeys()) {
-	    if (rs.next())
+	    if (rs.next()) {
 		return rs.getLong(1);
+	    }
 	}
 	throw new SQLException("executeGeneratedKey");
     }
@@ -73,13 +74,15 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public long executeGeneratedKey(Map<String, Object> params) throws java.sql.SQLException {
-	if (params != null)
+	if (params != null) {
 	    JdbcUtils.setParameters(this, getSql(), params);
+	}
 	this.stat.executeUpdate();
 
 	try (ResultSet rs = this.stat.getGeneratedKeys()) {
-	    if (rs.next())
+	    if (rs.next()) {
 		return rs.getLong(1);
+	    }
 	}
 	throw new SQLException("executeGeneratedKey");
     }
@@ -89,8 +92,9 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public int executeUpdate(Map<String, Object> params) throws java.sql.SQLException {
-	if (params != null)
+	if (params != null) {
 	    JdbcUtils.setParameters(this, getSql(), params);
+	}
 
 	return this.stat.executeUpdate();
     }
@@ -108,8 +112,9 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public <K, V> Map<K, V> executeMap(Map<String, Object> params, ResultSetMapper<K> keyMapper, ResultSetMapper<V> valueMapper, Map<K, V> map) throws java.sql.SQLException {
-	if (params != null)
+	if (params != null) {
 	    JdbcUtils.setParameters(this, getSql(), params);
+	}
 
 	try (ResultSetImpl rs = executeQuery()) {
 	    return JdbcUtils.executeMap(rs, keyMapper, valueMapper, map);
@@ -127,8 +132,9 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public <K, V> Map<K, V> executeMap(Map<String, Object> params, String keyColumn, String valueColumn, Map<K, V> map) throws java.sql.SQLException {
-	if (params != null)
+	if (params != null) {
 	    JdbcUtils.setParameters(this, getSql(), params);
+	}
 
 	try (ResultSetImpl rs = executeQuery()) {
 	    return JdbcUtils.executeMap(rs, keyColumn, valueColumn, map);
@@ -146,8 +152,9 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public <T> List<T> executeList(Map<String, Object> params, ResultSetMapper<T> mapper, List<T> list) throws java.sql.SQLException {
-	if (params != null)
+	if (params != null) {
 	    JdbcUtils.setParameters(this, getSql(), params);
+	}
 
 	try (ResultSetImpl rs = executeQuery()) {
 	    return JdbcUtils.executeList(rs, mapper, list);
@@ -165,8 +172,9 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public <T> T executeSingle(Map<String, Object> params, ResultSetMapper<T> mapper) throws java.sql.SQLException {
-	if (params != null)
+	if (params != null) {
 	    JdbcUtils.setParameters(this, getSql(), params);
+	}
 
 	try (ResultSetImpl rs = executeQuery()) {
 	    return JdbcUtils.executeSingle(rs, mapper);
@@ -196,8 +204,9 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public boolean executeExists(Map<String, Object> params) throws java.sql.SQLException {
-	if (params != null)
+	if (params != null) {
 	    JdbcUtils.setParameters(this, getSql(), params);
+	}
 
 	try (ResultSetImpl rs = executeQuery()) {
 	    return JdbcUtils.executeExists(rs);
@@ -217,8 +226,9 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public void executeQuery(Map<String, Object> params, ResultSetHandler handler) throws Exception {
-	if (params != null)
+	if (params != null) {
 	    JdbcUtils.setParameters(this, getSql(), params);
+	}
 
 	try (ResultSetImpl rs = executeQuery()) {
 	    while (rs.next()) {
@@ -238,8 +248,9 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public void executeStream(Map<String, Object> params, String streamLabel, OutputStream out, ResultSetHandler handler) throws Exception {
-	if (params != null)
+	if (params != null) {
 	    JdbcUtils.setParameters(this, getSql(), params);
+	}
 
 	try (ResultSetImpl rs = executeQuery()) {
 	    JdbcUtils.executeStream(rs, streamLabel, out, handler);
@@ -257,8 +268,9 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public void executeStream(Map<String, Object> params, String streamLabel, Writer out, ResultSetHandler handler) throws Exception {
-	if (params != null)
+	if (params != null) {
 	    JdbcUtils.setParameters(this, getSql(), params);
+	}
 
 	try (ResultSetImpl rs = executeQuery()) {
 	    JdbcUtils.executeStream(rs, streamLabel, out, handler);
@@ -276,8 +288,9 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public void executeNStream(Map<String, Object> params, String streamLabel, Writer out, ResultSetHandler handler) throws Exception {
-	if (params != null)
+	if (params != null) {
 	    JdbcUtils.setParameters(this, getSql(), params);
+	}
 
 	try (ResultSetImpl rs = executeQuery()) {
 	    JdbcUtils.executeNStream(rs, streamLabel, out, handler);
@@ -383,10 +396,11 @@ public class StatementImpl implements PreparedStatement {
 	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
-	    if (i < values.length)
+	    if (i < values.length) {
 		setBoolean(JdbcSql.toParamName(parameterName, i), values[i]);
-	    else
+	    } else {
 		setBoolean2(JdbcSql.toParamName(parameterName, i), null);
+	    }
 	}
     }
 
@@ -395,10 +409,11 @@ public class StatementImpl implements PreparedStatement {
 	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
-	    if (i < values.length)
+	    if (i < values.length) {
 		setByte(JdbcSql.toParamName(parameterName, i), values[i]);
-	    else
+	    } else {
 		setByte2(JdbcSql.toParamName(parameterName, i), null);
+	    }
 	}
     }
 
@@ -407,10 +422,11 @@ public class StatementImpl implements PreparedStatement {
 	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
-	    if (i < values.length)
+	    if (i < values.length) {
 		setShort(JdbcSql.toParamName(parameterName, i), values[i]);
-	    else
+	    } else {
 		setShort2(JdbcSql.toParamName(parameterName, i), null);
+	    }
 	}
     }
 
@@ -419,10 +435,11 @@ public class StatementImpl implements PreparedStatement {
 	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
-	    if (i < values.length)
+	    if (i < values.length) {
 		setInt(JdbcSql.toParamName(parameterName, i), values[i]);
-	    else
+	    } else {
 		setInt2(JdbcSql.toParamName(parameterName, i), null);
+	    }
 	}
     }
 
@@ -431,10 +448,11 @@ public class StatementImpl implements PreparedStatement {
 	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
-	    if (i < values.length)
+	    if (i < values.length) {
 		setLong(JdbcSql.toParamName(parameterName, i), values[i]);
-	    else
+	    } else {
 		setLong2(JdbcSql.toParamName(parameterName, i), null);
+	    }
 	}
     }
 
@@ -443,10 +461,11 @@ public class StatementImpl implements PreparedStatement {
 	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
-	    if (i < values.length)
+	    if (i < values.length) {
 		setFloat(JdbcSql.toParamName(parameterName, i), values[i]);
-	    else
+	    } else {
 		setFloat2(JdbcSql.toParamName(parameterName, i), null);
+	    }
 	}
     }
 
@@ -455,10 +474,11 @@ public class StatementImpl implements PreparedStatement {
 	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
-	    if (i < values.length)
+	    if (i < values.length) {
 		setDouble(JdbcSql.toParamName(parameterName, i), values[i]);
-	    else
+	    } else {
 		setDouble2(JdbcSql.toParamName(parameterName, i), null);
+	    }
 	}
     }
 
@@ -510,52 +530,59 @@ public class StatementImpl implements PreparedStatement {
     // Set Primitive Wrapper Parameters
 
     public void setBoolean2(String parameterName, Boolean value) throws java.sql.SQLException {
-	if (value == null)
+	if (value == null) {
 	    setNull(parameterName, Types.BIT);
-	else
+	} else {
 	    setBoolean(parameterName, value);
+	}
     }
 
     public void setByte2(String parameterName, Byte value) throws java.sql.SQLException {
-	if (value == null)
+	if (value == null) {
 	    setNull(parameterName, Types.TINYINT);
-	else
+	} else {
 	    setByte(parameterName, value);
+	}
     }
 
     public void setShort2(String parameterName, Short value) throws java.sql.SQLException {
-	if (value == null)
+	if (value == null) {
 	    setNull(parameterName, Types.SMALLINT);
-	else
+	} else {
 	    setShort(parameterName, value);
+	}
     }
 
     public void setInt2(String parameterName, Integer value) throws java.sql.SQLException {
-	if (value == null)
+	if (value == null) {
 	    setNull(parameterName, Types.INTEGER);
-	else
+	} else {
 	    setInt(parameterName, value);
+	}
     }
 
     public void setLong2(String parameterName, Long value) throws java.sql.SQLException {
-	if (value == null)
+	if (value == null) {
 	    setNull(parameterName, Types.BIGINT);
-	else
+	} else {
 	    setLong(parameterName, value);
+	}
     }
 
     public void setFloat2(String parameterName, Float value) throws java.sql.SQLException {
-	if (value == null)
+	if (value == null) {
 	    setNull(parameterName, Types.REAL);
-	else
+	} else {
 	    setFloat(parameterName, value);
+	}
     }
 
     public void setDouble2(String parameterName, Double value) throws java.sql.SQLException {
-	if (value == null)
+	if (value == null) {
 	    setNull(parameterName, Types.DOUBLE);
-	else
+	} else {
 	    setDouble(parameterName, value);
+	}
     }
 
     // Java 8+ Date/Time
@@ -1018,23 +1045,26 @@ public class StatementImpl implements PreparedStatement {
 	    Integer targetSqlType = ((par.getSqlType() != null) && SqlTypes.isSqlType(par.getSqlType())) ? par.getSqlType() : null;
 
 	    if (par.getValue() == null) {
-		if (targetSqlType == null)
+		if (targetSqlType == null) {
 		    this.stat.setObject(parameterIndex, null);
-		else
+		} else {
 		    this.stat.setNull(parameterIndex, targetSqlType);
+		}
 
 	    } else {
-		if (targetSqlType == null)
+		if (targetSqlType == null) {
 		    this.stat.setObject(parameterIndex, par.getValue());
-		else {
-		    if (par.getScaleOrLength() == null)
+		} else {
+		    if (par.getScaleOrLength() == null) {
 			this.stat.setObject(parameterIndex, par.getValue(), targetSqlType);
-		    else
+		    } else {
 			this.stat.setObject(parameterIndex, par.getValue(), targetSqlType, par.getScaleOrLength());
+		    }
 		}
 	    }
-	} else
+	} else {
 	    this.stat.setObject(parameterIndex, x);
+	}
     }
 
     @Override

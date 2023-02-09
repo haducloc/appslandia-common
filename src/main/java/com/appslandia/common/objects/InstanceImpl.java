@@ -82,26 +82,30 @@ public class InstanceImpl<T> implements Instance<T> {
 
     @Override
     public T get() {
-	if (isUnsatisfied())
+	if (isUnsatisfied()) {
 	    throw new ObjectException(STR.fmt("Unsatisfied dependency: type={}, qualifiers={}.", this.type, Arrays.toString(this.qualifiers)));
+	}
 
-	if (isAmbiguous())
+	if (isAmbiguous()) {
 	    throw new ObjectException(STR.fmt("Ambiguous dependency: type={}, qualifiers={}.", this.type, Arrays.toString(this.qualifiers)));
+	}
 
 	return ObjectUtils.cast(this.instances.get(0).getInstance());
     }
 
     @Override
     public Instance<T> select(Annotation... qualifiers) {
-	if (qualifiers.length == 0)
+	if (qualifiers.length == 0) {
 	    return this;
+	}
 
 	Annotation[] childQualifiers = getChildQualifiers(qualifiers);
 	List<ObjectInstance> sub = new ArrayList<>();
 
 	for (ObjectInstance objInst : this.instances) {
-	    if (AnnotationUtils.hasAnnotations(objInst.definition.getQualifiers(), childQualifiers))
+	    if (AnnotationUtils.hasAnnotations(objInst.definition.getQualifiers(), childQualifiers)) {
 		sub.add(objInst);
+	    }
 	}
 	return new InstanceImpl<>(this.type, childQualifiers, sub);
     }
@@ -110,16 +114,18 @@ public class InstanceImpl<T> implements Instance<T> {
     public <U extends T> Instance<U> select(Class<U> subtype, Annotation... qualifiers) {
 	Asserts.notNull(subtype);
 
-	if ((this.type == subtype) && (qualifiers.length == 0))
+	if ((this.type == subtype) && (qualifiers.length == 0)) {
 	    return ObjectUtils.cast(this);
+	}
 
 	Annotation[] childQualifiers = getChildQualifiers(qualifiers);
 	List<ObjectInstance> sub = new ArrayList<>();
 
 	for (ObjectInstance objInst : this.instances) {
 	    if (AnnotationUtils.hasAnnotations(objInst.definition.getQualifiers(), childQualifiers)) {
-		if (subtype.isInstance(objInst.getInstance()))
+		if (subtype.isInstance(objInst.getInstance())) {
 		    sub.add(objInst);
+		}
 	    }
 	}
 	return new InstanceImpl<>(subtype, childQualifiers, sub);

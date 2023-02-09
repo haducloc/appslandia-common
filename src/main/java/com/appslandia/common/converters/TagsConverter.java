@@ -54,14 +54,16 @@ public class TagsConverter implements Converter<String> {
     @Override
     public String parse(String str, FormatProvider formatProvider) throws ConverterException {
 	str = StringUtils.trimToNull(str);
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	Out<Boolean> isValid = new Out<Boolean>();
 	List<String> tags = TagUtils.toTags(str, isValid);
 
-	if (!isValid.val())
+	if (!isValid.val()) {
 	    throw toParsingError(str, "Tags");
+	}
 
 	return !tags.isEmpty() ? String.join(", ", tags) : null;
     }

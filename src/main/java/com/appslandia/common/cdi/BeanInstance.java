@@ -56,16 +56,18 @@ public class BeanInstance<T> {
     public void destroy() {
 	if (this.destroyed.compareAndSet(false, true)) {
 
-	    if (this.instance != null)
+	    if (this.instance != null) {
 		this.instance.destroy(this.obj);
-	    else
+	    } else {
 		this.creationalContext.release();
+	    }
 	}
     }
 
     public T get() {
-	if (this.destroyed.get())
+	if (this.destroyed.get()) {
 	    throw new AssertException("The instance is already destroyed.");
+	}
 
 	return this.obj;
     }

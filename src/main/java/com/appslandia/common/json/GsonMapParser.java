@@ -53,27 +53,31 @@ public class GsonMapParser {
 
     public Object parseValue(JsonElement element, boolean makeReadonly) {
 	// NULL
-	if (element.isJsonNull())
+	if (element.isJsonNull()) {
 	    return null;
+	}
 
 	// Primitive
 	if (element.isJsonPrimitive()) {
 	    JsonPrimitive jsonPrim = element.getAsJsonPrimitive();
 
 	    // String
-	    if (jsonPrim.isString())
+	    if (jsonPrim.isString()) {
 		return element.getAsString();
+	    }
 
 	    // Boolean
-	    if (jsonPrim.isBoolean())
+	    if (jsonPrim.isBoolean()) {
 		return element.getAsBoolean();
+	    }
 
 	    // Double/Long
 	    if (jsonPrim.isNumber()) {
 		String str = element.getAsString();
 
-		if (str.contains("."))
+		if (str.contains(".")) {
 		    return element.getAsDouble();
+		}
 
 		return element.getAsLong();
 	    }

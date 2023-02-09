@@ -52,14 +52,16 @@ public class TagConverter implements Converter<String> {
     @Override
     public String parse(String str, FormatProvider formatProvider) throws ConverterException {
 	str = StringUtils.trimToNull(str);
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	Out<Boolean> isValid = new Out<Boolean>();
 	String tag = TagUtils.toTag(str, isValid);
 
-	if (!isValid.val())
+	if (!isValid.val()) {
 	    throw toParsingError(str, "Tag");
+	}
 
 	return tag;
     }

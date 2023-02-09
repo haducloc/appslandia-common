@@ -102,8 +102,9 @@ public class IOUtils {
 	List<String> list = new ArrayList<>();
 	for (;;) {
 	    String line = r.readLine();
-	    if (line == null)
+	    if (line == null) {
 		break;
+	    }
 	    list.add(line);
 	}
 	return list;

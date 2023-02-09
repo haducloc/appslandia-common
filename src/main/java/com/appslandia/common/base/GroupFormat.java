@@ -88,11 +88,13 @@ public class GroupFormat {
     }
 
     public String format(String str) {
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
-	if (str.length() != this.inputLength)
+	if (str.length() != this.inputLength) {
 	    return str;
+	}
 
 	StringBuilder sb = new StringBuilder(this.outputLength);
 	int pos = 0;
@@ -100,8 +102,9 @@ public class GroupFormat {
 	    if (group.length > 0) {
 		sb.append(str.substring(pos, group.length + pos));
 		pos += group.length;
-	    } else
+	    } else {
 		sb.append(group.text);
+	    }
 	}
 	return sb.toString();
     }

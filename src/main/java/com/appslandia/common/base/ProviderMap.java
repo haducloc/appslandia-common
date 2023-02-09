@@ -53,8 +53,9 @@ public class ProviderMap<K, V> extends HashMap<K, V> {
     @Override
     public V get(Object key) {
 	V v = super.get(key);
-	if (v != null)
+	if (v != null) {
 	    return v;
+	}
 
 	v = this.factory.apply((K) key);
 	super.put((K) key, v);

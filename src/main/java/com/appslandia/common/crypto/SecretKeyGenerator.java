@@ -60,10 +60,11 @@ public class SecretKeyGenerator extends InitializeObject {
 	this.algorithm = ValueUtils.valueOrAlt(this.algorithm, "PBKDF2WithHmacSHA512");
 
 	// secretKeyFactory
-	if (this.provider == null)
+	if (this.provider == null) {
 	    this.secretKeyFactory = SecretKeyFactory.getInstance(this.algorithm);
-	else
+	} else {
 	    this.secretKeyFactory = SecretKeyFactory.getInstance(this.algorithm, this.provider);
+	}
     }
 
     public byte[] generate(char[] password, byte[] salt, int iterationCount, int keySize) throws CryptoException {

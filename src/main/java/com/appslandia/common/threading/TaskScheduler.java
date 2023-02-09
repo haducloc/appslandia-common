@@ -70,8 +70,9 @@ public class TaskScheduler<T> {
 
     public void cancel() {
 	ScheduledFuture<?> t = this.taskRef.getAndSet(null);
-	if (t != null)
+	if (t != null) {
 	    t.cancel(this.cancelMayInterruptIfRunning);
+	}
     }
 
     public void shutdownNow() {

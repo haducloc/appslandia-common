@@ -37,8 +37,9 @@ public class ValidateTest {
 
 	    @Override
 	    public boolean validate(ResetPasswordModel model) {
-		if (model.password == null || model.confirmPassword == null)
+		if (model.password == null || model.confirmPassword == null) {
 		    return true;
+		}
 
 		return model.confirmPassword.equals(model.password);
 	    }
@@ -53,7 +54,6 @@ public class ValidateTest {
 
 	Set<?> errors = ValidatorUtils.getValidator().validate(m);
 	Assertions.assertTrue(!errors.isEmpty());
-
     }
 
     @Validate(modelValidator = "confirmPasswordValidator", message = "{confirmPasswordValidator.message}", reportProperty = "confirmPassword")

@@ -44,11 +44,13 @@ public class JwtUtils {
 	Asserts.notNull(token);
 	String[] parts = JWT_SEP_PATTERN.split(token);
 
-	if (parts.length == 2)
+	if (parts.length == 2) {
 	    return token.endsWith(".") ? new String[] { parts[0], parts[1], null } : null;
+	}
 
-	if (parts.length != 3)
+	if (parts.length != 3) {
 	    return null;
+	}
 
 	return parts;
     }
@@ -56,15 +58,17 @@ public class JwtUtils {
     // number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC
     // date/time
     public static Long toNumericDate(Date value) {
-	if (value == null)
+	if (value == null) {
 	    return null;
+	}
 
 	return value.getTime() / 1000;
     }
 
     public static Long toNumericDate(Long timeInMs) {
-	if (timeInMs == null)
+	if (timeInMs == null) {
 	    return null;
+	}
 
 	return timeInMs / 1000;
     }
@@ -78,8 +82,9 @@ public class JwtUtils {
     }
 
     public static Date toDate(Long numericDate) {
-	if (numericDate == null)
+	if (numericDate == null) {
 	    return null;
+	}
 
 	return new Date(numericDate * 1000);
     }
@@ -87,15 +92,18 @@ public class JwtUtils {
     public static boolean isSupportedValue(Object value) {
 	Asserts.notNull(value);
 
-	if (value instanceof List)
+	if (value instanceof List) {
 	    return validateList((List<?>) value);
+	}
 
-	if (value instanceof Map)
+	if (value instanceof Map) {
 	    return validateMap((Map<?, ?>) value);
+	}
 
 	Class<?> type = value.getClass();
-	if (type.isArray())
+	if (type.isArray()) {
 	    return validateArray(value);
+	}
 
 	return isBasicType(type);
     }
@@ -103,12 +111,14 @@ public class JwtUtils {
     private static boolean validateMap(Map<?, ?> map) {
 	for (Entry<?, ?> entry : map.entrySet()) {
 	    // Key
-	    if ((entry.getKey() == null) || (entry.getKey().getClass() != String.class))
+	    if ((entry.getKey() == null) || (entry.getKey().getClass() != String.class)) {
 		return false;
+	    }
 
 	    // Value
-	    if ((entry.getValue() != null) && !isSupportedValue(entry.getValue()))
+	    if ((entry.getValue() != null) && !isSupportedValue(entry.getValue())) {
 		return false;
+	    }
 	}
 	return true;
     }
@@ -117,8 +127,9 @@ public class JwtUtils {
 	for (Object value : list) {
 
 	    // Value
-	    if ((value != null) && !isSupportedValue(value))
+	    if ((value != null) && !isSupportedValue(value)) {
 		return false;
+	    }
 	}
 	return true;
     }
@@ -129,8 +140,9 @@ public class JwtUtils {
 	    Object value = Array.get(array, i);
 
 	    // Value
-	    if ((value != null) && !isSupportedValue(value))
+	    if ((value != null) && !isSupportedValue(value)) {
 		return false;
+	    }
 	}
 	return true;
     }

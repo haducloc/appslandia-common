@@ -71,12 +71,14 @@ public @interface DigitOnly {
 
 	@Override
 	public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
-	    if (value == null)
+	    if (value == null) {
 		return true;
+	    }
 
 	    if (this.length > 0) {
-		if (value.length() != this.length)
+		if (value.length() != this.length) {
 		    return false;
+		}
 	    }
 	    return DIGITS_PATTERN.matcher(value).matches();
 	}

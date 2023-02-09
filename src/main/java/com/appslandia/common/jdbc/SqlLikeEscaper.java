@@ -45,8 +45,9 @@ public class SqlLikeEscaper {
     }
 
     public String escape(String value) {
-	if (value == null)
+	if (value == null) {
 	    return null;
+	}
 
 	StringBuilder sb = new StringBuilder(value.length() + value.length() / 5);
 	sb.append(value);
@@ -54,8 +55,9 @@ public class SqlLikeEscaper {
 	int i = -1;
 	while (true) {
 	    i++;
-	    if (i == sb.length())
+	    if (i == sb.length()) {
 		break;
+	    }
 
 	    for (char c : this.charsToEscape) {
 		if (c == sb.charAt(i)) {
@@ -69,8 +71,9 @@ public class SqlLikeEscaper {
     }
 
     public boolean hasEscapeSignChar(String value) {
-	if (value == null)
+	if (value == null) {
 	    return false;
+	}
 
 	return IntStream.range(0, value.length() - 1).anyMatch(index -> value.charAt(index) == getEscapeSignChar());
     }
@@ -85,8 +88,9 @@ public class SqlLikeEscaper {
 	SqlLikeEscaper obj = __default;
 	if (obj == null) {
 	    synchronized (MUTEX) {
-		if ((obj = __default) == null)
+		if ((obj = __default) == null) {
 		    __default = obj = new SqlLikeEscaper(getEscapeSignChar(), getCharsToEscape());
+		}
 	    }
 	}
 	return obj;
@@ -109,8 +113,9 @@ public class SqlLikeEscaper {
 	char chr = __escapeSignChar;
 	if (chr == (char) 0) {
 	    synchronized (MUTEX) {
-		if ((chr = __escapeSignChar) == (char) 0)
+		if ((chr = __escapeSignChar) == (char) 0) {
 		    __escapeSignChar = chr = '\\';
+		}
 	    }
 	}
 	return chr;
@@ -133,8 +138,9 @@ public class SqlLikeEscaper {
 	char[] obj = __charsToEscape;
 	if (obj == null) {
 	    synchronized (MUTEX) {
-		if ((obj = __charsToEscape) == null)
+		if ((obj = __charsToEscape) == null) {
 		    __charsToEscape = obj = new char[] { '%', '_' };
+		}
 	    }
 	}
 	return obj.clone();
@@ -156,14 +162,17 @@ public class SqlLikeEscaper {
     public static String toLikePattern(String value, LikeType likeType) {
 	Asserts.notNull(likeType);
 
-	if (StringUtils.isNullOrEmpty(value))
+	if (StringUtils.isNullOrEmpty(value)) {
 	    return value;
+	}
 
-	if (likeType == LikeType.CONTAINS)
+	if (likeType == LikeType.CONTAINS) {
 	    return "%" + getDefault().escape(value) + "%";
+	}
 
-	if (likeType == LikeType.STARTS_WITH)
+	if (likeType == LikeType.STARTS_WITH) {
 	    return getDefault().escape(value) + "%";
+	}
 
 	return "%" + getDefault().escape(value);
     }

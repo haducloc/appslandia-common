@@ -51,21 +51,25 @@ public class TagList implements Iterable<String> {
     }
 
     public boolean add(String tag) {
-	if (tag == null)
+	if (tag == null) {
 	    return false;
+	}
 
-	if (this.preTags.contains(tag))
+	if (this.preTags.contains(tag)) {
 	    return false;
+	}
 
 	return this.tags.add(tag);
     }
 
     public boolean remove(String tag) {
-	if (tag == null)
+	if (tag == null) {
 	    return false;
+	}
 
-	if (this.preTags.contains(tag))
+	if (this.preTags.contains(tag)) {
 	    return false;
+	}
 
 	return this.tags.remove(tag);
     }
@@ -88,8 +92,9 @@ public class TagList implements Iterable<String> {
 
 	    @Override
 	    public String next() {
-		if (it1.hasNext())
+		if (it1.hasNext()) {
 		    return it1.next();
+		}
 
 		return it2.next();
 	    }

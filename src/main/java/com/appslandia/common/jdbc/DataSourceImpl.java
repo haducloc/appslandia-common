@@ -65,10 +65,11 @@ public class DataSourceImpl extends InitializeObject implements DataSource {
 	initialize();
 
 	Connection conn = null;
-	if (this.userName != null)
+	if (this.userName != null) {
 	    conn = DriverManager.getConnection(this.url, this.userName, this.password);
-	else
+	} else {
 	    conn = DriverManager.getConnection(this.url);
+	}
 
 	return conn;
     }

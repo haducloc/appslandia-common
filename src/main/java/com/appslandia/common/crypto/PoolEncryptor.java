@@ -121,8 +121,9 @@ public class PoolEncryptor extends InitializeObject implements Encryptor {
     @Override
     public PoolEncryptor copy() {
 	PoolEncryptor impl = new PoolEncryptor().setPoolSize(this.poolSize);
-	if (this.encryptor != null)
+	if (this.encryptor != null) {
 	    impl.encryptor = this.encryptor.copy();
+	}
 
 	return impl;
     }

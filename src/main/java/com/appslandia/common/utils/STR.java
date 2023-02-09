@@ -39,8 +39,9 @@ public class STR {
     private static final Pattern PARAM_HOLDER_PATTERN = Pattern.compile("\\$\\{[^}]*}", Pattern.CASE_INSENSITIVE);
 
     public static String format(String str, Map<String, Object> parameters) {
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	return format(str, (pname, expr) -> {
 	    return parameters.containsKey(pname) ? parameters.get(pname) : MISSED_VALUE;
@@ -48,8 +49,9 @@ public class STR {
     }
 
     public static String format(String str, Object... parameters) {
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	return format(str, (pname, expr) -> {
 
@@ -64,8 +66,9 @@ public class STR {
     }
 
     public static String format(String str, BiFunction<String, String, Object> parameters) {
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	StringBuilder sb = new StringBuilder((int) (1.5 * str.length()));
 
@@ -83,10 +86,11 @@ public class STR {
 	while (matcher.find()) {
 
 	    // Non parameter
-	    if (prevEnd == 0)
+	    if (prevEnd == 0) {
 		out.append(str.substring(0, matcher.start()));
-	    else
+	    } else {
 		out.append(str.substring(prevEnd, matcher.start()));
+	    }
 
 	    // ${paramName}
 	    String parameterGroup = matcher.group();
@@ -94,8 +98,9 @@ public class STR {
 	    Asserts.isTrue(!parameterName.isEmpty(), () -> STR.fmt("Invalid expression '{}'.", parameterGroup));
 
 	    Object parameterValue = parameters.apply(parameterName, parameterGroup);
-	    if (parameterValue == MISSED_VALUE)
+	    if (parameterValue == MISSED_VALUE) {
 		parameterValue = parameterGroup;
+	    }
 
 	    if (parameterValue == null) {
 		out.append("null");
@@ -106,21 +111,24 @@ public class STR {
 
 		} else if (parameterValue.getClass().isArray()) {
 		    out.append(ObjectUtils.asString(parameterValue));
-		} else
+		} else {
 		    out.append(parameterValue.toString());
+		}
 	    }
 
 	    prevEnd = matcher.end();
 	}
-	if (prevEnd < str.length())
+	if (prevEnd < str.length()) {
 	    out.append(str.substring(prevEnd));
+	}
     }
 
     private static final Pattern SEQ_HOLDER_PATTERN = Pattern.compile("\\{}");
 
     public static String fmt(String str, Object... entries) {
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	StringBuilder out = new StringBuilder(str.length() + entries.length * 16);
 	Matcher matcher = SEQ_HOLDER_PATTERN.matcher(str);
@@ -130,16 +138,18 @@ public class STR {
 	while (matcher.find()) {
 
 	    // Non entry
-	    if (prevEnd == 0)
+	    if (prevEnd == 0) {
 		out.append(str.substring(0, matcher.start()));
-	    else
+	    } else {
 		out.append(str.substring(prevEnd, matcher.start()));
+	    }
 
 	    // {}
 	    index++;
 	    Object entryValue = ((0 <= index) && (index < entries.length)) ? entries[index] : MISSED_VALUE;
-	    if (entryValue == MISSED_VALUE)
+	    if (entryValue == MISSED_VALUE) {
 		entryValue = "{}";
+	    }
 
 	    if (entryValue == null) {
 		out.append("null");
@@ -150,14 +160,16 @@ public class STR {
 
 		} else if (entryValue.getClass().isArray()) {
 		    out.append(ObjectUtils.asString(entryValue));
-		} else
+		} else {
 		    out.append(entryValue.toString());
+		}
 	    }
 
 	    prevEnd = matcher.end();
 	}
-	if (prevEnd < str.length())
+	if (prevEnd < str.length()) {
 	    out.append(str.substring(prevEnd));
+	}
 
 	return out.toString();
     }

@@ -30,14 +30,16 @@ public class MathUtils {
     public static int digitCount(long n) {
 	Asserts.isTrue(n >= 0);
 
-	if (n == 0)
+	if (n == 0) {
 	    return 1;
+	}
 	return (int) (Math.log10(n) + 1);
     }
 
     public static boolean isPow2(long n) {
-	if ((n < 1) || (n > Long.MAX_VALUE / 2 + 1))
+	if ((n < 1) || (n > Long.MAX_VALUE / 2 + 1)) {
 	    return false;
+	}
 
 	return (n & (n - 1)) == 0;
     }

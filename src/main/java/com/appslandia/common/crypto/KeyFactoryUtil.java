@@ -65,10 +65,11 @@ public class KeyFactoryUtil extends InitializeObject {
 	Asserts.notNull(this.algorithm, "algorithm is required.");
 
 	// keyFactory
-	if (this.provider == null)
+	if (this.provider == null) {
 	    this.keyFactory = KeyFactory.getInstance(this.algorithm);
-	else
+	} else {
 	    this.keyFactory = KeyFactory.getInstance(this.algorithm, this.provider);
+	}
     }
 
     public PrivateKey toPrivateKey(String keyInPem) throws CryptoException {

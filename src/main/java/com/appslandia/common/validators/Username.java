@@ -71,8 +71,9 @@ public @interface Username {
 	}
 
 	public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
-	    if (value == null)
+	    if (value == null) {
 		return true;
+	    }
 
 	    return USERNAME_PATTERN.matcher(value).matches();
 	}

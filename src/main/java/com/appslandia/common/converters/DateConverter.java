@@ -40,8 +40,9 @@ public abstract class DateConverter<T extends java.util.Date> implements Convert
 
     @Override
     public String format(T obj, FormatProvider formatProvider, boolean localize) {
-	if (obj == null)
+	if (obj == null) {
 	    return null;
+	}
 
 	if (localize) {
 	    String pattern = formatProvider.getLanguage().getTemporalPattern(this.isoPattern);
@@ -52,14 +53,16 @@ public abstract class DateConverter<T extends java.util.Date> implements Convert
 
     protected java.util.Date doParse(String str, FormatProvider formatProvider) throws ConverterException {
 	java.util.Date parsedValue = parseDate(str, formatProvider.getDateFormat(this.isoPattern));
-	if (parsedValue != null)
+	if (parsedValue != null) {
 	    return parsedValue;
+	}
 
 	String pattern = formatProvider.getLanguage().getTemporalPattern(this.isoPattern);
 
 	parsedValue = parseDate(str, formatProvider.getDateFormat(pattern));
-	if (parsedValue != null)
+	if (parsedValue != null) {
 	    return parsedValue;
+	}
 
 	throw toParsingError(str, getTargetType().getName());
     }
@@ -68,8 +71,9 @@ public abstract class DateConverter<T extends java.util.Date> implements Convert
 	ParsePosition pos = new ParsePosition(0);
 	java.util.Date parsedValue = dateFormat.parse(str, pos);
 
-	if ((pos.getErrorIndex() < 0) && (pos.getIndex() == str.length()) && (parsedValue != null))
+	if ((pos.getErrorIndex() < 0) && (pos.getIndex() == str.length()) && (parsedValue != null)) {
 	    return parsedValue;
+	}
 
 	return null;
     }

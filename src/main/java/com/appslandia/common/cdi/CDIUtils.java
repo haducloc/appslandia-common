@@ -50,12 +50,14 @@ public class CDIUtils {
 
     public static <T> BeanInstance<T> getReference(BeanManager beanManager, Class<? extends T> type, Annotation... qualifiers) {
 	Set<Bean<?>> matchedBeans = beanManager.getBeans(type, qualifiers);
-	if (matchedBeans.isEmpty())
+	if (matchedBeans.isEmpty()) {
 	    return null;
+	}
 
 	Bean<?> bean = beanManager.resolve(matchedBeans);
-	if (bean == null)
+	if (bean == null) {
 	    return null;
+	}
 
 	CreationalContext<T> ctx = ObjectUtils.cast(beanManager.createCreationalContext(bean));
 	T t = ObjectUtils.cast(beanManager.getReference(bean, type, ctx));
@@ -65,12 +67,14 @@ public class CDIUtils {
 
     public static <T> BeanInstance<T> getReference(BeanManager beanManager, String name) {
 	Set<Bean<?>> matchedBeans = beanManager.getBeans(name);
-	if (matchedBeans.isEmpty())
+	if (matchedBeans.isEmpty()) {
 	    return null;
+	}
 
 	Bean<?> bean = beanManager.resolve(matchedBeans);
-	if (bean == null)
+	if (bean == null) {
 	    return null;
+	}
 
 	CreationalContext<T> ctx = ObjectUtils.cast(beanManager.createCreationalContext(bean));
 	T t = ObjectUtils.cast(beanManager.getReference(bean, bean.getBeanClass(), ctx));
@@ -122,25 +126,29 @@ public class CDIUtils {
 	for (Bean<T> bean : beans) {
 
 	    A annotation = bean.getBeanClass().getDeclaredAnnotation(annotationClass);
-	    if (annotation != null)
+	    if (annotation != null) {
 		consumer.accept(annotation, bean.getBeanClass());
+	    }
 	}
     }
 
     public static <A extends Annotation> A getAnnotation(BeanManager beanManager, Annotated annotated, Class<A> annotationType) {
-	if (annotated.getAnnotations().isEmpty())
+	if (annotated.getAnnotations().isEmpty()) {
 	    return null;
+	}
 
-	if (annotated.isAnnotationPresent(annotationType))
+	if (annotated.isAnnotationPresent(annotationType)) {
 	    return annotated.getAnnotation(annotationType);
+	}
 
 	Queue<Annotation> annotations = new LinkedList<>(annotated.getAnnotations());
 	return getAnnotation(beanManager, annotationType, annotations);
     }
 
     public static <A extends Annotation> A getAnnotation(BeanManager beanManager, Class<?> annotatedClass, Class<A> annotationType) {
-	if (annotatedClass.isAnnotationPresent(annotationType))
+	if (annotatedClass.isAnnotationPresent(annotationType)) {
 	    return annotatedClass.getAnnotation(annotationType);
+	}
 
 	Queue<Annotation> annotations = new LinkedList<>();
 	CollectionUtils.toList(annotations, annotatedClass.getAnnotations());
@@ -152,11 +160,13 @@ public class CDIUtils {
 	while (!annotations.isEmpty()) {
 	    Annotation annotation = annotations.remove();
 
-	    if (annotation.annotationType().equals(annotationType))
+	    if (annotation.annotationType().equals(annotationType)) {
 		return annotationType.cast(annotation);
+	    }
 
-	    if (beanManager.isStereotype(annotation.annotationType()))
+	    if (beanManager.isStereotype(annotation.annotationType())) {
 		annotations.addAll(beanManager.getStereotypeDefinition(annotation.annotationType()));
+	    }
 	}
 	return null;
     }

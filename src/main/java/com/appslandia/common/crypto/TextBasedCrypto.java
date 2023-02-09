@@ -43,8 +43,9 @@ public abstract class TextBasedCrypto extends InitializeObject {
 
     public TextBasedCrypto setTextCharset(String textCharset) {
 	this.assertNotInitialized();
-	if (textCharset != null)
+	if (textCharset != null) {
 	    this.textCharset = Charset.forName(textCharset);
+	}
 
 	return this;
     }
@@ -57,8 +58,9 @@ public abstract class TextBasedCrypto extends InitializeObject {
 
     public TextBasedCrypto setBaseEncoder(String baseEncoder) {
 	this.assertNotInitialized();
-	if (baseEncoder != null)
+	if (baseEncoder != null) {
 	    this.baseEncoder = BaseEncoder.valueOf(baseEncoder);
+	}
 
 	return this;
     }

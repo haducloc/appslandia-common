@@ -39,22 +39,25 @@ public class StringUtils {
     public static final String DOUBLE_LINE_SEP = System.lineSeparator() + System.lineSeparator();
 
     public static String toLowerCase(String str, Locale locale) {
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	return str.toLowerCase(locale);
     }
 
     public static String toUpperCase(String str, Locale locale) {
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	return str.toUpperCase(locale);
     }
 
     public static String firstLowerCase(String str, Locale locale) {
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	if (!str.isEmpty()) {
 	    StringBuilder sb = new StringBuilder(str.length());
@@ -64,8 +67,9 @@ public class StringUtils {
     }
 
     public static String firstUpperCase(String str, Locale locale) {
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	if (!str.isEmpty()) {
 	    StringBuilder sb = new StringBuilder(str.length());
@@ -83,16 +87,18 @@ public class StringUtils {
     }
 
     public static String trimToDefault(String str, String defaultValue) {
-	if (str == null)
+	if (str == null) {
 	    return defaultValue;
+	}
 
 	str = str.trim();
 	return !str.isEmpty() ? str : defaultValue;
     }
 
     public static String trimToNull(String str, char charToTrim) {
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	int start = -1;
 	while ((++start < str.length()) && (str.charAt(start) == charToTrim)) {
@@ -101,22 +107,25 @@ public class StringUtils {
 	int end = str.length();
 	while ((--end >= 0) && (str.charAt(end) == charToTrim)) {
 	}
-	if (start > end)
+	if (start > end) {
 	    return null;
+	}
 
 	return str.substring(start, end + 1);
     }
 
     public static String nullOrLowerCase(String str, Locale locale) {
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	return !str.isEmpty() ? str.toLowerCase(locale) : null;
     }
 
     public static String nullOrUpperCase(String str, Locale locale) {
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	return !str.isEmpty() ? str.toUpperCase(locale) : null;
     }
@@ -135,11 +144,13 @@ public class StringUtils {
 	Asserts.notNull(str);
 	Asserts.notNull(substrIgnoreCase);
 
-	if (substrIgnoreCase.isEmpty())
+	if (substrIgnoreCase.isEmpty()) {
 	    return true;
+	}
 
-	if (str.regionMatches(true, 0, substrIgnoreCase, 0, substrIgnoreCase.length()))
+	if (str.regionMatches(true, 0, substrIgnoreCase, 0, substrIgnoreCase.length())) {
 	    return true;
+	}
 
 	return false;
     }
@@ -148,11 +159,13 @@ public class StringUtils {
 	Asserts.notNull(str);
 	Asserts.notNull(substrIgnoreCase);
 
-	if (substrIgnoreCase.isEmpty())
+	if (substrIgnoreCase.isEmpty()) {
 	    return true;
+	}
 
-	if (str.regionMatches(true, str.length() - substrIgnoreCase.length(), substrIgnoreCase, 0, substrIgnoreCase.length()))
+	if (str.regionMatches(true, str.length() - substrIgnoreCase.length(), substrIgnoreCase, 0, substrIgnoreCase.length())) {
 	    return true;
+	}
 
 	return false;
     }
@@ -161,14 +174,16 @@ public class StringUtils {
 	Asserts.notNull(str);
 	Asserts.notNull(substrIgnoreCase);
 
-	if (substrIgnoreCase.isEmpty())
+	if (substrIgnoreCase.isEmpty()) {
 	    return true;
+	}
 
 	int maxOffset = str.length() - substrIgnoreCase.length();
 	for (int offset = 0; offset <= maxOffset; offset++) {
 
-	    if (str.regionMatches(true, offset, substrIgnoreCase, 0, substrIgnoreCase.length()))
+	    if (str.regionMatches(true, offset, substrIgnoreCase, 0, substrIgnoreCase.length())) {
 		return true;
+	    }
 	}
 	return false;
     }
@@ -178,8 +193,9 @@ public class StringUtils {
 
 	if (elements instanceof Collection) {
 	    Collection<? extends CharSequence> col = ObjectUtils.cast(elements);
-	    if (col.isEmpty())
+	    if (col.isEmpty()) {
 		return null;
+	    }
 	}
 
 	String sep = new String(new char[] { delimiter });
@@ -194,8 +210,9 @@ public class StringUtils {
     public static String join(char delimiter, boolean willWrap, CharSequence... elements) {
 	Objects.requireNonNull(elements);
 
-	if (elements.length == 0)
+	if (elements.length == 0) {
 	    return null;
+	}
 
 	String sep = new String(new char[] { delimiter });
 	StringJoiner joiner = willWrap ? new StringJoiner(sep, sep, sep) : new StringJoiner(sep);

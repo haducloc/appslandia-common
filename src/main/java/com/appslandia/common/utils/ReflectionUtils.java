@@ -64,12 +64,14 @@ public class ReflectionUtils {
 
 	    @Override
 	    public boolean matches(Field f) {
-		if (f.getName().equals(property))
+		if (f.getName().equals(property)) {
 		    return true;
+		}
 
 		if (f.getType() == boolean.class) {
-		    if (f.getName().equals("is" + StringUtils.firstUpperCase(property, Locale.ENGLISH)))
+		    if (f.getName().equals("is" + StringUtils.firstUpperCase(property, Locale.ENGLISH))) {
 			return true;
+		    }
 		}
 		return false;
 	    }
@@ -103,14 +105,17 @@ public class ReflectionUtils {
 
 	    @Override
 	    public boolean matches(Method m) {
-		if (!m.getName().equals(methodName))
+		if (!m.getName().equals(methodName)) {
 		    return false;
+		}
 
-		if (parameterTypes.length != m.getParameterCount())
+		if (parameterTypes.length != m.getParameterCount()) {
 		    return false;
+		}
 
-		if (parameterTypes.length == 0)
+		if (parameterTypes.length == 0) {
 		    return true;
+		}
 
 		final Class<?>[] mpTypes = m.getParameterTypes();
 		return IntStream.range(0, mpTypes.length).allMatch(idx -> mpTypes[idx].isAssignableFrom(parameterTypes[idx]));
@@ -133,8 +138,9 @@ public class ReflectionUtils {
 		if (handler.matches(field)) {
 
 		    matched = field;
-		    if (!handler.handle(field))
+		    if (!handler.handle(field)) {
 			return matched;
+		    }
 		}
 	    }
 	    clazz = clazz.getSuperclass();
@@ -151,8 +157,9 @@ public class ReflectionUtils {
 		if (handler.matches(m)) {
 
 		    matched = m;
-		    if (!handler.handle(m))
+		    if (!handler.handle(m)) {
 			return matched;
+		    }
 		}
 	    }
 	    clazz = clazz.getSuperclass();
@@ -163,13 +170,15 @@ public class ReflectionUtils {
     public static <T extends Annotation> T findAnnotation(Class<?> clazz, Class<T> annotationClass) {
 	while (clazz != null) {
 	    T t = clazz.getAnnotation(annotationClass);
-	    if (t != null)
+	    if (t != null) {
 		return t;
+	    }
 
 	    for (Class<?> interfaceClass : clazz.getInterfaces()) {
 		t = interfaceClass.getAnnotation(annotationClass);
-		if (t != null)
+		if (t != null) {
 		    return t;
+		}
 	    }
 	    clazz = clazz.getSuperclass();
 	}
@@ -201,35 +210,42 @@ public class ReflectionUtils {
     }
 
     public static Class<?> getListArgType(Type genericType) {
-	if (!(genericType instanceof ParameterizedType))
+	if (!(genericType instanceof ParameterizedType)) {
 	    return null;
+	}
 
 	Type[] types = ((ParameterizedType) genericType).getActualTypeArguments();
-	if (types.length != 1)
+	if (types.length != 1) {
 	    return null;
+	}
 
 	Type type = types[0];
-	if (!(type instanceof Class))
+	if (!(type instanceof Class)) {
 	    return null;
+	}
 
 	return (Class<?>) type;
     }
 
     public static Class<?>[] getMapArgTypes(Type genericType) {
-	if (!(genericType instanceof ParameterizedType))
+	if (!(genericType instanceof ParameterizedType)) {
 	    return null;
+	}
 
 	Type[] types = ((ParameterizedType) genericType).getActualTypeArguments();
-	if (types.length != 2)
+	if (types.length != 2) {
 	    return null;
+	}
 
 	Type kt = types[0];
-	if (!(kt instanceof Class))
+	if (!(kt instanceof Class)) {
 	    return null;
+	}
 
 	Type vt = types[1];
-	if (!(vt instanceof Class))
+	if (!(vt instanceof Class)) {
 	    return null;
+	}
 
 	return new Class<?>[] { (Class<?>) kt, (Class<?>) vt };
     }

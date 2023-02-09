@@ -140,8 +140,9 @@ public class PoolPasswordDigester extends PasswordDigester {
     @Override
     public PoolPasswordDigester copy() {
 	PoolPasswordDigester impl = new PoolPasswordDigester().setPoolSize(this.poolSize);
-	if (this.digester != null)
+	if (this.digester != null) {
 	    impl.digester = this.digester.copy();
+	}
 
 	return impl;
     }

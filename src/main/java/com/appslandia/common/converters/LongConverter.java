@@ -44,8 +44,9 @@ public class LongConverter extends NumberConverter<Long> {
 
     @Override
     public String format(Long obj, FormatProvider formatProvider, boolean localize) {
-	if (obj == null)
+	if (obj == null) {
 	    return null;
+	}
 
 	return obj.toString();
     }
@@ -53,8 +54,9 @@ public class LongConverter extends NumberConverter<Long> {
     @Override
     public Long parse(String str, FormatProvider formatProvider) throws ConverterException {
 	str = StringUtils.trimToNull(str);
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	try {
 	    return Long.valueOf(Long.parseLong(str));

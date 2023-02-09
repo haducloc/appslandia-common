@@ -36,12 +36,14 @@ public abstract class InitializeObject implements InitializeSupport {
 
     @Override
     public InitializeObject initialize() throws InitializeException {
-	if (this.initialized)
+	if (this.initialized) {
 	    return this;
+	}
 
 	synchronized (this.initMutex) {
-	    if (this.initialized)
+	    if (this.initialized) {
 		return this;
+	    }
 
 	    try {
 		this.init();
@@ -60,7 +62,8 @@ public abstract class InitializeObject implements InitializeSupport {
     }
 
     protected void assertNotInitialized() {
-	if (this.initialized)
+	if (this.initialized) {
 	    throw new AssertException("initialized.");
+	}
     }
 }

@@ -49,8 +49,9 @@ public class BooleanConverter implements Converter<Boolean> {
 
     @Override
     public String format(Boolean obj, FormatProvider formatProvider, boolean localize) {
-	if (obj == null)
+	if (obj == null) {
 	    return null;
+	}
 
 	return Boolean.TRUE.equals(obj) ? VALUE_TRUE : VALUE_FALSE;
     }
@@ -58,15 +59,18 @@ public class BooleanConverter implements Converter<Boolean> {
     @Override
     public Boolean parse(String str, FormatProvider formatProvider) throws ConverterException {
 	str = StringUtils.trimToNull(str);
-	if (str == null)
+	if (str == null) {
 	    return null;
+	}
 
 	String val = str.toLowerCase(Locale.ENGLISH);
-	if (VALUE_TRUE.equals(val))
+	if (VALUE_TRUE.equals(val)) {
 	    return Boolean.TRUE;
+	}
 
-	if (VALUE_FALSE.equals(val))
+	if (VALUE_FALSE.equals(val)) {
 	    return Boolean.FALSE;
+	}
 
 	throw toParsingError(str, getTargetType().getName());
     }

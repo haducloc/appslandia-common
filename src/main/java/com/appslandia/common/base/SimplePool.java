@@ -47,8 +47,9 @@ public class SimplePool<T> {
     public void put(T service) {
 	synchronized (this.mutex) {
 	    int idx = this.current;
-	    if (idx >= this.size - 1)
+	    if (idx >= this.size - 1) {
 		return;
+	    }
 
 	    this.pool[++idx] = service;
 	    this.current = idx;
@@ -58,8 +59,9 @@ public class SimplePool<T> {
     public T get() {
 	synchronized (this.mutex) {
 	    int idx = this.current;
-	    if (idx < 0)
+	    if (idx < 0) {
 		return null;
+	    }
 
 	    T t = this.pool[idx];
 	    this.current = idx - 1;

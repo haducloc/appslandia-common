@@ -48,8 +48,9 @@ public class GsonProcessor extends JsonProcessor {
 
     @Override
     protected void init() throws Exception {
-	if (this.builder == null)
+	if (this.builder == null) {
 	    this.builder = newBuilder();
+	}
 
 	this.gson = this.builder.create();
     }

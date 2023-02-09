@@ -34,21 +34,25 @@ import com.appslandia.common.base.Out;
 public class ParseUtils {
 
     public static boolean parseBool(String value, boolean defaultValue) {
-	if (value == null)
+	if (value == null) {
 	    return defaultValue;
+	}
 
-	if (isTrueValue(value))
+	if (isTrueValue(value)) {
 	    return true;
+	}
 
-	if (isFalseValue(value))
+	if (isFalseValue(value)) {
 	    return false;
+	}
 
 	return defaultValue;
     }
 
     public static int parseInt(String value, int defaultValue) {
-	if (value == null)
+	if (value == null) {
 	    return defaultValue;
+	}
 
 	try {
 	    return Integer.parseInt(value);
@@ -59,8 +63,9 @@ public class ParseUtils {
     }
 
     public static long parseLong(String value, long defaultValue) {
-	if (value == null)
+	if (value == null) {
 	    return defaultValue;
+	}
 
 	try {
 	    return Long.parseLong(value);
@@ -71,8 +76,9 @@ public class ParseUtils {
     }
 
     public static float parseFloat(String value, float defaultValue) {
-	if (value == null)
+	if (value == null) {
 	    return defaultValue;
+	}
 
 	try {
 	    float val = Float.parseFloat(value);
@@ -84,8 +90,9 @@ public class ParseUtils {
     }
 
     public static double parseDouble(String value, double defaultValue) {
-	if (value == null)
+	if (value == null) {
 	    return defaultValue;
+	}
 
 	try {
 	    double val = Double.parseDouble(value);
@@ -98,15 +105,18 @@ public class ParseUtils {
 
     public static boolean parseBool(String value, Out<Boolean> valid) {
 	valid.value = Boolean.FALSE;
-	if (value == null)
+	if (value == null) {
 	    return false;
+	}
 
 	valid.value = Boolean.TRUE;
-	if (isTrueValue(value))
+	if (isTrueValue(value)) {
 	    return true;
+	}
 
-	if (isFalseValue(value))
+	if (isFalseValue(value)) {
 	    return false;
+	}
 
 	valid.value = Boolean.FALSE;
 	return false;
@@ -114,8 +124,9 @@ public class ParseUtils {
 
     public static int parseInt(String value, Out<Boolean> valid) {
 	valid.value = Boolean.FALSE;
-	if (value == null)
+	if (value == null) {
 	    return 0;
+	}
 
 	try {
 	    int val = Integer.parseInt(value);
@@ -129,8 +140,9 @@ public class ParseUtils {
 
     public static long parseLong(String value, Out<Boolean> valid) {
 	valid.value = Boolean.FALSE;
-	if (value == null)
+	if (value == null) {
 	    return 0L;
+	}
 
 	try {
 	    long val = Long.parseLong(value);
@@ -144,8 +156,9 @@ public class ParseUtils {
 
     public static float parseFloat(String value, Out<Boolean> valid) {
 	valid.value = Boolean.FALSE;
-	if (value == null)
+	if (value == null) {
 	    return 0.0f;
+	}
 
 	try {
 	    float val = Float.parseFloat(value);
@@ -160,8 +173,9 @@ public class ParseUtils {
 
     public static double parseDouble(String value, Out<Boolean> valid) {
 	valid.value = Boolean.FALSE;
-	if (value == null)
+	if (value == null) {
 	    return 0.0d;
+	}
 
 	try {
 	    double val = Double.parseDouble(value);
@@ -192,14 +206,17 @@ public class ParseUtils {
     }
 
     public static Boolean parseBoolean(String value) throws BoolFormatException {
-	if (value == null)
+	if (value == null) {
 	    return null;
+	}
 
-	if (isTrueValue(value))
+	if (isTrueValue(value)) {
 	    return true;
+	}
 
-	if (isFalseValue(value))
+	if (isFalseValue(value)) {
 	    return false;
+	}
 
 	throw new BoolFormatException(value);
     }

@@ -90,8 +90,9 @@ public class WordsGenerator extends InitializeObject implements TextGenerator {
     @Override
     public boolean verify(String value) {
 	Asserts.notNull(value);
-	if (value.length() != this.length)
+	if (value.length() != this.length) {
 	    return false;
+	}
 
 	switch (this.alphabet) {
 	case DIGITS_AZ:

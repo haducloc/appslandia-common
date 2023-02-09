@@ -63,13 +63,15 @@ public class CsvEscaper extends InitializeObject {
 	initialize();
 
 	if (value == null) {
-	    if (this.writeNull)
+	    if (this.writeNull) {
 		return "null";
+	    }
 	    return "";
 	}
 
-	if (value.isEmpty())
+	if (value.isEmpty()) {
 	    return "";
+	}
 
 	StringBuilder out = new StringBuilder((int) (value.length() * 1.25f));
 	out.append('"');
@@ -83,13 +85,15 @@ public class CsvEscaper extends InitializeObject {
 	for (int i = 0; i < length; i++) {
 	    char c = srcChars[i];
 
-	    if (!useWrap)
+	    if (!useWrap) {
 		useWrap = c == '"' || c == '\r' || c == '\n' || c == this.separator;
+	    }
 
 	    if (c == '"') {
 		// add un_escaped portion
-		if (start < i)
+		if (start < i) {
 		    out.append(srcChars, start, i - start);
+		}
 
 		// add escaped
 		out.append("\"\"");
@@ -98,8 +102,9 @@ public class CsvEscaper extends InitializeObject {
 	    } else if (this.escCrLf && (c == '\r' || c == '\n')) {
 
 		// add un_escaped portion
-		if (start < i)
+		if (start < i) {
 		    out.append(srcChars, start, i - start);
+		}
 
 		// add escaped
 		out.append("\\").append(c == '\r' ? 'r' : 'n');
@@ -108,8 +113,9 @@ public class CsvEscaper extends InitializeObject {
 	}
 
 	// add rest of un_escaped portion
-	if (start < length)
+	if (start < length) {
 	    out.append(srcChars, start, length - start);
+	}
 
 	out.append('"');
 	return useWrap ? out.toString() : value;
@@ -117,16 +123,19 @@ public class CsvEscaper extends InitializeObject {
 
     public String unescape(String value) {
 	// ,,
-	if (value.isEmpty())
+	if (value.isEmpty()) {
 	    return null;
+	}
 
 	// ,null,
-	if ("null".equals(value))
+	if ("null".equals(value)) {
 	    return this.writeNull ? null : "null";
+	}
 
 	// ,value,
-	if (!this.escCrLf)
+	if (!this.escCrLf) {
 	    return value;
+	}
 
 	// \\r \\n
 	StringBuilder out = new StringBuilder(value.length());

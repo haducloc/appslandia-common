@@ -84,11 +84,13 @@ public class DeployEnv {
 
     @Override
     public boolean equals(Object obj) {
-	if (this == obj)
+	if (this == obj) {
 	    return true;
+	}
 
-	if (!(obj instanceof DeployEnv))
+	if (!(obj instanceof DeployEnv)) {
 	    return false;
+	}
 
 	DeployEnv another = (DeployEnv) obj;
 	return this.name.equalsIgnoreCase(another.name);
@@ -101,8 +103,9 @@ public class DeployEnv {
 	DeployEnv obj = __current;
 	if (obj == null) {
 	    synchronized (MUTEX) {
-		if ((obj = __current) == null)
+		if ((obj = __current) == null) {
 		    __current = obj = initDeployEnv();
+		}
 	    }
 	}
 	return obj;
@@ -132,17 +135,21 @@ public class DeployEnv {
     }
 
     private static DeployEnv getDeployEnv(String env) {
-	if (DEVELOPMENT.name.equalsIgnoreCase(env))
+	if (DEVELOPMENT.name.equalsIgnoreCase(env)) {
 	    return DEVELOPMENT;
+	}
 
-	if (TESTING.name.equalsIgnoreCase(env))
+	if (TESTING.name.equalsIgnoreCase(env)) {
 	    return TESTING;
+	}
 
-	if (STAGING.name.equalsIgnoreCase(env))
+	if (STAGING.name.equalsIgnoreCase(env)) {
 	    return STAGING;
+	}
 
-	if (PRODUCTION.name.equalsIgnoreCase(env))
+	if (PRODUCTION.name.equalsIgnoreCase(env)) {
 	    return PRODUCTION;
+	}
 
 	return new DeployEnv(env);
     }

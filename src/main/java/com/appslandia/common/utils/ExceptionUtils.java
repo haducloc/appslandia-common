@@ -35,8 +35,9 @@ public class ExceptionUtils {
 
     public static Exception tryUnwrap(InvocationTargetException ex) {
 	Throwable te = ex.getTargetException();
-	if (te instanceof Exception)
+	if (te instanceof Exception) {
 	    return (Exception) te;
+	}
 
 	return ex;
     }
@@ -55,18 +56,20 @@ public class ExceptionUtils {
 	sb.append('(');
 	sb.append("message=").append(ex.getMessage());
 	sb.append("; cause=");
-	if (ex.getCause() != null)
+	if (ex.getCause() != null) {
 	    sb.append(ex.getCause().getClass().getName());
-	else
+	} else {
 	    sb.append("null");
+	}
 
 	sb.append(')');
 	return sb.toString();
     }
 
     public static RuntimeException toUncheckedException(Throwable ex) {
-	if (ex instanceof RuntimeException)
+	if (ex instanceof RuntimeException) {
 	    return (RuntimeException) ex;
+	}
 
 	return new UncheckedException(ex);
     }

@@ -43,8 +43,9 @@ public class SingletonStore<T> implements Supplier<T> {
 	T obj = this.t;
 	if (obj == null) {
 	    synchronized (this.mutex) {
-		if ((obj = this.t) == null)
+		if ((obj = this.t) == null) {
 		    this.t = obj = supplier.get();
+		}
 	    }
 	}
 	return obj;

@@ -65,12 +65,14 @@ public @interface BoolType {
 
 	@Override
 	public boolean isValid(Number value, ConstraintValidatorContext context) {
-	    if (value == null)
+	    if (value == null) {
 		return true;
+	    }
 
 	    int bitValue = value.intValue();
-	    if ((bitValue == BitBool.FALSE) || (bitValue == BitBool.TRUE))
+	    if ((bitValue == BitBool.FALSE) || (bitValue == BitBool.TRUE)) {
 		return true;
+	    }
 
 	    return false;
 	}

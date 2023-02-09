@@ -61,8 +61,9 @@ public class MailerMessage {
     private Consumer<MimeMessage> msgInit;
 
     public MailerMessage clearFrom() {
-	if (this.from != null)
+	if (this.from != null) {
 	    this.from.clear();
+	}
 
 	return this;
     }
@@ -171,83 +172,97 @@ public class MailerMessage {
 	// Sender
 	// Notes: msg.setSender(this.sender); throws Exception in jakarta.mail-1.6.5.jar
 
-	if (this.sender != null)
+	if (this.sender != null) {
 	    msg.setSender(this.sender);
-	else
+	} else {
 	    msg.removeHeader("Sender");
+	}
 
 	// From
-	if (this.from != null)
+	if (this.from != null) {
 	    msg.addFrom(this.from.toArray(new Address[this.from.size()]));
+	}
 
 	// Reply To
-	if (this.replyTo != null)
+	if (this.replyTo != null) {
 	    msg.setReplyTo(this.replyTo.toArray(new Address[this.replyTo.size()]));
+	}
 
 	// debugToEmails?
-	if (debugToEmails != null)
+	if (debugToEmails != null) {
 	    msg.addRecipients(RecipientType.TO, InternetAddress.parse(debugToEmails));
-	else {
+	} else {
 	    // Recipients
-	    if (this.to != null)
+	    if (this.to != null) {
 		msg.addRecipients(RecipientType.TO, this.to.toArray(new Address[this.to.size()]));
+	    }
 
-	    if (this.cc != null)
+	    if (this.cc != null) {
 		msg.addRecipients(RecipientType.CC, this.cc.toArray(new Address[this.cc.size()]));
+	    }
 
-	    if (this.bcc != null)
+	    if (this.bcc != null) {
 		msg.addRecipients(RecipientType.BCC, this.bcc.toArray(new Address[this.bcc.size()]));
+	    }
 	}
 
 	// Subject
 	msg.setSubject(this.subject, StandardCharsets.UTF_8.name());
 
 	// Content
-	if (this.content != null)
+	if (this.content != null) {
 	    msg.setContent(this.content, this.contentType);
+	}
 
 	// sentDate
-	if (this.sentDate != null)
+	if (this.sentDate != null) {
 	    msg.setSentDate(this.sentDate);
+	}
 
 	// Others
-	if (this.msgInit != null)
+	if (this.msgInit != null) {
 	    this.msgInit.accept(msg);
+	}
 
 	return msg;
     }
 
     protected List<Address> getFrom() {
-	if (this.from == null)
+	if (this.from == null) {
 	    this.from = new ArrayList<>();
+	}
 
 	return this.from;
     }
 
     protected List<Address> getReplyTo() {
-	if (this.replyTo == null)
+	if (this.replyTo == null) {
 	    this.replyTo = new ArrayList<>();
+	}
 
 	return this.replyTo;
     }
 
     protected List<Address> getTo() {
-	if (this.to == null)
+	if (this.to == null) {
 	    this.to = new ArrayList<>();
+	}
 
 	return this.to;
     }
 
     protected List<Address> getCc() {
-	if (this.cc == null)
+	if (this.cc == null) {
 	    this.cc = new ArrayList<>();
+	}
 
 	return this.cc;
     }
 
     protected List<Address> getBcc() {
-	if (this.bcc == null)
+	if (this.bcc == null) {
 	    this.bcc = new ArrayList<>();
+	}
 
 	return this.bcc;
     }
