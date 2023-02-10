@@ -35,25 +35,18 @@ public class GeoUtils {
 
     public static final double EQUATOR_CIRCUMFERENCE_MILES = 24_901.461;
 
-    public static double toDecimalDegrees(int degrees, double minutes) {
-	Asserts.isTrue(degrees >= 0);
-	Asserts.isTrue(minutes >= 0.0d);
-
-	return degrees + minutes / 60;
-    }
-
     public static double toDecimalDegrees(int degrees, int minutes, double seconds) {
 	Asserts.isTrue(degrees >= 0);
-	Asserts.isTrue(minutes >= 0.0d);
+	Asserts.isTrue(minutes >= 0);
 	Asserts.isTrue(seconds >= 0.0d);
 
 	return degrees + minutes / 60.0 + seconds / 3600;
     }
 
     public static String format(double minOrSec, int decimals) {
-	StringBuilder fmt = new StringBuilder(2 + 1 + decimals);
+	StringBuilder fmt = new StringBuilder(3 + decimals);
 	fmt.append("00.");
-	IntStream.range(0, decimals).forEach(p -> fmt.append('#'));
+	IntStream.range(0, decimals).forEach(p -> fmt.append('0'));
 
 	return new DecimalFormat(fmt.toString()).format(minOrSec);
     }

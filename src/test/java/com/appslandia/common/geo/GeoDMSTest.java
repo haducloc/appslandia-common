@@ -78,4 +78,28 @@ public class GeoDMSTest {
 	// Direction.WEST because -0.0
 	Assertions.assertEquals(Direction.WEST, dms.getDirection());
     }
+
+    @Test
+    public void test_toGeoDMS_lat() {
+
+	GeoDMS dms = GeoDMS.toGeoDMS("10°20'30.05\"N");
+
+	Assertions.assertEquals(10, dms.getDegrees());
+	Assertions.assertEquals(20, dms.getMinutes());
+	Assertions.assertEquals(30.05, dms.getSeconds(), 0.001d);
+
+	Assertions.assertEquals(Direction.NORTH, dms.getDirection());
+    }
+
+    @Test
+    public void test_toGeoDMS_long() {
+
+	GeoDMS dms = GeoDMS.toGeoDMS("10°20'30.05\"E");
+
+	Assertions.assertEquals(10, dms.getDegrees());
+	Assertions.assertEquals(20, dms.getMinutes());
+	Assertions.assertEquals(30.05, dms.getSeconds(), 0.001d);
+
+	Assertions.assertEquals(Direction.EAST, dms.getDirection());
+    }
 }

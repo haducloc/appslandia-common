@@ -47,11 +47,11 @@ public enum Direction {
 	return this.symbol;
     }
 
-    public boolean isHorizontal() {
+    public boolean isX() {
 	return this == EAST || this == WEST;
     }
 
-    public boolean isVertical() {
+    public boolean isY() {
 	return this == NORTH || this == SOUTH;
     }
 

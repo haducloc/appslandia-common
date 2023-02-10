@@ -47,12 +47,12 @@ public class DirectionTest {
     }
 
     @Test
-    public void test_ver_hor() {
-	Assertions.assertTrue(Direction.EAST.isHorizontal());
-	Assertions.assertTrue(Direction.WEST.isHorizontal());
+    public void test_directions() {
+	Assertions.assertTrue(Direction.EAST.isX());
+	Assertions.assertTrue(Direction.WEST.isX());
 
-	Assertions.assertTrue(Direction.SOUTH.isVertical());
-	Assertions.assertTrue(Direction.NORTH.isVertical());
+	Assertions.assertTrue(Direction.SOUTH.isY());
+	Assertions.assertTrue(Direction.NORTH.isY());
     }
 
     @Test

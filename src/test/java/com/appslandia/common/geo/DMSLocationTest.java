@@ -38,4 +38,15 @@ public class DMSLocationTest {
 	Assertions.assertEquals(dm.getLatitude().toDecimalDegrees(), loc.getLatitude(), 0.0000001);
 	Assertions.assertEquals(dm.getLongitude().toDecimalDegrees(), loc.getLongitude(), 0.0000001);
     }
+
+    @Test
+    public void test_toDMSLocation() {
+	DMSLocation loc = DMSLocation.toDMSLocation("10°20'30\"E, 11°21'31\"N");
+
+	Assertions.assertEquals(11, loc.getLatitude().getDegrees());
+	Assertions.assertEquals(21, loc.getLatitude().getMinutes());
+
+	Assertions.assertEquals(10, loc.getLongitude().getDegrees());
+	Assertions.assertEquals(20, loc.getLongitude().getMinutes());
+    }
 }
