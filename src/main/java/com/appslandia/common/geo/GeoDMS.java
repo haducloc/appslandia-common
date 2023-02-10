@@ -113,7 +113,7 @@ public class GeoDMS {
 	return new GeoDMS(Math.abs(longitude), Double.compare(longitude, 0.0) >= 0 ? Direction.EAST : Direction.WEST);
     }
 
-    static final Pattern DMS_PATTERN = Pattern.compile("\\s*\\d+°\\s*\\d{1,2}'\\s*\\d+(\\.\\d+)?\"\\s*(N|E|S|W)\\s*", Pattern.CASE_INSENSITIVE);
+    static final Pattern DMS_PATTERN = Pattern.compile("\\d+°\\s*\\d{1,2}'\\s*\\d+(\\.\\d+)?\"\\s*(N|E|S|W)", Pattern.CASE_INSENSITIVE);
     static final Pattern DMS_SYMBOLS = Pattern.compile("(°|'|\")");
 
     public static GeoDMS toGeoDMS(String dms) {
