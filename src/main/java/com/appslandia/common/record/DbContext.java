@@ -70,19 +70,11 @@ public class DbContext implements AutoCloseable {
 	this.bakAutoCommit = JdbcUtils.isAutoCommit(conn);
     }
 
-    protected void addBatch(StatementImpl stat, String pSql) throws java.sql.SQLException {
-	if (this.batchPSqls == null) {
-	    this.batchPSqls = new LinkedHashSet<>();
-	}
-	this.batchPSqls.add(pSql);
-	stat.addBatch();
+    public long insert(String tableName, Record record) throws java.sql.SQLException {
+	return this.insert(tableName, record, false);
     }
 
-    public void insert(String tableName, Record record) throws java.sql.SQLException {
-	this.insert(tableName, record, false);
-    }
-
-    public Object insert(String tableName, Record record, boolean addBatch) throws java.sql.SQLException {
+    public long insert(String tableName, Record record, boolean addBatch) throws java.sql.SQLException {
 	// StatementImpl
 	Table table = getTable(tableName);
 	StatementImpl stat = this.stats.get(table.getInsertSql().getPSql());
@@ -114,7 +106,7 @@ public class DbContext implements AutoCloseable {
 		try (ResultSet rs = stat.getGeneratedKeys()) {
 
 		    if (rs.next()) {
-			Object generatedKey = rs.getObject(1);
+			long generatedKey = rs.getLong(1);
 			record.set(table.getKeyIncr().getName(), generatedKey);
 
 			return generatedKey;
@@ -130,11 +122,11 @@ public class DbContext implements AutoCloseable {
 	}
     }
 
-    public Object insert(String tableName, Object entity) throws java.sql.SQLException {
+    public long insert(String tableName, Object entity) throws java.sql.SQLException {
 	return this.insert(tableName, entity, false);
     }
 
-    public Object insert(String tableName, Object entity, boolean addBatch) throws java.sql.SQLException {
+    public long insert(String tableName, Object entity, boolean addBatch) throws java.sql.SQLException {
 	Table table = getTable(tableName);
 	Record record = RecordUtils.toRecord(table, entity);
 	return this.insert(tableName, record, addBatch);
@@ -588,6 +580,14 @@ public class DbContext implements AutoCloseable {
 	    }
 	    this.batchPSqls.clear();
 	}
+    }
+
+    protected void addBatch(StatementImpl stat, String pSql) throws java.sql.SQLException {
+	if (this.batchPSqls == null) {
+	    this.batchPSqls = new LinkedHashSet<>();
+	}
+	this.batchPSqls.add(pSql);
+	stat.addBatch();
     }
 
     public void setTransactional(boolean transactional) throws java.sql.SQLException {
