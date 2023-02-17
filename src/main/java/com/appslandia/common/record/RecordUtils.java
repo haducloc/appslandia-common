@@ -146,7 +146,6 @@ public final class RecordUtils {
 	Asserts.isTrue(PK_JAVA_TYPES.contains(pk.getClass()), "pk is invalid.");
 
 	List<Field> keyFields = table.getFields().stream().filter(f -> f.getKeyType() == FieldType.KEY || f.getKeyType() == FieldType.KEY_INCR).collect(Collectors.toList());
-
 	Asserts.isTrue(keyFields.size() == 1, "table is invalid.");
 
 	return new Key().set(keyFields.get(0).getName(), pk);

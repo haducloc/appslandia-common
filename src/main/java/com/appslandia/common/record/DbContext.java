@@ -27,8 +27,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -56,7 +58,8 @@ public class DbContext implements AutoCloseable {
     final ConnectionImpl conn;
     final boolean bakAutoCommit;
 
-    final Map<String, StatementImpl> tableStats = new LinkedHashMap<>();
+    final Map<String, StatementImpl> stats = new LinkedHashMap<>();
+    private Set<String> batchPSqls;
 
     public DbContext() {
 	this(ConnectionImpl.getCurrent());
@@ -67,6 +70,14 @@ public class DbContext implements AutoCloseable {
 	this.bakAutoCommit = JdbcUtils.isAutoCommit(conn);
     }
 
+    protected void addBatch(StatementImpl stat, String pSql) throws java.sql.SQLException {
+	if (this.batchPSqls == null) {
+	    this.batchPSqls = new LinkedHashSet<>();
+	}
+	this.batchPSqls.add(pSql);
+	stat.addBatch();
+    }
+
     public void insert(String tableName, Record record) throws java.sql.SQLException {
 	this.insert(tableName, record, false);
     }
@@ -74,11 +85,11 @@ public class DbContext implements AutoCloseable {
     public Object insert(String tableName, Record record, boolean addBatch) throws java.sql.SQLException {
 	// StatementImpl
 	Table table = getTable(tableName);
-	StatementImpl stat = this.tableStats.get(table.getInsertSql().getPSql());
+	StatementImpl stat = this.stats.get(table.getInsertSql().getPSql());
 
 	if (stat == null) {
 	    stat = this.conn.prepareStatement(table.getInsertSql(), (table.getKeyIncr() != null));
-	    this.tableStats.put(table.getInsertSql().getPSql(), stat);
+	    this.stats.put(table.getInsertSql().getPSql(), stat);
 	}
 
 	// Parameters
@@ -114,7 +125,7 @@ public class DbContext implements AutoCloseable {
 
 	} else {
 	    this.assertTransactional();
-	    stat.addBatch();
+	    addBatch(stat, table.getInsertSql().getPSql());
 	    return -1;
 	}
     }
@@ -136,17 +147,16 @@ public class DbContext implements AutoCloseable {
     public int update(String tableName, Record record, boolean addBatch) throws java.sql.SQLException {
 	// StatementImpl
 	Table table = getTable(tableName);
-	StatementImpl stat = this.tableStats.get(table.getUpdateSql().getPSql());
+	StatementImpl stat = this.stats.get(table.getUpdateSql().getPSql());
 
 	if (stat == null) {
 	    stat = this.conn.prepareStatement(table.getUpdateSql());
-	    this.tableStats.put(table.getUpdateSql().getPSql(), stat);
+	    this.stats.put(table.getUpdateSql().getPSql(), stat);
 	}
 
 	// Parameters
 	for (Field field : table.getFields()) {
 	    if (field.getKeyType() != FieldType.COL_GEN) {
-
 		Object val = record.get(field.getName());
 
 		if (!field.isNullable()) {
@@ -162,7 +172,7 @@ public class DbContext implements AutoCloseable {
 
 	} else {
 	    this.assertTransactional();
-	    stat.addBatch();
+	    addBatch(stat, table.getUpdateSql().getPSql());
 	    return -1;
 	}
     }
@@ -184,11 +194,11 @@ public class DbContext implements AutoCloseable {
     public int delete(String tableName, Key key, boolean addBatch) throws java.sql.SQLException {
 	// StatementImpl
 	Table table = getTable(tableName);
-	StatementImpl stat = this.tableStats.get(table.getDeleteSql().getPSql());
+	StatementImpl stat = this.stats.get(table.getDeleteSql().getPSql());
 
 	if (stat == null) {
 	    stat = this.conn.prepareStatement(table.getDeleteSql());
-	    this.tableStats.put(table.getDeleteSql().getPSql(), stat);
+	    this.stats.put(table.getDeleteSql().getPSql(), stat);
 	}
 
 	// Parameters
@@ -208,7 +218,7 @@ public class DbContext implements AutoCloseable {
 
 	} else {
 	    this.assertTransactional();
-	    stat.addBatch();
+	    addBatch(stat, table.getDeleteSql().getPSql());
 	    return -1;
 	}
     }
@@ -226,11 +236,11 @@ public class DbContext implements AutoCloseable {
     public Record getRecord(String tableName, Key key) throws java.sql.SQLException {
 	// StatementImpl
 	Table table = getTable(tableName);
-	StatementImpl stat = this.tableStats.get(table.getGetSql().getPSql());
+	StatementImpl stat = this.stats.get(table.getGetSql().getPSql());
 
 	if (stat == null) {
 	    stat = this.conn.prepareStatement(table.getGetSql());
-	    this.tableStats.put(table.getGetSql().getPSql(), stat);
+	    this.stats.put(table.getGetSql().getPSql(), stat);
 	}
 
 	// Parameters
@@ -261,11 +271,11 @@ public class DbContext implements AutoCloseable {
     public boolean exists(String tableName, Key key) throws java.sql.SQLException {
 	// StatementImpl
 	Table table = getTable(tableName);
-	StatementImpl stat = this.tableStats.get(table.getExistsSql().getPSql());
+	StatementImpl stat = this.stats.get(table.getExistsSql().getPSql());
 
 	if (stat == null) {
 	    stat = this.conn.prepareStatement(table.getExistsSql());
-	    this.tableStats.put(table.getExistsSql().getPSql(), stat);
+	    this.stats.put(table.getExistsSql().getPSql(), stat);
 	}
 
 	// Parameters
@@ -299,11 +309,11 @@ public class DbContext implements AutoCloseable {
     protected StatementImpl prepareStatement(String pSql, Map<String, Object> params) throws java.sql.SQLException {
 	// StatementImpl
 	JdbcSql sql = new JdbcSql(pSql);
-	StatementImpl stat = this.tableStats.get(pSql);
+	StatementImpl stat = this.stats.get(pSql);
 
 	if (stat == null) {
 	    stat = this.conn.prepareStatement(sql);
-	    this.tableStats.put(pSql, stat);
+	    this.stats.put(pSql, stat);
 	}
 
 	// Parameters
@@ -385,7 +395,7 @@ public class DbContext implements AutoCloseable {
 
 	} else {
 	    this.assertTransactional();
-	    stat.addBatch();
+	    addBatch(stat, pSql);
 	    return -1;
 	}
     }
@@ -554,8 +564,29 @@ public class DbContext implements AutoCloseable {
     public void executeBatch() throws java.sql.SQLException {
 	this.assertTransactional();
 
-	for (StatementImpl stat : this.tableStats.values()) {
-	    stat.executeBatch();
+	doBatch("execute");
+    }
+
+    public void clearBatch() throws java.sql.SQLException {
+	this.assertTransactional();
+
+	doBatch("clear");
+    }
+
+    protected void doBatch(String action) throws java.sql.SQLException {
+	Asserts.isTrue("execute".equals(action) || "clear".equals(action));
+	if (this.batchPSqls != null) {
+
+	    for (String pSql : this.batchPSqls) {
+		StatementImpl stat = Asserts.notNull(this.stats.get(pSql));
+
+		if ("execute".equals(action)) {
+		    stat.executeBatch();
+		} else {
+		    stat.clearBatch();
+		}
+	    }
+	    this.batchPSqls.clear();
 	}
     }
 
@@ -586,7 +617,7 @@ public class DbContext implements AutoCloseable {
     }
 
     private void closeStatements() throws java.sql.SQLException {
-	List<StatementImpl> stats = new ArrayList<>(this.tableStats.values());
+	List<StatementImpl> stats = new ArrayList<>(this.stats.values());
 
 	for (int i = stats.size() - 1; i >= 0; i--) {
 	    stats.get(i).close();
