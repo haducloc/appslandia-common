@@ -52,7 +52,7 @@ public class JwtProcessorTest {
 	    String jwt = jwtProcessor.toJwt(new JwtToken(header, payload));
 	    Assertions.assertNotNull(jwt);
 
-	    JwtToken token = jwtProcessor.parseJwt(jwt);
+	    JwtToken token = jwtProcessor.verifyJwt(jwt);
 
 	    Assertions.assertNotNull(token);
 	    Assertions.assertNotNull(token.getHeader());
@@ -82,7 +82,7 @@ public class JwtProcessorTest {
 	    String jwt = jwtProcessor.toJwt(new JwtToken(header, payload));
 	    Assertions.assertNotNull(jwt);
 
-	    JwtToken token = jwtProcessor.parseJwt(jwt);
+	    JwtToken token = jwtProcessor.verifyJwt(jwt);
 
 	    Assertions.assertNotNull(token);
 	    Assertions.assertNotNull(token.getHeader());
