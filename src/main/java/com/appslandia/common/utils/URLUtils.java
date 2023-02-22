@@ -35,14 +35,18 @@ import java.util.Map;
 public class URLUtils {
 
     public static String toQueryParams(Map<String, Object> parameterMap) {
+	if (parameterMap == null) {
+	    return null;
+	}
 	StringBuilder sb = new StringBuilder(parameterMap.size() * 16);
+
 	for (Map.Entry<String, Object> param : parameterMap.entrySet()) {
 	    if (sb.length() > 0) {
 		sb.append('&');
 	    }
 	    addQueryParam(sb, param.getKey(), param.getValue());
 	}
-	return sb.toString();
+	return sb.length() > 0 ? sb.toString() : null;
     }
 
     public static void addQueryParam(StringBuilder sb, String name, Object value) {
@@ -87,15 +91,23 @@ public class URLUtils {
     public static String toUrl(String url, Map<String, Object> moreParameters) {
 	try {
 	    URI oldUri = new URI(url);
-	    String newQuery = oldUri.getQuery();
+	    String newQuery = oldUri.getRawQuery();
+	    String moreQuery = toQueryParams(moreParameters);
 
 	    if (newQuery == null) {
-		newQuery = toQueryParams(moreParameters);
-	    } else {
-		newQuery += '&' + toQueryParams(moreParameters);
+		newQuery = moreQuery;
+
+	    } else if (moreQuery != null) {
+		newQuery += ('&' + moreQuery);
 	    }
-	    URI newUri = new URI(oldUri.getScheme(), oldUri.getAuthority(), oldUri.getPath(), newQuery, oldUri.getFragment());
-	    return newUri.toString();
+
+	    URI newUri = new URI(oldUri.getScheme(), oldUri.getAuthority(), oldUri.getPath(), null, null);
+	    String newUrl = newUri.toString();
+
+	    if (newQuery != null) {
+		return newUrl + '?' + newQuery;
+	    }
+	    return newUrl;
 
 	} catch (URISyntaxException ex) {
 	    throw new IllegalArgumentException(ex);
