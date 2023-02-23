@@ -34,10 +34,16 @@ public class JwtToken implements Serializable {
 
     final JwtHeader header;
     final JwtPayload payload;
+    final String signature;
 
     public JwtToken(JwtHeader header, JwtPayload payload) {
+	this(header, payload, null);
+    }
+
+    public JwtToken(JwtHeader header, JwtPayload payload, String signature) {
 	this.header = Asserts.notNull(header);
 	this.payload = Asserts.notNull(payload);
+	this.signature = signature;
     }
 
     public JwtHeader getHeader() {
@@ -46,5 +52,9 @@ public class JwtToken implements Serializable {
 
     public JwtPayload getPayload() {
 	return this.payload;
+    }
+
+    public String getSignature() {
+	return this.signature;
     }
 }
