@@ -34,16 +34,22 @@ public class JwtToken implements Serializable {
 
     final JwtHeader header;
     final JwtPayload payload;
-    final String signature;
+
+    final String headerPart;
+    final String payloadPart;
+    final String signaturePart;
 
     public JwtToken(JwtHeader header, JwtPayload payload) {
-	this(header, payload, null);
+	this(header, payload, null, null, null);
     }
 
-    public JwtToken(JwtHeader header, JwtPayload payload, String signature) {
+    public JwtToken(JwtHeader header, JwtPayload payload, String headerPart, String payloadPart, String signaturePart) {
 	this.header = Asserts.notNull(header);
 	this.payload = Asserts.notNull(payload);
-	this.signature = signature;
+
+	this.headerPart = headerPart;
+	this.payloadPart = payloadPart;
+	this.signaturePart = signaturePart;
     }
 
     public JwtHeader getHeader() {
@@ -54,7 +60,15 @@ public class JwtToken implements Serializable {
 	return this.payload;
     }
 
-    public String getSignature() {
-	return this.signature;
+    public String getHeaderPart() {
+	return this.headerPart;
+    }
+
+    public String getPayloadPart() {
+	return this.payloadPart;
+    }
+
+    public String getSignaturePart() {
+	return this.signaturePart;
     }
 }

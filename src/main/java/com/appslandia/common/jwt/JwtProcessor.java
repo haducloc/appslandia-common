@@ -130,7 +130,7 @@ public class JwtProcessor extends InitializeObject {
 	String payloadJson = new String(BaseEncoder.BASE64_URL.decode(parts[1]), StandardCharsets.UTF_8);
 	JwtPayload payload = this.jsonProcessor.read(new StringReader(payloadJson), JwtPayload.class);
 
-	return new JwtToken(header, payload, parts[2]);
+	return new JwtToken(header, payload, parts[0], parts[1], parts[2]);
     }
 
     public JwtToken parseJwt(String jwt) throws JsonException {
@@ -149,7 +149,7 @@ public class JwtProcessor extends InitializeObject {
 	String payloadJson = new String(BaseEncoder.BASE64_URL.decode(parts[1]), StandardCharsets.UTF_8);
 	JwtPayload payload = this.jsonProcessor.read(new StringReader(payloadJson), JwtPayload.class);
 
-	return new JwtToken(header, payload, parts[2]);
+	return new JwtToken(header, payload, parts[0], parts[1], parts[2]);
     }
 
     public JsonProcessor getJsonProcessor() {
