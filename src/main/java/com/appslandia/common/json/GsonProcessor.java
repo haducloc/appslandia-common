@@ -96,6 +96,8 @@ public class GsonProcessor extends JsonProcessor {
 
     public static GsonBuilder newBuilder() {
 	GsonBuilder builder = new GsonBuilder();
+	builder.serializeNulls();
+
 	builder.setExclusionStrategies(new ExclusionStrategy() {
 
 	    @Override
