@@ -42,6 +42,6 @@ public @interface Json {
     Profile value();
 
     public enum Profile {
-	COMPACT, COMPACT_NULL, PRETTY, PRETTY_NULL
+	COMPACT, PRETTY
     }
 }

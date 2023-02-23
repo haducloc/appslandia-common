@@ -33,11 +33,7 @@ public class JsonLiteral extends AnnotationLiteral<Json> implements Json {
 
     public static final Json COMPACT = new JsonLiteral(Profile.COMPACT);
 
-    public static final Json COMPACT_NULL = new JsonLiteral(Profile.COMPACT_NULL);
-
     public static final Json PRETTY = new JsonLiteral(Profile.PRETTY);
-
-    public static final Json PRETTY_NULL = new JsonLiteral(Profile.PRETTY_NULL);
 
     private Profile profile;
 
