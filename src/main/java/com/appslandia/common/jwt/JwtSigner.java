@@ -59,16 +59,15 @@ public class JwtSigner extends InitializeObject {
 
 	// No ALG
 	if (this == NONE) {
-	    return JwtUtils.newBuilder(header, payload, 1).append(".").toString();
+	    return JwtUtils.toJwt(header, payload, "");
 	}
 
-	String dataToSign = JwtUtils.newBuilder(header, payload, 0).toString();
+	String dataToSign = JwtUtils.toData(header, payload);
 
 	// Signature
 	byte[] sig = this.signer.digest(dataToSign.getBytes(StandardCharsets.UTF_8));
-	String base64Sig = BaseEncoder.BASE64_URL.encode(sig);
 
-	return JwtUtils.newBuilder(header, payload, 1 + base64Sig.length()).append(".").append(base64Sig).toString();
+	return JwtUtils.toJwt(header, payload, BaseEncoder.BASE64_URL.encode(sig));
     }
 
     public boolean verify(String header, String payload, String signature) throws CryptoException {
@@ -81,7 +80,7 @@ public class JwtSigner extends InitializeObject {
 	    return signature.length() == 0;
 	}
 
-	String dataToSign = JwtUtils.newBuilder(header, payload, 0).toString();
+	String dataToSign = JwtUtils.toData(header, payload);
 	return this.signer.verify(dataToSign.getBytes(StandardCharsets.UTF_8), BaseEncoder.BASE64_URL.decode(signature));
     }
 

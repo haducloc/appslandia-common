@@ -53,8 +53,12 @@ public class JwtUtils {
 	return parts;
     }
 
-    public static StringBuilder newBuilder(String header, String payload, int signtureLen) {
-	return new StringBuilder(header.length() + 1 + payload.length() + signtureLen).append(header).append(".").append(payload);
+    public static String toData(String header, String payload) {
+	return new StringBuilder(header.length() + 1 + payload.length()).append(header).append('.').append(payload).toString();
+    }
+
+    public static String toJwt(String header, String payload, String signture) {
+	return new StringBuilder(header.length() + 1 + payload.length() + 1 + signture.length()).append(header).append('.').append(payload).append('.').append(signture).toString();
     }
 
     // number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC
