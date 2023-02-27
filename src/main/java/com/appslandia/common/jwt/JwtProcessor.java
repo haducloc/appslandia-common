@@ -71,7 +71,7 @@ public class JwtProcessor extends InitializeObject {
 	return new JwtPayload().setIssuer(this.issuer);
     }
 
-    public String toJwt(JwtToken jwt) throws CryptoException, JsonException, JwtException {
+    public String toJwt(JwtToken jwt) throws CryptoException, JsonException {
 	this.initialize();
 	Asserts.notNull(jwt);
 	Asserts.notNull(jwt.getHeader());
