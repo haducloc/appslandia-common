@@ -35,6 +35,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.ToNumberPolicy;
 
 /**
  *
@@ -97,6 +98,7 @@ public class GsonProcessor extends JsonProcessor {
     public static GsonBuilder newBuilder() {
 	GsonBuilder builder = new GsonBuilder();
 	builder.serializeNulls();
+	builder.setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE);
 
 	builder.setExclusionStrategies(new ExclusionStrategy() {
 

@@ -27,7 +27,6 @@ import org.junit.jupiter.api.Test;
 
 import com.appslandia.common.crypto.MacDigester;
 import com.appslandia.common.json.GsonProcessor;
-import com.google.gson.GsonBuilder;
 
 /**
  *
@@ -38,8 +37,7 @@ public class JwtSignerTest {
 
     @Test
     public void test() {
-	GsonBuilder gsonBuilder = JwtGson.newGsonBuilder();
-	GsonProcessor gsonProcessor = new GsonProcessor().setBuilder(gsonBuilder);
+	GsonProcessor gsonProcessor = new GsonProcessor();
 
 	JwtSigner jwtSigner = new JwtSigner().setJsonProcessor(gsonProcessor);
 	jwtSigner.setAlg("HS256").setSigner(new MacDigester().setAlgorithm("HmacSHA256").setSecret("secret".getBytes()));
@@ -69,8 +67,7 @@ public class JwtSignerTest {
 
     @Test
     public void test_none() {
-	GsonBuilder gsonBuilder = JwtGson.newGsonBuilder();
-	GsonProcessor gsonProcessor = new GsonProcessor().setBuilder(gsonBuilder);
+	GsonProcessor gsonProcessor = new GsonProcessor();
 
 	JwtSigner jwtSigner = new JwtSigner().setJsonProcessor(gsonProcessor);
 	jwtSigner.setIssuer("Issuer1");
