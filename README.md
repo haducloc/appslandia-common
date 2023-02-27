@@ -100,7 +100,7 @@ try (ConnectionImpl connScoped = new ConnectionImpl(javax.sql.DataSource)) {
   JwtSigner jwtSigner = new JwtSigner().setIssuer("Issuer1");
 
   // GsonProcessor or your JsonProcessor
-  jwtSigner.setJsonProcessor(new GsonProcessor().setBuilder(JwtGson.newGsonBuilder()));
+  jwtSigner.setJsonProcessor(new GsonProcessor());
   
   jwtSigner.setAlg("HS256").setSigner(new MacDigester().setAlgorithm("HmacSHA256").setSecret("secret".getBytes()));
 
