@@ -43,6 +43,8 @@ import com.appslandia.common.utils.STR;
  */
 public class JwtSigner extends InitializeObject {
 
+    static final String JWT_NONE_ALG = "none";
+
     protected JsonProcessor jsonProcessor;
 
     protected String type = "JWT";
@@ -59,7 +61,7 @@ public class JwtSigner extends InitializeObject {
 	if (this.signer != null) {
 	    Asserts.notNull(this.alg, "alg is required.");
 	} else {
-	    this.alg = null;
+	    this.alg = JWT_NONE_ALG;
 	}
 
 	Asserts.notNull(this.jsonProcessor, "jsonProcessor is required.");
@@ -74,11 +76,8 @@ public class JwtSigner extends InitializeObject {
 
     public JwtHeader newHeader() {
 	this.initialize();
-	JwtHeader header = new JwtHeader().setType(this.type);
+	JwtHeader header = new JwtHeader().setType(this.type).setAlgorithm(this.alg);
 
-	if (this.alg != null) {
-	    header.setAlgorithm(this.alg);
-	}
 	if (this.kid != null) {
 	    header.setKid(this.kid);
 	}
@@ -127,11 +126,11 @@ public class JwtSigner extends InitializeObject {
 	// Verify Signature
 	if (parts[2].length() == 0) {
 	    if (this.signer != null) {
-		throw new JwtException("JWT signature verification failed. No signature provided.");
+		throw new JwtException("No signature provided.");
 	    }
 	} else {
 	    if (this.signer == null) {
-		throw new JwtException("JWT signature verification failed. signer must be provided.");
+		throw new JwtException("signer must be provided.");
 	    }
 
 	    String dataToSign = JwtUtils.toData(parts[0], parts[1]);
@@ -145,13 +144,16 @@ public class JwtSigner extends InitializeObject {
 	JwtToken token = doParseJwt(parts);
 
 	if (!Objects.equals(this.type, token.getHeader().getType())) {
-	    throw new JwtException("JWT verification failed. typ didn't match.");
+	    throw new JwtException("typ didn't match.");
+	}
+	if (!Objects.equals(this.alg, token.getHeader().getAlgorithm())) {
+	    throw new JwtException("alg didn't match.");
 	}
 	if (!Objects.equals(this.kid, token.getHeader().getKid())) {
-	    throw new JwtException("JWT verification failed. kid didn't match.");
+	    throw new JwtException("kid didn't match.");
 	}
 	if (!Objects.equals(this.issuer, token.getPayload().getIssuer())) {
-	    throw new JwtException("JWT verification failed. iss didn't match.");
+	    throw new JwtException("iss didn't match.");
 	}
 	return token;
     }
