@@ -20,8 +20,9 @@
 
 package com.appslandia.common.jwt;
 
-import java.util.Arrays;
+import java.nio.charset.StandardCharsets;
 
+import com.appslandia.common.base.BaseEncoder;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.crypto.CryptoException;
 import com.appslandia.common.crypto.Digester;
@@ -35,8 +36,6 @@ import com.appslandia.common.utils.Asserts;
  *
  */
 public class JwtSigner extends InitializeObject {
-
-    private static final byte[] EMPTY_SIG = new byte[] {};
 
     public static final JwtSigner NONE = new JwtSigner().setAlg("none");
 
@@ -53,25 +52,37 @@ public class JwtSigner extends InitializeObject {
 	}
     }
 
-    public byte[] sign(byte[] message) throws CryptoException {
+    public String sign(String header, String payload) throws CryptoException {
 	this.initialize();
-	Asserts.notNull(message, "message is required.");
+	Asserts.notNull(header, "header is required.");
+	Asserts.notNull(payload, "payload is required.");
 
+	// No ALG
 	if (this == NONE) {
-	    return EMPTY_SIG;
+	    return JwtUtils.newBuilder(header, payload, 1).append(".").toString();
 	}
-	return this.signer.digest(message);
+
+	String dataToSign = JwtUtils.newBuilder(header, payload, 0).toString();
+
+	// Signature
+	byte[] sig = this.signer.digest(dataToSign.getBytes(StandardCharsets.UTF_8));
+	String base64Sig = BaseEncoder.BASE64_URL.encode(sig);
+
+	return JwtUtils.newBuilder(header, payload, 1 + base64Sig.length()).append(".").append(base64Sig).toString();
     }
 
-    public boolean verify(byte[] message, byte[] signature) throws CryptoException {
+    public boolean verify(String header, String payload, String signature) throws CryptoException {
 	this.initialize();
-	Asserts.notNull(message, "message is required.");
+	Asserts.notNull(header, "header is required.");
+	Asserts.notNull(payload, "payload is required.");
 	Asserts.notNull(signature, "signature is required.");
 
 	if (this == NONE) {
-	    return Arrays.equals(signature, EMPTY_SIG);
+	    return signature.length() == 0;
 	}
-	return this.signer.verify(message, signature);
+
+	String dataToSign = JwtUtils.newBuilder(header, payload, 0).toString();
+	return this.signer.verify(dataToSign.getBytes(StandardCharsets.UTF_8), BaseEncoder.BASE64_URL.decode(signature));
     }
 
     public String getAlg() {

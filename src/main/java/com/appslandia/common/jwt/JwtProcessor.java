@@ -77,23 +77,10 @@ public class JwtProcessor extends InitializeObject {
 	Asserts.notNull(jwt.getHeader());
 	Asserts.notNull(jwt.getPayload());
 
-	// Header
-	String base64Header = BaseEncoder.BASE64_URL.encode(this.jsonProcessor.toByteArray(jwt.getHeader()));
+	String header = BaseEncoder.BASE64_URL.encode(this.jsonProcessor.toByteArray(jwt.getHeader()));
+	String payload = BaseEncoder.BASE64_URL.encode(this.jsonProcessor.toByteArray(jwt.getPayload()));
 
-	// PAYLOAD
-	String base64Payload = BaseEncoder.BASE64_URL.encode(this.jsonProcessor.toByteArray(jwt.getPayload()));
-
-	// No ALG
-	if (this.jwtSigner == JwtSigner.NONE) {
-	    return newBuilder(base64Header, base64Payload, 1).append(".").toString();
-	}
-
-	// Signature
-	String dataToSign = newBuilder(base64Header, base64Payload, 0).toString();
-	String base64Sig = BaseEncoder.BASE64_URL.encode(this.jwtSigner.sign(dataToSign.getBytes(StandardCharsets.UTF_8)));
-
-	// JWT
-	return newBuilder(base64Header, base64Payload, 1 + base64Sig.length()).append(".").append(base64Sig).toString();
+	return this.jwtSigner.sign(header, payload);
     }
 
     public JwtToken verifyJwt(String jwt) throws CryptoException, JsonException, JwtException {
@@ -104,7 +91,6 @@ public class JwtProcessor extends InitializeObject {
 	Asserts.notNull(parts, () -> STR.fmt("The jwt '{}' is invalid format.", jwt));
 
 	// Verify Signature
-
 	if (parts[2] == null) {
 	    if (this.jwtSigner != JwtSigner.NONE) {
 		throw new JwtException("JWT signature verification failed.");
@@ -114,14 +100,10 @@ public class JwtProcessor extends InitializeObject {
 		throw new JwtException("JWT signature verification failed.");
 	    }
 
-	    // ALG
-	    String dataToSign = newBuilder(parts[0], parts[1], 0).toString();
-
-	    if (!this.jwtSigner.verify(dataToSign.getBytes(StandardCharsets.UTF_8), BaseEncoder.BASE64_URL.decode(parts[2]))) {
+	    if (!this.jwtSigner.verify(parts[0], parts[1], parts[2])) {
 		throw new JwtException("JWT signature verification failed.");
 	    }
 	}
-
 	return doParseJwt(parts);
     }
 
@@ -174,9 +156,5 @@ public class JwtProcessor extends InitializeObject {
 	assertNotInitialized();
 	this.issuer = issuer;
 	return this;
-    }
-
-    static StringBuilder newBuilder(String base64Header, String base64Payload, int signtureLen) {
-	return new StringBuilder(base64Header.length() + 1 + base64Payload.length() + signtureLen).append(base64Header).append(".").append(base64Payload);
     }
 }

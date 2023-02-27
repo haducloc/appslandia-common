@@ -53,6 +53,10 @@ public class JwtUtils {
 	return parts;
     }
 
+    public static StringBuilder newBuilder(String header, String payload, int signtureLen) {
+	return new StringBuilder(header.length() + 1 + payload.length() + signtureLen).append(header).append(".").append(payload);
+    }
+
     // number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC
     // date/time
     public static Long toNumericDate(Date value) {
