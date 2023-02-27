@@ -54,38 +54,13 @@ public class BasicMap extends MapWrapper<String, Object> {
 
     @Override
     public Object put(String key, Object value) {
-	throw new UnsupportedOperationException("Use set(key, value) instead.");
+	return this.map.put(key, value);
     }
 
     public BasicMap set(String key, Object value) {
 	Asserts.isTrue(isSupportedValue(value), "value is unsupported.");
 
 	this.map.put(key, value);
-	return this;
-    }
-
-    public BasicMap set(String key, String value) {
-	this.map.put(key, value);
-	return this;
-    }
-
-    public BasicMap set(String key, boolean value) {
-	this.map.put(key, Boolean.toString(value));
-	return this;
-    }
-
-    public BasicMap set(String key, int value) {
-	this.map.put(key, Integer.toString(value));
-	return this;
-    }
-
-    public BasicMap set(String key, long value) {
-	this.map.put(key, Long.toString(value));
-	return this;
-    }
-
-    public BasicMap set(String key, double value) {
-	this.map.put(key, Double.toString(value));
 	return this;
     }
 
