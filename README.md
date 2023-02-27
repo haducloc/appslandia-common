@@ -96,24 +96,24 @@ try (ConnectionImpl connScoped = new ConnectionImpl(javax.sql.DataSource)) {
 ```
 ### JWT
 ```java
-  // JwtProcessor
-  JwtProcessor processor = new JwtProcessor().setIssuer("Issuer1");
+  // JwtSigner
+  JwtSigner jwtSigner = new JwtSigner().setIssuer("Issuer1");
 
   // GsonProcessor or your JsonProcessor
-  processor.setJsonProcessor(new GsonProcessor().setBuilder(JwtGson.newGsonBuilder()));
+  jwtSigner.setJsonProcessor(new GsonProcessor().setBuilder(JwtGson.newGsonBuilder()));
   
-  processor.setJwtSigner(new JwtSigner().setAlg("HS256")
-  				.setSigner(new MacDigester().setAlgorithm("HmacSHA256").setSecret("secret")));
+  jwtSigner.setAlg("HS256").setSigner(new MacDigester().setAlgorithm("HmacSHA256").setSecret("secret".getBytes()));
 
   JwtHeader header = processor.newHeader();
   JwtPayload payload = processor.newPayload().setExpiresIn(1, TimeUnit.DAYS);
 
   // Serialize
-  String jwt = processor.toJwt(new JwtToken(header, payload));
+  String jwt = jwtSigner.toJwt(new JwtToken(header, payload));
   
   // Deserialize
-  JwtToken token = processor.parseJwt(jwt);
-  token.getHeader(); token.getPayload();
+  JwtToken token = jwtSigner.verifyJwt(jwt);
+  token.getHeader();
+  token.getPayload();
 ```
 
 ## License

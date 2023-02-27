@@ -45,7 +45,7 @@ public class JwtUtils {
 	String[] parts = JWT_SEP_PATTERN.split(token);
 
 	if (parts.length == 2) {
-	    return token.endsWith(".") ? new String[] { parts[0], parts[1], null } : null;
+	    return token.endsWith(".") ? new String[] { parts[0], parts[1], "" } : null;
 	}
 	if (parts.length != 3) {
 	    return null;

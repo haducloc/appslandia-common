@@ -28,11 +28,13 @@ import com.appslandia.common.base.BaseEncoder;
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.crypto.CryptoException;
+import com.appslandia.common.crypto.Digester;
+import com.appslandia.common.crypto.DsaDigester;
+import com.appslandia.common.crypto.MacDigester;
 import com.appslandia.common.json.JsonException;
 import com.appslandia.common.json.JsonProcessor;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
-import com.appslandia.common.utils.ValueUtils;
 
 /**
  *
@@ -42,18 +44,25 @@ import com.appslandia.common.utils.ValueUtils;
 public class JwtProcessor extends InitializeObject {
 
     protected JsonProcessor jsonProcessor;
-    protected JwtSigner jwtSigner;
 
     protected String type = "JWT";
-    protected String issuer;
+    private String alg;
     protected String kid;
+    protected String issuer;
+
+    private Digester signer;
 
     @Override
     protected void init() throws Exception {
 	Asserts.notNull(this.type, "type is required.");
-	Asserts.notNull(this.jsonProcessor, "jsonProcessor is required.");
 
-	this.jwtSigner = ValueUtils.valueOrAlt(this.jwtSigner, JwtSigner.NONE);
+	if (this.signer != null) {
+	    Asserts.notNull(this.alg, "alg is required.");
+	} else {
+	    this.alg = null;
+	}
+
+	Asserts.notNull(this.jsonProcessor, "jsonProcessor is required.");
     }
 
     @Override
@@ -61,15 +70,15 @@ public class JwtProcessor extends InitializeObject {
 	if (this.jsonProcessor != null) {
 	    this.jsonProcessor.destroy();
 	}
-	if (this.jwtSigner != null) {
-	    this.jwtSigner.destroy();
-	}
     }
 
     public JwtHeader newHeader() {
 	this.initialize();
-	JwtHeader header = new JwtHeader().setType(this.type).setAlgorithm(this.jwtSigner.getAlg());
+	JwtHeader header = new JwtHeader().setType(this.type);
 
+	if (this.alg != null) {
+	    header.setAlgorithm(this.alg);
+	}
 	if (this.kid != null) {
 	    header.setKid(this.kid);
 	}
@@ -95,7 +104,17 @@ public class JwtProcessor extends InitializeObject {
 	String header = BaseEncoder.BASE64_URL.encode(this.jsonProcessor.toByteArray(jwt.getHeader()));
 	String payload = BaseEncoder.BASE64_URL.encode(this.jsonProcessor.toByteArray(jwt.getPayload()));
 
-	return this.jwtSigner.sign(header, payload);
+	// No ALG
+	if (this.signer == null) {
+	    return JwtUtils.toJwt(header, payload, "");
+	}
+
+	String dataToSign = JwtUtils.toData(header, payload);
+
+	// Signature
+	byte[] sig = this.signer.digest(dataToSign.getBytes(StandardCharsets.UTF_8));
+
+	return JwtUtils.toJwt(header, payload, BaseEncoder.BASE64_URL.encode(sig));
     }
 
     public JwtToken verifyJwt(String jwt) throws CryptoException, JsonException, JwtException {
@@ -106,19 +125,23 @@ public class JwtProcessor extends InitializeObject {
 	Asserts.notNull(parts, () -> STR.fmt("The jwt '{}' is invalid format.", jwt));
 
 	// Verify Signature
-	if (parts[2] == null) {
-	    if (this.jwtSigner != JwtSigner.NONE) {
-		throw new JwtException("JWT signature verification failed. jwtSigner must be JwtSigner.NONE.");
+	if (parts[2].length() == 0) {
+	    if (this.signer != null) {
+		throw new JwtException("JWT signature verification failed. No signature provided.");
 	    }
 	} else {
-	    if (this.jwtSigner == JwtSigner.NONE) {
-		throw new JwtException("JWT signature verification failed. jwtSigner must be not JwtSigner.NONE.");
+	    if (this.signer == null) {
+		throw new JwtException("JWT signature verification failed. signer must be provided.");
 	    }
 
-	    if (!this.jwtSigner.verify(parts[0], parts[1], parts[2])) {
+	    String dataToSign = JwtUtils.toData(parts[0], parts[1]);
+
+	    if (!this.signer.verify(dataToSign.getBytes(StandardCharsets.UTF_8), BaseEncoder.BASE64_URL.decode(parts[2]))) {
 		throw new JwtException("JWT signature verification failed.");
 	    }
 	}
+
+	// JwtToken
 	JwtToken token = doParseJwt(parts);
 
 	if (!Objects.equals(this.type, token.getHeader().getType())) {
@@ -167,26 +190,33 @@ public class JwtProcessor extends InitializeObject {
 	return this;
     }
 
-    public JwtSigner getJwtSigner() {
-	this.initialize();
-	return this.jwtSigner;
-    }
-
-    public JwtProcessor setJwtSigner(JwtSigner jwtSigner) {
+    public JwtProcessor setSigner(MacDigester signer) {
 	assertNotInitialized();
-	this.jwtSigner = jwtSigner;
+	this.signer = signer;
 	return this;
     }
 
-    public JwtProcessor setIssuer(String issuer) {
+    public JwtProcessor setSigner(DsaDigester signer) {
 	assertNotInitialized();
-	this.issuer = issuer;
+	this.signer = signer;
+	return this;
+    }
+
+    public JwtProcessor setAlg(String alg) {
+	assertNotInitialized();
+	this.alg = alg;
 	return this;
     }
 
     public JwtProcessor setKid(String kid) {
 	assertNotInitialized();
 	this.kid = kid;
+	return this;
+    }
+
+    public JwtProcessor setIssuer(String issuer) {
+	assertNotInitialized();
+	this.issuer = issuer;
 	return this;
     }
 }

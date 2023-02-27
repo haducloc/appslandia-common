@@ -34,25 +34,25 @@ import com.google.gson.GsonBuilder;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JwtProcessorTest {
+public class JwtSignerTest {
 
     @Test
     public void test() {
 	GsonBuilder gsonBuilder = JwtGson.newGsonBuilder();
 	GsonProcessor gsonProcessor = new GsonProcessor().setBuilder(gsonBuilder);
 
-	JwtProcessor jwtProcessor = new JwtProcessor().setJsonProcessor(gsonProcessor);
-	jwtProcessor.setJwtSigner(new JwtSigner().setAlg("HS256").setSigner(new MacDigester().setAlgorithm("HmacSHA256").setSecret("secret".getBytes())));
-	jwtProcessor.setIssuer("Issuer1");
+	JwtProcessor jwtSigner = new JwtProcessor().setJsonProcessor(gsonProcessor);
+	jwtSigner.setAlg("HS256").setSigner(new MacDigester().setAlgorithm("HmacSHA256").setSecret("secret".getBytes()));
+	jwtSigner.setIssuer("Issuer1");
 
-	JwtHeader header = jwtProcessor.newHeader();
-	JwtPayload payload = jwtProcessor.newPayload().setExpiresIn(1, TimeUnit.DAYS);
+	JwtHeader header = jwtSigner.newHeader();
+	JwtPayload payload = jwtSigner.newPayload().setExpiresIn(1, TimeUnit.DAYS);
 
 	try {
-	    String jwt = jwtProcessor.toJwt(new JwtToken(header, payload));
+	    String jwt = jwtSigner.toJwt(new JwtToken(header, payload));
 	    Assertions.assertNotNull(jwt);
 
-	    JwtToken token = jwtProcessor.verifyJwt(jwt);
+	    JwtToken token = jwtSigner.verifyJwt(jwt);
 
 	    Assertions.assertNotNull(token);
 	    Assertions.assertNotNull(token.getHeader());
@@ -72,17 +72,17 @@ public class JwtProcessorTest {
 	GsonBuilder gsonBuilder = JwtGson.newGsonBuilder();
 	GsonProcessor gsonProcessor = new GsonProcessor().setBuilder(gsonBuilder);
 
-	JwtProcessor jwtProcessor = new JwtProcessor().setJsonProcessor(gsonProcessor);
-	jwtProcessor.setIssuer("Issuer1");
+	JwtProcessor jwtSigner = new JwtProcessor().setJsonProcessor(gsonProcessor);
+	jwtSigner.setIssuer("Issuer1");
 
-	JwtHeader header = jwtProcessor.newHeader();
-	JwtPayload payload = jwtProcessor.newPayload().setExpiresIn(1, TimeUnit.DAYS);
+	JwtHeader header = jwtSigner.newHeader();
+	JwtPayload payload = jwtSigner.newPayload().setExpiresIn(1, TimeUnit.DAYS);
 
 	try {
-	    String jwt = jwtProcessor.toJwt(new JwtToken(header, payload));
+	    String jwt = jwtSigner.toJwt(new JwtToken(header, payload));
 	    Assertions.assertNotNull(jwt);
 
-	    JwtToken token = jwtProcessor.verifyJwt(jwt);
+	    JwtToken token = jwtSigner.verifyJwt(jwt);
 
 	    Assertions.assertNotNull(token);
 	    Assertions.assertNotNull(token.getHeader());
