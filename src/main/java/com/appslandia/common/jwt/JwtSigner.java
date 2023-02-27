@@ -41,7 +41,7 @@ import com.appslandia.common.utils.STR;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JwtProcessor extends InitializeObject {
+public class JwtSigner extends InitializeObject {
 
     protected JsonProcessor jsonProcessor;
 
@@ -184,37 +184,37 @@ public class JwtProcessor extends InitializeObject {
 	return this.jsonProcessor;
     }
 
-    public JwtProcessor setJsonProcessor(JsonProcessor jsonProcessor) {
+    public JwtSigner setJsonProcessor(JsonProcessor jsonProcessor) {
 	assertNotInitialized();
 	this.jsonProcessor = jsonProcessor;
 	return this;
     }
 
-    public JwtProcessor setSigner(MacDigester signer) {
+    public JwtSigner setSigner(MacDigester signer) {
 	assertNotInitialized();
 	this.signer = signer;
 	return this;
     }
 
-    public JwtProcessor setSigner(DsaDigester signer) {
+    public JwtSigner setSigner(DsaDigester signer) {
 	assertNotInitialized();
 	this.signer = signer;
 	return this;
     }
 
-    public JwtProcessor setAlg(String alg) {
+    public JwtSigner setAlg(String alg) {
 	assertNotInitialized();
 	this.alg = alg;
 	return this;
     }
 
-    public JwtProcessor setKid(String kid) {
+    public JwtSigner setKid(String kid) {
 	assertNotInitialized();
 	this.kid = kid;
 	return this;
     }
 
-    public JwtProcessor setIssuer(String issuer) {
+    public JwtSigner setIssuer(String issuer) {
 	assertNotInitialized();
 	this.issuer = issuer;
 	return this;

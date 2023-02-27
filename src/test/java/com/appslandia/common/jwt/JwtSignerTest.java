@@ -41,7 +41,7 @@ public class JwtSignerTest {
 	GsonBuilder gsonBuilder = JwtGson.newGsonBuilder();
 	GsonProcessor gsonProcessor = new GsonProcessor().setBuilder(gsonBuilder);
 
-	JwtProcessor jwtSigner = new JwtProcessor().setJsonProcessor(gsonProcessor);
+	JwtSigner jwtSigner = new JwtSigner().setJsonProcessor(gsonProcessor);
 	jwtSigner.setAlg("HS256").setSigner(new MacDigester().setAlgorithm("HmacSHA256").setSecret("secret".getBytes()));
 	jwtSigner.setIssuer("Issuer1");
 
@@ -72,7 +72,7 @@ public class JwtSignerTest {
 	GsonBuilder gsonBuilder = JwtGson.newGsonBuilder();
 	GsonProcessor gsonProcessor = new GsonProcessor().setBuilder(gsonBuilder);
 
-	JwtProcessor jwtSigner = new JwtProcessor().setJsonProcessor(gsonProcessor);
+	JwtSigner jwtSigner = new JwtSigner().setJsonProcessor(gsonProcessor);
 	jwtSigner.setIssuer("Issuer1");
 
 	JwtHeader header = jwtSigner.newHeader();
