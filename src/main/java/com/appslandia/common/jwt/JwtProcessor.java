@@ -22,6 +22,7 @@ package com.appslandia.common.jwt;
 
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 import com.appslandia.common.base.BaseEncoder;
 import com.appslandia.common.base.DestroyException;
@@ -42,10 +43,14 @@ public class JwtProcessor extends InitializeObject {
 
     protected JsonProcessor jsonProcessor;
     protected JwtSigner jwtSigner;
+
+    protected String type = "JWT";
     protected String issuer;
+    protected String kid;
 
     @Override
     protected void init() throws Exception {
+	Asserts.notNull(this.type, "type is required.");
 	Asserts.notNull(this.jsonProcessor, "jsonProcessor is required.");
 
 	this.jwtSigner = ValueUtils.valueOrAlt(this.jwtSigner, JwtSigner.NONE);
@@ -63,12 +68,22 @@ public class JwtProcessor extends InitializeObject {
 
     public JwtHeader newHeader() {
 	this.initialize();
-	return new JwtHeader().setType("JWT").setAlgorithm(this.jwtSigner.getAlg());
+	JwtHeader header = new JwtHeader().setType(this.type).setAlgorithm(this.jwtSigner.getAlg());
+
+	if (this.kid != null) {
+	    header.setKid(this.kid);
+	}
+	return header;
     }
 
     public JwtPayload newPayload() {
 	this.initialize();
-	return new JwtPayload().setIssuer(this.issuer);
+	JwtPayload payload = new JwtPayload();
+
+	if (this.issuer != null) {
+	    payload.setIssuer(this.issuer);
+	}
+	return payload;
     }
 
     public String toJwt(JwtToken jwt) throws CryptoException, JsonException {
@@ -93,18 +108,29 @@ public class JwtProcessor extends InitializeObject {
 	// Verify Signature
 	if (parts[2] == null) {
 	    if (this.jwtSigner != JwtSigner.NONE) {
-		throw new JwtException("JWT signature verification failed.");
+		throw new JwtException("JWT signature verification failed. jwtSigner must be JwtSigner.NONE.");
 	    }
 	} else {
 	    if (this.jwtSigner == JwtSigner.NONE) {
-		throw new JwtException("JWT signature verification failed.");
+		throw new JwtException("JWT signature verification failed. jwtSigner must be not JwtSigner.NONE.");
 	    }
 
 	    if (!this.jwtSigner.verify(parts[0], parts[1], parts[2])) {
 		throw new JwtException("JWT signature verification failed.");
 	    }
 	}
-	return doParseJwt(parts);
+	JwtToken token = doParseJwt(parts);
+
+	if (!Objects.equals(this.type, token.getHeader().getType())) {
+	    throw new JwtException("JWT verification failed. typ didn't match.");
+	}
+	if (!Objects.equals(this.kid, token.getHeader().getKid())) {
+	    throw new JwtException("JWT verification failed. kid didn't match.");
+	}
+	if (!Objects.equals(this.issuer, token.getPayload().getIssuer())) {
+	    throw new JwtException("JWT verification failed. iss didn't match.");
+	}
+	return token;
     }
 
     public JwtToken parseJwt(String jwt) throws JsonException {
@@ -155,6 +181,12 @@ public class JwtProcessor extends InitializeObject {
     public JwtProcessor setIssuer(String issuer) {
 	assertNotInitialized();
 	this.issuer = issuer;
+	return this;
+    }
+
+    public JwtProcessor setKid(String kid) {
+	assertNotInitialized();
+	this.kid = kid;
 	return this;
     }
 }

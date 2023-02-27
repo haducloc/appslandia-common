@@ -41,7 +41,6 @@ public class JwtSigner extends InitializeObject {
 
     private String alg;
     private Digester signer;
-    private String kid;
 
     @Override
     protected void init() throws Exception {
@@ -112,17 +111,6 @@ public class JwtSigner extends InitializeObject {
 	return this;
     }
 
-    public String getKid() {
-	this.initialize();
-	return this.kid;
-    }
-
-    public JwtSigner setKid(String kid) {
-	assertNotInitialized();
-	this.kid = kid;
-	return this;
-    }
-
     public JwtSigner copy() {
 	if (this == NONE) {
 	    return NONE;
@@ -132,7 +120,6 @@ public class JwtSigner extends InitializeObject {
 	if (this.signer != null) {
 	    impl.signer = this.signer.copy();
 	}
-	impl.kid = this.kid;
 	return impl;
     }
 }
