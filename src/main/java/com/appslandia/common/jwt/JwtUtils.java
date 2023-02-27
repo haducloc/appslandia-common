@@ -20,13 +20,7 @@
 
 package com.appslandia.common.jwt;
 
-import java.lang.reflect.Array;
-import java.math.BigDecimal;
-import java.time.temporal.Temporal;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import com.appslandia.common.utils.Asserts;
@@ -90,65 +84,5 @@ public class JwtUtils {
 	    return null;
 	}
 	return new Date(numericDate * 1000);
-    }
-
-    public static boolean isSupportedValue(Object value) {
-	Asserts.notNull(value);
-
-	if (value instanceof List) {
-	    return validateList((List<?>) value);
-	}
-	if (value instanceof Map) {
-	    return validateMap((Map<?, ?>) value);
-	}
-	Class<?> type = value.getClass();
-	if (type.isArray()) {
-	    return validateArray(value);
-	}
-	return isBasicType(type);
-    }
-
-    private static boolean validateMap(Map<?, ?> map) {
-	for (Entry<?, ?> entry : map.entrySet()) {
-	    // Key
-	    if ((entry.getKey() == null) || (entry.getKey().getClass() != String.class)) {
-		return false;
-	    }
-
-	    // Value
-	    if ((entry.getValue() != null) && !isSupportedValue(entry.getValue())) {
-		return false;
-	    }
-	}
-	return true;
-    }
-
-    private static boolean validateList(List<?> list) {
-	for (Object value : list) {
-
-	    // Value
-	    if ((value != null) && !isSupportedValue(value)) {
-		return false;
-	    }
-	}
-	return true;
-    }
-
-    private static boolean validateArray(Object array) {
-	int len = Array.getLength(array);
-	for (int i = 0; i < len; i++) {
-	    Object value = Array.get(array, i);
-
-	    // Value
-	    if ((value != null) && !isSupportedValue(value)) {
-		return false;
-	    }
-	}
-	return true;
-    }
-
-    private static boolean isBasicType(Class<?> c) {
-	return (c == String.class) || (c == Byte.class) || (c == Short.class) || (c == Integer.class) || (c == Long.class) || (c == Float.class) || (c == Double.class)
-		|| (c == BigDecimal.class) || (c == Boolean.class) || (c == Character.class) || Date.class.isAssignableFrom(c) || Temporal.class.isAssignableFrom(c);
     }
 }

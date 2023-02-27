@@ -25,16 +25,14 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.appslandia.common.base.AssertException;
-import com.appslandia.common.base.MapWrapper;
-import com.appslandia.common.utils.Asserts;
-import com.appslandia.common.utils.STR;
+import com.appslandia.common.base.BasicMap;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public abstract class JwtClaims extends MapWrapper<String, Object> {
+public abstract class JwtClaims extends BasicMap {
     private static final long serialVersionUID = 1L;
 
     public JwtClaims() {
@@ -45,38 +43,19 @@ public abstract class JwtClaims extends MapWrapper<String, Object> {
 	super(map);
     }
 
-    @Override
-    public Object put(String key, Object value) {
-	Asserts.notNull(key);
-
-	if (value == null) {
-	    return this.remove(key);
-	}
-	Asserts.isTrue(JwtUtils.isSupportedValue(value), "value is unsupported.");
-	return super.put(key, value);
-    }
-
-    public JwtClaims set(String key, Object value) {
-	put(key, value);
-	return this;
-    }
-
     public Date getNumericDate(String key) {
 	Number nd = (Number) this.get(key);
 	return (nd != null) ? JwtUtils.toDate(nd.longValue()) : null;
     }
 
     public JwtClaims setNumericDate(String key, Date value) {
-	return this.set(key, JwtUtils.toNumericDate(value));
+	set(key, JwtUtils.toNumericDate(value));
+	return this;
     }
 
     public JwtClaims setNumericDate(String key, long timeInMs) {
-	return this.set(key, JwtUtils.toNumericDate(timeInMs));
-    }
-
-    public Object getRequired(String key) {
-	Object obj = this.get(key);
-	return Asserts.notNull(obj, () -> STR.fmt("No value associated with key '{}'.", key));
+	set(key, JwtUtils.toNumericDate(timeInMs));
+	return this;
     }
 
     public Date getDate(String key) {
