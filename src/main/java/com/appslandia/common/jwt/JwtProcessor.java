@@ -122,15 +122,7 @@ public class JwtProcessor extends InitializeObject {
 	    }
 	}
 
-	// Header
-	String headerJson = new String(BaseEncoder.BASE64_URL.decode(parts[0]), StandardCharsets.UTF_8);
-	JwtHeader header = this.jsonProcessor.read(new StringReader(headerJson), JwtHeader.class);
-
-	// PAYLOAD
-	String payloadJson = new String(BaseEncoder.BASE64_URL.decode(parts[1]), StandardCharsets.UTF_8);
-	JwtPayload payload = this.jsonProcessor.read(new StringReader(payloadJson), JwtPayload.class);
-
-	return new JwtToken(header, payload, parts[0], parts[1], parts[2]);
+	return doParseJwt(parts);
     }
 
     public JwtToken parseJwt(String jwt) throws JsonException {
@@ -141,15 +133,19 @@ public class JwtProcessor extends InitializeObject {
 	String[] parts = JwtUtils.parseParts(jwt);
 	Asserts.notNull(parts, () -> STR.fmt("The jwt '{}' is invalid format.", jwt));
 
+	return doParseJwt(parts);
+    }
+
+    protected JwtToken doParseJwt(String[] jwtParts) throws JsonException {
 	// Header
-	String headerJson = new String(BaseEncoder.BASE64_URL.decode(parts[0]), StandardCharsets.UTF_8);
+	String headerJson = new String(BaseEncoder.BASE64_URL.decode(jwtParts[0]), StandardCharsets.UTF_8);
 	JwtHeader header = this.jsonProcessor.read(new StringReader(headerJson), JwtHeader.class);
 
 	// PAYLOAD
-	String payloadJson = new String(BaseEncoder.BASE64_URL.decode(parts[1]), StandardCharsets.UTF_8);
+	String payloadJson = new String(BaseEncoder.BASE64_URL.decode(jwtParts[1]), StandardCharsets.UTF_8);
 	JwtPayload payload = this.jsonProcessor.read(new StringReader(payloadJson), JwtPayload.class);
 
-	return new JwtToken(header, payload, parts[0], parts[1], parts[2]);
+	return new JwtToken(header, payload, jwtParts[0], jwtParts[1], jwtParts[2]);
     }
 
     public JsonProcessor getJsonProcessor() {
