@@ -193,6 +193,9 @@ public class JwtSigner extends InitializeObject {
     public JwtSigner setSigner(MacDigester signer) {
 	assertNotInitialized();
 	this.signer = signer;
+	if (signer != null) {
+	    this.alg = parseJwtAlg(signer.getAlgorithm());
+	}
 	return this;
     }
 
@@ -218,5 +221,20 @@ public class JwtSigner extends InitializeObject {
 	assertNotInitialized();
 	this.issuer = issuer;
 	return this;
+    }
+
+    static String parseJwtAlg(String macAlg) {
+	switch (macAlg) {
+	case "HmacSHA256":
+	    return "HS256";
+
+	case "HmacSHA384":
+	    return "HS384";
+
+	case "HmacSHA512":
+	    return "HS512";
+	default:
+	    return null;
+	}
     }
 }
