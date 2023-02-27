@@ -121,10 +121,20 @@ public class DsaDigester extends InitializeObject implements Digester {
 	throw new UnsupportedOperationException();
     }
 
+    public String getAlgorithm() {
+	this.initialize();
+	return this.algorithm;
+    }
+
     public DsaDigester setAlgorithm(String algorithm) {
 	assertNotInitialized();
 	this.algorithm = algorithm;
 	return this;
+    }
+
+    public String getProvider() {
+	this.initialize();
+	return this.provider;
     }
 
     public DsaDigester setProvider(String provider) {

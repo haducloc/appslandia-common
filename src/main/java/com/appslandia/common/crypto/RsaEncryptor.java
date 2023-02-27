@@ -135,10 +135,20 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 	throw new UnsupportedOperationException();
     }
 
+    public String getTransformation() {
+	this.initialize();
+	return this.transformation;
+    }
+
     public RsaEncryptor setTransformation(String transformation) {
 	this.assertNotInitialized();
 	this.transformation = transformation;
 	return this;
+    }
+
+    public String getProvider() {
+	this.initialize();
+	return this.provider;
     }
 
     public RsaEncryptor setProvider(String provider) {

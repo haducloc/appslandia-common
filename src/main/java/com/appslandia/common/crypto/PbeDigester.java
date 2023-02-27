@@ -145,10 +145,20 @@ public class PbeDigester extends PbeObject implements Digester {
 	}
     }
 
+    public String getAlgorithm() {
+	this.initialize();
+	return this.algorithm;
+    }
+
     public PbeDigester setAlgorithm(String algorithm) {
 	this.assertNotInitialized();
 	this.algorithm = algorithm;
 	return this;
+    }
+
+    public String getProvider() {
+	this.initialize();
+	return this.provider;
     }
 
     public PbeDigester setProvider(String provider) {

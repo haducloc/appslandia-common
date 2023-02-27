@@ -100,10 +100,20 @@ public class MacDigester extends InitializeObject implements Digester {
 	throw new UnsupportedOperationException();
     }
 
+    public String getAlgorithm() {
+	this.initialize();
+	return this.algorithm;
+    }
+
     public MacDigester setAlgorithm(String algorithm) {
 	this.assertNotInitialized();
 	this.algorithm = algorithm;
 	return this;
+    }
+
+    public String getProvider() {
+	this.initialize();
+	return this.provider;
     }
 
     public MacDigester setProvider(String provider) {

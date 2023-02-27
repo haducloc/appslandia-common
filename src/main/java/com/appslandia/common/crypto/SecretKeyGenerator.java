@@ -86,10 +86,20 @@ public class SecretKeyGenerator extends InitializeObject {
 	return key;
     }
 
+    public String getAlgorithm() {
+	this.initialize();
+	return this.algorithm;
+    }
+
     public SecretKeyGenerator setAlgorithm(String algorithm) {
 	this.assertNotInitialized();
 	this.algorithm = algorithm;
 	return this;
+    }
+
+    public String getProvider() {
+	this.initialize();
+	return this.provider;
     }
 
     public SecretKeyGenerator setProvider(String provider) {

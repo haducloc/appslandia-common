@@ -98,10 +98,20 @@ public class DigesterImpl extends InitializeObject implements Digester {
 	throw new UnsupportedOperationException();
     }
 
+    public String getAlgorithm() {
+	this.initialize();
+	return this.algorithm;
+    }
+
     public DigesterImpl setAlgorithm(String algorithm) {
 	this.assertNotInitialized();
 	this.algorithm = algorithm;
 	return this;
+    }
+
+    public String getProvider() {
+	this.initialize();
+	return this.provider;
     }
 
     public DigesterImpl setProvider(String provider) {

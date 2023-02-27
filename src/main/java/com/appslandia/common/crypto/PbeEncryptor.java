@@ -203,10 +203,20 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	}
     }
 
+    public String getTransformation() {
+	this.initialize();
+	return this.transformation;
+    }
+
     public PbeEncryptor setTransformation(String transformation) {
 	this.assertNotInitialized();
 	this.transformation = transformation;
 	return this;
+    }
+
+    public String getProvider() {
+	this.initialize();
+	return this.provider;
     }
 
     public PbeEncryptor setProvider(String provider) {
