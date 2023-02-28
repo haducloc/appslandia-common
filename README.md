@@ -111,7 +111,9 @@ try (ConnectionImpl connScoped = new ConnectionImpl(javax.sql.DataSource)) {
   String jwt = jwtSigner.toJwt(new JwtToken(header, payload));
   
   // Deserialize
-  JwtToken token = jwtSigner.verifyJwt(jwt);
+  JwtToken token = jwtSigner.parseJwt(jwt);
+  jwtSigner.verifyJwt(token);
+  
   token.getHeader();
   token.getPayload();
 ```
