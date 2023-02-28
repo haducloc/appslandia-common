@@ -133,7 +133,7 @@ public class JwtSigner extends InitializeObject {
 	verifyFields(jwt);
 
 	// Verify Signature
-	if (jwt.getSignaturePart().isBlank()) {
+	if (jwt.getSignaturePart().isEmpty()) {
 	    if (this.signer != null) {
 		throw new JwtException("signature is required.");
 	    }
