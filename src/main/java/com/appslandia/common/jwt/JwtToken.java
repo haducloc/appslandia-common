@@ -40,16 +40,21 @@ public class JwtToken implements Serializable {
     final String signaturePart;
 
     public JwtToken(JwtHeader header, JwtPayload payload) {
-	this(header, payload, null, null, null);
+	this.header = Asserts.notNull(header);
+	this.payload = Asserts.notNull(payload);
+
+	this.headerPart = null;
+	this.payloadPart = null;
+	this.signaturePart = null;
     }
 
     public JwtToken(JwtHeader header, JwtPayload payload, String headerPart, String payloadPart, String signaturePart) {
 	this.header = Asserts.notNull(header);
 	this.payload = Asserts.notNull(payload);
 
-	this.headerPart = headerPart;
-	this.payloadPart = payloadPart;
-	this.signaturePart = signaturePart;
+	this.headerPart = Asserts.notNull(headerPart);
+	this.payloadPart = Asserts.notNull(payloadPart);
+	this.signaturePart = Asserts.notNull(signaturePart);
     }
 
     public JwtHeader getHeader() {

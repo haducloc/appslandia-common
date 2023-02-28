@@ -100,6 +100,9 @@ public class JwtSigner extends InitializeObject {
 	Asserts.notNull(jwt.getHeader());
 	Asserts.notNull(jwt.getPayload());
 
+	// Verify fields
+	verifyFields(jwt);
+
 	String header = BaseEncoder.BASE64_URL.encode(this.jsonProcessor.toByteArray(jwt.getHeader()));
 	String payload = BaseEncoder.BASE64_URL.encode(this.jsonProcessor.toByteArray(jwt.getPayload()));
 
@@ -116,69 +119,68 @@ public class JwtSigner extends InitializeObject {
 	return JwtUtils.toJwt(header, payload, BaseEncoder.BASE64_URL.encode(sig));
     }
 
-    public JwtToken verifyJwt(String jwt) throws CryptoException, JsonException, JwtException {
+    public JwtToken verifyJwt(JwtToken jwt) throws CryptoException, JwtException {
 	this.initialize();
 	Asserts.notNull(jwt);
+	Asserts.notNull(jwt.getHeader());
+	Asserts.notNull(jwt.getPayload());
 
-	String[] parts = JwtUtils.parseParts(jwt);
-	Asserts.notNull(parts, () -> STR.fmt("The jwt '{}' is invalid format.", jwt));
+	Asserts.notNull(jwt.getHeaderPart());
+	Asserts.notNull(jwt.getPayloadPart());
+	Asserts.notNull(jwt.getSignaturePart());
+
+	// Verify fields
+	verifyFields(jwt);
 
 	// Verify Signature
-	if (parts[2].length() == 0) {
+	if (jwt.getSignaturePart().isBlank()) {
 	    if (this.signer != null) {
-		throw new JwtException("No signature provided.");
+		throw new JwtException("signature is required.");
 	    }
 	} else {
 	    if (this.signer == null) {
-		throw new JwtException("signer must be provided.");
+		throw new JwtException("signer is required.");
 	    }
+	    String dataToSign = JwtUtils.toData(jwt.getHeaderPart(), jwt.getPayloadPart());
 
-	    String dataToSign = JwtUtils.toData(parts[0], parts[1]);
-
-	    if (!this.signer.verify(dataToSign.getBytes(StandardCharsets.UTF_8), BaseEncoder.BASE64_URL.decode(parts[2]))) {
+	    if (!this.signer.verify(dataToSign.getBytes(StandardCharsets.UTF_8), BaseEncoder.BASE64_URL.decode(jwt.getSignaturePart()))) {
 		throw new JwtException("JWT signature verification failed.");
 	    }
 	}
-
-	// JwtToken
-	JwtToken token = doParseJwt(parts);
-
-	if (!Objects.equals(this.type, token.getHeader().getType())) {
-	    throw new JwtException("typ didn't match.");
-	}
-	if (!Objects.equals(this.alg, token.getHeader().getAlgorithm())) {
-	    throw new JwtException("alg didn't match.");
-	}
-	if (!Objects.equals(this.kid, token.getHeader().getKid())) {
-	    throw new JwtException("kid didn't match.");
-	}
-	if (!Objects.equals(this.issuer, token.getPayload().getIssuer())) {
-	    throw new JwtException("iss didn't match.");
-	}
-	return token;
+	return jwt;
     }
 
     public JwtToken parseJwt(String jwt) throws JsonException {
 	this.initialize();
-
 	Asserts.notNull(jwt);
 
 	String[] parts = JwtUtils.parseParts(jwt);
 	Asserts.notNull(parts, () -> STR.fmt("The jwt '{}' is invalid format.", jwt));
 
-	return doParseJwt(parts);
-    }
-
-    protected JwtToken doParseJwt(String[] jwtParts) throws JsonException {
 	// Header
-	String headerJson = new String(BaseEncoder.BASE64_URL.decode(jwtParts[0]), StandardCharsets.UTF_8);
+	String headerJson = new String(BaseEncoder.BASE64_URL.decode(parts[0]), StandardCharsets.UTF_8);
 	JwtHeader header = this.jsonProcessor.read(new StringReader(headerJson), JwtHeader.class);
 
 	// PAYLOAD
-	String payloadJson = new String(BaseEncoder.BASE64_URL.decode(jwtParts[1]), StandardCharsets.UTF_8);
+	String payloadJson = new String(BaseEncoder.BASE64_URL.decode(parts[1]), StandardCharsets.UTF_8);
 	JwtPayload payload = this.jsonProcessor.read(new StringReader(payloadJson), JwtPayload.class);
 
-	return new JwtToken(header, payload, jwtParts[0], jwtParts[1], jwtParts[2]);
+	return new JwtToken(header, payload, parts[0], parts[1], parts[2]);
+    }
+
+    protected void verifyFields(JwtToken jwt) throws JwtException {
+	if (!Objects.equals(this.type, jwt.getHeader().getType())) {
+	    throw new JwtException("type doesn't match.");
+	}
+	if (!Objects.equals(this.alg, jwt.getHeader().getAlgorithm())) {
+	    throw new JwtException("algorithm doesn't match.");
+	}
+	if (!Objects.equals(this.kid, jwt.getHeader().getKid())) {
+	    throw new JwtException("kid doesn't match.");
+	}
+	if (!Objects.equals(this.issuer, jwt.getPayload().getIssuer())) {
+	    throw new JwtException("issuer doesn't match.");
+	}
     }
 
     public JsonProcessor getJsonProcessor() {

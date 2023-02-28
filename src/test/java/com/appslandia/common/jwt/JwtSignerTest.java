@@ -50,7 +50,8 @@ public class JwtSignerTest {
 	    String jwt = jwtSigner.toJwt(new JwtToken(header, payload));
 	    Assertions.assertNotNull(jwt);
 
-	    JwtToken token = jwtSigner.verifyJwt(jwt);
+	    JwtToken token = jwtSigner.parseJwt(jwt);
+	    jwtSigner.verifyJwt(token);
 
 	    Assertions.assertNotNull(token);
 	    Assertions.assertNotNull(token.getHeader());
@@ -79,7 +80,8 @@ public class JwtSignerTest {
 	    String jwt = jwtSigner.toJwt(new JwtToken(header, payload));
 	    Assertions.assertNotNull(jwt);
 
-	    JwtToken token = jwtSigner.verifyJwt(jwt);
+	    JwtToken token = jwtSigner.parseJwt(jwt);
+	    jwtSigner.verifyJwt(token);
 
 	    Assertions.assertNotNull(token);
 	    Assertions.assertNotNull(token.getHeader());
