@@ -169,23 +169,25 @@ public class JwtSigner extends InitializeObject {
     }
 
     protected void verifyFields(JwtToken jwt) throws JwtException {
+	// typ
 	if (!Objects.equals(this.type, jwt.getHeader().getType())) {
 	    throw new JwtException("type doesn't match.");
 	}
+
+	// alg
 	if (!Objects.equals(this.alg, jwt.getHeader().getAlgorithm())) {
 	    throw new JwtException("algorithm doesn't match.");
 	}
+
+	// kid
 	if (!Objects.equals(this.kid, jwt.getHeader().getKid())) {
 	    throw new JwtException("kid doesn't match.");
 	}
+
+	// iss
 	if (!Objects.equals(this.issuer, jwt.getPayload().getIssuer())) {
 	    throw new JwtException("issuer doesn't match.");
 	}
-    }
-
-    public JsonProcessor getJsonProcessor() {
-	this.initialize();
-	return this.jsonProcessor;
     }
 
     public JwtSigner setJsonProcessor(JsonProcessor jsonProcessor) {
