@@ -124,20 +124,18 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	this.initialize();
 
 	Asserts.notNull(message, "message is required.");
-	if (isIVSpec()) {
-	    Asserts.isTrue(message.length >= this.getIVSize() + this.saltSize, "message is invalid.");
-	} else {
-	    Asserts.isTrue(message.length >= this.saltSize, "message is invalid.");
-	}
 
 	byte[] salt = new byte[this.saltSize];
 	byte[] iv = isIVSpec() ? new byte[this.getIVSize()] : null;
 
 	if (iv == null) {
+	    Asserts.isTrue(message.length >= this.saltSize, "message is invalid.");
 	    ArrayUtils.copy(message, salt);
 	} else {
+	    Asserts.isTrue(message.length >= this.getIVSize() + this.saltSize, "message is invalid.");
 	    ArrayUtils.copy(message, iv, salt);
 	}
+
 	SecretKey secretKey = buildSecretKey(salt, this.algorithms[0]);
 
 	try {
