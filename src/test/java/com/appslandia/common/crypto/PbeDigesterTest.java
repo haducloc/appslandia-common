@@ -25,7 +25,6 @@ import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.appslandia.common.base.Out;
 import com.appslandia.common.base.ThreadSafeTester;
 
 /**
@@ -45,24 +44,6 @@ public class PbeDigesterTest {
 	    byte[] digest = impl.digest(data);
 
 	    Assertions.assertTrue(impl.verify(data, digest));
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
-	}
-    }
-
-    @Test
-    public void test_salt() {
-	PbeDigester impl = new PbeDigester().setAlgorithm("HmacMD5");
-	impl.setKeySize(16).setPassword("password".toCharArray());
-
-	try {
-	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-
-	    Out<byte[]> salt = new Out<>();
-	    byte[] digest = impl.digest(data, salt);
-
-	    Assertions.assertTrue(impl.verify(data, digest, salt.value));
 
 	} catch (Exception ex) {
 	    Assertions.fail(ex.getMessage());

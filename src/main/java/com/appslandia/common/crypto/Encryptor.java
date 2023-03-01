@@ -21,7 +21,6 @@
 package com.appslandia.common.crypto;
 
 import com.appslandia.common.base.InitializeSupport;
-import com.appslandia.common.base.Out;
 
 /**
  *
@@ -33,10 +32,6 @@ public interface Encryptor extends InitializeSupport {
     byte[] encrypt(byte[] message) throws CryptoException;
 
     byte[] decrypt(byte[] message) throws CryptoException;
-
-    byte[] encrypt(byte[] message, Out<byte[]> salt) throws CryptoException;
-
-    byte[] decrypt(byte[] message, byte[] salt) throws CryptoException;
 
     Encryptor copy();
 }

@@ -56,6 +56,8 @@ public class RsaEncryptorTest {
 	RsaEncryptor impl = new RsaEncryptor();
 	impl.setTransformation("RSA/ECB/PKCS1Padding");
 	impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
+	impl.setAlgSpecFunc(RsaEncryptor::OAEPParameterSpec);
+
 	try {
 	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
 	    byte[] enc = impl.encrypt(data);
@@ -72,6 +74,8 @@ public class RsaEncryptorTest {
 	RsaEncryptor impl = new RsaEncryptor();
 	impl.setTransformation("RSA/ECB/PKCS1Padding");
 	impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
+	impl.setAlgSpecFunc(RsaEncryptor::OAEPParameterSpec);
+
 	impl = impl.copy();
 
 	try {
@@ -90,6 +94,7 @@ public class RsaEncryptorTest {
 	RsaEncryptor impl = new RsaEncryptor();
 	impl.setTransformation("RSA/ECB/OAEPPadding");
 	impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
+	impl.setAlgSpecFunc(RsaEncryptor::OAEPParameterSpec);
 
 	try {
 	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -107,6 +112,7 @@ public class RsaEncryptorTest {
 	RsaEncryptor impl = new RsaEncryptor();
 	impl.setTransformation("RSA/ECB/OAEPWithMD5AndMGF1Padding");
 	impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
+	impl.setAlgSpecFunc(RsaEncryptor::OAEPParameterSpec);
 
 	try {
 	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -124,6 +130,7 @@ public class RsaEncryptorTest {
 	RsaEncryptor impl = new RsaEncryptor();
 	impl.setTransformation("RSA/ECB/OAEPWithSHA-1AndMGF1Padding");
 	impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
+	impl.setAlgSpecFunc(RsaEncryptor::OAEPParameterSpec);
 
 	try {
 	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -141,6 +148,7 @@ public class RsaEncryptorTest {
 	RsaEncryptor impl = new RsaEncryptor();
 	impl.setTransformation("RSA/ECB/OAEPWithSHA-224AndMGF1Padding");
 	impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
+	impl.setAlgSpecFunc(RsaEncryptor::OAEPParameterSpec);
 
 	try {
 	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -158,6 +166,7 @@ public class RsaEncryptorTest {
 	RsaEncryptor impl = new RsaEncryptor();
 	impl.setTransformation("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
 	impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
+	impl.setAlgSpecFunc(RsaEncryptor::OAEPParameterSpec);
 
 	try {
 	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -175,6 +184,7 @@ public class RsaEncryptorTest {
 	RsaEncryptor impl = new RsaEncryptor();
 	impl.setTransformation("RSA/ECB/OAEPWithSHA-384AndMGF1Padding");
 	impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
+	impl.setAlgSpecFunc(RsaEncryptor::OAEPParameterSpec);
 
 	try {
 	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -192,6 +202,7 @@ public class RsaEncryptorTest {
 	RsaEncryptor impl = new RsaEncryptor();
 	impl.setTransformation("RSA/ECB/OAEPWithSHA-512AndMGF1Padding");
 	impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
+	impl.setAlgSpecFunc(RsaEncryptor::OAEPParameterSpec);
 
 	try {
 	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -209,6 +220,7 @@ public class RsaEncryptorTest {
 	final RsaEncryptor impl = new RsaEncryptor();
 	impl.setTransformation("RSA/ECB/PKCS1Padding");
 	impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
+	impl.setAlgSpecFunc(RsaEncryptor::OAEPParameterSpec);
 
 	new ThreadSafeTester() {
 

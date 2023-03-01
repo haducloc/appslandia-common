@@ -53,12 +53,14 @@ public class SecureProps extends Properties implements Config {
 
     public SecureProps(char[] password) {
 	Asserts.notNull(password);
-	this.textEncryptor = new TextEncryptor(new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(32).setPassword(password));
+	this.textEncryptor = new TextEncryptor(
+		new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(32).setPassword(password).setAlgSpecFunc(PbeEncryptor::IvParameterSpec));
     }
 
     public SecureProps(String password) {
 	Asserts.notNull(password);
-	this.textEncryptor = new TextEncryptor(new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(32).setPassword(password));
+	this.textEncryptor = new TextEncryptor(
+		new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(32).setPassword(password).setAlgSpecFunc(PbeEncryptor::IvParameterSpec));
     }
 
     public SecureProps(Encryptor encryptor) {

@@ -24,7 +24,6 @@ import java.security.MessageDigest;
 import java.util.Arrays;
 
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.base.Out;
 import com.appslandia.common.utils.Asserts;
 
 /**
@@ -86,16 +85,6 @@ public class DigesterImpl extends InitializeObject implements Digester {
 	    digest = this.digest.digest(message);
 	}
 	return Arrays.equals(hash, digest);
-    }
-
-    @Override
-    public byte[] digest(byte[] message, Out<byte[]> salt) throws CryptoException {
-	throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean verify(byte[] message, byte[] digested, byte[] salt) throws CryptoException {
-	throw new UnsupportedOperationException();
     }
 
     public String getAlgorithm() {

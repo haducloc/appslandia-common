@@ -25,15 +25,13 @@ import java.security.SecureRandom;
 import java.security.spec.AlgorithmParameterSpec;
 import java.util.Locale;
 import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.function.BiFunction;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 
-import com.appslandia.common.base.Out;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.RandomUtils;
@@ -46,18 +44,15 @@ import com.appslandia.common.utils.ValueUtils;
  */
 public class PbeEncryptor extends PbeObject implements Encryptor {
     private String transformation, provider;
-    private String algorithm;
-    private String mode;
+    private String[] algorithms;
 
     private Integer ivSize;
-    private Integer tagSize;
+    private BiFunction<String[], byte[], AlgorithmParameterSpec> algSpecFunc;
 
     private Cipher cipher;
 
     final Object mutex = new Object();
     final Random random = new SecureRandom();
-
-    static final ConcurrentMap<Integer, byte[]> ZERO_IV_CACHE = new ConcurrentHashMap<>();
 
     @Override
     protected void init() throws Exception {
@@ -66,15 +61,18 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	// transformation
 	Asserts.notNull(this.transformation, "transformation is required.");
 
-	String[] trans = this.transformation.split("/");
-	Asserts.isTrue(trans.length == 3, "transformation is required.");
+	this.algorithms = this.transformation.split("/");
+	Asserts.isTrue(algorithms.length == 3, "transformation is invalid.");
 
-	// algorithm
-	this.algorithm = trans[0].toUpperCase(Locale.ENGLISH);
-	Asserts.isTrue(!"RSA".equals(this.algorithm), "RSA algorithm is not supported.");
+	this.algorithms[0] = this.algorithms[0].toUpperCase(Locale.ENGLISH);
+	this.algorithms[1] = this.algorithms[1].toUpperCase(Locale.ENGLISH);
 
-	// mode
-	this.mode = trans[1].toUpperCase(Locale.ENGLISH);
+	Asserts.isTrue(!"RSA".equals(this.algorithms[0]), "Use RsaEncryptor instead.");
+
+	// algSpecFunc
+	if (this.algSpecFunc == null) {
+	    this.algSpecFunc = (algs, iv) -> null;
+	}
 
 	// cipher
 	if (this.provider == null) {
@@ -85,23 +83,11 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
     }
 
     private boolean isIVSpec() {
-	return !"ECB".equals(this.mode);
-    }
-
-    private boolean isGCMMode() {
-	return "GCM".equals(this.mode);
+	return !"ECB".equals(this.algorithms[1]);
     }
 
     private int getIVSize() {
 	return ValueUtils.valueOrAlt(this.ivSize, this.cipher.getBlockSize());
-    }
-
-    protected AlgorithmParameterSpec buildIvParameter(byte[] iv) {
-	if (isGCMMode()) {
-	    int tSize = ValueUtils.valueOrAlt(this.tagSize, 12);
-	    return new GCMParameterSpec(tSize * 8, iv);
-	}
-	return new IvParameterSpec(iv);
     }
 
     @Override
@@ -109,9 +95,28 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	this.initialize();
 	Asserts.notNull(message, "message is required.");
 
-	Out<byte[]> salt = new Out<>();
-	byte[] encMsg = encrypt(message, salt);
-	return ArrayUtils.append(salt.value, encMsg);
+	byte[] salt = RandomUtils.nextBytes(this.saltSize, this.random);
+	SecretKey secretKey = buildSecretKey(salt, this.algorithms[0]);
+	byte[] iv = isIVSpec() ? RandomUtils.nextBytes(this.getIVSize(), this.random) : null;
+
+	try {
+	    synchronized (this.mutex) {
+		AlgorithmParameterSpec spec = this.algSpecFunc.apply(this.algorithms, iv);
+
+		if (spec == null) {
+		    this.cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+		} else {
+		    this.cipher.init(Cipher.ENCRYPT_MODE, secretKey, spec);
+		}
+
+		byte[] encMsg = this.cipher.doFinal(message);
+		return (iv != null) ? ArrayUtils.append(iv, salt, encMsg) : ArrayUtils.append(salt, encMsg);
+	    }
+	} catch (GeneralSecurityException ex) {
+	    throw new CryptoException(ex);
+	} finally {
+	    CryptoUtils.destroyQuietly(secretKey);
+	}
     }
 
     @Override
@@ -119,82 +124,37 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	this.initialize();
 
 	Asserts.notNull(message, "message is required.");
-	Asserts.isTrue(message.length > this.saltSize, "message is invalid.");
+	if (isIVSpec()) {
+	    Asserts.isTrue(message.length >= this.getIVSize() + this.saltSize, "message is invalid.");
+	} else {
+	    Asserts.isTrue(message.length >= this.saltSize, "message is invalid.");
+	}
 
 	byte[] salt = new byte[this.saltSize];
-	ArrayUtils.copy(message, salt);
-	SecretKey secretKey = buildSecretKey(salt, this.algorithm);
+	byte[] iv = isIVSpec() ? new byte[this.getIVSize()] : null;
 
-	byte[] iv = null;
-	if (isIVSpec()) {
-	    iv = ZERO_IV_CACHE.computeIfAbsent(getIVSize(), s -> new byte[s]);
+	if (iv == null) {
+	    ArrayUtils.copy(message, salt);
+	} else {
+	    ArrayUtils.copy(message, iv, salt);
 	}
+	SecretKey secretKey = buildSecretKey(salt, this.algorithms[0]);
+
 	try {
 	    synchronized (this.mutex) {
-		if (iv != null) {
-		    this.cipher.init(Cipher.DECRYPT_MODE, secretKey, buildIvParameter(iv));
-		} else {
+		AlgorithmParameterSpec spec = this.algSpecFunc.apply(this.algorithms, iv);
+
+		if (spec == null) {
 		    this.cipher.init(Cipher.DECRYPT_MODE, secretKey);
-		}
-		return this.cipher.doFinal(message, salt.length, message.length - salt.length);
-	    }
-	} catch (GeneralSecurityException ex) {
-	    throw new CryptoException(ex);
-	} finally {
-	    CryptoUtils.destroyQuietly(secretKey);
-	}
-    }
-
-    @Override
-    public byte[] encrypt(byte[] message, Out<byte[]> salt) throws CryptoException {
-	this.initialize();
-	Asserts.notNull(message, "message is required.");
-	Asserts.notNull(salt, "salt is required.");
-
-	salt.value = RandomUtils.nextBytes(this.saltSize, this.random);
-	SecretKey secretKey = buildSecretKey(salt.value, this.algorithm);
-
-	byte[] iv = null;
-	if (isIVSpec()) {
-	    iv = ZERO_IV_CACHE.computeIfAbsent(getIVSize(), s -> new byte[s]);
-	}
-	try {
-	    synchronized (this.mutex) {
-		if (iv != null) {
-		    this.cipher.init(Cipher.ENCRYPT_MODE, secretKey, buildIvParameter(iv));
 		} else {
-		    this.cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+		    this.cipher.init(Cipher.DECRYPT_MODE, secretKey, spec);
 		}
-		return this.cipher.doFinal(message);
-	    }
-	} catch (GeneralSecurityException ex) {
-	    throw new CryptoException(ex);
-	} finally {
-	    CryptoUtils.destroyQuietly(secretKey);
-	}
-    }
 
-    @Override
-    public byte[] decrypt(byte[] message, byte[] salt) throws CryptoException {
-	this.initialize();
-	Asserts.notNull(message, "message is required.");
-	Asserts.notNull(salt, "salt is required.");
-
-	Asserts.isTrue(salt.length == this.saltSize, "salt is invalid.");
-	SecretKey secretKey = buildSecretKey(salt, this.algorithm);
-
-	byte[] iv = null;
-	if (isIVSpec()) {
-	    iv = ZERO_IV_CACHE.computeIfAbsent(getIVSize(), s -> new byte[s]);
-	}
-	try {
-	    synchronized (this.mutex) {
-		if (iv != null) {
-		    this.cipher.init(Cipher.DECRYPT_MODE, secretKey, buildIvParameter(iv));
+		if (iv == null) {
+		    return this.cipher.doFinal(message, salt.length, message.length - salt.length);
 		} else {
-		    this.cipher.init(Cipher.DECRYPT_MODE, secretKey);
+		    return this.cipher.doFinal(message, iv.length + salt.length, message.length - iv.length - salt.length);
 		}
-		return this.cipher.doFinal(message);
 	    }
 	} catch (GeneralSecurityException ex) {
 	    throw new CryptoException(ex);
@@ -267,9 +227,9 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	return this;
     }
 
-    public PbeEncryptor setTagSize(int tagSize) {
+    public PbeEncryptor setAlgSpecFunc(BiFunction<String[], byte[], AlgorithmParameterSpec> algSpecFunc) {
 	assertNotInitialized();
-	this.tagSize = tagSize;
+	this.algSpecFunc = algSpecFunc;
 	return this;
     }
 
@@ -285,7 +245,16 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	    impl.secretKeyGenerator = this.secretKeyGenerator.copy();
 	}
 	impl.ivSize = this.ivSize;
-	impl.tagSize = this.tagSize;
+	impl.algSpecFunc = this.algSpecFunc;
 	return impl;
+    }
+
+    public static AlgorithmParameterSpec IvParameterSpec(String[] algs, byte[] iv) {
+	return new IvParameterSpec(iv);
+    }
+
+    public static AlgorithmParameterSpec GCMParameterSpec(String[] algs, byte[] iv) {
+	final int tSize = 16;
+	return new GCMParameterSpec(tSize * 8, iv);
     }
 }

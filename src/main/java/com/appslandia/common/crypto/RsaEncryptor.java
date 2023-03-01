@@ -26,16 +26,16 @@ import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.MGF1ParameterSpec;
+import java.util.Locale;
 import java.util.Random;
+import java.util.function.Function;
 
 import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.OAEPParameterSpec;
 import javax.crypto.spec.PSource;
 
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.base.Out;
 import com.appslandia.common.utils.Asserts;
 
 /**
@@ -45,6 +45,7 @@ import com.appslandia.common.utils.Asserts;
  */
 public class RsaEncryptor extends InitializeObject implements Encryptor {
     private String transformation, provider;
+    private String[] algorithms;
 
     private PublicKey publicKey;
     private PrivateKey privateKey;
@@ -56,18 +57,26 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
     final Object decMutex = new Object();
     final Random random = new SecureRandom();
 
+    private Function<String[], AlgorithmParameterSpec> algSpecFunc;
+
     @Override
     protected void init() throws Exception {
-	// Algorithm
+	// transformation
 	Asserts.notNull(this.transformation, "transformation is required.");
 
-	String[] trans = this.transformation.split("/");
-	Asserts.isTrue("RSA".equalsIgnoreCase(trans[0]), "RSA algorithm is required.");
+	this.algorithms = this.transformation.split("/");
+	Asserts.isTrue(algorithms.length == 3, "transformation is invalid.");
 
-	String padding = (trans.length == 3) ? trans[2] : null;
-	AlgorithmParameterSpec paramSpec = (padding != null) ? parseParamSpec(padding) : null;
+	this.algorithms[0] = this.algorithms[0].toUpperCase(Locale.ENGLISH);
+	this.algorithms[1] = this.algorithms[1].toUpperCase(Locale.ENGLISH);
 
+	Asserts.isTrue("RSA".equals(this.algorithms[0]), "RSA algorithm is required.");
 	Asserts.isTrue((this.privateKey != null) || (this.publicKey != null), "No key is provided.");
+
+	// algSpecFunc
+	if (this.algSpecFunc == null) {
+	    this.algSpecFunc = (algs) -> null;
+	}
 
 	// ENCRYPT
 	if (this.publicKey != null) {
@@ -76,7 +85,14 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 	    } else {
 		this.encrypt = Cipher.getInstance(this.transformation, this.provider);
 	    }
-	    this.encrypt.init(Cipher.ENCRYPT_MODE, this.publicKey, paramSpec);
+
+	    AlgorithmParameterSpec spec = this.algSpecFunc.apply(this.algorithms);
+
+	    if (spec == null) {
+		this.encrypt.init(Cipher.ENCRYPT_MODE, this.publicKey);
+	    } else {
+		this.encrypt.init(Cipher.ENCRYPT_MODE, this.publicKey, spec);
+	    }
 	}
 
 	// DECRYPT
@@ -86,7 +102,14 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 	    } else {
 		this.decrypt = Cipher.getInstance(this.transformation, this.provider);
 	    }
-	    this.decrypt.init(Cipher.DECRYPT_MODE, this.privateKey, paramSpec);
+
+	    AlgorithmParameterSpec spec = this.algSpecFunc.apply(this.algorithms);
+
+	    if (spec == null) {
+		this.decrypt.init(Cipher.DECRYPT_MODE, this.privateKey, spec);
+	    } else {
+		this.decrypt.init(Cipher.DECRYPT_MODE, this.privateKey, spec);
+	    }
 	}
     }
 
@@ -123,16 +146,6 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 	} catch (GeneralSecurityException ex) {
 	    throw new CryptoException(ex);
 	}
-    }
-
-    @Override
-    public byte[] encrypt(byte[] message, Out<byte[]> salt) throws CryptoException {
-	throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public byte[] decrypt(byte[] message, byte[] salt) throws CryptoException {
-	throw new UnsupportedOperationException();
     }
 
     public String getTransformation() {
@@ -185,6 +198,12 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 	return this;
     }
 
+    public RsaEncryptor setAlgSpecFunc(Function<String[], AlgorithmParameterSpec> algSpecFunc) {
+	assertNotInitialized();
+	this.algSpecFunc = algSpecFunc;
+	return this;
+    }
+
     @Override
     public RsaEncryptor copy() {
 	RsaEncryptor impl = new RsaEncryptor().setTransformation(this.transformation).setProvider(this.provider);
@@ -192,12 +211,20 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 	if (this.privateKey != null) {
 	    impl.privateKey = new KeyFactoryUtil(this.privateKey.getAlgorithm()).copy(this.privateKey);
 	}
-	impl.publicKey = this.publicKey;
+	if (this.publicKey != null) {
+	    impl.publicKey = new KeyFactoryUtil(this.publicKey.getAlgorithm()).copy(this.publicKey);
+	}
+
+	impl.algSpecFunc = this.algSpecFunc;
 	return impl;
     }
 
-    static AlgorithmParameterSpec parseParamSpec(String padding) throws NoSuchPaddingException {
-	if (padding.equalsIgnoreCase("NoPadding") || padding.equalsIgnoreCase("PKCS1Padding")) {
+    // Optimal Asymmetric Encryption
+    // OAEPPadding, OAEPWith<digest>And<mgf>Padding
+
+    public static AlgorithmParameterSpec OAEPParameterSpec(String[] algs) {
+	String padding = algs[2];
+	if (padding.equalsIgnoreCase("PKCS1Padding")) {
 	    return null;
 	}
 	if (padding.equalsIgnoreCase("OAEPPadding")) {
@@ -221,6 +248,6 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 	if (padding.equalsIgnoreCase("OAEPWithSHA-512AndMGF1Padding")) {
 	    return new OAEPParameterSpec("SHA-512", "MGF1", MGF1ParameterSpec.SHA512, PSource.PSpecified.DEFAULT);
 	}
-	throw new NoSuchPaddingException(padding + " unavailable with RSA.");
+	return null;
     }
 }

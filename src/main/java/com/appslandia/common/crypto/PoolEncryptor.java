@@ -22,7 +22,6 @@ package com.appslandia.common.crypto;
 
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.base.Out;
 import com.appslandia.common.base.RoundRobinPool;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ValueUtils;
@@ -86,24 +85,6 @@ public class PoolEncryptor extends InitializeObject implements Encryptor {
 	this.initialize();
 	Asserts.notNull(message, "message is required.");
 	return this.encryptorPool.next().decrypt(message);
-    }
-
-    @Override
-    public byte[] encrypt(byte[] message, Out<byte[]> salt) throws CryptoException {
-	this.initialize();
-	Asserts.notNull(message, "message is required.");
-	Asserts.notNull(salt, "salt is required.");
-
-	return this.encryptorPool.next().encrypt(message, salt);
-    }
-
-    @Override
-    public byte[] decrypt(byte[] message, byte[] salt) throws CryptoException {
-	this.initialize();
-	Asserts.notNull(message, "message is required.");
-	Asserts.notNull(salt, "salt is required.");
-
-	return this.encryptorPool.next().decrypt(message, salt);
     }
 
     public PoolEncryptor setEncryptor(Encryptor encryptor) {

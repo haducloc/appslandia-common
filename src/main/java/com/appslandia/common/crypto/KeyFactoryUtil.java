@@ -42,8 +42,8 @@ public class KeyFactoryUtil extends InitializeObject {
 
     public static final KeyFactoryUtil DSA = new KeyFactoryUtil("DSA");
     public static final KeyFactoryUtil RSA = new KeyFactoryUtil("RSA");
+    public static final KeyFactoryUtil EC = new KeyFactoryUtil("EC");
 
-    // DSA|RSA
     private String algorithm, provider;
     private KeyFactory keyFactory;
     final Object mutex = new Object();

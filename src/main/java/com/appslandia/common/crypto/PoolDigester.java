@@ -22,7 +22,6 @@ package com.appslandia.common.crypto;
 
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.base.Out;
 import com.appslandia.common.base.RoundRobinPool;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ValueUtils;
@@ -88,25 +87,6 @@ public class PoolDigester extends InitializeObject implements Digester {
 	Asserts.notNull(digested, "digested is required.");
 
 	return this.digesterPool.next().verify(message, digested);
-    }
-
-    @Override
-    public byte[] digest(byte[] message, Out<byte[]> salt) throws CryptoException {
-	this.initialize();
-	Asserts.notNull(message, "message is required.");
-	Asserts.notNull(salt, "salt is required.");
-
-	return this.digesterPool.next().digest(message, salt);
-    }
-
-    @Override
-    public boolean verify(byte[] message, byte[] digested, byte[] salt) throws CryptoException {
-	this.initialize();
-	Asserts.notNull(message, "message is required.");
-	Asserts.notNull(digested, "digested is required.");
-	Asserts.notNull(salt, "salt is required.");
-
-	return this.digesterPool.next().verify(message, digested, salt);
     }
 
     public PoolDigester setDigester(Digester digester) {

@@ -25,7 +25,6 @@ import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.appslandia.common.base.Out;
 import com.appslandia.common.base.ThreadSafeTester;
 
 /**
@@ -40,6 +39,8 @@ public class PbeEncryptorTest {
 	PbeEncryptor impl = new PbeEncryptor();
 	impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
 	impl.setPassword("password".toCharArray());
+	impl.setAlgSpecFunc(PbeEncryptor::IvParameterSpec);
+
 	try {
 	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
 	    byte[] encrypted = impl.encrypt(data);
@@ -57,6 +58,8 @@ public class PbeEncryptorTest {
 	PbeEncryptor impl = new PbeEncryptor();
 	impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
 	impl.setPassword("password".toCharArray());
+	impl.setAlgSpecFunc(PbeEncryptor::IvParameterSpec);
+
 	try {
 	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
 	    byte[] encrypted = impl.encrypt(data);
@@ -70,17 +73,16 @@ public class PbeEncryptorTest {
     }
 
     @Test
-    public void test_salt() {
+    public void test_ECB() {
 	PbeEncryptor impl = new PbeEncryptor();
-	impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
+	impl.setTransformation("AES/ECB/PKCS5Padding").setKeySize(16);
 	impl.setPassword("password".toCharArray());
+
 	try {
 	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+	    byte[] encrypted = impl.encrypt(data);
 
-	    Out<byte[]> salt = new Out<>();
-	    byte[] encrypted = impl.encrypt(data, salt);
-
-	    byte[] decrypted = impl.decrypt(encrypted, salt.value);
+	    byte[] decrypted = impl.decrypt(encrypted);
 	    Assertions.assertArrayEquals(data, decrypted);
 
 	} catch (Exception ex) {
@@ -93,6 +95,8 @@ public class PbeEncryptorTest {
 	PbeEncryptor impl = new PbeEncryptor();
 	impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
 	impl.setPassword("password".toCharArray());
+	impl.setAlgSpecFunc(PbeEncryptor::IvParameterSpec);
+
 	impl = impl.copy();
 	try {
 	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -111,6 +115,8 @@ public class PbeEncryptorTest {
 	PbeEncryptor impl = new PbeEncryptor();
 	impl.setTransformation("AES/GCM/NoPadding").setKeySize(16);
 	impl.setPassword("password".toCharArray());
+	impl.setAlgSpecFunc(PbeEncryptor::GCMParameterSpec);
+
 	try {
 	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
 	    byte[] encrypted = impl.encrypt(data);
@@ -128,6 +134,8 @@ public class PbeEncryptorTest {
 	final PbeEncryptor impl = new PbeEncryptor();
 	impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
 	impl.setPassword("password".toCharArray());
+	impl.setAlgSpecFunc(PbeEncryptor::IvParameterSpec);
+
 	new ThreadSafeTester() {
 
 	    @Override

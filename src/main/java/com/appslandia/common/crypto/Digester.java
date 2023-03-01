@@ -21,7 +21,6 @@
 package com.appslandia.common.crypto;
 
 import com.appslandia.common.base.InitializeSupport;
-import com.appslandia.common.base.Out;
 
 /**
  *
@@ -33,10 +32,6 @@ public interface Digester extends InitializeSupport {
     byte[] digest(byte[] message) throws CryptoException;
 
     boolean verify(byte[] message, byte[] digested) throws CryptoException;
-
-    byte[] digest(byte[] message, Out<byte[]> salt) throws CryptoException;
-
-    boolean verify(byte[] message, byte[] digested, byte[] salt) throws CryptoException;
 
     Digester copy();
 }

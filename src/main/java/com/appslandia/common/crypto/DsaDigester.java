@@ -27,7 +27,6 @@ import java.security.Signature;
 
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.base.Out;
 import com.appslandia.common.utils.Asserts;
 
 /**
@@ -109,16 +108,6 @@ public class DsaDigester extends InitializeObject implements Digester {
 	} catch (GeneralSecurityException ex) {
 	    throw new CryptoException(ex);
 	}
-    }
-
-    @Override
-    public byte[] digest(byte[] message, Out<byte[]> salt) throws CryptoException {
-	throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean verify(byte[] message, byte[] digested, byte[] salt) throws CryptoException {
-	throw new UnsupportedOperationException();
     }
 
     public String getAlgorithm() {

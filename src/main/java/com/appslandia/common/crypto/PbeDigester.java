@@ -22,13 +22,11 @@ package com.appslandia.common.crypto;
 
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
-import java.util.Arrays;
 import java.util.Random;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 
-import com.appslandia.common.base.Out;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.RandomUtils;
@@ -64,22 +62,35 @@ public class PbeDigester extends PbeObject implements Digester {
 	this.initialize();
 	Asserts.notNull(message, "message is required.");
 
-	Out<byte[]> salt = new Out<>();
-	byte[] msgMac = digest(message, salt);
+	byte[] salt = RandomUtils.nextBytes(this.saltSize, this.random);
+	SecretKey secretKey = buildSecretKey(salt, this.algorithm);
 
-	return ArrayUtils.append(salt.value, msgMac);
+	try {
+	    byte[] msgMac = null;
+	    synchronized (this.mutex) {
+		this.mac.init(secretKey);
+		msgMac = this.mac.doFinal(message);
+	    }
+
+	    return ArrayUtils.append(salt, msgMac);
+
+	} catch (GeneralSecurityException ex) {
+	    throw new CryptoException(ex);
+	} finally {
+	    CryptoUtils.destroyQuietly(secretKey);
+	}
     }
 
     @Override
-    public boolean verify(byte[] message, byte[] saltHmac) throws CryptoException {
+    public boolean verify(byte[] message, byte[] saltMac) throws CryptoException {
 	this.initialize();
 
 	Asserts.notNull(message, "message is required.");
-	Asserts.notNull(saltHmac, "saltHmac is required.");
-	Asserts.isTrue(saltHmac.length > this.saltSize, "digested is invalid.");
+	Asserts.notNull(saltMac, "saltMac is required.");
+	Asserts.isTrue(saltMac.length >= this.saltSize, "saltMac is invalid.");
 
 	byte[] salt = new byte[this.saltSize];
-	ArrayUtils.copy(saltHmac, salt);
+	ArrayUtils.copy(saltMac, salt);
 
 	SecretKey secretKey = buildSecretKey(salt, this.algorithm);
 	try {
@@ -88,55 +99,7 @@ public class PbeDigester extends PbeObject implements Digester {
 		this.mac.init(secretKey);
 		msgMac = this.mac.doFinal(message);
 	    }
-	    return ArrayUtils.endsWith(saltHmac, msgMac, this.saltSize);
-
-	} catch (GeneralSecurityException ex) {
-	    throw new CryptoException(ex);
-	} finally {
-	    CryptoUtils.destroyQuietly(secretKey);
-	}
-    }
-
-    @Override
-    public byte[] digest(byte[] message, Out<byte[]> salt) throws CryptoException {
-	this.initialize();
-	Asserts.notNull(message, "message is required.");
-	Asserts.notNull(salt, "salt is required.");
-
-	salt.value = RandomUtils.nextBytes(this.saltSize, this.random);
-	SecretKey secretKey = buildSecretKey(salt.value, this.algorithm);
-
-	try {
-	    byte[] msgMac = null;
-	    synchronized (this.mutex) {
-		this.mac.init(secretKey);
-		msgMac = this.mac.doFinal(message);
-	    }
-	    return msgMac;
-
-	} catch (GeneralSecurityException ex) {
-	    throw new CryptoException(ex);
-	} finally {
-	    CryptoUtils.destroyQuietly(secretKey);
-	}
-    }
-
-    @Override
-    public boolean verify(byte[] message, byte[] hmac, byte[] salt) throws CryptoException {
-	this.initialize();
-
-	Asserts.notNull(message, "message is required.");
-	Asserts.notNull(hmac, "hmac is required.");
-	Asserts.notNull(salt, "salt is required.");
-
-	SecretKey secretKey = buildSecretKey(salt, this.algorithm);
-	try {
-	    byte[] msgMac = null;
-	    synchronized (this.mutex) {
-		this.mac.init(secretKey);
-		msgMac = this.mac.doFinal(message);
-	    }
-	    return Arrays.equals(hmac, msgMac);
+	    return ArrayUtils.endsWith(saltMac, msgMac, this.saltSize);
 
 	} catch (GeneralSecurityException ex) {
 	    throw new CryptoException(ex);

@@ -30,7 +30,6 @@ import javax.crypto.spec.SecretKeySpec;
 
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.base.Out;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.SYS;
@@ -78,26 +77,16 @@ public class MacDigester extends InitializeObject implements Digester {
     }
 
     @Override
-    public boolean verify(byte[] message, byte[] hmac) throws CryptoException {
+    public boolean verify(byte[] message, byte[] mac) throws CryptoException {
 	this.initialize();
 	Asserts.notNull(message, "message is required.");
-	Asserts.notNull(hmac, "hmac is required.");
+	Asserts.notNull(mac, "mac is required.");
 
 	byte[] msgMac = null;
 	synchronized (this.mutex) {
 	    msgMac = this.mac.doFinal(message);
 	}
-	return Arrays.equals(hmac, msgMac);
-    }
-
-    @Override
-    public byte[] digest(byte[] message, Out<byte[]> salt) throws CryptoException {
-	throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean verify(byte[] message, byte[] hmac, byte[] salt) throws CryptoException {
-	throw new UnsupportedOperationException();
+	return Arrays.equals(mac, msgMac);
     }
 
     public String getAlgorithm() {
