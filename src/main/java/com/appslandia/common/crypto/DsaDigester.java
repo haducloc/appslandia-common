@@ -167,7 +167,9 @@ public class DsaDigester extends InitializeObject implements Digester {
 	if (this.privateKey != null) {
 	    impl.privateKey = new KeyFactoryUtil(this.privateKey.getAlgorithm()).copy(this.privateKey);
 	}
-	impl.publicKey = this.publicKey;
+	if (this.publicKey != null) {
+	    impl.publicKey = new KeyFactoryUtil(this.publicKey.getAlgorithm()).copy(this.publicKey);
+	}
 	return impl;
     }
 }
