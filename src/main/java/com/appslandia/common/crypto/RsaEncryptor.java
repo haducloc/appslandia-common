@@ -21,6 +21,7 @@
 package com.appslandia.common.crypto;
 
 import java.security.GeneralSecurityException;
+import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
@@ -194,6 +195,15 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 	assertNotInitialized();
 	if (publicKeyPem != null) {
 	    this.publicKey = KeyFactoryUtil.RSA.toPublicKey(publicKeyPem);
+	}
+	return this;
+    }
+
+    public RsaEncryptor setKeyPair(KeyPair keyPair) {
+	assertNotInitialized();
+	if (keyPair != null) {
+	    this.privateKey = keyPair.getPrivate();
+	    this.publicKey = keyPair.getPublic();
 	}
 	return this;
     }

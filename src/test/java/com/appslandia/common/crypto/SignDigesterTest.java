@@ -36,7 +36,7 @@ import com.appslandia.common.base.ThreadSafeTester;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class DsaDigesterTest {
+public class SignDigesterTest {
 
     private KeyPair keyPair;
 
@@ -53,7 +53,7 @@ public class DsaDigesterTest {
 
     @Test
     public void test() {
-	DsaDigester impl = new DsaDigester();
+	SignDigester impl = new SignDigester();
 	impl.setAlgorithm("SHA256withDSA");
 	impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
 	try {
@@ -69,7 +69,7 @@ public class DsaDigesterTest {
 
     @Test
     public void test_copy() {
-	DsaDigester impl = new DsaDigester();
+	SignDigester impl = new SignDigester();
 	impl.setAlgorithm("SHA256withDSA");
 	impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
 	impl = impl.copy();
@@ -86,7 +86,7 @@ public class DsaDigesterTest {
 
     @Test
     public void test_invalid() {
-	DsaDigester impl = new DsaDigester();
+	SignDigester impl = new SignDigester();
 	impl.setAlgorithm("SHA256withDSA");
 	impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
 	try {
@@ -103,7 +103,7 @@ public class DsaDigesterTest {
 
     @Test
     public void test_threadSafe() {
-	final DsaDigester impl = new DsaDigester();
+	final SignDigester impl = new SignDigester();
 	impl.setAlgorithm("SHA256withDSA");
 	impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
 

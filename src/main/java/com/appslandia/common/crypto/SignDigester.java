@@ -21,6 +21,7 @@
 package com.appslandia.common.crypto;
 
 import java.security.GeneralSecurityException;
+import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
@@ -34,7 +35,7 @@ import com.appslandia.common.utils.Asserts;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class DsaDigester extends InitializeObject implements Digester {
+public class SignDigester extends InitializeObject implements Digester {
     private String algorithm, provider;
 
     private Signature sign;
@@ -115,7 +116,7 @@ public class DsaDigester extends InitializeObject implements Digester {
 	return this.algorithm;
     }
 
-    public DsaDigester setAlgorithm(String algorithm) {
+    public SignDigester setAlgorithm(String algorithm) {
 	assertNotInitialized();
 	this.algorithm = algorithm;
 	return this;
@@ -126,43 +127,36 @@ public class DsaDigester extends InitializeObject implements Digester {
 	return this.provider;
     }
 
-    public DsaDigester setProvider(String provider) {
+    public SignDigester setProvider(String provider) {
 	assertNotInitialized();
 	this.provider = provider;
 	return this;
     }
 
-    public DsaDigester setPrivateKey(PrivateKey privateKey) {
+    public SignDigester setPrivateKey(PrivateKey privateKey) {
 	assertNotInitialized();
 	this.privateKey = privateKey;
 	return this;
     }
 
-    public DsaDigester setPrivateKey(String privateKeyPem) {
-	assertNotInitialized();
-	if (privateKeyPem != null) {
-	    this.privateKey = KeyFactoryUtil.DSA.toPrivateKey(privateKeyPem);
-	}
-	return this;
-    }
-
-    public DsaDigester setPublicKey(PublicKey publicKey) {
+    public SignDigester setPublicKey(PublicKey publicKey) {
 	assertNotInitialized();
 	this.publicKey = publicKey;
 	return this;
     }
 
-    public DsaDigester setPublicKey(String publicKeyPem) {
+    public SignDigester setKeyPair(KeyPair keyPair) {
 	assertNotInitialized();
-	if (publicKeyPem != null) {
-	    this.publicKey = KeyFactoryUtil.DSA.toPublicKey(publicKeyPem);
+	if (keyPair != null) {
+	    this.privateKey = keyPair.getPrivate();
+	    this.publicKey = keyPair.getPublic();
 	}
 	return this;
     }
 
     @Override
-    public DsaDigester copy() {
-	DsaDigester impl = new DsaDigester().setAlgorithm(this.algorithm).setProvider(this.provider);
+    public SignDigester copy() {
+	SignDigester impl = new SignDigester().setAlgorithm(this.algorithm).setProvider(this.provider);
 
 	if (this.privateKey != null) {
 	    impl.privateKey = new KeyFactoryUtil(this.privateKey.getAlgorithm()).copy(this.privateKey);

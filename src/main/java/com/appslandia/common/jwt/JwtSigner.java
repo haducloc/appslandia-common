@@ -29,8 +29,8 @@ import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.crypto.CryptoException;
 import com.appslandia.common.crypto.Digester;
-import com.appslandia.common.crypto.DsaDigester;
 import com.appslandia.common.crypto.MacDigester;
+import com.appslandia.common.crypto.SignDigester;
 import com.appslandia.common.json.JsonException;
 import com.appslandia.common.json.JsonProcessor;
 import com.appslandia.common.utils.Asserts;
@@ -205,7 +205,7 @@ public class JwtSigner extends InitializeObject {
 	return this;
     }
 
-    public JwtSigner setSigner(DsaDigester signer) {
+    public JwtSigner setSigner(SignDigester signer) {
 	assertNotInitialized();
 	this.signer = signer;
 	return this;
