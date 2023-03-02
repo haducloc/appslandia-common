@@ -173,28 +173,32 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 
     public RsaEncryptor setPrivateKey(PrivateKey privateKey) {
 	assertNotInitialized();
-	this.privateKey = privateKey;
+	if (privateKey != null) {
+	    this.privateKey = new KeyFactoryUtil(privateKey.getAlgorithm(), this.provider).copy(privateKey);
+	}
 	return this;
     }
 
     public RsaEncryptor setPrivateKey(String privateKeyPem) {
 	assertNotInitialized();
 	if (privateKeyPem != null) {
-	    this.privateKey = KeyFactoryUtil.RSA.toPrivateKey(privateKeyPem);
+	    this.privateKey = new KeyFactoryUtil("RSA", this.provider).toPrivateKey(privateKeyPem);
 	}
 	return this;
     }
 
     public RsaEncryptor setPublicKey(PublicKey publicKey) {
 	assertNotInitialized();
-	this.publicKey = publicKey;
+	if (publicKey != null) {
+	    this.publicKey = new KeyFactoryUtil(publicKey.getAlgorithm(), this.provider).copy(publicKey);
+	}
 	return this;
     }
 
     public RsaEncryptor setPublicKey(String publicKeyPem) {
 	assertNotInitialized();
 	if (publicKeyPem != null) {
-	    this.publicKey = KeyFactoryUtil.RSA.toPublicKey(publicKeyPem);
+	    this.publicKey = new KeyFactoryUtil("RSA", this.provider).toPublicKey(publicKeyPem);
 	}
 	return this;
     }
@@ -202,8 +206,10 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
     public RsaEncryptor setKeyPair(KeyPair keyPair) {
 	assertNotInitialized();
 	if (keyPair != null) {
-	    this.privateKey = keyPair.getPrivate();
-	    this.publicKey = keyPair.getPublic();
+	    KeyFactoryUtil keyFactoryUtil = new KeyFactoryUtil(keyPair.getPrivate().getAlgorithm(), this.provider);
+
+	    this.privateKey = keyFactoryUtil.copy(keyPair.getPrivate());
+	    this.publicKey = keyFactoryUtil.copy(keyPair.getPublic());
 	}
 	return this;
     }
@@ -219,10 +225,10 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 	RsaEncryptor impl = new RsaEncryptor().setTransformation(this.transformation).setProvider(this.provider);
 
 	if (this.privateKey != null) {
-	    impl.privateKey = new KeyFactoryUtil(this.privateKey.getAlgorithm()).copy(this.privateKey);
+	    impl.privateKey = new KeyFactoryUtil(this.privateKey.getAlgorithm(), this.provider).copy(this.privateKey);
 	}
 	if (this.publicKey != null) {
-	    impl.publicKey = new KeyFactoryUtil(this.publicKey.getAlgorithm()).copy(this.publicKey);
+	    impl.publicKey = new KeyFactoryUtil(this.publicKey.getAlgorithm(), this.provider).copy(this.publicKey);
 	}
 
 	impl.algSpecFunc = this.algSpecFunc;

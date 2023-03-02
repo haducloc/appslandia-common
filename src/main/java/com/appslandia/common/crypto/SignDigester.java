@@ -135,21 +135,27 @@ public class SignDigester extends InitializeObject implements Digester {
 
     public SignDigester setPrivateKey(PrivateKey privateKey) {
 	assertNotInitialized();
-	this.privateKey = privateKey;
+	if (privateKey != null) {
+	    this.privateKey = new KeyFactoryUtil(privateKey.getAlgorithm(), this.provider).copy(privateKey);
+	}
 	return this;
     }
 
     public SignDigester setPublicKey(PublicKey publicKey) {
 	assertNotInitialized();
-	this.publicKey = publicKey;
+	if (publicKey != null) {
+	    this.publicKey = new KeyFactoryUtil(publicKey.getAlgorithm(), this.provider).copy(publicKey);
+	}
 	return this;
     }
 
     public SignDigester setKeyPair(KeyPair keyPair) {
 	assertNotInitialized();
 	if (keyPair != null) {
-	    this.privateKey = keyPair.getPrivate();
-	    this.publicKey = keyPair.getPublic();
+	    KeyFactoryUtil keyFactoryUtil = new KeyFactoryUtil(keyPair.getPrivate().getAlgorithm(), this.provider);
+
+	    this.privateKey = keyFactoryUtil.copy(keyPair.getPrivate());
+	    this.publicKey = keyFactoryUtil.copy(keyPair.getPublic());
 	}
 	return this;
     }
@@ -159,10 +165,10 @@ public class SignDigester extends InitializeObject implements Digester {
 	SignDigester impl = new SignDigester().setAlgorithm(this.algorithm).setProvider(this.provider);
 
 	if (this.privateKey != null) {
-	    impl.privateKey = new KeyFactoryUtil(this.privateKey.getAlgorithm()).copy(this.privateKey);
+	    impl.privateKey = new KeyFactoryUtil(this.privateKey.getAlgorithm(), this.provider).copy(this.privateKey);
 	}
 	if (this.publicKey != null) {
-	    impl.publicKey = new KeyFactoryUtil(this.publicKey.getAlgorithm()).copy(this.publicKey);
+	    impl.publicKey = new KeyFactoryUtil(this.publicKey.getAlgorithm(), this.provider).copy(this.publicKey);
 	}
 	return impl;
     }
