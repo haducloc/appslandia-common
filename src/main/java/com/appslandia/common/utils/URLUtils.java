@@ -89,25 +89,38 @@ public class URLUtils {
     }
 
     public static String toUrl(String url, Map<String, Object> moreParameters) {
+	if (moreParameters == null) {
+	    return url;
+	}
+
 	try {
-	    URI oldUri = new URI(url);
-	    String newQuery = oldUri.getRawQuery();
-	    String moreQuery = toQueryParams(moreParameters);
+	    URI uri = new URI(url);
+	    StringBuilder sb = new StringBuilder(url.length() + moreParameters.size() * 16);
+	    sb.append(uri.getScheme()).append("://").append(uri.getRawAuthority()).append(uri.getRawPath());
 
-	    if (newQuery == null) {
-		newQuery = moreQuery;
+	    boolean addedQuest = false;
+	    if (uri.getRawQuery() != null) {
+		sb.append("?").append(uri.getRawQuery());
 
-	    } else if (moreQuery != null) {
-		newQuery += ('&' + moreQuery);
+		addedQuest = true;
 	    }
 
-	    URI newUri = new URI(oldUri.getScheme(), oldUri.getAuthority(), oldUri.getPath(), null, null);
-	    String newUrl = newUri.toString();
-
-	    if (newQuery != null) {
-		return newUrl + '?' + newQuery;
+	    if (moreParameters != null) {
+		for (Map.Entry<String, Object> entry : moreParameters.entrySet()) {
+		    if (!addedQuest) {
+			sb.append("?");
+			addedQuest = true;
+		    } else {
+			sb.append("&");
+		    }
+		    addQueryParam(sb, entry.getKey(), entry.getValue());
+		}
 	    }
-	    return newUrl;
+
+	    if (uri.getRawFragment() != null) {
+		sb.append("#").append(uri.getRawFragment());
+	    }
+	    return sb.toString();
 
 	} catch (URISyntaxException ex) {
 	    throw new IllegalArgumentException(ex);
