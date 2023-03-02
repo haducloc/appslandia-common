@@ -25,7 +25,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 import com.appslandia.common.base.BaseEncoder;
-import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.crypto.CryptoException;
 import com.appslandia.common.crypto.Digester;
@@ -65,13 +64,6 @@ public class JwtSigner extends InitializeObject {
 	}
 
 	Asserts.notNull(this.jsonProcessor, "jsonProcessor is required.");
-    }
-
-    @Override
-    public void destroy() throws DestroyException {
-	if (this.jsonProcessor != null) {
-	    this.jsonProcessor.destroy();
-	}
     }
 
     public JwtHeader newHeader() {
