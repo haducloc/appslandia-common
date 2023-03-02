@@ -152,10 +152,20 @@ public class KeyFactoryUtil extends InitializeObject {
 	}
     }
 
+    public String getAlgorithm() {
+	initialize();
+	return this.algorithm;
+    }
+
     public KeyFactoryUtil setAlgorithm(String algorithm) {
 	assertNotInitialized();
 	this.algorithm = algorithm;
 	return this;
+    }
+
+    public String getProvider() {
+	initialize();
+	return this.provider;
     }
 
     public KeyFactoryUtil setProvider(String provider) {

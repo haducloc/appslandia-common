@@ -116,10 +116,20 @@ public class KeyStoreUtil extends InitializeObject {
 	}
     }
 
+    public String getType() {
+	initialize();
+	return this.type;
+    }
+
     public KeyStoreUtil setType(String type) {
 	assertNotInitialized();
 	this.type = type;
 	return this;
+    }
+
+    public String getProvider() {
+	initialize();
+	return this.provider;
     }
 
     public KeyStoreUtil setProvider(String provider) {

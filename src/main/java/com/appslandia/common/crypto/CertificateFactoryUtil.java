@@ -89,10 +89,20 @@ public class CertificateFactoryUtil extends InitializeObject {
 	}
     }
 
+    public String getType() {
+	initialize();
+	return this.type;
+    }
+
     public CertificateFactoryUtil setType(String type) {
 	assertNotInitialized();
 	this.type = type;
 	return this;
+    }
+
+    public String getProvider() {
+	initialize();
+	return this.provider;
     }
 
     public CertificateFactoryUtil setProvider(String provider) {
