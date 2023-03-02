@@ -62,7 +62,7 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	Asserts.notNull(this.transformation, "transformation is required.");
 
 	this.algorithms = this.transformation.split("/");
-	Asserts.isTrue(algorithms.length == 3, "transformation is invalid.");
+	Asserts.isTrue(this.algorithms.length == 3, "transformation is invalid.");
 
 	this.algorithms[0] = this.algorithms[0].toUpperCase(Locale.ENGLISH);
 	this.algorithms[1] = this.algorithms[1].toUpperCase(Locale.ENGLISH);
