@@ -247,11 +247,11 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	return impl;
     }
 
-    public static AlgorithmParameterSpec IvParameterSpec(String[] algs, byte[] iv) {
+    public static IvParameterSpec toIvParameterSpec(String[] algs, byte[] iv) {
 	return new IvParameterSpec(iv);
     }
 
-    public static AlgorithmParameterSpec GCMParameterSpec(String[] algs, byte[] iv) {
+    public static GCMParameterSpec toGCMParameterSpec(String[] algs, byte[] iv) {
 	final int tSize = 16;
 	return new GCMParameterSpec(tSize * 8, iv);
     }

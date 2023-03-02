@@ -37,7 +37,7 @@ public class PoolEncryptorTest {
     @Test
     public void test() {
 	final PoolEncryptor impl = new PoolEncryptor().setEncryptor(
-		new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(16).setPassword("password".toCharArray()).setAlgSpecFunc(PbeEncryptor::IvParameterSpec));
+		new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(16).setPassword("password".toCharArray()).setAlgSpecFunc(PbeEncryptor::toIvParameterSpec));
 
 	new ThreadSafeTester() {
 
@@ -68,7 +68,7 @@ public class PoolEncryptorTest {
     @Test
     public void test_copy() {
 	PoolEncryptor temp = new PoolEncryptor().setEncryptor(
-		new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(16).setPassword("password".toCharArray()).setAlgSpecFunc(PbeEncryptor::IvParameterSpec));
+		new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(16).setPassword("password".toCharArray()).setAlgSpecFunc(PbeEncryptor::toIvParameterSpec));
 	final PoolEncryptor impl = temp.copy();
 
 	new ThreadSafeTester() {

@@ -42,13 +42,13 @@ public class SecureConfig extends PropertyConfig {
     public SecureConfig(char[] password) {
 	Asserts.notNull(password);
 	this.textEncryptor = new TextEncryptor(
-		new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(32).setPassword(password).setAlgSpecFunc(PbeEncryptor::IvParameterSpec));
+		new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(32).setPassword(password).setAlgSpecFunc(PbeEncryptor::toIvParameterSpec));
     }
 
     public SecureConfig(String password) {
 	Asserts.notNull(password);
 	this.textEncryptor = new TextEncryptor(
-		new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(32).setPassword(password).setAlgSpecFunc(PbeEncryptor::IvParameterSpec));
+		new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(32).setPassword(password).setAlgSpecFunc(PbeEncryptor::toIvParameterSpec));
     }
 
     public SecureConfig(Encryptor encryptor) {

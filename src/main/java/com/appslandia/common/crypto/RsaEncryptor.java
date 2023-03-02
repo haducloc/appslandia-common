@@ -232,7 +232,7 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
     // Optimal Asymmetric Encryption
     // OAEPPadding, OAEPWith<digest>And<mgf>Padding
 
-    public static AlgorithmParameterSpec OAEPParameterSpec(String[] algs) {
+    public static OAEPParameterSpec toOAEPParameterSpec(String[] algs) {
 	String padding = algs[2];
 	if (padding.equalsIgnoreCase("PKCS1Padding")) {
 	    return null;
