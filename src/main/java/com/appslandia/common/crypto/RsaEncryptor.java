@@ -206,7 +206,9 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
     public RsaEncryptor setKeyPair(KeyPair keyPair) {
 	assertNotInitialized();
 	if (keyPair != null) {
-	    KeyFactoryUtil keyFactoryUtil = new KeyFactoryUtil(keyPair.getPrivate().getAlgorithm(), this.provider);
+	    Asserts.isTrue("RSA".equals(keyPair.getPrivate().getAlgorithm()));
+
+	    KeyFactoryUtil keyFactoryUtil = new KeyFactoryUtil("RSA", this.provider);
 
 	    this.privateKey = keyFactoryUtil.copy(keyPair.getPrivate());
 	    this.publicKey = keyFactoryUtil.copy(keyPair.getPublic());
