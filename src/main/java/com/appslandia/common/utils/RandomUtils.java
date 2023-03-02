@@ -22,6 +22,7 @@ package com.appslandia.common.utils;
 
 import java.security.SecureRandom;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  *
@@ -41,7 +42,7 @@ public class RandomUtils {
     }
 
     public static int nextInt(int min, int max) {
-	return nextInt(min, max, new Random());
+	return nextInt(min, max, ThreadLocalRandom.current());
     }
 
     public static int nextInt(int min, int max, Random random) {
@@ -49,7 +50,7 @@ public class RandomUtils {
     }
 
     public static int[] nextIndexes(int n) {
-	return nextIndexes(n, new Random());
+	return nextIndexes(n, ThreadLocalRandom.current());
     }
 
     public static int[] nextIndexes(int n, Random random) {
@@ -62,7 +63,7 @@ public class RandomUtils {
     }
 
     public static int[] nextInts(int length, int min, int max) {
-	return nextInts(length, min, max, new Random());
+	return nextInts(length, min, max, ThreadLocalRandom.current());
     }
 
     public static int[] nextInts(int length, int min, int max, Random random) {
@@ -71,13 +72,5 @@ public class RandomUtils {
 	    ints[i] = nextInt(min, max, random);
 	}
 	return ints;
-    }
-
-    public static int rdCompare() {
-	return rdCompare(new Random());
-    }
-
-    public static int rdCompare(Random random) {
-	return nextInt(-1, 1, random);
     }
 }
