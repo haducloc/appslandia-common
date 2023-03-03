@@ -79,10 +79,7 @@ public class GsonMapParser {
 		    return Long.valueOf(str);
 
 		} catch (NumberFormatException ex) {
-		    Double d = Double.valueOf(str);
-		    if (d.isInfinite() || d.isNaN()) {
-		    }
-		    return d;
+		    return Double.valueOf(str);
 		}
 	    }
 	    throw new Error();
