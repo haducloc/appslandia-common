@@ -20,13 +20,12 @@
 
 package com.appslandia.common.jwt;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import com.appslandia.common.utils.CollectionUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ObjectUtils;
 
 /**
@@ -88,22 +87,29 @@ public class JwtPayload extends JwtClaims {
 	return this;
     }
 
-    public List<String> getAudiences() {
+    public String[] getAudiences() {
 	Object value = this.get(AUD);
 	if (value == null) {
 	    return null;
 	}
 	if (value.getClass() == String.class) {
-	    return CollectionUtils.toList(new ArrayList<String>(1), (String) value);
+	    return new String[] { (String) value };
 	}
-	return ObjectUtils.cast(value);
+	Asserts.isTrue(value.getClass().isArray() || Collection.class.isAssignableFrom(value.getClass()));
+
+	if (value.getClass().isArray()) {
+	    return ObjectUtils.cast(value);
+	}
+
+	Collection<String> col = ObjectUtils.cast(value);
+	return col.toArray(new String[col.size()]);
     }
 
     public JwtPayload setAudiences(String... values) {
 	if (values.length == 0) {
 	    return this;
 	}
-	this.put(AUD, (values.length == 1) ? values[0] : CollectionUtils.toList(values));
+	this.put(AUD, (values.length == 1) ? values[0] : values);
 	return this;
     }
 
