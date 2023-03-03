@@ -20,6 +20,7 @@
 
 package com.appslandia.common.jwt;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
@@ -49,6 +50,16 @@ public class JwtPayload extends JwtClaims {
 
     public JwtPayload(Map<String, Object> map) {
 	super(map);
+    }
+
+    public boolean isForAudience(String checkingAudience) {
+	Asserts.notNull(checkingAudience);
+
+	String[] auds = getAudiences();
+	if (auds == null) {
+	    return false;
+	}
+	return Arrays.stream(auds).anyMatch(a -> checkingAudience.equals(a));
     }
 
     @Override
