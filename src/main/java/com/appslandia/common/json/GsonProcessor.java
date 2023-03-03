@@ -98,6 +98,7 @@ public class GsonProcessor extends JsonProcessor {
     public static GsonBuilder newBuilder() {
 	GsonBuilder builder = new GsonBuilder();
 	builder.serializeNulls();
+	builder.setPrettyPrinting();
 	builder.setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE);
 
 	builder.setExclusionStrategies(new ExclusionStrategy() {

@@ -103,6 +103,7 @@ public class JsonbProcessor extends JsonProcessor {
     public static JsonbConfig newConfig() {
 	JsonbConfig config = new JsonbConfig();
 	config.withNullValues(true);
+	config.withFormatting(true);
 
 	config.withPropertyVisibilityStrategy(new PropertyVisibilityStrategy() {
 
