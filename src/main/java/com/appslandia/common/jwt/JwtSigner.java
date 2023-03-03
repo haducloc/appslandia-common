@@ -170,7 +170,7 @@ public class JwtSigner extends InitializeObject {
 	if (this.issuer != null) {
 	    payload.setIssuer(this.issuer);
 	}
-	if (this.audiences == null) {
+	if (this.audiences != null) {
 	    payload.setAudiences(this.audiences.toArray(new String[this.audiences.size()]));
 	}
 	return payload;
@@ -218,7 +218,9 @@ public class JwtSigner extends InitializeObject {
 	this.signatureVerifier.verify(jwt);
 
 	// customVerifiers
-	this.customVerifiers.forEach((verifier) -> verifier.verify(jwt));
+	if (customVerifiers != null) {
+	    this.customVerifiers.forEach((verifier) -> verifier.verify(jwt));
+	}
 	return jwt;
     }
 
