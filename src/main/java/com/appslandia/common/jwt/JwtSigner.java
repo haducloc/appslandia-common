@@ -57,6 +57,7 @@ public class JwtSigner extends InitializeObject {
     protected String kid;
     protected String issuer;
 
+    protected int leewaySec;
     protected Digester signer;
 
     protected final List<JwtVerifier> defaultVerifiers = new LinkedList<>();
@@ -85,6 +86,7 @@ public class JwtSigner extends InitializeObject {
     @Override
     protected void init() throws Exception {
 	Asserts.notNull(this.type, "type is required.");
+	Asserts.notNull(this.jsonProcessor, "jsonProcessor is required.");
 
 	if (this.signer != null) {
 	    Asserts.notNull(this.alg, "alg is required.");
@@ -92,7 +94,7 @@ public class JwtSigner extends InitializeObject {
 	    this.alg = JWT_NONE_ALG;
 	}
 
-	Asserts.notNull(this.jsonProcessor, "jsonProcessor is required.");
+	Asserts.isTrue(this.leewaySec >= 0);
 
 	// Type
 	this.defaultVerifiers.add((jwt) -> {
@@ -128,7 +130,7 @@ public class JwtSigner extends InitializeObject {
 	    if (dt != null) {
 		long nt = JwtUtils.toNumericDate(dt);
 
-		if (!JwtUtils.isFutureTime(nt, 0)) {
+		if (!JwtUtils.isFutureTime(nt, this.leewaySec)) {
 		    throw new JwtVerificationException("jwt is expired.");
 		}
 	    }
@@ -284,6 +286,12 @@ public class JwtSigner extends InitializeObject {
 	    this.audiences = new LinkedHashSet<>();
 	}
 	this.audiences.add(audience);
+	return this;
+    }
+
+    public JwtSigner setLeewaySec(int leewaySec) {
+	assertNotInitialized();
+	this.leewaySec = leewaySec;
 	return this;
     }
 
