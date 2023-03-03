@@ -36,11 +36,11 @@ public class DsaJwtSigner {
 
     protected JsonProcessor jsonProcessor;
 
-    private String alg;
-    private String kid;
-    private String issuer;
+    protected String alg;
+    protected String kid;
+    protected String issuer;
 
-    private DsaDigester signer;
+    protected DsaDigester signer;
 
     public DsaJwtSigner(String jwtAlgorithm, String dsaAlgorithm) {
 	this.alg = jwtAlgorithm;

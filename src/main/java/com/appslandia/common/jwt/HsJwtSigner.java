@@ -33,11 +33,11 @@ public class HsJwtSigner {
 
     protected JsonProcessor jsonProcessor;
 
-    private String alg;
-    private String kid;
-    private String issuer;
+    protected String alg;
+    protected String kid;
+    protected String issuer;
 
-    private MacDigester signer;
+    protected MacDigester signer;
 
     public HsJwtSigner(String jwtAlgorithm, String macAlgorithm) {
 	this.alg = jwtAlgorithm;
