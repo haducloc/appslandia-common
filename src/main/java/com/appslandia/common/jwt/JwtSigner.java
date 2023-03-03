@@ -22,11 +22,12 @@ package com.appslandia.common.jwt;
 
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import com.appslandia.common.base.BaseEncoder;
 import com.appslandia.common.base.InitializeException;
@@ -52,14 +53,18 @@ public class JwtSigner extends InitializeObject {
     protected JsonProcessor jsonProcessor;
 
     protected String type = "JWT";
-    private String alg;
+    protected String alg;
     protected String kid;
     protected String issuer;
 
-    private Digester signer;
+    protected Digester signer;
+
+    protected final List<JwtVerifier> defaultVerifiers = new LinkedList<>();
+    protected List<JwtVerifier> customVerifiers;
+    protected Set<String> audiences;
 
     // signatureVerifier
-    final JwtVerifier signatureVerifier = (jwt) -> {
+    protected final JwtVerifier signatureVerifier = (jwt) -> {
 
 	if (jwt.getSignaturePart().isEmpty()) {
 	    if (this.signer != null) {
@@ -76,12 +81,6 @@ public class JwtSigner extends InitializeObject {
 	    }
 	}
     };
-
-    // defaultVerifiers
-    final List<JwtVerifier> defaultVerifiers = new LinkedList<>();
-
-    // customVerifiers
-    final List<JwtVerifier> customVerifiers = new ArrayList<>();
 
     @Override
     protected void init() throws Exception {
@@ -170,6 +169,9 @@ public class JwtSigner extends InitializeObject {
 
 	if (this.issuer != null) {
 	    payload.setIssuer(this.issuer);
+	}
+	if (this.audiences == null) {
+	    payload.setAudiences(this.audiences.toArray(new String[this.audiences.size()]));
 	}
 	return payload;
     }
@@ -274,11 +276,21 @@ public class JwtSigner extends InitializeObject {
 	return this;
     }
 
+    public JwtSigner addAudience(String audience) {
+	assertNotInitialized();
+	if (this.audiences == null) {
+	    this.audiences = new LinkedHashSet<>();
+	}
+	this.audiences.add(audience);
+	return this;
+    }
+
     public JwtSigner addVerifier(JwtVerifier verifier) {
 	assertNotInitialized();
-	if (verifier != null) {
-	    this.customVerifiers.add(verifier);
+	if (this.customVerifiers == null) {
+	    this.customVerifiers = new LinkedList<>();
 	}
+	this.customVerifiers.add(verifier);
 	return this;
     }
 }
