@@ -1,0 +1,56 @@
+// The MIT License (MIT)
+// Copyright © 2015 AppsLandia. All rights reserved.
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+package com.appslandia.common.json;
+
+import java.lang.reflect.Type;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.function.Function;
+
+import jakarta.json.bind.serializer.DeserializationContext;
+import jakarta.json.bind.serializer.JsonbDeserializer;
+import jakarta.json.stream.JsonParser;
+
+/**
+ *
+ * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
+ *
+ */
+public class JsonbMapDeserializer<T extends Map<String, Object>> implements JsonbDeserializer<T> {
+
+    final Function<Map<String, Object>, T> converter;
+    final boolean makeReadonly;
+
+    public JsonbMapDeserializer(Function<Map<String, Object>, T> converter) {
+	this(converter, false);
+    }
+
+    public JsonbMapDeserializer(Function<Map<String, Object>, T> converter, boolean makeReadonly) {
+	this.converter = converter;
+	this.makeReadonly = makeReadonly;
+    }
+
+    @Override
+    public T deserialize(JsonParser parser, DeserializationContext ctx, Type rtType) {
+	Map<String, Object> map = new JsonbMapParser().parseMap(parser.getObject(), () -> new LinkedHashMap<String, Object>(), this.makeReadonly);
+	return this.converter.apply(map);
+    }
+}
