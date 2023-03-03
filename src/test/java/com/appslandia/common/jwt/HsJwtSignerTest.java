@@ -25,30 +25,59 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.appslandia.common.crypto.MacDigester;
 import com.appslandia.common.json.GsonProcessor;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JwtSignerTest {
+public class HsJwtSignerTest {
 
     @Test
-    public void test() {
-	JwtSigner jwtSigner = new JwtSigner().setJsonProcessor(new GsonProcessor());
-	jwtSigner.setAlg("HS256").setSigner(new MacDigester().setAlgorithm("HmacSHA256").setSecret("secret".getBytes()));
-	jwtSigner.setIssuer("Issuer1");
-
-	JwtHeader header = jwtSigner.newHeader();
-	JwtPayload payload = jwtSigner.newPayload().setExpiresIn(1, TimeUnit.DAYS).setIssuedAtNow();
-
+    public void test_hs() {
 	try {
+	    // jwtSigner
+	    JwtSigner jwtSigner = HsJwtSigner.HS256().setJsonProcessor(new GsonProcessor()).setSecret("secret".getBytes()).setIssuer("Issuer1").build();
+
+	    JwtHeader header = jwtSigner.newHeader();
+	    JwtPayload payload = jwtSigner.newPayload().setExpiresIn(1, TimeUnit.DAYS).setIssuedAtNow();
+
 	    String jwt = jwtSigner.toJwt(new JwtToken(header, payload));
 	    Assertions.assertNotNull(jwt);
 
-	    JwtToken token = jwtSigner.parseJwt(jwt);
+	    // AUTH0
+
+	    Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+	    JWTVerifier verifier = JWT.require(algorithm).withIssuer("Issuer1").build();
+
+	    DecodedJWT decodedJWT = verifier.verify(jwt);
+
+	    Assertions.assertEquals("JWT", decodedJWT.getType());
+	    Assertions.assertEquals("HS256", decodedJWT.getAlgorithm());
+	    Assertions.assertEquals("Issuer1", decodedJWT.getIssuer());
+
+	} catch (Exception ex) {
+	    Assertions.fail(ex.getMessage());
+	}
+    }
+
+    @Test
+    public void test_hs_verify() {
+	try {
+	    // AUTH0
+
+	    Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+	    String auth0Jwt = JWT.create().withIssuer("Issuer1").sign(algorithm);
+
+	    // jwtSigner
+	    JwtSigner jwtSigner = HsJwtSigner.HS256().setJsonProcessor(new GsonProcessor()).setSecret("secret".getBytes()).setIssuer("Issuer1").build();
+
+	    JwtToken token = jwtSigner.parseJwt(auth0Jwt);
 	    jwtSigner.verifyJwt(token);
 
 	    Assertions.assertNotNull(token);
@@ -57,35 +86,6 @@ public class JwtSignerTest {
 
 	    Assertions.assertEquals("JWT", token.getHeader().getType());
 	    Assertions.assertEquals("HS256", token.getHeader().getAlgorithm());
-	    Assertions.assertEquals("Issuer1", token.getPayload().get("iss"));
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
-	}
-    }
-
-    @Test
-    public void test_none() {
-	GsonProcessor gsonProcessor = new GsonProcessor();
-
-	JwtSigner jwtSigner = new JwtSigner().setJsonProcessor(gsonProcessor);
-	jwtSigner.setIssuer("Issuer1");
-
-	JwtHeader header = jwtSigner.newHeader();
-	JwtPayload payload = jwtSigner.newPayload().setExpiresIn(1, TimeUnit.DAYS).setIssuedAtNow();
-
-	try {
-	    String jwt = jwtSigner.toJwt(new JwtToken(header, payload));
-	    Assertions.assertNotNull(jwt);
-
-	    JwtToken token = jwtSigner.parseJwt(jwt);
-	    jwtSigner.verifyJwt(token);
-
-	    Assertions.assertNotNull(token);
-	    Assertions.assertNotNull(token.getHeader());
-	    Assertions.assertNotNull(token.getPayload());
-
-	    Assertions.assertEquals("JWT", token.getHeader().getType());
 	    Assertions.assertEquals("Issuer1", token.getPayload().get("iss"));
 
 	} catch (Exception ex) {

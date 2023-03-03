@@ -25,6 +25,7 @@
 		<version.jakarta-platform>10.0.0</version.jakarta-platform>
 		<version.glassfish-jakarta-el>5.0.0-M1</version.glassfish-jakarta-el>
 		<version.hibernate-validator>8.0.0.Final</version.hibernate-validator>
+		<version.auth0-jwt>4.3.0</version.auth0-jwt>
 		<version.junit-jupiter-api>5.9.2</version.junit-jupiter-api>
 	</properties>
 	<licenses>
@@ -192,6 +193,12 @@
 			<artifactId>junit-jupiter-api</artifactId>
 			<version>${version.junit-jupiter-api}</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>${version.auth0-jwt}</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>

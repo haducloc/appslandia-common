@@ -25,18 +25,18 @@ package com.appslandia.common.jwt;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JwtException extends RuntimeException {
+public class JwtSignatureException extends JwtVerificationException {
     private static final long serialVersionUID = 1L;
 
-    public JwtException(String message) {
+    public JwtSignatureException(String message) {
 	super(message);
     }
 
-    public JwtException(Throwable cause) {
+    public JwtSignatureException(Throwable cause) {
 	super(cause);
     }
 
-    public JwtException(String message, Throwable cause) {
+    public JwtSignatureException(String message, Throwable cause) {
 	super(message, cause);
     }
 }

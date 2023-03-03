@@ -76,7 +76,7 @@ public class JwtUtils {
     }
 
     public static boolean isPastTime(long numericDate, int leewaySec) {
-	return (System.currentTimeMillis() / 1000) + leewaySec >= numericDate;
+	return (System.currentTimeMillis() / 1000) + leewaySec > numericDate;
     }
 
     public static Date toDate(Long numericDate) {

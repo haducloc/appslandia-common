@@ -97,12 +97,8 @@ try (ConnectionImpl connScoped = new ConnectionImpl(javax.sql.DataSource)) {
 ### JWT
 ```java
   // JwtSigner
-  JwtSigner jwtSigner = new JwtSigner().setIssuer("Issuer1");
-
-  // GsonProcessor or your JsonProcessor
-  jwtSigner.setJsonProcessor(new GsonProcessor());
-  
-  jwtSigner.setAlg("HS256").setSigner(new MacDigester().setAlgorithm("HmacSHA256").setSecret("secret".getBytes()));
+  JwtSigner jwtSigner = HsJwtSigner.HS256().setJsonProcessor(gsonProcessor)
+  							  .setSecret("secret".getBytes()).setIssuer("Issuer1").build();
 
   JwtHeader header = processor.newHeader();
   JwtPayload payload = processor.newPayload().setExpiresIn(1, TimeUnit.DAYS);

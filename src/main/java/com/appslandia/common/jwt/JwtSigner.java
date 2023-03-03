@@ -22,14 +22,19 @@ package com.appslandia.common.jwt;
 
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 import com.appslandia.common.base.BaseEncoder;
+import com.appslandia.common.base.InitializeException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.crypto.CryptoException;
 import com.appslandia.common.crypto.Digester;
+import com.appslandia.common.crypto.DsaDigester;
 import com.appslandia.common.crypto.MacDigester;
-import com.appslandia.common.crypto.SignDigester;
 import com.appslandia.common.json.JsonException;
 import com.appslandia.common.json.JsonProcessor;
 import com.appslandia.common.utils.Asserts;
@@ -53,6 +58,31 @@ public class JwtSigner extends InitializeObject {
 
     private Digester signer;
 
+    // signatureVerifier
+    final JwtVerifier signatureVerifier = (jwt) -> {
+
+	if (jwt.getSignaturePart().isEmpty()) {
+	    if (this.signer != null) {
+		throw new JwtSignatureException("signature is required.");
+	    }
+	} else {
+	    if (this.signer == null) {
+		throw new JwtSignatureException("signer is required.");
+	    }
+	    String dataToSign = JwtUtils.toData(jwt.getHeaderPart(), jwt.getPayloadPart());
+
+	    if (!this.signer.verify(dataToSign.getBytes(StandardCharsets.UTF_8), BaseEncoder.BASE64_URL.decode(jwt.getSignaturePart()))) {
+		throw new JwtSignatureException("JWT signature verification failed.");
+	    }
+	}
+    };
+
+    // defaultVerifiers
+    final List<JwtVerifier> defaultVerifiers = new LinkedList<>();
+
+    // customVerifiers
+    final List<JwtVerifier> customVerifiers = new ArrayList<>();
+
     @Override
     protected void init() throws Exception {
 	Asserts.notNull(this.type, "type is required.");
@@ -64,6 +94,64 @@ public class JwtSigner extends InitializeObject {
 	}
 
 	Asserts.notNull(this.jsonProcessor, "jsonProcessor is required.");
+
+	// Type
+	this.defaultVerifiers.add((jwt) -> {
+	    if (!Objects.equals(this.type, jwt.getHeader().getType())) {
+		throw new JwtVerificationException("type doesn't match.");
+	    }
+	});
+
+	// Algorithm
+	this.defaultVerifiers.add((jwt) -> {
+	    if (!Objects.equals(this.alg, jwt.getHeader().getAlgorithm())) {
+		throw new JwtVerificationException("algorithm doesn't match.");
+	    }
+	});
+
+	// kid
+	this.defaultVerifiers.add((jwt) -> {
+	    if (!Objects.equals(this.kid, jwt.getHeader().getKid())) {
+		throw new JwtVerificationException("kid doesn't match.");
+	    }
+	});
+
+	// issuer
+	this.defaultVerifiers.add((jwt) -> {
+	    if (!Objects.equals(this.issuer, jwt.getPayload().getIssuer())) {
+		throw new JwtVerificationException("issuer doesn't match.");
+	    }
+	});
+
+	// exp
+	this.defaultVerifiers.add((jwt) -> {
+	    Date dt = jwt.getPayload().getExpiresAt();
+	    if (dt != null) {
+		long nt = JwtUtils.toNumericDate(dt);
+
+		if (!JwtUtils.isFutureTime(nt, 0)) {
+		    throw new JwtVerificationException("jwt is expired.");
+		}
+	    }
+	});
+
+	// iat
+	this.defaultVerifiers.add((jwt) -> {
+	    Date dt = jwt.getPayload().getIssuedAt();
+	    if (dt != null) {
+		long nt = JwtUtils.toNumericDate(dt);
+
+		if (JwtUtils.isFutureTime(nt, 0)) {
+		    throw new JwtVerificationException("iat must be a past date/time.");
+		}
+	    }
+	});
+    }
+
+    @Override
+    public JwtSigner initialize() throws InitializeException {
+	super.initialize();
+	return this;
     }
 
     public JwtHeader newHeader() {
@@ -86,14 +174,14 @@ public class JwtSigner extends InitializeObject {
 	return payload;
     }
 
-    public String toJwt(JwtToken jwt) throws CryptoException, JsonException {
+    public String toJwt(JwtToken jwt) throws CryptoException, JwtSignatureException, JsonException {
 	this.initialize();
 	Asserts.notNull(jwt);
 	Asserts.notNull(jwt.getHeader());
 	Asserts.notNull(jwt.getPayload());
 
-	// Verify fields
-	verifyFields(jwt);
+	// defaultVerifiers
+	this.defaultVerifiers.forEach((verifier) -> verifier.verify(jwt));
 
 	String header = BaseEncoder.BASE64_URL.encode(this.jsonProcessor.toByteArray(jwt.getHeader()));
 	String payload = BaseEncoder.BASE64_URL.encode(this.jsonProcessor.toByteArray(jwt.getPayload()));
@@ -111,7 +199,7 @@ public class JwtSigner extends InitializeObject {
 	return JwtUtils.toJwt(header, payload, BaseEncoder.BASE64_URL.encode(sig));
     }
 
-    public JwtToken verifyJwt(JwtToken jwt) throws CryptoException, JwtException {
+    public JwtToken verifyJwt(JwtToken jwt) throws CryptoException, JwtSignatureException {
 	this.initialize();
 	Asserts.notNull(jwt);
 	Asserts.notNull(jwt.getHeader());
@@ -121,24 +209,14 @@ public class JwtSigner extends InitializeObject {
 	Asserts.notNull(jwt.getPayloadPart());
 	Asserts.notNull(jwt.getSignaturePart());
 
-	// Verify fields
-	verifyFields(jwt);
+	// defaultVerifiers
+	this.defaultVerifiers.forEach((verifier) -> verifier.verify(jwt));
 
-	// Verify Signature
-	if (jwt.getSignaturePart().isEmpty()) {
-	    if (this.signer != null) {
-		throw new JwtException("signature is required.");
-	    }
-	} else {
-	    if (this.signer == null) {
-		throw new JwtException("signer is required.");
-	    }
-	    String dataToSign = JwtUtils.toData(jwt.getHeaderPart(), jwt.getPayloadPart());
+	// signatureVerifier
+	this.signatureVerifier.verify(jwt);
 
-	    if (!this.signer.verify(dataToSign.getBytes(StandardCharsets.UTF_8), BaseEncoder.BASE64_URL.decode(jwt.getSignaturePart()))) {
-		throw new JwtException("JWT signature verification failed.");
-	    }
-	}
+	// customVerifiers
+	this.customVerifiers.forEach((verifier) -> verifier.verify(jwt));
 	return jwt;
     }
 
@@ -160,28 +238,6 @@ public class JwtSigner extends InitializeObject {
 	return new JwtToken(header, payload, parts[0], parts[1], parts[2]);
     }
 
-    protected void verifyFields(JwtToken jwt) throws JwtException {
-	// typ
-	if (!Objects.equals(this.type, jwt.getHeader().getType())) {
-	    throw new JwtException("type doesn't match.");
-	}
-
-	// alg
-	if (!Objects.equals(this.alg, jwt.getHeader().getAlgorithm())) {
-	    throw new JwtException("algorithm doesn't match.");
-	}
-
-	// kid
-	if (!Objects.equals(this.kid, jwt.getHeader().getKid())) {
-	    throw new JwtException("kid doesn't match.");
-	}
-
-	// iss
-	if (!Objects.equals(this.issuer, jwt.getPayload().getIssuer())) {
-	    throw new JwtException("issuer doesn't match.");
-	}
-    }
-
     public JwtSigner setJsonProcessor(JsonProcessor jsonProcessor) {
 	assertNotInitialized();
 	this.jsonProcessor = jsonProcessor;
@@ -191,13 +247,10 @@ public class JwtSigner extends InitializeObject {
     public JwtSigner setSigner(MacDigester signer) {
 	assertNotInitialized();
 	this.signer = signer;
-	if (signer != null) {
-	    this.alg = parseJwtAlg(signer.getAlgorithm());
-	}
 	return this;
     }
 
-    public JwtSigner setSigner(SignDigester signer) {
+    public JwtSigner setSigner(DsaDigester signer) {
 	assertNotInitialized();
 	this.signer = signer;
 	return this;
@@ -221,18 +274,11 @@ public class JwtSigner extends InitializeObject {
 	return this;
     }
 
-    static String parseJwtAlg(String macAlg) {
-	switch (macAlg) {
-	case "HmacSHA256":
-	    return "HS256";
-
-	case "HmacSHA384":
-	    return "HS384";
-
-	case "HmacSHA512":
-	    return "HS512";
-	default:
-	    return null;
+    public JwtSigner addVerifier(JwtVerifier verifier) {
+	assertNotInitialized();
+	if (verifier != null) {
+	    this.customVerifiers.add(verifier);
 	}
+	return this;
     }
 }
