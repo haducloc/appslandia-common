@@ -34,7 +34,7 @@ import com.google.gson.JsonParseException;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class GsonMapDeserializer<T extends Map<String, Object>> implements JsonDeserializer<T> {
+public class GsonMapDeserializer<T> implements JsonDeserializer<T> {
 
     final Function<Map<String, Object>, T> converter;
     final boolean makeReadonly;

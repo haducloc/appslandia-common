@@ -33,7 +33,7 @@ import jakarta.json.stream.JsonParser;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JsonbMapDeserializer<T extends Map<String, Object>> implements JsonbDeserializer<T> {
+public class JsonbMapDeserializer<T> implements JsonbDeserializer<T> {
 
     final Function<Map<String, Object>, T> converter;
     final boolean makeReadonly;
