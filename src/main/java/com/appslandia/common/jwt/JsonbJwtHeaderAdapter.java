@@ -18,39 +18,45 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.json;
+package com.appslandia.common.jwt;
 
-import java.lang.reflect.Type;
 import java.util.Map;
-import java.util.function.Function;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
+import com.appslandia.common.json.JsonbMapParser;
+
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.bind.adapter.JsonbAdapter;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class GsonMapDeserializer<T> implements JsonDeserializer<T> {
+public class JsonbJwtHeaderAdapter implements JsonbAdapter<JwtHeader, JsonObject> {
 
-    final Function<Map<String, Object>, T> converter;
-    final boolean makeReadonly;
+    final boolean unmodifiable;
 
-    public GsonMapDeserializer(Function<Map<String, Object>, T> converter) {
-	this(converter, false);
+    public JsonbJwtHeaderAdapter() {
+	this(false);
     }
 
-    public GsonMapDeserializer(Function<Map<String, Object>, T> converter, boolean makeReadonly) {
-	this.converter = converter;
-	this.makeReadonly = makeReadonly;
+    public JsonbJwtHeaderAdapter(boolean unmodifiable) {
+	this.unmodifiable = unmodifiable;
     }
 
     @Override
-    public T deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-	Map<String, Object> map = new GsonMapParser().parseMap(json, this.makeReadonly);
-	return this.converter.apply(map);
+    public JsonObject adaptToJson(JwtHeader obj) throws Exception {
+	return Json.createObjectBuilder(obj).build();
+    }
+
+    @Override
+    public JwtHeader adaptFromJson(JsonObject obj) throws Exception {
+	Map<String, Object> map = new JsonbMapParser().parseMap(obj, this.unmodifiable);
+	return new JwtHeader(map);
+    }
+
+    public boolean isUnmodifiable() {
+	return this.unmodifiable;
     }
 }

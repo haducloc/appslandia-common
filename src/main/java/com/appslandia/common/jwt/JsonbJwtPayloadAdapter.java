@@ -18,38 +18,45 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.json;
+package com.appslandia.common.jwt;
 
-import java.lang.reflect.Type;
 import java.util.Map;
-import java.util.function.Function;
 
-import jakarta.json.bind.serializer.DeserializationContext;
-import jakarta.json.bind.serializer.JsonbDeserializer;
-import jakarta.json.stream.JsonParser;
+import com.appslandia.common.json.JsonbMapParser;
+
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.bind.adapter.JsonbAdapter;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JsonbMapDeserializer<T> implements JsonbDeserializer<T> {
+public class JsonbJwtPayloadAdapter implements JsonbAdapter<JwtPayload, JsonObject> {
 
-    final Function<Map<String, Object>, T> converter;
-    final boolean makeReadonly;
+    final boolean unmodifiable;
 
-    public JsonbMapDeserializer(Function<Map<String, Object>, T> converter) {
-	this(converter, false);
+    public JsonbJwtPayloadAdapter() {
+	this(false);
     }
 
-    public JsonbMapDeserializer(Function<Map<String, Object>, T> converter, boolean makeReadonly) {
-	this.converter = converter;
-	this.makeReadonly = makeReadonly;
+    public JsonbJwtPayloadAdapter(boolean unmodifiable) {
+	this.unmodifiable = unmodifiable;
     }
 
     @Override
-    public T deserialize(JsonParser parser, DeserializationContext ctx, Type rtType) {
-	Map<String, Object> map = new JsonbMapParser().parseMap(parser.getValue(), this.makeReadonly);
-	return this.converter.apply(map);
+    public JsonObject adaptToJson(JwtPayload obj) throws Exception {
+	return Json.createObjectBuilder(obj).build();
+    }
+
+    @Override
+    public JwtPayload adaptFromJson(JsonObject obj) throws Exception {
+	Map<String, Object> map = new JsonbMapParser().parseMap(obj, this.unmodifiable);
+	return new JwtPayload(map);
+    }
+
+    public boolean isUnmodifiable() {
+	return this.unmodifiable;
     }
 }

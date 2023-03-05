@@ -26,11 +26,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
 
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
+import jakarta.json.JsonString;
 import jakarta.json.JsonValue;
 import jakarta.json.JsonValue.ValueType;
 
@@ -41,20 +41,16 @@ import jakarta.json.JsonValue.ValueType;
  */
 public class JsonbMapParser {
 
-    public Map<String, Object> parseMap(JsonValue element, boolean makeReadonly) {
-	Asserts.isTrue(element.getValueType() == ValueType.OBJECT);
-
-	JsonObject jsonObject = element.asJsonObject();
-
+    public Map<String, Object> parseMap(JsonObject jsonObject, boolean unmodifiable) {
 	Map<String, Object> map = new LinkedHashMap<>();
 	for (String key : jsonObject.keySet()) {
 
-	    map.put(key, parseValue(jsonObject.get(key), makeReadonly));
+	    map.put(key, parseValue(jsonObject.get(key), unmodifiable));
 	}
-	return makeReadonly ? Collections.unmodifiableMap(map) : map;
+	return unmodifiable ? Collections.unmodifiableMap(map) : map;
     }
 
-    public Object parseValue(JsonValue element, boolean makeReadonly) {
+    public Object parseValue(JsonValue element, boolean unmodifiable) {
 	// NULL
 	if (element.getValueType() == ValueType.NULL) {
 	    return null;
@@ -62,7 +58,7 @@ public class JsonbMapParser {
 
 	// STRING
 	if (element.getValueType() == ValueType.STRING) {
-	    return element.toString();
+	    return ((JsonString) element).getString();
 	}
 
 	// Boolean
@@ -90,9 +86,9 @@ public class JsonbMapParser {
 	    List<Object> list = new LinkedList<>();
 
 	    for (JsonValue jsonElement : jsonArray) {
-		list.add(parseValue(jsonElement, makeReadonly));
+		list.add(parseValue(jsonElement, unmodifiable));
 	    }
-	    return makeReadonly ? Collections.unmodifiableList(list) : list;
+	    return unmodifiable ? Collections.unmodifiableList(list) : list;
 	}
 
 	// MAP
@@ -101,9 +97,9 @@ public class JsonbMapParser {
 	    Map<String, Object> map = new LinkedHashMap<>(jsonObject.size());
 
 	    for (String key : jsonObject.keySet()) {
-		map.put(key, parseValue(jsonObject.get(key), makeReadonly));
+		map.put(key, parseValue(jsonObject.get(key), unmodifiable));
 	    }
-	    return makeReadonly ? Collections.unmodifiableMap(map) : map;
+	    return unmodifiable ? Collections.unmodifiableMap(map) : map;
 	}
 
 	throw new IllegalArgumentException(STR.fmt("invalid JsonValue {}", element.toString()));

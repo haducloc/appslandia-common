@@ -40,19 +40,19 @@ import com.google.gson.JsonPrimitive;
  */
 public class GsonMapParser {
 
-    public Map<String, Object> parseMap(JsonElement element, boolean makeReadonly) {
+    public Map<String, Object> parseMap(JsonElement element, boolean unmodifiable) {
 	Asserts.isTrue(element.isJsonObject());
 	JsonObject jsonObject = (JsonObject) element.getAsJsonObject();
 
 	Map<String, Object> map = new LinkedHashMap<>();
 	for (String key : jsonObject.keySet()) {
 
-	    map.put(key, parseValue(jsonObject.get(key), makeReadonly));
+	    map.put(key, parseValue(jsonObject.get(key), unmodifiable));
 	}
-	return makeReadonly ? Collections.unmodifiableMap(map) : map;
+	return unmodifiable ? Collections.unmodifiableMap(map) : map;
     }
 
-    public Object parseValue(JsonElement element, boolean makeReadonly) {
+    public Object parseValue(JsonElement element, boolean unmodifiable) {
 	// NULL
 	if (element.isJsonNull()) {
 	    return null;
@@ -91,9 +91,9 @@ public class GsonMapParser {
 	    List<Object> list = new LinkedList<>();
 
 	    for (JsonElement jsonElement : jsonArray) {
-		list.add(parseValue(jsonElement, makeReadonly));
+		list.add(parseValue(jsonElement, unmodifiable));
 	    }
-	    return makeReadonly ? Collections.unmodifiableList(list) : list;
+	    return unmodifiable ? Collections.unmodifiableList(list) : list;
 	}
 
 	// MAP
@@ -102,9 +102,9 @@ public class GsonMapParser {
 	    Map<String, Object> map = new LinkedHashMap<>(jsonObject.size());
 
 	    for (String key : jsonObject.keySet()) {
-		map.put(key, parseValue(jsonObject.get(key), makeReadonly));
+		map.put(key, parseValue(jsonObject.get(key), unmodifiable));
 	    }
-	    return makeReadonly ? Collections.unmodifiableMap(map) : map;
+	    return unmodifiable ? Collections.unmodifiableMap(map) : map;
 	}
 
 	throw new IllegalArgumentException(STR.fmt("invalid JsonElement {}", element.getAsString()));
