@@ -21,7 +21,6 @@
 package com.appslandia.common.json;
 
 import java.lang.reflect.Type;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -51,7 +50,7 @@ public class GsonMapDeserializer<T extends Map<String, Object>> implements JsonD
 
     @Override
     public T deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-	Map<String, Object> map = new GsonMapParser().parseMap(json.getAsJsonObject(), () -> new LinkedHashMap<String, Object>(), this.makeReadonly);
+	Map<String, Object> map = new GsonMapParser().parseMap(json, this.makeReadonly);
 	return this.converter.apply(map);
     }
 }

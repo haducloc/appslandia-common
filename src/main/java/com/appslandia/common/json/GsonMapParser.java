@@ -20,12 +20,11 @@
 
 package com.appslandia.common.json;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
@@ -41,10 +40,11 @@ import com.google.gson.JsonPrimitive;
  */
 public class GsonMapParser {
 
-    public Map<String, Object> parseMap(JsonObject jsonObject, Supplier<Map<String, Object>> newMap, boolean makeReadonly) {
-	Asserts.isTrue(jsonObject.isJsonObject());
+    public Map<String, Object> parseMap(JsonElement element, boolean makeReadonly) {
+	Asserts.isTrue(element.isJsonObject());
+	JsonObject jsonObject = (JsonObject) element.getAsJsonObject();
 
-	Map<String, Object> map = newMap.get();
+	Map<String, Object> map = new LinkedHashMap<>();
 	for (String key : jsonObject.keySet()) {
 
 	    map.put(key, parseValue(jsonObject.get(key), makeReadonly));
@@ -88,7 +88,7 @@ public class GsonMapParser {
 	// Array
 	if (element.isJsonArray()) {
 	    JsonArray jsonArray = element.getAsJsonArray();
-	    List<Object> list = new ArrayList<>(jsonArray.size());
+	    List<Object> list = new LinkedList<>();
 
 	    for (JsonElement jsonElement : jsonArray) {
 		list.add(parseValue(jsonElement, makeReadonly));

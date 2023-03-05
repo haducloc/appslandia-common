@@ -21,7 +21,6 @@
 package com.appslandia.common.json;
 
 import java.lang.reflect.Type;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -50,7 +49,7 @@ public class JsonbMapDeserializer<T extends Map<String, Object>> implements Json
 
     @Override
     public T deserialize(JsonParser parser, DeserializationContext ctx, Type rtType) {
-	Map<String, Object> map = new JsonbMapParser().parseMap(parser.getObject(), () -> new LinkedHashMap<String, Object>(), this.makeReadonly);
+	Map<String, Object> map = new JsonbMapParser().parseMap(parser.getValue(), this.makeReadonly);
 	return this.converter.apply(map);
     }
 }
