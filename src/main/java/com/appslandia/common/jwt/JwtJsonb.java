@@ -35,7 +35,7 @@ public class JwtJsonb {
 	return JsonbProcessor.newConfig().withAdapters(new JsonbJwtHeaderAdapter(true), new JsonbJwtPayloadAdapter(true));
     }
 
-    public static JsonbProcessor newJsonbProcessor() {
+    public static JsonbProcessor newJsonProcessor() {
 	return new JsonbProcessor().setConfig(newJsonbConfig());
     }
 }

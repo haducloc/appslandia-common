@@ -39,7 +39,7 @@ public class JwtGson {
 	// @formatter:on
     }
 
-    public static GsonProcessor newGsonProcessor() {
+    public static GsonProcessor newJsonProcessor() {
 	return new GsonProcessor().setBuilder(newGsonBuilder());
     }
 }
