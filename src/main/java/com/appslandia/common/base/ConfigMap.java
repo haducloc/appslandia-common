@@ -59,9 +59,7 @@ public class ConfigMap extends MapWrapper<String, String> implements Config {
 
     @Override
     public void putAll(Map<? extends String, ? extends String> m) {
-	for (Entry<? extends String, ? extends String> config : m.entrySet()) {
-	    this.map.put(config.getKey(), StringUtils.trimToNull(config.getValue()));
-	}
+	throw new UnsupportedOperationException();
     }
 
     @Override
