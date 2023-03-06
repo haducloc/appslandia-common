@@ -104,14 +104,7 @@ public class BasicMap extends ValidatableMap {
     }
 
     private boolean validateCollection(Collection<?> col) {
-	for (Object value : col) {
-
-	    // Value
-	    if ((value != null) && !isValueSupported(value)) {
-		return false;
-	    }
-	}
-	return true;
+	return col.stream().allMatch(value -> (value == null) || isValueSupported(value));
     }
 
     private boolean validateArray(Object array) {
