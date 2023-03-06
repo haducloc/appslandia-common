@@ -96,8 +96,8 @@ try (ConnectionImpl connScoped = new ConnectionImpl(javax.sql.DataSource)) {
 ```
 ### JWT
 ```java
-  // GsonProcessor or JsonbProcessor or your own JsonProcessor
-  JsonProcessor jsonProcessor = new GsonProcessor();
+  // Gson or JsonB JwtJsonb.newJsonProcessor() or your implementation
+  JsonProcessor jsonProcessor = JwtGson.newJsonProcessor();
   
   // JwtSigner - HS256/HS384/HS512
   JwtSigner jwtSigner = HsJwtSigner.HS256().setJsonProcessor(jsonProcessor)
