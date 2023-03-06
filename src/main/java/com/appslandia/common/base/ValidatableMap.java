@@ -49,11 +49,14 @@ public abstract class ValidatableMap extends MapWrapper<String, Object> {
 
     @Override
     public Object put(String key, Object value) {
+	Asserts.notNull(key);
 	Asserts.isTrue(isValueSupported(value), "value is unsupported.");
+
 	return this.map.put(key, value);
     }
 
     public ValidatableMap set(String key, Object value) {
+	Asserts.notNull(key);
 	Asserts.isTrue(isValueSupported(value), "value is unsupported.");
 
 	this.map.put(key, value);
