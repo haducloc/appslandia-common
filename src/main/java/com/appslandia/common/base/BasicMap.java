@@ -23,10 +23,15 @@ package com.appslandia.common.base;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.time.temporal.Temporal;
+import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
+
+import com.appslandia.common.utils.ObjectUtils;
 
 /**
  *
@@ -55,17 +60,27 @@ public class BasicMap extends ValidatableMap {
 	if (value == null) {
 	    return true;
 	}
-	if (value instanceof List) {
-	    return validateList((List<?>) value);
+
+	// Basic Types
+	if (isBasicType(value.getClass())) {
+	    return true;
 	}
+
+	// Collection
+	if (value instanceof Collection) {
+	    return validateCollection((Collection<?>) value);
+	}
+
+	// Map
 	if (value instanceof Map) {
 	    return validateMap((Map<?, ?>) value);
 	}
-	Class<?> type = value.getClass();
-	if (type.isArray()) {
+
+	// Array
+	if (value.getClass().isArray()) {
 	    return validateArray(value);
 	}
-	return isBasicType(type);
+	return false;
     }
 
     protected boolean isBasicType(Class<?> c) {
@@ -88,8 +103,8 @@ public class BasicMap extends ValidatableMap {
 	return true;
     }
 
-    private boolean validateList(List<?> list) {
-	for (Object value : list) {
+    private boolean validateCollection(Collection<?> col) {
+	for (Object value : col) {
 
 	    // Value
 	    if ((value != null) && !isValueSupported(value)) {
@@ -110,5 +125,60 @@ public class BasicMap extends ValidatableMap {
 	    }
 	}
 	return true;
+    }
+
+    public Map<String, Object> copyInnerMap() {
+	Map<String, Object> cm = new LinkedHashMap<>();
+
+	for (Entry<String, Object> entry : cm.entrySet()) {
+	    cm.put(entry.getKey(), copyValue(entry.getValue()));
+	}
+	return cm;
+    }
+
+    protected Object copyValue(Object value) {
+	if (value == null) {
+	    return null;
+	}
+
+	// Basic Types
+	if (isBasicType(value.getClass())) {
+	    return value;
+	}
+
+	// Collection
+	if (value instanceof Collection) {
+	    Collection<Object> valueAsCol = ObjectUtils.cast(value);
+	    Collection<Object> cc = (valueAsCol instanceof Set) ? new LinkedHashSet<>() : new LinkedList<>();
+
+	    for (Object element : valueAsCol) {
+		cc.add(copyValue(element));
+	    }
+	    return cc;
+	}
+
+	// Map
+	if (value instanceof Map) {
+	    Map<String, Object> valueAsMap = ObjectUtils.cast(value);
+	    Map<String, Object> cm = new LinkedHashMap<>(valueAsMap.size());
+
+	    for (Entry<String, Object> entry : valueAsMap.entrySet()) {
+		cm.put(entry.getKey(), copyValue(entry.getValue()));
+	    }
+	    return cm;
+	}
+
+	// Array
+	if (value.getClass().isArray()) {
+	    int len = Array.getLength(value);
+	    Object[] cv = new Object[len];
+
+	    for (int i = 0; i < len; i++) {
+		cv[i] = copyValue(Array.get(value, i));
+	    }
+	    return cv;
+	}
+
+	throw new Error();
     }
 }
