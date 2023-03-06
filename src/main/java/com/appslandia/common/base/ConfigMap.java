@@ -20,8 +20,8 @@
 
 package com.appslandia.common.base;
 
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.appslandia.common.utils.StringUtils;
@@ -35,7 +35,7 @@ public class ConfigMap extends MapWrapper<String, String> implements Config {
     private static final long serialVersionUID = 1L;
 
     public ConfigMap() {
-	super(new HashMap<String, String>());
+	super(new LinkedHashMap<String, String>());
     }
 
     public ConfigMap(Map<String, String> newMap) {

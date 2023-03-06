@@ -20,7 +20,7 @@
 
 package com.appslandia.common.base;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.appslandia.common.utils.Asserts;
@@ -35,7 +35,7 @@ public abstract class ValidatableMap extends MapWrapper<String, Object> {
     private static final long serialVersionUID = 1L;
 
     public ValidatableMap() {
-	super(new HashMap<String, Object>());
+	super(new LinkedHashMap<String, Object>());
     }
 
     public ValidatableMap(Map<String, Object> newMap) {

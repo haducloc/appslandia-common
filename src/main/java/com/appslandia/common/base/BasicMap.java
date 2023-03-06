@@ -24,7 +24,7 @@ import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.time.temporal.Temporal;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +37,7 @@ public class BasicMap extends ValidatableMap {
     private static final long serialVersionUID = 1L;
 
     public BasicMap() {
-	super(new HashMap<String, Object>());
+	super(new LinkedHashMap<String, Object>());
     }
 
     public BasicMap(Map<String, Object> newMap) {
