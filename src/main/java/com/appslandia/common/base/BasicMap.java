@@ -111,7 +111,7 @@ public class BasicMap extends ValidatableMap {
     public Map<String, Object> copyInnerMap() {
 	Map<String, Object> cm = new LinkedHashMap<>();
 
-	for (Entry<String, Object> entry : cm.entrySet()) {
+	for (Entry<String, Object> entry : this.map.entrySet()) {
 	    cm.put(entry.getKey(), copyValue(entry.getValue()));
 	}
 	return cm;
