@@ -30,6 +30,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 import com.appslandia.common.utils.ObjectUtils;
 
@@ -89,18 +90,9 @@ public class BasicMap extends ValidatableMap {
     }
 
     private boolean validateMap(Map<?, ?> map) {
-	for (Entry<?, ?> entry : map.entrySet()) {
-	    // Key
-	    if ((entry.getKey() == null) || (entry.getKey().getClass() != String.class)) {
-		return false;
-	    }
-
-	    // Value
-	    if ((entry.getValue() != null) && !isValueSupported(entry.getValue())) {
-		return false;
-	    }
-	}
-	return true;
+	return map.entrySet().stream().allMatch(entry -> {
+	    return (entry.getKey() instanceof String) && ((entry.getValue() == null) || isValueSupported(entry.getValue()));
+	});
     }
 
     private boolean validateCollection(Collection<?> col) {
@@ -109,15 +101,11 @@ public class BasicMap extends ValidatableMap {
 
     private boolean validateArray(Object array) {
 	int len = Array.getLength(array);
-	for (int i = 0; i < len; i++) {
-	    Object value = Array.get(array, i);
 
-	    // Value
-	    if ((value != null) && !isValueSupported(value)) {
-		return false;
-	    }
-	}
-	return true;
+	return IntStream.range(0, len).allMatch(i -> {
+	    Object value = Array.get(array, i);
+	    return (value == null) || isValueSupported(value);
+	});
     }
 
     public Map<String, Object> copyInnerMap() {
