@@ -96,7 +96,13 @@ public class URLUtils {
 	try {
 	    URI uri = new URI(url);
 	    StringBuilder sb = new StringBuilder(url.length() + moreParameters.size() * 16);
-	    sb.append(uri.getScheme()).append("://").append(uri.getRawAuthority()).append(uri.getRawPath());
+
+	    if (uri.getScheme() != null) {
+		sb.append(uri.getScheme()).append("://").append(uri.getRawAuthority());
+	    }
+
+	    Asserts.notNull(uri.getRawPath());
+	    sb.append(uri.getRawPath());
 
 	    boolean addedQuest = false;
 	    if (uri.getRawQuery() != null) {
