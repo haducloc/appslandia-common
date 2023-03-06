@@ -26,8 +26,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.appslandia.common.utils.STR;
-
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonString;
@@ -102,6 +100,6 @@ public class JsonbMapParser {
 	    return unmodifiable ? Collections.unmodifiableMap(map) : map;
 	}
 
-	throw new IllegalArgumentException(STR.fmt("invalid JsonValue {}", element.toString()));
+	throw new Error();
     }
 }

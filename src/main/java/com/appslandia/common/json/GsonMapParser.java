@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.appslandia.common.utils.Asserts;
-import com.appslandia.common.utils.STR;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -107,6 +106,6 @@ public class GsonMapParser {
 	    return unmodifiable ? Collections.unmodifiableMap(map) : map;
 	}
 
-	throw new IllegalArgumentException(STR.fmt("invalid JsonElement {}", element.getAsString()));
+	throw new Error();
     }
 }
