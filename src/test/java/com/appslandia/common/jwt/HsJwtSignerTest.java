@@ -25,7 +25,6 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.appslandia.common.json.GsonProcessor;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -42,7 +41,7 @@ public class HsJwtSignerTest {
     public void test_hs() {
 	try {
 	    // jwtSigner
-	    JwtSigner jwtSigner = HsJwtSigner.HS256().setJsonProcessor(new GsonProcessor()).setSecret("secret".getBytes()).setIssuer("Issuer1").build();
+	    JwtSigner jwtSigner = HsJwtSigner.HS256().setJsonProcessor(JwtGson.newJsonProcessor()).setSecret("secret".getBytes()).setIssuer("Issuer1").build();
 
 	    JwtHeader header = jwtSigner.newHeader();
 	    JwtPayload payload = jwtSigner.newPayload().setExpiresIn(1, TimeUnit.DAYS).setIssuedAtNow();
@@ -75,7 +74,7 @@ public class HsJwtSignerTest {
 	    String auth0Jwt = JWT.create().withIssuer("Issuer1").sign(algorithm);
 
 	    // jwtSigner
-	    JwtSigner jwtSigner = HsJwtSigner.HS256().setJsonProcessor(new GsonProcessor()).setSecret("secret".getBytes()).setIssuer("Issuer1").build();
+	    JwtSigner jwtSigner = HsJwtSigner.HS256().setJsonProcessor(JwtGson.newJsonProcessor()).setSecret("secret".getBytes()).setIssuer("Issuer1").build();
 
 	    JwtToken token = jwtSigner.parseJwt(auth0Jwt);
 	    jwtSigner.verifyJwt(token);

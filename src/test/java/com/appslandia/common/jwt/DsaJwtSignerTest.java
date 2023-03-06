@@ -32,7 +32,6 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.appslandia.common.json.GsonProcessor;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -58,7 +57,7 @@ public class DsaJwtSignerTest {
 	    KeyPair keyPair = generateECKeyPair();
 
 	    // jwtSigner
-	    JwtSigner jwtSigner = DsaJwtSigner.ES256().setJsonProcessor(new GsonProcessor()).setPrivateKey(keyPair.getPrivate()).setPublicKey(keyPair.getPublic())
+	    JwtSigner jwtSigner = DsaJwtSigner.ES256().setJsonProcessor(JwtGson.newJsonProcessor()).setPrivateKey(keyPair.getPrivate()).setPublicKey(keyPair.getPublic())
 		    .setIssuer("Issuer1").build();
 
 	    JwtHeader header = jwtSigner.newHeader();
@@ -94,7 +93,7 @@ public class DsaJwtSignerTest {
 	    String auth0Jwt = JWT.create().withIssuer("Issuer1").sign(algorithm);
 
 	    // jwtSigner
-	    JwtSigner jwtSigner = DsaJwtSigner.ES256().setJsonProcessor(new GsonProcessor()).setPrivateKey(keyPair.getPrivate()).setPublicKey(keyPair.getPublic())
+	    JwtSigner jwtSigner = DsaJwtSigner.ES256().setJsonProcessor(JwtGson.newJsonProcessor()).setPrivateKey(keyPair.getPrivate()).setPublicKey(keyPair.getPublic())
 		    .setIssuer("Issuer1").build();
 
 	    JwtToken token = jwtSigner.parseJwt(auth0Jwt);
@@ -125,7 +124,7 @@ public class DsaJwtSignerTest {
 	    KeyPair keyPair = generateRSKeyPair();
 
 	    // jwtSigner
-	    JwtSigner jwtSigner = DsaJwtSigner.RS256().setJsonProcessor(new GsonProcessor()).setPrivateKey(keyPair.getPrivate()).setPublicKey(keyPair.getPublic())
+	    JwtSigner jwtSigner = DsaJwtSigner.RS256().setJsonProcessor(JwtGson.newJsonProcessor()).setPrivateKey(keyPair.getPrivate()).setPublicKey(keyPair.getPublic())
 		    .setIssuer("Issuer1").build();
 
 	    JwtHeader header = jwtSigner.newHeader();
@@ -161,7 +160,7 @@ public class DsaJwtSignerTest {
 	    String auth0Jwt = JWT.create().withIssuer("Issuer1").sign(algorithm);
 
 	    // jwtSigner
-	    JwtSigner jwtSigner = DsaJwtSigner.RS256().setJsonProcessor(new GsonProcessor()).setPrivateKey(keyPair.getPrivate()).setPublicKey(keyPair.getPublic())
+	    JwtSigner jwtSigner = DsaJwtSigner.RS256().setJsonProcessor(JwtGson.newJsonProcessor()).setPrivateKey(keyPair.getPrivate()).setPublicKey(keyPair.getPublic())
 		    .setIssuer("Issuer1").build();
 
 	    JwtToken token = jwtSigner.parseJwt(auth0Jwt);
