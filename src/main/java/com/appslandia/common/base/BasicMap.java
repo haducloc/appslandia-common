@@ -28,15 +28,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.appslandia.common.utils.Asserts;
-import com.appslandia.common.utils.STR;
-
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class BasicMap extends MapWrapper<String, Object> {
+public class BasicMap extends ValidatableMap {
     private static final long serialVersionUID = 1L;
 
     public BasicMap() {
@@ -47,24 +44,14 @@ public class BasicMap extends MapWrapper<String, Object> {
 	super(newMap);
     }
 
-    public Object getRequired(String key) {
-	Object obj = this.get(key);
-	return Asserts.notNull(obj, () -> STR.fmt("No value associated with key '{}'.", key));
-    }
-
     @Override
-    public Object put(String key, Object value) {
-	return this.map.put(key, value);
-    }
-
     public BasicMap set(String key, Object value) {
-	Asserts.isTrue(isSupportedValue(value), "value is unsupported.");
-
-	this.map.put(key, value);
+	super.set(key, value);
 	return this;
     }
 
-    protected boolean isSupportedValue(Object value) {
+    @Override
+    protected boolean isValueSupported(Object value) {
 	if (value == null) {
 	    return true;
 	}
@@ -94,7 +81,7 @@ public class BasicMap extends MapWrapper<String, Object> {
 	    }
 
 	    // Value
-	    if ((entry.getValue() != null) && !isSupportedValue(entry.getValue())) {
+	    if ((entry.getValue() != null) && !isValueSupported(entry.getValue())) {
 		return false;
 	    }
 	}
@@ -105,7 +92,7 @@ public class BasicMap extends MapWrapper<String, Object> {
 	for (Object value : list) {
 
 	    // Value
-	    if ((value != null) && !isSupportedValue(value)) {
+	    if ((value != null) && !isValueSupported(value)) {
 		return false;
 	    }
 	}
@@ -118,7 +105,7 @@ public class BasicMap extends MapWrapper<String, Object> {
 	    Object value = Array.get(array, i);
 
 	    // Value
-	    if ((value != null) && !isSupportedValue(value)) {
+	    if ((value != null) && !isValueSupported(value)) {
 		return false;
 	    }
 	}
