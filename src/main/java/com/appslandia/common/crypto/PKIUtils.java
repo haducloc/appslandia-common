@@ -37,9 +37,27 @@ import com.appslandia.common.utils.Asserts;
  */
 public class PKIUtils {
 
+    static final String BEGIN_MARKER = "-----BEGIN ";
+    static final String END_MARKER = "-----END ";
+
     public static byte[] toDerEncoded(String pem) {
 	pem = removeBeginEnd(pem);
 	return BaseEncoder.BASE64_MIME.decode(pem);
+    }
+
+    public static String extracData(String pem, String entityName) {
+	String beginMarker = "-----BEGIN " + entityName + "-----";
+	String endMarker = "-----END " + entityName + "-----";
+
+	int idx1 = pem.indexOf(beginMarker);
+	if (idx1 < 0) {
+	    return null;
+	}
+	int idx2 = pem.indexOf(endMarker, idx1 + beginMarker.length());
+	if (idx2 < 0) {
+	    return null;
+	}
+	return pem.substring(idx1 + beginMarker.length(), idx2).trim();
     }
 
     public static String removeBeginEnd(String pem) {
