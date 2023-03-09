@@ -43,9 +43,9 @@ public class DsaJwsSigner<P> {
     protected DsaDigester signer;
 
     public DsaJwsSigner(String jwsAlgorithm, String dsaAlgorithm, Class<P> payloadClass) {
-	this.alg = jwsAlgorithm;
-	this.signer = new DsaDigester().setAlgorithm(dsaAlgorithm);
-	this.payloadClass = payloadClass;
+	this.alg = Asserts.notNull(jwsAlgorithm);
+	this.signer = new DsaDigester().setAlgorithm(Asserts.notNull(dsaAlgorithm));
+	this.payloadClass = Asserts.notNull(payloadClass);
     }
 
     public DsaJwsSigner<P> setProvider(String provider) {

@@ -48,8 +48,8 @@ public class DsaJwtSigner {
     protected DsaDigester signer;
 
     public DsaJwtSigner(String jwsAlgorithm, String dsaAlgorithm) {
-	this.alg = jwsAlgorithm;
-	this.signer = new DsaDigester().setAlgorithm(dsaAlgorithm);
+	this.alg = Asserts.notNull(jwsAlgorithm);
+	this.signer = new DsaDigester().setAlgorithm(Asserts.notNull(dsaAlgorithm));
     }
 
     public DsaJwtSigner setProvider(String provider) {

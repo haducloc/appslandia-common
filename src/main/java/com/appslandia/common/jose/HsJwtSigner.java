@@ -46,8 +46,8 @@ public class HsJwtSigner {
     protected MacDigester signer;
 
     public HsJwtSigner(String jwsAlgorithm, String macAlgorithm) {
-	this.alg = jwsAlgorithm;
-	this.signer = new MacDigester().setAlgorithm(macAlgorithm);
+	this.alg = Asserts.notNull(jwsAlgorithm);
+	this.signer = new MacDigester().setAlgorithm(Asserts.notNull(macAlgorithm));
     }
 
     public HsJwtSigner setProvider(String provider) {

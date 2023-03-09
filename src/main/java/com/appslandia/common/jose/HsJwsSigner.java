@@ -40,9 +40,9 @@ public class HsJwsSigner<P> {
     protected MacDigester signer;
 
     public HsJwsSigner(String jwsAlgorithm, String macAlgorithm, Class<P> payloadClass) {
-	this.alg = jwsAlgorithm;
-	this.signer = new MacDigester().setAlgorithm(macAlgorithm);
-	this.payloadClass = payloadClass;
+	this.alg = Asserts.notNull(jwsAlgorithm);
+	this.signer = new MacDigester().setAlgorithm(Asserts.notNull(macAlgorithm));
+	this.payloadClass = Asserts.notNull(payloadClass);
     }
 
     public HsJwsSigner<P> setProvider(String provider) {
