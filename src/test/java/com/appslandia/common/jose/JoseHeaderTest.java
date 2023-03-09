@@ -20,26 +20,37 @@
 
 package com.appslandia.common.jose;
 
-import com.appslandia.common.json.GsonMapAdapter;
-import com.appslandia.common.json.GsonProcessor;
-import com.google.gson.GsonBuilder;
+import java.util.Date;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JwtGson {
+public class JoseHeaderTest {
 
-    public static GsonBuilder newGsonBuilder() {
-	// @formatter:off
-	return GsonProcessor.newBuilder()
-		.registerTypeAdapter(JwtHeader.class, new GsonMapAdapter<>((m) -> new JwtHeader(m), true))
-		.registerTypeAdapter(JwtPayload.class, new GsonMapAdapter<>((m) -> new JwtPayload(m), true));
-	// @formatter:on
+    @Test
+    public void test_date() {
+	JoseHeader header = new JoseHeader();
+
+	Date d = new Date();
+	header.set("d", d.getTime());
+
+	Date d1 = header.getDate("d");
+	Assertions.assertEquals(d.getTime(), d1.getTime());
     }
 
-    public static GsonProcessor newJsonProcessor() {
-	return new GsonProcessor().setBuilder(newGsonBuilder());
+    @Test
+    public void test_numericDate() {
+	JoseHeader header = new JoseHeader();
+
+	Date d = new Date();
+	header.setNumericDate("nd", d);
+
+	Date d1 = header.getNumericDate("nd");
+	Assertions.assertEquals((d.getTime() / 1000) * 1000, d1.getTime());
     }
 }

@@ -20,22 +20,43 @@
 
 package com.appslandia.common.jose;
 
-import com.appslandia.common.json.JsonbProcessor;
+import java.util.Map;
 
-import jakarta.json.bind.JsonbConfig;
+import com.appslandia.common.json.JsonbMapParser;
+
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.bind.adapter.JsonbAdapter;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JwtJsonb {
+public class JsonbJoseHeaderAdapter implements JsonbAdapter<JoseHeader, JsonObject> {
 
-    public static JsonbConfig newJsonbConfig() {
-	return JsonbProcessor.newConfig().withAdapters(new JsonbJwtHeaderAdapter(true), new JsonbJwtPayloadAdapter(true));
+    final boolean unmodifiable;
+
+    public JsonbJoseHeaderAdapter() {
+	this(false);
     }
 
-    public static JsonbProcessor newJsonProcessor() {
-	return new JsonbProcessor().setConfig(newJsonbConfig());
+    public JsonbJoseHeaderAdapter(boolean unmodifiable) {
+	this.unmodifiable = unmodifiable;
+    }
+
+    @Override
+    public JsonObject adaptToJson(JoseHeader obj) throws Exception {
+	return Json.createObjectBuilder(obj).build();
+    }
+
+    @Override
+    public JoseHeader adaptFromJson(JsonObject obj) throws Exception {
+	Map<String, Object> map = new JsonbMapParser().parseMap(obj, this.unmodifiable);
+	return new JoseHeader(map);
+    }
+
+    public boolean isUnmodifiable() {
+	return this.unmodifiable;
     }
 }

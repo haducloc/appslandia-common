@@ -20,43 +20,70 @@
 
 package com.appslandia.common.jose;
 
+import java.util.Date;
 import java.util.Map;
-
-import com.appslandia.common.json.JsonbMapParser;
-
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
-import jakarta.json.bind.adapter.JsonbAdapter;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JsonbJwtHeaderAdapter implements JsonbAdapter<JwtHeader, JsonObject> {
+public class JoseHeader extends JoseBasicMap {
+    private static final long serialVersionUID = 1L;
 
-    final boolean unmodifiable;
+    public static final String TYP = "typ";
+    public static final String ALG = "alg";
+    public static final String KID = "kid";
 
-    public JsonbJwtHeaderAdapter() {
-	this(false);
+    public JoseHeader() {
     }
 
-    public JsonbJwtHeaderAdapter(boolean unmodifiable) {
-	this.unmodifiable = unmodifiable;
-    }
-
-    @Override
-    public JsonObject adaptToJson(JwtHeader obj) throws Exception {
-	return Json.createObjectBuilder(obj).build();
+    public JoseHeader(Map<String, Object> map) {
+	super(map);
     }
 
     @Override
-    public JwtHeader adaptFromJson(JsonObject obj) throws Exception {
-	Map<String, Object> map = new JsonbMapParser().parseMap(obj, this.unmodifiable);
-	return new JwtHeader(map);
+    public JoseHeader set(String key, Object value) {
+	super.set(key, value);
+	return this;
     }
 
-    public boolean isUnmodifiable() {
-	return this.unmodifiable;
+    @Override
+    public JoseHeader setNumericDate(String key, Date value) {
+	super.setNumericDate(key, value);
+	return this;
+    }
+
+    @Override
+    public JoseHeader setNumericDate(String key, long timeInMs) {
+	super.setNumericDate(key, timeInMs);
+	return this;
+    }
+
+    public String getType() {
+	return (String) this.get(TYP);
+    }
+
+    public JoseHeader setType(String value) {
+	this.put(TYP, value);
+	return this;
+    }
+
+    public String getAlgorithm() {
+	return (String) this.get(ALG);
+    }
+
+    public JoseHeader setAlgorithm(String value) {
+	this.put(ALG, value);
+	return this;
+    }
+
+    public String getKid() {
+	return (String) this.get(KID);
+    }
+
+    public JoseHeader setKid(String value) {
+	this.put(KID, value);
+	return this;
     }
 }

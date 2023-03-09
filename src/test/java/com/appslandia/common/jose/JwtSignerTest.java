@@ -36,11 +36,11 @@ public class JwtSignerTest {
 
     @Test
     public void test() {
-	JwtSigner jwtSigner = new JwtSigner().setJsonProcessor(JwtGson.newJsonProcessor());
+	JwtSigner jwtSigner = new JwtSigner().setJsonProcessor(JoseGson.newJsonProcessor());
 	jwtSigner.setAlg("HS256").setSigner(new MacDigester().setAlgorithm("HmacSHA256").setSecret("secret".getBytes()));
 	jwtSigner.setIssuer("Issuer1");
 
-	JwtHeader header = jwtSigner.newHeader();
+	JoseHeader header = jwtSigner.newHeader();
 	JwtPayload payload = jwtSigner.newPayload().setExpiresIn(1, TimeUnit.DAYS).setIssuedAtNow();
 
 	try {
@@ -65,10 +65,10 @@ public class JwtSignerTest {
 
     @Test
     public void test_none() {
-	JwtSigner jwtSigner = new JwtSigner().setJsonProcessor(JwtGson.newJsonProcessor());
+	JwtSigner jwtSigner = new JwtSigner().setJsonProcessor(JoseGson.newJsonProcessor());
 	jwtSigner.setIssuer("Issuer1");
 
-	JwtHeader header = jwtSigner.newHeader();
+	JoseHeader header = jwtSigner.newHeader();
 	JwtPayload payload = jwtSigner.newPayload().setExpiresIn(1, TimeUnit.DAYS).setIssuedAtNow();
 
 	try {

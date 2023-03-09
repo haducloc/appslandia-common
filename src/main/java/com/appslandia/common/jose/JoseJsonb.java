@@ -20,70 +20,22 @@
 
 package com.appslandia.common.jose;
 
-import java.util.Date;
-import java.util.Map;
+import com.appslandia.common.json.JsonbProcessor;
+
+import jakarta.json.bind.JsonbConfig;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JwtHeader extends JoseBasicMap {
-    private static final long serialVersionUID = 1L;
+public class JoseJsonb {
 
-    public static final String TYP = "typ";
-    public static final String ALG = "alg";
-    public static final String KID = "kid";
-
-    public JwtHeader() {
+    public static JsonbConfig newJsonbConfig() {
+	return JsonbProcessor.newConfig().withAdapters(new JsonbJoseHeaderAdapter(true), new JsonbJwtPayloadAdapter(true));
     }
 
-    public JwtHeader(Map<String, Object> map) {
-	super(map);
-    }
-
-    @Override
-    public JwtHeader set(String key, Object value) {
-	super.set(key, value);
-	return this;
-    }
-
-    @Override
-    public JwtHeader setNumericDate(String key, Date value) {
-	super.setNumericDate(key, value);
-	return this;
-    }
-
-    @Override
-    public JwtHeader setNumericDate(String key, long timeInMs) {
-	super.setNumericDate(key, timeInMs);
-	return this;
-    }
-
-    public String getType() {
-	return (String) this.get(TYP);
-    }
-
-    public JwtHeader setType(String value) {
-	this.put(TYP, value);
-	return this;
-    }
-
-    public String getAlgorithm() {
-	return (String) this.get(ALG);
-    }
-
-    public JwtHeader setAlgorithm(String value) {
-	this.put(ALG, value);
-	return this;
-    }
-
-    public String getKid() {
-	return (String) this.get(KID);
-    }
-
-    public JwtHeader setKid(String value) {
-	this.put(KID, value);
-	return this;
+    public static JsonbProcessor newJsonProcessor() {
+	return new JsonbProcessor().setConfig(newJsonbConfig());
     }
 }

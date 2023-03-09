@@ -155,9 +155,9 @@ public class JwtSigner extends InitializeObject {
 	return this;
     }
 
-    public JwtHeader newHeader() {
+    public JoseHeader newHeader() {
 	this.initialize();
-	JwtHeader header = new JwtHeader().setType(this.type).setAlgorithm(this.alg);
+	JoseHeader header = new JoseHeader().setType(this.type).setAlgorithm(this.alg);
 
 	if (this.kid != null) {
 	    header.setKid(this.kid);
@@ -235,7 +235,7 @@ public class JwtSigner extends InitializeObject {
 
 	// Header
 	String headerJson = new String(BaseEncoder.BASE64_URL.decode(parts[0]), StandardCharsets.UTF_8);
-	JwtHeader header = this.jsonProcessor.read(new StringReader(headerJson), JwtHeader.class);
+	JoseHeader header = this.jsonProcessor.read(new StringReader(headerJson), JoseHeader.class);
 
 	// PAYLOAD
 	String payloadJson = new String(BaseEncoder.BASE64_URL.decode(parts[1]), StandardCharsets.UTF_8);

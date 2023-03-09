@@ -41,9 +41,9 @@ public class HsJwtSignerTest {
     public void test_hs() {
 	try {
 	    // jwtSigner
-	    JwtSigner jwtSigner = HsJwtSigner.HS256().setJsonProcessor(JwtGson.newJsonProcessor()).setSecret("secret".getBytes()).setIssuer("Issuer1").build();
+	    JwtSigner jwtSigner = HsJwtSigner.HS256().setJsonProcessor(JoseGson.newJsonProcessor()).setSecret("secret".getBytes()).setIssuer("Issuer1").build();
 
-	    JwtHeader header = jwtSigner.newHeader();
+	    JoseHeader header = jwtSigner.newHeader();
 	    JwtPayload payload = jwtSigner.newPayload().setExpiresIn(1, TimeUnit.DAYS).setIssuedAtNow();
 
 	    String jwt = jwtSigner.toJwt(new JwtToken(header, payload));
@@ -74,7 +74,7 @@ public class HsJwtSignerTest {
 	    String auth0Jwt = JWT.create().withIssuer("Issuer1").sign(algorithm);
 
 	    // jwtSigner
-	    JwtSigner jwtSigner = HsJwtSigner.HS256().setJsonProcessor(JwtGson.newJsonProcessor()).setSecret("secret".getBytes()).setIssuer("Issuer1").build();
+	    JwtSigner jwtSigner = HsJwtSigner.HS256().setJsonProcessor(JoseGson.newJsonProcessor()).setSecret("secret".getBytes()).setIssuer("Issuer1").build();
 
 	    JwtToken token = jwtSigner.parseJwt(auth0Jwt);
 	    jwtSigner.verifyJwt(token);

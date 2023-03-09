@@ -32,14 +32,14 @@ import com.appslandia.common.utils.Asserts;
 public class JwtToken implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    final JwtHeader header;
+    final JoseHeader header;
     final JwtPayload payload;
 
     final String headerPart;
     final String payloadPart;
     final String signaturePart;
 
-    public JwtToken(JwtHeader header, JwtPayload payload) {
+    public JwtToken(JoseHeader header, JwtPayload payload) {
 	this.header = Asserts.notNull(header);
 	this.payload = Asserts.notNull(payload);
 
@@ -48,7 +48,7 @@ public class JwtToken implements Serializable {
 	this.signaturePart = null;
     }
 
-    public JwtToken(JwtHeader header, JwtPayload payload, String headerPart, String payloadPart, String signaturePart) {
+    public JwtToken(JoseHeader header, JwtPayload payload, String headerPart, String payloadPart, String signaturePart) {
 	this.header = Asserts.notNull(header);
 	this.payload = Asserts.notNull(payload);
 
@@ -57,7 +57,7 @@ public class JwtToken implements Serializable {
 	this.signaturePart = Asserts.notNull(signaturePart);
     }
 
-    public JwtHeader getHeader() {
+    public JoseHeader getHeader() {
 	return this.header;
     }
 
