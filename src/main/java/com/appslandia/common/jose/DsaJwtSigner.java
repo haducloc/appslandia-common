@@ -22,6 +22,8 @@ package com.appslandia.common.jose;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import com.appslandia.common.crypto.DsaDigester;
 import com.appslandia.common.json.JsonProcessor;
@@ -38,7 +40,10 @@ public class DsaJwtSigner {
 
     protected String alg;
     protected String kid;
+
+    protected int leewaySec;
     protected String issuer;
+    protected Set<String> audiences;
 
     protected DsaDigester signer;
 
@@ -72,14 +77,31 @@ public class DsaJwtSigner {
 	return this;
     }
 
+    public DsaJwtSigner setLeewaySec(int leewaySec) {
+	this.leewaySec = leewaySec;
+	return this;
+    }
+
     public DsaJwtSigner setIssuer(String issuer) {
 	this.issuer = issuer;
 	return this;
     }
 
+    public DsaJwtSigner addAudience(String audience) {
+	if (this.audiences == null) {
+	    this.audiences = new LinkedHashSet<>();
+	}
+	this.audiences.add(audience);
+	return this;
+    }
+
     public JwtSigner build() {
 	Asserts.notNull(this.jsonProcessor);
-	return new JwtSigner().setJsonProcessor(this.jsonProcessor).setSigner(this.signer).setAlg(this.alg).setKid(this.kid).setIssuer(this.issuer).initialize();
+	JwtSigner impl = new JwtSigner().setJsonProcessor(this.jsonProcessor).setSigner(this.signer).setAlg(this.alg).setKid(this.kid).setLeewaySec(this.leewaySec)
+		.setIssuer(this.issuer);
+
+	impl.audiences = this.audiences;
+	return impl.initialize();
     }
 
     public static DsaJwtSigner ES256() {

@@ -20,6 +20,9 @@
 
 package com.appslandia.common.jose;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import com.appslandia.common.crypto.MacDigester;
 import com.appslandia.common.json.JsonProcessor;
 import com.appslandia.common.utils.Asserts;
@@ -35,7 +38,10 @@ public class HsJwtSigner {
 
     protected String alg;
     protected String kid;
+
+    protected int leewaySec;
     protected String issuer;
+    protected Set<String> audiences;
 
     protected MacDigester signer;
 
@@ -69,14 +75,31 @@ public class HsJwtSigner {
 	return this;
     }
 
+    public HsJwtSigner setLeewaySec(int leewaySec) {
+	this.leewaySec = leewaySec;
+	return this;
+    }
+
     public HsJwtSigner setIssuer(String issuer) {
 	this.issuer = issuer;
 	return this;
     }
 
+    public HsJwtSigner addAudience(String audience) {
+	if (this.audiences == null) {
+	    this.audiences = new LinkedHashSet<>();
+	}
+	this.audiences.add(audience);
+	return this;
+    }
+
     public JwtSigner build() {
 	Asserts.notNull(this.jsonProcessor);
-	return new JwtSigner().setJsonProcessor(this.jsonProcessor).setSigner(this.signer).setAlg(this.alg).setKid(this.kid).setIssuer(this.issuer).initialize();
+	JwtSigner impl = new JwtSigner().setJsonProcessor(this.jsonProcessor).setSigner(this.signer).setAlg(this.alg).setKid(this.kid).setLeewaySec(this.leewaySec)
+		.setIssuer(this.issuer);
+
+	impl.audiences = this.audiences;
+	return impl.initialize();
     }
 
     public static HsJwtSigner HS256() {
