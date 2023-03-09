@@ -18,72 +18,57 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.jwt;
+package com.appslandia.common.jose;
 
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.Map;
+
+import com.appslandia.common.base.AssertException;
+import com.appslandia.common.base.BasicMap;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JwtHeader extends JoseBasicMap {
+public abstract class JoseBasicMap extends BasicMap {
     private static final long serialVersionUID = 1L;
 
-    public static final String TYP = "typ";
-    public static final String ALG = "alg";
-    public static final String KID = "kid";
-
-    public JwtHeader() {
+    public JoseBasicMap() {
+	super(new LinkedHashMap<>());
     }
 
-    public JwtHeader(Map<String, Object> map) {
+    public JoseBasicMap(Map<String, Object> map) {
 	super(map);
     }
 
-    @Override
-    public JwtHeader set(String key, Object value) {
-	super.set(key, value);
+    public Date getNumericDate(String key) {
+	Number nd = (Number) this.get(key);
+	return (nd != null) ? JwtUtils.toDate(nd.longValue()) : null;
+    }
+
+    public JoseBasicMap setNumericDate(String key, Date value) {
+	set(key, JwtUtils.toNumericDate(value));
 	return this;
     }
 
-    @Override
-    public JwtHeader setNumericDate(String key, Date value) {
-	super.setNumericDate(key, value);
+    public JoseBasicMap setNumericDate(String key, long timeInMs) {
+	set(key, JwtUtils.toNumericDate(timeInMs));
 	return this;
     }
 
-    @Override
-    public JwtHeader setNumericDate(String key, long timeInMs) {
-	super.setNumericDate(key, timeInMs);
-	return this;
-    }
-
-    public String getType() {
-	return (String) this.get(TYP);
-    }
-
-    public JwtHeader setType(String value) {
-	this.put(TYP, value);
-	return this;
-    }
-
-    public String getAlgorithm() {
-	return (String) this.get(ALG);
-    }
-
-    public JwtHeader setAlgorithm(String value) {
-	this.put(ALG, value);
-	return this;
-    }
-
-    public String getKid() {
-	return (String) this.get(KID);
-    }
-
-    public JwtHeader setKid(String value) {
-	this.put(KID, value);
-	return this;
+    public Date getDate(String key) {
+	Object d = this.get(key);
+	if (d == null) {
+	    return null;
+	}
+	if (d instanceof Date) {
+	    return (Date) d;
+	}
+	if (d.getClass() == Long.class) {
+	    return new Date((Long) d);
+	}
+	throw new AssertException("Date conversion failed.");
     }
 }

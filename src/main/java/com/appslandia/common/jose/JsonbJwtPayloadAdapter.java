@@ -18,28 +18,45 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.jwt;
+package com.appslandia.common.jose;
 
-import com.appslandia.common.json.GsonMapAdapter;
-import com.appslandia.common.json.GsonProcessor;
-import com.google.gson.GsonBuilder;
+import java.util.Map;
+
+import com.appslandia.common.json.JsonbMapParser;
+
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.bind.adapter.JsonbAdapter;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JwtGson {
+public class JsonbJwtPayloadAdapter implements JsonbAdapter<JwtPayload, JsonObject> {
 
-    public static GsonBuilder newGsonBuilder() {
-	// @formatter:off
-	return GsonProcessor.newBuilder()
-		.registerTypeAdapter(JwtHeader.class, new GsonMapAdapter<>((m) -> new JwtHeader(m), true))
-		.registerTypeAdapter(JwtPayload.class, new GsonMapAdapter<>((m) -> new JwtPayload(m), true));
-	// @formatter:on
+    final boolean unmodifiable;
+
+    public JsonbJwtPayloadAdapter() {
+	this(false);
     }
 
-    public static GsonProcessor newJsonProcessor() {
-	return new GsonProcessor().setBuilder(newGsonBuilder());
+    public JsonbJwtPayloadAdapter(boolean unmodifiable) {
+	this.unmodifiable = unmodifiable;
+    }
+
+    @Override
+    public JsonObject adaptToJson(JwtPayload obj) throws Exception {
+	return Json.createObjectBuilder(obj).build();
+    }
+
+    @Override
+    public JwtPayload adaptFromJson(JsonObject obj) throws Exception {
+	Map<String, Object> map = new JsonbMapParser().parseMap(obj, this.unmodifiable);
+	return new JwtPayload(map);
+    }
+
+    public boolean isUnmodifiable() {
+	return this.unmodifiable;
     }
 }

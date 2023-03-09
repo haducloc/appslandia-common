@@ -18,25 +18,30 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.jwt;
+package com.appslandia.common.jose;
+
+import java.util.Date;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import com.appslandia.common.utils.DateUtils;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JwtVerificationException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
+public class JwtUtilsTest {
 
-    public JwtVerificationException(String message) {
-	super(message);
-    }
+    @Test
+    public void test_toNumericDate() {
+	Date dt = DateUtils.iso8601DateTime("2010-10-10T10:10:10.999");
 
-    public JwtVerificationException(Throwable cause) {
-	super(cause);
-    }
+	Long numericDate = JwtUtils.toNumericDate(dt.getTime());
+	Date restoredDate = JwtUtils.toDate(numericDate);
 
-    public JwtVerificationException(String message, Throwable cause) {
-	super(message, cause);
+	Assertions.assertEquals("2010-10-10T10:10:10.000", DateUtils.iso8601DateTime(restoredDate));
+	Assertions.assertEquals((dt.getTime() / 1000) * 1000, restoredDate.getTime());
     }
 }

@@ -18,45 +18,25 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.jwt;
-
-import java.util.Map;
-
-import com.appslandia.common.json.JsonbMapParser;
-
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
-import jakarta.json.bind.adapter.JsonbAdapter;
+package com.appslandia.common.jose;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JsonbJwtPayloadAdapter implements JsonbAdapter<JwtPayload, JsonObject> {
+public class JwtSignatureException extends JwtVerificationException {
+    private static final long serialVersionUID = 1L;
 
-    final boolean unmodifiable;
-
-    public JsonbJwtPayloadAdapter() {
-	this(false);
+    public JwtSignatureException(String message) {
+	super(message);
     }
 
-    public JsonbJwtPayloadAdapter(boolean unmodifiable) {
-	this.unmodifiable = unmodifiable;
+    public JwtSignatureException(Throwable cause) {
+	super(cause);
     }
 
-    @Override
-    public JsonObject adaptToJson(JwtPayload obj) throws Exception {
-	return Json.createObjectBuilder(obj).build();
-    }
-
-    @Override
-    public JwtPayload adaptFromJson(JsonObject obj) throws Exception {
-	Map<String, Object> map = new JsonbMapParser().parseMap(obj, this.unmodifiable);
-	return new JwtPayload(map);
-    }
-
-    public boolean isUnmodifiable() {
-	return this.unmodifiable;
+    public JwtSignatureException(String message, Throwable cause) {
+	super(message, cause);
     }
 }

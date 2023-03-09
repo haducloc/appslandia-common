@@ -18,65 +18,36 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.jwt;
+package com.appslandia.common.jose;
 
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
+import com.appslandia.common.crypto.MacDigester;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class HsJwtSignerTest {
+public class JwtSignerTest {
 
     @Test
-    public void test_hs() {
+    public void test() {
+	JwtSigner jwtSigner = new JwtSigner().setJsonProcessor(JwtGson.newJsonProcessor());
+	jwtSigner.setAlg("HS256").setSigner(new MacDigester().setAlgorithm("HmacSHA256").setSecret("secret".getBytes()));
+	jwtSigner.setIssuer("Issuer1");
+
+	JwtHeader header = jwtSigner.newHeader();
+	JwtPayload payload = jwtSigner.newPayload().setExpiresIn(1, TimeUnit.DAYS).setIssuedAtNow();
+
 	try {
-	    // jwtSigner
-	    JwtSigner jwtSigner = HsJwtSigner.HS256().setJsonProcessor(JwtGson.newJsonProcessor()).setSecret("secret".getBytes()).setIssuer("Issuer1").build();
-
-	    JwtHeader header = jwtSigner.newHeader();
-	    JwtPayload payload = jwtSigner.newPayload().setExpiresIn(1, TimeUnit.DAYS).setIssuedAtNow();
-
 	    String jwt = jwtSigner.toJwt(new JwtToken(header, payload));
 	    Assertions.assertNotNull(jwt);
 
-	    // AUTH0
-
-	    Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-	    JWTVerifier verifier = JWT.require(algorithm).withIssuer("Issuer1").build();
-
-	    DecodedJWT decodedJWT = verifier.verify(jwt);
-
-	    Assertions.assertEquals("JWT", decodedJWT.getType());
-	    Assertions.assertEquals("HS256", decodedJWT.getAlgorithm());
-	    Assertions.assertEquals("Issuer1", decodedJWT.getIssuer());
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
-	}
-    }
-
-    @Test
-    public void test_hs_verify() {
-	try {
-	    // AUTH0
-
-	    Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-	    String auth0Jwt = JWT.create().withIssuer("Issuer1").sign(algorithm);
-
-	    // jwtSigner
-	    JwtSigner jwtSigner = HsJwtSigner.HS256().setJsonProcessor(JwtGson.newJsonProcessor()).setSecret("secret".getBytes()).setIssuer("Issuer1").build();
-
-	    JwtToken token = jwtSigner.parseJwt(auth0Jwt);
+	    JwtToken token = jwtSigner.parseJwt(jwt);
 	    jwtSigner.verifyJwt(token);
 
 	    Assertions.assertNotNull(token);
@@ -85,6 +56,33 @@ public class HsJwtSignerTest {
 
 	    Assertions.assertEquals("JWT", token.getHeader().getType());
 	    Assertions.assertEquals("HS256", token.getHeader().getAlgorithm());
+	    Assertions.assertEquals("Issuer1", token.getPayload().get("iss"));
+
+	} catch (Exception ex) {
+	    Assertions.fail(ex.getMessage());
+	}
+    }
+
+    @Test
+    public void test_none() {
+	JwtSigner jwtSigner = new JwtSigner().setJsonProcessor(JwtGson.newJsonProcessor());
+	jwtSigner.setIssuer("Issuer1");
+
+	JwtHeader header = jwtSigner.newHeader();
+	JwtPayload payload = jwtSigner.newPayload().setExpiresIn(1, TimeUnit.DAYS).setIssuedAtNow();
+
+	try {
+	    String jwt = jwtSigner.toJwt(new JwtToken(header, payload));
+	    Assertions.assertNotNull(jwt);
+
+	    JwtToken token = jwtSigner.parseJwt(jwt);
+	    jwtSigner.verifyJwt(token);
+
+	    Assertions.assertNotNull(token);
+	    Assertions.assertNotNull(token.getHeader());
+	    Assertions.assertNotNull(token.getPayload());
+
+	    Assertions.assertEquals("JWT", token.getHeader().getType());
 	    Assertions.assertEquals("Issuer1", token.getPayload().get("iss"));
 
 	} catch (Exception ex) {

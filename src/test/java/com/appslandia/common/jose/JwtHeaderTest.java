@@ -18,45 +18,39 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.jwt;
+package com.appslandia.common.jose;
 
-import java.util.Map;
+import java.util.Date;
 
-import com.appslandia.common.json.JsonbMapParser;
-
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
-import jakarta.json.bind.adapter.JsonbAdapter;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JsonbJwtHeaderAdapter implements JsonbAdapter<JwtHeader, JsonObject> {
+public class JwtHeaderTest {
 
-    final boolean unmodifiable;
+    @Test
+    public void test_date() {
+	JwtHeader claims = new JwtHeader();
 
-    public JsonbJwtHeaderAdapter() {
-	this(false);
+	Date d = new Date();
+	claims.set("d", d.getTime());
+
+	Date d1 = claims.getDate("d");
+	Assertions.assertEquals(d.getTime(), d1.getTime());
     }
 
-    public JsonbJwtHeaderAdapter(boolean unmodifiable) {
-	this.unmodifiable = unmodifiable;
-    }
+    @Test
+    public void test_numericDate() {
+	JwtHeader claims = new JwtHeader();
 
-    @Override
-    public JsonObject adaptToJson(JwtHeader obj) throws Exception {
-	return Json.createObjectBuilder(obj).build();
-    }
+	Date d = new Date();
+	claims.setNumericDate("nd", d);
 
-    @Override
-    public JwtHeader adaptFromJson(JsonObject obj) throws Exception {
-	Map<String, Object> map = new JsonbMapParser().parseMap(obj, this.unmodifiable);
-	return new JwtHeader(map);
-    }
-
-    public boolean isUnmodifiable() {
-	return this.unmodifiable;
+	Date d1 = claims.getNumericDate("nd");
+	Assertions.assertEquals((d.getTime() / 1000) * 1000, d1.getTime());
     }
 }

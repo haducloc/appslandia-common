@@ -18,39 +18,15 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.jwt;
-
-import java.util.Date;
-
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+package com.appslandia.common.jose;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JwtClaimsTest {
+@FunctionalInterface
+public interface JwtVerifier {
 
-    @Test
-    public void test_date() {
-	JwtHeader claims = new JwtHeader();
-
-	Date d = new Date();
-	claims.set("d", d.getTime());
-
-	Date d1 = claims.getDate("d");
-	Assertions.assertEquals(d.getTime(), d1.getTime());
-    }
-
-    @Test
-    public void test_numericDate() {
-	JwtHeader claims = new JwtHeader();
-
-	Date d = new Date();
-	claims.setNumericDate("nd", d);
-
-	Date d1 = claims.getNumericDate("nd");
-	Assertions.assertEquals((d.getTime() / 1000) * 1000, d1.getTime());
-    }
+    void verify(JwtToken jwt) throws JwtVerificationException;
 }

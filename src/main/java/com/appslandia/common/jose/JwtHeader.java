@@ -18,62 +18,72 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.jwt;
+package com.appslandia.common.jose;
 
-import java.io.Serializable;
-
-import com.appslandia.common.utils.Asserts;
+import java.util.Date;
+import java.util.Map;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JwtToken implements Serializable {
+public class JwtHeader extends JoseBasicMap {
     private static final long serialVersionUID = 1L;
 
-    final JwtHeader header;
-    final JwtPayload payload;
+    public static final String TYP = "typ";
+    public static final String ALG = "alg";
+    public static final String KID = "kid";
 
-    final String headerPart;
-    final String payloadPart;
-    final String signaturePart;
-
-    public JwtToken(JwtHeader header, JwtPayload payload) {
-	this.header = Asserts.notNull(header);
-	this.payload = Asserts.notNull(payload);
-
-	this.headerPart = null;
-	this.payloadPart = null;
-	this.signaturePart = null;
+    public JwtHeader() {
     }
 
-    public JwtToken(JwtHeader header, JwtPayload payload, String headerPart, String payloadPart, String signaturePart) {
-	this.header = Asserts.notNull(header);
-	this.payload = Asserts.notNull(payload);
-
-	this.headerPart = Asserts.notNull(headerPart);
-	this.payloadPart = Asserts.notNull(payloadPart);
-	this.signaturePart = Asserts.notNull(signaturePart);
+    public JwtHeader(Map<String, Object> map) {
+	super(map);
     }
 
-    public JwtHeader getHeader() {
-	return this.header;
+    @Override
+    public JwtHeader set(String key, Object value) {
+	super.set(key, value);
+	return this;
     }
 
-    public JwtPayload getPayload() {
-	return this.payload;
+    @Override
+    public JwtHeader setNumericDate(String key, Date value) {
+	super.setNumericDate(key, value);
+	return this;
     }
 
-    public String getHeaderPart() {
-	return this.headerPart;
+    @Override
+    public JwtHeader setNumericDate(String key, long timeInMs) {
+	super.setNumericDate(key, timeInMs);
+	return this;
     }
 
-    public String getPayloadPart() {
-	return this.payloadPart;
+    public String getType() {
+	return (String) this.get(TYP);
     }
 
-    public String getSignaturePart() {
-	return this.signaturePart;
+    public JwtHeader setType(String value) {
+	this.put(TYP, value);
+	return this;
+    }
+
+    public String getAlgorithm() {
+	return (String) this.get(ALG);
+    }
+
+    public JwtHeader setAlgorithm(String value) {
+	this.put(ALG, value);
+	return this;
+    }
+
+    public String getKid() {
+	return (String) this.get(KID);
+    }
+
+    public JwtHeader setKid(String value) {
+	this.put(KID, value);
+	return this;
     }
 }

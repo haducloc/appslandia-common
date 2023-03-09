@@ -18,57 +18,62 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.jwt;
+package com.appslandia.common.jose;
 
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.io.Serializable;
 
-import com.appslandia.common.base.AssertException;
-import com.appslandia.common.base.BasicMap;
+import com.appslandia.common.utils.Asserts;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public abstract class JoseBasicMap extends BasicMap {
+public class JwtToken implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public JoseBasicMap() {
-	super(new LinkedHashMap<>());
+    final JwtHeader header;
+    final JwtPayload payload;
+
+    final String headerPart;
+    final String payloadPart;
+    final String signaturePart;
+
+    public JwtToken(JwtHeader header, JwtPayload payload) {
+	this.header = Asserts.notNull(header);
+	this.payload = Asserts.notNull(payload);
+
+	this.headerPart = null;
+	this.payloadPart = null;
+	this.signaturePart = null;
     }
 
-    public JoseBasicMap(Map<String, Object> map) {
-	super(map);
+    public JwtToken(JwtHeader header, JwtPayload payload, String headerPart, String payloadPart, String signaturePart) {
+	this.header = Asserts.notNull(header);
+	this.payload = Asserts.notNull(payload);
+
+	this.headerPart = Asserts.notNull(headerPart);
+	this.payloadPart = Asserts.notNull(payloadPart);
+	this.signaturePart = Asserts.notNull(signaturePart);
     }
 
-    public Date getNumericDate(String key) {
-	Number nd = (Number) this.get(key);
-	return (nd != null) ? JwtUtils.toDate(nd.longValue()) : null;
+    public JwtHeader getHeader() {
+	return this.header;
     }
 
-    public JoseBasicMap setNumericDate(String key, Date value) {
-	set(key, JwtUtils.toNumericDate(value));
-	return this;
+    public JwtPayload getPayload() {
+	return this.payload;
     }
 
-    public JoseBasicMap setNumericDate(String key, long timeInMs) {
-	set(key, JwtUtils.toNumericDate(timeInMs));
-	return this;
+    public String getHeaderPart() {
+	return this.headerPart;
     }
 
-    public Date getDate(String key) {
-	Object d = this.get(key);
-	if (d == null) {
-	    return null;
-	}
-	if (d instanceof Date) {
-	    return (Date) d;
-	}
-	if (d.getClass() == Long.class) {
-	    return new Date((Long) d);
-	}
-	throw new AssertException("Date conversion failed.");
+    public String getPayloadPart() {
+	return this.payloadPart;
+    }
+
+    public String getSignaturePart() {
+	return this.signaturePart;
     }
 }

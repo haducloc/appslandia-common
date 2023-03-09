@@ -18,15 +18,45 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.jwt;
+package com.appslandia.common.jose;
+
+import java.util.Map;
+
+import com.appslandia.common.json.JsonbMapParser;
+
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.bind.adapter.JsonbAdapter;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-@FunctionalInterface
-public interface JwtVerifier {
+public class JsonbJwtHeaderAdapter implements JsonbAdapter<JwtHeader, JsonObject> {
 
-    void verify(JwtToken jwt) throws JwtVerificationException;
+    final boolean unmodifiable;
+
+    public JsonbJwtHeaderAdapter() {
+	this(false);
+    }
+
+    public JsonbJwtHeaderAdapter(boolean unmodifiable) {
+	this.unmodifiable = unmodifiable;
+    }
+
+    @Override
+    public JsonObject adaptToJson(JwtHeader obj) throws Exception {
+	return Json.createObjectBuilder(obj).build();
+    }
+
+    @Override
+    public JwtHeader adaptFromJson(JsonObject obj) throws Exception {
+	Map<String, Object> map = new JsonbMapParser().parseMap(obj, this.unmodifiable);
+	return new JwtHeader(map);
+    }
+
+    public boolean isUnmodifiable() {
+	return this.unmodifiable;
+    }
 }

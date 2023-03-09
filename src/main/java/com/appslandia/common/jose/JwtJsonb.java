@@ -18,25 +18,24 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.jwt;
+package com.appslandia.common.jose;
+
+import com.appslandia.common.json.JsonbProcessor;
+
+import jakarta.json.bind.JsonbConfig;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JwtSignatureException extends JwtVerificationException {
-    private static final long serialVersionUID = 1L;
+public class JwtJsonb {
 
-    public JwtSignatureException(String message) {
-	super(message);
+    public static JsonbConfig newJsonbConfig() {
+	return JsonbProcessor.newConfig().withAdapters(new JsonbJwtHeaderAdapter(true), new JsonbJwtPayloadAdapter(true));
     }
 
-    public JwtSignatureException(Throwable cause) {
-	super(cause);
-    }
-
-    public JwtSignatureException(String message, Throwable cause) {
-	super(message, cause);
+    public static JsonbProcessor newJsonProcessor() {
+	return new JsonbProcessor().setConfig(newJsonbConfig());
     }
 }

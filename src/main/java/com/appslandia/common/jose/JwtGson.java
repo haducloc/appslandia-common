@@ -18,24 +18,28 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.jwt;
+package com.appslandia.common.jose;
 
-import com.appslandia.common.json.JsonbProcessor;
-
-import jakarta.json.bind.JsonbConfig;
+import com.appslandia.common.json.GsonMapAdapter;
+import com.appslandia.common.json.GsonProcessor;
+import com.google.gson.GsonBuilder;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JwtJsonb {
+public class JwtGson {
 
-    public static JsonbConfig newJsonbConfig() {
-	return JsonbProcessor.newConfig().withAdapters(new JsonbJwtHeaderAdapter(true), new JsonbJwtPayloadAdapter(true));
+    public static GsonBuilder newGsonBuilder() {
+	// @formatter:off
+	return GsonProcessor.newBuilder()
+		.registerTypeAdapter(JwtHeader.class, new GsonMapAdapter<>((m) -> new JwtHeader(m), true))
+		.registerTypeAdapter(JwtPayload.class, new GsonMapAdapter<>((m) -> new JwtPayload(m), true));
+	// @formatter:on
     }
 
-    public static JsonbProcessor newJsonProcessor() {
-	return new JsonbProcessor().setConfig(newJsonbConfig());
+    public static GsonProcessor newJsonProcessor() {
+	return new GsonProcessor().setBuilder(newGsonBuilder());
     }
 }
