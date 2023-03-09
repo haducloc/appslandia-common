@@ -29,65 +29,61 @@ import com.appslandia.common.utils.Asserts;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class HsJwtSigner {
+public class HsJwsSigner<P> {
 
+    protected Class<P> payloadClass;
     protected JsonProcessor jsonProcessor;
 
     protected String alg;
     protected String kid;
-    protected String issuer;
 
     protected MacDigester signer;
 
-    public HsJwtSigner(String jwsAlgorithm, String macAlgorithm) {
+    public HsJwsSigner(String jwsAlgorithm, String macAlgorithm, Class<P> payloadClass) {
 	this.alg = jwsAlgorithm;
 	this.signer = new MacDigester().setAlgorithm(macAlgorithm);
+	this.payloadClass = payloadClass;
     }
 
-    public HsJwtSigner setProvider(String provider) {
+    public HsJwsSigner<P> setProvider(String provider) {
 	this.signer.setProvider(provider);
 	return this;
     }
 
-    public HsJwtSigner setSecret(byte[] secret) {
+    public HsJwsSigner<P> setSecret(byte[] secret) {
 	this.signer.setSecret(secret);
 	return this;
     }
 
-    public HsJwtSigner setSecret(String secretOrEnv) {
+    public HsJwsSigner<P> setSecret(String secretOrEnv) {
 	this.signer.setSecret(secretOrEnv);
 	return this;
     }
 
-    public HsJwtSigner setJsonProcessor(JsonProcessor jsonProcessor) {
+    public HsJwsSigner<P> setJsonProcessor(JsonProcessor jsonProcessor) {
 	this.jsonProcessor = jsonProcessor;
 	return this;
     }
 
-    public HsJwtSigner setKid(String kid) {
+    public HsJwsSigner<P> setKid(String kid) {
 	this.kid = kid;
 	return this;
     }
 
-    public HsJwtSigner setIssuer(String issuer) {
-	this.issuer = issuer;
-	return this;
-    }
-
-    public JwtSigner build() {
+    public JwsSigner<P> build() {
 	Asserts.notNull(this.jsonProcessor);
-	return new JwtSigner().setJsonProcessor(this.jsonProcessor).setSigner(this.signer).setAlg(this.alg).setKid(this.kid).setIssuer(this.issuer).initialize();
+	return new JwsSigner<>(this.payloadClass).setJsonProcessor(this.jsonProcessor).setSigner(this.signer).setAlg(this.alg).setKid(this.kid).initialize();
     }
 
-    public static HsJwtSigner HS256() {
-	return new HsJwtSigner("HS256", "HmacSHA256");
+    public static <P> HsJwsSigner<P> HS256(Class<P> payloadClass) {
+	return new HsJwsSigner<>("HS256", "HmacSHA256", payloadClass);
     }
 
-    public static HsJwtSigner HS384() {
-	return new HsJwtSigner("HS384", "HmacSHA384");
+    public static <P> HsJwsSigner<P> HS384(Class<P> payloadClass) {
+	return new HsJwsSigner<>("HS384", "HmacSHA384", payloadClass);
     }
 
-    public static HsJwtSigner HS512() {
-	return new HsJwtSigner("HS512", "HmacSHA512");
+    public static <P> HsJwsSigner<P> HS512(Class<P> payloadClass) {
+	return new HsJwsSigner<>("HS512", "HmacSHA512", payloadClass);
     }
 }

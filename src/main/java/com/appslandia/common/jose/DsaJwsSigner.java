@@ -32,77 +32,73 @@ import com.appslandia.common.utils.Asserts;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class DsaJwtSigner {
+public class DsaJwsSigner<P> {
 
+    protected Class<P> payloadClass;
     protected JsonProcessor jsonProcessor;
 
     protected String alg;
     protected String kid;
-    protected String issuer;
 
     protected DsaDigester signer;
 
-    public DsaJwtSigner(String jwsAlgorithm, String dsaAlgorithm) {
+    public DsaJwsSigner(String jwsAlgorithm, String dsaAlgorithm, Class<P> payloadClass) {
 	this.alg = jwsAlgorithm;
 	this.signer = new DsaDigester().setAlgorithm(dsaAlgorithm);
+	this.payloadClass = payloadClass;
     }
 
-    public DsaJwtSigner setProvider(String provider) {
+    public DsaJwsSigner<P> setProvider(String provider) {
 	this.signer.setProvider(provider);
 	return this;
     }
 
-    public DsaJwtSigner setPrivateKey(PrivateKey key) {
+    public DsaJwsSigner<P> setPrivateKey(PrivateKey key) {
 	this.signer.setPrivateKey(key);
 	return this;
     }
 
-    public DsaJwtSigner setPublicKey(PublicKey key) {
+    public DsaJwsSigner<P> setPublicKey(PublicKey key) {
 	this.signer.setPublicKey(key);
 	return this;
     }
 
-    public DsaJwtSigner setJsonProcessor(JsonProcessor jsonProcessor) {
+    public DsaJwsSigner<P> setJsonProcessor(JsonProcessor jsonProcessor) {
 	this.jsonProcessor = jsonProcessor;
 	return this;
     }
 
-    public DsaJwtSigner setKid(String kid) {
+    public DsaJwsSigner<P> setKid(String kid) {
 	this.kid = kid;
 	return this;
     }
 
-    public DsaJwtSigner setIssuer(String issuer) {
-	this.issuer = issuer;
-	return this;
-    }
-
-    public JwtSigner build() {
+    public JwsSigner<P> build() {
 	Asserts.notNull(this.jsonProcessor);
-	return new JwtSigner().setJsonProcessor(this.jsonProcessor).setSigner(this.signer).setAlg(this.alg).setKid(this.kid).setIssuer(this.issuer).initialize();
+	return new JwsSigner<>(this.payloadClass).setJsonProcessor(this.jsonProcessor).setSigner(this.signer).setAlg(this.alg).setKid(this.kid).initialize();
     }
 
-    public static DsaJwtSigner ES256() {
-	return new DsaJwtSigner("ES256", "SHA256WithECDSAInP1363Format");
+    public static <P> DsaJwsSigner<P> ES256(Class<P> payloadClass) {
+	return new DsaJwsSigner<P>("ES256", "SHA256WithECDSAInP1363Format", payloadClass);
     }
 
-    public static DsaJwtSigner ES384() {
-	return new DsaJwtSigner("ES384", "SHA384WithECDSAInP1363Format");
+    public static <P> DsaJwsSigner<P> ES384(Class<P> payloadClass) {
+	return new DsaJwsSigner<P>("ES384", "SHA384WithECDSAInP1363Format", payloadClass);
     }
 
-    public static DsaJwtSigner ES512() {
-	return new DsaJwtSigner("ES512", "SHA512withECDSAinP1363Format");
+    public static <P> DsaJwsSigner<P> ES512(Class<P> payloadClass) {
+	return new DsaJwsSigner<P>("ES512", "SHA512withECDSAinP1363Format", payloadClass);
     }
 
-    public static DsaJwtSigner RS256() {
-	return new DsaJwtSigner("RS256", "SHA256withRSA");
+    public static <P> DsaJwsSigner<P> RS256(Class<P> payloadClass) {
+	return new DsaJwsSigner<P>("RS256", "SHA256withRSA", payloadClass);
     }
 
-    public static DsaJwtSigner RS384() {
-	return new DsaJwtSigner("RS384", "SHA384withRSA");
+    public static <P> DsaJwsSigner<P> RS384(Class<P> payloadClass) {
+	return new DsaJwsSigner<P>("RS384", "SHA384withRSA", payloadClass);
     }
 
-    public static DsaJwtSigner RS512() {
-	return new DsaJwtSigner("RS512", "SHA512withRSA");
+    public static <P> DsaJwsSigner<P> RS512(Class<P> payloadClass) {
+	return new DsaJwsSigner<P>("RS512", "SHA512withRSA", payloadClass);
     }
 }
