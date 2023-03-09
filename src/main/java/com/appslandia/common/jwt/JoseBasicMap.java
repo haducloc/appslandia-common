@@ -32,14 +32,14 @@ import com.appslandia.common.base.BasicMap;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public abstract class JwtClaims extends BasicMap {
+public abstract class JoseBasicMap extends BasicMap {
     private static final long serialVersionUID = 1L;
 
-    public JwtClaims() {
+    public JoseBasicMap() {
 	super(new LinkedHashMap<>());
     }
 
-    public JwtClaims(Map<String, Object> map) {
+    public JoseBasicMap(Map<String, Object> map) {
 	super(map);
     }
 
@@ -48,12 +48,12 @@ public abstract class JwtClaims extends BasicMap {
 	return (nd != null) ? JwtUtils.toDate(nd.longValue()) : null;
     }
 
-    public JwtClaims setNumericDate(String key, Date value) {
+    public JoseBasicMap setNumericDate(String key, Date value) {
 	set(key, JwtUtils.toNumericDate(value));
 	return this;
     }
 
-    public JwtClaims setNumericDate(String key, long timeInMs) {
+    public JoseBasicMap setNumericDate(String key, long timeInMs) {
 	set(key, JwtUtils.toNumericDate(timeInMs));
 	return this;
     }

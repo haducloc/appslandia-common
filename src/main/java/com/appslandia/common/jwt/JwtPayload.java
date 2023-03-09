@@ -34,7 +34,7 @@ import com.appslandia.common.utils.ObjectUtils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JwtPayload extends JwtClaims {
+public class JwtPayload extends JoseBasicMap {
     private static final long serialVersionUID = 1L;
 
     public static final String ISS = "iss";
