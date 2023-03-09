@@ -28,7 +28,7 @@ import java.util.Map;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JoseHeader extends JoseBasicMap {
+public class JoseHeader extends JoseMapObject {
     private static final long serialVersionUID = 1L;
 
     public static final String TYP = "typ";

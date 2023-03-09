@@ -32,14 +32,14 @@ import com.appslandia.common.base.BasicMap;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public abstract class JoseBasicMap extends BasicMap {
+public abstract class JoseMapObject extends BasicMap {
     private static final long serialVersionUID = 1L;
 
-    public JoseBasicMap() {
+    public JoseMapObject() {
 	super(new LinkedHashMap<>());
     }
 
-    public JoseBasicMap(Map<String, Object> map) {
+    public JoseMapObject(Map<String, Object> map) {
 	super(map);
     }
 
@@ -48,12 +48,12 @@ public abstract class JoseBasicMap extends BasicMap {
 	return (nd != null) ? JoseUtils.toDate(nd.longValue()) : null;
     }
 
-    public JoseBasicMap setNumericDate(String key, Date value) {
+    public JoseMapObject setNumericDate(String key, Date value) {
 	set(key, JoseUtils.toNumericDate(value));
 	return this;
     }
 
-    public JoseBasicMap setNumericDate(String key, long timeInMs) {
+    public JoseMapObject setNumericDate(String key, long timeInMs) {
 	set(key, JoseUtils.toNumericDate(timeInMs));
 	return this;
     }
