@@ -36,19 +36,19 @@ public class JwtSignerTest {
 
     @Test
     public void test() {
-	JwtSigner jwtSigner = new JwtSigner().setJsonProcessor(JoseGson.newJsonProcessor());
-	jwtSigner.setAlg("HS256").setSigner(new MacDigester().setAlgorithm("HmacSHA256").setSecret("secret".getBytes()));
-	jwtSigner.setIssuer("Issuer1");
+	JwtSigner signer = new JwtSigner().setJsonProcessor(JoseGson.newJsonProcessor());
+	signer.setAlg("HS256").setSigner(new MacDigester().setAlgorithm("HmacSHA256").setSecret("secret".getBytes()));
+	signer.setIssuer("Issuer1");
 
-	JoseHeader header = jwtSigner.newHeader();
-	JwtPayload payload = jwtSigner.newPayload().setExpiresIn(1, TimeUnit.DAYS).setIssuedAtNow();
+	JoseHeader header = signer.newHeader();
+	JwtPayload payload = signer.newPayload().setExpiresIn(1, TimeUnit.DAYS).setIssuedAtNow();
 
 	try {
-	    String jwt = jwtSigner.toJwt(new JwtToken(header, payload));
+	    String jwt = signer.sign(new JwtToken(header, payload));
 	    Assertions.assertNotNull(jwt);
 
-	    JwtToken token = jwtSigner.parseJwt(jwt);
-	    jwtSigner.verifyJwt(token);
+	    JwtToken token = signer.parse(jwt);
+	    signer.verify(token);
 
 	    Assertions.assertNotNull(token);
 	    Assertions.assertNotNull(token.getHeader());
@@ -65,18 +65,18 @@ public class JwtSignerTest {
 
     @Test
     public void test_none() {
-	JwtSigner jwtSigner = new JwtSigner().setJsonProcessor(JoseGson.newJsonProcessor());
-	jwtSigner.setIssuer("Issuer1");
+	JwtSigner signer = new JwtSigner().setJsonProcessor(JoseGson.newJsonProcessor());
+	signer.setIssuer("Issuer1");
 
-	JoseHeader header = jwtSigner.newHeader();
-	JwtPayload payload = jwtSigner.newPayload().setExpiresIn(1, TimeUnit.DAYS).setIssuedAtNow();
+	JoseHeader header = signer.newHeader();
+	JwtPayload payload = signer.newPayload().setExpiresIn(1, TimeUnit.DAYS).setIssuedAtNow();
 
 	try {
-	    String jwt = jwtSigner.toJwt(new JwtToken(header, payload));
+	    String jwt = signer.sign(new JwtToken(header, payload));
 	    Assertions.assertNotNull(jwt);
 
-	    JwtToken token = jwtSigner.parseJwt(jwt);
-	    jwtSigner.verifyJwt(token);
+	    JwtToken token = signer.parse(jwt);
+	    signer.verify(token);
 
 	    Assertions.assertNotNull(token);
 	    Assertions.assertNotNull(token.getHeader());

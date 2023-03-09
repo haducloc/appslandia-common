@@ -47,11 +47,11 @@ public class JoseUtils {
 	return parts;
     }
 
-    public static String toData(String header, String payload) {
+    public static String toJoseData(String header, String payload) {
 	return new StringBuilder(header.length() + 1 + payload.length()).append(header).append('.').append(payload).toString();
     }
 
-    public static String toJwt(String header, String payload, String signture) {
+    public static String toJoseToken(String header, String payload, String signture) {
 	return new StringBuilder(header.length() + 1 + payload.length() + 1 + signture.length()).append(header).append('.').append(payload).append('.').append(signture).toString();
     }
 

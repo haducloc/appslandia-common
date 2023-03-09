@@ -65,9 +65,9 @@ public class JwtSigner extends InitializeObject {
     protected Set<String> audiences;
 
     // signatureVerifier
-    protected final JoseVerifier<JwtPayload> signatureVerifier = (jwt) -> {
+    protected final JoseVerifier<JwtPayload> signatureVerifier = (token) -> {
 
-	if (jwt.getSignaturePart().isEmpty()) {
+	if (token.getSignaturePart().isEmpty()) {
 	    if (this.signer != null) {
 		throw new JoseSignatureException("signature is required.");
 	    }
@@ -75,9 +75,9 @@ public class JwtSigner extends InitializeObject {
 	    if (this.signer == null) {
 		throw new JoseSignatureException("signer is required.");
 	    }
-	    String dataToSign = JoseUtils.toData(jwt.getHeaderPart(), jwt.getPayloadPart());
+	    String dataToSign = JoseUtils.toJoseData(token.getHeaderPart(), token.getPayloadPart());
 
-	    if (!this.signer.verify(dataToSign.getBytes(StandardCharsets.UTF_8), BaseEncoder.BASE64_URL.decode(jwt.getSignaturePart()))) {
+	    if (!this.signer.verify(dataToSign.getBytes(StandardCharsets.UTF_8), BaseEncoder.BASE64_URL.decode(token.getSignaturePart()))) {
 		throw new JoseSignatureException("JWT signature verification failed.");
 	    }
 	}
@@ -97,48 +97,48 @@ public class JwtSigner extends InitializeObject {
 	Asserts.isTrue(this.leewaySec >= 0);
 
 	// Type
-	this.defaultVerifiers.add((jwt) -> {
-	    if (!Objects.equals(this.type, jwt.getHeader().getType())) {
+	this.defaultVerifiers.add((token) -> {
+	    if (!Objects.equals(this.type, token.getHeader().getType())) {
 		throw new JoseVerificationException("type doesn't match.");
 	    }
 	});
 
 	// Algorithm
-	this.defaultVerifiers.add((jwt) -> {
-	    if (!Objects.equals(this.alg, jwt.getHeader().getAlgorithm())) {
+	this.defaultVerifiers.add((token) -> {
+	    if (!Objects.equals(this.alg, token.getHeader().getAlgorithm())) {
 		throw new JoseVerificationException("algorithm doesn't match.");
 	    }
 	});
 
 	// kid
-	this.defaultVerifiers.add((jwt) -> {
-	    if (!Objects.equals(this.kid, jwt.getHeader().getKid())) {
+	this.defaultVerifiers.add((token) -> {
+	    if (!Objects.equals(this.kid, token.getHeader().getKid())) {
 		throw new JoseVerificationException("kid doesn't match.");
 	    }
 	});
 
 	// issuer
-	this.defaultVerifiers.add((jwt) -> {
-	    if (!Objects.equals(this.issuer, jwt.getPayload().getIssuer())) {
+	this.defaultVerifiers.add((token) -> {
+	    if (!Objects.equals(this.issuer, token.getPayload().getIssuer())) {
 		throw new JoseVerificationException("issuer doesn't match.");
 	    }
 	});
 
 	// exp
-	this.defaultVerifiers.add((jwt) -> {
-	    Date dt = jwt.getPayload().getExpiresAt();
+	this.defaultVerifiers.add((token) -> {
+	    Date dt = token.getPayload().getExpiresAt();
 	    if (dt != null) {
 		long nt = JoseUtils.toNumericDate(dt);
 
 		if (!JoseUtils.isFutureTime(nt, this.leewaySec)) {
-		    throw new JoseVerificationException("jwt is expired.");
+		    throw new JoseVerificationException("token is expired.");
 		}
 	    }
 	});
 
 	// iat
-	this.defaultVerifiers.add((jwt) -> {
-	    Date dt = jwt.getPayload().getIssuedAt();
+	this.defaultVerifiers.add((token) -> {
+	    Date dt = token.getPayload().getIssuedAt();
 	    if (dt != null) {
 		long nt = JoseUtils.toNumericDate(dt);
 
@@ -178,60 +178,60 @@ public class JwtSigner extends InitializeObject {
 	return payload;
     }
 
-    public String toJwt(JwtToken jwt) throws CryptoException, JoseSignatureException, JsonException {
+    public String sign(JwtToken token) throws CryptoException, JoseSignatureException, JsonException {
 	this.initialize();
-	Asserts.notNull(jwt);
-	Asserts.notNull(jwt.getHeader());
-	Asserts.notNull(jwt.getPayload());
+	Asserts.notNull(token);
+	Asserts.notNull(token.getHeader());
+	Asserts.notNull(token.getPayload());
 
 	// defaultVerifiers
-	this.defaultVerifiers.forEach((verifier) -> verifier.verify(jwt));
+	this.defaultVerifiers.forEach((verifier) -> verifier.verify(token));
 
-	String header = BaseEncoder.BASE64_URL.encode(this.jsonProcessor.toByteArray(jwt.getHeader()));
-	String payload = BaseEncoder.BASE64_URL.encode(this.jsonProcessor.toByteArray(jwt.getPayload()));
+	String header = BaseEncoder.BASE64_URL.encode(this.jsonProcessor.toByteArray(token.getHeader()));
+	String payload = BaseEncoder.BASE64_URL.encode(this.jsonProcessor.toByteArray(token.getPayload()));
 
 	// No ALG
 	if (this.signer == null) {
-	    return JoseUtils.toJwt(header, payload, "");
+	    return JoseUtils.toJoseToken(header, payload, "");
 	}
 
-	String dataToSign = JoseUtils.toData(header, payload);
+	String dataToSign = JoseUtils.toJoseData(header, payload);
 
 	// Signature
 	byte[] sig = this.signer.digest(dataToSign.getBytes(StandardCharsets.UTF_8));
 
-	return JoseUtils.toJwt(header, payload, BaseEncoder.BASE64_URL.encode(sig));
+	return JoseUtils.toJoseToken(header, payload, BaseEncoder.BASE64_URL.encode(sig));
     }
 
-    public JwtToken verifyJwt(JwtToken jwt) throws CryptoException, JoseSignatureException {
+    public JwtToken verify(JwtToken token) throws CryptoException, JoseSignatureException {
 	this.initialize();
-	Asserts.notNull(jwt);
-	Asserts.notNull(jwt.getHeader());
-	Asserts.notNull(jwt.getPayload());
+	Asserts.notNull(token);
+	Asserts.notNull(token.getHeader());
+	Asserts.notNull(token.getPayload());
 
-	Asserts.notNull(jwt.getHeaderPart());
-	Asserts.notNull(jwt.getPayloadPart());
-	Asserts.notNull(jwt.getSignaturePart());
+	Asserts.notNull(token.getHeaderPart());
+	Asserts.notNull(token.getPayloadPart());
+	Asserts.notNull(token.getSignaturePart());
 
 	// defaultVerifiers
-	this.defaultVerifiers.forEach((verifier) -> verifier.verify(jwt));
+	this.defaultVerifiers.forEach((verifier) -> verifier.verify(token));
 
 	// signatureVerifier
-	this.signatureVerifier.verify(jwt);
+	this.signatureVerifier.verify(token);
 
 	// customVerifiers
 	if (customVerifiers != null) {
-	    this.customVerifiers.forEach((verifier) -> verifier.verify(jwt));
+	    this.customVerifiers.forEach((verifier) -> verifier.verify(token));
 	}
-	return jwt;
+	return token;
     }
 
-    public JwtToken parseJwt(String jwt) throws JsonException {
+    public JwtToken parse(String token) throws JsonException {
 	this.initialize();
-	Asserts.notNull(jwt);
+	Asserts.notNull(token);
 
-	String[] parts = JoseUtils.parseParts(jwt);
-	Asserts.notNull(parts, () -> STR.fmt("The jwt '{}' is invalid format.", jwt));
+	String[] parts = JoseUtils.parseParts(token);
+	Asserts.notNull(parts, () -> STR.fmt("The token '{}' is invalid format.", token));
 
 	// Header
 	String headerJson = new String(BaseEncoder.BASE64_URL.decode(parts[0]), StandardCharsets.UTF_8);
