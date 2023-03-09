@@ -25,7 +25,7 @@ package com.appslandia.common.jose;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JwtToken extends JoseToken<JwtPayload> {
+public class JwtToken extends JwsToken<JwtPayload> {
     private static final long serialVersionUID = 1L;
 
     public JwtToken(JoseHeader header, JwtPayload payload) {

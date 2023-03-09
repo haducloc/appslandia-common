@@ -1,0 +1,238 @@
+// The MIT License (MIT)
+// Copyright © 2015 AppsLandia. All rights reserved.
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+package com.appslandia.common.jose;
+
+import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+
+import com.appslandia.common.base.BaseEncoder;
+import com.appslandia.common.base.InitializeException;
+import com.appslandia.common.base.InitializeObject;
+import com.appslandia.common.crypto.CryptoException;
+import com.appslandia.common.crypto.Digester;
+import com.appslandia.common.crypto.DsaDigester;
+import com.appslandia.common.crypto.MacDigester;
+import com.appslandia.common.json.JsonException;
+import com.appslandia.common.json.JsonProcessor;
+import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.STR;
+
+/**
+ *
+ * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
+ *
+ */
+public class JwsSigner<P> extends InitializeObject {
+
+    static final String JWT_NONE_ALG = "none";
+
+    protected JsonProcessor jsonProcessor;
+
+    protected String type = "JWT";
+    protected String alg;
+    protected String kid;
+
+    protected Digester signer;
+
+    protected final List<JwsVerifier<P>> defaultVerifiers = new LinkedList<>();
+    protected List<JwsVerifier<P>> customVerifiers;
+
+    protected Class<P> payloadClass;
+
+    public JwsSigner(Class<P> payloadClass) {
+	this.payloadClass = payloadClass;
+    }
+
+    // signatureVerifier
+    protected final JwsVerifier<P> signatureVerifier = (token) -> {
+
+	if (token.getSignaturePart().isEmpty()) {
+	    if (this.signer != null) {
+		throw new JwsSignatureException("signature is required.");
+	    }
+	} else {
+	    if (this.signer == null) {
+		throw new JwsSignatureException("signer is required.");
+	    }
+	    String dataToSign = JoseUtils.toJwsData(token.getHeaderPart(), token.getPayloadPart());
+
+	    if (!this.signer.verify(dataToSign.getBytes(StandardCharsets.UTF_8), BaseEncoder.BASE64_URL.decode(token.getSignaturePart()))) {
+		throw new JwsSignatureException("JWT signature verification failed.");
+	    }
+	}
+    };
+
+    @Override
+    protected void init() throws Exception {
+	Asserts.notNull(this.type, "type is required.");
+	Asserts.notNull(this.jsonProcessor, "jsonProcessor is required.");
+
+	if (this.signer != null) {
+	    Asserts.notNull(this.alg, "alg is required.");
+	} else {
+	    this.alg = JWT_NONE_ALG;
+	}
+
+	// Type
+	this.defaultVerifiers.add((token) -> {
+	    if (!Objects.equals(this.type, token.getHeader().getType())) {
+		throw new JoseVerificationException("type doesn't match.");
+	    }
+	});
+
+	// Algorithm
+	this.defaultVerifiers.add((token) -> {
+	    if (!Objects.equals(this.alg, token.getHeader().getAlgorithm())) {
+		throw new JoseVerificationException("algorithm doesn't match.");
+	    }
+	});
+
+	// kid
+	this.defaultVerifiers.add((token) -> {
+	    if (!Objects.equals(this.kid, token.getHeader().getKid())) {
+		throw new JoseVerificationException("kid doesn't match.");
+	    }
+	});
+    }
+
+    @Override
+    public JwsSigner<P> initialize() throws InitializeException {
+	super.initialize();
+	return this;
+    }
+
+    public JoseHeader newHeader() {
+	this.initialize();
+	JoseHeader header = new JoseHeader().setType(this.type).setAlgorithm(this.alg);
+
+	if (this.kid != null) {
+	    header.setKid(this.kid);
+	}
+	return header;
+    }
+
+    public String sign(JwsToken<P> token) throws CryptoException, JwsSignatureException, JsonException {
+	this.initialize();
+	Asserts.notNull(token);
+	Asserts.notNull(token.getHeader());
+	Asserts.notNull(token.getPayload());
+
+	// defaultVerifiers
+	this.defaultVerifiers.forEach((verifier) -> verifier.verify(token));
+
+	String header = BaseEncoder.BASE64_URL.encode(this.jsonProcessor.toByteArray(token.getHeader()));
+	String payload = BaseEncoder.BASE64_URL.encode(this.jsonProcessor.toByteArray(token.getPayload()));
+
+	// No ALG
+	if (this.signer == null) {
+	    return JoseUtils.toJwsToken(header, payload, "");
+	}
+
+	String dataToSign = JoseUtils.toJwsData(header, payload);
+
+	// Signature
+	byte[] sig = this.signer.digest(dataToSign.getBytes(StandardCharsets.UTF_8));
+
+	return JoseUtils.toJwsToken(header, payload, BaseEncoder.BASE64_URL.encode(sig));
+    }
+
+    public void verify(JwsToken<P> token) throws CryptoException, JwsSignatureException {
+	this.initialize();
+	Asserts.notNull(token);
+	Asserts.notNull(token.getHeader());
+	Asserts.notNull(token.getPayload());
+
+	Asserts.notNull(token.getHeaderPart());
+	Asserts.notNull(token.getPayloadPart());
+	Asserts.notNull(token.getSignaturePart());
+
+	// defaultVerifiers
+	this.defaultVerifiers.forEach((verifier) -> verifier.verify(token));
+
+	// signatureVerifier
+	this.signatureVerifier.verify(token);
+
+	// customVerifiers
+	if (customVerifiers != null) {
+	    this.customVerifiers.forEach((verifier) -> verifier.verify(token));
+	}
+    }
+
+    public JwsToken<P> parse(String token) throws JsonException {
+	this.initialize();
+	Asserts.notNull(token);
+
+	String[] parts = JoseUtils.parseJws(token);
+	Asserts.notNull(parts, () -> STR.fmt("The token '{}' is invalid format.", token));
+
+	// Header
+	String headerJson = new String(BaseEncoder.BASE64_URL.decode(parts[0]), StandardCharsets.UTF_8);
+	JoseHeader header = this.jsonProcessor.read(new StringReader(headerJson), JoseHeader.class);
+
+	// PAYLOAD
+	String payloadJson = new String(BaseEncoder.BASE64_URL.decode(parts[1]), StandardCharsets.UTF_8);
+	P payload = this.jsonProcessor.read(new StringReader(payloadJson), this.payloadClass);
+
+	return new JwsToken<P>(header, payload, parts[0], parts[1], parts[2]);
+    }
+
+    public JwsSigner<P> setJsonProcessor(JsonProcessor jsonProcessor) {
+	assertNotInitialized();
+	this.jsonProcessor = jsonProcessor;
+	return this;
+    }
+
+    public JwsSigner<P> setSigner(MacDigester signer) {
+	assertNotInitialized();
+	this.signer = signer;
+	return this;
+    }
+
+    public JwsSigner<P> setSigner(DsaDigester signer) {
+	assertNotInitialized();
+	this.signer = signer;
+	return this;
+    }
+
+    public JwsSigner<P> setAlg(String alg) {
+	assertNotInitialized();
+	this.alg = alg;
+	return this;
+    }
+
+    public JwsSigner<P> setKid(String kid) {
+	assertNotInitialized();
+	this.kid = kid;
+	return this;
+    }
+
+    public JwsSigner<P> addVerifier(JwsVerifier<P> verifier) {
+	assertNotInitialized();
+	if (this.customVerifiers == null) {
+	    this.customVerifiers = new LinkedList<>();
+	}
+	this.customVerifiers.add(verifier);
+	return this;
+    }
+}

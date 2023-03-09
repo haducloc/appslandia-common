@@ -34,7 +34,7 @@ public class JoseUtils {
 
     private static final Pattern JOSE_SEP_PATTERN = Pattern.compile("\\.");
 
-    public static String[] parseParts(String token) {
+    public static String[] parseJws(String token) {
 	Asserts.notNull(token);
 	String[] parts = JOSE_SEP_PATTERN.split(token);
 
@@ -47,11 +47,11 @@ public class JoseUtils {
 	return parts;
     }
 
-    public static String toJoseData(String header, String payload) {
+    public static String toJwsData(String header, String payload) {
 	return new StringBuilder(header.length() + 1 + payload.length()).append(header).append('.').append(payload).toString();
     }
 
-    public static String toJoseToken(String header, String payload, String signture) {
+    public static String toJwsToken(String header, String payload, String signture) {
 	return new StringBuilder(header.length() + 1 + payload.length() + 1 + signture.length()).append(header).append('.').append(payload).append('.').append(signture).toString();
     }
 

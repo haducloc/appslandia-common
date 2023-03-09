@@ -26,7 +26,7 @@ package com.appslandia.common.jose;
  *
  */
 @FunctionalInterface
-public interface JoseVerifier<P> {
+public interface JwsVerifier<P> {
 
-    void verify(JoseToken<P> token) throws JoseVerificationException;
+    void verify(JwsToken<P> token) throws JoseVerificationException;
 }

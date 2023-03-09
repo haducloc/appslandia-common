@@ -25,18 +25,18 @@ package com.appslandia.common.jose;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JoseSignatureException extends JoseVerificationException {
+public class JwsSignatureException extends JoseVerificationException {
     private static final long serialVersionUID = 1L;
 
-    public JoseSignatureException(String message) {
+    public JwsSignatureException(String message) {
 	super(message);
     }
 
-    public JoseSignatureException(Throwable cause) {
+    public JwsSignatureException(Throwable cause) {
 	super(cause);
     }
 
-    public JoseSignatureException(String message, Throwable cause) {
+    public JwsSignatureException(String message, Throwable cause) {
 	super(message, cause);
     }
 }

@@ -29,7 +29,7 @@ import com.appslandia.common.utils.Asserts;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JoseToken<P> implements Serializable {
+public class JwsToken<P> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     final JoseHeader header;
@@ -39,7 +39,7 @@ public class JoseToken<P> implements Serializable {
     final String payloadPart;
     final String signaturePart;
 
-    public JoseToken(JoseHeader header, P payload) {
+    public JwsToken(JoseHeader header, P payload) {
 	this.header = Asserts.notNull(header);
 	this.payload = Asserts.notNull(payload);
 
@@ -48,7 +48,7 @@ public class JoseToken<P> implements Serializable {
 	this.signaturePart = null;
     }
 
-    public JoseToken(JoseHeader header, P payload, String headerPart, String payloadPart, String signaturePart) {
+    public JwsToken(JoseHeader header, P payload, String headerPart, String payloadPart, String signaturePart) {
 	this.header = Asserts.notNull(header);
 	this.payload = Asserts.notNull(payload);
 

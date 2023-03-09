@@ -20,102 +20,38 @@
 
 package com.appslandia.common.jose;
 
-import java.io.StringReader;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import com.appslandia.common.base.BaseEncoder;
 import com.appslandia.common.base.InitializeException;
-import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.crypto.CryptoException;
-import com.appslandia.common.crypto.Digester;
 import com.appslandia.common.crypto.DsaDigester;
 import com.appslandia.common.crypto.MacDigester;
 import com.appslandia.common.json.JsonException;
 import com.appslandia.common.json.JsonProcessor;
 import com.appslandia.common.utils.Asserts;
-import com.appslandia.common.utils.STR;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JwtSigner extends InitializeObject {
-
-    static final String JWT_NONE_ALG = "none";
-
-    protected JsonProcessor jsonProcessor;
-
-    protected String type = "JWT";
-    protected String alg;
-    protected String kid;
-    protected String issuer;
+public class JwtSigner extends JwsSigner<JwtPayload> {
 
     protected int leewaySec;
-    protected Digester signer;
-
-    protected final List<JoseVerifier<JwtPayload>> defaultVerifiers = new LinkedList<>();
-    protected List<JoseVerifier<JwtPayload>> customVerifiers;
+    protected String issuer;
     protected Set<String> audiences;
 
-    // signatureVerifier
-    protected final JoseVerifier<JwtPayload> signatureVerifier = (token) -> {
-
-	if (token.getSignaturePart().isEmpty()) {
-	    if (this.signer != null) {
-		throw new JoseSignatureException("signature is required.");
-	    }
-	} else {
-	    if (this.signer == null) {
-		throw new JoseSignatureException("signer is required.");
-	    }
-	    String dataToSign = JoseUtils.toJoseData(token.getHeaderPart(), token.getPayloadPart());
-
-	    if (!this.signer.verify(dataToSign.getBytes(StandardCharsets.UTF_8), BaseEncoder.BASE64_URL.decode(token.getSignaturePart()))) {
-		throw new JoseSignatureException("JWT signature verification failed.");
-	    }
-	}
-    };
+    public JwtSigner() {
+	super(JwtPayload.class);
+    }
 
     @Override
     protected void init() throws Exception {
-	Asserts.notNull(this.type, "type is required.");
-	Asserts.notNull(this.jsonProcessor, "jsonProcessor is required.");
-
-	if (this.signer != null) {
-	    Asserts.notNull(this.alg, "alg is required.");
-	} else {
-	    this.alg = JWT_NONE_ALG;
-	}
+	super.init();
 
 	Asserts.isTrue(this.leewaySec >= 0);
-
-	// Type
-	this.defaultVerifiers.add((token) -> {
-	    if (!Objects.equals(this.type, token.getHeader().getType())) {
-		throw new JoseVerificationException("type doesn't match.");
-	    }
-	});
-
-	// Algorithm
-	this.defaultVerifiers.add((token) -> {
-	    if (!Objects.equals(this.alg, token.getHeader().getAlgorithm())) {
-		throw new JoseVerificationException("algorithm doesn't match.");
-	    }
-	});
-
-	// kid
-	this.defaultVerifiers.add((token) -> {
-	    if (!Objects.equals(this.kid, token.getHeader().getKid())) {
-		throw new JoseVerificationException("kid doesn't match.");
-	    }
-	});
 
 	// issuer
 	this.defaultVerifiers.add((token) -> {
@@ -155,16 +91,6 @@ public class JwtSigner extends InitializeObject {
 	return this;
     }
 
-    public JoseHeader newHeader() {
-	this.initialize();
-	JoseHeader header = new JoseHeader().setType(this.type).setAlgorithm(this.alg);
-
-	if (this.kid != null) {
-	    header.setKid(this.kid);
-	}
-	return header;
-    }
-
     public JwtPayload newPayload() {
 	this.initialize();
 	JwtPayload payload = new JwtPayload();
@@ -178,99 +104,15 @@ public class JwtSigner extends InitializeObject {
 	return payload;
     }
 
-    public String sign(JwtToken token) throws CryptoException, JoseSignatureException, JsonException {
-	this.initialize();
-	Asserts.notNull(token);
-	Asserts.notNull(token.getHeader());
-	Asserts.notNull(token.getPayload());
-
-	// defaultVerifiers
-	this.defaultVerifiers.forEach((verifier) -> verifier.verify(token));
-
-	String header = BaseEncoder.BASE64_URL.encode(this.jsonProcessor.toByteArray(token.getHeader()));
-	String payload = BaseEncoder.BASE64_URL.encode(this.jsonProcessor.toByteArray(token.getPayload()));
-
-	// No ALG
-	if (this.signer == null) {
-	    return JoseUtils.toJoseToken(header, payload, "");
-	}
-
-	String dataToSign = JoseUtils.toJoseData(header, payload);
-
-	// Signature
-	byte[] sig = this.signer.digest(dataToSign.getBytes(StandardCharsets.UTF_8));
-
-	return JoseUtils.toJoseToken(header, payload, BaseEncoder.BASE64_URL.encode(sig));
-    }
-
-    public JwtToken verify(JwtToken token) throws CryptoException, JoseSignatureException {
-	this.initialize();
-	Asserts.notNull(token);
-	Asserts.notNull(token.getHeader());
-	Asserts.notNull(token.getPayload());
-
-	Asserts.notNull(token.getHeaderPart());
-	Asserts.notNull(token.getPayloadPart());
-	Asserts.notNull(token.getSignaturePart());
-
-	// defaultVerifiers
-	this.defaultVerifiers.forEach((verifier) -> verifier.verify(token));
-
-	// signatureVerifier
-	this.signatureVerifier.verify(token);
-
-	// customVerifiers
-	if (customVerifiers != null) {
-	    this.customVerifiers.forEach((verifier) -> verifier.verify(token));
-	}
-	return token;
-    }
-
+    @Override
     public JwtToken parse(String token) throws JsonException {
-	this.initialize();
-	Asserts.notNull(token);
-
-	String[] parts = JoseUtils.parseParts(token);
-	Asserts.notNull(parts, () -> STR.fmt("The token '{}' is invalid format.", token));
-
-	// Header
-	String headerJson = new String(BaseEncoder.BASE64_URL.decode(parts[0]), StandardCharsets.UTF_8);
-	JoseHeader header = this.jsonProcessor.read(new StringReader(headerJson), JoseHeader.class);
-
-	// PAYLOAD
-	String payloadJson = new String(BaseEncoder.BASE64_URL.decode(parts[1]), StandardCharsets.UTF_8);
-	JwtPayload payload = this.jsonProcessor.read(new StringReader(payloadJson), JwtPayload.class);
-
-	return new JwtToken(header, payload, parts[0], parts[1], parts[2]);
+	JwsToken<JwtPayload> jwsToken = super.parse(token);
+	return new JwtToken(jwsToken.header, jwsToken.payload, jwsToken.headerPart, jwsToken.payloadPart, jwsToken.signaturePart);
     }
 
-    public JwtSigner setJsonProcessor(JsonProcessor jsonProcessor) {
+    public JwtSigner setLeewaySec(int leewaySec) {
 	assertNotInitialized();
-	this.jsonProcessor = jsonProcessor;
-	return this;
-    }
-
-    public JwtSigner setSigner(MacDigester signer) {
-	assertNotInitialized();
-	this.signer = signer;
-	return this;
-    }
-
-    public JwtSigner setSigner(DsaDigester signer) {
-	assertNotInitialized();
-	this.signer = signer;
-	return this;
-    }
-
-    public JwtSigner setAlg(String alg) {
-	assertNotInitialized();
-	this.alg = alg;
-	return this;
-    }
-
-    public JwtSigner setKid(String kid) {
-	assertNotInitialized();
-	this.kid = kid;
+	this.leewaySec = leewaySec;
 	return this;
     }
 
@@ -289,18 +131,33 @@ public class JwtSigner extends InitializeObject {
 	return this;
     }
 
-    public JwtSigner setLeewaySec(int leewaySec) {
-	assertNotInitialized();
-	this.leewaySec = leewaySec;
+    @Override
+    public JwtSigner setJsonProcessor(JsonProcessor jsonProcessor) {
+	super.setJsonProcessor(jsonProcessor);
 	return this;
     }
 
-    public JwtSigner addVerifier(JoseVerifier<JwtPayload> verifier) {
-	assertNotInitialized();
-	if (this.customVerifiers == null) {
-	    this.customVerifiers = new LinkedList<>();
-	}
-	this.customVerifiers.add(verifier);
+    @Override
+    public JwtSigner setSigner(DsaDigester signer) {
+	super.setSigner(signer);
+	return this;
+    }
+
+    @Override
+    public JwtSigner setSigner(MacDigester signer) {
+	super.setSigner(signer);
+	return this;
+    }
+
+    @Override
+    public JwtSigner setAlg(String alg) {
+	super.setAlg(alg);
+	return this;
+    }
+
+    @Override
+    public JwtSigner setKid(String kid) {
+	super.setKid(kid);
 	return this;
     }
 }
