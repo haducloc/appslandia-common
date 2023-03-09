@@ -20,23 +20,60 @@
 
 package com.appslandia.common.jose;
 
+import java.io.Serializable;
+
+import com.appslandia.common.utils.Asserts;
+
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JwtVerificationException extends RuntimeException {
+public class JoseToken<P> implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public JwtVerificationException(String message) {
-	super(message);
+    final JoseHeader header;
+    final P payload;
+
+    final String headerPart;
+    final String payloadPart;
+    final String signaturePart;
+
+    public JoseToken(JoseHeader header, P payload) {
+	this.header = Asserts.notNull(header);
+	this.payload = Asserts.notNull(payload);
+
+	this.headerPart = null;
+	this.payloadPart = null;
+	this.signaturePart = null;
     }
 
-    public JwtVerificationException(Throwable cause) {
-	super(cause);
+    public JoseToken(JoseHeader header, P payload, String headerPart, String payloadPart, String signaturePart) {
+	this.header = Asserts.notNull(header);
+	this.payload = Asserts.notNull(payload);
+
+	this.headerPart = Asserts.notNull(headerPart);
+	this.payloadPart = Asserts.notNull(payloadPart);
+	this.signaturePart = Asserts.notNull(signaturePart);
     }
 
-    public JwtVerificationException(String message, Throwable cause) {
-	super(message, cause);
+    public JoseHeader getHeader() {
+	return this.header;
+    }
+
+    public P getPayload() {
+	return this.payload;
+    }
+
+    public String getHeaderPart() {
+	return this.headerPart;
+    }
+
+    public String getPayloadPart() {
+	return this.payloadPart;
+    }
+
+    public String getSignaturePart() {
+	return this.signaturePart;
     }
 }

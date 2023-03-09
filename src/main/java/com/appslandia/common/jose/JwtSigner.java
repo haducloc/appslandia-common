@@ -60,25 +60,25 @@ public class JwtSigner extends InitializeObject {
     protected int leewaySec;
     protected Digester signer;
 
-    protected final List<JwtVerifier> defaultVerifiers = new LinkedList<>();
-    protected List<JwtVerifier> customVerifiers;
+    protected final List<JoseVerifier<JwtPayload>> defaultVerifiers = new LinkedList<>();
+    protected List<JoseVerifier<JwtPayload>> customVerifiers;
     protected Set<String> audiences;
 
     // signatureVerifier
-    protected final JwtVerifier signatureVerifier = (jwt) -> {
+    protected final JoseVerifier<JwtPayload> signatureVerifier = (jwt) -> {
 
 	if (jwt.getSignaturePart().isEmpty()) {
 	    if (this.signer != null) {
-		throw new JwtSignatureException("signature is required.");
+		throw new JoseSignatureException("signature is required.");
 	    }
 	} else {
 	    if (this.signer == null) {
-		throw new JwtSignatureException("signer is required.");
+		throw new JoseSignatureException("signer is required.");
 	    }
-	    String dataToSign = JwtUtils.toData(jwt.getHeaderPart(), jwt.getPayloadPart());
+	    String dataToSign = JoseUtils.toData(jwt.getHeaderPart(), jwt.getPayloadPart());
 
 	    if (!this.signer.verify(dataToSign.getBytes(StandardCharsets.UTF_8), BaseEncoder.BASE64_URL.decode(jwt.getSignaturePart()))) {
-		throw new JwtSignatureException("JWT signature verification failed.");
+		throw new JoseSignatureException("JWT signature verification failed.");
 	    }
 	}
     };
@@ -99,28 +99,28 @@ public class JwtSigner extends InitializeObject {
 	// Type
 	this.defaultVerifiers.add((jwt) -> {
 	    if (!Objects.equals(this.type, jwt.getHeader().getType())) {
-		throw new JwtVerificationException("type doesn't match.");
+		throw new JoseVerificationException("type doesn't match.");
 	    }
 	});
 
 	// Algorithm
 	this.defaultVerifiers.add((jwt) -> {
 	    if (!Objects.equals(this.alg, jwt.getHeader().getAlgorithm())) {
-		throw new JwtVerificationException("algorithm doesn't match.");
+		throw new JoseVerificationException("algorithm doesn't match.");
 	    }
 	});
 
 	// kid
 	this.defaultVerifiers.add((jwt) -> {
 	    if (!Objects.equals(this.kid, jwt.getHeader().getKid())) {
-		throw new JwtVerificationException("kid doesn't match.");
+		throw new JoseVerificationException("kid doesn't match.");
 	    }
 	});
 
 	// issuer
 	this.defaultVerifiers.add((jwt) -> {
 	    if (!Objects.equals(this.issuer, jwt.getPayload().getIssuer())) {
-		throw new JwtVerificationException("issuer doesn't match.");
+		throw new JoseVerificationException("issuer doesn't match.");
 	    }
 	});
 
@@ -128,10 +128,10 @@ public class JwtSigner extends InitializeObject {
 	this.defaultVerifiers.add((jwt) -> {
 	    Date dt = jwt.getPayload().getExpiresAt();
 	    if (dt != null) {
-		long nt = JwtUtils.toNumericDate(dt);
+		long nt = JoseUtils.toNumericDate(dt);
 
-		if (!JwtUtils.isFutureTime(nt, this.leewaySec)) {
-		    throw new JwtVerificationException("jwt is expired.");
+		if (!JoseUtils.isFutureTime(nt, this.leewaySec)) {
+		    throw new JoseVerificationException("jwt is expired.");
 		}
 	    }
 	});
@@ -140,10 +140,10 @@ public class JwtSigner extends InitializeObject {
 	this.defaultVerifiers.add((jwt) -> {
 	    Date dt = jwt.getPayload().getIssuedAt();
 	    if (dt != null) {
-		long nt = JwtUtils.toNumericDate(dt);
+		long nt = JoseUtils.toNumericDate(dt);
 
-		if (JwtUtils.isFutureTime(nt, 0)) {
-		    throw new JwtVerificationException("iat must be a past date/time.");
+		if (JoseUtils.isFutureTime(nt, 0)) {
+		    throw new JoseVerificationException("iat must be a past date/time.");
 		}
 	    }
 	});
@@ -178,7 +178,7 @@ public class JwtSigner extends InitializeObject {
 	return payload;
     }
 
-    public String toJwt(JwtToken jwt) throws CryptoException, JwtSignatureException, JsonException {
+    public String toJwt(JwtToken jwt) throws CryptoException, JoseSignatureException, JsonException {
 	this.initialize();
 	Asserts.notNull(jwt);
 	Asserts.notNull(jwt.getHeader());
@@ -192,18 +192,18 @@ public class JwtSigner extends InitializeObject {
 
 	// No ALG
 	if (this.signer == null) {
-	    return JwtUtils.toJwt(header, payload, "");
+	    return JoseUtils.toJwt(header, payload, "");
 	}
 
-	String dataToSign = JwtUtils.toData(header, payload);
+	String dataToSign = JoseUtils.toData(header, payload);
 
 	// Signature
 	byte[] sig = this.signer.digest(dataToSign.getBytes(StandardCharsets.UTF_8));
 
-	return JwtUtils.toJwt(header, payload, BaseEncoder.BASE64_URL.encode(sig));
+	return JoseUtils.toJwt(header, payload, BaseEncoder.BASE64_URL.encode(sig));
     }
 
-    public JwtToken verifyJwt(JwtToken jwt) throws CryptoException, JwtSignatureException {
+    public JwtToken verifyJwt(JwtToken jwt) throws CryptoException, JoseSignatureException {
 	this.initialize();
 	Asserts.notNull(jwt);
 	Asserts.notNull(jwt.getHeader());
@@ -230,7 +230,7 @@ public class JwtSigner extends InitializeObject {
 	this.initialize();
 	Asserts.notNull(jwt);
 
-	String[] parts = JwtUtils.parseParts(jwt);
+	String[] parts = JoseUtils.parseParts(jwt);
 	Asserts.notNull(parts, () -> STR.fmt("The jwt '{}' is invalid format.", jwt));
 
 	// Header
@@ -295,7 +295,7 @@ public class JwtSigner extends InitializeObject {
 	return this;
     }
 
-    public JwtSigner addVerifier(JwtVerifier verifier) {
+    public JwtSigner addVerifier(JoseVerifier<JwtPayload> verifier) {
 	assertNotInitialized();
 	if (this.customVerifiers == null) {
 	    this.customVerifiers = new LinkedList<>();

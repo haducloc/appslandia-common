@@ -45,16 +45,16 @@ public abstract class JoseBasicMap extends BasicMap {
 
     public Date getNumericDate(String key) {
 	Number nd = (Number) this.get(key);
-	return (nd != null) ? JwtUtils.toDate(nd.longValue()) : null;
+	return (nd != null) ? JoseUtils.toDate(nd.longValue()) : null;
     }
 
     public JoseBasicMap setNumericDate(String key, Date value) {
-	set(key, JwtUtils.toNumericDate(value));
+	set(key, JoseUtils.toNumericDate(value));
 	return this;
     }
 
     public JoseBasicMap setNumericDate(String key, long timeInMs) {
-	set(key, JwtUtils.toNumericDate(timeInMs));
+	set(key, JoseUtils.toNumericDate(timeInMs));
 	return this;
     }
 

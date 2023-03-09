@@ -20,13 +20,28 @@
 
 package com.appslandia.common.jose;
 
+import java.util.Date;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import com.appslandia.common.utils.DateUtils;
+
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-@FunctionalInterface
-public interface JwtVerifier {
+public class JoseUtilsTest {
 
-    void verify(JwtToken jwt) throws JwtVerificationException;
+    @Test
+    public void test_toNumericDate() {
+	Date dt = DateUtils.iso8601DateTime("2010-10-10T10:10:10.999");
+
+	Long numericDate = JoseUtils.toNumericDate(dt.getTime());
+	Date restoredDate = JoseUtils.toDate(numericDate);
+
+	Assertions.assertEquals("2010-10-10T10:10:10.000", DateUtils.iso8601DateTime(restoredDate));
+	Assertions.assertEquals((dt.getTime() / 1000) * 1000, restoredDate.getTime());
+    }
 }

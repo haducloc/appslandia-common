@@ -96,8 +96,8 @@ try (ConnectionImpl connScoped = new ConnectionImpl(javax.sql.DataSource)) {
 ```
 ### JWT
 ```java
-  // Gson or JsonB JwtJsonb.newJsonProcessor() or your implementation
-  JsonProcessor jsonProcessor = JwtGson.newJsonProcessor();
+  // Gson or JsonB JoseGson.newJsonProcessor() or your implementation
+  JsonProcessor jsonProcessor = JoseGson.newJsonProcessor();
   
   // JwtSigner - HS256/HS384/HS512
   JwtSigner jwtSigner = HsJwtSigner.HS256().setJsonProcessor(jsonProcessor)
@@ -107,7 +107,7 @@ try (ConnectionImpl connScoped = new ConnectionImpl(javax.sql.DataSource)) {
   JwtSigner jwtSigner = DsaJwtSigner.ES256().setJsonProcessor(jsonProcessor)
   							  .setPrivateKey(privateKey).setPublicKey(publicKey).setIssuer("Issuer1").build();
 
-  JwtHeader header = processor.newHeader();
+  JoseHeader header = processor.newHeader();
   JwtPayload payload = processor.newPayload().setExpiresIn(1, TimeUnit.DAYS);
 
   // Serialize

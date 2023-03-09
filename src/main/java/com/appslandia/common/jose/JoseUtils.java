@@ -30,13 +30,13 @@ import com.appslandia.common.utils.Asserts;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JwtUtils {
+public class JoseUtils {
 
-    private static final Pattern JWT_SEP_PATTERN = Pattern.compile("\\.");
+    private static final Pattern JOSE_SEP_PATTERN = Pattern.compile("\\.");
 
     public static String[] parseParts(String token) {
 	Asserts.notNull(token);
-	String[] parts = JWT_SEP_PATTERN.split(token);
+	String[] parts = JOSE_SEP_PATTERN.split(token);
 
 	if (parts.length == 2) {
 	    return token.endsWith(".") ? new String[] { parts[0], parts[1], "" } : null;

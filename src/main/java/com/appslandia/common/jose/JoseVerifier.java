@@ -25,14 +25,8 @@ package com.appslandia.common.jose;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JwtToken extends JoseToken<JwtPayload> {
-    private static final long serialVersionUID = 1L;
+@FunctionalInterface
+public interface JoseVerifier<P> {
 
-    public JwtToken(JoseHeader header, JwtPayload payload) {
-	super(header, payload);
-    }
-
-    public JwtToken(JoseHeader header, JwtPayload payload, String headerPart, String payloadPart, String signaturePart) {
-	super(header, payload, headerPart, payloadPart, signaturePart);
-    }
+    void verify(JoseToken<P> token) throws JoseVerificationException;
 }
