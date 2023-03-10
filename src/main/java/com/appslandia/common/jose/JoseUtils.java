@@ -23,6 +23,7 @@ package com.appslandia.common.jose;
 import java.util.Date;
 import java.util.regex.Pattern;
 
+import com.appslandia.common.base.BaseEncoder;
 import com.appslandia.common.utils.Asserts;
 
 /**
@@ -85,5 +86,9 @@ public class JoseUtils {
 	    return null;
 	}
 	return new Date(numericDate * 1000);
+    }
+
+    public static BaseEncoder getJoseBase64() {
+	return BaseEncoder.BASE64_URL_NP;
     }
 }

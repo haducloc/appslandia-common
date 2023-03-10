@@ -22,6 +22,8 @@ package com.appslandia.common.jose;
 
 import java.security.Key;
 
+import com.appslandia.common.crypto.CryptoException;
+
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
@@ -29,8 +31,8 @@ import java.security.Key;
  */
 public abstract class JsonWebKeyConverter<K extends Key> {
 
-    final String kty;
-    final String alg;
+    protected final String kty;
+    protected final String alg;
 
     public JsonWebKeyConverter(String kty, String alg) {
 	this.kty = kty;
@@ -39,5 +41,5 @@ public abstract class JsonWebKeyConverter<K extends Key> {
 
     public abstract JsonWebKey toJsonWebKey(K key);
 
-    public abstract K fromJsonWebKey(JsonWebKey key);
+    public abstract K fromJsonWebKey(JsonWebKey key) throws CryptoException;
 }

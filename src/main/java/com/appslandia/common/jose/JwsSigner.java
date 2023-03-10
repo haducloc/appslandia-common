@@ -26,7 +26,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import com.appslandia.common.base.BaseEncoder;
 import com.appslandia.common.base.InitializeException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.crypto.CryptoException;
@@ -78,7 +77,7 @@ public class JwsSigner<P> extends InitializeObject {
 	    }
 	    String dataToSign = JoseUtils.toJwsData(token.getHeaderPart(), token.getPayloadPart());
 
-	    if (!this.signer.verify(dataToSign.getBytes(StandardCharsets.UTF_8), BaseEncoder.BASE64_URL.decode(token.getSignaturePart()))) {
+	    if (!this.signer.verify(dataToSign.getBytes(StandardCharsets.UTF_8), JoseUtils.getJoseBase64().decode(token.getSignaturePart()))) {
 		throw new JwsSignatureException("JWT signature verification failed.");
 	    }
 	}
@@ -142,13 +141,13 @@ public class JwsSigner<P> extends InitializeObject {
 	// defaultVerifiers
 	this.defaultVerifiers.forEach((verifier) -> verifier.verify(token));
 
-	String header = BaseEncoder.BASE64_URL.encode(this.jsonProcessor.toByteArray(token.getHeader()));
+	String header = JoseUtils.getJoseBase64().encode(this.jsonProcessor.toByteArray(token.getHeader()));
 	String payload = null;
 
 	if (this.payloadClass == byte[].class) {
-	    payload = BaseEncoder.BASE64_URL.encode((byte[]) token.getPayload());
+	    payload = JoseUtils.getJoseBase64().encode((byte[]) token.getPayload());
 	} else {
-	    payload = BaseEncoder.BASE64_URL.encode(this.jsonProcessor.toByteArray(token.getPayload()));
+	    payload = JoseUtils.getJoseBase64().encode(this.jsonProcessor.toByteArray(token.getPayload()));
 	}
 
 	// No ALG
@@ -161,7 +160,7 @@ public class JwsSigner<P> extends InitializeObject {
 	// Signature
 	byte[] sig = this.signer.digest(dataToSign.getBytes(StandardCharsets.UTF_8));
 
-	return JoseUtils.toJwsToken(header, payload, BaseEncoder.BASE64_URL.encode(sig));
+	return JoseUtils.toJwsToken(header, payload, JoseUtils.getJoseBase64().encode(sig));
     }
 
     public void verify(JwsToken<P> token) throws CryptoException, JwsSignatureException {
@@ -194,11 +193,11 @@ public class JwsSigner<P> extends InitializeObject {
 	Asserts.notNull(parts, () -> STR.fmt("The token '{}' is invalid format.", token));
 
 	// Header
-	String headerJson = new String(BaseEncoder.BASE64_URL.decode(parts[0]), StandardCharsets.UTF_8);
+	String headerJson = new String(JoseUtils.getJoseBase64().decode(parts[0]), StandardCharsets.UTF_8);
 	JoseHeader header = this.jsonProcessor.read(new StringReader(headerJson), JoseHeader.class);
 
 	// PAYLOAD
-	byte[] payloadBytes = BaseEncoder.BASE64_URL.decode(parts[1]);
+	byte[] payloadBytes = JoseUtils.getJoseBase64().decode(parts[1]);
 	P payload = null;
 
 	if (this.payloadClass == byte[].class) {
