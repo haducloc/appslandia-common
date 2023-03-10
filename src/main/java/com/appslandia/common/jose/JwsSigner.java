@@ -36,6 +36,7 @@ import com.appslandia.common.crypto.MacDigester;
 import com.appslandia.common.json.JsonException;
 import com.appslandia.common.json.JsonProcessor;
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.ObjectUtils;
 import com.appslandia.common.utils.STR;
 
 /**
@@ -142,7 +143,13 @@ public class JwsSigner<P> extends InitializeObject {
 	this.defaultVerifiers.forEach((verifier) -> verifier.verify(token));
 
 	String header = BaseEncoder.BASE64_URL.encode(this.jsonProcessor.toByteArray(token.getHeader()));
-	String payload = BaseEncoder.BASE64_URL.encode(this.jsonProcessor.toByteArray(token.getPayload()));
+	String payload = null;
+
+	if (this.payloadClass == byte[].class) {
+	    payload = BaseEncoder.BASE64_URL.encode((byte[]) token.getPayload());
+	} else {
+	    payload = BaseEncoder.BASE64_URL.encode(this.jsonProcessor.toByteArray(token.getPayload()));
+	}
 
 	// No ALG
 	if (this.signer == null) {
@@ -191,9 +198,15 @@ public class JwsSigner<P> extends InitializeObject {
 	JoseHeader header = this.jsonProcessor.read(new StringReader(headerJson), JoseHeader.class);
 
 	// PAYLOAD
-	String payloadJson = new String(BaseEncoder.BASE64_URL.decode(parts[1]), StandardCharsets.UTF_8);
-	P payload = this.jsonProcessor.read(new StringReader(payloadJson), this.payloadClass);
+	byte[] payloadBytes = BaseEncoder.BASE64_URL.decode(parts[1]);
+	P payload = null;
 
+	if (this.payloadClass == byte[].class) {
+	    payload = ObjectUtils.cast(payloadBytes);
+	} else {
+	    String payloadJson = new String(payloadBytes, StandardCharsets.UTF_8);
+	    payload = this.jsonProcessor.read(new StringReader(payloadJson), this.payloadClass);
+	}
 	return new JwsToken<P>(header, payload, parts[0], parts[1], parts[2]);
     }
 
