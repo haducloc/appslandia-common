@@ -20,27 +20,46 @@
 
 package com.appslandia.common.jose;
 
-import com.appslandia.common.json.GsonMapAdapter;
-import com.appslandia.common.json.GsonProcessor;
-import com.google.gson.GsonBuilder;
+import java.util.Map;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JoseGson {
+public class JoseJwk extends JoseMapObject {
+    private static final long serialVersionUID = 1L;
 
-    public static GsonBuilder newGsonBuilder() {
-	// @formatter:off
-	return GsonProcessor.newBuilder()
-		.registerTypeAdapter(JoseHeader.class, new GsonMapAdapter<>((m) -> new JoseHeader(m), true))
-		.registerTypeAdapter(JwtPayload.class, new GsonMapAdapter<>((m) -> new JwtPayload(m), true))
-		.registerTypeAdapter(JoseJwk.class, new GsonMapAdapter<>((m) -> new JoseJwk(m), true));
-	// @formatter:on
+    // Specifies the type of the key, such as "RSA", "EC", or "oct".
+    public static final String KTY = "kty";
+
+    // Specifies the intended use of the key, such as "sig" (signature) or "enc" (encryption).
+    public static final String USE = "use";
+
+    // Specifies the cryptographic algorithm used with the key, such as "RS256" or "ES256".
+    public static final String ALG = "alg";
+
+    // A unique identifier for the key.
+    public static final String KID = "kid";
+
+    // The modulus and exponent components of an RSA public key.
+    public static final String N = "n";
+    public static final String E = "e";
+
+    // The private exponent component of an RSA key.
+    public static final String D = "d";
+
+    // The x-coordinate and y-coordinate components of an EC public key.
+    public static final String X = "x";
+    public static final String Y = "y";
+
+    // The value of a symmetric key, represented as a sequence of octets
+    public static final String K = "k";
+
+    public JoseJwk() {
     }
 
-    public static GsonProcessor newJsonProcessor() {
-	return new GsonProcessor().setBuilder(newGsonBuilder());
+    public JoseJwk(Map<String, Object> map) {
+	super(map);
     }
 }

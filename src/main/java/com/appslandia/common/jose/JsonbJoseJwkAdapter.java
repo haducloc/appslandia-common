@@ -20,27 +20,43 @@
 
 package com.appslandia.common.jose;
 
-import com.appslandia.common.json.GsonMapAdapter;
-import com.appslandia.common.json.GsonProcessor;
-import com.google.gson.GsonBuilder;
+import java.util.Map;
+
+import com.appslandia.common.json.JsonbMapParser;
+
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.bind.adapter.JsonbAdapter;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JoseGson {
+public class JsonbJoseJwkAdapter implements JsonbAdapter<JoseJwk, JsonObject> {
 
-    public static GsonBuilder newGsonBuilder() {
-	// @formatter:off
-	return GsonProcessor.newBuilder()
-		.registerTypeAdapter(JoseHeader.class, new GsonMapAdapter<>((m) -> new JoseHeader(m), true))
-		.registerTypeAdapter(JwtPayload.class, new GsonMapAdapter<>((m) -> new JwtPayload(m), true))
-		.registerTypeAdapter(JoseJwk.class, new GsonMapAdapter<>((m) -> new JoseJwk(m), true));
-	// @formatter:on
+    final boolean unmodifiable;
+
+    public JsonbJoseJwkAdapter() {
+	this(false);
     }
 
-    public static GsonProcessor newJsonProcessor() {
-	return new GsonProcessor().setBuilder(newGsonBuilder());
+    public JsonbJoseJwkAdapter(boolean unmodifiable) {
+	this.unmodifiable = unmodifiable;
+    }
+
+    @Override
+    public JsonObject adaptToJson(JoseJwk obj) throws Exception {
+	return Json.createObjectBuilder(obj).build();
+    }
+
+    @Override
+    public JoseJwk adaptFromJson(JsonObject obj) throws Exception {
+	Map<String, Object> map = new JsonbMapParser().parseMap(obj, this.unmodifiable);
+	return new JoseJwk(map);
+    }
+
+    public boolean isUnmodifiable() {
+	return this.unmodifiable;
     }
 }
