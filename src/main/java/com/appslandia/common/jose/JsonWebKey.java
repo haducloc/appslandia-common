@@ -30,9 +30,16 @@ import java.util.Map;
 public class JsonWebKey extends JoseMapObject {
     private static final long serialVersionUID = 1L;
 
+    // type of cryptographic key, such as "RSA", "EC", or "oct" (for symmetric keys).
     public static final String KTY = "kty";
+
+    // purpose intended for use with key, such as "sig" for signature or "enc" for encryption.
     public static final String USE = "use";
+
+    // algorithm intended for use with the key
+    // RS256, PS256, ES256, etc.
     public static final String ALG = "alg";
+
     public static final String KID = "kid";
 
     public JsonWebKey() {

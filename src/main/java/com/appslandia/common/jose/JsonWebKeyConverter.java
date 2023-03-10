@@ -31,7 +31,11 @@ import com.appslandia.common.crypto.CryptoException;
  */
 public abstract class JsonWebKeyConverter<K extends Key> {
 
+    // type of cryptographic key, such as "RSA", "EC", or "oct" (for symmetric keys).
     protected final String kty;
+
+    // algorithm intended for use with the key
+    // RS256, PS256, ES256, etc.
     protected final String alg;
 
     public JsonWebKeyConverter(String kty, String alg) {
