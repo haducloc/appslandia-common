@@ -22,41 +22,23 @@ package com.appslandia.common.jose;
 
 import java.util.Map;
 
-import com.appslandia.common.json.JsonbMapParser;
-
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
-import jakarta.json.bind.adapter.JsonbAdapter;
-
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JsonbJoseJwkAdapter implements JsonbAdapter<JoseJwk, JsonObject> {
+public class JsonWebKey extends JoseMapObject {
+    private static final long serialVersionUID = 1L;
 
-    final boolean unmodifiable;
+    public static final String KTY = "kty";
+    public static final String USE = "use";
+    public static final String ALG = "alg";
+    public static final String KID = "kid";
 
-    public JsonbJoseJwkAdapter() {
-	this(false);
+    public JsonWebKey() {
     }
 
-    public JsonbJoseJwkAdapter(boolean unmodifiable) {
-	this.unmodifiable = unmodifiable;
-    }
-
-    @Override
-    public JsonObject adaptToJson(JoseJwk obj) throws Exception {
-	return Json.createObjectBuilder(obj).build();
-    }
-
-    @Override
-    public JoseJwk adaptFromJson(JsonObject obj) throws Exception {
-	Map<String, Object> map = new JsonbMapParser().parseMap(obj, this.unmodifiable);
-	return new JoseJwk(map);
-    }
-
-    public boolean isUnmodifiable() {
-	return this.unmodifiable;
+    public JsonWebKey(Map<String, Object> map) {
+	super(map);
     }
 }

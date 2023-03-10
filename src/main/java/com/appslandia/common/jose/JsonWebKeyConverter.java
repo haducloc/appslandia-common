@@ -20,22 +20,16 @@
 
 package com.appslandia.common.jose;
 
-import com.appslandia.common.json.JsonbProcessor;
-
-import jakarta.json.bind.JsonbConfig;
+import java.security.Key;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JoseJsonb {
+public interface JsonWebKeyConverter<K extends Key> {
 
-    public static JsonbConfig newJsonbConfig() {
-	return JsonbProcessor.newConfig().withAdapters(new JsonbJoseHeaderAdapter(true), new JsonbJwtPayloadAdapter(true), new JsonbJsonWebKeyAdapter(true));
-    }
+    JsonWebKey toJsonWebKey(K key);
 
-    public static JsonbProcessor newJsonProcessor() {
-	return new JsonbProcessor().setConfig(newJsonbConfig());
-    }
+    K fromJsonWebKey(JsonWebKey key);
 }
