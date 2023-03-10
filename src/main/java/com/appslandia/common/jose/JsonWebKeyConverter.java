@@ -27,9 +27,17 @@ import java.security.Key;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public interface JsonWebKeyConverter<K extends Key> {
+public abstract class JsonWebKeyConverter<K extends Key> {
 
-    JsonWebKey toJsonWebKey(K key);
+    final String kty;
+    final String alg;
 
-    K fromJsonWebKey(JsonWebKey key);
+    public JsonWebKeyConverter(String kty, String alg) {
+	this.kty = kty;
+	this.alg = alg;
+    }
+
+    public abstract JsonWebKey toJsonWebKey(K key);
+
+    public abstract K fromJsonWebKey(JsonWebKey key);
 }
