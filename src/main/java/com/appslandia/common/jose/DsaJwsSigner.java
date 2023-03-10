@@ -53,6 +53,11 @@ public class DsaJwsSigner<P> {
 	return this;
     }
 
+    public DsaJwsSigner<P> setJsonProcessor(JsonProcessor jsonProcessor) {
+	this.jsonProcessor = jsonProcessor;
+	return this;
+    }
+
     public DsaJwsSigner<P> setPrivateKey(PrivateKey key) {
 	this.signer.setPrivateKey(key);
 	return this;
@@ -60,11 +65,6 @@ public class DsaJwsSigner<P> {
 
     public DsaJwsSigner<P> setPublicKey(PublicKey key) {
 	this.signer.setPublicKey(key);
-	return this;
-    }
-
-    public DsaJwsSigner<P> setJsonProcessor(JsonProcessor jsonProcessor) {
-	this.jsonProcessor = jsonProcessor;
 	return this;
     }
 

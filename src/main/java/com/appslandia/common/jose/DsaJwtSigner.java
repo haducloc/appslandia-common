@@ -25,7 +25,6 @@ import java.security.PublicKey;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import com.appslandia.common.crypto.DsaDigester;
 import com.appslandia.common.json.JsonProcessor;
 import com.appslandia.common.utils.Asserts;
 
@@ -34,51 +33,43 @@ import com.appslandia.common.utils.Asserts;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class DsaJwtSigner {
+public class DsaJwtSigner extends DsaJwsSigner<JwtPayload> {
 
-    protected JsonProcessor jsonProcessor;
-
-    protected String alg;
-    protected String kid;
-
-    protected int leewaySec;
     protected String issuer;
     protected Set<String> audiences;
-
-    protected DsaDigester signer;
+    protected int leewaySec;
 
     public DsaJwtSigner(String jwsAlgorithm, String dsaAlgorithm) {
-	this.alg = Asserts.notNull(jwsAlgorithm);
-	this.signer = new DsaDigester().setAlgorithm(Asserts.notNull(dsaAlgorithm));
+	super(jwsAlgorithm, dsaAlgorithm, JwtPayload.class);
     }
 
+    @Override
     public DsaJwtSigner setProvider(String provider) {
-	this.signer.setProvider(provider);
+	super.setProvider(provider);
 	return this;
     }
 
-    public DsaJwtSigner setPrivateKey(PrivateKey key) {
-	this.signer.setPrivateKey(key);
-	return this;
-    }
-
-    public DsaJwtSigner setPublicKey(PublicKey key) {
-	this.signer.setPublicKey(key);
-	return this;
-    }
-
+    @Override
     public DsaJwtSigner setJsonProcessor(JsonProcessor jsonProcessor) {
-	this.jsonProcessor = jsonProcessor;
+	super.setJsonProcessor(jsonProcessor);
 	return this;
     }
 
+    @Override
+    public DsaJwtSigner setPrivateKey(PrivateKey key) {
+	super.setPrivateKey(key);
+	return this;
+    }
+
+    @Override
+    public DsaJwtSigner setPublicKey(PublicKey key) {
+	super.setPublicKey(key);
+	return this;
+    }
+
+    @Override
     public DsaJwtSigner setKid(String kid) {
-	this.kid = kid;
-	return this;
-    }
-
-    public DsaJwtSigner setLeewaySec(int leewaySec) {
-	this.leewaySec = leewaySec;
+	super.setKid(kid);
 	return this;
     }
 
@@ -95,6 +86,12 @@ public class DsaJwtSigner {
 	return this;
     }
 
+    public DsaJwtSigner setLeewaySec(int leewaySec) {
+	this.leewaySec = leewaySec;
+	return this;
+    }
+
+    @Override
     public JwtSigner build() {
 	Asserts.notNull(this.jsonProcessor);
 	JwtSigner impl = new JwtSigner().setJsonProcessor(this.jsonProcessor).setSigner(this.signer).setAlg(this.alg).setKid(this.kid).setLeewaySec(this.leewaySec)

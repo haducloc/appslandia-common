@@ -39,9 +39,9 @@ import com.appslandia.common.utils.Asserts;
  */
 public class JwtSigner extends JwsSigner<JwtPayload> {
 
-    protected int leewaySec;
     protected String issuer;
     protected Set<String> audiences;
+    protected int leewaySec;
 
     public JwtSigner() {
 	super(JwtPayload.class);
@@ -110,27 +110,6 @@ public class JwtSigner extends JwsSigner<JwtPayload> {
 	return new JwtToken(jwsToken.header, jwsToken.payload, jwsToken.headerPart, jwsToken.payloadPart, jwsToken.signaturePart);
     }
 
-    public JwtSigner setLeewaySec(int leewaySec) {
-	assertNotInitialized();
-	this.leewaySec = leewaySec;
-	return this;
-    }
-
-    public JwtSigner setIssuer(String issuer) {
-	assertNotInitialized();
-	this.issuer = issuer;
-	return this;
-    }
-
-    public JwtSigner addAudience(String audience) {
-	assertNotInitialized();
-	if (this.audiences == null) {
-	    this.audiences = new LinkedHashSet<>();
-	}
-	this.audiences.add(audience);
-	return this;
-    }
-
     @Override
     public JwtSigner setJsonProcessor(JsonProcessor jsonProcessor) {
 	super.setJsonProcessor(jsonProcessor);
@@ -158,6 +137,27 @@ public class JwtSigner extends JwsSigner<JwtPayload> {
     @Override
     public JwtSigner setKid(String kid) {
 	super.setKid(kid);
+	return this;
+    }
+
+    public JwtSigner setIssuer(String issuer) {
+	assertNotInitialized();
+	this.issuer = issuer;
+	return this;
+    }
+
+    public JwtSigner addAudience(String audience) {
+	assertNotInitialized();
+	if (this.audiences == null) {
+	    this.audiences = new LinkedHashSet<>();
+	}
+	this.audiences.add(audience);
+	return this;
+    }
+
+    public JwtSigner setLeewaySec(int leewaySec) {
+	assertNotInitialized();
+	this.leewaySec = leewaySec;
 	return this;
     }
 }

@@ -50,6 +50,11 @@ public class HsJwsSigner<P> {
 	return this;
     }
 
+    public HsJwsSigner<P> setJsonProcessor(JsonProcessor jsonProcessor) {
+	this.jsonProcessor = jsonProcessor;
+	return this;
+    }
+
     public HsJwsSigner<P> setSecret(byte[] secret) {
 	this.signer.setSecret(secret);
 	return this;
@@ -57,11 +62,6 @@ public class HsJwsSigner<P> {
 
     public HsJwsSigner<P> setSecret(String secretOrEnv) {
 	this.signer.setSecret(secretOrEnv);
-	return this;
-    }
-
-    public HsJwsSigner<P> setJsonProcessor(JsonProcessor jsonProcessor) {
-	this.jsonProcessor = jsonProcessor;
 	return this;
     }
 
