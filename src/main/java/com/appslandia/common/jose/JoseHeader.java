@@ -35,21 +35,6 @@ public class JoseHeader extends JoseMapObject {
     public static final String ALG = "alg";
     public static final String KID = "kid";
 
-    // (JWK Set URL) Header Parameter
-    public static final String JKU = "jku";
-
-    // (JSON Web Key) Header Parameter
-    public static final String JWK = "jwk";
-
-    // X.509 URL) Header Parameter
-    public static final String X5U = "x5u";
-
-    // (X.509 Certificate Chain) Header Parameter
-    public static final String X5C = "x5c";
-
-    // "x5t" (X.509 Certificate SHA-1 Thumbprint)
-    public static final String X5T = "x5t";
-
     public JoseHeader() {
     }
 
