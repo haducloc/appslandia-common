@@ -35,6 +35,9 @@ public class JoseHeader extends JoseMapObject {
     public static final String ALG = "alg";
     public static final String KID = "kid";
 
+    public static final String JKU = "jku";
+    public static final String JWK = "jwk";
+
     public JoseHeader() {
     }
 
