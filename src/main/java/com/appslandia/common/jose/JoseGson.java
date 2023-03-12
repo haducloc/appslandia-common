@@ -35,8 +35,7 @@ public class JoseGson {
 	// @formatter:off
 	return GsonProcessor.newBuilder()
 		.registerTypeAdapter(JoseHeader.class, new GsonMapAdapter<>((m) -> new JoseHeader(m), true))
-		.registerTypeAdapter(JwtPayload.class, new GsonMapAdapter<>((m) -> new JwtPayload(m), true))
-		.registerTypeAdapter(JsonWebKey.class, new GsonMapAdapter<>((m) -> new JsonWebKey(m), true));
+		.registerTypeAdapter(JwtPayload.class, new GsonMapAdapter<>((m) -> new JwtPayload(m), true));
 	// @formatter:on
     }
 

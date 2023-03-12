@@ -50,14 +50,6 @@ public class BasicMap extends ValidatableMap {
 	super(newMap);
     }
 
-    public String getString(String key) {
-	return (String) get(key);
-    }
-
-    public String getRequiredString(String key) {
-	return (String) getRequired(key);
-    }
-
     @Override
     public BasicMap set(String key, Object value) {
 	super.set(key, value);

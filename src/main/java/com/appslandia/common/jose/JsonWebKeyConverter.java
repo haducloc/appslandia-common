@@ -21,6 +21,7 @@
 package com.appslandia.common.jose;
 
 import java.security.Key;
+import java.util.Map;
 
 import com.appslandia.common.crypto.CryptoException;
 
@@ -43,7 +44,7 @@ public abstract class JsonWebKeyConverter<K extends Key> {
 	this.alg = alg;
     }
 
-    public abstract JsonWebKey toJsonWebKey(K key);
+    public abstract Map<String, Object> toJsonWebKey(K key);
 
-    public abstract K fromJsonWebKey(JsonWebKey key) throws CryptoException;
+    public abstract K fromJsonWebKey(Map<String, Object> jwk) throws CryptoException;
 }

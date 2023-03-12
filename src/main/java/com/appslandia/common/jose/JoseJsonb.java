@@ -32,7 +32,7 @@ import jakarta.json.bind.JsonbConfig;
 public class JoseJsonb {
 
     public static JsonbConfig newJsonbConfig() {
-	return JsonbProcessor.newConfig().withAdapters(new JsonbJoseHeaderAdapter(true), new JsonbJwtPayloadAdapter(true), new JsonbJsonWebKeyAdapter(true));
+	return JsonbProcessor.newConfig().withAdapters(new JsonbJoseHeaderAdapter(true), new JsonbJwtPayloadAdapter(true));
     }
 
     public static JsonbProcessor newJsonProcessor() {
