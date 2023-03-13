@@ -34,6 +34,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import com.appslandia.common.crypto.AlgorithmParametersUtil;
 import com.appslandia.common.crypto.CryptoException;
+import com.appslandia.common.crypto.CryptoUtils;
 import com.appslandia.common.crypto.KeyFactoryUtil;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
@@ -76,8 +77,8 @@ public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> implement
 	// ecPoint
 	ECPoint ecPoint = key.getW();
 
-	byte[] xBytes = ecPoint.getAffineX().toByteArray();
-	byte[] yBytes = ecPoint.getAffineY().toByteArray();
+	byte[] xBytes = CryptoUtils.stripLeadingZeros(ecPoint.getAffineX().toByteArray());
+	byte[] yBytes = CryptoUtils.stripLeadingZeros(ecPoint.getAffineY().toByteArray());
 
 	jwk.put("x", JoseUtils.getJoseBase64().encode(xBytes));
 	jwk.put("y", JoseUtils.getJoseBase64().encode(yBytes));

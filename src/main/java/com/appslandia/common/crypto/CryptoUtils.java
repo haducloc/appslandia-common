@@ -62,6 +62,17 @@ public class CryptoUtils {
 	return arr;
     }
 
+    public static byte[] stripLeadingZeros(byte[] bytes) {
+	for (int i = 0; i < bytes.length; i++) {
+	    if (bytes[i] != 0) {
+		byte[] stripped = new byte[bytes.length - i];
+		System.arraycopy(bytes, i, stripped, 0, stripped.length);
+		return stripped;
+	    }
+	}
+	return bytes;
+    }
+
     public static void destroyQuietly(Object destroyable) {
 	if (!(destroyable instanceof Destroyable)) {
 	    return;

@@ -28,6 +28,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.appslandia.common.crypto.CryptoException;
+import com.appslandia.common.crypto.CryptoUtils;
 import com.appslandia.common.crypto.KeyFactoryUtil;
 import com.appslandia.common.utils.Asserts;
 
@@ -59,8 +60,8 @@ public class RSAPublicKeyJwkConverter extends JwkConverter<RSAPublicKey> impleme
 	Map<String, Object> jwk = new LinkedHashMap<>();
 	jwk.put("kty", this.kty);
 
-	byte[] nBytes = stripLeadingZeros(key.getModulus().toByteArray());
-	byte[] eBytes = stripLeadingZeros(key.getPublicExponent().toByteArray());
+	byte[] nBytes = CryptoUtils.stripLeadingZeros(key.getModulus().toByteArray());
+	byte[] eBytes = CryptoUtils.stripLeadingZeros(key.getPublicExponent().toByteArray());
 
 	jwk.put("n", JoseUtils.getJoseBase64().encode(nBytes));
 	jwk.put("e", JoseUtils.getJoseBase64().encode(eBytes));
@@ -96,17 +97,5 @@ public class RSAPublicKeyJwkConverter extends JwkConverter<RSAPublicKey> impleme
     @Override
     public RSAPublicKeyJwkConverter clone() {
 	return new RSAPublicKeyJwkConverter().setRsaKeyFactoryProvider(this.rsaKeyFactoryProvider);
-    }
-
-    static byte[] stripLeadingZeros(byte[] bytes) {
-	for (int i = 0; i < bytes.length; i++) {
-	    if (bytes[i] != 0) {
-		byte[] stripped = new byte[bytes.length - i];
-		System.arraycopy(bytes, i, stripped, 0, stripped.length);
-		return stripped;
-	    }
-
-	}
-	return bytes;
     }
 }
