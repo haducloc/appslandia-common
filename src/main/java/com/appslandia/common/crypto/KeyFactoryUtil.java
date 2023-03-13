@@ -26,6 +26,7 @@ import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
@@ -65,6 +66,28 @@ public class KeyFactoryUtil extends InitializeObject {
 	    this.keyFactory = KeyFactory.getInstance(this.algorithm);
 	} else {
 	    this.keyFactory = KeyFactory.getInstance(this.algorithm, this.provider);
+	}
+    }
+
+    public PrivateKey toPrivateKey(KeySpec keySpec) throws CryptoException {
+	this.initialize();
+	try {
+	    synchronized (this.mutex) {
+		return this.keyFactory.generatePrivate(keySpec);
+	    }
+	} catch (GeneralSecurityException ex) {
+	    throw new CryptoException(ex);
+	}
+    }
+
+    public PublicKey toPublicKey(KeySpec keySpec) throws CryptoException {
+	this.initialize();
+	try {
+	    synchronized (this.mutex) {
+		return this.keyFactory.generatePublic(keySpec);
+	    }
+	} catch (GeneralSecurityException ex) {
+	    throw new CryptoException(ex);
 	}
     }
 
