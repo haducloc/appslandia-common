@@ -98,11 +98,11 @@ public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> implement
 	String y = Asserts.notNull((String) key.get("y"), "y is required.");
 
 	// algorithmParametersUtil
-	AlgorithmParametersUtil<ECParameterSpec> algorithmParametersUtil = this.ecAlgorithmParametersUtils.computeIfAbsent(stdName, (n) -> {
+	AlgorithmParametersUtil<ECParameterSpec> algorithmParametersUtil = this.ecAlgorithmParametersUtils.computeIfAbsent(stdName, (name) -> {
 
 	    AlgorithmParametersUtil<ECParameterSpec> impl = new AlgorithmParametersUtil<>("EC", this.ecAlgParamsProvider);
 	    impl.setParamSpecClass(ECParameterSpec.class);
-	    impl.setInitAlgParamSpec(new ECGenParameterSpec(stdName));
+	    impl.setInitAlgParamSpec(new ECGenParameterSpec(name));
 
 	    return impl;
 	});
