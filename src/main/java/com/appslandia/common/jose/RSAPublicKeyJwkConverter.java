@@ -21,9 +21,7 @@
 package com.appslandia.common.jose;
 
 import java.math.BigInteger;
-import java.security.Provider;
 import java.security.PublicKey;
-import java.security.Security;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.LinkedHashMap;
@@ -110,21 +108,5 @@ public class RSAPublicKeyJwkConverter extends JwkConverter<RSAPublicKey> impleme
 
 	}
 	return bytes;
-    }
-
-    public static void main(String[] args) {
-
-	try {
-
-	    Security.getProviders();
-
-	    for (Provider p : Security.getProviders()) {
-		System.out.println(p.getInfo());
-	    }
-	} catch (Exception e) {
-	    // TODO: handle exception
-
-	    e.printStackTrace();
-	}
     }
 }
