@@ -34,7 +34,8 @@ public class SecurityProviderApp {
 
     public static void main(String[] args) {
 	try {
-	    System.out.println(String.format("Java Runtime Version: %s", Runtime.version().toString()));
+	    System.out.println(String.format("***** Java Runtime Version: %s *****", Runtime.version().toString()));
+	    System.out.println("***** Installed Security Providers *****");
 	    System.out.println();
 
 	    int seq = 0;
@@ -56,6 +57,8 @@ public class SecurityProviderApp {
 		    }
 		}
 	    }
+
+	    System.out.println("***** Done *****");
 
 	} catch (Exception ex) {
 	    ex.printStackTrace();
