@@ -23,6 +23,7 @@ package com.appslandia.common.jose;
 import java.security.Key;
 import java.util.Map;
 
+import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.crypto.CryptoException;
 
 /**
@@ -30,12 +31,12 @@ import com.appslandia.common.crypto.CryptoException;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public abstract class JsonWebKeyConverter<K extends Key> {
+public abstract class JwkConverter<K extends Key> extends InitializeObject {
 
     // type of cryptographic key, such as "RSA", "EC", or "oct" (for symmetric keys).
     protected final String kty;
 
-    public JsonWebKeyConverter(String kty) {
+    public JwkConverter(String kty) {
 	this.kty = kty;
     }
 

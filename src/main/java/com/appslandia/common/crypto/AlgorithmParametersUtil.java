@@ -23,7 +23,6 @@ package com.appslandia.common.crypto;
 import java.security.AlgorithmParameters;
 import java.security.GeneralSecurityException;
 import java.security.spec.AlgorithmParameterSpec;
-import java.util.function.Consumer;
 
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.utils.Asserts;
@@ -38,7 +37,7 @@ public class AlgorithmParametersUtil<T extends AlgorithmParameterSpec> extends I
     private String algorithm, provider;
     private AlgorithmParameters algorithmParameters;
     private Class<T> paramSpecClass;
-    private Consumer<AlgorithmParameters> algParamsInit;
+    private AlgorithmParameterSpec initAlgParamSpec;
 
     final Object mutex = new Object();
 
@@ -58,7 +57,7 @@ public class AlgorithmParametersUtil<T extends AlgorithmParameterSpec> extends I
     protected void init() throws Exception {
 	Asserts.notNull(this.algorithm, "algorithm is required.");
 	Asserts.notNull(this.paramSpecClass, "paramSpecClass is required.");
-	Asserts.notNull(this.algParamsInit, "algParamsInit is required.");
+	Asserts.notNull(this.initAlgParamSpec, "initAlgParamSpec is required.");
 
 	// AlgorithmParameters
 	if (this.provider == null) {
@@ -67,8 +66,7 @@ public class AlgorithmParametersUtil<T extends AlgorithmParameterSpec> extends I
 	    this.algorithmParameters = AlgorithmParameters.getInstance(this.algorithm, this.provider);
 	}
 
-	// init();
-	this.algParamsInit.accept(this.algorithmParameters);
+	this.algorithmParameters.init(this.initAlgParamSpec);
     }
 
     public T getParameterSpec() throws CryptoException {
@@ -110,14 +108,15 @@ public class AlgorithmParametersUtil<T extends AlgorithmParameterSpec> extends I
 	return this;
     }
 
-    public AlgorithmParametersUtil<T> setAlgParamsInit(Consumer<AlgorithmParameters> algParamsInit) {
+    public AlgorithmParametersUtil<T> setInitAlgParamSpec(AlgorithmParameterSpec initAlgParamSpec) {
 	assertNotInitialized();
-	this.algParamsInit = algParamsInit;
+	this.initAlgParamSpec = initAlgParamSpec;
 	return this;
     }
 
     @Override
     public AlgorithmParametersUtil<T> clone() {
-	return new AlgorithmParametersUtil<T>().setAlgorithm(this.algorithm).setProvider(this.provider).setParamSpecClass(this.paramSpecClass).setAlgParamsInit(this.algParamsInit);
+	return new AlgorithmParametersUtil<T>().setAlgorithm(this.algorithm).setProvider(this.provider).setParamSpecClass(this.paramSpecClass)
+		.setInitAlgParamSpec(this.initAlgParamSpec);
     }
 }
