@@ -91,6 +91,10 @@ public class KeyFactoryUtil extends InitializeObject {
 	}
     }
 
+    // PKCS#8/ASN.1 encoding is a standard format for encoding private key
+    // Abstract Syntax Notation One (ASN.1) is a standard interface description language for defining data structures that
+    // can be serialized and deserialized in a cross-platform way
+
     public PrivateKey toPrivateKey(String keyInPem) throws CryptoException {
 	this.initialize();
 	byte[] der = PKIUtils.toDerEncoded(keyInPem);
@@ -118,6 +122,8 @@ public class KeyFactoryUtil extends InitializeObject {
 	    CryptoUtils.clear(der);
 	}
     }
+
+    // X509/ASN.1 encoding is a standard format for encoding public key
 
     public PublicKey toPublicKey(String keyInPem) throws CryptoException {
 	this.initialize();
