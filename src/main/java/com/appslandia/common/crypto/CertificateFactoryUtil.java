@@ -66,6 +66,7 @@ public class CertificateFactoryUtil extends InitializeObject implements Cloneabl
 	}
     }
 
+    // X509/ASN.1 encoding is a standard format for encoding Certificate
     public X509Certificate toCertificate(InputStream certInDer) throws CryptoException {
 	this.initialize();
 	try {
@@ -77,6 +78,7 @@ public class CertificateFactoryUtil extends InitializeObject implements Cloneabl
 	}
     }
 
+    // X509/ASN.1 encoding is a standard format for encoding Certificate
     public X509Certificate toCertificate(String certInPem) throws CryptoException {
 	this.initialize();
 	byte[] der = PKIUtils.toDerEncoded(certInPem);
