@@ -34,7 +34,7 @@ public class CryptoUtils {
 
     public static void clear(char[] chars) {
 	if (chars != null) {
-	    Arrays.fill(chars, ('0'));
+	    Arrays.fill(chars, (char) 0);
 	}
     }
 
