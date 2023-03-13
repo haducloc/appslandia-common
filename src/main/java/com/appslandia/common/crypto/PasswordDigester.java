@@ -175,7 +175,7 @@ public class PasswordDigester extends TextDigester {
     }
 
     @Override
-    public PasswordDigester copy() {
+    public PasswordDigester clone() {
 	PasswordDigester impl = new PasswordDigester();
 	impl.setSaltSize(this.saltSize).setIterationCount(this.iterationCount).setKeySize(this.keySize);
 	impl.setSecretKeyAlgorithm(this.secretKeyAlgorithm).setProvider(this.provider);

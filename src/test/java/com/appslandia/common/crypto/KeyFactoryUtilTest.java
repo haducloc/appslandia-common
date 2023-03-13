@@ -60,7 +60,7 @@ public class KeyFactoryUtilTest {
     }
 
     @Test
-    public void test_copy() {
+    public void test_clone() {
 	try {
 	    KeyPairGenerator generator = KeyPairGenerator.getInstance("DSA");
 	    generator.initialize(1024, new SecureRandom());

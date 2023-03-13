@@ -47,10 +47,10 @@ public class TextDigesterTest {
     }
 
     @Test
-    public void test_copy() {
+    public void test_clone() {
 	TextDigester impl = new TextDigester();
 	impl.setDigester(new DigesterImpl("MD5"));
-	impl = impl.copy();
+	impl = impl.clone();
 	try {
 
 	    String message = "data";

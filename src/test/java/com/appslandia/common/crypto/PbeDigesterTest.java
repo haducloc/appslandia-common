@@ -51,10 +51,10 @@ public class PbeDigesterTest {
     }
 
     @Test
-    public void test_copy() {
+    public void test_clone() {
 	PbeDigester impl = new PbeDigester().setAlgorithm("HmacMD5");
 	impl.setKeySize(16).setPassword("password".toCharArray());
-	impl = impl.copy();
+	impl = impl.clone();
 
 	try {
 	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);

@@ -51,14 +51,14 @@ public class TextEncryptorTest {
     }
 
     @Test
-    public void test_copy() {
+    public void test_clone() {
 	PbeEncryptor encryptor = new PbeEncryptor();
 	encryptor.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
 	encryptor.setPassword("password".toCharArray());
 	encryptor.setAlgSpecFunc(PbeEncryptor::toIvParameterSpec);
 
 	TextEncryptor impl = new TextEncryptor().setEncryptor(encryptor);
-	impl = impl.copy();
+	impl = impl.clone();
 
 	try {
 	    String message = "data";

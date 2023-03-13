@@ -46,7 +46,7 @@ import com.appslandia.common.utils.StringUtils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class SecureProps extends Properties implements Config {
+public class SecureProps extends Properties implements Config, Cloneable {
     private static final long serialVersionUID = 1L;
 
     final TextEncryptor textEncryptor;
@@ -198,10 +198,11 @@ public class SecureProps extends Properties implements Config {
 	}
     }
 
-    public SecureProps copy() {
-	SecureProps props = new SecureProps(this.textEncryptor.copy());
-	props.putAll(this);
-	return props;
+    @Override
+    public SecureProps clone() {
+	SecureProps impl = new SecureProps(this.textEncryptor.clone());
+	impl.putAll(this);
+	return impl;
     }
 
     private static class LinkedProperties extends Properties {

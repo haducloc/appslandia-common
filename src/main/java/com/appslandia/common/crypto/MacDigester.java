@@ -130,7 +130,7 @@ public class MacDigester extends InitializeObject implements Digester {
     }
 
     @Override
-    public MacDigester copy() {
+    public MacDigester clone() {
 	MacDigester impl = new MacDigester().setAlgorithm(this.algorithm).setProvider(this.provider);
 	impl.secret = ArrayUtils.copy(this.secret);
 	return impl;

@@ -99,7 +99,8 @@ public class BitMap extends BitSet {
 	return this;
     }
 
-    public BitMap copy() {
+    @Override
+    public BitMap clone() {
 	BitMap impl = new BitMap(this.size());
 	impl.or(this);
 	return impl;

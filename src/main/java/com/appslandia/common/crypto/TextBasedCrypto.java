@@ -30,7 +30,7 @@ import com.appslandia.common.base.InitializeObject;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public abstract class TextBasedCrypto extends InitializeObject {
+public abstract class TextBasedCrypto extends InitializeObject implements Cloneable {
 
     protected Charset textCharset;
     protected BaseEncoder baseEncoder;
@@ -62,4 +62,6 @@ public abstract class TextBasedCrypto extends InitializeObject {
 	}
 	return this;
     }
+
+    public abstract TextBasedCrypto clone();
 }

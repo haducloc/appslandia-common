@@ -161,7 +161,7 @@ public class DsaDigester extends InitializeObject implements Digester {
     }
 
     @Override
-    public DsaDigester copy() {
+    public DsaDigester clone() {
 	DsaDigester impl = new DsaDigester().setAlgorithm(this.algorithm).setProvider(this.provider);
 
 	if (this.privateKey != null) {

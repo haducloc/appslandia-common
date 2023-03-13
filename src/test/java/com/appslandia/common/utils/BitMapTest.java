@@ -73,12 +73,12 @@ public class BitMapTest {
     }
 
     @Test
-    public void test_copy() {
+    public void test_clone() {
 
 	BitMap bits = new BitMap();
 	bits.on(1, 3, 5);
 
-	BitMap copy = bits.copy();
+	BitMap copy = bits.clone();
 	Assertions.assertEquals(bits, copy);
     }
 }

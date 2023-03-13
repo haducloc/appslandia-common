@@ -34,7 +34,7 @@ import com.appslandia.common.utils.ValueUtils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class CertificateFactoryUtil extends InitializeObject {
+public class CertificateFactoryUtil extends InitializeObject implements Cloneable {
 
     public static final CertificateFactoryUtil X509 = new CertificateFactoryUtil("X.509");
 
@@ -109,5 +109,10 @@ public class CertificateFactoryUtil extends InitializeObject {
 	assertNotInitialized();
 	this.provider = provider;
 	return this;
+    }
+
+    @Override
+    public CertificateFactoryUtil clone() {
+	return new CertificateFactoryUtil().setType(this.type).setProvider(this.provider);
     }
 }

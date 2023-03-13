@@ -232,7 +232,7 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
     }
 
     @Override
-    public PbeEncryptor copy() {
+    public PbeEncryptor clone() {
 	PbeEncryptor impl = new PbeEncryptor().setTransformation(this.transformation).setProvider(this.provider);
 	impl.setSaltSize(this.saltSize).setIterationCount(this.iterationCount).setKeySize(this.keySize);
 
@@ -240,7 +240,7 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	    impl.setPassword(this.password);
 	}
 	if (this.secretKeyGenerator != null) {
-	    impl.secretKeyGenerator = this.secretKeyGenerator.copy();
+	    impl.secretKeyGenerator = this.secretKeyGenerator.clone();
 	}
 	impl.ivSize = this.ivSize;
 	impl.algSpecFunc = this.algSpecFunc;

@@ -39,7 +39,7 @@ import com.appslandia.common.utils.IOUtils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class KeyFactoryUtil extends InitializeObject {
+public class KeyFactoryUtil extends InitializeObject implements Cloneable {
 
     private String algorithm, provider;
     private KeyFactory keyFactory;
@@ -197,5 +197,10 @@ public class KeyFactoryUtil extends InitializeObject {
 	assertNotInitialized();
 	this.provider = provider;
 	return this;
+    }
+
+    @Override
+    public KeyFactoryUtil clone() {
+	return new KeyFactoryUtil().setAlgorithm(this.algorithm).setProvider(this.provider);
     }
 }

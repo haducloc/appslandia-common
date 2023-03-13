@@ -122,7 +122,7 @@ public class SmtpMailer extends InitializeObject {
 	assertNotInitialized();
 
 	if (props != null) {
-	    this.props = props.copy();
+	    this.props = props.clone();
 	}
 	return this;
     }

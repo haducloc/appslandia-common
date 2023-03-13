@@ -59,7 +59,7 @@ public class PoolEncryptor extends InitializeObject implements Encryptor {
 	this.encryptors[0] = this.encryptor;
 
 	for (int i = 1; i < this.poolSize; i++) {
-	    this.encryptors[i] = this.encryptor.copy();
+	    this.encryptors[i] = this.encryptor.clone();
 	}
 	this.encryptorPool = new RoundRobinPool<>(this.encryptors);
     }
@@ -100,10 +100,10 @@ public class PoolEncryptor extends InitializeObject implements Encryptor {
     }
 
     @Override
-    public PoolEncryptor copy() {
+    public PoolEncryptor clone() {
 	PoolEncryptor impl = new PoolEncryptor().setPoolSize(this.poolSize);
 	if (this.encryptor != null) {
-	    impl.encryptor = this.encryptor.copy();
+	    impl.encryptor = this.encryptor.clone();
 	}
 	return impl;
     }

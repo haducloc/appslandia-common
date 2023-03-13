@@ -47,9 +47,9 @@ public class SecretKeyGeneratorTest {
     }
 
     @Test
-    public void test_copy() {
+    public void test_clone() {
 	SecretKeyGenerator impl = new SecretKeyGenerator();
-	impl = impl.copy();
+	impl = impl.clone();
 	try {
 	    byte[] key = impl.generate("password".toCharArray(), "salt".getBytes(), 1000, 16);
 

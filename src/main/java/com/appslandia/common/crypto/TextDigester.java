@@ -97,11 +97,12 @@ public class TextDigester extends TextBasedCrypto {
 	return this;
     }
 
-    public TextDigester copy() {
+    @Override
+    public TextDigester clone() {
 	TextDigester impl = new TextDigester();
 	impl.setTextCharset(this.textCharset).setBaseEncoder(this.baseEncoder);
 	if (this.digester != null) {
-	    impl.digester = this.digester.copy();
+	    impl.digester = this.digester.clone();
 	}
 	return impl;
     }

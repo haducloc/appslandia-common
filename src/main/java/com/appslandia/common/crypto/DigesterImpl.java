@@ -110,7 +110,7 @@ public class DigesterImpl extends InitializeObject implements Digester {
     }
 
     @Override
-    public DigesterImpl copy() {
+    public DigesterImpl clone() {
 	return new DigesterImpl().setAlgorithm(this.algorithm).setProvider(this.provider);
     }
 }

@@ -34,7 +34,7 @@ import com.appslandia.common.utils.StringUtils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class SecureConfig extends PropertyConfig {
+public class SecureConfig extends PropertyConfig implements Cloneable {
     private static final long serialVersionUID = 1L;
 
     final TextEncryptor textEncryptor;
@@ -153,5 +153,12 @@ public class SecureConfig extends PropertyConfig {
     public SecureConfig enc(String key, double value) throws CryptoException {
 	this.map.put(key, CryptoUtils.markEncValue(this.textEncryptor.encrypt(Double.toString(value))));
 	return this;
+    }
+
+    @Override
+    public SecureConfig clone() {
+	SecureConfig impl = new SecureConfig(this.textEncryptor.clone());
+	impl.map.putAll(this.map);
+	return impl;
     }
 }

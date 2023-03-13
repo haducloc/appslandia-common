@@ -27,11 +27,11 @@ import com.appslandia.common.base.InitializeSupport;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public interface Encryptor extends InitializeSupport {
+public interface Encryptor extends InitializeSupport, Cloneable {
 
     byte[] encrypt(byte[] message) throws CryptoException;
 
     byte[] decrypt(byte[] message) throws CryptoException;
 
-    Encryptor copy();
+    Encryptor clone();
 }

@@ -68,11 +68,11 @@ public class DsaDigesterTest {
     }
 
     @Test
-    public void test_copy() {
+    public void test_clone() {
 	DsaDigester impl = new DsaDigester();
 	impl.setAlgorithm("SHA256withDSA");
 	impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
-	impl = impl.copy();
+	impl = impl.clone();
 	try {
 	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
 	    byte[] sign = impl.digest(data);

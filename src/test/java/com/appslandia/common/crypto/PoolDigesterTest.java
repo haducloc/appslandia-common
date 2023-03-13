@@ -64,9 +64,9 @@ public class PoolDigesterTest {
     }
 
     @Test
-    public void test_copy() {
+    public void test_clone() {
 	PoolDigester temp = new PoolDigester().setDigester(new DigesterImpl("MD5"));
-	final PoolDigester impl = temp.copy();
+	final PoolDigester impl = temp.clone();
 
 	new ThreadSafeTester() {
 

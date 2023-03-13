@@ -223,7 +223,7 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
     }
 
     @Override
-    public RsaEncryptor copy() {
+    public RsaEncryptor clone() {
 	RsaEncryptor impl = new RsaEncryptor().setTransformation(this.transformation).setProvider(this.provider);
 
 	if (this.privateKey != null) {

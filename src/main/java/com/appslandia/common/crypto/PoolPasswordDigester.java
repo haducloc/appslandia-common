@@ -60,7 +60,7 @@ public class PoolPasswordDigester extends PasswordDigester {
 	this.digesters[0] = this.digester;
 
 	for (int i = 1; i < this.poolSize; i++) {
-	    this.digesters[i] = this.digester.copy();
+	    this.digesters[i] = this.digester.clone();
 	}
 	this.digesterPool = new RoundRobinPool<>(this.digesters);
     }
@@ -138,10 +138,10 @@ public class PoolPasswordDigester extends PasswordDigester {
     }
 
     @Override
-    public PoolPasswordDigester copy() {
+    public PoolPasswordDigester clone() {
 	PoolPasswordDigester impl = new PoolPasswordDigester().setPoolSize(this.poolSize);
 	if (this.digester != null) {
-	    impl.digester = this.digester.copy();
+	    impl.digester = this.digester.clone();
 	}
 	return impl;
     }

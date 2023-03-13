@@ -96,11 +96,12 @@ public class TextEncryptor extends TextBasedCrypto {
 	return this;
     }
 
-    public TextEncryptor copy() {
+    @Override
+    public TextEncryptor clone() {
 	TextEncryptor impl = new TextEncryptor();
 	impl.setTextCharset(this.textCharset).setBaseEncoder(this.baseEncoder);
 	if (this.encryptor != null) {
-	    impl.encryptor = this.encryptor.copy();
+	    impl.encryptor = this.encryptor.clone();
 	}
 	return impl;
     }

@@ -49,9 +49,9 @@ public class DigesterImplTest {
     }
 
     @Test
-    public void test_copy() {
+    public void test_clone() {
 	DigesterImpl impl = new DigesterImpl("MD5");
-	impl = impl.copy();
+	impl = impl.clone();
 	try {
 	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
 	    byte[] hash = impl.digest(data);

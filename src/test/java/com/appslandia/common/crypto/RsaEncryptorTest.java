@@ -70,13 +70,13 @@ public class RsaEncryptorTest {
     }
 
     @Test
-    public void test_copy() {
+    public void test_clone() {
 	RsaEncryptor impl = new RsaEncryptor();
 	impl.setTransformation("RSA/ECB/PKCS1Padding");
 	impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
 	impl.setAlgSpecFunc(RsaEncryptor::toOAEPParameterSpec);
 
-	impl = impl.copy();
+	impl = impl.clone();
 
 	try {
 	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);

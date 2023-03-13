@@ -51,10 +51,10 @@ public class MacDigesterTest {
     }
 
     @Test
-    public void test_copy() {
+    public void test_clone() {
 	MacDigester impl = new MacDigester().setAlgorithm("HmacMD5");
 	impl.setSecret("secret".getBytes(StandardCharsets.UTF_8));
-	impl = impl.copy();
+	impl = impl.clone();
 
 	try {
 	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);

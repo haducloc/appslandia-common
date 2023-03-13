@@ -48,9 +48,9 @@ public class PoolPasswordDigesterTest {
     }
 
     @Test
-    public void test_copy() {
+    public void test_clone() {
 	PoolPasswordDigester impl = new PoolPasswordDigester().setPasswordDigester(new PasswordDigester());
-	impl = impl.copy();
+	impl = impl.clone();
 	try {
 
 	    String password = "password";
