@@ -33,11 +33,12 @@ import com.appslandia.common.utils.Asserts;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class AlgorithmParametersUtil extends InitializeObject implements Cloneable {
+public class AlgorithmParametersUtil<T extends AlgorithmParameterSpec> extends InitializeObject implements Cloneable {
 
     private String algorithm, provider;
     private AlgorithmParameters algorithmParameters;
-    private Consumer<AlgorithmParameters> algParametersInit;
+    private Class<T> paramSpecClass;
+    private Consumer<AlgorithmParameters> algParamsInit;
 
     final Object mutex = new Object();
 
@@ -56,7 +57,8 @@ public class AlgorithmParametersUtil extends InitializeObject implements Cloneab
     @Override
     protected void init() throws Exception {
 	Asserts.notNull(this.algorithm, "algorithm is required.");
-	Asserts.notNull(this.algParametersInit, "algParametersInit is required.");
+	Asserts.notNull(this.paramSpecClass, "paramSpecClass is required.");
+	Asserts.notNull(this.algParamsInit, "algParamsInit is required.");
 
 	// AlgorithmParameters
 	if (this.provider == null) {
@@ -66,14 +68,14 @@ public class AlgorithmParametersUtil extends InitializeObject implements Cloneab
 	}
 
 	// init();
-	this.algParametersInit.accept(this.algorithmParameters);
+	this.algParamsInit.accept(this.algorithmParameters);
     }
 
-    public <T extends AlgorithmParameterSpec> T getParameterSpec(Class<T> paramSpec) throws CryptoException {
+    public T getParameterSpec() throws CryptoException {
 	this.initialize();
 	try {
 	    synchronized (this.mutex) {
-		return this.algorithmParameters.getParameterSpec(paramSpec);
+		return this.algorithmParameters.getParameterSpec(this.paramSpecClass);
 	    }
 	} catch (GeneralSecurityException ex) {
 	    throw new CryptoException(ex);
@@ -85,7 +87,7 @@ public class AlgorithmParametersUtil extends InitializeObject implements Cloneab
 	return this.algorithm;
     }
 
-    public AlgorithmParametersUtil setAlgorithm(String algorithm) {
+    public AlgorithmParametersUtil<T> setAlgorithm(String algorithm) {
 	assertNotInitialized();
 	this.algorithm = algorithm;
 	return this;
@@ -96,20 +98,26 @@ public class AlgorithmParametersUtil extends InitializeObject implements Cloneab
 	return this.provider;
     }
 
-    public AlgorithmParametersUtil setProvider(String provider) {
+    public AlgorithmParametersUtil<T> setProvider(String provider) {
 	assertNotInitialized();
 	this.provider = provider;
 	return this;
     }
 
-    public AlgorithmParametersUtil setAlgParametersInit(Consumer<AlgorithmParameters> algParametersInit) {
+    public AlgorithmParametersUtil<T> setParamSpecClass(Class<T> paramSpecClass) {
 	assertNotInitialized();
-	this.algParametersInit = algParametersInit;
+	this.paramSpecClass = paramSpecClass;
+	return this;
+    }
+
+    public AlgorithmParametersUtil<T> setAlgParamsInit(Consumer<AlgorithmParameters> algParamsInit) {
+	assertNotInitialized();
+	this.algParamsInit = algParamsInit;
 	return this;
     }
 
     @Override
-    public AlgorithmParametersUtil clone() {
-	return new AlgorithmParametersUtil().setAlgorithm(this.algorithm).setProvider(this.provider).setAlgParametersInit(this.algParametersInit);
+    public AlgorithmParametersUtil<T> clone() {
+	return new AlgorithmParametersUtil<T>().setAlgorithm(this.algorithm).setProvider(this.provider).setParamSpecClass(this.paramSpecClass).setAlgParamsInit(this.algParamsInit);
     }
 }
