@@ -98,6 +98,7 @@ public class KeyStoreUtil extends InitializeObject {
     }
 
     public void save(OutputStream out) throws CryptoException, IOException {
+	initialize();
 	try {
 	    this.keyStore.store(out, this.password);
 
