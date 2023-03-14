@@ -21,8 +21,12 @@
 package com.appslandia.common.crypto;
 
 import java.nio.charset.StandardCharsets;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.SecureRandom;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.appslandia.common.base.ThreadSafeTester;
@@ -32,18 +36,31 @@ import com.appslandia.common.base.ThreadSafeTester;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class MacDigesterTest {
+public class SignatureSignerTest {
+
+    private KeyPair keyPair;
+
+    @BeforeEach
+    public void initialize() {
+	try {
+	    KeyPairGenerator generator = KeyPairGenerator.getInstance("DSA");
+	    generator.initialize(2048, new SecureRandom());
+	    keyPair = generator.generateKeyPair();
+	} catch (Exception ex) {
+	    Assertions.fail(ex.getMessage());
+	}
+    }
 
     @Test
     public void test() {
-	MacDigester impl = new MacDigester().setAlgorithm("HmacMD5");
-	impl.setSecret("secret".getBytes(StandardCharsets.UTF_8));
-
+	SignatureSigner impl = new SignatureSigner();
+	impl.setAlgorithm("SHA256withDSA");
+	impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
 	try {
 	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-	    byte[] digest = impl.digest(data);
+	    byte[] sign = impl.digest(data);
 
-	    Assertions.assertTrue(impl.verify(data, digest));
+	    Assertions.assertTrue(impl.verify(data, sign));
 
 	} catch (Exception ex) {
 	    Assertions.fail(ex.getMessage());
@@ -52,15 +69,15 @@ public class MacDigesterTest {
 
     @Test
     public void test_clone() {
-	MacDigester impl = new MacDigester().setAlgorithm("HmacMD5");
-	impl.setSecret("secret".getBytes(StandardCharsets.UTF_8));
+	SignatureSigner impl = new SignatureSigner();
+	impl.setAlgorithm("SHA256withDSA");
+	impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
 	impl = impl.clone();
-
 	try {
 	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-	    byte[] digest = impl.digest(data);
+	    byte[] sign = impl.digest(data);
 
-	    Assertions.assertTrue(impl.verify(data, digest));
+	    Assertions.assertTrue(impl.verify(data, sign));
 
 	} catch (Exception ex) {
 	    Assertions.fail(ex.getMessage());
@@ -69,14 +86,15 @@ public class MacDigesterTest {
 
     @Test
     public void test_invalid() {
-	MacDigester impl = new MacDigester().setAlgorithm("HmacMD5");
-	impl.setSecret("secret".getBytes(StandardCharsets.UTF_8));
-
+	SignatureSigner impl = new SignatureSigner();
+	impl.setAlgorithm("SHA256withDSA");
+	impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
 	try {
 	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-	    byte[] digest = impl.digest(data);
+	    byte[] sign = impl.digest(data);
 
-	    Assertions.assertFalse(impl.verify("invalid".getBytes(StandardCharsets.UTF_8), digest));
+	    byte[] modifiedData = "invalid".getBytes(StandardCharsets.UTF_8);
+	    Assertions.assertFalse(impl.verify(modifiedData, sign));
 
 	} catch (Exception ex) {
 	    Assertions.fail(ex.getMessage());
@@ -85,8 +103,9 @@ public class MacDigesterTest {
 
     @Test
     public void test_threadSafe() {
-	final MacDigester impl = new MacDigester().setAlgorithm("HmacMD5");
-	impl.setSecret("secret".getBytes(StandardCharsets.UTF_8));
+	final SignatureSigner impl = new SignatureSigner();
+	impl.setAlgorithm("SHA256withDSA");
+	impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
 
 	new ThreadSafeTester() {
 
@@ -98,12 +117,13 @@ public class MacDigesterTest {
 		    public void run() {
 			try {
 			    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-			    byte[] digest = impl.digest(data);
+			    byte[] sign = impl.digest(data);
 
-			    Assertions.assertTrue(impl.verify(data, digest));
+			    Assertions.assertTrue(impl.verify(data, sign));
 
 			} catch (Exception ex) {
 			    Assertions.fail(ex.getMessage());
+
 			} finally {
 			    countDown();
 			}

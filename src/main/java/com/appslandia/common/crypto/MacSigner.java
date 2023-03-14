@@ -39,7 +39,7 @@ import com.appslandia.common.utils.SYS;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class MacDigester extends InitializeObject implements Digester {
+public class MacSigner extends InitializeObject implements Digester {
     private String algorithm, provider;
     private Mac mac;
     private byte[] secret;
@@ -94,7 +94,7 @@ public class MacDigester extends InitializeObject implements Digester {
 	return this.algorithm;
     }
 
-    public MacDigester setAlgorithm(String algorithm) {
+    public MacSigner setAlgorithm(String algorithm) {
 	this.assertNotInitialized();
 	this.algorithm = algorithm;
 	return this;
@@ -105,13 +105,13 @@ public class MacDigester extends InitializeObject implements Digester {
 	return this.provider;
     }
 
-    public MacDigester setProvider(String provider) {
+    public MacSigner setProvider(String provider) {
 	this.assertNotInitialized();
 	this.provider = provider;
 	return this;
     }
 
-    public MacDigester setSecret(byte[] secret) {
+    public MacSigner setSecret(byte[] secret) {
 	this.assertNotInitialized();
 	if (secret != null) {
 	    this.secret = ArrayUtils.copy(secret);
@@ -119,7 +119,7 @@ public class MacDigester extends InitializeObject implements Digester {
 	return this;
     }
 
-    public MacDigester setSecret(String secretOrEnv) {
+    public MacSigner setSecret(String secretOrEnv) {
 	this.assertNotInitialized();
 
 	if (secretOrEnv != null) {
@@ -130,8 +130,8 @@ public class MacDigester extends InitializeObject implements Digester {
     }
 
     @Override
-    public MacDigester clone() {
-	MacDigester impl = new MacDigester().setAlgorithm(this.algorithm).setProvider(this.provider);
+    public MacSigner clone() {
+	MacSigner impl = new MacSigner().setAlgorithm(this.algorithm).setProvider(this.provider);
 	impl.secret = ArrayUtils.copy(this.secret);
 	return impl;
     }

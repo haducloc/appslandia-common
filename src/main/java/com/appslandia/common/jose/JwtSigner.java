@@ -26,8 +26,8 @@ import java.util.Objects;
 import java.util.Set;
 
 import com.appslandia.common.base.InitializeException;
-import com.appslandia.common.crypto.DsaDigester;
-import com.appslandia.common.crypto.MacDigester;
+import com.appslandia.common.crypto.MacSigner;
+import com.appslandia.common.crypto.SignatureSigner;
 import com.appslandia.common.json.JsonException;
 import com.appslandia.common.json.JsonProcessor;
 import com.appslandia.common.utils.Asserts;
@@ -117,13 +117,13 @@ public class JwtSigner extends JwsSigner<JwtPayload> {
     }
 
     @Override
-    public JwtSigner setSigner(DsaDigester signer) {
+    public JwtSigner setSigner(SignatureSigner signer) {
 	super.setSigner(signer);
 	return this;
     }
 
     @Override
-    public JwtSigner setSigner(MacDigester signer) {
+    public JwtSigner setSigner(MacSigner signer) {
 	super.setSigner(signer);
 	return this;
     }

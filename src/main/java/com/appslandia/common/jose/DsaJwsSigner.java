@@ -23,7 +23,7 @@ package com.appslandia.common.jose;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
-import com.appslandia.common.crypto.DsaDigester;
+import com.appslandia.common.crypto.SignatureSigner;
 import com.appslandia.common.json.JsonProcessor;
 import com.appslandia.common.utils.Asserts;
 
@@ -40,11 +40,11 @@ public class DsaJwsSigner<P> {
     protected String alg;
     protected String kid;
 
-    protected DsaDigester signer;
+    protected SignatureSigner signer;
 
     public DsaJwsSigner(String jwsAlgorithm, String signatureAlgorithm, Class<P> payloadClass) {
 	this.alg = Asserts.notNull(jwsAlgorithm);
-	this.signer = new DsaDigester().setAlgorithm(Asserts.notNull(signatureAlgorithm));
+	this.signer = new SignatureSigner().setAlgorithm(Asserts.notNull(signatureAlgorithm));
 	this.payloadClass = Asserts.notNull(payloadClass);
     }
 

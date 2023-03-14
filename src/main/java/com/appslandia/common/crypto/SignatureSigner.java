@@ -35,7 +35,7 @@ import com.appslandia.common.utils.Asserts;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class DsaDigester extends InitializeObject implements Digester {
+public class SignatureSigner extends InitializeObject implements Digester {
     private String algorithm, provider;
 
     private Signature sign;
@@ -116,7 +116,7 @@ public class DsaDigester extends InitializeObject implements Digester {
 	return this.algorithm;
     }
 
-    public DsaDigester setAlgorithm(String algorithm) {
+    public SignatureSigner setAlgorithm(String algorithm) {
 	assertNotInitialized();
 	this.algorithm = algorithm;
 	return this;
@@ -127,13 +127,13 @@ public class DsaDigester extends InitializeObject implements Digester {
 	return this.provider;
     }
 
-    public DsaDigester setProvider(String provider) {
+    public SignatureSigner setProvider(String provider) {
 	assertNotInitialized();
 	this.provider = provider;
 	return this;
     }
 
-    public DsaDigester setPrivateKey(PrivateKey privateKey) {
+    public SignatureSigner setPrivateKey(PrivateKey privateKey) {
 	assertNotInitialized();
 	if (privateKey != null) {
 	    this.privateKey = new KeyFactoryUtil(privateKey.getAlgorithm(), this.provider).copy(privateKey);
@@ -141,7 +141,7 @@ public class DsaDigester extends InitializeObject implements Digester {
 	return this;
     }
 
-    public DsaDigester setPublicKey(PublicKey publicKey) {
+    public SignatureSigner setPublicKey(PublicKey publicKey) {
 	assertNotInitialized();
 	if (publicKey != null) {
 	    this.publicKey = new KeyFactoryUtil(publicKey.getAlgorithm(), this.provider).copy(publicKey);
@@ -149,7 +149,7 @@ public class DsaDigester extends InitializeObject implements Digester {
 	return this;
     }
 
-    public DsaDigester setKeyPair(KeyPair keyPair) {
+    public SignatureSigner setKeyPair(KeyPair keyPair) {
 	assertNotInitialized();
 	if (keyPair != null) {
 	    KeyFactoryUtil keyFactoryUtil = new KeyFactoryUtil(keyPair.getPrivate().getAlgorithm(), this.provider);
@@ -161,8 +161,8 @@ public class DsaDigester extends InitializeObject implements Digester {
     }
 
     @Override
-    public DsaDigester clone() {
-	DsaDigester impl = new DsaDigester().setAlgorithm(this.algorithm).setProvider(this.provider);
+    public SignatureSigner clone() {
+	SignatureSigner impl = new SignatureSigner().setAlgorithm(this.algorithm).setProvider(this.provider);
 
 	if (this.privateKey != null) {
 	    impl.privateKey = new KeyFactoryUtil(this.privateKey.getAlgorithm(), this.provider).copy(this.privateKey);

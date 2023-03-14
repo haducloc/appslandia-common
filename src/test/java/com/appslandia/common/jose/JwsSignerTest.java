@@ -25,7 +25,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.appslandia.common.crypto.MacDigester;
+import com.appslandia.common.crypto.MacSigner;
 import com.appslandia.common.utils.MathUtils;
 
 /**
@@ -38,7 +38,7 @@ public class JwsSignerTest {
     @Test
     public void test_bytes() {
 	JwsSigner<byte[]> signer = new JwsSigner<>(byte[].class).setJsonProcessor(JoseGson.newJsonProcessor());
-	signer.setAlg("HS256").setSigner(new MacDigester().setAlgorithm("HmacSHA256").setSecret("secret".getBytes()));
+	signer.setAlg("HS256").setSigner(new MacSigner().setAlgorithm("HmacSHA256").setSecret("secret".getBytes()));
 
 	JoseHeader header = signer.newHeader();
 	byte[] payload = MathUtils.toByteArray(1, 100);
