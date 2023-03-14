@@ -42,8 +42,8 @@ public class HsJwtSigner extends HsJwsSigner<JwtPayload> {
     }
 
     @Override
-    public HsJwtSigner setProvider(String provider) {
-	super.setProvider(provider);
+    public HsJwsSigner<JwtPayload> setMacAlgProvider(String macAlgProvider) {
+	super.setMacAlgProvider(macAlgProvider);
 	return this;
     }
 
