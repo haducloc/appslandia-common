@@ -110,12 +110,14 @@ try (ConnectionImpl connScoped = new ConnectionImpl(javax.sql.DataSource)) {
   JoseHeader header = processor.newHeader();
   JwtPayload payload = processor.newPayload().setExpiresIn(1, TimeUnit.DAYS);
 
-  // Serialize
-  String jwt = jwtSigner.toJwt(new JwtToken(header, payload));
+  // Sign
+  String jwt = jwtSigner.sign(new JwtToken(header, payload));
   
-  // Deserialize
-  JwtToken token = jwtSigner.parseJwt(jwt);
-  jwtSigner.verifyJwt(token);
+  // Parse
+  JwtToken token = jwtSigner.parse(jwt);
+  
+  // Verify
+  jwtSigner.verify(token);
   
   token.getHeader();
   token.getPayload();
