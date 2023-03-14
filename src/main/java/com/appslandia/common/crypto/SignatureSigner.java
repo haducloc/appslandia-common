@@ -136,7 +136,7 @@ public class SignatureSigner extends InitializeObject implements Digester {
     public SignatureSigner setPrivateKey(PrivateKey privateKey) {
 	assertNotInitialized();
 	if (privateKey != null) {
-	    this.privateKey = new KeyFactoryUtil(privateKey.getAlgorithm(), this.provider).copy(privateKey);
+	    this.privateKey = new KeyFactoryUtil(privateKey.getAlgorithm()).copy(privateKey);
 	}
 	return this;
     }
@@ -144,7 +144,7 @@ public class SignatureSigner extends InitializeObject implements Digester {
     public SignatureSigner setPublicKey(PublicKey publicKey) {
 	assertNotInitialized();
 	if (publicKey != null) {
-	    this.publicKey = new KeyFactoryUtil(publicKey.getAlgorithm(), this.provider).copy(publicKey);
+	    this.publicKey = new KeyFactoryUtil(publicKey.getAlgorithm()).copy(publicKey);
 	}
 	return this;
     }
@@ -152,7 +152,7 @@ public class SignatureSigner extends InitializeObject implements Digester {
     public SignatureSigner setKeyPair(KeyPair keyPair) {
 	assertNotInitialized();
 	if (keyPair != null) {
-	    KeyFactoryUtil keyFactoryUtil = new KeyFactoryUtil(keyPair.getPrivate().getAlgorithm(), this.provider);
+	    KeyFactoryUtil keyFactoryUtil = new KeyFactoryUtil(keyPair.getPrivate().getAlgorithm());
 
 	    this.privateKey = keyFactoryUtil.copy(keyPair.getPrivate());
 	    this.publicKey = keyFactoryUtil.copy(keyPair.getPublic());
@@ -165,10 +165,10 @@ public class SignatureSigner extends InitializeObject implements Digester {
 	SignatureSigner impl = new SignatureSigner().setAlgorithm(this.algorithm).setProvider(this.provider);
 
 	if (this.privateKey != null) {
-	    impl.privateKey = new KeyFactoryUtil(this.privateKey.getAlgorithm(), this.provider).copy(this.privateKey);
+	    impl.privateKey = new KeyFactoryUtil(this.privateKey.getAlgorithm()).copy(this.privateKey);
 	}
 	if (this.publicKey != null) {
-	    impl.publicKey = new KeyFactoryUtil(this.publicKey.getAlgorithm(), this.provider).copy(this.publicKey);
+	    impl.publicKey = new KeyFactoryUtil(this.publicKey.getAlgorithm()).copy(this.publicKey);
 	}
 	return impl;
     }

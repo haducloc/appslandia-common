@@ -174,7 +174,7 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
     public RsaEncryptor setPrivateKey(PrivateKey privateKey) {
 	assertNotInitialized();
 	if (privateKey != null) {
-	    this.privateKey = new KeyFactoryUtil(privateKey.getAlgorithm(), this.provider).copy(privateKey);
+	    this.privateKey = new KeyFactoryUtil(privateKey.getAlgorithm()).copy(privateKey);
 	}
 	return this;
     }
@@ -182,7 +182,7 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
     public RsaEncryptor setPrivateKey(String privateKeyPem) {
 	assertNotInitialized();
 	if (privateKeyPem != null) {
-	    this.privateKey = new KeyFactoryUtil("RSA", this.provider).toPrivateKey(privateKeyPem);
+	    this.privateKey = new KeyFactoryUtil("RSA").toPrivateKey(privateKeyPem);
 	}
 	return this;
     }
@@ -190,7 +190,7 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
     public RsaEncryptor setPublicKey(PublicKey publicKey) {
 	assertNotInitialized();
 	if (publicKey != null) {
-	    this.publicKey = new KeyFactoryUtil(publicKey.getAlgorithm(), this.provider).copy(publicKey);
+	    this.publicKey = new KeyFactoryUtil(publicKey.getAlgorithm()).copy(publicKey);
 	}
 	return this;
     }
@@ -198,7 +198,7 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
     public RsaEncryptor setPublicKey(String publicKeyPem) {
 	assertNotInitialized();
 	if (publicKeyPem != null) {
-	    this.publicKey = new KeyFactoryUtil("RSA", this.provider).toPublicKey(publicKeyPem);
+	    this.publicKey = new KeyFactoryUtil("RSA").toPublicKey(publicKeyPem);
 	}
 	return this;
     }
@@ -208,7 +208,7 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 	if (keyPair != null) {
 	    Asserts.isTrue("RSA".equals(keyPair.getPrivate().getAlgorithm()));
 
-	    KeyFactoryUtil keyFactoryUtil = new KeyFactoryUtil("RSA", this.provider);
+	    KeyFactoryUtil keyFactoryUtil = new KeyFactoryUtil("RSA");
 
 	    this.privateKey = keyFactoryUtil.copy(keyPair.getPrivate());
 	    this.publicKey = keyFactoryUtil.copy(keyPair.getPublic());
@@ -227,10 +227,10 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 	RsaEncryptor impl = new RsaEncryptor().setTransformation(this.transformation).setProvider(this.provider);
 
 	if (this.privateKey != null) {
-	    impl.privateKey = new KeyFactoryUtil(this.privateKey.getAlgorithm(), this.provider).copy(this.privateKey);
+	    impl.privateKey = new KeyFactoryUtil(this.privateKey.getAlgorithm()).copy(this.privateKey);
 	}
 	if (this.publicKey != null) {
-	    impl.publicKey = new KeyFactoryUtil(this.publicKey.getAlgorithm(), this.provider).copy(this.publicKey);
+	    impl.publicKey = new KeyFactoryUtil(this.publicKey.getAlgorithm()).copy(this.publicKey);
 	}
 
 	impl.algSpecFunc = this.algSpecFunc;
