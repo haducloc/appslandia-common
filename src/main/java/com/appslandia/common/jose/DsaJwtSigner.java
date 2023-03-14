@@ -39,8 +39,8 @@ public class DsaJwtSigner extends DsaJwsSigner<JwtPayload> {
     protected Set<String> audiences;
     protected int leewaySec;
 
-    public DsaJwtSigner(String jwsAlgorithm, String dsaAlgorithm) {
-	super(jwsAlgorithm, dsaAlgorithm, JwtPayload.class);
+    public DsaJwtSigner(String jwsAlgorithm, String signatureAlgorithm) {
+	super(jwsAlgorithm, signatureAlgorithm, JwtPayload.class);
     }
 
     @Override
