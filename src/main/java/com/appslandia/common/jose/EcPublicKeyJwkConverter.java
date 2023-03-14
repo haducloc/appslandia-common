@@ -27,6 +27,7 @@ import java.security.spec.ECGenParameterSpec;
 import java.security.spec.ECParameterSpec;
 import java.security.spec.ECPoint;
 import java.security.spec.ECPublicKeySpec;
+import java.security.spec.EllipticCurve;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -71,7 +72,7 @@ public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> implement
 	jwk.put("kty", this.kty);
 
 	// curve
-	String curve = getCurve(key.getParams().getCurve().getField().getFieldSize());
+	String curve = getCurveName(key.getParams().getCurve());
 	jwk.put("crv", curve);
 
 	// ecPoint
@@ -139,8 +140,8 @@ public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> implement
 	return new EcPublicKeyJwkConverter().setEcAlgParamsProvider(this.ecAlgParamsProvider).setEcKeyFactoryProvider(this.ecKeyFactoryProvider);
     }
 
-    protected String getCurve(int curveFieldLength) {
-	switch (curveFieldLength) {
+    protected String getCurveName(EllipticCurve curve) {
+	switch (curve.getField().getFieldSize()) {
 	case 256:
 	    return "P-256";
 	case 384:
@@ -150,7 +151,7 @@ public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> implement
 	default:
 	    break;
 	}
-	throw new IllegalArgumentException(STR.fmt("Unsupported curve field length: {}", curveFieldLength));
+	throw new IllegalArgumentException(STR.fmt("Unsupported curve: {}", curve));
     }
 
     protected String getStdName(String curve) {
