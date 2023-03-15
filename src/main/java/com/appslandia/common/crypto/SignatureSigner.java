@@ -25,6 +25,8 @@ import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
+import java.security.spec.AlgorithmParameterSpec;
+import java.util.function.Function;
 
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
@@ -47,10 +49,17 @@ public class SignatureSigner extends InitializeObject implements Digester {
     final Object sigMutex = new Object();
     final Object verMutex = new Object();
 
+    private Function<String, AlgorithmParameterSpec> algParamSpec;
+
     @Override
     protected void init() throws Exception {
 	Asserts.notNull(this.algorithm, "algorithm is required.");
 	Asserts.isTrue((this.privateKey != null) || (this.publicKey != null), "No key is provided.");
+
+	// algParamSpec
+	if (this.algParamSpec == null) {
+	    this.algParamSpec = (alg) -> null;
+	}
 
 	// Sign
 	if (this.privateKey != null) {
@@ -58,6 +67,12 @@ public class SignatureSigner extends InitializeObject implements Digester {
 		this.sign = Signature.getInstance(this.algorithm);
 	    } else {
 		this.sign = Signature.getInstance(this.algorithm, this.provider);
+	    }
+
+	    AlgorithmParameterSpec algorithmParameterSpec = this.algParamSpec.apply(this.algorithm);
+
+	    if (algorithmParameterSpec != null) {
+		this.sign.setParameter(algorithmParameterSpec);
 	    }
 	    this.sign.initSign(this.privateKey);
 	}
@@ -68,6 +83,12 @@ public class SignatureSigner extends InitializeObject implements Digester {
 		this.ver = Signature.getInstance(this.algorithm);
 	    } else {
 		this.ver = Signature.getInstance(this.algorithm, this.provider);
+	    }
+
+	    AlgorithmParameterSpec algorithmParameterSpec = this.algParamSpec.apply(this.algorithm);
+
+	    if (algorithmParameterSpec != null) {
+		this.ver.setParameter(algorithmParameterSpec);
 	    }
 	    this.ver.initVerify(this.publicKey);
 	}
@@ -160,6 +181,12 @@ public class SignatureSigner extends InitializeObject implements Digester {
 	return this;
     }
 
+    public SignatureSigner setAlgParamSpec(Function<String, AlgorithmParameterSpec> algParamSpec) {
+	assertNotInitialized();
+	this.algParamSpec = algParamSpec;
+	return this;
+    }
+
     @Override
     public SignatureSigner clone() {
 	SignatureSigner impl = new SignatureSigner().setAlgorithm(this.algorithm).setProvider(this.provider);
@@ -170,6 +197,7 @@ public class SignatureSigner extends InitializeObject implements Digester {
 	if (this.publicKey != null) {
 	    impl.publicKey = new KeyFactoryUtil(this.publicKey.getAlgorithm()).copy(this.publicKey);
 	}
+	impl.algParamSpec = this.algParamSpec;
 	return impl;
     }
 }

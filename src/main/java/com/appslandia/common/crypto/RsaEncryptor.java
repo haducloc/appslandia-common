@@ -58,7 +58,7 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
     final Object decMutex = new Object();
     final Random random = new SecureRandom();
 
-    private Function<String[], AlgorithmParameterSpec> algSpecFunc;
+    private Function<String[], AlgorithmParameterSpec> algParamSpec;
 
     @Override
     protected void init() throws Exception {
@@ -74,9 +74,9 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 	Asserts.isTrue("RSA".equals(this.algorithms[0]), "RSA algorithm is required.");
 	Asserts.isTrue((this.privateKey != null) || (this.publicKey != null), "No key is provided.");
 
-	// algSpecFunc
-	if (this.algSpecFunc == null) {
-	    this.algSpecFunc = (algs) -> null;
+	// algParamSpec
+	if (this.algParamSpec == null) {
+	    this.algParamSpec = (algs) -> null;
 	}
 
 	// ENCRYPT
@@ -87,7 +87,7 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 		this.encrypt = Cipher.getInstance(this.transformation, this.provider);
 	    }
 
-	    AlgorithmParameterSpec spec = this.algSpecFunc.apply(this.algorithms);
+	    AlgorithmParameterSpec spec = this.algParamSpec.apply(this.algorithms);
 
 	    if (spec == null) {
 		this.encrypt.init(Cipher.ENCRYPT_MODE, this.publicKey);
@@ -104,7 +104,7 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 		this.decrypt = Cipher.getInstance(this.transformation, this.provider);
 	    }
 
-	    AlgorithmParameterSpec spec = this.algSpecFunc.apply(this.algorithms);
+	    AlgorithmParameterSpec spec = this.algParamSpec.apply(this.algorithms);
 
 	    if (spec == null) {
 		this.decrypt.init(Cipher.DECRYPT_MODE, this.privateKey, spec);
@@ -216,9 +216,9 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 	return this;
     }
 
-    public RsaEncryptor setAlgSpecFunc(Function<String[], AlgorithmParameterSpec> algSpecFunc) {
+    public RsaEncryptor setAlgParamSpec(Function<String[], AlgorithmParameterSpec> algParamSpec) {
 	assertNotInitialized();
-	this.algSpecFunc = algSpecFunc;
+	this.algParamSpec = algParamSpec;
 	return this;
     }
 
@@ -233,7 +233,7 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 	    impl.publicKey = new KeyFactoryUtil(this.publicKey.getAlgorithm()).copy(this.publicKey);
 	}
 
-	impl.algSpecFunc = this.algSpecFunc;
+	impl.algParamSpec = this.algParamSpec;
 	return impl;
     }
 

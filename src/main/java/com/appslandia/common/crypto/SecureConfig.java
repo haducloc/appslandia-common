@@ -42,13 +42,13 @@ public class SecureConfig extends PropertyConfig implements Cloneable {
     public SecureConfig(char[] password) {
 	Asserts.notNull(password);
 	this.textEncryptor = new TextEncryptor(
-		new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(32).setPassword(password).setAlgSpecFunc(PbeEncryptor::toIvParameterSpec));
+		new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(32).setPassword(password).setAlgParamSpec(PbeEncryptor::toIvParameterSpec));
     }
 
     public SecureConfig(String password) {
 	Asserts.notNull(password);
 	this.textEncryptor = new TextEncryptor(
-		new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(32).setPassword(password).setAlgSpecFunc(PbeEncryptor::toIvParameterSpec));
+		new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(32).setPassword(password).setAlgParamSpec(PbeEncryptor::toIvParameterSpec));
     }
 
     public SecureConfig(Encryptor encryptor) {

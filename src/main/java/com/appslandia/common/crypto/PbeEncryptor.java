@@ -47,7 +47,7 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
     private String[] algorithms;
 
     private Integer ivSize;
-    private BiFunction<String[], byte[], AlgorithmParameterSpec> algSpecFunc;
+    private BiFunction<String[], byte[], AlgorithmParameterSpec> algParamSpec;
 
     private Cipher cipher;
 
@@ -69,9 +69,9 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 
 	Asserts.isTrue(!"RSA".equals(this.algorithms[0]), "Use RsaEncryptor instead.");
 
-	// algSpecFunc
-	if (this.algSpecFunc == null) {
-	    this.algSpecFunc = (algs, iv) -> null;
+	// algParamSpec
+	if (this.algParamSpec == null) {
+	    this.algParamSpec = (algs, iv) -> null;
 	}
 
 	// cipher
@@ -101,7 +101,7 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 
 	try {
 	    synchronized (this.mutex) {
-		AlgorithmParameterSpec spec = this.algSpecFunc.apply(this.algorithms, iv);
+		AlgorithmParameterSpec spec = this.algParamSpec.apply(this.algorithms, iv);
 
 		if (spec == null) {
 		    this.cipher.init(Cipher.ENCRYPT_MODE, secretKey);
@@ -140,7 +140,7 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 
 	try {
 	    synchronized (this.mutex) {
-		AlgorithmParameterSpec spec = this.algSpecFunc.apply(this.algorithms, iv);
+		AlgorithmParameterSpec spec = this.algParamSpec.apply(this.algorithms, iv);
 
 		if (spec == null) {
 		    this.cipher.init(Cipher.DECRYPT_MODE, secretKey);
@@ -225,9 +225,9 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	return this;
     }
 
-    public PbeEncryptor setAlgSpecFunc(BiFunction<String[], byte[], AlgorithmParameterSpec> algSpecFunc) {
+    public PbeEncryptor setAlgParamSpec(BiFunction<String[], byte[], AlgorithmParameterSpec> algParamSpec) {
 	assertNotInitialized();
-	this.algSpecFunc = algSpecFunc;
+	this.algParamSpec = algParamSpec;
 	return this;
     }
 
@@ -243,7 +243,7 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	    impl.secretKeyGenerator = this.secretKeyGenerator.clone();
 	}
 	impl.ivSize = this.ivSize;
-	impl.algSpecFunc = this.algSpecFunc;
+	impl.algParamSpec = this.algParamSpec;
 	return impl;
     }
 

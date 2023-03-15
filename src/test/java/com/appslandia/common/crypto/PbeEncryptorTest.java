@@ -39,7 +39,7 @@ public class PbeEncryptorTest {
 	PbeEncryptor impl = new PbeEncryptor();
 	impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
 	impl.setPassword("password".toCharArray());
-	impl.setAlgSpecFunc(PbeEncryptor::toIvParameterSpec);
+	impl.setAlgParamSpec(PbeEncryptor::toIvParameterSpec);
 
 	try {
 	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -58,7 +58,7 @@ public class PbeEncryptorTest {
 	PbeEncryptor impl = new PbeEncryptor();
 	impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
 	impl.setPassword("password".toCharArray());
-	impl.setAlgSpecFunc(PbeEncryptor::toIvParameterSpec);
+	impl.setAlgParamSpec(PbeEncryptor::toIvParameterSpec);
 
 	try {
 	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -95,7 +95,7 @@ public class PbeEncryptorTest {
 	PbeEncryptor impl = new PbeEncryptor();
 	impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
 	impl.setPassword("password".toCharArray());
-	impl.setAlgSpecFunc(PbeEncryptor::toIvParameterSpec);
+	impl.setAlgParamSpec(PbeEncryptor::toIvParameterSpec);
 
 	impl = impl.clone();
 	try {
@@ -115,7 +115,7 @@ public class PbeEncryptorTest {
 	PbeEncryptor impl = new PbeEncryptor();
 	impl.setTransformation("AES/GCM/NoPadding").setKeySize(16);
 	impl.setPassword("password".toCharArray());
-	impl.setAlgSpecFunc(PbeEncryptor::toGCMParameterSpec);
+	impl.setAlgParamSpec(PbeEncryptor::toGCMParameterSpec);
 
 	try {
 	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -134,7 +134,7 @@ public class PbeEncryptorTest {
 	final PbeEncryptor impl = new PbeEncryptor();
 	impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
 	impl.setPassword("password".toCharArray());
-	impl.setAlgSpecFunc(PbeEncryptor::toIvParameterSpec);
+	impl.setAlgParamSpec(PbeEncryptor::toIvParameterSpec);
 
 	new ThreadSafeTester() {
 

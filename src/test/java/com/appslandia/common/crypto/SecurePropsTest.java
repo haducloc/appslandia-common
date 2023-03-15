@@ -33,7 +33,7 @@ public class SecurePropsTest {
     @Test
     public void test() {
 	Encryptor encryptor = new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(16).setPassword("password".toCharArray())
-		.setAlgSpecFunc(PbeEncryptor::toIvParameterSpec);
+		.setAlgParamSpec(PbeEncryptor::toIvParameterSpec);
 
 	TextEncryptor textEncryptor = new TextEncryptor().setEncryptor(encryptor);
 	SecureProps props = new SecureProps(textEncryptor);

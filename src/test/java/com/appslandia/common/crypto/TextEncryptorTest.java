@@ -35,7 +35,7 @@ public class TextEncryptorTest {
 	PbeEncryptor encryptor = new PbeEncryptor();
 	encryptor.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
 	encryptor.setPassword("password".toCharArray());
-	encryptor.setAlgSpecFunc(PbeEncryptor::toIvParameterSpec);
+	encryptor.setAlgParamSpec(PbeEncryptor::toIvParameterSpec);
 
 	TextEncryptor impl = new TextEncryptor().setEncryptor(encryptor);
 
@@ -55,7 +55,7 @@ public class TextEncryptorTest {
 	PbeEncryptor encryptor = new PbeEncryptor();
 	encryptor.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
 	encryptor.setPassword("password".toCharArray());
-	encryptor.setAlgSpecFunc(PbeEncryptor::toIvParameterSpec);
+	encryptor.setAlgParamSpec(PbeEncryptor::toIvParameterSpec);
 
 	TextEncryptor impl = new TextEncryptor().setEncryptor(encryptor);
 	impl = impl.clone();
