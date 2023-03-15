@@ -52,7 +52,7 @@ public class SecurityProviderApp {
 		    int subseq = 0;
 		    for (Service service : services) {
 
-			System.out.println(String.format("(%02d) Algorithm: %s", (++subseq), service.getAlgorithm()));
+			System.out.println(String.format("(%02d) Service: %s, Algorithm: %s", (++subseq), service.getType(), service.getAlgorithm()));
 			System.out.println(service);
 		    }
 		}
