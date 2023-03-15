@@ -57,12 +57,12 @@ public class PoolEncryptorTest {
 			} catch (Exception ex) {
 			    Assertions.fail(ex.getMessage());
 			} finally {
-			    countDown();
+			    doneTask();
 			}
 		    }
 		};
 	    }
-	}.executeThenAwait();
+	}.execute();
     }
 
     @Test
@@ -89,11 +89,11 @@ public class PoolEncryptorTest {
 			} catch (Exception ex) {
 			    Assertions.fail(ex.getMessage());
 			} finally {
-			    countDown();
+			    doneTask();
 			}
 		    }
 		};
 	    }
-	}.executeThenAwait();
+	}.execute();
     }
 }

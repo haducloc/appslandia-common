@@ -100,11 +100,11 @@ public class PasswordDigesterTest {
 			} catch (Exception ex) {
 			    Assertions.fail(ex.getMessage());
 			} finally {
-			    countDown();
+			    doneTask();
 			}
 		    }
 		};
 	    }
-	}.executeThenAwait();
+	}.execute();
     }
 }

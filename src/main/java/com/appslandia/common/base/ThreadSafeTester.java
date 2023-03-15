@@ -25,7 +25,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.ValueUtils;
 
 /**
  *
@@ -34,28 +34,30 @@ import com.appslandia.common.utils.Asserts;
  */
 public abstract class ThreadSafeTester extends InitializeObject {
 
-    private int tasks = 100;
-    private int threads = 8;
+    private int tasks;
+    private int threads;
 
-    private CountDownLatch countDownLatch;
+    private CountDownLatch taskMonitor;
     private ExecutorService executorService;
 
     @Override
     protected void init() throws Exception {
-	Asserts.isTrue(this.tasks > 0);
-	Asserts.isTrue(this.threads > 0);
+	this.tasks = ValueUtils.valueOrMin(this.tasks, 100);
+
+	int minPoolSize = ValueUtils.valueOrMin(Runtime.getRuntime().availableProcessors() / 4, 1);
+	this.threads = ValueUtils.valueOrMin(this.threads, minPoolSize);
 
 	this.executorService = Executors.newFixedThreadPool(this.threads);
-	this.countDownLatch = new CountDownLatch(this.tasks);
+	this.taskMonitor = new CountDownLatch(this.tasks);
     }
 
-    public ThreadSafeTester tasks(int tasks) {
+    public ThreadSafeTester setTasks(int tasks) {
 	assertNotInitialized();
 	this.tasks = tasks;
 	return this;
     }
 
-    public ThreadSafeTester threads(int threads) {
+    public ThreadSafeTester setThreads(int threads) {
 	assertNotInitialized();
 	this.threads = threads;
 	return this;
@@ -63,21 +65,22 @@ public abstract class ThreadSafeTester extends InitializeObject {
 
     protected abstract Runnable newTask();
 
-    public ThreadSafeTester executeThenAwait() {
-	return executeThenAwait(0, null);
+    public ThreadSafeTester execute() {
+	return execute(0, TimeUnit.MILLISECONDS);
     }
 
-    public ThreadSafeTester executeThenAwait(long timeout, TimeUnit unit) {
+    public ThreadSafeTester execute(long timeout, TimeUnit unit) {
 	initialize();
 	for (int i = 0; i < this.tasks; i++) {
 	    this.executorService.execute(newTask());
 	}
 	try {
 	    if (timeout == 0) {
-		this.countDownLatch.await();
+		this.taskMonitor.await();
 	    } else {
-		this.countDownLatch.await(timeout, unit);
+		this.taskMonitor.await(timeout, unit);
 	    }
+
 	} catch (InterruptedException ex) {
 	    throw new UncheckedException(ex);
 	}
@@ -85,7 +88,7 @@ public abstract class ThreadSafeTester extends InitializeObject {
 	return this;
     }
 
-    protected void countDown() {
-	this.countDownLatch.countDown();
+    protected void doneTask() {
+	this.taskMonitor.countDown();
     }
 }

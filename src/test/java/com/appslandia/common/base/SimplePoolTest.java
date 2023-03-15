@@ -73,11 +73,11 @@ public class SimplePoolTest {
 			} catch (Exception ex) {
 			    Assertions.fail(ex.getMessage());
 			} finally {
-			    countDown();
+			    doneTask();
 			}
 		    }
 		};
 	    }
-	}.executeThenAwait();
+	}.execute();
     }
 }

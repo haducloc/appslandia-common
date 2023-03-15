@@ -99,11 +99,11 @@ public class PoolPasswordDigesterTest {
 			} catch (Exception ex) {
 			    Assertions.fail(ex.getMessage());
 			} finally {
-			    countDown();
+			    doneTask();
 			}
 		    }
 		};
 	    }
-	}.executeThenAwait();
+	}.execute();
     }
 }

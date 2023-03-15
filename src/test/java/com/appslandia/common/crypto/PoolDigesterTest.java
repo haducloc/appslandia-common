@@ -55,12 +55,12 @@ public class PoolDigesterTest {
 			    Assertions.fail(ex.getMessage());
 
 			} finally {
-			    countDown();
+			    doneTask();
 			}
 		    }
 		};
 	    }
-	}.executeThenAwait();
+	}.execute();
     }
 
     @Test
@@ -85,11 +85,11 @@ public class PoolDigesterTest {
 			} catch (Exception ex) {
 			    Assertions.fail(ex.getMessage());
 			} finally {
-			    countDown();
+			    doneTask();
 			}
 		    }
 		};
 	    }
-	}.executeThenAwait();
+	}.execute();
     }
 }

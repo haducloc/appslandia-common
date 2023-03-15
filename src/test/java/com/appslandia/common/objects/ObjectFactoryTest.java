@@ -165,12 +165,12 @@ public class ObjectFactoryTest {
 			} catch (Exception ex) {
 			    Assertions.fail(ex.getMessage());
 			} finally {
-			    countDown();
+			    doneTask();
 			}
 		    }
 		};
 	    }
-	}.executeThenAwait();
+	}.execute();
 	Assertions.assertEquals(1, ThreadSafeService.lastSeq.get());
     }
 
