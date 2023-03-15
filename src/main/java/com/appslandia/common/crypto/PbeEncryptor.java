@@ -100,6 +100,7 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	byte[] iv = isIVSpec() ? RandomUtils.nextBytes(this.getIVSize(), this.random) : null;
 
 	try {
+	    byte[] encMsg = null;
 	    synchronized (this.mutex) {
 		AlgorithmParameterSpec spec = this.algParamSpec.apply(this.algorithms, iv);
 
@@ -108,10 +109,10 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 		} else {
 		    this.cipher.init(Cipher.ENCRYPT_MODE, secretKey, spec);
 		}
-
-		byte[] encMsg = this.cipher.doFinal(message);
-		return (iv != null) ? ArrayUtils.append(iv, salt, encMsg) : ArrayUtils.append(salt, encMsg);
+		encMsg = this.cipher.doFinal(message);
 	    }
+	    return (iv != null) ? ArrayUtils.append(iv, salt, encMsg) : ArrayUtils.append(salt, encMsg);
+
 	} catch (GeneralSecurityException ex) {
 	    throw new CryptoException(ex);
 	} finally {
@@ -137,7 +138,6 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	}
 
 	SecretKey secretKey = buildSecretKey(salt, this.algorithms[0]);
-
 	try {
 	    synchronized (this.mutex) {
 		AlgorithmParameterSpec spec = this.algParamSpec.apply(this.algorithms, iv);

@@ -71,7 +71,6 @@ public class PbeDigester extends PbeObject implements Digester {
 		this.mac.init(secretKey);
 		msgMac = this.mac.doFinal(message);
 	    }
-
 	    return ArrayUtils.append(salt, msgMac);
 
 	} catch (GeneralSecurityException ex) {
