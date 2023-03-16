@@ -50,7 +50,7 @@ public class GsonMapAdapter<T extends Map<String, Object>> implements JsonDeseri
 
     @Override
     public T deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-	Map<String, Object> map = new GsonMapParser().parseMap(json, this.unmodifiable);
+	Map<String, Object> map = new JsonMapParser().setJsonElementConverter(GsonElementConverter.INSTANCE).parseMap(json, this.unmodifiable);
 	return this.converter.apply(map);
     }
 

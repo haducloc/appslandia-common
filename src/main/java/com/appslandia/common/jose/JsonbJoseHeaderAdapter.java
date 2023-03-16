@@ -22,7 +22,8 @@ package com.appslandia.common.jose;
 
 import java.util.Map;
 
-import com.appslandia.common.json.JsonbMapParser;
+import com.appslandia.common.json.JsonMapParser;
+import com.appslandia.common.json.JsonbElementConverter;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
@@ -52,7 +53,7 @@ public class JsonbJoseHeaderAdapter implements JsonbAdapter<JoseHeader, JsonObje
 
     @Override
     public JoseHeader adaptFromJson(JsonObject obj) throws Exception {
-	Map<String, Object> map = new JsonbMapParser().parseMap(obj, this.unmodifiable);
+	Map<String, Object> map = new JsonMapParser().setJsonElementConverter(JsonbElementConverter.INSTANCE).parseMap(obj, this.unmodifiable);
 	return new JoseHeader(map);
     }
 

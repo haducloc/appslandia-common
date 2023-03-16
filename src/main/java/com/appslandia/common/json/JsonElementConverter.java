@@ -18,41 +18,29 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.base;
+package com.appslandia.common.json;
 
-import com.appslandia.common.utils.Asserts;
+import java.util.Iterator;
+import java.util.Map;
+
+import com.appslandia.common.base.Out;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class Out<T> {
+public interface JsonElementConverter {
 
-    public T value;
+    boolean isJsonNull(Object element);
 
-    public Out() {
-    }
+    String asNumber(Object element, Out<Boolean> asResult);
 
-    public Out(T value) {
-	this.value = value;
-    }
+    String asString(Object element, Out<Boolean> asResult);
 
-    public T val() throws AssertException {
-	return Asserts.notNull(this.value, "value is required.");
-    }
+    boolean asBoolean(Object element, Out<Boolean> asResult);
 
-    public T orElse(T defaultValue) {
-	return this.value != null ? this.value : defaultValue;
-    }
+    Iterator<Object> asJsonArray(Object element, Out<Boolean> asResult);
 
-    public Out<T> setNull() {
-	this.value = null;
-	return this;
-    }
-
-    @Override
-    public String toString() {
-	return String.format("Out.%s", this.value);
-    }
+    Iterator<Map.Entry<String, Object>> asJsonObject(Object element, Out<Boolean> asResult);
 }
