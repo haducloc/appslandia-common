@@ -47,7 +47,7 @@ public class GsonJsonValueConverter implements JsonValueConverter {
 	JsonElement jsonElement = (JsonElement) element;
 
 	if (jsonElement.isJsonPrimitive() && ((JsonPrimitive) jsonElement).isNumber()) {
-	    asResult.value = Boolean.TRUE;
+	    asResult.value = true;
 	    return jsonElement.getAsString();
 	}
 	return null;
@@ -58,7 +58,7 @@ public class GsonJsonValueConverter implements JsonValueConverter {
 	JsonElement jsonElement = (JsonElement) element;
 
 	if (jsonElement.isJsonPrimitive() && ((JsonPrimitive) jsonElement).isString()) {
-	    asResult.value = Boolean.TRUE;
+	    asResult.value = true;
 	    return jsonElement.getAsString();
 	}
 	return null;
@@ -69,7 +69,7 @@ public class GsonJsonValueConverter implements JsonValueConverter {
 	JsonElement jsonElement = (JsonElement) element;
 
 	if (jsonElement.isJsonPrimitive() && ((JsonPrimitive) jsonElement).isBoolean()) {
-	    asResult.value = Boolean.TRUE;
+	    asResult.value = true;
 	    return jsonElement.getAsBoolean();
 	}
 	return false;
@@ -80,7 +80,7 @@ public class GsonJsonValueConverter implements JsonValueConverter {
 	JsonElement jsonElement = (JsonElement) element;
 
 	if (jsonElement.isJsonArray()) {
-	    asResult.value = Boolean.TRUE;
+	    asResult.value = true;
 	    return ObjectUtils.cast(jsonElement.getAsJsonArray().iterator());
 	}
 	return null;
@@ -91,7 +91,7 @@ public class GsonJsonValueConverter implements JsonValueConverter {
 	JsonElement jsonElement = (JsonElement) element;
 
 	if (jsonElement.isJsonObject()) {
-	    asResult.value = Boolean.TRUE;
+	    asResult.value = true;
 	    return ObjectUtils.cast(jsonElement.getAsJsonObject().entrySet().iterator());
 	}
 	return null;
