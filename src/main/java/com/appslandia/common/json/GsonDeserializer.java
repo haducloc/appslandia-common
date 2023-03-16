@@ -45,7 +45,7 @@ public class GsonDeserializer<T> implements JsonDeserializer<T> {
 	this.jsonMapParser.setRootConverter(converter);
     }
 
-    public <F, V> GsonDeserializer<T> setValueConverter(String pathOrPattern, Function<F, V> converter) {
+    public <F, V> GsonDeserializer<T> setValueConverter(String[] pathOrPattern, Function<F, V> converter) {
 	this.jsonMapParser.setValueConverter(pathOrPattern, converter);
 	return this;
     }

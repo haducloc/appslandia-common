@@ -54,14 +54,20 @@ public class JsonObjectParser extends InitializeObject {
 	Asserts.notNull(this.jsonValueConverter);
     }
 
-    public <F, V> JsonObjectParser setValueConverter(String pathOrPattern, Function<F, V> converter) {
+    public <F, V> JsonObjectParser setValueConverter(String[] pathOrPatterns, Function<F, V> converter) {
 	this.assertNotInitialized();
-	this.valueConverters.put(pathOrPattern, ObjectUtils.cast(converter));
+
+	for (String pathOrPattern : pathOrPatterns) {
+	    this.valueConverters.put(pathOrPattern, ObjectUtils.cast(converter));
+	}
 	return this;
     }
 
     public <V> JsonObjectParser setRootConverter(Function<Map<String, Object>, V> converter) {
-	return setValueConverter(ROOT_PATH, converter);
+	this.assertNotInitialized();
+
+	this.valueConverters.put(ROOT_PATH, ObjectUtils.cast(converter));
+	return this;
     }
 
     public JsonObjectParser setJsonValueConverter(JsonValueConverter jsonValueConverter) {

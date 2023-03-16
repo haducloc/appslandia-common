@@ -36,10 +36,10 @@ public class JoseJsonb {
 	// @formatter:off
 	return JsonbProcessor.newConfig().withAdapters(
 		new JsonbJoseHeaderAdapter(true, map -> new JoseHeader(map))
-			.setValueConverter("jwk", k -> new JsonWebKey(ObjectUtils.cast(k))),
+			.setValueConverter(new String[] {"jwk"}, map -> new JsonWebKey(ObjectUtils.cast(map))),
 
 		new JsonbJwtPayloadAdapter(true, map -> new JwtPayload(map))
-			.setValueConverter("jwks\\[\\d+]", k -> new JsonWebKey(ObjectUtils.cast(k)))
+			.setValueConverter(new String[] {"jwks\\[\\d+]"}, map -> new JsonWebKey(ObjectUtils.cast(map)))
 		);
 	// @formatter:on
     }

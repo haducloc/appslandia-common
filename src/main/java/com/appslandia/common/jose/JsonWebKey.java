@@ -20,8 +20,12 @@
 
 package com.appslandia.common.jose;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
+
+import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.ObjectUtils;
 
 /**
  *
@@ -33,6 +37,7 @@ public class JsonWebKey extends JoseMapObject {
 
     public static final String KTY = "kty";
     public static final String USE = "use";
+    public static final String KEY_OPS = "key_ops";
     public static final String ALG = "alg";
     public static final String KID = "kid";
 
@@ -76,6 +81,31 @@ public class JsonWebKey extends JoseMapObject {
 
     public JsonWebKey setUse(String value) {
 	this.put(USE, value);
+	return this;
+    }
+
+    public String[] getKey_ops() {
+	Object value = this.get(KEY_OPS);
+	if (value == null) {
+	    return null;
+	}
+	if (value.getClass() == String.class) {
+	    return new String[] { (String) value };
+	}
+	Asserts.isTrue(value.getClass().isArray() || Collection.class.isAssignableFrom(value.getClass()));
+
+	if (value.getClass().isArray()) {
+	    return ObjectUtils.cast(value);
+	}
+
+	Collection<String> col = ObjectUtils.cast(value);
+	return col.toArray(new String[col.size()]);
+    }
+
+    public JsonWebKey setKey_ops(String... values) {
+	if ((values != null) && (values.length > 0)) {
+	    this.put(KEY_OPS, values);
+	}
 	return this;
     }
 

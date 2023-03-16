@@ -117,10 +117,9 @@ public class JwtPayload extends JoseMapObject {
     }
 
     public JwtPayload setAud(String... values) {
-	if (values.length == 0) {
-	    return this;
+	if ((values != null) && (values.length > 0)) {
+	    this.put(AUD, values);
 	}
-	this.put(AUD, (values.length == 1) ? values[0] : values);
 	return this;
     }
 

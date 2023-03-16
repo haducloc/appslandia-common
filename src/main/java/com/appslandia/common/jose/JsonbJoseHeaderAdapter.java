@@ -46,8 +46,8 @@ public class JsonbJoseHeaderAdapter implements JsonbAdapter<JoseHeader, JsonObje
 	this.jsonObjectParser.setRootConverter(converter);
     }
 
-    public <F, T> JsonbJoseHeaderAdapter setValueConverter(String pathOrPattern, Function<F, T> converter) {
-	this.jsonObjectParser.setValueConverter(pathOrPattern, converter);
+    public <F, T> JsonbJoseHeaderAdapter setValueConverter(String[] pathOrPatterns, Function<F, T> converter) {
+	this.jsonObjectParser.setValueConverter(pathOrPatterns, converter);
 	return this;
     }
 

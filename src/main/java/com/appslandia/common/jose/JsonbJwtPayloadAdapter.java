@@ -46,8 +46,8 @@ public class JsonbJwtPayloadAdapter implements JsonbAdapter<JwtPayload, JsonObje
 	this.jsonObjectParser.setRootConverter(converter);
     }
 
-    public <F, T> JsonbJwtPayloadAdapter setValueConverter(String pathOrPattern, Function<F, T> converter) {
-	this.jsonObjectParser.setValueConverter(pathOrPattern, converter);
+    public <F, T> JsonbJwtPayloadAdapter setValueConverter(String[] pathOrPatterns, Function<F, T> converter) {
+	this.jsonObjectParser.setValueConverter(pathOrPatterns, converter);
 	return this;
     }
 
