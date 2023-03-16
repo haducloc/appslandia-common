@@ -25,81 +25,74 @@ import java.util.Map.Entry;
 
 import com.appslandia.common.base.Out;
 import com.appslandia.common.utils.ObjectUtils;
-
-import jakarta.json.JsonValue;
-import jakarta.json.JsonValue.ValueType;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JsonbElementConverter implements JsonElementConverter {
+public class GsonJsonValueConverter implements JsonValueConverter {
 
-    public static final JsonbElementConverter INSTANCE = new JsonbElementConverter();
+    public static final GsonJsonValueConverter INSTANCE = new GsonJsonValueConverter();
 
     @Override
     public boolean isJsonNull(Object element) {
-	JsonValue JsonValue = (JsonValue) element;
-	return JsonValue.getValueType() == ValueType.NULL;
+	return ((JsonElement) element).isJsonNull();
     }
 
     @Override
     public String asNumber(Object element, Out<Boolean> asResult) {
-	asResult.value = Boolean.FALSE;
-	JsonValue JsonValue = (JsonValue) element;
+	JsonElement jsonElement = (JsonElement) element;
 
-	if (JsonValue.getValueType() == ValueType.NUMBER) {
+	if (jsonElement.isJsonPrimitive() && ((JsonPrimitive) jsonElement).isNumber()) {
 	    asResult.value = Boolean.TRUE;
-	    return JsonValue.toString();
+	    return jsonElement.getAsString();
 	}
 	return null;
     }
 
     @Override
     public String asString(Object element, Out<Boolean> asResult) {
-	asResult.value = Boolean.FALSE;
-	JsonValue JsonValue = (JsonValue) element;
+	JsonElement jsonElement = (JsonElement) element;
 
-	if (JsonValue.getValueType() == ValueType.STRING) {
+	if (jsonElement.isJsonPrimitive() && ((JsonPrimitive) jsonElement).isString()) {
 	    asResult.value = Boolean.TRUE;
-	    return JsonValue.toString();
+	    return jsonElement.getAsString();
 	}
 	return null;
     }
 
     @Override
     public boolean asBoolean(Object element, Out<Boolean> asResult) {
-	asResult.value = Boolean.FALSE;
-	JsonValue JsonValue = (JsonValue) element;
+	JsonElement jsonElement = (JsonElement) element;
 
-	if ((JsonValue.getValueType() == ValueType.TRUE) || (JsonValue.getValueType() == ValueType.FALSE)) {
+	if (jsonElement.isJsonPrimitive() && ((JsonPrimitive) jsonElement).isBoolean()) {
 	    asResult.value = Boolean.TRUE;
-	    return JsonValue.getValueType() == ValueType.TRUE;
+	    return jsonElement.getAsBoolean();
 	}
 	return false;
     }
 
     @Override
     public Iterator<Object> asJsonArray(Object element, Out<Boolean> asResult) {
-	asResult.value = Boolean.FALSE;
-	JsonValue JsonValue = (JsonValue) element;
+	JsonElement jsonElement = (JsonElement) element;
 
-	if (JsonValue.getValueType() == ValueType.ARRAY) {
+	if (jsonElement.isJsonArray()) {
 	    asResult.value = Boolean.TRUE;
-	    return ObjectUtils.cast(JsonValue.asJsonArray().iterator());
+	    return ObjectUtils.cast(jsonElement.getAsJsonArray().iterator());
 	}
 	return null;
     }
 
     @Override
     public Iterator<Entry<String, Object>> asJsonObject(Object element, Out<Boolean> asResult) {
-	asResult.value = Boolean.FALSE;
-	JsonValue JsonValue = (JsonValue) element;
+	JsonElement jsonElement = (JsonElement) element;
 
-	if (JsonValue.getValueType() == ValueType.OBJECT) {
+	if (jsonElement.isJsonObject()) {
 	    asResult.value = Boolean.TRUE;
-	    return ObjectUtils.cast(JsonValue.asJsonObject().entrySet().iterator());
+	    return ObjectUtils.cast(jsonElement.getAsJsonObject().entrySet().iterator());
 	}
 	return null;
     }

@@ -41,7 +41,7 @@ public class JwtSignerTest {
 	signer.setIssuer("Issuer1");
 
 	JoseHeader header = signer.newHeader();
-	JwtPayload payload = signer.newPayload().setExpiresIn(1, TimeUnit.DAYS).setIssuedAtNow();
+	JwtPayload payload = signer.newPayload().setExp(1, TimeUnit.DAYS).setIatNow();
 
 	try {
 	    String jwt = signer.sign(new JwtToken(header, payload));
@@ -54,8 +54,8 @@ public class JwtSignerTest {
 	    Assertions.assertNotNull(token.getHeader());
 	    Assertions.assertNotNull(token.getPayload());
 
-	    Assertions.assertEquals("JWT", token.getHeader().getType());
-	    Assertions.assertEquals("HS256", token.getHeader().getAlgorithm());
+	    Assertions.assertEquals("JWT", token.getHeader().getTyp());
+	    Assertions.assertEquals("HS256", token.getHeader().getAlg());
 	    Assertions.assertEquals("Issuer1", token.getPayload().get("iss"));
 
 	} catch (Exception ex) {
@@ -69,7 +69,7 @@ public class JwtSignerTest {
 	signer.setIssuer("Issuer1");
 
 	JoseHeader header = signer.newHeader();
-	JwtPayload payload = signer.newPayload().setExpiresIn(1, TimeUnit.DAYS).setIssuedAtNow();
+	JwtPayload payload = signer.newPayload().setExp(1, TimeUnit.DAYS).setIatNow();
 
 	try {
 	    String jwt = signer.sign(new JwtToken(header, payload));
@@ -82,7 +82,7 @@ public class JwtSignerTest {
 	    Assertions.assertNotNull(token.getHeader());
 	    Assertions.assertNotNull(token.getPayload());
 
-	    Assertions.assertEquals("JWT", token.getHeader().getType());
+	    Assertions.assertEquals("JWT", token.getHeader().getTyp());
 	    Assertions.assertEquals("Issuer1", token.getPayload().get("iss"));
 
 	} catch (Exception ex) {

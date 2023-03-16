@@ -20,49 +20,80 @@
 
 package com.appslandia.common.jose;
 
+import java.util.Date;
 import java.util.Map;
-import java.util.function.Function;
-
-import com.appslandia.common.json.JsonObjectParser;
-import com.appslandia.common.json.JsonbJsonValueConverter;
-import com.appslandia.common.utils.ObjectUtils;
-
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
-import jakarta.json.bind.adapter.JsonbAdapter;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JsonbJwtPayloadAdapter implements JsonbAdapter<JwtPayload, JsonObject> {
+public class JsonWebKey extends JoseMapObject {
+    private static final long serialVersionUID = 1L;
 
-    final boolean unmodifiable;
-    final JsonObjectParser jsonObjectParser = new JsonObjectParser().setJsonValueConverter(JsonbJsonValueConverter.INSTANCE);
+    public static final String KTY = "kty";
+    public static final String USE = "use";
+    public static final String ALG = "alg";
+    public static final String KID = "kid";
 
-    public JsonbJwtPayloadAdapter(boolean unmodifiable, Function<Map<String, Object>, JwtPayload> converter) {
-	this.unmodifiable = unmodifiable;
-	this.jsonObjectParser.setRootConverter(converter);
+    public JsonWebKey() {
     }
 
-    public <F, T> JsonbJwtPayloadAdapter setValueConverter(String pathOrPattern, Function<F, T> converter) {
-	this.jsonObjectParser.setValueConverter(pathOrPattern, converter);
+    public JsonWebKey(Map<String, Object> map) {
+	super(map);
+    }
+
+    @Override
+    public JsonWebKey set(String key, Object value) {
+	super.set(key, value);
 	return this;
     }
 
     @Override
-    public JsonObject adaptToJson(JwtPayload obj) throws Exception {
-	return Json.createObjectBuilder(obj).build();
+    public JsonWebKey setNumericDate(String key, Date value) {
+	super.setNumericDate(key, value);
+	return this;
     }
 
     @Override
-    public JwtPayload adaptFromJson(JsonObject obj) throws Exception {
-	Object value = this.jsonObjectParser.parse(obj, this.unmodifiable);
-	return ObjectUtils.cast(value);
+    public JsonWebKey setNumericDate(String key, long timeInMs) {
+	super.setNumericDate(key, timeInMs);
+	return this;
     }
 
-    public boolean isUnmodifiable() {
-	return this.unmodifiable;
+    public String getKty() {
+	return (String) this.get(KTY);
+    }
+
+    public JsonWebKey setKty(String value) {
+	this.put(KTY, value);
+	return this;
+    }
+
+    public String getUse() {
+	return (String) this.get(USE);
+    }
+
+    public JsonWebKey setUse(String value) {
+	this.put(USE, value);
+	return this;
+    }
+
+    public String getAlg() {
+	return (String) this.get(ALG);
+    }
+
+    public JsonWebKey setAlg(String value) {
+	this.put(ALG, value);
+	return this;
+    }
+
+    public String getKid() {
+	return (String) this.get(KID);
+    }
+
+    public JsonWebKey setKid(String value) {
+	this.put(KID, value);
+	return this;
     }
 }

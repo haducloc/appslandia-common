@@ -21,9 +21,11 @@
 package com.appslandia.common.jose;
 
 import java.util.Map;
+import java.util.function.Function;
 
-import com.appslandia.common.json.JsonMapParser;
-import com.appslandia.common.json.JsonbElementConverter;
+import com.appslandia.common.json.JsonObjectParser;
+import com.appslandia.common.json.JsonbJsonValueConverter;
+import com.appslandia.common.utils.ObjectUtils;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
@@ -37,13 +39,16 @@ import jakarta.json.bind.adapter.JsonbAdapter;
 public class JsonbJoseHeaderAdapter implements JsonbAdapter<JoseHeader, JsonObject> {
 
     final boolean unmodifiable;
+    final JsonObjectParser jsonObjectParser = new JsonObjectParser().setJsonValueConverter(JsonbJsonValueConverter.INSTANCE);
 
-    public JsonbJoseHeaderAdapter() {
-	this(false);
+    public JsonbJoseHeaderAdapter(boolean unmodifiable, Function<Map<String, Object>, JoseHeader> converter) {
+	this.unmodifiable = unmodifiable;
+	this.jsonObjectParser.setRootConverter(converter);
     }
 
-    public JsonbJoseHeaderAdapter(boolean unmodifiable) {
-	this.unmodifiable = unmodifiable;
+    public <F, T> JsonbJoseHeaderAdapter setValueConverter(String pathOrPattern, Function<F, T> converter) {
+	this.jsonObjectParser.setValueConverter(pathOrPattern, converter);
+	return this;
     }
 
     @Override
@@ -53,8 +58,8 @@ public class JsonbJoseHeaderAdapter implements JsonbAdapter<JoseHeader, JsonObje
 
     @Override
     public JoseHeader adaptFromJson(JsonObject obj) throws Exception {
-	Map<String, Object> map = new JsonMapParser().setJsonElementConverter(JsonbElementConverter.INSTANCE).parseMap(obj, this.unmodifiable);
-	return new JoseHeader(map);
+	Object value = this.jsonObjectParser.parse(obj, this.unmodifiable);
+	return ObjectUtils.cast(value);
     }
 
     public boolean isUnmodifiable() {

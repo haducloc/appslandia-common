@@ -55,14 +55,14 @@ public class JwtSigner extends JwsSigner<JwtPayload> {
 
 	// issuer
 	this.defaultVerifiers.add((token) -> {
-	    if (!Objects.equals(this.issuer, token.getPayload().getIssuer())) {
+	    if (!Objects.equals(this.issuer, token.getPayload().getIss())) {
 		throw new JoseVerificationException("issuer doesn't match.");
 	    }
 	});
 
 	// exp
 	this.defaultVerifiers.add((token) -> {
-	    Date dt = token.getPayload().getExpiresAt();
+	    Date dt = token.getPayload().getExp();
 	    if (dt != null) {
 		long nt = JoseUtils.toNumericDate(dt);
 
@@ -74,7 +74,7 @@ public class JwtSigner extends JwsSigner<JwtPayload> {
 
 	// iat
 	this.defaultVerifiers.add((token) -> {
-	    Date dt = token.getPayload().getIssuedAt();
+	    Date dt = token.getPayload().getIat();
 	    if (dt != null) {
 		long nt = JoseUtils.toNumericDate(dt);
 
@@ -96,10 +96,10 @@ public class JwtSigner extends JwsSigner<JwtPayload> {
 	JwtPayload payload = new JwtPayload();
 
 	if (this.issuer != null) {
-	    payload.setIssuer(this.issuer);
+	    payload.setIss(this.issuer);
 	}
 	if (this.audiences != null) {
-	    payload.setAudiences(this.audiences.toArray(new String[this.audiences.size()]));
+	    payload.setAud(this.audiences.toArray(new String[this.audiences.size()]));
 	}
 	return payload;
     }

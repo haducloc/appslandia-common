@@ -96,15 +96,15 @@ public class JwsSigner<P> extends InitializeObject {
 
 	// Type
 	this.defaultVerifiers.add((token) -> {
-	    if (!Objects.equals(this.type, token.getHeader().getType())) {
-		throw new JoseVerificationException("type doesn't match.");
+	    if (!Objects.equals(this.type, token.getHeader().getTyp())) {
+		throw new JoseVerificationException("typ doesn't match.");
 	    }
 	});
 
 	// Algorithm
 	this.defaultVerifiers.add((token) -> {
-	    if (!Objects.equals(this.alg, token.getHeader().getAlgorithm())) {
-		throw new JoseVerificationException("algorithm doesn't match.");
+	    if (!Objects.equals(this.alg, token.getHeader().getAlg())) {
+		throw new JoseVerificationException("alg doesn't match.");
 	    }
 	});
 
@@ -124,7 +124,7 @@ public class JwsSigner<P> extends InitializeObject {
 
     public JoseHeader newHeader() {
 	this.initialize();
-	JoseHeader header = new JoseHeader().setType(this.type).setAlgorithm(this.alg);
+	JoseHeader header = new JoseHeader().setTyp(this.type).setAlg(this.alg);
 
 	if (this.kid != null) {
 	    header.setKid(this.kid);

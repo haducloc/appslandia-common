@@ -28,8 +28,6 @@ import java.security.spec.ECParameterSpec;
 import java.security.spec.ECPoint;
 import java.security.spec.ECPublicKeySpec;
 import java.security.spec.EllipticCurve;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -62,13 +60,13 @@ public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> implement
     }
 
     @Override
-    public Map<String, Object> toJsonWebKey(ECPublicKey key) {
+    public JsonWebKey toJsonWebKey(ECPublicKey key) {
 	this.initialize();
 	Asserts.isTrue("EC".equals(key.getAlgorithm()));
 
 	// jwk
-	Map<String, Object> jwk = new LinkedHashMap<>();
-	jwk.put("kty", this.kty);
+	JsonWebKey jwk = new JsonWebKey();
+	jwk.setKty(this.kty);
 
 	// curve
 	String curve = getCurveName(key.getParams().getCurve());
@@ -86,17 +84,15 @@ public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> implement
     }
 
     @Override
-    public ECPublicKey fromJsonWebKey(Map<String, Object> key) throws CryptoException {
+    public ECPublicKey fromJsonWebKey(JsonWebKey jwk) throws CryptoException {
 	this.initialize();
+	Asserts.isTrue(this.kty.equals(kty), "kty doesn't match.");
 
-	String kty = Asserts.notNull((String) key.get("kty"), "kty is required.");
-	Asserts.isTrue(this.kty.equals(kty));
-
-	String curve = Asserts.notNull((String) key.get("crv"), "crv is required.");
+	String curve = Asserts.notNull((String) jwk.get("crv"), "crv is required.");
 	String stdName = getStdName(curve);
 
-	String x = Asserts.notNull((String) key.get("x"), "x is required.");
-	String y = Asserts.notNull((String) key.get("y"), "y is required.");
+	String x = Asserts.notNull((String) jwk.get("x"), "x is required.");
+	String y = Asserts.notNull((String) jwk.get("y"), "y is required.");
 
 	// algorithmParametersUtil
 	AlgorithmParametersUtil<ECParameterSpec> algorithmParametersUtil = this.algorithmParametersUtils.computeIfAbsent(stdName, (name) -> {

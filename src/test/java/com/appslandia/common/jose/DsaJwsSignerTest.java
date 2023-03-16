@@ -48,7 +48,7 @@ public class DsaJwsSignerTest {
 	String iss;
 	Long exp;
 
-	public JwsPayload setExpiresIn(long expiresIn, TimeUnit unit) {
+	public JwsPayload setExp(long expiresIn, TimeUnit unit) {
 	    long timeInMs = System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(expiresIn, unit);
 	    this.exp = JoseUtils.toNumericDate(timeInMs);
 	    return this;
@@ -77,7 +77,7 @@ public class DsaJwsSignerTest {
 		    .setPublicKey(keyPair.getPublic()).build();
 
 	    JoseHeader header = signer.newHeader();
-	    JwsPayload payload = new JwsPayload().setIssuer("Issuer1").setExpiresIn(1, TimeUnit.HOURS);
+	    JwsPayload payload = new JwsPayload().setIssuer("Issuer1").setExp(1, TimeUnit.HOURS);
 
 	    String token = signer.sign(new JwsToken<>(header, payload));
 	    Assertions.assertNotNull(token);
@@ -119,8 +119,8 @@ public class DsaJwsSignerTest {
 	    Assertions.assertNotNull(token.getHeader());
 	    Assertions.assertNotNull(token.getPayload());
 
-	    Assertions.assertEquals("JWT", token.getHeader().getType());
-	    Assertions.assertEquals("ES256", token.getHeader().getAlgorithm());
+	    Assertions.assertEquals("JWT", token.getHeader().getTyp());
+	    Assertions.assertEquals("ES256", token.getHeader().getAlg());
 	    Assertions.assertEquals("Issuer1", token.getPayload().iss);
 
 	} catch (Exception ex) {
@@ -144,7 +144,7 @@ public class DsaJwsSignerTest {
 		    .setPublicKey(keyPair.getPublic()).build();
 
 	    JoseHeader header = signer.newHeader();
-	    JwsPayload payload = new JwsPayload().setIssuer("Issuer1").setExpiresIn(1, TimeUnit.HOURS);
+	    JwsPayload payload = new JwsPayload().setIssuer("Issuer1").setExp(1, TimeUnit.HOURS);
 
 	    String token = signer.sign(new JwsToken<>(header, payload));
 	    Assertions.assertNotNull(token);
@@ -186,8 +186,8 @@ public class DsaJwsSignerTest {
 	    Assertions.assertNotNull(token.getHeader());
 	    Assertions.assertNotNull(token.getPayload());
 
-	    Assertions.assertEquals("JWT", token.getHeader().getType());
-	    Assertions.assertEquals("RS256", token.getHeader().getAlgorithm());
+	    Assertions.assertEquals("JWT", token.getHeader().getTyp());
+	    Assertions.assertEquals("RS256", token.getHeader().getAlg());
 	    Assertions.assertEquals("Issuer1", token.getPayload().iss);
 
 	} catch (Exception ex) {

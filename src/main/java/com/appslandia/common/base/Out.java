@@ -46,8 +46,8 @@ public class Out<T> {
 	return this.value != null ? this.value : defaultValue;
     }
 
-    public Out<T> setNull() {
-	this.value = null;
+    public Out<T> set(T value) {
+	this.value = value;
 	return this;
     }
 

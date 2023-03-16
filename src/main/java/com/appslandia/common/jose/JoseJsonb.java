@@ -21,6 +21,7 @@
 package com.appslandia.common.jose;
 
 import com.appslandia.common.json.JsonbProcessor;
+import com.appslandia.common.utils.ObjectUtils;
 
 import jakarta.json.bind.JsonbConfig;
 
@@ -32,7 +33,15 @@ import jakarta.json.bind.JsonbConfig;
 public class JoseJsonb {
 
     public static JsonbConfig newJsonbConfig() {
-	return JsonbProcessor.newConfig().withAdapters(new JsonbJoseHeaderAdapter(true), new JsonbJwtPayloadAdapter(true));
+	// @formatter:off
+	return JsonbProcessor.newConfig().withAdapters(
+		new JsonbJoseHeaderAdapter(true, map -> new JoseHeader(map))
+			.setValueConverter("jwk", k -> new JsonWebKey(ObjectUtils.cast(k))),
+
+		new JsonbJwtPayloadAdapter(true, map -> new JwtPayload(map))
+			.setValueConverter("jwks\\[\\d+]", k -> new JsonWebKey(ObjectUtils.cast(k)))
+		);
+	// @formatter:on
     }
 
     public static JsonbProcessor newJsonProcessor() {

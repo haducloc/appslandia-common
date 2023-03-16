@@ -63,20 +63,20 @@ public class JoseHeader extends JoseMapObject {
 	return this;
     }
 
-    public String getType() {
+    public String getTyp() {
 	return (String) this.get(TYP);
     }
 
-    public JoseHeader setType(String value) {
+    public JoseHeader setTyp(String value) {
 	this.put(TYP, value);
 	return this;
     }
 
-    public String getAlgorithm() {
+    public String getAlg() {
 	return (String) this.get(ALG);
     }
 
-    public JoseHeader setAlgorithm(String value) {
+    public JoseHeader setAlg(String value) {
 	this.put(ALG, value);
 	return this;
     }
@@ -87,6 +87,15 @@ public class JoseHeader extends JoseMapObject {
 
     public JoseHeader setKid(String value) {
 	this.put(KID, value);
+	return this;
+    }
+
+    public String getJku() {
+	return (String) this.get(JKU);
+    }
+
+    public JoseHeader setJku(String value) {
+	this.put(JKU, value);
 	return this;
     }
 }

@@ -42,7 +42,7 @@ public class HsJwsSignerTest {
 	String iss;
 	Long exp;
 
-	public JwsPayload setExpiresIn(long expiresIn, TimeUnit unit) {
+	public JwsPayload setExp(long expiresIn, TimeUnit unit) {
 	    long timeInMs = System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(expiresIn, unit);
 	    this.exp = JoseUtils.toNumericDate(timeInMs);
 	    return this;
@@ -61,7 +61,7 @@ public class HsJwsSignerTest {
 	    JwsSigner<JwsPayload> signer = HsJwsSigner.HS256(JwsPayload.class).setJsonProcessor(JoseGson.newJsonProcessor()).setSecret("secret".getBytes()).build();
 
 	    JoseHeader header = signer.newHeader();
-	    JwsPayload payload = new JwsPayload().setIssuer("Issuer1").setExpiresIn(1, TimeUnit.HOURS);
+	    JwsPayload payload = new JwsPayload().setIssuer("Issuer1").setExp(1, TimeUnit.HOURS);
 
 	    String token = signer.sign(new JwsToken<>(header, payload));
 	    Assertions.assertNotNull(token);
@@ -101,8 +101,8 @@ public class HsJwsSignerTest {
 	    Assertions.assertNotNull(token.getHeader());
 	    Assertions.assertNotNull(token.getPayload());
 
-	    Assertions.assertEquals("JWT", token.getHeader().getType());
-	    Assertions.assertEquals("HS256", token.getHeader().getAlgorithm());
+	    Assertions.assertEquals("JWT", token.getHeader().getTyp());
+	    Assertions.assertEquals("HS256", token.getHeader().getAlg());
 	    Assertions.assertEquals("Issuer1", token.getPayload().iss);
 
 	} catch (Exception ex) {

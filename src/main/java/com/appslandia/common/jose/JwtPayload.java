@@ -55,7 +55,7 @@ public class JwtPayload extends JoseMapObject {
     public boolean isForAudience(String checkingAudience) {
 	Asserts.notNull(checkingAudience);
 
-	String[] auds = getAudiences();
+	String[] auds = getAud();
 	if (auds == null) {
 	    return false;
 	}
@@ -80,25 +80,25 @@ public class JwtPayload extends JoseMapObject {
 	return this;
     }
 
-    public String getIssuer() {
+    public String getIss() {
 	return (String) this.get(ISS);
     }
 
-    public JwtPayload setIssuer(String value) {
+    public JwtPayload setIss(String value) {
 	this.put(ISS, value);
 	return this;
     }
 
-    public String getSubject() {
+    public String getSub() {
 	return (String) this.get(SUB);
     }
 
-    public JwtPayload setSubject(String value) {
+    public JwtPayload setSub(String value) {
 	this.put(SUB, value);
 	return this;
     }
 
-    public String[] getAudiences() {
+    public String[] getAud() {
 	Object value = this.get(AUD);
 	if (value == null) {
 	    return null;
@@ -116,7 +116,7 @@ public class JwtPayload extends JoseMapObject {
 	return col.toArray(new String[col.size()]);
     }
 
-    public JwtPayload setAudiences(String... values) {
+    public JwtPayload setAud(String... values) {
 	if (values.length == 0) {
 	    return this;
 	}
@@ -124,47 +124,47 @@ public class JwtPayload extends JoseMapObject {
 	return this;
     }
 
-    public Date getExpiresAt() {
+    public Date getExp() {
 	return getNumericDate(EXP);
     }
 
-    public JwtPayload setExpiresAt(Date value) {
+    public JwtPayload setExp(Date value) {
 	setNumericDate(EXP, value);
 	return this;
     }
 
-    public JwtPayload setExpiresIn(long expiresIn, TimeUnit unit) {
+    public JwtPayload setExp(long expiresIn, TimeUnit unit) {
 	setNumericDate(EXP, System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(expiresIn, unit));
 	return this;
     }
 
-    public Date getNotBefore() {
+    public Date getNbf() {
 	return getNumericDate(NBF);
     }
 
-    public JwtPayload setNotBefore(Date value) {
+    public JwtPayload setNbf(Date value) {
 	setNumericDate(NBF, value);
 	return this;
     }
 
-    public Date getIssuedAt() {
+    public Date getIat() {
 	return getNumericDate(IAT);
     }
 
-    public JwtPayload setIssuedAt(Date value) {
+    public JwtPayload setIat(Date value) {
 	setNumericDate(IAT, value);
 	return this;
     }
 
-    public JwtPayload setIssuedAtNow() {
-	return setIssuedAt(new Date());
+    public JwtPayload setIatNow() {
+	return setIat(new Date());
     }
 
-    public String getJwtId() {
+    public String getJti() {
 	return (String) this.get(JTI);
     }
 
-    public JwtPayload setJwtId(String value) {
+    public JwtPayload setJti(String value) {
 	this.put(JTI, value);
 	return this;
     }

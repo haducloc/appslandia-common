@@ -24,8 +24,6 @@ import java.math.BigInteger;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.RSAPublicKeySpec;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import com.appslandia.common.crypto.CryptoException;
 import com.appslandia.common.crypto.CryptoUtils;
@@ -52,13 +50,13 @@ public class RSAPublicKeyJwkConverter extends JwkConverter<RSAPublicKey> impleme
     }
 
     @Override
-    public Map<String, Object> toJsonWebKey(RSAPublicKey key) {
+    public JsonWebKey toJsonWebKey(RSAPublicKey key) {
 	this.initialize();
 	Asserts.isTrue("RSA".equals(key.getAlgorithm()));
 
 	// jwk
-	Map<String, Object> jwk = new LinkedHashMap<>();
-	jwk.put("kty", this.kty);
+	JsonWebKey jwk = new JsonWebKey();
+	jwk.setKty(this.kty);
 
 	byte[] nBytes = CryptoUtils.stripLeadingZeros(key.getModulus().toByteArray());
 	byte[] eBytes = CryptoUtils.stripLeadingZeros(key.getPublicExponent().toByteArray());
@@ -70,14 +68,12 @@ public class RSAPublicKeyJwkConverter extends JwkConverter<RSAPublicKey> impleme
     }
 
     @Override
-    public RSAPublicKey fromJsonWebKey(Map<String, Object> key) throws CryptoException {
+    public RSAPublicKey fromJsonWebKey(JsonWebKey jwk) throws CryptoException {
 	this.initialize();
+	Asserts.isTrue(this.kty.equals(kty), "kty doesn't match.");
 
-	String kty = Asserts.notNull((String) key.get("kty"), "kty is required.");
-	Asserts.isTrue(this.kty.equals(kty));
-
-	String n = Asserts.notNull((String) key.get("n"), "n is required.");
-	String e = Asserts.notNull((String) key.get("e"), "e is required.");
+	String n = Asserts.notNull((String) jwk.get("n"), "n is required.");
+	String e = Asserts.notNull((String) jwk.get("e"), "e is required.");
 
 	byte[] nBytes = JoseUtils.getJoseBase64().decode(n);
 	byte[] eBytes = JoseUtils.getJoseBase64().decode(e);

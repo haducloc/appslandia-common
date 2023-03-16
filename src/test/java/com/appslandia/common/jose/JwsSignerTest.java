@@ -54,8 +54,8 @@ public class JwsSignerTest {
 	    Assertions.assertNotNull(token.getHeader());
 	    Assertions.assertNotNull(token.getPayload());
 
-	    Assertions.assertEquals("JWT", token.getHeader().getType());
-	    Assertions.assertEquals("HS256", token.getHeader().getAlgorithm());
+	    Assertions.assertEquals("JWT", token.getHeader().getTyp());
+	    Assertions.assertEquals("HS256", token.getHeader().getAlg());
 
 	    Assertions.assertTrue(Arrays.equals(MathUtils.toByteArray(1, 100), token.getPayload()));
 

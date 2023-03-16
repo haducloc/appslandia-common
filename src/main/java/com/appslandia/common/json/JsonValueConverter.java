@@ -30,7 +30,7 @@ import com.appslandia.common.base.Out;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public interface JsonElementConverter {
+public interface JsonValueConverter {
 
     boolean isJsonNull(Object element);
 

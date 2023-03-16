@@ -27,49 +27,55 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.ObjectUtils;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JsonMapParser extends InitializeObject {
+public class JsonObjectParser extends InitializeObject {
 
-    final Map<String, BiFunction<Object, Boolean, Object>> valueConverters = new LinkedHashMap<>();
+    static final String ROOT_PATH = "";
+
+    final Map<String, Function<Object, Object>> valueConverters = new LinkedHashMap<>();
     final Map<String, Pattern> pathPatterns = new ConcurrentHashMap<>();
 
-    private JsonElementConverter jsonElementConverter;
+    private JsonValueConverter jsonValueConverter;
 
     @Override
     protected void init() throws Exception {
-	Asserts.notNull(this.jsonElementConverter);
+	Asserts.notNull(this.jsonValueConverter);
     }
 
-    public JsonMapParser setValueConverter(String pathOrPattern, BiFunction<Object, Boolean, Object> converter) {
+    public <F, V> JsonObjectParser setValueConverter(String pathOrPattern, Function<F, V> converter) {
 	this.assertNotInitialized();
-
-	this.valueConverters.put(pathOrPattern, converter);
+	this.valueConverters.put(pathOrPattern, ObjectUtils.cast(converter));
 	return this;
     }
 
-    public JsonMapParser setJsonElementConverter(JsonElementConverter jsonElementConverter) {
+    public <V> JsonObjectParser setRootConverter(Function<Map<String, Object>, V> converter) {
+	return setValueConverter(ROOT_PATH, converter);
+    }
+
+    public JsonObjectParser setJsonValueConverter(JsonValueConverter jsonValueConverter) {
 	this.assertNotInitialized();
-	this.jsonElementConverter = jsonElementConverter;
+	this.jsonValueConverter = jsonValueConverter;
 	return this;
     }
 
-    public Map<String, Object> parseMap(Object rootElement, boolean unmodifiable) {
+    public Object parse(Object rootElement, boolean unmodifiable) {
 	this.initialize();
 	Asserts.notNull(rootElement);
 
 	Out<Boolean> asResult = new Out<>();
-	Iterator<Map.Entry<String, Object>> elementEntries = this.jsonElementConverter.asJsonObject(rootElement, asResult);
+	Iterator<Map.Entry<String, Object>> elementEntries = this.jsonValueConverter.asJsonObject(rootElement, asResult);
 	Asserts.isTrue(Boolean.TRUE.equals(asResult.value));
 
 	Map<String, Object> rootMap = new LinkedHashMap<>();
@@ -81,26 +87,29 @@ public class JsonMapParser extends InitializeObject {
 	    int len = path.length();
 	    path.append(elementEntry.getKey());
 
-	    Object parsedVal = parseValue(elementEntry.getValue(), unmodifiable, path, asResult.setNull());
+	    Object parsedVal = parseValue(elementEntry.getValue(), unmodifiable, path, asResult.set(false));
 	    parsedVal = convertValue(parsedVal, path.toString(), unmodifiable);
 
 	    rootMap.put(elementEntry.getKey(), parsedVal);
 	    path.delete(len, path.length());
 	}
-	return unmodifiable ? Collections.unmodifiableMap(rootMap) : rootMap;
+
+	Map<String, Object> rMap = unmodifiable ? Collections.unmodifiableMap(rootMap) : rootMap;
+	Function<Object, Object> rootConverter = this.valueConverters.get(ROOT_PATH);
+	return (rootConverter != null) ? rootConverter.apply(rMap) : rMap;
     }
 
     protected Object convertValue(Object value, String path, boolean unmodifiable) {
-	BiFunction<Object, Boolean, Object> converter = this.valueConverters.get(path);
+	Function<Object, Object> converter = this.valueConverters.get(path);
 	if (converter != null) {
-	    return converter.apply(value, unmodifiable);
+	    return converter.apply(value);
 	}
-	for (Map.Entry<String, BiFunction<Object, Boolean, Object>> converterEntry : this.valueConverters.entrySet()) {
+	for (Map.Entry<String, Function<Object, Object>> converterEntry : this.valueConverters.entrySet()) {
 
 	    Pattern pattern = this.pathPatterns.computeIfAbsent(converterEntry.getKey(), (p) -> Pattern.compile(p, Pattern.CASE_INSENSITIVE));
 	    if (pattern.matcher(path).matches()) {
 
-		return converterEntry.getValue().apply(value, unmodifiable);
+		return converterEntry.getValue().apply(value);
 	    }
 	}
 	return value;
@@ -108,24 +117,24 @@ public class JsonMapParser extends InitializeObject {
 
     protected Object parseValue(Object element, boolean unmodifiable, StringBuilder path, Out<Boolean> asResult) {
 	// NULL
-	if (this.jsonElementConverter.isJsonNull(element)) {
+	if (this.jsonValueConverter.isJsonNull(element)) {
 	    return null;
 	}
 
 	// String
-	String strValue = this.jsonElementConverter.asString(element, asResult.setNull());
+	String strValue = this.jsonValueConverter.asString(element, asResult.set(false));
 	if (Boolean.TRUE.equals(asResult.value)) {
 	    return strValue;
 	}
 
 	// Boolean
-	boolean boolValue = this.jsonElementConverter.asBoolean(element, asResult.setNull());
+	boolean boolValue = this.jsonValueConverter.asBoolean(element, asResult.set(false));
 	if (Boolean.TRUE.equals(asResult.value)) {
 	    return boolValue;
 	}
 
 	// Double/Long
-	String numberVal = this.jsonElementConverter.asNumber(element, asResult.setNull());
+	String numberVal = this.jsonValueConverter.asNumber(element, asResult.set(false));
 	if (Boolean.TRUE.equals(asResult.value)) {
 	    try {
 		return Long.valueOf(numberVal);
@@ -136,7 +145,7 @@ public class JsonMapParser extends InitializeObject {
 	}
 
 	// Array
-	Iterator<?> childElements = this.jsonElementConverter.asJsonArray(element, asResult.setNull());
+	Iterator<?> childElements = this.jsonValueConverter.asJsonArray(element, asResult.set(false));
 	if (Boolean.TRUE.equals(asResult.value)) {
 
 	    List<Object> list = new LinkedList<>();
@@ -148,7 +157,7 @@ public class JsonMapParser extends InitializeObject {
 		int len = path.length();
 		path.append("[" + (idx++) + "]");
 
-		Object parsedVal = parseValue(childElement, unmodifiable, path, asResult.setNull());
+		Object parsedVal = parseValue(childElement, unmodifiable, path, asResult.set(false));
 		parsedVal = convertValue(parsedVal, path.toString(), unmodifiable);
 
 		list.add(parsedVal);
@@ -158,7 +167,7 @@ public class JsonMapParser extends InitializeObject {
 	}
 
 	// MAP
-	Iterator<Map.Entry<String, Object>> childElementEntries = this.jsonElementConverter.asJsonObject(element, asResult.setNull());
+	Iterator<Map.Entry<String, Object>> childElementEntries = this.jsonValueConverter.asJsonObject(element, asResult.set(false));
 	if (Boolean.TRUE.equals(asResult.value)) {
 
 	    Map<String, Object> map = new LinkedHashMap<>();
@@ -169,7 +178,7 @@ public class JsonMapParser extends InitializeObject {
 		int len = path.length();
 		path.append(".").append(childElementEntry.getKey());
 
-		Object parsedVal = parseValue(childElementEntry.getValue(), unmodifiable, path, asResult.setNull());
+		Object parsedVal = parseValue(childElementEntry.getValue(), unmodifiable, path, asResult.set(false));
 		parsedVal = convertValue(parsedVal, path.toString(), unmodifiable);
 
 		map.put(childElementEntry.getKey(), parsedVal);
