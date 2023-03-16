@@ -46,8 +46,8 @@ public class DsaJwtSigner extends DsaJwsSigner<JwtPayload> {
     }
 
     @Override
-    public DsaJwtSigner setSignAlgProvider(String signAlgProvider) {
-	super.setSignAlgProvider(signAlgProvider);
+    public DsaJwtSigner setSignatureProvider(String signatureProvider) {
+	super.setSignatureProvider(signatureProvider);
 	return this;
     }
 

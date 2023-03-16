@@ -47,11 +47,10 @@ import com.appslandia.common.utils.STR;
  */
 public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> implements Cloneable {
 
-    private String ecAlgParamsProvider;
     private String ecKeyFactoryProvider;
 
-    final ConcurrentMap<String, AlgorithmParametersUtil<ECParameterSpec>> ecAlgorithmParametersUtils = new ConcurrentHashMap<>();
-    private KeyFactoryUtil ecKeyFactoryUtil;
+    final ConcurrentMap<String, AlgorithmParametersUtil<ECParameterSpec>> algorithmParametersUtils = new ConcurrentHashMap<>();
+    private KeyFactoryUtil keyFactoryUtil;
 
     public EcPublicKeyJwkConverter() {
 	super("EC");
@@ -59,7 +58,7 @@ public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> implement
 
     @Override
     protected void init() throws Exception {
-	this.ecKeyFactoryUtil = new KeyFactoryUtil("EC", this.ecKeyFactoryProvider);
+	this.keyFactoryUtil = new KeyFactoryUtil("EC", this.ecKeyFactoryProvider);
     }
 
     @Override
@@ -100,11 +99,11 @@ public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> implement
 	String y = Asserts.notNull((String) key.get("y"), "y is required.");
 
 	// algorithmParametersUtil
-	AlgorithmParametersUtil<ECParameterSpec> algorithmParametersUtil = this.ecAlgorithmParametersUtils.computeIfAbsent(stdName, (name) -> {
+	AlgorithmParametersUtil<ECParameterSpec> algorithmParametersUtil = this.algorithmParametersUtils.computeIfAbsent(stdName, (name) -> {
 
-	    AlgorithmParametersUtil<ECParameterSpec> impl = new AlgorithmParametersUtil<>("EC", this.ecAlgParamsProvider);
+	    AlgorithmParametersUtil<ECParameterSpec> impl = new AlgorithmParametersUtil<>("EC", this.ecKeyFactoryProvider);
 	    impl.setParamSpecClass(ECParameterSpec.class);
-	    impl.setInitAlgParamSpec(new ECGenParameterSpec(name));
+	    impl.setAlgParamSpec(new ECGenParameterSpec(name));
 
 	    return impl;
 	});
@@ -119,14 +118,8 @@ public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> implement
 	ECPoint ecPoint = new ECPoint(new BigInteger(1, xBytes), new BigInteger(1, yBytes));
 	ECPublicKeySpec pubKeySpec = new ECPublicKeySpec(ecPoint, ecSpec);
 
-	PublicKey pk = this.ecKeyFactoryUtil.toPublicKey(pubKeySpec);
+	PublicKey pk = this.keyFactoryUtil.toPublicKey(pubKeySpec);
 	return (ECPublicKey) pk;
-    }
-
-    public EcPublicKeyJwkConverter setEcAlgParamsProvider(String ecAlgParamsProvider) {
-	assertNotInitialized();
-	this.ecAlgParamsProvider = ecAlgParamsProvider;
-	return this;
     }
 
     public EcPublicKeyJwkConverter setEcKeyFactoryProvider(String ecKeyFactoryProvider) {
@@ -137,7 +130,7 @@ public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> implement
 
     @Override
     public EcPublicKeyJwkConverter clone() {
-	return new EcPublicKeyJwkConverter().setEcAlgParamsProvider(this.ecAlgParamsProvider).setEcKeyFactoryProvider(this.ecKeyFactoryProvider);
+	return new EcPublicKeyJwkConverter().setEcKeyFactoryProvider(this.ecKeyFactoryProvider);
     }
 
     protected String getCurveName(EllipticCurve curve) {

@@ -194,7 +194,7 @@ public class DsaJwtSignerTest {
 	    KeyPair keyPair = generateRSKeyPair();
 
 	    // signer
-	    JwtSigner signer = DsaJwtSigner.PS256().setSignAlgProvider("BC").setJsonProcessor(JoseGson.newJsonProcessor()).setPrivateKey(keyPair.getPrivate())
+	    JwtSigner signer = DsaJwtSigner.PS256().setSignatureProvider("BC").setJsonProcessor(JoseGson.newJsonProcessor()).setPrivateKey(keyPair.getPrivate())
 		    .setPublicKey(keyPair.getPublic()).setIssuer("Issuer1").build();
 
 	    JoseHeader header = signer.newHeader();
@@ -231,7 +231,7 @@ public class DsaJwtSignerTest {
 	    String fusionauthJwt = io.fusionauth.jwt.domain.JWT.getEncoder().encode(jwt, rsapssSigner);
 
 	    // signer
-	    JwtSigner signer = DsaJwtSigner.PS256().setSignAlgProvider("BC").setJsonProcessor(JoseGson.newJsonProcessor()).setPrivateKey(keyPair.getPrivate())
+	    JwtSigner signer = DsaJwtSigner.PS256().setSignatureProvider("BC").setJsonProcessor(JoseGson.newJsonProcessor()).setPrivateKey(keyPair.getPrivate())
 		    .setPublicKey(keyPair.getPublic()).setIssuer("Issuer1").build();
 
 	    JwtToken token = signer.parse(fusionauthJwt);

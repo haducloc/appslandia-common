@@ -45,8 +45,8 @@ public class HsJwsSigner<P> {
 	this.payloadClass = Asserts.notNull(payloadClass);
     }
 
-    public HsJwsSigner<P> setMacAlgProvider(String macAlgProvider) {
-	this.signer.setProvider(macAlgProvider);
+    public HsJwsSigner<P> setMacProvider(String macProvider) {
+	this.signer.setProvider(macProvider);
 	return this;
     }
 

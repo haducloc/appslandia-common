@@ -40,7 +40,7 @@ import com.appslandia.common.utils.Asserts;
 public class RSAPublicKeyJwkConverter extends JwkConverter<RSAPublicKey> implements Cloneable {
 
     private String rsaKeyFactoryProvider;
-    private KeyFactoryUtil rsaKeyFactoryUtil;
+    private KeyFactoryUtil keyFactoryUtil;
 
     public RSAPublicKeyJwkConverter() {
 	super("RSA");
@@ -48,7 +48,7 @@ public class RSAPublicKeyJwkConverter extends JwkConverter<RSAPublicKey> impleme
 
     @Override
     protected void init() throws Exception {
-	this.rsaKeyFactoryUtil = new KeyFactoryUtil("RSA", this.rsaKeyFactoryProvider);
+	this.keyFactoryUtil = new KeyFactoryUtil("RSA", this.rsaKeyFactoryProvider);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class RSAPublicKeyJwkConverter extends JwkConverter<RSAPublicKey> impleme
 	byte[] eBytes = JoseUtils.getJoseBase64().decode(e);
 
 	RSAPublicKeySpec keySpec = new RSAPublicKeySpec(new BigInteger(1, nBytes), new BigInteger(1, eBytes));
-	PublicKey publicKey = this.rsaKeyFactoryUtil.toPublicKey(keySpec);
+	PublicKey publicKey = this.keyFactoryUtil.toPublicKey(keySpec);
 
 	return (RSAPublicKey) publicKey;
     }

@@ -53,8 +53,8 @@ public class DsaJwsSigner<P> {
 	this.payloadClass = Asserts.notNull(payloadClass);
     }
 
-    public DsaJwsSigner<P> setSignAlgProvider(String signAlgProvider) {
-	this.signer.setProvider(signAlgProvider);
+    public DsaJwsSigner<P> setSignatureProvider(String signatureProvider) {
+	this.signer.setProvider(signatureProvider);
 	return this;
     }
 
