@@ -22,6 +22,7 @@ package com.appslandia.common.jose;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.Security;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPrivateKey;
@@ -29,6 +30,7 @@ import java.security.interfaces.RSAPublicKey;
 import java.security.spec.ECGenParameterSpec;
 import java.util.concurrent.TimeUnit;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -37,12 +39,19 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import io.fusionauth.jwt.rsa.RSAPSSSigner;
+import io.fusionauth.jwt.rsa.RSAPSSVerifier;
+
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
 public class DsaJwtSignerTest {
+
+    static {
+	Security.addProvider(new BouncyCastleProvider());
+    }
 
     private static KeyPair generateECKeyPair() throws Exception {
 	KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
@@ -172,6 +181,68 @@ public class DsaJwtSignerTest {
 
 	    Assertions.assertEquals("JWT", token.getHeader().getType());
 	    Assertions.assertEquals("RS256", token.getHeader().getAlgorithm());
+	    Assertions.assertEquals("Issuer1", token.getPayload().get("iss"));
+
+	} catch (Exception ex) {
+	    Assertions.fail(ex.getMessage());
+	}
+    }
+
+    @Test
+    public void test_PS() {
+	try {
+	    KeyPair keyPair = generateRSKeyPair();
+
+	    // signer
+	    JwtSigner signer = DsaJwtSigner.PS256().setSignAlgProvider("BC").setJsonProcessor(JoseGson.newJsonProcessor()).setPrivateKey(keyPair.getPrivate())
+		    .setPublicKey(keyPair.getPublic()).setIssuer("Issuer1").build();
+
+	    JoseHeader header = signer.newHeader();
+	    JwtPayload payload = signer.newPayload().setExpiresIn(1, TimeUnit.DAYS).setIssuedAtNow();
+
+	    String token = signer.sign(new JwtToken(header, payload));
+	    Assertions.assertNotNull(token);
+
+	    // fusionauth
+	    RSAPSSVerifier verifier = RSAPSSVerifier.newVerifier(keyPair.getPublic());
+	    io.fusionauth.jwt.domain.JWT jwt = io.fusionauth.jwt.domain.JWT.getDecoder().decode(token, verifier);
+
+	    Assertions.assertNotNull(jwt);
+	    Assertions.assertNotNull(jwt.header);
+	    Assertions.assertNotNull(jwt.header.algorithm);
+
+	    Assertions.assertEquals("Issuer1", jwt.getString("iss"));
+	    Assertions.assertEquals("JWT", jwt.header.type);
+	    // Assertions.assertEquals("PS256", jwt.header.algorithm.getName());
+
+	} catch (Exception ex) {
+	    Assertions.fail(ex.getMessage());
+	}
+    }
+
+    @Test
+    public void test_PS_verify() {
+	try {
+	    KeyPair keyPair = generateRSKeyPair();
+
+	    // fusionauth
+	    RSAPSSSigner rsapssSigner = RSAPSSSigner.newSHA256Signer((RSAPrivateKey) keyPair.getPrivate());
+	    io.fusionauth.jwt.domain.JWT jwt = new io.fusionauth.jwt.domain.JWT().setIssuer("Issuer1");
+	    String fusionauthJwt = io.fusionauth.jwt.domain.JWT.getEncoder().encode(jwt, rsapssSigner);
+
+	    // signer
+	    JwtSigner signer = DsaJwtSigner.PS256().setSignAlgProvider("BC").setJsonProcessor(JoseGson.newJsonProcessor()).setPrivateKey(keyPair.getPrivate())
+		    .setPublicKey(keyPair.getPublic()).setIssuer("Issuer1").build();
+
+	    JwtToken token = signer.parse(fusionauthJwt);
+	    signer.verify(token);
+
+	    Assertions.assertNotNull(token);
+	    Assertions.assertNotNull(token.getHeader());
+	    Assertions.assertNotNull(token.getPayload());
+
+	    Assertions.assertEquals("JWT", token.getHeader().getType());
+	    Assertions.assertEquals("PS256", token.getHeader().getAlgorithm());
 	    Assertions.assertEquals("Issuer1", token.getPayload().get("iss"));
 
 	} catch (Exception ex) {

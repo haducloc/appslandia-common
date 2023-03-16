@@ -26,6 +26,8 @@
 		<version.glassfish-jakarta-el>5.0.0-M1</version.glassfish-jakarta-el>
 		<version.hibernate-validator>8.0.0.Final</version.hibernate-validator>
 		<version.auth0-jwt>4.3.0</version.auth0-jwt>
+		<version.fusionauth-jwt>5.2.2</version.fusionauth-jwt>
+		<version.bouncy-castle-bcpkix>1.72</version.bouncy-castle-bcpkix>
 		<version.junit-jupiter-api>5.9.2</version.junit-jupiter-api>
 	</properties>
 	<licenses>
@@ -198,6 +200,18 @@
 			<groupId>com.auth0</groupId>
 			<artifactId>java-jwt</artifactId>
 			<version>${version.auth0-jwt}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.fusionauth</groupId>
+			<artifactId>fusionauth-jwt</artifactId>
+			<version>${version.fusionauth-jwt}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcpkix-jdk18on</artifactId>
+			<version>${version.bouncy-castle-bcpkix}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

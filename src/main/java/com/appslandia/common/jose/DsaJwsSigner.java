@@ -22,10 +22,15 @@ package com.appslandia.common.jose;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.spec.AlgorithmParameterSpec;
+import java.security.spec.MGF1ParameterSpec;
+import java.security.spec.PSSParameterSpec;
+import java.util.function.Function;
 
 import com.appslandia.common.crypto.SignatureSigner;
 import com.appslandia.common.json.JsonProcessor;
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -50,6 +55,11 @@ public class DsaJwsSigner<P> {
 
     public DsaJwsSigner<P> setSignAlgProvider(String signAlgProvider) {
 	this.signer.setProvider(signAlgProvider);
+	return this;
+    }
+
+    public DsaJwsSigner<P> setAlgParamSpec(Function<String, AlgorithmParameterSpec> algParamSpec) {
+	this.signer.setAlgParamSpec(algParamSpec);
 	return this;
     }
 
@@ -100,5 +110,33 @@ public class DsaJwsSigner<P> {
 
     public static <P> DsaJwsSigner<P> RS512(Class<P> payloadClass) {
 	return new DsaJwsSigner<P>("RS512", "SHA512withRSA", payloadClass);
+    }
+
+    public static <P> DsaJwsSigner<P> PS256(Class<P> payloadClass) {
+	return new DsaJwsSigner<P>("PS256", "SHA256withRSA/PSS", payloadClass).setAlgParamSpec(DsaJwsSigner::toPSSParameterSpec);
+    }
+
+    public static <P> DsaJwsSigner<P> PS384(Class<P> payloadClass) {
+	return new DsaJwsSigner<P>("PS384", "SHA384withRSA/PSS", payloadClass).setAlgParamSpec(DsaJwsSigner::toPSSParameterSpec);
+    }
+
+    public static <P> DsaJwsSigner<P> PS512(Class<P> payloadClass) {
+	return new DsaJwsSigner<P>("PS512", "SHA512withRSA/PSS", payloadClass).setAlgParamSpec(DsaJwsSigner::toPSSParameterSpec);
+    }
+
+    protected static PSSParameterSpec toPSSParameterSpec(String signatureAlgorithm) {
+	switch (signatureAlgorithm) {
+	case "SHA256withRSA/PSS":
+	    return new PSSParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA256, 32, 1);
+
+	case "SHA384withRSA/PSS":
+	    return new PSSParameterSpec("SHA-384", "MGF1", MGF1ParameterSpec.SHA384, 48, 1);
+
+	case "SHA512withRSA/PSS":
+	    return new PSSParameterSpec("SHA-512", "MGF1", MGF1ParameterSpec.SHA512, 64, 1);
+	default:
+	    break;
+	}
+	throw new IllegalArgumentException(STR.fmt("Unsupported signatureAlgorithm: {}", signatureAlgorithm));
     }
 }
