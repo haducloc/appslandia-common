@@ -67,7 +67,7 @@ public class DsaJwtSignerTest {
 
 	    // signer
 	    JwtSigner signer = DsaJwtSigner.ES256().setJsonProcessor(JoseGson.newJsonProcessor()).setPrivateKey(keyPair.getPrivate()).setPublicKey(keyPair.getPublic())
-		    .setIssuer("Issuer1").build();
+		    .setIss("Issuer1").build();
 
 	    JoseHeader header = signer.newHeader();
 	    JwtPayload payload = signer.newPayload().setExp(1, TimeUnit.DAYS).setIatNow();
@@ -103,7 +103,7 @@ public class DsaJwtSignerTest {
 
 	    // signer
 	    JwtSigner signer = DsaJwtSigner.ES256().setJsonProcessor(JoseGson.newJsonProcessor()).setPrivateKey(keyPair.getPrivate()).setPublicKey(keyPair.getPublic())
-		    .setIssuer("Issuer1").build();
+		    .setIss("Issuer1").build();
 
 	    JwtToken token = signer.parse(auth0Jwt);
 	    signer.verify(token);
@@ -134,7 +134,7 @@ public class DsaJwtSignerTest {
 
 	    // signer
 	    JwtSigner signer = DsaJwtSigner.RS256().setJsonProcessor(JoseGson.newJsonProcessor()).setPrivateKey(keyPair.getPrivate()).setPublicKey(keyPair.getPublic())
-		    .setIssuer("Issuer1").build();
+		    .setIss("Issuer1").build();
 
 	    JoseHeader header = signer.newHeader();
 	    JwtPayload payload = signer.newPayload().setExp(1, TimeUnit.DAYS).setIatNow();
@@ -170,7 +170,7 @@ public class DsaJwtSignerTest {
 
 	    // signer
 	    JwtSigner signer = DsaJwtSigner.RS256().setJsonProcessor(JoseGson.newJsonProcessor()).setPrivateKey(keyPair.getPrivate()).setPublicKey(keyPair.getPublic())
-		    .setIssuer("Issuer1").build();
+		    .setIss("Issuer1").build();
 
 	    JwtToken token = signer.parse(auth0Jwt);
 	    signer.verify(token);
@@ -195,7 +195,7 @@ public class DsaJwtSignerTest {
 
 	    // signer
 	    JwtSigner signer = DsaJwtSigner.PS256().setSignatureProvider("BC").setJsonProcessor(JoseGson.newJsonProcessor()).setPrivateKey(keyPair.getPrivate())
-		    .setPublicKey(keyPair.getPublic()).setIssuer("Issuer1").build();
+		    .setPublicKey(keyPair.getPublic()).setIss("Issuer1").build();
 
 	    JoseHeader header = signer.newHeader();
 	    JwtPayload payload = signer.newPayload().setExp(1, TimeUnit.DAYS).setIatNow();
@@ -232,7 +232,7 @@ public class DsaJwtSignerTest {
 
 	    // signer
 	    JwtSigner signer = DsaJwtSigner.PS256().setSignatureProvider("BC").setJsonProcessor(JoseGson.newJsonProcessor()).setPrivateKey(keyPair.getPrivate())
-		    .setPublicKey(keyPair.getPublic()).setIssuer("Issuer1").build();
+		    .setPublicKey(keyPair.getPublic()).setIss("Issuer1").build();
 
 	    JwtToken token = signer.parse(fusionauthJwt);
 	    signer.verify(token);

@@ -94,14 +94,14 @@ public class JwsSigner<P> extends InitializeObject {
 	    this.alg = JWT_NONE_ALG;
 	}
 
-	// Type
+	// typ
 	this.defaultVerifiers.add((token) -> {
 	    if (!Objects.equals(this.type, token.getHeader().getTyp())) {
 		throw new JoseVerificationException("typ doesn't match.");
 	    }
 	});
 
-	// Algorithm
+	// alg
 	this.defaultVerifiers.add((token) -> {
 	    if (!Objects.equals(this.alg, token.getHeader().getAlg())) {
 		throw new JoseVerificationException("alg doesn't match.");

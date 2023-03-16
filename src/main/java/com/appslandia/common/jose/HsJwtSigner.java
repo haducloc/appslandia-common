@@ -25,6 +25,7 @@ import java.util.Set;
 
 import com.appslandia.common.json.JsonProcessor;
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.CollectionUtils;
 
 /**
  *
@@ -33,8 +34,8 @@ import com.appslandia.common.utils.Asserts;
  */
 public class HsJwtSigner extends HsJwsSigner<JwtPayload> {
 
-    protected String issuer;
-    protected Set<String> audiences;
+    protected String iss;
+    protected Set<String> aud;
     protected int leewaySec;
 
     public HsJwtSigner(String jwsAlgorithm, String macAlgorithm) {
@@ -71,16 +72,15 @@ public class HsJwtSigner extends HsJwsSigner<JwtPayload> {
 	return this;
     }
 
-    public HsJwtSigner setIssuer(String issuer) {
-	this.issuer = issuer;
+    public HsJwtSigner setIss(String iss) {
+	this.iss = iss;
 	return this;
     }
 
-    public HsJwtSigner addAudience(String audience) {
-	if (this.audiences == null) {
-	    this.audiences = new LinkedHashSet<>();
+    public HsJwtSigner setAud(String... aud) {
+	if ((aud != null) && (aud.length > 0)) {
+	    this.aud = CollectionUtils.toSet(new LinkedHashSet<>(), aud);
 	}
-	this.audiences.add(audience);
 	return this;
     }
 
@@ -93,9 +93,9 @@ public class HsJwtSigner extends HsJwsSigner<JwtPayload> {
     public JwtSigner build() {
 	Asserts.notNull(this.jsonProcessor);
 	JwtSigner impl = new JwtSigner().setJsonProcessor(this.jsonProcessor).setSigner(this.signer).setAlg(this.alg).setKid(this.kid).setLeewaySec(this.leewaySec)
-		.setIssuer(this.issuer);
+		.setIss(this.iss);
 
-	impl.audiences = this.audiences;
+	impl.aud = this.aud;
 	return impl.initialize();
     }
 

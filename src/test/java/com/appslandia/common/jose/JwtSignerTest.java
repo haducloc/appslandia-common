@@ -38,7 +38,7 @@ public class JwtSignerTest {
     public void test() {
 	JwtSigner signer = new JwtSigner().setJsonProcessor(JoseGson.newJsonProcessor());
 	signer.setAlg("HS256").setSigner(new MacSigner().setAlgorithm("HmacSHA256").setSecret("secret".getBytes()));
-	signer.setIssuer("Issuer1");
+	signer.setIss("Issuer1");
 
 	JoseHeader header = signer.newHeader();
 	JwtPayload payload = signer.newPayload().setExp(1, TimeUnit.DAYS).setIatNow();
@@ -66,7 +66,7 @@ public class JwtSignerTest {
     @Test
     public void test_none() {
 	JwtSigner signer = new JwtSigner().setJsonProcessor(JoseGson.newJsonProcessor());
-	signer.setIssuer("Issuer1");
+	signer.setIss("Issuer1");
 
 	JoseHeader header = signer.newHeader();
 	JwtPayload payload = signer.newPayload().setExp(1, TimeUnit.DAYS).setIatNow();

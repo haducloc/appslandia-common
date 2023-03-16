@@ -48,8 +48,8 @@ public class HsJwsSignerTest {
 	    return this;
 	}
 
-	public JwsPayload setIssuer(String issuer) {
-	    this.iss = issuer;
+	public JwsPayload setIss(String iss) {
+	    this.iss = iss;
 	    return this;
 	}
     }
@@ -61,7 +61,7 @@ public class HsJwsSignerTest {
 	    JwsSigner<JwsPayload> signer = HsJwsSigner.HS256(JwsPayload.class).setJsonProcessor(JoseGson.newJsonProcessor()).setSecret("secret".getBytes()).build();
 
 	    JoseHeader header = signer.newHeader();
-	    JwsPayload payload = new JwsPayload().setIssuer("Issuer1").setExp(1, TimeUnit.HOURS);
+	    JwsPayload payload = new JwsPayload().setIss("Issuer1").setExp(1, TimeUnit.HOURS);
 
 	    String token = signer.sign(new JwsToken<>(header, payload));
 	    Assertions.assertNotNull(token);

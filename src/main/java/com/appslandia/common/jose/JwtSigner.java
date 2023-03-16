@@ -31,6 +31,7 @@ import com.appslandia.common.crypto.SignatureSigner;
 import com.appslandia.common.json.JsonException;
 import com.appslandia.common.json.JsonProcessor;
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.CollectionUtils;
 
 /**
  *
@@ -39,8 +40,8 @@ import com.appslandia.common.utils.Asserts;
  */
 public class JwtSigner extends JwsSigner<JwtPayload> {
 
-    protected String issuer;
-    protected Set<String> audiences;
+    protected String iss;
+    protected Set<String> aud;
     protected int leewaySec;
 
     public JwtSigner() {
@@ -53,10 +54,10 @@ public class JwtSigner extends JwsSigner<JwtPayload> {
 
 	Asserts.isTrue(this.leewaySec >= 0);
 
-	// issuer
+	// iss
 	this.defaultVerifiers.add((token) -> {
-	    if (!Objects.equals(this.issuer, token.getPayload().getIss())) {
-		throw new JoseVerificationException("issuer doesn't match.");
+	    if (!Objects.equals(this.iss, token.getPayload().getIss())) {
+		throw new JoseVerificationException("iss doesn't match.");
 	    }
 	});
 
@@ -95,11 +96,11 @@ public class JwtSigner extends JwsSigner<JwtPayload> {
 	this.initialize();
 	JwtPayload payload = new JwtPayload();
 
-	if (this.issuer != null) {
-	    payload.setIss(this.issuer);
+	if (this.iss != null) {
+	    payload.setIss(this.iss);
 	}
-	if (this.audiences != null) {
-	    payload.setAud(this.audiences.toArray(new String[this.audiences.size()]));
+	if (this.aud != null) {
+	    payload.setAud(this.aud.toArray(new String[this.aud.size()]));
 	}
 	return payload;
     }
@@ -140,18 +141,17 @@ public class JwtSigner extends JwsSigner<JwtPayload> {
 	return this;
     }
 
-    public JwtSigner setIssuer(String issuer) {
+    public JwtSigner setIss(String iss) {
 	assertNotInitialized();
-	this.issuer = issuer;
+	this.iss = iss;
 	return this;
     }
 
-    public JwtSigner addAudience(String audience) {
+    public JwtSigner setAud(String... aud) {
 	assertNotInitialized();
-	if (this.audiences == null) {
-	    this.audiences = new LinkedHashSet<>();
+	if ((aud != null) && (aud.length > 0)) {
+	    this.aud = CollectionUtils.toSet(new LinkedHashSet<>(), aud);
 	}
-	this.audiences.add(audience);
 	return this;
     }
 

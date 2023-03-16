@@ -29,6 +29,7 @@ import java.util.function.Function;
 
 import com.appslandia.common.json.JsonProcessor;
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.CollectionUtils;
 
 /**
  *
@@ -37,8 +38,8 @@ import com.appslandia.common.utils.Asserts;
  */
 public class DsaJwtSigner extends DsaJwsSigner<JwtPayload> {
 
-    protected String issuer;
-    protected Set<String> audiences;
+    protected String iss;
+    protected Set<String> aud;
     protected int leewaySec;
 
     public DsaJwtSigner(String jwsAlgorithm, String signatureAlgorithm) {
@@ -80,16 +81,15 @@ public class DsaJwtSigner extends DsaJwsSigner<JwtPayload> {
 	return this;
     }
 
-    public DsaJwtSigner setIssuer(String issuer) {
-	this.issuer = issuer;
+    public DsaJwtSigner setIss(String iss) {
+	this.iss = iss;
 	return this;
     }
 
-    public DsaJwtSigner addAudience(String audience) {
-	if (this.audiences == null) {
-	    this.audiences = new LinkedHashSet<>();
+    public DsaJwtSigner setAud(String... aud) {
+	if ((aud != null) && (aud.length > 0)) {
+	    this.aud = CollectionUtils.toSet(new LinkedHashSet<>(), aud);
 	}
-	this.audiences.add(audience);
 	return this;
     }
 
@@ -102,9 +102,9 @@ public class DsaJwtSigner extends DsaJwsSigner<JwtPayload> {
     public JwtSigner build() {
 	Asserts.notNull(this.jsonProcessor);
 	JwtSigner impl = new JwtSigner().setJsonProcessor(this.jsonProcessor).setSigner(this.signer).setAlg(this.alg).setKid(this.kid).setLeewaySec(this.leewaySec)
-		.setIssuer(this.issuer);
+		.setIss(this.iss);
 
-	impl.audiences = this.audiences;
+	impl.aud = this.aud;
 	return impl.initialize();
     }
 
