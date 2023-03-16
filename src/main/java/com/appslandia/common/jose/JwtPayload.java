@@ -21,13 +21,11 @@
 package com.appslandia.common.jose;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import com.appslandia.common.utils.Asserts;
-import com.appslandia.common.utils.ObjectUtils;
 
 /**
  *
@@ -99,27 +97,11 @@ public class JwtPayload extends JoseMapObject {
     }
 
     public String[] getAud() {
-	Object value = this.get(AUD);
-	if (value == null) {
-	    return null;
-	}
-	if (value.getClass() == String.class) {
-	    return new String[] { (String) value };
-	}
-	Asserts.isTrue(value.getClass().isArray() || Collection.class.isAssignableFrom(value.getClass()));
-
-	if (value.getClass().isArray()) {
-	    return ObjectUtils.cast(value);
-	}
-
-	Collection<String> col = ObjectUtils.cast(value);
-	return col.toArray(new String[col.size()]);
+	return getStringArray(AUD);
     }
 
     public JwtPayload setAud(String... values) {
-	if ((values != null) && (values.length > 0)) {
-	    this.put(AUD, values);
-	}
+	setStringArray(AUD, values);
 	return this;
     }
 
