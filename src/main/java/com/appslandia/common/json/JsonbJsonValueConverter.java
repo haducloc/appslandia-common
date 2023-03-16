@@ -49,7 +49,7 @@ public class JsonbJsonValueConverter implements JsonValueConverter {
 	JsonValue JsonValue = (JsonValue) element;
 
 	if (JsonValue.getValueType() == ValueType.NUMBER) {
-	    asResult.value = Boolean.TRUE;
+	    asResult.value = true;
 	    return JsonValue.toString();
 	}
 	return null;
@@ -60,7 +60,7 @@ public class JsonbJsonValueConverter implements JsonValueConverter {
 	JsonValue JsonValue = (JsonValue) element;
 
 	if (JsonValue.getValueType() == ValueType.STRING) {
-	    asResult.value = Boolean.TRUE;
+	    asResult.value = true;
 	    return JsonValue.toString();
 	}
 	return null;
@@ -71,7 +71,7 @@ public class JsonbJsonValueConverter implements JsonValueConverter {
 	JsonValue JsonValue = (JsonValue) element;
 
 	if ((JsonValue.getValueType() == ValueType.TRUE) || (JsonValue.getValueType() == ValueType.FALSE)) {
-	    asResult.value = Boolean.TRUE;
+	    asResult.value = true;
 	    return JsonValue.getValueType() == ValueType.TRUE;
 	}
 	return false;
@@ -82,7 +82,7 @@ public class JsonbJsonValueConverter implements JsonValueConverter {
 	JsonValue JsonValue = (JsonValue) element;
 
 	if (JsonValue.getValueType() == ValueType.ARRAY) {
-	    asResult.value = Boolean.TRUE;
+	    asResult.value = true;
 	    return ObjectUtils.cast(JsonValue.asJsonArray().iterator());
 	}
 	return null;
@@ -93,7 +93,7 @@ public class JsonbJsonValueConverter implements JsonValueConverter {
 	JsonValue JsonValue = (JsonValue) element;
 
 	if (JsonValue.getValueType() == ValueType.OBJECT) {
-	    asResult.value = Boolean.TRUE;
+	    asResult.value = true;
 	    return ObjectUtils.cast(JsonValue.asJsonObject().entrySet().iterator());
 	}
 	return null;
