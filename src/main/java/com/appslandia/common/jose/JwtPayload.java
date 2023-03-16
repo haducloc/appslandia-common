@@ -52,7 +52,7 @@ public class JwtPayload extends JoseMapObject {
 	super(map);
     }
 
-    public boolean isForAudience(String checkingAudience) {
+    public boolean hasAudience(String checkingAudience) {
 	Asserts.notNull(checkingAudience);
 
 	String[] auds = getAud();
