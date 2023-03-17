@@ -185,6 +185,21 @@ public class ArrayUtils {
 	}
     }
 
+    public static Object copyArray(Object arr) {
+	if (arr == null) {
+	    return null;
+	}
+	Asserts.isTrue(arr.getClass().isArray());
+
+	int len = Array.getLength(arr);
+	Object ca = Array.newInstance(arr.getClass().getComponentType(), len);
+
+	for (int i = 0; i < len; i++) {
+	    Array.set(ca, i, Array.get(arr, i));
+	}
+	return ca;
+    }
+
     public static boolean endsWith(byte[] arr, byte[] suffix, int fromIndex) {
 	if (arr == suffix) {
 	    return fromIndex == 0;

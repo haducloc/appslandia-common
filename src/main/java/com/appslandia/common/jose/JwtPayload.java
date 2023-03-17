@@ -20,8 +20,8 @@
 
 package com.appslandia.common.jose;
 
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -54,11 +54,11 @@ public class JwtPayload extends JoseMapObject {
     public boolean hasAudience(String checkingAudience) {
 	Asserts.notNull(checkingAudience);
 
-	Collection<String> auds = getAud();
-	if (auds == null) {
+	List<String> aud = getAud();
+	if (aud == null) {
 	    return false;
 	}
-	return auds.contains(checkingAudience);
+	return aud.contains(checkingAudience);
     }
 
     @Override
@@ -97,12 +97,12 @@ public class JwtPayload extends JoseMapObject {
 	return this;
     }
 
-    public Collection<String> getAud() {
-	return ObjectUtils.cast(get(AUD));
+    public List<String> getAud() {
+	return ObjectUtils.cast(this.get(AUD));
     }
 
     public JwtPayload setAud(String... values) {
-	setList(AUD, values);
+	this.put(AUD, values);
 	return this;
     }
 

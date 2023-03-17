@@ -22,19 +22,17 @@ package com.appslandia.common.jose;
 
 import java.util.Date;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 import com.appslandia.common.base.AssertException;
-import com.appslandia.common.base.BasicMap;
-import com.appslandia.common.utils.CollectionUtils;
+import com.appslandia.common.base.MapWrapper;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public abstract class JoseMapObject extends BasicMap {
+public abstract class JoseMapObject extends MapWrapper<String, Object> {
     private static final long serialVersionUID = 1L;
 
     public JoseMapObject() {
@@ -45,24 +43,22 @@ public abstract class JoseMapObject extends BasicMap {
 	super(map);
     }
 
+    public JoseMapObject set(String key, Object value) {
+	this.map.put(key, value);
+	return this;
+    }
+
     public Date getNumericDate(String key) {
 	Number nd = (Number) this.get(key);
 	return (nd != null) ? JoseUtils.toDate(nd.longValue()) : null;
     }
 
     public JoseMapObject setNumericDate(String key, Date value) {
-	set(key, JoseUtils.toNumericDate(value));
-	return this;
+	return set(key, JoseUtils.toNumericDate(value));
     }
 
     public JoseMapObject setNumericDate(String key, long timeInMs) {
-	set(key, JoseUtils.toNumericDate(timeInMs));
-	return this;
-    }
-
-    public JoseMapObject setList(String key, Object[] values) {
-	set(key, (values != null) ? CollectionUtils.toList(new LinkedList<>(), values) : null);
-	return this;
+	return set(key, JoseUtils.toNumericDate(timeInMs));
     }
 
     public Date getDate(String key) {
