@@ -24,8 +24,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.appslandia.common.utils.ObjectUtils;
-
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
@@ -84,7 +82,7 @@ public class JsonWebKey extends JoseMapObject {
     }
 
     public List<String> getKey_ops() {
-	return ObjectUtils.cast(this.get(KEY_OPS));
+	return getList(KEY_OPS);
     }
 
     public JsonWebKey setKey_ops(String... values) {

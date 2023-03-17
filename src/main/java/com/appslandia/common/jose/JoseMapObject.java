@@ -20,12 +20,17 @@
 
 package com.appslandia.common.jose;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
-import com.appslandia.common.base.AssertException;
 import com.appslandia.common.base.MapWrapper;
+import com.appslandia.common.utils.ArrayUtils;
+import com.appslandia.common.utils.ObjectUtils;
+import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -72,6 +77,31 @@ public abstract class JoseMapObject extends MapWrapper<String, Object> {
 	if (d.getClass() == Long.class) {
 	    return new Date((Long) d);
 	}
-	throw new AssertException("Date conversion failed.");
+	throw new IllegalArgumentException(STR.fmt("Failed to getDate('{}')", key));
+    }
+
+    public <E> List<E> getList(String key) {
+	Object value = this.get(key);
+	if (value == null) {
+	    return null;
+	}
+
+	// List
+	if (value instanceof List) {
+	    return ObjectUtils.cast(value);
+	}
+
+	// Collection
+	if (value instanceof Collection) {
+	    Collection<E> col = ObjectUtils.cast(value);
+	    return new ArrayList<>(col);
+	}
+
+	// Array
+	if (value.getClass().isArray()) {
+	    List<Object> list = ArrayUtils.toList(value);
+	    return ObjectUtils.cast(list);
+	}
+	throw new IllegalArgumentException(STR.fmt("Failed to getList('{}')", key));
     }
 }

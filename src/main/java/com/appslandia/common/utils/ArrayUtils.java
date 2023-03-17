@@ -21,9 +21,11 @@
 package com.appslandia.common.utils;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
@@ -173,31 +175,33 @@ public class ArrayUtils {
 	}
 	Asserts.isTrue(arr.getClass().isArray());
 
-	if (!arr.getClass().getComponentType().isPrimitive()) {
+	Class<?> elementType = arr.getClass().getComponentType();
+	if (!elementType.isPrimitive()) {
 	    return (Object[]) arr;
-	} else {
-	    Object[] wrappers = new Object[Array.getLength(arr)];
-
-	    for (int i = 0; i < wrappers.length; i++) {
-		wrappers[i] = Array.get(arr, i);
-	    }
-	    return wrappers;
 	}
+
+	int len = Array.getLength(arr);
+	Object ca = Array.newInstance(TypeUtils.wrap(elementType), len);
+
+	for (int i = 0; i < len; i++) {
+	    Array.set(ca, i, Array.get(arr, i));
+	}
+	return (Object[]) ca;
     }
 
-    public static Object copyArray(Object arr) {
+    public static List<Object> toList(Object arr) {
 	if (arr == null) {
 	    return null;
 	}
 	Asserts.isTrue(arr.getClass().isArray());
 
 	int len = Array.getLength(arr);
-	Object ca = Array.newInstance(arr.getClass().getComponentType(), len);
+	List<Object> list = new ArrayList<>(len);
 
 	for (int i = 0; i < len; i++) {
-	    Array.set(ca, i, Array.get(arr, i));
+	    list.add(Array.get(arr, i));
 	}
-	return ca;
+	return list;
     }
 
     public static boolean endsWith(byte[] arr, byte[] suffix, int fromIndex) {
