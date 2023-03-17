@@ -29,6 +29,7 @@ import java.util.Map;
 
 import com.appslandia.common.base.MapWrapper;
 import com.appslandia.common.utils.ArrayUtils;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ObjectUtils;
 import com.appslandia.common.utils.STR;
 
@@ -51,6 +52,11 @@ public abstract class JoseMapObject extends MapWrapper<String, Object> {
     public JoseMapObject set(String key, Object value) {
 	this.map.put(key, value);
 	return this;
+    }
+
+    public Object getRequired(String key) {
+	Object value = super.get(key);
+	return Asserts.notNull(value);
     }
 
     public Date getNumericDate(String key) {
