@@ -35,6 +35,7 @@ public class JoseGson {
     public static GsonBuilder newGsonBuilder() {
 	// @formatter:off
 	return GsonProcessor.newBuilder()
+
 		// JsonWebKey
 		.registerTypeAdapter(JsonWebKey.class, new GsonDeserializer<>(true, m -> new JsonWebKey(ObjectUtils.cast(m))))
 		
