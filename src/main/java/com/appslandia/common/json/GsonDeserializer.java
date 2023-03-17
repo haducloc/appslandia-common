@@ -21,7 +21,6 @@
 package com.appslandia.common.json;
 
 import java.lang.reflect.Type;
-import java.util.Map;
 import java.util.function.Function;
 
 import com.appslandia.common.utils.ObjectUtils;
@@ -40,9 +39,9 @@ public class GsonDeserializer<T> implements JsonDeserializer<T> {
     final boolean unmodifiable;
     final JsonObjectParser jsonMapParser = new JsonObjectParser().setJsonValueConverter(GsonJsonValueConverter.INSTANCE);
 
-    public GsonDeserializer(boolean unmodifiable, Function<Map<String, Object>, T> converter) {
+    public GsonDeserializer(boolean unmodifiable, Function<Object, T> rootConverter) {
 	this.unmodifiable = unmodifiable;
-	this.jsonMapParser.setRootConverter(converter);
+	this.jsonMapParser.setRootConverter(rootConverter);
     }
 
     public <F, V> GsonDeserializer<T> setValueConverter(String[] pathOrPattern, Function<F, V> converter) {

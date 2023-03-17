@@ -36,28 +36,28 @@ import jakarta.json.bind.adapter.JsonbAdapter;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JsonbJwtPayloadAdapter implements JsonbAdapter<JwtPayload, JsonObject> {
+public abstract class JsonbMapAdapter<T extends Map<String, Object>> implements JsonbAdapter<T, JsonObject> {
 
     final boolean unmodifiable;
     final JsonObjectParser jsonObjectParser = new JsonObjectParser().setJsonValueConverter(JsonbJsonValueConverter.INSTANCE);
 
-    public JsonbJwtPayloadAdapter(boolean unmodifiable, Function<Map<String, Object>, JwtPayload> converter) {
+    public JsonbMapAdapter(boolean unmodifiable, Function<Map<String, Object>, T> rootConverter) {
 	this.unmodifiable = unmodifiable;
-	this.jsonObjectParser.setRootConverter(converter);
+	this.jsonObjectParser.setRootConverter(ObjectUtils.cast(rootConverter));
     }
 
-    public <F, T> JsonbJwtPayloadAdapter setValueConverter(String[] pathOrPatterns, Function<F, T> converter) {
+    public <F, V> JsonbMapAdapter<T> setValueConverter(String[] pathOrPatterns, Function<F, V> converter) {
 	this.jsonObjectParser.setValueConverter(pathOrPatterns, converter);
 	return this;
     }
 
     @Override
-    public JsonObject adaptToJson(JwtPayload obj) throws Exception {
+    public JsonObject adaptToJson(T obj) throws Exception {
 	return Json.createObjectBuilder(obj).build();
     }
 
     @Override
-    public JwtPayload adaptFromJson(JsonObject obj) throws Exception {
+    public T adaptFromJson(JsonObject obj) throws Exception {
 	Object value = this.jsonObjectParser.parse(obj, this.unmodifiable);
 	return ObjectUtils.cast(value);
     }

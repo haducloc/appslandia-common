@@ -35,13 +35,19 @@ public class JoseGson {
     public static GsonBuilder newGsonBuilder() {
 	// @formatter:off
 	return GsonProcessor.newBuilder()
+		// JsonWebKey
+		.registerTypeAdapter(JsonWebKey.class, new GsonDeserializer<>(true, m -> new JsonWebKey(ObjectUtils.cast(m))))
+		
+		// JoseHeader
 		.registerTypeAdapter(JoseHeader.class, 
-			new GsonDeserializer<>(true, m -> new JoseHeader(m))
+			new GsonDeserializer<>(true, m -> new JoseHeader(ObjectUtils.cast(m)))
 				.setValueConverter(new String[] {"jwk"}, map -> new JsonWebKey(ObjectUtils.cast(map)))
 			)
+		
+		// JwtPayload
 		.registerTypeAdapter(JwtPayload.class, 
-			new GsonDeserializer<>(true, (m) -> new JwtPayload(m))
-				.setValueConverter(new String[] {"jwks\\[\\d+]"}, map -> new JsonWebKey(ObjectUtils.cast(map)))
+			new GsonDeserializer<>(true, (m) -> new JwtPayload(ObjectUtils.cast(m)))
+				.setValueConverter(new String[] {"jwks\\[\\d+]"}, m -> new JsonWebKey(ObjectUtils.cast(m)))
 			);
 	// @formatter:on
     }

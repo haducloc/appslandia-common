@@ -26,6 +26,7 @@ import java.util.Map.Entry;
 import com.appslandia.common.base.Out;
 import com.appslandia.common.utils.ObjectUtils;
 
+import jakarta.json.JsonString;
 import jakarta.json.JsonValue;
 import jakarta.json.JsonValue.ValueType;
 
@@ -61,7 +62,7 @@ public class JsonbJsonValueConverter implements JsonValueConverter {
 
 	if (JsonValue.getValueType() == ValueType.STRING) {
 	    asResult.value = true;
-	    return JsonValue.toString();
+	    return ((JsonString) JsonValue).getString();
 	}
 	return null;
     }

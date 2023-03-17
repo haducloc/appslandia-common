@@ -63,7 +63,7 @@ public class JsonObjectParser extends InitializeObject {
 	return this;
     }
 
-    public <V> JsonObjectParser setRootConverter(Function<Map<String, Object>, V> converter) {
+    public <V> JsonObjectParser setRootConverter(Function<Object, V> converter) {
 	this.assertNotInitialized();
 
 	this.valueConverters.put(ROOT_PATH, ObjectUtils.cast(converter));
@@ -80,29 +80,10 @@ public class JsonObjectParser extends InitializeObject {
 	this.initialize();
 	Asserts.notNull(rootElement);
 
-	Out<Boolean> asResult = new Out<>();
-	Iterator<Map.Entry<String, Object>> elementEntries = this.jsonValueConverter.asJsonObject(rootElement, asResult);
-	Asserts.isTrue(Boolean.TRUE.equals(asResult.value));
+	Object rootObj = parseValue(rootElement, unmodifiable, new StringBuilder(), new Out<>());
 
-	Map<String, Object> rootMap = new LinkedHashMap<>();
-	StringBuilder path = new StringBuilder();
-
-	while (elementEntries.hasNext()) {
-	    Map.Entry<String, Object> elementEntry = elementEntries.next();
-
-	    int len = path.length();
-	    path.append(elementEntry.getKey());
-
-	    Object parsedVal = parseValue(elementEntry.getValue(), unmodifiable, path, asResult.set(false));
-	    parsedVal = convertValue(parsedVal, path.toString(), unmodifiable);
-
-	    rootMap.put(elementEntry.getKey(), parsedVal);
-	    path.delete(len, path.length());
-	}
-
-	Map<String, Object> rMap = unmodifiable ? Collections.unmodifiableMap(rootMap) : rootMap;
 	Function<Object, Object> rootConverter = this.valueConverters.get(ROOT_PATH);
-	return (rootConverter != null) ? rootConverter.apply(rMap) : rMap;
+	return (rootConverter != null) ? rootConverter.apply(rootObj) : rootObj;
     }
 
     protected Object convertValue(Object value, String path, boolean unmodifiable) {
@@ -182,7 +163,10 @@ public class JsonObjectParser extends InitializeObject {
 		Map.Entry<String, Object> childElementEntry = childElementEntries.next();
 
 		int len = path.length();
-		path.append(".").append(childElementEntry.getKey());
+		if (len > 0) {
+		    path.append(".");
+		}
+		path.append(childElementEntry.getKey());
 
 		Object parsedVal = parseValue(childElementEntry.getValue(), unmodifiable, path, asResult.set(false));
 		parsedVal = convertValue(parsedVal, path.toString(), unmodifiable);

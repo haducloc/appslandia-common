@@ -35,11 +35,17 @@ public class JoseJsonb {
     public static JsonbConfig newJsonbConfig() {
 	// @formatter:off
 	return JsonbProcessor.newConfig().withAdapters(
-		new JsonbJoseHeaderAdapter(true, map -> new JoseHeader(map))
-			.setValueConverter(new String[] {"jwk"}, map -> new JsonWebKey(ObjectUtils.cast(map))),
 
-		new JsonbJwtPayloadAdapter(true, map -> new JwtPayload(map))
-			.setValueConverter(new String[] {"jwks\\[\\d+]"}, map -> new JsonWebKey(ObjectUtils.cast(map)))
+		// JsonWebKey
+		new JsonbMapAdapter<>(true, m -> new JsonWebKey(m)) {},
+
+		// JoseHeader
+		new JsonbMapAdapter<JoseHeader>(true, m -> new JoseHeader(m)) {}
+			.setValueConverter(new String[] {"jwk"}, m -> new JsonWebKey(ObjectUtils.cast(m))),
+
+		// JwtPayload
+		new JsonbMapAdapter<JwtPayload>(true, m -> new JwtPayload(m)) {}
+			.setValueConverter(new String[] {"jwks\\[\\d+]"}, m -> new JsonWebKey(ObjectUtils.cast(m)))
 		);
 	// @formatter:on
     }
