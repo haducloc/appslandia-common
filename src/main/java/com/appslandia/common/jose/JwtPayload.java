@@ -102,7 +102,7 @@ public class JwtPayload extends JoseMapObject {
     }
 
     public JwtPayload setAud(String... values) {
-	set(AUD, values);
+	setList(AUD, values);
 	return this;
     }
 

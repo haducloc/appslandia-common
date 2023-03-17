@@ -88,7 +88,7 @@ public class JsonWebKey extends JoseMapObject {
     }
 
     public JsonWebKey setKey_ops(String... values) {
-	set(KEY_OPS, values);
+	setList(KEY_OPS, values);
 	return this;
     }
 

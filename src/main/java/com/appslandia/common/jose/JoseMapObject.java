@@ -60,7 +60,7 @@ public abstract class JoseMapObject extends BasicMap {
 	return this;
     }
 
-    public JoseMapObject set(String key, Object[] values) {
+    public JoseMapObject setList(String key, Object[] values) {
 	set(key, (values != null) ? CollectionUtils.toList(new LinkedList<>(), values) : null);
 	return this;
     }
