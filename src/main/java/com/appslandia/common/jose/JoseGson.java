@@ -37,17 +37,17 @@ public class JoseGson {
 	return GsonProcessor.newBuilder()
 
 		// JsonWebKey
-		.registerTypeAdapter(JsonWebKey.class, new GsonMapAdapter<>(true, m -> new JsonWebKey(ObjectUtils.cast(m))))
+		.registerTypeAdapter(JsonWebKey.class, new GsonMapAdapter<>(true, m -> new JsonWebKey(m)))
 		
 		// JoseHeader
 		.registerTypeAdapter(JoseHeader.class, 
-			new GsonMapAdapter<>(true, m -> new JoseHeader(ObjectUtils.cast(m)))
-				.setValueConverter(new String[] {"jwk"}, map -> new JsonWebKey(ObjectUtils.cast(map)))
+			new GsonMapAdapter<>(true, m -> new JoseHeader(m))
+				.setValueConverter(new String[] {"jwk"}, m -> new JsonWebKey(ObjectUtils.cast(m)))
 			)
 		
 		// JwtPayload
 		.registerTypeAdapter(JwtPayload.class, 
-			new GsonMapAdapter<>(true, (m) -> new JwtPayload(ObjectUtils.cast(m)))
+			new GsonMapAdapter<>(true, (m) -> new JwtPayload(m))
 				.setValueConverter(new String[] {"jwks\\[\\d+]"}, m -> new JsonWebKey(ObjectUtils.cast(m)))
 			);
 	// @formatter:on
