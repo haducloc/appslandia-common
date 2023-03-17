@@ -20,7 +20,7 @@
 
 package com.appslandia.common.jose;
 
-import com.appslandia.common.json.GsonDeserializer;
+import com.appslandia.common.json.GsonMapAdapter;
 import com.appslandia.common.json.GsonProcessor;
 import com.appslandia.common.utils.ObjectUtils;
 import com.google.gson.GsonBuilder;
@@ -37,17 +37,17 @@ public class JoseGson {
 	return GsonProcessor.newBuilder()
 
 		// JsonWebKey
-		.registerTypeAdapter(JsonWebKey.class, new GsonDeserializer<>(true, m -> new JsonWebKey(ObjectUtils.cast(m))))
+		.registerTypeAdapter(JsonWebKey.class, new GsonMapAdapter<>(true, m -> new JsonWebKey(ObjectUtils.cast(m))))
 		
 		// JoseHeader
 		.registerTypeAdapter(JoseHeader.class, 
-			new GsonDeserializer<>(true, m -> new JoseHeader(ObjectUtils.cast(m)))
+			new GsonMapAdapter<>(true, m -> new JoseHeader(ObjectUtils.cast(m)))
 				.setValueConverter(new String[] {"jwk"}, map -> new JsonWebKey(ObjectUtils.cast(map)))
 			)
 		
 		// JwtPayload
 		.registerTypeAdapter(JwtPayload.class, 
-			new GsonDeserializer<>(true, (m) -> new JwtPayload(ObjectUtils.cast(m)))
+			new GsonMapAdapter<>(true, (m) -> new JwtPayload(ObjectUtils.cast(m)))
 				.setValueConverter(new String[] {"jwks\\[\\d+]"}, m -> new JsonWebKey(ObjectUtils.cast(m)))
 			);
 	// @formatter:on

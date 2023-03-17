@@ -21,6 +21,7 @@
 package com.appslandia.common.json;
 
 import java.lang.reflect.Type;
+import java.util.Map;
 import java.util.function.Function;
 
 import com.appslandia.common.utils.ObjectUtils;
@@ -34,24 +35,24 @@ import com.google.gson.JsonParseException;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class GsonDeserializer<T> implements JsonDeserializer<T> {
+public class GsonMapAdapter<T extends Map<String, Object>> implements JsonDeserializer<T> {
 
     final boolean unmodifiable;
-    final JsonObjectParser jsonMapParser = new JsonObjectParser().setJsonValueConverter(GsonJsonValueConverter.INSTANCE);
+    final JsonObjectParser jsonObjectParser = new JsonObjectParser().setJsonValueConverter(GsonJsonValueConverter.INSTANCE);
 
-    public GsonDeserializer(boolean unmodifiable, Function<Object, T> rootConverter) {
+    public GsonMapAdapter(boolean unmodifiable, Function<Map<String, Object>, T> rootConverter) {
 	this.unmodifiable = unmodifiable;
-	this.jsonMapParser.setRootConverter(rootConverter);
+	this.jsonObjectParser.setRootConverter(ObjectUtils.cast(rootConverter));
     }
 
-    public <F, V> GsonDeserializer<T> setValueConverter(String[] pathOrPattern, Function<F, V> converter) {
-	this.jsonMapParser.setValueConverter(pathOrPattern, converter);
+    public <F, V> GsonMapAdapter<T> setValueConverter(String[] pathOrPatterns, Function<F, V> converter) {
+	this.jsonObjectParser.setValueConverter(pathOrPatterns, converter);
 	return this;
     }
 
     @Override
     public T deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-	Object value = this.jsonMapParser.parse(json, this.unmodifiable);
+	Object value = this.jsonObjectParser.parse(json, this.unmodifiable);
 	return ObjectUtils.cast(value);
     }
 
