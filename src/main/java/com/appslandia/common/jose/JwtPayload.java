@@ -20,12 +20,13 @@
 
 package com.appslandia.common.jose;
 
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.ObjectUtils;
 
 /**
  *
@@ -53,11 +54,11 @@ public class JwtPayload extends JoseMapObject {
     public boolean hasAudience(String checkingAudience) {
 	Asserts.notNull(checkingAudience);
 
-	String[] auds = getAud();
+	Collection<String> auds = getAud();
 	if (auds == null) {
 	    return false;
 	}
-	return Arrays.stream(auds).anyMatch(a -> checkingAudience.equals(a));
+	return auds.contains(checkingAudience);
     }
 
     @Override
@@ -96,12 +97,12 @@ public class JwtPayload extends JoseMapObject {
 	return this;
     }
 
-    public String[] getAud() {
-	return getStringArray(AUD);
+    public Collection<String> getAud() {
+	return ObjectUtils.cast(get(AUD));
     }
 
     public JwtPayload setAud(String... values) {
-	setStringArray(AUD, values);
+	set(AUD, values);
 	return this;
     }
 

@@ -20,8 +20,11 @@
 
 package com.appslandia.common.jose;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
+
+import com.appslandia.common.utils.ObjectUtils;
 
 /**
  *
@@ -80,12 +83,12 @@ public class JsonWebKey extends JoseMapObject {
 	return this;
     }
 
-    public String[] getKey_ops() {
-	return getStringArray(KEY_OPS);
+    public Collection<String> getKey_ops() {
+	return ObjectUtils.cast(get(KEY_OPS));
     }
 
     public JsonWebKey setKey_ops(String... values) {
-	setStringArray(KEY_OPS, values);
+	set(KEY_OPS, values);
 	return this;
     }
 

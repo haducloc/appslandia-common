@@ -20,7 +20,6 @@
 
 package com.appslandia.common.base;
 
-import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.time.temporal.Temporal;
 import java.util.Collection;
@@ -30,8 +29,8 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.IntStream;
 
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ObjectUtils;
 
 /**
@@ -39,7 +38,7 @@ import com.appslandia.common.utils.ObjectUtils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class BasicMap extends ValidatableMap {
+public class BasicMap extends MapWrapper<String, Object> {
     private static final long serialVersionUID = 1L;
 
     public BasicMap() {
@@ -51,12 +50,19 @@ public class BasicMap extends ValidatableMap {
     }
 
     @Override
+    public Object put(String key, Object value) {
+	Asserts.isTrue(isValueSupported(value));
+
+	return super.put(key, value);
+    }
+
     public BasicMap set(String key, Object value) {
-	super.set(key, value);
+	Asserts.isTrue(isValueSupported(value));
+
+	super.put(key, value);
 	return this;
     }
 
-    @Override
     protected boolean isValueSupported(Object value) {
 	if (value == null) {
 	    return true;
@@ -76,11 +82,6 @@ public class BasicMap extends ValidatableMap {
 	if (value instanceof Map) {
 	    return validateMap((Map<?, ?>) value);
 	}
-
-	// Array
-	if (value.getClass().isArray()) {
-	    return validateArray(value);
-	}
 	return false;
     }
 
@@ -97,15 +98,6 @@ public class BasicMap extends ValidatableMap {
 
     private boolean validateCollection(Collection<?> col) {
 	return col.stream().allMatch(value -> (value == null) || isValueSupported(value));
-    }
-
-    private boolean validateArray(Object array) {
-	int len = Array.getLength(array);
-
-	return IntStream.range(0, len).allMatch(i -> {
-	    Object value = Array.get(array, i);
-	    return (value == null) || isValueSupported(value);
-	});
     }
 
     public Map<String, Object> copyInnerMap() {
@@ -147,17 +139,6 @@ public class BasicMap extends ValidatableMap {
 		cm.put(entry.getKey(), copyValue(entry.getValue()));
 	    }
 	    return cm;
-	}
-
-	// Array
-	if (value.getClass().isArray()) {
-	    int len = Array.getLength(value);
-	    Object[] cv = new Object[len];
-
-	    for (int i = 0; i < len; i++) {
-		cv[i] = copyValue(Array.get(value, i));
-	    }
-	    return cv;
 	}
 
 	throw new Error();

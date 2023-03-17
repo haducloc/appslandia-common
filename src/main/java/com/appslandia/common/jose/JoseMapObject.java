@@ -20,15 +20,14 @@
 
 package com.appslandia.common.jose;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 import com.appslandia.common.base.AssertException;
 import com.appslandia.common.base.BasicMap;
-import com.appslandia.common.utils.Asserts;
-import com.appslandia.common.utils.ObjectUtils;
+import com.appslandia.common.utils.CollectionUtils;
 
 /**
  *
@@ -61,6 +60,11 @@ public abstract class JoseMapObject extends BasicMap {
 	return this;
     }
 
+    public JoseMapObject set(String key, Object[] values) {
+	set(key, (values != null) ? CollectionUtils.toList(new LinkedList<>(), values) : null);
+	return this;
+    }
+
     public Date getDate(String key) {
 	Object d = this.get(key);
 	if (d == null) {
@@ -73,30 +77,5 @@ public abstract class JoseMapObject extends BasicMap {
 	    return new Date((Long) d);
 	}
 	throw new AssertException("Date conversion failed.");
-    }
-
-    public String[] getStringArray(String key) {
-	Object value = this.get(key);
-	if (value == null) {
-	    return null;
-	}
-	if (value.getClass() == String.class) {
-	    return new String[] { (String) value };
-	}
-	Asserts.isTrue(value.getClass().isArray() || Collection.class.isAssignableFrom(value.getClass()));
-
-	if (value.getClass().isArray()) {
-	    return ObjectUtils.cast(value);
-	}
-
-	Collection<String> col = ObjectUtils.cast(value);
-	return col.toArray(new String[col.size()]);
-    }
-
-    public JoseMapObject setStringArray(String key, String[] values) {
-	if ((values != null) && (values.length > 0)) {
-	    this.put(key, values);
-	}
-	return this;
     }
 }
