@@ -42,6 +42,12 @@ public abstract class JoseMapObject extends JsonMapObject {
 	super(map);
     }
 
+    @Override
+    public JoseMapObject set(String key, Object value) {
+	super.set(key, value);
+	return this;
+    }
+
     public Date getNumericDate(String key) {
 	Number nd = (Number) this.get(key);
 	return (nd != null) ? JoseUtils.toDate(nd.longValue()) : null;
