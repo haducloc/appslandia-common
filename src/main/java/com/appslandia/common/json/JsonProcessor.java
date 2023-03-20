@@ -27,9 +27,7 @@ import java.io.StringReader;
 import java.io.Writer;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -64,16 +62,6 @@ public abstract class JsonProcessor extends InitializeObject {
 
     public <T> T readString(String jsonString, Type type) throws JsonException {
 	return read(new StringReader(jsonString), type);
-    }
-
-    public <T> Type getListGenericType(Class<T> elementClass) {
-	return new ArrayList<T>() {
-	    private static final long serialVersionUID = 1L;
-	}.getClass().getGenericSuperclass();
-    }
-
-    public <T> List<T> readList(Reader reader, Class<T> elementClass) throws JsonException {
-	return read(reader, getListGenericType(elementClass));
     }
 
     public String toString(Object obj) throws JsonException {
