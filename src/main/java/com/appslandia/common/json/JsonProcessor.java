@@ -23,10 +23,13 @@ package com.appslandia.common.json;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
+import java.io.StringReader;
 import java.io.Writer;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -53,6 +56,24 @@ public abstract class JsonProcessor extends InitializeObject {
 
     public <V> Map<String, V> readAsMap(Reader reader) throws JsonException {
 	return ObjectUtils.cast(read(reader, LinkedHashMap.class));
+    }
+
+    public <T> T readString(String jsonString, Class<T> resultClass) throws JsonException {
+	return read(new StringReader(jsonString), resultClass);
+    }
+
+    public <T> T readString(String jsonString, Type type) throws JsonException {
+	return read(new StringReader(jsonString), type);
+    }
+
+    public <T> Type getListGenericType() {
+	return new ArrayList<T>() {
+	    private static final long serialVersionUID = 1L;
+	}.getClass().getGenericSuperclass();
+    }
+
+    public <T> List<T> readList(Reader reader) throws JsonException {
+	return read(reader, getListGenericType());
     }
 
     public String toString(Object obj) throws JsonException {

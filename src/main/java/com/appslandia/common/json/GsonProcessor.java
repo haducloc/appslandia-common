@@ -28,6 +28,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
+import java.util.ArrayList;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
@@ -36,6 +37,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.ToNumberPolicy;
+import com.google.gson.reflect.TypeToken;
 
 /**
  *
@@ -87,6 +89,12 @@ public class GsonProcessor extends JsonProcessor {
 	} catch (JsonIOException ex) {
 	    throw new JsonException(ex);
 	}
+    }
+
+    @Override
+    public <T> Type getListGenericType() {
+	return new TypeToken<ArrayList<T>>() {
+	}.getType();
     }
 
     public GsonProcessor setBuilder(GsonBuilder builder) {
