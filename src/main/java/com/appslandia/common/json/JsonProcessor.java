@@ -66,14 +66,14 @@ public abstract class JsonProcessor extends InitializeObject {
 	return read(new StringReader(jsonString), type);
     }
 
-    public <T> Type getListGenericType() {
+    public <T> Type getListGenericType(Class<T> elementClass) {
 	return new ArrayList<T>() {
 	    private static final long serialVersionUID = 1L;
 	}.getClass().getGenericSuperclass();
     }
 
-    public <T> List<T> readList(Reader reader) throws JsonException {
-	return read(reader, getListGenericType());
+    public <T> List<T> readList(Reader reader, Class<T> elementClass) throws JsonException {
+	return read(reader, getListGenericType(elementClass));
     }
 
     public String toString(Object obj) throws JsonException {

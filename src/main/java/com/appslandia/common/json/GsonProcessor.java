@@ -92,7 +92,7 @@ public class GsonProcessor extends JsonProcessor {
     }
 
     @Override
-    public <T> Type getListGenericType() {
+    public <T> Type getListGenericType(Class<T> elementClass) {
 	return new TypeToken<ArrayList<T>>() {
 	}.getType();
     }
