@@ -55,14 +55,14 @@ public abstract class JsonMapObject extends MapWrapper<String, Object> {
     @Override
     public Object put(String key, Object value) {
 	Asserts.notNull(key);
-	Asserts.isTrue(isValueSupported(value));
+	Asserts.isTrue(isValueSupported(value), "The value is unsuppored.");
 
 	return super.put(key, value);
     }
 
     public JsonMapObject set(String key, Object value) {
 	Asserts.notNull(key);
-	Asserts.isTrue(isValueSupported(value));
+	Asserts.isTrue(isValueSupported(value), "The value is unsuppored.");
 
 	super.put(key, value);
 	return this;
