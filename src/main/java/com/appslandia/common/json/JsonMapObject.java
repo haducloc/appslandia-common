@@ -64,7 +64,7 @@ public abstract class JsonMapObject extends MapWrapper<String, Object> {
 	Asserts.notNull(key);
 	Asserts.isTrue(isValueSupported(value));
 
-	this.map.put(key, value);
+	super.put(key, value);
 	return this;
     }
 
