@@ -70,7 +70,7 @@ public abstract class JsonMapObject extends MapWrapper<String, Object> {
 
     public Object getRequired(String key) {
 	Object value = super.get(key);
-	return Asserts.notNull(value);
+	return Asserts.notNull(value, "The value is required.");
     }
 
     public Date getDate(String key) {
@@ -85,6 +85,59 @@ public abstract class JsonMapObject extends MapWrapper<String, Object> {
 	    return new Date((Long) d);
 	}
 	throw new IllegalArgumentException(STR.fmt("Failed to getDate('{}')", key));
+    }
+
+    public Integer getInteger(String key) {
+	Object d = this.get(key);
+	if (d == null) {
+	    return null;
+	}
+	if (d instanceof Integer) {
+	    return (Integer) d;
+	}
+	if (d instanceof Number) {
+	    return ((Number) d).intValue();
+	}
+	throw new IllegalArgumentException(STR.fmt("Failed to getInteger('{}')", key));
+    }
+
+    public Long getLong(String key) {
+	Object d = this.get(key);
+	if (d == null) {
+	    return null;
+	}
+	if (d instanceof Long) {
+	    return (Long) d;
+	}
+	if (d instanceof Number) {
+	    return ((Number) d).longValue();
+	}
+	throw new IllegalArgumentException(STR.fmt("Failed to getLong('{}')", key));
+    }
+
+    public Double getDouble(String key) {
+	Object d = this.get(key);
+	if (d == null) {
+	    return null;
+	}
+	if (d instanceof Double) {
+	    return (Double) d;
+	}
+	if (d instanceof Number) {
+	    return ((Number) d).doubleValue();
+	}
+	throw new IllegalArgumentException(STR.fmt("Failed to getDouble('{}')", key));
+    }
+
+    public Boolean getBoolean(String key) {
+	Object d = this.get(key);
+	if (d == null) {
+	    return null;
+	}
+	if (d instanceof Boolean) {
+	    return (Boolean) d;
+	}
+	throw new IllegalArgumentException(STR.fmt("Failed to getBoolean('{}')", key));
     }
 
     public <E> List<E> getList(String key) {
