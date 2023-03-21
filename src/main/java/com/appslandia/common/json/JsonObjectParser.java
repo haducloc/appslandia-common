@@ -148,7 +148,7 @@ public class JsonObjectParser extends InitializeObject {
 		parsedVal = convertValue(parsedVal, path.toString(), unmodifiable);
 
 		list.add(parsedVal);
-		path.delete(len, path.length());
+		path.setLength(len);
 	    }
 	    return unmodifiable ? Collections.unmodifiableList(list) : list;
 	}
@@ -172,7 +172,7 @@ public class JsonObjectParser extends InitializeObject {
 		parsedVal = convertValue(parsedVal, path.toString(), unmodifiable);
 
 		map.put(childElementEntry.getKey(), parsedVal);
-		path.delete(len, path.length());
+		path.setLength(len);
 	    }
 	    return unmodifiable ? Collections.unmodifiableMap(map) : map;
 	}
