@@ -20,6 +20,10 @@
 
 package com.appslandia.common.utils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -131,9 +135,13 @@ public class CsvEscaperTest {
 	CsvEscaper escaper = new CsvEscaper();
 
 	String value = "abc";
-	String unescaped = escaper.unescape(value);
+	try {
+	    String unescaped = escaper.parse(new BufferedReader(new StringReader(value))).get(0)[0];
+	    Assertions.assertEquals("abc", unescaped);
 
-	Assertions.assertEquals("abc", unescaped);
+	} catch (IOException ex) {
+	    Assertions.fail(ex);
+	}
     }
 
     @Test
@@ -141,9 +149,13 @@ public class CsvEscaperTest {
 	CsvEscaper escaper = new CsvEscaper();
 
 	String value = "";
-	String unescaped = escaper.unescape(value);
+	try {
+	    String unescaped = escaper.parse(new BufferedReader(new StringReader(value))).get(0)[0];
+	    Assertions.assertNull(unescaped);
 
-	Assertions.assertNull(unescaped);
+	} catch (IOException ex) {
+	    Assertions.fail(ex);
+	}
     }
 
     @Test
@@ -151,19 +163,27 @@ public class CsvEscaperTest {
 	CsvEscaper escaper = new CsvEscaper();
 
 	String value = " ";
-	String unescaped = escaper.unescape(value);
+	try {
+	    String unescaped = escaper.parse(new BufferedReader(new StringReader(value))).get(0)[0];
 
-	Assertions.assertEquals(" ", unescaped);
+	    Assertions.assertEquals(" ", unescaped);
+	} catch (IOException ex) {
+	    Assertions.fail(ex);
+	}
     }
 
     @Test
     public void test_unescape_null() {
 	CsvEscaper escaper = new CsvEscaper();
-
 	String value = "null";
-	String unescaped = escaper.unescape(value);
 
-	Assertions.assertEquals("null", unescaped);
+	try {
+	    String unescaped = escaper.parse(new BufferedReader(new StringReader(value))).get(0)[0];
+
+	    Assertions.assertEquals("null", unescaped);
+	} catch (IOException ex) {
+	    Assertions.fail(ex);
+	}
     }
 
     @Test
@@ -171,9 +191,13 @@ public class CsvEscaperTest {
 	CsvEscaper escaper = new CsvEscaper().writeNull();
 
 	String value = "null";
-	String unescaped = escaper.unescape(value);
+	try {
+	    String unescaped = escaper.parse(new BufferedReader(new StringReader(value))).get(0)[0];
 
-	Assertions.assertNull(unescaped);
+	    Assertions.assertNull(unescaped);
+	} catch (IOException ex) {
+	    Assertions.fail(ex);
+	}
     }
 
     @Test
@@ -181,8 +205,12 @@ public class CsvEscaperTest {
 	CsvEscaper escaper = new CsvEscaper().escCrLf();
 
 	String value = "abc\\r\\ndef";
-	String unescaped = escaper.unescape(value);
+	try {
+	    String unescaped = escaper.parse(new BufferedReader(new StringReader(value))).get(0)[0];
 
-	Assertions.assertEquals("abc\r\ndef", unescaped);
+	    Assertions.assertEquals("abc\r\ndef", unescaped);
+	} catch (IOException ex) {
+	    Assertions.fail(ex);
+	}
     }
 }

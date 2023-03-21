@@ -20,6 +20,12 @@
 
 package com.appslandia.common.utils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
+
 import com.appslandia.common.base.InitializeObject;
 
 /**
@@ -117,31 +123,27 @@ public class CsvEscaper extends InitializeObject {
 	return useWrap ? out.toString() : value;
     }
 
-    public String unescape(String value) {
+    protected String unescape(StringBuilder value) {
 	// ,,
-	if (value.isEmpty()) {
+	if (value.length() == 0) {
 	    return null;
 	}
 
 	// ,null,
-	if ("null".equals(value)) {
+	if (value.length() == 4 && "null".equals(value.toString())) {
 	    return this.writeNull ? null : "null";
 	}
 
 	// ,value,
 	if (!this.escCrLf) {
-	    return value;
+	    return value.toString();
 	}
 
 	// \\r \\n
-	StringBuilder out = new StringBuilder(value.length());
-	boolean crlf = false;
-
 	for (int i = 0; i < value.length(); i++) {
 	    char c = value.charAt(i);
 
 	    if (c != '\\') {
-		out.append(c);
 		continue;
 	    }
 
@@ -150,14 +152,90 @@ public class CsvEscaper extends InitializeObject {
 		char nc = value.charAt(i + 1);
 
 		if (nc == 'r' || nc == 'n') {
-		    out.append(nc == 'r' ? '\r' : '\n');
-		    i += 1;
-
-		    crlf = true;
-		    continue;
+		    value.replace(i, i + 2, nc == 'r' ? "\r" : "\n");
+		    i -= 1;
 		}
 	    }
 	}
-	return crlf ? out.toString() : value;
+	return value.toString();
+    }
+
+    public List<String[]> parse(BufferedReader reader) throws IOException {
+	List<String[]> records = new ArrayList<>();
+
+	String line;
+	StringBuilder currentRecord = new StringBuilder();
+	Integer recordLen = 0;
+
+	while ((line = reader.readLine()) != null) {
+
+	    currentRecord.append(line);
+	    currentRecord.append('\n');
+
+	    int numQuotes = countQuotes(currentRecord.toString());
+
+	    // Found record?
+	    if (numQuotes % 2 == 0) {
+
+		// Delete the last add \n
+		currentRecord.deleteCharAt(currentRecord.length() - 1);
+
+		String[] values = splitRecord(currentRecord.toString(), recordLen);
+		if (recordLen == null) {
+		    recordLen = values.length;
+		}
+
+		records.add(values);
+		currentRecord.setLength(0);
+	    }
+	}
+	if (records.isEmpty()) {
+	    records.add(new String[] { null });
+	}
+	return records;
+    }
+
+    static final Pattern QUOTE_PATTERN = Pattern.compile("[^\"]");
+
+    private static int countQuotes(String s) {
+	return QUOTE_PATTERN.matcher(s).replaceAll("").length();
+    }
+
+    private String[] splitRecord(String record, Integer recordLen) {
+
+	List<String> values = (recordLen == null) ? new ArrayList<>() : new ArrayList<>(recordLen);
+	StringBuilder currentField = new StringBuilder();
+	boolean inQuotes = false;
+
+	for (int i = 0; i < record.length(); i++) {
+	    char c = record.charAt(i);
+
+	    if (c == '"') {
+		// Handle quotes within CSV values
+
+		if (i < record.length() - 1 && record.charAt(i + 1) == '"') {
+
+		    // Add the first quote to the current field
+		    currentField.append(c);
+
+		    // Skip the second quote
+		    i++;
+
+		} else {
+		    inQuotes = !inQuotes;
+		}
+
+	    } else if (c == this.separator && !inQuotes) {
+		// Handle commas within CSV values
+
+		values.add(unescape(currentField));
+		currentField.setLength(0);
+	    } else {
+		currentField.append(c);
+	    }
+	}
+
+	values.add(unescape(currentField));
+	return values.toArray(new String[0]);
     }
 }
