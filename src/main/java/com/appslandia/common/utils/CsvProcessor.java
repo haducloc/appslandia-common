@@ -33,7 +33,7 @@ import com.appslandia.common.base.InitializeObject;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class CsvEscaper extends InitializeObject {
+public class CsvProcessor extends InitializeObject {
 
     private boolean writeNull;
     private char separator = ',';
@@ -44,21 +44,21 @@ public class CsvEscaper extends InitializeObject {
 	// Validate separator?
     }
 
-    public CsvEscaper writeNull() {
+    public CsvProcessor writeNull() {
 	assertNotInitialized();
 
 	this.writeNull = true;
 	return this;
     }
 
-    public CsvEscaper separator(char separator) {
+    public CsvProcessor separator(char separator) {
 	assertNotInitialized();
 
 	this.separator = separator;
 	return this;
     }
 
-    public CsvEscaper escCrLf() {
+    public CsvProcessor escCrLf() {
 	assertNotInitialized();
 
 	this.escCrLf = true;
@@ -66,7 +66,7 @@ public class CsvEscaper extends InitializeObject {
     }
 
     public String escape(String value) {
-	initialize();
+	this.initialize();
 
 	if (value == null) {
 	    if (this.writeNull) {
@@ -123,44 +123,8 @@ public class CsvEscaper extends InitializeObject {
 	return useWrap ? out.toString() : value;
     }
 
-    protected String unescape(StringBuilder value) {
-	// ,,
-	if (value.length() == 0) {
-	    return null;
-	}
-
-	// ,null,
-	if (value.length() == 4 && "null".equals(value.toString())) {
-	    return this.writeNull ? null : "null";
-	}
-
-	// ,value,
-	if (!this.escCrLf) {
-	    return value.toString();
-	}
-
-	// \\r \\n
-	for (int i = 0; i < value.length(); i++) {
-	    char c = value.charAt(i);
-
-	    if (c != '\\') {
-		continue;
-	    }
-
-	    // c = '\\'
-	    if (i + 1 < value.length()) {
-		char nc = value.charAt(i + 1);
-
-		if (nc == 'r' || nc == 'n') {
-		    value.replace(i, i + 2, nc == 'r' ? "\r" : "\n");
-		    i -= 1;
-		}
-	    }
-	}
-	return value.toString();
-    }
-
     public List<String[]> parse(BufferedReader reader) throws IOException {
+	this.initialize();
 	List<String[]> records = new ArrayList<>();
 
 	String line;
@@ -202,7 +166,6 @@ public class CsvEscaper extends InitializeObject {
     }
 
     private String[] splitRecord(String record, Integer recordLen) {
-
 	List<String> values = (recordLen == null) ? new ArrayList<>() : new ArrayList<>(recordLen);
 	StringBuilder currentField = new StringBuilder();
 	boolean inQuotes = false;
@@ -237,5 +200,42 @@ public class CsvEscaper extends InitializeObject {
 
 	values.add(unescape(currentField));
 	return values.toArray(new String[0]);
+    }
+
+    protected String unescape(StringBuilder value) {
+	// ,,
+	if (value.length() == 0) {
+	    return null;
+	}
+
+	// ,null,
+	if (value.length() == 4 && "null".equals(value.toString())) {
+	    return this.writeNull ? null : "null";
+	}
+
+	// ,value,
+	if (!this.escCrLf) {
+	    return value.toString();
+	}
+
+	// \\r \\n
+	for (int i = 0; i < value.length(); i++) {
+	    char c = value.charAt(i);
+
+	    if (c != '\\') {
+		continue;
+	    }
+
+	    // c = '\\'
+	    if (i + 1 < value.length()) {
+		char nc = value.charAt(i + 1);
+
+		if (nc == 'r' || nc == 'n') {
+		    value.replace(i, i + 2, nc == 'r' ? "\r" : "\n");
+		    i -= 1;
+		}
+	    }
+	}
+	return value.toString();
     }
 }
