@@ -66,7 +66,7 @@ public class CsvProcessor extends InitializeObject {
     }
 
     public String escape(String value) {
-	return escape(value, new StringBuilder((int) (value.length() * 1.25f)));
+	return escape(value, (value != null) ? new StringBuilder((int) (value.length() * 1.25f)) : new StringBuilder());
     }
 
     public String escape(String value, StringBuilder buf) {
