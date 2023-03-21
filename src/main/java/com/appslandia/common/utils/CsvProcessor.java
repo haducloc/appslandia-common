@@ -66,7 +66,12 @@ public class CsvProcessor extends InitializeObject {
     }
 
     public String escape(String value) {
+	return escape(value, new StringBuilder((int) (value.length() * 1.25f)));
+    }
+
+    public String escape(String value, StringBuilder buf) {
 	this.initialize();
+	buf.setLength(0);
 
 	if (value == null) {
 	    if (this.writeNull) {
@@ -77,8 +82,7 @@ public class CsvProcessor extends InitializeObject {
 	if (value.isEmpty()) {
 	    return "";
 	}
-	StringBuilder out = new StringBuilder((int) (value.length() * 1.25f));
-	out.append('"');
+	buf.append('"');
 
 	int start = 0;
 	char[] srcChars = value.toCharArray();
@@ -95,32 +99,32 @@ public class CsvProcessor extends InitializeObject {
 	    if (c == '"') {
 		// add un_escaped portion
 		if (start < i) {
-		    out.append(srcChars, start, i - start);
+		    buf.append(srcChars, start, i - start);
 		}
 
 		// add escaped
-		out.append("\"\"");
+		buf.append("\"\"");
 		start = i + 1;
 
 	    } else if (this.escCrLf && (c == '\r' || c == '\n')) {
 
 		// add un_escaped portion
 		if (start < i) {
-		    out.append(srcChars, start, i - start);
+		    buf.append(srcChars, start, i - start);
 		}
 
 		// add escaped
-		out.append("\\").append(c == '\r' ? 'r' : 'n');
+		buf.append("\\").append(c == '\r' ? 'r' : 'n');
 		start = i + 1;
 	    }
 	}
 
 	// add rest of un_escaped portion
 	if (start < length) {
-	    out.append(srcChars, start, length - start);
+	    buf.append(srcChars, start, length - start);
 	}
-	out.append('"');
-	return useWrap ? out.toString() : value;
+	buf.append('"');
+	return useWrap ? buf.toString() : value;
     }
 
     public List<String[]> parse(BufferedReader reader) throws IOException {
