@@ -4,7 +4,7 @@
 - Cryptography utilities
 - JDBC utilities (Named parameters, Array parameters, LIKE_ANY operator, etc.)
 - Record framework
-- JSON Web Token
+- JSON Web Signature/Json Web Token (HS/RS/ES/PS)
 - Geography utilities
 - ToStringBuilder
 - 360+ Unit tests
@@ -103,7 +103,7 @@ try (ConnectionImpl connScoped = new ConnectionImpl(javax.sql.DataSource)) {
   JwtSigner jwtSigner = HsJwtSigner.HS256().setJsonProcessor(jsonProcessor)
   							  .setSecret("secret".getBytes()).setIssuer("Issuer1").build();
 
-  // OR JwtSigner - ES256/ES384/ES512 - RS256/RS384/RS512
+  // OR JwtSigner - ES256/ES384/ES512 - RS256/RS384/RS512 - PS256/PS384/PS512
   JwtSigner jwtSigner = DsaJwtSigner.ES256().setJsonProcessor(jsonProcessor)
   							  .setPrivateKey(privateKey).setPublicKey(publicKey).setIssuer("Issuer1").build();
 
