@@ -24,7 +24,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import com.appslandia.common.base.InitializeObject;
 
@@ -140,7 +139,7 @@ public class CsvProcessor extends InitializeObject {
 	    currentRecord.append(line);
 	    currentRecord.append('\n');
 
-	    int numQuotes = countQuotes(currentRecord.toString());
+	    int numQuotes = (int) currentRecord.chars().filter(ch -> ch == '"').count();
 
 	    // Found record?
 	    if (numQuotes % 2 == 0) {
@@ -161,12 +160,6 @@ public class CsvProcessor extends InitializeObject {
 	    records.add(new String[] { null });
 	}
 	return records;
-    }
-
-    static final Pattern QUOTE_PATTERN = Pattern.compile("[^\"]");
-
-    private static int countQuotes(String s) {
-	return QUOTE_PATTERN.matcher(s).replaceAll("").length();
     }
 
     private String[] splitRecord(String record, Integer recordLen) {
