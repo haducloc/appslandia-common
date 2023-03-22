@@ -22,8 +22,10 @@ package com.appslandia.common.json;
 
 import java.lang.reflect.Type;
 import java.time.OffsetTime;
+import java.time.format.DateTimeParseException;
 
 import com.appslandia.common.utils.DateUtils;
+import com.appslandia.common.utils.STR;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -44,8 +46,18 @@ public class OffsetTimeAdapter extends Java8DateAdapter implements JsonSerialize
 	return new JsonPrimitive(getFormatter(DateUtils.ISO8601_TIME_Z).format(src));
     }
 
+    static final String[] TZ_PATTERNS = new String[] { DateUtils.ISO8601_TIME_MZ, DateUtils.ISO8601_TIME_SZ, DateUtils.ISO8601_TIME_Z };
+
     @Override
     public OffsetTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-	return OffsetTime.parse(json.getAsString(), getFormatter(DateUtils.ISO8601_TIME_Z));
+	String value = json.getAsString();
+
+	for (String pattern : TZ_PATTERNS) {
+	    try {
+		return OffsetTime.parse(value, getFormatter(pattern));
+	    } catch (DateTimeParseException ex) {
+	    }
+	}
+	throw new IllegalArgumentException(STR.fmt("Couldn't parse '{}' to OffsetTime.", value));
     }
 }

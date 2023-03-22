@@ -24,6 +24,7 @@ import java.lang.reflect.Type;
 import java.text.ParseException;
 
 import com.appslandia.common.utils.DateUtils;
+import com.appslandia.common.utils.STR;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -45,10 +46,20 @@ public class SqlTimeAdapter implements JsonSerializer<java.sql.Time>, JsonDeseri
 
     @Override
     public java.sql.Time deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+	String value = json.getAsString();
+
 	try {
-	    return new java.sql.Time(DateUtils.newDateFormat(DateUtils.ISO8601_TIME).parse(json.getAsString()).getTime());
+	    if (DateUtils.ISO8601_TIME_M.length() == value.length()) {
+		return new java.sql.Time(DateUtils.newDateFormat(DateUtils.ISO8601_TIME_M).parse(value).getTime());
+
+	    } else if (DateUtils.ISO8601_TIME_S.length() == value.length()) {
+		return new java.sql.Time(DateUtils.newDateFormat(DateUtils.ISO8601_TIME_S).parse(value).getTime());
+
+	    } else if (DateUtils.ISO8601_TIME.length() == value.length()) {
+		return new java.sql.Time(DateUtils.newDateFormat(DateUtils.ISO8601_TIME).parse(value).getTime());
+	    }
 	} catch (ParseException ex) {
-	    throw new JsonParseException(ex);
 	}
+	throw new IllegalArgumentException(STR.fmt("Couldn't parse '{}' to java.sql.Time.", value));
     }
 }

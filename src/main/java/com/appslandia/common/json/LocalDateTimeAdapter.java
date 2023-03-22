@@ -22,8 +22,10 @@ package com.appslandia.common.json;
 
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 
 import com.appslandia.common.utils.DateUtils;
+import com.appslandia.common.utils.STR;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -46,6 +48,20 @@ public class LocalDateTimeAdapter extends Java8DateAdapter implements JsonSerial
 
     @Override
     public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-	return LocalDateTime.parse(json.getAsString(), getFormatter(DateUtils.ISO8601_DATETIME));
+	String value = json.getAsString();
+
+	try {
+	    if (DateUtils.ISO8601_DATETIME_M.length() - 2 == value.length()) {
+		return LocalDateTime.parse(value, getFormatter(DateUtils.ISO8601_DATETIME_M));
+
+	    } else if (DateUtils.ISO8601_DATETIME_S.length() - 2 == value.length()) {
+		return LocalDateTime.parse(value, getFormatter(DateUtils.ISO8601_DATETIME_S));
+
+	    } else if (DateUtils.ISO8601_DATETIME.length() - 2 == value.length()) {
+		return LocalDateTime.parse(value, getFormatter(DateUtils.ISO8601_DATETIME));
+	    }
+	} catch (DateTimeParseException ex) {
+	}
+	throw new IllegalArgumentException(STR.fmt("Couldn't parse '{}' to LocalDateTime.", value));
     }
 }

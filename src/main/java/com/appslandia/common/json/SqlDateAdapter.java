@@ -24,6 +24,7 @@ import java.lang.reflect.Type;
 import java.text.ParseException;
 
 import com.appslandia.common.utils.DateUtils;
+import com.appslandia.common.utils.STR;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -45,10 +46,11 @@ public class SqlDateAdapter implements JsonSerializer<java.sql.Date>, JsonDeseri
 
     @Override
     public java.sql.Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+	String value = json.getAsString();
 	try {
-	    return new java.sql.Date(DateUtils.newDateFormat(DateUtils.ISO8601_DATE).parse(json.getAsString()).getTime());
+	    return new java.sql.Date(DateUtils.newDateFormat(DateUtils.ISO8601_DATE).parse(value).getTime());
 	} catch (ParseException ex) {
-	    throw new JsonParseException(ex);
 	}
+	throw new IllegalArgumentException(STR.fmt("Couldn't parse '{}' to java.sql.Date.", value));
     }
 }

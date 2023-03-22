@@ -24,6 +24,7 @@ import java.lang.reflect.Type;
 import java.text.ParseException;
 
 import com.appslandia.common.utils.DateUtils;
+import com.appslandia.common.utils.STR;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -45,10 +46,19 @@ public class DateAdapter implements JsonSerializer<java.util.Date>, JsonDeserial
 
     @Override
     public java.util.Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+	String value = json.getAsString();
 	try {
-	    return DateUtils.newDateFormat(DateUtils.ISO8601_DATETIME).parse(json.getAsString());
+	    if (DateUtils.ISO8601_DATETIME_M.length() - 2 == value.length()) {
+		return new java.util.Date(DateUtils.newDateFormat(DateUtils.ISO8601_DATETIME_M).parse(value).getTime());
+
+	    } else if (DateUtils.ISO8601_DATETIME_S.length() - 2 == value.length()) {
+		return new java.util.Date(DateUtils.newDateFormat(DateUtils.ISO8601_DATETIME_S).parse(value).getTime());
+
+	    } else if (DateUtils.ISO8601_DATETIME.length() - 2 == value.length()) {
+		return new java.util.Date(DateUtils.newDateFormat(DateUtils.ISO8601_DATETIME).parse(value).getTime());
+	    }
 	} catch (ParseException ex) {
-	    throw new JsonParseException(ex);
 	}
+	throw new IllegalArgumentException(STR.fmt("Couldn't parse '{}' to java.util.Date.", value));
     }
 }
