@@ -56,11 +56,11 @@ public abstract class JsonProcessor extends InitializeObject {
 	return ObjectUtils.cast(read(reader, LinkedHashMap.class));
     }
 
-    public <T> T readString(String jsonString, Class<T> resultClass) throws JsonException {
+    public <T> T read(String jsonString, Class<T> resultClass) throws JsonException {
 	return read(new StringReader(jsonString), resultClass);
     }
 
-    public <T> T readString(String jsonString, Type type) throws JsonException {
+    public <T> T read(String jsonString, Type type) throws JsonException {
 	return read(new StringReader(jsonString), type);
     }
 
