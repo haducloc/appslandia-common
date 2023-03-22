@@ -61,7 +61,7 @@ public class DateUtils {
     public static final String ISO8601_TIME_M = "HH:mm";
     public static final String ISO8601_TIME_MZ = "HH:mmXXX";
 
-    public static final String ISO8601_TIME_S = "HH:mm:ssXXX";
+    public static final String ISO8601_TIME_S = "HH:mm:ss";
     public static final String ISO8601_TIME_SZ = "HH:mm:ssXXX";
 
     public static final String ISO8601_TIME = "HH:mm:ss.SSS";
