@@ -20,10 +20,18 @@
 
 package com.appslandia.common.jdbc;
 
+import java.math.BigDecimal;
 import java.sql.Types;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
+
+import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -38,10 +46,13 @@ public class SqlTypes {
 	Set<Integer> types = new LinkedHashSet<>();
 
 	types.add(Types.BIT);
+	types.add(Types.BOOLEAN);
+
 	types.add(Types.TINYINT);
 	types.add(Types.SMALLINT);
 	types.add(Types.INTEGER);
 	types.add(Types.BIGINT);
+
 	types.add(Types.FLOAT);
 	types.add(Types.REAL);
 	types.add(Types.DOUBLE);
@@ -51,14 +62,23 @@ public class SqlTypes {
 	types.add(Types.CHAR);
 	types.add(Types.VARCHAR);
 	types.add(Types.LONGVARCHAR);
+	types.add(Types.CLOB);
+
+	types.add(Types.NCHAR);
+	types.add(Types.NVARCHAR);
+	types.add(Types.LONGNVARCHAR);
+	types.add(Types.NCLOB);
 
 	types.add(Types.DATE);
 	types.add(Types.TIME);
 	types.add(Types.TIMESTAMP);
+	types.add(Types.TIME_WITH_TIMEZONE);
+	types.add(Types.TIMESTAMP_WITH_TIMEZONE);
 
 	types.add(Types.BINARY);
 	types.add(Types.VARBINARY);
 	types.add(Types.LONGVARBINARY);
+	types.add(Types.BLOB);
 
 	types.add(Types.NULL);
 	types.add(Types.OTHER);
@@ -67,25 +87,12 @@ public class SqlTypes {
 	types.add(Types.STRUCT);
 	types.add(Types.ARRAY);
 
-	types.add(Types.BLOB);
-	types.add(Types.CLOB);
-
 	types.add(Types.REF);
 	types.add(Types.DATALINK);
-
-	types.add(Types.BOOLEAN);
 	types.add(Types.ROWID);
-
-	types.add(Types.NCHAR);
-	types.add(Types.NVARCHAR);
-	types.add(Types.LONGNVARCHAR);
-	types.add(Types.NCLOB);
 
 	types.add(Types.SQLXML);
 	types.add(Types.REF_CURSOR);
-
-	types.add(Types.TIME_WITH_TIMEZONE);
-	types.add(Types.TIMESTAMP_WITH_TIMEZONE);
 
 	TYPES = Collections.unmodifiableSet(types);
     }
@@ -94,7 +101,50 @@ public class SqlTypes {
 	return TYPES.contains(sqlType);
     }
 
-    public static Set<Integer> getTypes() {
-	return TYPES;
+    private static final Map<Integer, Class<?>> SQL_TYPE_JAVA_TYPES;
+    static {
+	Map<Integer, Class<?>> map = new HashMap<>();
+
+	map.put(Types.BIT, boolean.class);
+	map.put(Types.BOOLEAN, boolean.class);
+
+	map.put(Types.TINYINT, short.class);
+	map.put(Types.SMALLINT, short.class);
+	map.put(Types.INTEGER, int.class);
+	map.put(Types.BIGINT, long.class);
+
+	map.put(Types.FLOAT, float.class);
+	map.put(Types.REAL, float.class);
+	map.put(Types.DOUBLE, double.class);
+	map.put(Types.NUMERIC, BigDecimal.class);
+	map.put(Types.DECIMAL, BigDecimal.class);
+
+	map.put(Types.CHAR, String.class);
+	map.put(Types.VARCHAR, String.class);
+	map.put(Types.LONGVARCHAR, String.class);
+	map.put(Types.CLOB, java.io.InputStream.class);
+
+	map.put(Types.NCHAR, String.class);
+	map.put(Types.NVARCHAR, String.class);
+	map.put(Types.LONGNVARCHAR, String.class);
+	map.put(Types.NCLOB, java.io.InputStream.class);
+
+	map.put(Types.DATE, java.sql.Date.class);
+	map.put(Types.TIME, java.sql.Time.class);
+	map.put(Types.TIMESTAMP, java.sql.Timestamp.class);
+	map.put(Types.TIME_WITH_TIMEZONE, OffsetTime.class);
+	map.put(Types.TIMESTAMP_WITH_TIMEZONE, OffsetDateTime.class);
+
+	map.put(Types.BINARY, byte[].class);
+	map.put(Types.VARBINARY, byte[].class);
+	map.put(Types.LONGVARBINARY, byte[].class);
+	map.put(Types.BLOB, java.io.InputStream.class);
+
+	SQL_TYPE_JAVA_TYPES = Collections.unmodifiableMap(map);
+    }
+
+    public static Class<?> getJavaType(int sqlType) {
+	Class<?> type = SQL_TYPE_JAVA_TYPES.get(sqlType);
+	return Asserts.notNull(type, () -> STR.fmt("Failed to getJavaType({})", sqlType));
     }
 }

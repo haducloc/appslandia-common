@@ -24,6 +24,7 @@ import java.io.Serializable;
 
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.jdbc.JdbcSql;
+import com.appslandia.common.jdbc.SqlTypes;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
 
@@ -41,12 +42,16 @@ public class Field extends InitializeObject implements Serializable {
     private boolean nullable;
     private int position;
 
+    private Class<?> javaType;
+
     private FieldType keyType = FieldType.COL;
 
     @Override
     protected void init() throws Exception {
 	Asserts.notNull(this.name, "name is required.");
 	Asserts.notNull(this.keyType, "keyType is required.");
+
+	this.javaType = (this.sqlType != null) ? SqlTypes.getJavaType(this.sqlType) : null;
     }
 
     public String getParamName() {
@@ -119,10 +124,15 @@ public class Field extends InitializeObject implements Serializable {
 	return this;
     }
 
+    public Class<?> getJavaType() {
+	this.initialize();
+	return this.javaType;
+    }
+
     @Override
     public String toString() {
 	this.initialize();
-	return STR.fmt("name={}, sqlType={}, scaleOrLength={}, nullable={}, position={}, keyType={}", this.name, this.sqlType, this.scaleOrLength, this.nullable, this.position,
-		this.keyType);
+	return STR.fmt("name={}, sqlType={}, scaleOrLength={}, nullable={}, position={}, keyType={}, javaType={}", this.name, this.sqlType, this.scaleOrLength, this.nullable,
+		this.position, this.keyType, this.javaType);
     }
 }
