@@ -84,6 +84,8 @@ public class Table extends InitializeObject implements Serializable {
     }
 
     public String[] getColumnLabels() {
+	initialize();
+
 	return this.fields.stream().map(f -> f.getName()).toArray(String[]::new);
     }
 
