@@ -53,7 +53,7 @@ public class Field extends InitializeObject implements Serializable {
 	Asserts.notNull(this.name, "name is required.");
 	Asserts.notNull(this.keyType, "keyType is required.");
 
-	this.javaName = RecordUtils.toJavaFieldName(this.name);
+	this.javaName = RecordUtils.toJavaName(this.name);
 
 	Class<?> javaType = (this.sqlType != null) ? SqlTypes.getJavaType(this.sqlType) : null;
 	this.javaType = this.nullable ? TypeUtils.wrap(javaType) : javaType;
@@ -142,7 +142,7 @@ public class Field extends InitializeObject implements Serializable {
     @Override
     public String toString() {
 	this.initialize();
-	return STR.fmt("name={}, sqlType={}, scaleOrLength={}, nullable={}, position={}, keyType={}, javaType={}", this.name, this.sqlType, this.scaleOrLength, this.nullable,
-		this.position, this.keyType, this.javaType);
+	return STR.fmt("name={}, sqlType={}, scaleOrLength={}, nullable={}, position={}, keyType={}, javaType={}, javaName={}", this.name, this.sqlType, this.scaleOrLength,
+		this.nullable, this.position, this.keyType, this.javaType, this.javaName);
     }
 }

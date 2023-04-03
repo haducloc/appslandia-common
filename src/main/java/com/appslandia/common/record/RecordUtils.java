@@ -156,21 +156,21 @@ public final class RecordUtils {
     private static final Set<Class<?>> PK_JAVA_TYPES = CollectionUtils.unmodifiableSet(Short.class, Integer.class, Long.class, Float.class, Double.class, BigDecimal.class,
 	    String.class, UUID.class, java.sql.Date.class, java.sql.Timestamp.class, LocalDate.class, LocalDateTime.class, OffsetDateTime.class);
 
-    public static String toJavaFieldName(String dbFieldName) {
-	Asserts.notNull(dbFieldName);
+    public static String toJavaName(String fieldName) {
+	Asserts.notNull(fieldName);
 
 	// All Uppers
-	if (dbFieldName.equals(dbFieldName.toUpperCase(Locale.ENGLISH))) {
-	    return dbFieldName.toLowerCase(Locale.ENGLISH);
+	if (fieldName.equals(fieldName.toUpperCase(Locale.ENGLISH))) {
+	    return fieldName.toLowerCase(Locale.ENGLISH);
 	}
 
 	// All Lowers
-	String lc = dbFieldName.toLowerCase(Locale.ENGLISH);
-	if (dbFieldName.equals(lc)) {
+	String lc = fieldName.toLowerCase(Locale.ENGLISH);
+	if (fieldName.equals(lc)) {
 	    return lc;
 	}
 
 	// Mixed
-	return StringUtils.firstLowerCase(dbFieldName, Locale.ENGLISH);
+	return StringUtils.firstLowerCase(fieldName, Locale.ENGLISH);
     }
 }
