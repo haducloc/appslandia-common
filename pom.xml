@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.appslandia</groupId>
 	<artifactId>appslandia-common</artifactId>
@@ -22,6 +24,7 @@
 		<version.gson>2.9.0</version.gson>
 		<version.log4j-api>2.17.2</version.log4j-api>
 		<version.cache-api>1.1.1</version.cache-api>
+		<version.byte-buddy>1.14.3</version.byte-buddy>
 		<version.jakarta-platform>10.0.0</version.jakarta-platform>
 		<version.glassfish-jakarta-el>5.0.0-M1</version.glassfish-jakarta-el>
 		<version.hibernate-validator>8.0.0.Final</version.hibernate-validator>
@@ -33,7 +36,8 @@
 	<licenses>
 		<license>
 			<name>MIT License</name>
-			<url>https://github.com/haducloc/appslandia-common/blob/master/LICENSE</url>
+			<url>
+				https://github.com/haducloc/appslandia-common/blob/master/LICENSE</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
@@ -46,7 +50,8 @@
 	</developers>
 	<scm>
 		<connection>scm:git:https://github.com/haducloc/appslandia-common.git</connection>
-		<developerConnection>scm:git:https://github.com/haducloc/appslandia-common.git</developerConnection>
+		<developerConnection>
+			scm:git:https://github.com/haducloc/appslandia-common.git</developerConnection>
 		<url>https://github.com/haducloc/appslandia-common.git</url>
 	</scm>
 	<distributionManagement>
@@ -194,6 +199,12 @@
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 			<version>${version.junit-jupiter-api}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.bytebuddy</groupId>
+			<artifactId>byte-buddy</artifactId>
+			<version>${version.byte-buddy}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
