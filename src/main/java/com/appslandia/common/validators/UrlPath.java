@@ -49,13 +49,6 @@ public @interface UrlPath {
 
     Class<? extends Payload>[] payload() default {};
 
-    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER })
-    @Retention(RetentionPolicy.RUNTIME)
-    @Documented
-    @interface List {
-	UrlPath[] value();
-    }
-
     static final Pattern URL_PATH_PATTERN = Pattern.compile("[a-z\\d-]+", Pattern.CASE_INSENSITIVE);
 
     public static class ConstraintValidatorImpl implements ConstraintValidator<UrlPath, String> {

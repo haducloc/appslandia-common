@@ -52,13 +52,6 @@ public @interface BitMask {
 
     int value();
 
-    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER })
-    @Retention(RetentionPolicy.RUNTIME)
-    @Documented
-    @interface List {
-	BitMask[] value();
-    }
-
     public static class ConstraintValidatorImpl implements ConstraintValidator<BitMask, Number> {
 	private long max;
 

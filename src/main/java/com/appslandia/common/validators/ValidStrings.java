@@ -50,13 +50,6 @@ public @interface ValidStrings {
 
     String[] value();
 
-    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER })
-    @Retention(RetentionPolicy.RUNTIME)
-    @Documented
-    @interface List {
-	ValidStrings[] value();
-    }
-
     public static class ConstraintValidatorImpl implements ConstraintValidator<ValidStrings, String> {
 
 	private String[] validValues;

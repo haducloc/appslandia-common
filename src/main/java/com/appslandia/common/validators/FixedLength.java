@@ -50,13 +50,6 @@ public @interface FixedLength {
 
     int value();
 
-    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER })
-    @Retention(RetentionPolicy.RUNTIME)
-    @Documented
-    @interface List {
-	FixedLength[] value();
-    }
-
     public static class ConstraintValidatorImpl implements ConstraintValidator<FixedLength, CharSequence> {
 
 	private int length;

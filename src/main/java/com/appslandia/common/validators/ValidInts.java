@@ -50,13 +50,6 @@ public @interface ValidInts {
 
     int[] value();
 
-    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER })
-    @Retention(RetentionPolicy.RUNTIME)
-    @Documented
-    @interface List {
-	ValidInts[] value();
-    }
-
     public static class ConstraintValidatorImpl implements ConstraintValidator<ValidInts, Number> {
 
 	private int[] validValues;

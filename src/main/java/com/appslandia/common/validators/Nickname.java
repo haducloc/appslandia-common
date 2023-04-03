@@ -51,13 +51,6 @@ public @interface Nickname {
 
     Class<? extends Payload>[] payload() default {};
 
-    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER })
-    @Retention(RetentionPolicy.RUNTIME)
-    @Documented
-    @interface List {
-	Nickname[] value();
-    }
-
     // contains a-z and 0-9
     // start with a-z
     // length 3-45

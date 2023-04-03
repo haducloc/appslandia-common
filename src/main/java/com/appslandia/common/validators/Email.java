@@ -50,13 +50,6 @@ public @interface Email {
 
     Class<? extends Payload>[] payload() default {};
 
-    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER })
-    @Retention(RetentionPolicy.RUNTIME)
-    @Documented
-    @interface List {
-	Email[] value();
-    }
-
     public static class ConstraintValidatorImpl implements ConstraintValidator<Email, CharSequence> {
 
 	@Override

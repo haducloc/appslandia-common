@@ -50,13 +50,6 @@ public @interface Password {
 
     Class<? extends Payload>[] payload() default {};
 
-    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER })
-    @Retention(RetentionPolicy.RUNTIME)
-    @Documented
-    @interface List {
-	Password[] value();
-    }
-
     public static class ConstraintValidatorImpl implements ConstraintValidator<Password, CharSequence> {
 
 	@Override

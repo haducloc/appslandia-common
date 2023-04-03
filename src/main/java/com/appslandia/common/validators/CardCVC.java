@@ -49,13 +49,6 @@ public @interface CardCVC {
 
     Class<? extends Payload>[] payload() default {};
 
-    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER })
-    @Retention(RetentionPolicy.RUNTIME)
-    @Documented
-    @interface List {
-	CardCVC[] value();
-    }
-
     static final Pattern CVC_PATTERN = Pattern.compile("\\d{3,4}");
 
     public static class ConstraintValidatorImpl implements ConstraintValidator<CardCVC, CharSequence> {

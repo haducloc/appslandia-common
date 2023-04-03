@@ -51,13 +51,6 @@ public @interface Username {
 
     Class<? extends Payload>[] payload() default {};
 
-    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER })
-    @Retention(RetentionPolicy.RUNTIME)
-    @Documented
-    @interface List {
-	Username[] value();
-    }
-
     // allow characters: a-zA-Z0-9.
     // no two consecutive dot
     // must start a-zA-Z

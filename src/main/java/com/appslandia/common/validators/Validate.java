@@ -52,13 +52,6 @@ public @interface Validate {
 
     String reportProperty();
 
-    @Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
-    @Retention(RetentionPolicy.RUNTIME)
-    @Documented
-    @interface List {
-	Validate[] value();
-    }
-
     public static class ConstraintValidatorImpl implements ConstraintValidator<Validate, Object> {
 
 	private String message;

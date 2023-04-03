@@ -51,13 +51,6 @@ public @interface DigitOnly {
 
     int value() default 0;
 
-    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER })
-    @Retention(RetentionPolicy.RUNTIME)
-    @Documented
-    @interface List {
-	DigitOnly[] value();
-    }
-
     static final Pattern DIGITS_PATTERN = Pattern.compile("\\d+");
 
     public static class ConstraintValidatorImpl implements ConstraintValidator<DigitOnly, CharSequence> {

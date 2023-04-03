@@ -50,13 +50,6 @@ public @interface MaxLength {
 
     int value();
 
-    @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER })
-    @Retention(RetentionPolicy.RUNTIME)
-    @Documented
-    @interface List {
-	MaxLength[] value();
-    }
-
     public static class ConstraintValidatorImpl implements ConstraintValidator<MaxLength, CharSequence> {
 
 	private int maxLength;
