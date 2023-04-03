@@ -27,6 +27,7 @@ import com.appslandia.common.jdbc.JdbcSql;
 import com.appslandia.common.jdbc.SqlTypes;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
+import com.appslandia.common.utils.TypeUtils;
 
 /**
  *
@@ -51,7 +52,8 @@ public class Field extends InitializeObject implements Serializable {
 	Asserts.notNull(this.name, "name is required.");
 	Asserts.notNull(this.keyType, "keyType is required.");
 
-	this.javaType = (this.sqlType != null) ? SqlTypes.getJavaType(this.sqlType) : null;
+	Class<?> javaType = (this.sqlType != null) ? SqlTypes.getJavaType(this.sqlType) : null;
+	this.javaType = this.nullable ? TypeUtils.wrap(javaType) : javaType;
     }
 
     public String getParamName() {
