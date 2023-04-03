@@ -33,6 +33,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -41,6 +42,7 @@ import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.ReflectionException;
 import com.appslandia.common.utils.STR;
+import com.appslandia.common.utils.StringUtils;
 
 /**
  *
@@ -153,4 +155,22 @@ public final class RecordUtils {
 
     private static final Set<Class<?>> PK_JAVA_TYPES = CollectionUtils.unmodifiableSet(Short.class, Integer.class, Long.class, Float.class, Double.class, BigDecimal.class,
 	    String.class, UUID.class, java.sql.Date.class, java.sql.Timestamp.class, LocalDate.class, LocalDateTime.class, OffsetDateTime.class);
+
+    public static String toJavaFieldName(String dbFieldName) {
+	Asserts.notNull(dbFieldName);
+
+	// All Uppers
+	if (dbFieldName.equals(dbFieldName.toUpperCase(Locale.ENGLISH))) {
+	    return dbFieldName.toLowerCase(Locale.ENGLISH);
+	}
+
+	// All Lowers
+	String lc = dbFieldName.toLowerCase(Locale.ENGLISH);
+	if (dbFieldName.equals(lc)) {
+	    return lc;
+	}
+
+	// Mixed
+	return StringUtils.firstLowerCase(dbFieldName, Locale.ENGLISH);
+    }
 }
