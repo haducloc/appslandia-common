@@ -41,40 +41,36 @@ public class Table extends InitializeObject implements Serializable {
     private String schema;
     private String name;
 
-    @TSExcluded
-    private transient Field keyIncr;
     private List<Field> fields;
 
-    private JdbcSql insertSql;
-    private JdbcSql updateSql;
-    private JdbcSql deleteSql;
+    @TSExcluded
+    private transient Field singleKey;
 
-    private JdbcSql getSql;
-    private JdbcSql existsSql;
+    private transient JdbcSql insertSql;
+    private transient JdbcSql updateSql;
+    private transient JdbcSql deleteSql;
+
+    private transient JdbcSql getSql;
+    private transient JdbcSql existsSql;
 
     @Override
     protected void init() throws Exception {
 	Asserts.notNull(this.name, "name is required.");
 	Asserts.hasElements(this.fields, "fields are required.");
 
-	int keyCount = 0;
-	for (Field field : this.fields) {
+	int keyIncr = (int) this.fields.stream().filter(field -> field.getKeyType() == FieldType.KEY_INCR).count();
+	int keyCount = (int) this.fields.stream().filter(field -> field.getKeyType() == FieldType.KEY_INCR || field.getKeyType() == FieldType.KEY).count();
 
-	    if (field.getKeyType() == FieldType.KEY || field.getKeyType() == FieldType.KEY_INCR) {
-		keyCount++;
-
-		if (field.getKeyType() == FieldType.KEY_INCR) {
-		    Asserts.isNull(this.keyIncr, "keyIncr duplicated.");
-
-		    this.keyIncr = field;
-		}
-	    }
-	}
-
-	// No keys
 	if (keyCount == 0) {
 	    throw new IllegalArgumentException("No keys found.");
 	}
+	if (keyIncr > 1) {
+	    throw new IllegalArgumentException("More than one auto-increment keys.");
+	}
+	if (keyCount == 1) {
+	    this.singleKey = this.fields.stream().filter(field -> field.getKeyType() == FieldType.KEY_INCR || field.getKeyType() == FieldType.KEY).findFirst().get();
+	}
+
 	this.insertSql = new JdbcSql(this.buildInsertSQL());
 	this.updateSql = new JdbcSql(this.buildUpdateSQL());
 	this.deleteSql = new JdbcSql(this.buildDeleteSQL());
@@ -87,6 +83,14 @@ public class Table extends InitializeObject implements Serializable {
 	initialize();
 
 	return this.fields.stream().map(f -> f.getName()).toArray(String[]::new);
+    }
+
+    public Field getKeyIncr() {
+	initialize();
+	if (this.singleKey == null || this.singleKey.getKeyType() != FieldType.KEY_INCR) {
+	    return null;
+	}
+	return this.singleKey;
     }
 
     protected String buildInsertSQL() {
@@ -232,9 +236,9 @@ public class Table extends InitializeObject implements Serializable {
 	return this;
     }
 
-    public Field getKeyIncr() {
+    public Field getSingleKey() {
 	initialize();
-	return this.keyIncr;
+	return this.singleKey;
     }
 
     public JdbcSql getInsertSql() {

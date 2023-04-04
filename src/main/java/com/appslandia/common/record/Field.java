@@ -56,7 +56,9 @@ public class Field extends InitializeObject implements Serializable {
 	this.javaName = RecordUtils.toJavaName(this.name);
 
 	Class<?> javaType = (this.sqlType != null) ? SqlTypes.getJavaType(this.sqlType) : null;
-	this.javaType = this.nullable ? TypeUtils.wrap(javaType) : javaType;
+	if (javaType != null) {
+	    this.javaType = this.nullable ? TypeUtils.wrap(javaType) : javaType;
+	}
     }
 
     public String getParamName() {
