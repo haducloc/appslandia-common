@@ -26,6 +26,7 @@ import java.beans.PropertyDescriptor;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -172,5 +173,22 @@ public final class RecordUtils {
 
 	// Mixed
 	return StringUtils.firstLowerCase(fieldName, Locale.ENGLISH);
+    }
+
+    public static List<Field> getFields(ResultSet rs) throws SQLException {
+	ResultSetMetaData md = rs.getMetaData();
+	List<Field> fields = new ArrayList<>(md.getColumnCount());
+
+	for (int col = 1; col <= md.getColumnCount(); col++) {
+	    Field field = new Field();
+
+	    field.setName(md.getColumnLabel(col));
+	    field.setKeyType(FieldType.COL);
+	    field.setSqlType(md.getColumnType(col));
+
+	    fields.add(field);
+	}
+
+	return fields;
     }
 }

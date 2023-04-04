@@ -59,8 +59,8 @@ public class JdbcUtils {
 	ResultSetMetaData md = rs.getMetaData();
 	String[] labels = new String[md.getColumnCount()];
 
-	for (int idx = 0; idx < md.getColumnCount(); idx++) {
-	    labels[idx] = md.getColumnLabel(idx + 1);
+	for (int col = 1; col <= md.getColumnCount(); col++) {
+	    labels[col - 1] = md.getColumnLabel(col);
 	}
 	return labels;
     }
