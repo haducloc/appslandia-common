@@ -46,12 +46,12 @@ public class Field extends InitializeObject implements Serializable {
     private String javaName;
     private Class<?> javaType;
 
-    private FieldType keyType = FieldType.COL;
+    private FieldType fieldType = FieldType.COL;
 
     @Override
     protected void init() throws Exception {
 	Asserts.notNull(this.name, "name is required.");
-	Asserts.notNull(this.keyType, "keyType is required.");
+	Asserts.notNull(this.fieldType, "fieldType is required.");
 
 	this.javaName = RecordUtils.toJavaName(this.name);
 
@@ -120,14 +120,14 @@ public class Field extends InitializeObject implements Serializable {
 	return this;
     }
 
-    public FieldType getKeyType() {
+    public FieldType getFieldType() {
 	this.initialize();
-	return this.keyType;
+	return this.fieldType;
     }
 
-    public Field setKeyType(FieldType keyType) {
+    public Field setFieldType(FieldType fieldType) {
 	this.assertNotInitialized();
-	this.keyType = keyType;
+	this.fieldType = fieldType;
 	return this;
     }
 
@@ -144,7 +144,7 @@ public class Field extends InitializeObject implements Serializable {
     @Override
     public String toString() {
 	this.initialize();
-	return STR.fmt("name={}, sqlType={}, scaleOrLength={}, nullable={}, position={}, keyType={}, javaType={}, javaName={}", this.name, this.sqlType, this.scaleOrLength,
-		this.nullable, this.position, this.keyType, this.javaType, this.javaName);
+	return STR.fmt("name={}, sqlType={}, scaleOrLength={}, nullable={}, position={}, fieldType={}, javaType={}, javaName={}", this.name, this.sqlType, this.scaleOrLength,
+		this.nullable, this.position, this.fieldType, this.javaType, this.javaName);
     }
 }

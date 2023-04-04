@@ -58,8 +58,8 @@ public class Table extends InitializeObject implements Serializable {
 	Asserts.notNull(this.name, "name is required.");
 	Asserts.hasElements(this.fields, "fields are required.");
 
-	int keyIncr = (int) this.fields.stream().filter(field -> field.getKeyType() == FieldType.KEY_INCR).count();
-	int keyCount = (int) this.fields.stream().filter(field -> field.getKeyType() == FieldType.KEY_INCR || field.getKeyType() == FieldType.KEY).count();
+	int keyIncr = (int) this.fields.stream().filter(field -> field.getFieldType() == FieldType.KEY_INCR).count();
+	int keyCount = (int) this.fields.stream().filter(field -> field.getFieldType() == FieldType.KEY_INCR || field.getFieldType() == FieldType.KEY).count();
 
 	if (keyCount == 0) {
 	    throw new IllegalArgumentException("No keys found.");
@@ -68,7 +68,7 @@ public class Table extends InitializeObject implements Serializable {
 	    throw new IllegalArgumentException("More than one auto-increment keys.");
 	}
 	if (keyCount == 1) {
-	    this.singleKey = this.fields.stream().filter(field -> field.getKeyType() == FieldType.KEY_INCR || field.getKeyType() == FieldType.KEY).findFirst().get();
+	    this.singleKey = this.fields.stream().filter(field -> field.getFieldType() == FieldType.KEY_INCR || field.getFieldType() == FieldType.KEY).findFirst().get();
 	}
 
 	this.insertSql = new JdbcSql(this.buildInsertSQL());
@@ -87,7 +87,7 @@ public class Table extends InitializeObject implements Serializable {
 
     public Field getKeyIncr() {
 	initialize();
-	if (this.singleKey == null || this.singleKey.getKeyType() != FieldType.KEY_INCR) {
+	if (this.singleKey == null || this.singleKey.getFieldType() != FieldType.KEY_INCR) {
 	    return null;
 	}
 	return this.singleKey;
@@ -100,7 +100,7 @@ public class Table extends InitializeObject implements Serializable {
 	boolean isFirst = true;
 	for (Field field : this.fields) {
 
-	    if (field.getKeyType() != FieldType.KEY_INCR && field.getKeyType() != FieldType.COL_GEN) {
+	    if (field.getFieldType() != FieldType.KEY_INCR && field.getFieldType() != FieldType.COL_GEN) {
 
 		if (isFirst) {
 		    sb.append(field.getName());
@@ -115,7 +115,7 @@ public class Table extends InitializeObject implements Serializable {
 
 	isFirst = true;
 	for (Field field : this.fields) {
-	    if (field.getKeyType() != FieldType.KEY_INCR && field.getKeyType() != FieldType.COL_GEN) {
+	    if (field.getFieldType() != FieldType.KEY_INCR && field.getFieldType() != FieldType.COL_GEN) {
 
 		if (isFirst) {
 		    sb.append(field.getParamName());
@@ -137,7 +137,7 @@ public class Table extends InitializeObject implements Serializable {
 	for (Field field : this.fields) {
 
 	    // Don't update Key & Generated columns
-	    if (field.getKeyType() == FieldType.COL) {
+	    if (field.getFieldType() == FieldType.COL) {
 
 		if (isFirst) {
 		    sb.append(field.getName()).append("=").append(field.getParamName());
@@ -180,7 +180,7 @@ public class Table extends InitializeObject implements Serializable {
     protected void appendWhereKeyConditions(TextBuilder sqlBuilder) {
 	boolean isFirst = true;
 	for (Field field : this.fields) {
-	    if (field.getKeyType() == FieldType.KEY || field.getKeyType() == FieldType.KEY_INCR) {
+	    if (field.getFieldType() == FieldType.KEY || field.getFieldType() == FieldType.KEY_INCR) {
 
 		if (isFirst) {
 		    sqlBuilder.append(field.getName()).append("=").append(field.getParamName());

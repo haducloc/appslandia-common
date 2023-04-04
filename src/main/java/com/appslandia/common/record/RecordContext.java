@@ -71,7 +71,7 @@ public class RecordContext extends DbContext {
 
 	// Parameters
 	for (Field field : table.getFields()) {
-	    if (field.getKeyType() != FieldType.KEY_INCR && field.getKeyType() != FieldType.COL_GEN) {
+	    if (field.getFieldType() != FieldType.KEY_INCR && field.getFieldType() != FieldType.COL_GEN) {
 
 		Object val = record.get(field.getName());
 
@@ -133,7 +133,7 @@ public class RecordContext extends DbContext {
 
 	// Parameters
 	for (Field field : table.getFields()) {
-	    if (field.getKeyType() != FieldType.COL_GEN) {
+	    if (field.getFieldType() != FieldType.COL_GEN) {
 		Object val = record.get(field.getName());
 
 		if (!field.isNullable()) {
@@ -180,7 +180,7 @@ public class RecordContext extends DbContext {
 
 	// Parameters
 	for (Field field : table.getFields()) {
-	    if (field.getKeyType() == FieldType.KEY || field.getKeyType() == FieldType.KEY_INCR) {
+	    if (field.getFieldType() == FieldType.KEY || field.getFieldType() == FieldType.KEY_INCR) {
 
 		Object val = key.get(field.getName());
 		Asserts.notNull(val, () -> STR.fmt("The field '{}' is required.", field.getName()));
@@ -222,7 +222,7 @@ public class RecordContext extends DbContext {
 
 	// Parameters
 	for (Field field : table.getFields()) {
-	    if (field.getKeyType() == FieldType.KEY || field.getKeyType() == FieldType.KEY_INCR) {
+	    if (field.getFieldType() == FieldType.KEY || field.getFieldType() == FieldType.KEY_INCR) {
 
 		Object val = key.get(field.getName());
 		Asserts.notNull(val, () -> STR.fmt("The field '{}' is required.", field.getName()));
@@ -257,7 +257,7 @@ public class RecordContext extends DbContext {
 
 	// Parameters
 	for (Field field : table.getFields()) {
-	    if (field.getKeyType() == FieldType.KEY || field.getKeyType() == FieldType.KEY_INCR) {
+	    if (field.getFieldType() == FieldType.KEY || field.getFieldType() == FieldType.KEY_INCR) {
 
 		Object val = key.get(field.getName());
 		Asserts.notNull(val, () -> STR.fmt("The field '{}' is required.", field.getName()));

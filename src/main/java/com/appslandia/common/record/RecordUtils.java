@@ -109,9 +109,9 @@ public final class RecordUtils {
 		field.setPosition(position);
 
 		if (isKey) {
-		    field.setKeyType(autoIncr ? FieldType.KEY_INCR : FieldType.KEY);
+		    field.setFieldType(autoIncr ? FieldType.KEY_INCR : FieldType.KEY);
 		} else {
-		    field.setKeyType(genCol ? FieldType.COL_GEN : FieldType.COL);
+		    field.setFieldType(genCol ? FieldType.COL_GEN : FieldType.COL);
 		}
 		fields.add(field);
 	    }
@@ -148,7 +148,7 @@ public final class RecordUtils {
 	Asserts.notNull(pk);
 	Asserts.isTrue(PK_JAVA_TYPES.contains(pk.getClass()), "pk is invalid.");
 
-	List<Field> keyFields = table.getFields().stream().filter(f -> f.getKeyType() == FieldType.KEY || f.getKeyType() == FieldType.KEY_INCR).collect(Collectors.toList());
+	List<Field> keyFields = table.getFields().stream().filter(f -> f.getFieldType() == FieldType.KEY || f.getFieldType() == FieldType.KEY_INCR).collect(Collectors.toList());
 	Asserts.isTrue(keyFields.size() == 1, "table is invalid.");
 
 	return new Key().set(keyFields.get(0).getName(), pk);
@@ -183,7 +183,7 @@ public final class RecordUtils {
 	    Field field = new Field();
 
 	    field.setName(md.getColumnLabel(col));
-	    field.setKeyType(FieldType.COL);
+	    field.setFieldType(FieldType.COL);
 	    field.setSqlType(md.getColumnType(col));
 
 	    fields.add(field);
