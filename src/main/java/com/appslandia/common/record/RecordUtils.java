@@ -37,7 +37,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
@@ -144,14 +143,14 @@ public final class RecordUtils {
 	}
     }
 
-    public static Key toKey(Table table, Object pk) throws ReflectionException {
+    public static Key toKey(Table table, Object pk) {
 	Asserts.notNull(pk);
 	Asserts.isTrue(PK_JAVA_TYPES.contains(pk.getClass()), "pk is invalid.");
 
-	List<Field> keyFields = table.getFields().stream().filter(f -> f.getFieldType() == FieldType.KEY || f.getFieldType() == FieldType.KEY_INCR).collect(Collectors.toList());
-	Asserts.isTrue(keyFields.size() == 1, "table is invalid.");
+	Field keyField = table.getSingleKey();
+	Asserts.notNull(keyField, "table is invalid.");
 
-	return new Key().set(keyFields.get(0).getName(), pk);
+	return new Key().set(keyField.getName(), pk);
     }
 
     private static final Set<Class<?>> PK_JAVA_TYPES = CollectionUtils.unmodifiableSet(Short.class, Integer.class, Long.class, Float.class, Double.class, BigDecimal.class,
