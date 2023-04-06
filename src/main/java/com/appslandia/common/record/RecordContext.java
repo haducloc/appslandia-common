@@ -65,7 +65,7 @@ public class RecordContext extends DbContext {
 	StatementImpl stat = this.stats.get(table.getInsertSql().getPSql());
 
 	if (stat == null) {
-	    stat = this.conn.prepareStatement(table.getInsertSql(), (table.getKeyIncr() != null));
+	    stat = this.conn.prepareStatement(table.getInsertSql(), (table.getIncrKey() != null));
 	    this.stats.put(table.getInsertSql().getPSql(), stat);
 	}
 
@@ -87,12 +87,12 @@ public class RecordContext extends DbContext {
 	    int rowAffected = stat.executeUpdate();
 
 	    // Generated Key
-	    if (table.getKeyIncr() != null) {
+	    if (table.getIncrKey() != null) {
 		try (ResultSet rs = stat.getGeneratedKeys()) {
 
 		    if (rs.next()) {
 			long generatedKey = rs.getLong(1);
-			record.set(table.getKeyIncr().getName(), generatedKey);
+			record.set(table.getIncrKey().getName(), generatedKey);
 
 			return generatedKey;
 		    }

@@ -85,7 +85,7 @@ public class Table extends InitializeObject implements Serializable {
 	return this.fields.stream().map(f -> f.getName()).toArray(String[]::new);
     }
 
-    public Field getKeyIncr() {
+    public Field getIncrKey() {
 	initialize();
 	if (this.singleKey == null || this.singleKey.getFieldType() != FieldType.KEY_INCR) {
 	    return null;
