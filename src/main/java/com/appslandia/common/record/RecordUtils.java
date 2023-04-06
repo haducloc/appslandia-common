@@ -156,22 +156,38 @@ public final class RecordUtils {
     private static final Set<Class<?>> PK_JAVA_TYPES = CollectionUtils.unmodifiableSet(Short.class, Integer.class, Long.class, Float.class, Double.class, BigDecimal.class,
 	    String.class, UUID.class, java.sql.Date.class, java.sql.Timestamp.class, LocalDate.class, LocalDateTime.class, OffsetDateTime.class);
 
-    public static String toJavaFieldName(String fieldName) {
-	Asserts.notNull(fieldName);
+    public static String toFieldName(String dbFieldName) {
+	Asserts.notNull(dbFieldName);
 
 	// All Uppers
-	if (fieldName.equals(fieldName.toUpperCase(Locale.ENGLISH))) {
-	    return fieldName.toLowerCase(Locale.ENGLISH);
+	if (dbFieldName.equals(dbFieldName.toUpperCase(Locale.ENGLISH))) {
+	    return dbFieldName.toLowerCase(Locale.ENGLISH);
 	}
 
 	// All Lowers
-	String lc = fieldName.toLowerCase(Locale.ENGLISH);
-	if (fieldName.equals(lc)) {
-	    return lc;
+	if (dbFieldName.equals(dbFieldName.toLowerCase(Locale.ENGLISH))) {
+	    return dbFieldName;
 	}
 
 	// Mixed
-	return StringUtils.firstLowerCase(fieldName, Locale.ENGLISH);
+	return StringUtils.firstLowerCase(dbFieldName, Locale.ENGLISH);
+    }
+
+    public static String toEntityName(String tableName) {
+	Asserts.notNull(tableName);
+
+	// All Uppers
+	if (tableName.equals(tableName.toUpperCase(Locale.ENGLISH))) {
+	    return StringUtils.firstUpperCase(tableName.toLowerCase(Locale.ENGLISH), Locale.ENGLISH);
+	}
+
+	// All Lowers
+	if (tableName.equals(tableName.toLowerCase(Locale.ENGLISH))) {
+	    return StringUtils.firstUpperCase(tableName, Locale.ENGLISH);
+	}
+
+	// Mixed
+	return StringUtils.firstUpperCase(tableName, Locale.ENGLISH);
     }
 
     public static List<Field> getFields(ResultSet rs) throws SQLException {

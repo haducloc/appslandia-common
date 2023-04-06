@@ -85,7 +85,7 @@ public class Field extends InitializeObject implements Serializable {
     public Field setName(String name) {
 	this.assertNotInitialized();
 	if (name != null) {
-	    this.name = RecordUtils.toJavaFieldName(name);
+	    this.name = RecordUtils.toFieldName(name);
 	}
 	return this;
     }
