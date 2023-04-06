@@ -180,7 +180,7 @@ public class Table extends InitializeObject implements Serializable {
     protected void appendWhereKeyConditions(TextBuilder sqlBuilder) {
 	boolean isFirst = true;
 	for (Field field : this.fields) {
-	    if (field.getFieldType() == FieldType.KEY || field.getFieldType() == FieldType.KEY_INCR) {
+	    if (field.getFieldType() == FieldType.KEY_INCR || field.getFieldType() == FieldType.KEY) {
 
 		if (isFirst) {
 		    sqlBuilder.append(field.getName()).append("=").append(field.getParamName());
