@@ -40,7 +40,7 @@ public class Field extends InitializeObject implements Serializable {
     private String name;
     private Integer sqlType;
     private Integer scaleOrLength;
-    private boolean nullable;
+    private boolean nullable = true;
     private int position;
 
     private String javaName;
@@ -55,9 +55,18 @@ public class Field extends InitializeObject implements Serializable {
 
 	this.javaName = RecordUtils.toJavaName(this.name);
 
-	Class<?> javaType = (this.sqlType != null) ? SqlTypes.getJavaType(this.sqlType) : null;
-	if (javaType != null) {
-	    this.javaType = this.nullable ? TypeUtils.wrap(javaType) : javaType;
+	if (this.javaType == null) {
+	    Class<?> javaType = (this.sqlType != null) ? SqlTypes.getJavaType(this.sqlType) : null;
+
+	    if (javaType != null) {
+
+		if (this.fieldType == FieldType.KEY_INCR || this.fieldType == FieldType.KEY) {
+		    this.javaType = TypeUtils.wrap(javaType);
+
+		} else {
+		    this.javaType = this.nullable ? TypeUtils.wrap(javaType) : javaType;
+		}
+	    }
 	}
     }
 
@@ -139,6 +148,12 @@ public class Field extends InitializeObject implements Serializable {
     public Class<?> getJavaType() {
 	this.initialize();
 	return this.javaType;
+    }
+
+    public Field setJavaType(Class<?> javaType) {
+	this.assertNotInitialized();
+	this.javaType = javaType;
+	return this;
     }
 
     @Override
