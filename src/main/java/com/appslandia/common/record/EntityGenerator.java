@@ -175,7 +175,7 @@ public class EntityGenerator extends InitializeObject {
 		return obj.getClass().getDeclaredField(mtdt.key());
 
 	    } catch (NoSuchFieldException ex) {
-		throw new Error(ex);
+		throw new IllegalArgumentException(ex);
 	    }
 	});
 
