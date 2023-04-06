@@ -43,7 +43,6 @@ public class Field extends InitializeObject implements Serializable {
     private boolean nullable = true;
     private int position;
 
-    private String javaName;
     private Class<?> javaType;
 
     private FieldType fieldType = FieldType.COL;
@@ -52,8 +51,6 @@ public class Field extends InitializeObject implements Serializable {
     protected void init() throws Exception {
 	Asserts.notNull(this.name, "name is required.");
 	Asserts.notNull(this.fieldType, "fieldType is required.");
-
-	this.javaName = RecordUtils.toJavaName(this.name);
 
 	if (this.javaType == null) {
 	    Class<?> javaType = (this.sqlType != null) ? SqlTypes.getJavaType(this.sqlType) : null;
@@ -74,7 +71,7 @@ public class Field extends InitializeObject implements Serializable {
 	return JdbcSql.getParamPrefix() + getName();
     }
 
-    public boolean isPk() {
+    public boolean isKey() {
 	this.initialize();
 
 	return this.fieldType == FieldType.KEY_INCR || this.fieldType == FieldType.KEY;
@@ -87,7 +84,9 @@ public class Field extends InitializeObject implements Serializable {
 
     public Field setName(String name) {
 	this.assertNotInitialized();
-	this.name = name;
+	if (name != null) {
+	    this.name = RecordUtils.toJavaFieldName(name);
+	}
 	return this;
     }
 
@@ -146,11 +145,6 @@ public class Field extends InitializeObject implements Serializable {
 	return this;
     }
 
-    public String getJavaName() {
-	this.initialize();
-	return this.javaName;
-    }
-
     public Class<?> getJavaType() {
 	this.initialize();
 	return this.javaType;
@@ -165,7 +159,7 @@ public class Field extends InitializeObject implements Serializable {
     @Override
     public String toString() {
 	this.initialize();
-	return STR.fmt("name={}, sqlType={}, scaleOrLength={}, nullable={}, position={}, fieldType={}, javaType={}, javaName={}", this.name, this.sqlType, this.scaleOrLength,
-		this.nullable, this.position, this.fieldType, this.javaType, this.javaName);
+	return STR.fmt("name={}, sqlType={}, scaleOrLength={}, nullable={}, position={}, fieldType={}, javaType={}.", this.name, this.sqlType, this.scaleOrLength, this.nullable,
+		this.position, this.fieldType, this.javaType);
     }
 }

@@ -156,7 +156,7 @@ public final class RecordUtils {
     private static final Set<Class<?>> PK_JAVA_TYPES = CollectionUtils.unmodifiableSet(Short.class, Integer.class, Long.class, Float.class, Double.class, BigDecimal.class,
 	    String.class, UUID.class, java.sql.Date.class, java.sql.Timestamp.class, LocalDate.class, LocalDateTime.class, OffsetDateTime.class);
 
-    public static String toJavaName(String fieldName) {
+    public static String toJavaFieldName(String fieldName) {
 	Asserts.notNull(fieldName);
 
 	// All Uppers

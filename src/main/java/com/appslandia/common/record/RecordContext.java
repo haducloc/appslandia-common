@@ -180,7 +180,7 @@ public class RecordContext extends DbContext {
 
 	// Parameters
 	for (Field field : table.getFields()) {
-	    if (field.isPk()) {
+	    if (field.isKey()) {
 
 		Object val = key.get(field.getName());
 		Asserts.notNull(val, () -> STR.fmt("The field '{}' is required.", field.getName()));
@@ -222,7 +222,7 @@ public class RecordContext extends DbContext {
 
 	// Parameters
 	for (Field field : table.getFields()) {
-	    if (field.isPk()) {
+	    if (field.isKey()) {
 
 		Object val = key.get(field.getName());
 		Asserts.notNull(val, () -> STR.fmt("The field '{}' is required.", field.getName()));
@@ -257,7 +257,7 @@ public class RecordContext extends DbContext {
 
 	// Parameters
 	for (Field field : table.getFields()) {
-	    if (field.isPk()) {
+	    if (field.isKey()) {
 
 		Object val = key.get(field.getName());
 		Asserts.notNull(val, () -> STR.fmt("The field '{}' is required.", field.getName()));
