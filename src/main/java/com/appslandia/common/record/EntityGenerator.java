@@ -118,7 +118,7 @@ public class EntityGenerator extends InitializeObject {
 	}
 
 	// pk
-	builder = builder.defineMethod("getPk", Object.class, Visibility.PUBLIC).intercept(FieldAccessor.ofField(table.getSingleKey().getName()));
+	builder = builder.defineMethod("getPk", table.getSingleKey().getJavaType(), Visibility.PUBLIC).intercept(FieldAccessor.ofField(table.getSingleKey().getName()));
 
 	// Constructor
 	Composable ctor = MethodCall.invoke(EntityBase.class.getDeclaredConstructor()).onSuper();
