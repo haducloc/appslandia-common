@@ -26,7 +26,9 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
@@ -47,9 +49,6 @@ import net.bytebuddy.dynamic.DynamicType.Unloaded;
 import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.Implementation.Composable;
 import net.bytebuddy.implementation.MethodCall;
-import net.bytebuddy.implementation.MethodDelegation;
-import net.bytebuddy.implementation.bind.annotation.RuntimeType;
-import net.bytebuddy.implementation.bind.annotation.This;
 
 /**
  *
@@ -101,7 +100,7 @@ public class EntityGenerator extends InitializeObject {
 
 	// EntityBase base
 	var builder = new ByteBuddy().subclass(EntityBase.class).name(fullClass)
-		.annotateType(AnnotationDescription.Builder.ofType(Metadata.class).define("catalog", ValueUtils.valueOrAlt(table.getCatalog(), StringUtils.EMPTY_STRING))
+		.annotateType(AnnotationDescription.Builder.ofType(TableMtdt.class).define("catalog", ValueUtils.valueOrAlt(table.getCatalog(), StringUtils.EMPTY_STRING))
 			.define("schema", ValueUtils.valueOrAlt(table.getSchema(), StringUtils.EMPTY_STRING)).define("table", table.getName())
 			.define("key", table.getSingleKey().getName()).build());
 
@@ -119,7 +118,7 @@ public class EntityGenerator extends InitializeObject {
 	}
 
 	// pk
-	builder = builder.defineMethod("getPk", Object.class, Visibility.PUBLIC).intercept(MethodDelegation.to(EntityGenerator.class));
+	builder = builder.defineMethod("getPk", Object.class, Visibility.PUBLIC).intercept(FieldAccessor.ofField(table.getSingleKey().getName()));
 
 	// Constructor
 	Composable ctor = MethodCall.invoke(EntityBase.class.getDeclaredConstructor()).onSuper();
@@ -144,7 +143,7 @@ public class EntityGenerator extends InitializeObject {
     @Documented
     @Target(ElementType.TYPE)
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface Metadata {
+    public @interface TableMtdt {
 
 	String catalog();
 
@@ -155,32 +154,66 @@ public class EntityGenerator extends InitializeObject {
 	String key();
     }
 
-    static final ConcurrentMap<Class<?>, Metadata> METADATAS = new ConcurrentHashMap<>();
+    public static class Metadata {
 
-    public static Metadata getMetadata(Object obj) {
-	Metadata mtdt = METADATAS.computeIfAbsent(obj.getClass(), clazz -> {
-	    return obj.getClass().getDeclaredAnnotation(Metadata.class);
-	});
-	return Asserts.notNull(mtdt);
+	final TableMtdt tableMtdt;
+	final Constructor<?> emptyConstructor;
+	final Constructor<?> paramConstructor;
+	final java.lang.reflect.Field pkField;
+
+	public Metadata(TableMtdt tableMtdt, Constructor<?> emptyConstructor, Constructor<?> paramConstructor, java.lang.reflect.Field pkField) {
+	    this.tableMtdt = tableMtdt;
+	    this.emptyConstructor = emptyConstructor;
+	    this.paramConstructor = paramConstructor;
+	    this.pkField = pkField;
+	}
+
+	public TableMtdt getTableMtdt() {
+	    return this.tableMtdt;
+	}
+
+	public Constructor<?> getEmptyConstructor() {
+	    return this.emptyConstructor;
+	}
+
+	public Constructor<?> getParamConstructor() {
+	    return this.paramConstructor;
+	}
+
+	public java.lang.reflect.Field getPkField() {
+	    return this.pkField;
+	}
     }
 
-    static final ConcurrentMap<Class<?>, java.lang.reflect.Field> PK_FIELDS = new ConcurrentHashMap<>();
+    static final ConcurrentMap<Class<?>, Metadata> METADATAS = new ConcurrentHashMap<>();
 
-    @RuntimeType
-    public static Object getPk(@This Object obj) {
-	java.lang.reflect.Field pkField = PK_FIELDS.computeIfAbsent(obj.getClass(), clazz -> {
-	    Metadata mtdt = getMetadata(obj);
+    public static Metadata getMetadata(Class<?> genClass) {
+	return METADATAS.computeIfAbsent(genClass, clazz -> {
+
+	    // TableMtdt
+	    TableMtdt tableMtdt = clazz.getDeclaredAnnotation(TableMtdt.class);
+	    Asserts.notNull(tableMtdt);
 
 	    try {
-		return obj.getClass().getDeclaredField(mtdt.key());
+		java.lang.reflect.Field pkField = clazz.getDeclaredField(tableMtdt.key());
+
+		Constructor<?>[] ctors = clazz.getDeclaredConstructors();
+		Asserts.isTrue(ctors.length == 2);
+
+		Constructor<?> emptyConstructor = Arrays.stream(ctors).filter(c -> c.getParameterCount() == 0).findFirst().get();
+		Constructor<?> paramConstructor = Arrays.stream(ctors).filter(c -> c.getParameterCount() != 0).findFirst().get();
+
+		return new Metadata(tableMtdt, emptyConstructor, paramConstructor, pkField);
 
 	    } catch (NoSuchFieldException ex) {
-		throw new IllegalArgumentException(ex);
+		throw new Error(ex);
 	    }
 	});
+    }
 
+    public static Object getPk(Object obj) {
 	try {
-	    return pkField.get(obj);
+	    return getMetadata(obj.getClass()).pkField.get(obj);
 
 	} catch (IllegalAccessException ex) {
 	    throw new ReflectionException(ex);
