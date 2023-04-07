@@ -37,6 +37,10 @@ import com.appslandia.common.utils.TypeUtils;
 public class Field extends InitializeObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    private String tableCat;
+    private String tableSchema;
+    private String tableName;
+
     private String name;
     private Integer sqlType;
     private Integer scaleOrLength;
@@ -75,6 +79,36 @@ public class Field extends InitializeObject implements Serializable {
 	this.initialize();
 
 	return this.fieldType == FieldType.KEY_INCR || this.fieldType == FieldType.KEY;
+    }
+
+    public String getTableCat() {
+	this.initialize();
+	return this.tableCat;
+    }
+
+    public void setTableCat(String tableCat) {
+	this.assertNotInitialized();
+	this.tableCat = tableCat;
+    }
+
+    public String getTableSchema() {
+	this.initialize();
+	return this.tableSchema;
+    }
+
+    public void setTableSchema(String tableSchema) {
+	this.assertNotInitialized();
+	this.tableSchema = tableSchema;
+    }
+
+    public String getTableName() {
+	this.initialize();
+	return this.tableName;
+    }
+
+    public void setTableName(String tableName) {
+	this.assertNotInitialized();
+	this.tableName = tableName;
     }
 
     public String getName() {

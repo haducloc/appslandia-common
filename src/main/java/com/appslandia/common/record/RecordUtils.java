@@ -94,18 +94,18 @@ public final class RecordUtils {
 		String columnName = rs.getString("COLUMN_NAME");
 		boolean isKey = keys.contains(columnName);
 
-		int sqlType = rs.getInt("DATA_TYPE");
-		int position = rs.getInt("ORDINAL_POSITION");
-
-		boolean nullable = "yes".equalsIgnoreCase(rs.getString("IS_NULLABLE"));
 		boolean autoIncr = "yes".equalsIgnoreCase(rs.getString("IS_AUTOINCREMENT"));
 		boolean genCol = "yes".equalsIgnoreCase(rs.getString("IS_GENERATEDCOLUMN"));
 
 		Field field = new Field();
 		field.setName(columnName);
-		field.setSqlType(sqlType);
-		field.setNullable(nullable);
-		field.setPosition(position);
+		field.setSqlType(rs.getInt("DATA_TYPE"));
+		field.setNullable("yes".equalsIgnoreCase(rs.getString("IS_NULLABLE")));
+		field.setPosition(rs.getInt("ORDINAL_POSITION"));
+
+		field.setTableCat(rs.getString("TABLE_CAT"));
+		field.setTableSchema(rs.getString("TABLE_SCHEM"));
+		field.setTableName(rs.getString("TABLE_NAME"));
 
 		if (isKey) {
 		    field.setFieldType(autoIncr ? FieldType.KEY_INCR : FieldType.KEY);
@@ -200,6 +200,10 @@ public final class RecordUtils {
 	    field.setName(md.getColumnLabel(col));
 	    field.setFieldType(FieldType.COL);
 	    field.setSqlType(md.getColumnType(col));
+
+	    field.setTableCat(md.getCatalogName(col));
+	    field.setTableSchema(md.getSchemaName(col));
+	    field.setTableName(md.getTableName(col));
 
 	    fields.add(field);
 	}
