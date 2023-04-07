@@ -96,12 +96,12 @@ public class EntityGenerator extends InitializeObject {
 	Asserts.notNull(table);
 	Asserts.notNull(table.getSingleKey(), "Only single key supported.");
 
-	String fullClass = this.classPackage != null ? this.classPackage + "." + table.getEntityName() : table.getEntityName();
+	String fullClass = this.classPackage != null ? this.classPackage + "." + table.getRecordClassName() : table.getRecordClassName();
 
 	// EntityBase base
 	var builder = new ByteBuddy().subclass(EntityBase.class).name(fullClass)
-		.annotateType(AnnotationDescription.Builder.ofType(TableMtdt.class).define("catalog", ValueUtils.valueOrAlt(table.getCatalog(), StringUtils.EMPTY_STRING))
-			.define("schema", ValueUtils.valueOrAlt(table.getSchema(), StringUtils.EMPTY_STRING)).define("table", table.getName())
+		.annotateType(AnnotationDescription.Builder.ofType(TableMtdt.class).define("catalog", ValueUtils.valueOrAlt(table.getTableCat(), StringUtils.EMPTY_STRING))
+			.define("schema", ValueUtils.valueOrAlt(table.getTableSchema(), StringUtils.EMPTY_STRING)).define("table", table.getTableName())
 			.define("key", table.getSingleKey().getName()).build());
 
 	for (Field field : table.getFields()) {

@@ -86,9 +86,10 @@ public class Field extends InitializeObject implements Serializable {
 	return this.tableCat;
     }
 
-    public void setTableCat(String tableCat) {
+    public Field setTableCat(String tableCat) {
 	this.assertNotInitialized();
 	this.tableCat = tableCat;
+	return this;
     }
 
     public String getTableSchema() {
@@ -96,9 +97,10 @@ public class Field extends InitializeObject implements Serializable {
 	return this.tableSchema;
     }
 
-    public void setTableSchema(String tableSchema) {
+    public Field setTableSchema(String tableSchema) {
 	this.assertNotInitialized();
 	this.tableSchema = tableSchema;
+	return this;
     }
 
     public String getTableName() {
@@ -106,9 +108,10 @@ public class Field extends InitializeObject implements Serializable {
 	return this.tableName;
     }
 
-    public void setTableName(String tableName) {
+    public Field setTableName(String tableName) {
 	this.assertNotInitialized();
 	this.tableName = tableName;
+	return this;
     }
 
     public String getName() {

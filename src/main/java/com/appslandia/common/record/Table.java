@@ -37,12 +37,12 @@ import com.appslandia.common.utils.Asserts;
 public class Table extends InitializeObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String catalog;
-    private String schema;
-    private String name;
+    private String tableCat;
+    private String tableSchema;
+    private String tableName;
 
     private List<Field> fields;
-    private transient String entityName;
+    private transient String recordClassName;
 
     @TSExcluded
     private transient Field singleKey;
@@ -56,10 +56,10 @@ public class Table extends InitializeObject implements Serializable {
 
     @Override
     protected void init() throws Exception {
-	Asserts.notNull(this.name, "name is required.");
+	Asserts.notNull(this.tableName, "name is required.");
 	Asserts.hasElements(this.fields, "fields are required.");
 
-	this.entityName = RecordUtils.toEntityName(this.name);
+	this.recordClassName = RecordUtils.toRecordClassName(this.tableName);
 
 	int keyIncr = (int) this.fields.stream().filter(field -> field.getFieldType() == FieldType.KEY_INCR).count();
 	int keyCount = (int) this.fields.stream().filter(field -> field.getFieldType() == FieldType.KEY_INCR || field.getFieldType() == FieldType.KEY).count();
@@ -97,7 +97,7 @@ public class Table extends InitializeObject implements Serializable {
     }
 
     protected String buildInsertSQL() {
-	TextBuilder sb = new TextBuilder().append("INSERT INTO ").append(this.name);
+	TextBuilder sb = new TextBuilder().append("INSERT INTO ").append(this.tableName);
 	sb.append(" (");
 
 	boolean isFirst = true;
@@ -133,7 +133,7 @@ public class Table extends InitializeObject implements Serializable {
     }
 
     protected String buildUpdateSQL() {
-	TextBuilder sb = new TextBuilder().append("UPDATE ").append(this.name);
+	TextBuilder sb = new TextBuilder().append("UPDATE ").append(this.tableName);
 	sb.append(" SET ");
 
 	boolean isFirst = true;
@@ -157,7 +157,7 @@ public class Table extends InitializeObject implements Serializable {
     }
 
     protected String buildDeleteSQL() {
-	TextBuilder sb = new TextBuilder().append("DELETE FROM ").append(this.name);
+	TextBuilder sb = new TextBuilder().append("DELETE FROM ").append(this.tableName);
 	sb.append(" WHERE ");
 
 	this.appendWhereKeyConditions(sb);
@@ -165,7 +165,7 @@ public class Table extends InitializeObject implements Serializable {
     }
 
     protected String buildExistsSQL() {
-	TextBuilder sb = new TextBuilder().append("SELECT COUNT(1) FROM ").append(this.name);
+	TextBuilder sb = new TextBuilder().append("SELECT COUNT(1) FROM ").append(this.tableName);
 	sb.append(" WHERE ");
 
 	this.appendWhereKeyConditions(sb);
@@ -173,7 +173,7 @@ public class Table extends InitializeObject implements Serializable {
     }
 
     protected String buildGetSQL() {
-	TextBuilder sb = new TextBuilder().append("SELECT * FROM ").append(this.name);
+	TextBuilder sb = new TextBuilder().append("SELECT * FROM ").append(this.tableName);
 	sb.append(" WHERE ");
 
 	this.appendWhereKeyConditions(sb);
@@ -196,35 +196,43 @@ public class Table extends InitializeObject implements Serializable {
     }
 
     public String getName() {
-	initialize();
-	return this.name;
+	return getTableName();
     }
 
     public Table setName(String name) {
-	assertNotInitialized();
-	this.name = name;
+	return setTableName(name);
+    }
+
+    public String getTableCat() {
+	this.initialize();
+	return this.tableCat;
+    }
+
+    public Table setTableCat(String tableCat) {
+	this.assertNotInitialized();
+	this.tableCat = tableCat;
 	return this;
     }
 
-    public String getCatalog() {
-	initialize();
-	return this.catalog;
+    public String getTableSchema() {
+	this.initialize();
+	return this.tableSchema;
     }
 
-    public Table setCatalog(String catalog) {
-	assertNotInitialized();
-	this.catalog = catalog;
+    public Table setTableSchema(String tableSchema) {
+	this.assertNotInitialized();
+	this.tableSchema = tableSchema;
 	return this;
     }
 
-    public String getSchema() {
-	initialize();
-	return this.schema;
+    public String getTableName() {
+	this.initialize();
+	return this.tableName;
     }
 
-    public Table setSchema(String schema) {
-	assertNotInitialized();
-	this.schema = schema;
+    public Table setTableName(String tableName) {
+	this.assertNotInitialized();
+	this.tableName = tableName;
 	return this;
     }
 
@@ -239,9 +247,9 @@ public class Table extends InitializeObject implements Serializable {
 	return this;
     }
 
-    public String getEntityName() {
+    public String getRecordClassName() {
 	initialize();
-	return this.entityName;
+	return this.recordClassName;
     }
 
     public Field getSingleKey() {

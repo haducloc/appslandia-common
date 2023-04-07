@@ -59,48 +59,48 @@ public final class RecordUtils {
 	return record;
     }
 
-    public static boolean checkTable(Connection conn, String catalog, String schema, String tableName) throws SQLException {
-	try (ResultSet rs = conn.getMetaData().getTables(catalog, schema, tableName, new String[] { "TABLE" })) {
-	    return rs.next();
-	}
-    }
+    public static Table loadTable(Connection conn, String catalog, String schema, String tableName) throws SQLException {
 
-    public static Set<String> loadKeys(Connection conn, String catalog, String schema, String tableName) throws SQLException {
+	// Table
+	Table table = null;
+	try (ResultSet rs = conn.getMetaData().getTables(catalog, schema, tableName, new String[] { "TABLE" })) {
+	    while (rs.next()) {
+		if (table != null) {
+		    throw new IllegalArgumentException(STR.fmt("More than one table with name '{}' returned.", tableName));
+		}
+		table = new Table();
+
+		table.setTableCat(rs.getString("TABLE_CAT"));
+		table.setTableSchema(rs.getString("TABLE_SCHEM"));
+		table.setTableName(rs.getString("TABLE_NAME"));
+	    }
+	}
+
+	// Keys
 	Set<String> keys = new LinkedHashSet<>();
 	try (ResultSet rs = conn.getMetaData().getPrimaryKeys(catalog, schema, tableName)) {
 	    while (rs.next()) {
 		keys.add(rs.getString("COLUMN_NAME"));
 	    }
 	}
-	return keys;
-    }
-
-    public static Table loadTable(Connection conn, String catalog, String schema, String tableName) throws SQLException {
-	// tableName
-	if (!checkTable(conn, catalog, schema, tableName)) {
-	    throw new IllegalArgumentException(STR.fmt("catalog={}, schema={}, tableName={} is not found.", catalog, schema, tableName));
-	}
 
 	// fields
 	List<Field> fields = new ArrayList<>();
 
-	// All keys
-	Set<String> keys = loadKeys(conn, catalog, schema, tableName);
-
-	// All columns
 	try (ResultSet rs = conn.getMetaData().getColumns(catalog, schema, tableName, null)) {
 	    while (rs.next()) {
 
 		String columnName = rs.getString("COLUMN_NAME");
 		boolean isKey = keys.contains(columnName);
 
-		boolean autoIncr = "yes".equalsIgnoreCase(rs.getString("IS_AUTOINCREMENT"));
-		boolean genCol = "yes".equalsIgnoreCase(rs.getString("IS_GENERATEDCOLUMN"));
+		boolean autoIncr = "YES".equals(rs.getString("IS_AUTOINCREMENT"));
+		boolean genCol = "YES".equals(rs.getString("IS_GENERATEDCOLUMN"));
 
 		Field field = new Field();
 		field.setName(columnName);
+
 		field.setSqlType(rs.getInt("DATA_TYPE"));
-		field.setNullable("yes".equalsIgnoreCase(rs.getString("IS_NULLABLE")));
+		field.setNullable("YES".equals(rs.getString("IS_NULLABLE")));
 		field.setPosition(rs.getInt("ORDINAL_POSITION"));
 
 		field.setTableCat(rs.getString("TABLE_CAT"));
@@ -115,7 +115,7 @@ public final class RecordUtils {
 		fields.add(field);
 	    }
 	}
-	return new Table().setCatalog(catalog).setSchema(schema).setName(tableName).setFields(fields);
+	return table.setFields(fields);
     }
 
     public static Record toRecord(Table table, Object entity) throws ReflectionException {
@@ -173,7 +173,7 @@ public final class RecordUtils {
 	return StringUtils.firstLowerCase(dbFieldName, Locale.ENGLISH);
     }
 
-    public static String toEntityName(String tableName) {
+    public static String toRecordClassName(String tableName) {
 	Asserts.notNull(tableName);
 
 	// All Uppers
