@@ -202,7 +202,7 @@ public class Field extends InitializeObject implements Serializable {
     @Override
     public String toString() {
 	this.initialize();
-	return STR.fmt("name={}, sqlType={}, scaleOrLength={}, nullable={}, position={}, fieldType={}, javaType={}.", this.name, this.sqlType, this.scaleOrLength, this.nullable,
-		this.position, this.fieldType, this.javaType);
+	return STR.fmt("name={}, sqlType={}, scaleOrLength={}, nullable={}, position={}, fieldType={}, javaType={}, tableCat={}, tableSchema={}, tableName={}", this.name,
+		this.sqlType, this.scaleOrLength, this.nullable, this.position, this.fieldType, this.javaType, this.tableCat, this.tableSchema, this.tableName);
     }
 }

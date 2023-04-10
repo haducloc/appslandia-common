@@ -60,6 +60,8 @@ public final class RecordUtils {
     }
 
     public static Table loadTable(Connection conn, String catalog, String schema, String tableName) throws SQLException {
+	Asserts.notNull(conn);
+	Asserts.notNull(tableName);
 
 	// Table
 	Table table = null;
