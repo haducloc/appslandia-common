@@ -75,6 +75,12 @@ public class Field extends InitializeObject implements Serializable {
 	return JdbcSql.getParamPrefix() + getName();
     }
 
+    public boolean isKeyIncr() {
+	this.initialize();
+
+	return this.fieldType == FieldType.KEY_INCR;
+    }
+
     public boolean isKey() {
 	this.initialize();
 

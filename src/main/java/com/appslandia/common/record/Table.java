@@ -21,6 +21,7 @@
 package com.appslandia.common.record;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 import com.appslandia.common.base.InitializeObject;
@@ -80,6 +81,8 @@ public class Table extends InitializeObject implements Serializable {
 
 	this.getSql = new JdbcSql(this.buildGetSQL());
 	this.existsSql = new JdbcSql(this.buildExistsSQL());
+
+	this.fields = Collections.unmodifiableList(this.fields);
     }
 
     public String[] getColumnLabels() {

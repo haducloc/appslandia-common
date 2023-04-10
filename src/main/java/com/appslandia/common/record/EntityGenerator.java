@@ -28,6 +28,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -41,7 +42,13 @@ import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ReflectionException;
 import com.appslandia.common.utils.StringUtils;
 import com.appslandia.common.utils.ValueUtils;
+import com.appslandia.common.validators.MaxLength;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.annotation.AnnotationDescription;
 import net.bytebuddy.description.modifier.Visibility;
@@ -60,6 +67,8 @@ public class EntityGenerator extends InitializeObject {
     private String classPackage;
     private ClassLoader classLoader;
     private File classPath;
+
+    private GenerationType idGenType;
 
     @Override
     protected void init() throws Exception {
@@ -90,6 +99,12 @@ public class EntityGenerator extends InitializeObject {
 	return this;
     }
 
+    public EntityGenerator setIdGenType(GenerationType idGenType) {
+	assertNotInitialized();
+	this.idGenType = idGenType;
+	return this;
+    }
+
     public Class<?> generateRecordClass(Table table) throws Exception {
 	initialize();
 
@@ -98,23 +113,59 @@ public class EntityGenerator extends InitializeObject {
 
 	String fullClass = this.classPackage != null ? this.classPackage + "." + table.getRecordClassName() : table.getRecordClassName();
 
+	// Class annotations
+	List<AnnotationDescription> classAnnotations = new ArrayList<>();
+
+	// @TableMtdt
+	classAnnotations.add(AnnotationDescription.Builder.ofType(TableMtdt.class).define("catalog", ValueUtils.valueOrAlt(table.getTableCat(), StringUtils.EMPTY_STRING))
+		.define("schema", ValueUtils.valueOrAlt(table.getTableSchema(), StringUtils.EMPTY_STRING)).define("table", table.getTableName())
+		.define("key", table.getSingleKey().getName()).build());
+
+	// @Entity
+	classAnnotations.add(AnnotationDescription.Builder.ofType(Entity.class).build());
+
 	// EntityBase base
-	var builder = new ByteBuddy().subclass(EntityBase.class).name(fullClass)
-		.annotateType(AnnotationDescription.Builder.ofType(TableMtdt.class).define("catalog", ValueUtils.valueOrAlt(table.getTableCat(), StringUtils.EMPTY_STRING))
-			.define("schema", ValueUtils.valueOrAlt(table.getTableSchema(), StringUtils.EMPTY_STRING)).define("table", table.getTableName())
-			.define("key", table.getSingleKey().getName()).build());
+	var builder = new ByteBuddy().subclass(EntityBase.class).name(fullClass).annotateType(classAnnotations);
 
 	for (Field field : table.getFields()) {
 
+	    // Field annotations
+	    List<AnnotationDescription> fieldAnnotations = new ArrayList<>();
+
+	    if (field.isKey()) {
+		// @Id
+		fieldAnnotations.add(AnnotationDescription.Builder.ofType(Id.class).build());
+
+		// @GeneratedValue
+		if (field.isKeyIncr()) {
+		    if (this.idGenType == null) {
+			fieldAnnotations.add(AnnotationDescription.Builder.ofType(GeneratedValue.class).build());
+		    } else {
+			fieldAnnotations.add(AnnotationDescription.Builder.ofType(GeneratedValue.class).define("strategy", this.idGenType).build());
+		    }
+		}
+	    } else {
+		// Noy key
+		if (!field.isNullable()) {
+		    // @NotNull
+		    fieldAnnotations.add(AnnotationDescription.Builder.ofType(NotNull.class).build());
+		}
+		// @MaxLength
+		if (field.getJavaType() == String.class && field.getScaleOrLength() != null) {
+		    fieldAnnotations.add(AnnotationDescription.Builder.ofType(MaxLength.class).define("value", field.getScaleOrLength()).build());
+		}
+	    }
+
 	    // Field
-	    builder = builder.defineField(field.getName(), field.getJavaType(), Modifier.PUBLIC);
+	    builder = builder.defineField(field.getName(), field.getJavaType(), Modifier.PUBLIC).annotateField(fieldAnnotations);
 
 	    // Getter
-	    builder = builder.defineMethod(getGetterName(field.getName(), field.getJavaType()), field.getJavaType(), Visibility.PUBLIC).intercept(FieldAccessor.ofBeanProperty());
+	    builder = builder.defineMethod(getGetterName(field.getName(), field.getJavaType()), field.getJavaType(), Visibility.PUBLIC)
+		    .intercept(FieldAccessor.ofField(field.getName()));
 
 	    // Setter
 	    builder = builder.defineMethod(getSetterName(field.getName(), field.getJavaType()), void.class, Visibility.PUBLIC).withParameter(field.getJavaType())
-		    .intercept(FieldAccessor.ofBeanProperty());
+		    .intercept(FieldAccessor.ofField(field.getName()));
 	}
 
 	// pk

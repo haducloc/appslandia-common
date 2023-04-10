@@ -100,6 +100,8 @@ public final class RecordUtils {
 		field.setName(columnName);
 
 		field.setSqlType(rs.getInt("DATA_TYPE"));
+		field.setScaleOrLength(rs.getInt("COLUMN_SIZE"));
+
 		field.setNullable("YES".equals(rs.getString("IS_NULLABLE")));
 		field.setPosition(rs.getInt("ORDINAL_POSITION"));
 
