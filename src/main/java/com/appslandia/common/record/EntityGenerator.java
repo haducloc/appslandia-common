@@ -105,13 +105,13 @@ public class EntityGenerator extends InitializeObject {
 	return this;
     }
 
-    public Class<?> generateRecordClass(Table table) throws Exception {
+    public Class<?> generateEntityClass(Table table) throws Exception {
 	initialize();
 
 	Asserts.notNull(table);
 	Asserts.notNull(table.getSingleKey(), "Only single key supported.");
 
-	String fullClass = this.classPackage != null ? this.classPackage + "." + table.getRecordClassName() : table.getRecordClassName();
+	String fullClass = this.classPackage != null ? this.classPackage + "." + table.getEntityClassName() : table.getEntityClassName();
 
 	// Class annotations
 	List<AnnotationDescription> classAnnotations = new ArrayList<>();
@@ -183,6 +183,50 @@ public class EntityGenerator extends InitializeObject {
 	builder = builder.defineConstructor(Visibility.PUBLIC).withParameters(fieldTypes).intercept(ctor);
 
 	Unloaded<EntityBase> unloaded = builder.make();
+	if (this.classPath != null) {
+	    unloaded.saveIn(this.classPath);
+	}
+
+	ClassLoader loader = this.classLoader != null ? this.classLoader : getDefaultClassLoader();
+	return unloaded.load(loader).getLoaded();
+    }
+
+    public Class<?> generateRecordClass(String recordClassName, List<Field> fields) throws Exception {
+	initialize();
+
+	Asserts.notNull(fields);
+
+	String fullClass = this.classPackage != null ? this.classPackage + "." + recordClassName : recordClassName;
+
+	// Object base
+	var builder = new ByteBuddy().subclass(Object.class).name(fullClass);
+
+	for (Field field : fields) {
+
+	    // Field
+	    builder = builder.defineField(field.getName(), field.getJavaType(), Modifier.PUBLIC);
+
+	    // Getter
+	    builder = builder.defineMethod(getGetterName(field.getName(), field.getJavaType()), field.getJavaType(), Visibility.PUBLIC)
+		    .intercept(FieldAccessor.ofField(field.getName()));
+
+	    // Setter
+	    builder = builder.defineMethod(getSetterName(field.getName(), field.getJavaType()), void.class, Visibility.PUBLIC).withParameter(field.getJavaType())
+		    .intercept(FieldAccessor.ofField(field.getName()));
+	}
+
+	// Constructor
+	Composable ctor = MethodCall.invoke(Object.class.getDeclaredConstructor()).onSuper();
+
+	int index = 0;
+	for (Field field : fields) {
+	    ctor = ctor.andThen(FieldAccessor.ofField(field.getName()).setsArgumentAt(index++));
+	}
+
+	List<Class<?>> fieldTypes = fields.stream().map(f -> f.getJavaType()).collect(Collectors.toList());
+	builder = builder.defineConstructor(Visibility.PUBLIC).withParameters(fieldTypes).intercept(ctor);
+
+	Unloaded<Object> unloaded = builder.make();
 	if (this.classPath != null) {
 	    unloaded.saveIn(this.classPath);
 	}

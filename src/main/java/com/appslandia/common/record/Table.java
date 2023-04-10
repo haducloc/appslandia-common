@@ -43,7 +43,7 @@ public class Table extends InitializeObject implements Serializable {
     private String tableName;
 
     private List<Field> fields;
-    private transient String recordClassName;
+    private transient String entityClassName;
 
     @TSExcluded
     private transient Field singleKey;
@@ -60,7 +60,7 @@ public class Table extends InitializeObject implements Serializable {
 	Asserts.notNull(this.tableName, "name is required.");
 	Asserts.hasElements(this.fields, "fields are required.");
 
-	this.recordClassName = RecordUtils.toRecordClassName(this.tableName);
+	this.entityClassName = RecordUtils.toEntityClassName(this.tableName);
 
 	int keyIncr = (int) this.fields.stream().filter(field -> field.getFieldType() == FieldType.KEY_INCR).count();
 	int keyCount = (int) this.fields.stream().filter(field -> field.getFieldType() == FieldType.KEY_INCR || field.getFieldType() == FieldType.KEY).count();
@@ -250,9 +250,9 @@ public class Table extends InitializeObject implements Serializable {
 	return this;
     }
 
-    public String getRecordClassName() {
+    public String getEntityClassName() {
 	initialize();
-	return this.recordClassName;
+	return this.entityClassName;
     }
 
     public Field getSingleKey() {

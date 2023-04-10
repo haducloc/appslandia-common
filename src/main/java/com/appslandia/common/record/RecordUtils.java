@@ -177,7 +177,7 @@ public final class RecordUtils {
 	return StringUtils.firstLowerCase(dbFieldName, Locale.ENGLISH);
     }
 
-    public static String toRecordClassName(String tableName) {
+    public static String toEntityClassName(String tableName) {
 	Asserts.notNull(tableName);
 
 	// All Uppers
