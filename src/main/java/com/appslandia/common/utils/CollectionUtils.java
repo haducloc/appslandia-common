@@ -101,4 +101,8 @@ public class CollectionUtils {
     public static <T> boolean hasElements(Collection<T> c) {
 	return (c != null) && (c.size() > 0);
     }
+
+    public static <K, V> boolean hasEntries(Map<K, V> m) {
+	return (m != null) && (m.size() > 0);
+    }
 }
