@@ -21,11 +21,13 @@
 package com.appslandia.common.record;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.jdbc.JdbcSql;
 import com.appslandia.common.jdbc.SqlTypes;
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.STR;
 import com.appslandia.common.utils.TypeUtils;
 
@@ -50,6 +52,7 @@ public class Field extends InitializeObject implements Serializable {
     private Class<?> javaType;
 
     private FieldType fieldType = FieldType.COL;
+    private List<AnnotationModel> annotations;
 
     @Override
     protected void init() throws Exception {
@@ -69,6 +72,8 @@ public class Field extends InitializeObject implements Serializable {
 		}
 	    }
 	}
+
+	this.annotations = CollectionUtils.unmodifiableList(this.annotations);
     }
 
     public String getParamName() {
@@ -196,6 +201,17 @@ public class Field extends InitializeObject implements Serializable {
     public Field setJavaType(Class<?> javaType) {
 	this.assertNotInitialized();
 	this.javaType = javaType;
+	return this;
+    }
+
+    public List<AnnotationModel> getAnnotations() {
+	initialize();
+	return this.annotations;
+    }
+
+    public Field setAnnotations(List<AnnotationModel> annotations) {
+	assertNotInitialized();
+	this.annotations = annotations;
 	return this;
     }
 

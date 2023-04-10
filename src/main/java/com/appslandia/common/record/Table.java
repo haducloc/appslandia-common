@@ -29,6 +29,7 @@ import com.appslandia.common.base.TextBuilder;
 import com.appslandia.common.base.ToStringBuilder.TSExcluded;
 import com.appslandia.common.jdbc.JdbcSql;
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.CollectionUtils;
 
 /**
  *
@@ -47,6 +48,7 @@ public class Table extends InitializeObject implements Serializable {
 
     @TSExcluded
     private transient Field singleKey;
+    private List<AnnotationModel> annotations;
 
     private transient JdbcSql insertSql;
     private transient JdbcSql updateSql;
@@ -83,6 +85,7 @@ public class Table extends InitializeObject implements Serializable {
 	this.existsSql = new JdbcSql(this.buildExistsSQL());
 
 	this.fields = Collections.unmodifiableList(this.fields);
+	this.annotations = CollectionUtils.unmodifiableList(this.annotations);
     }
 
     public String[] getColumnLabels() {
@@ -258,6 +261,17 @@ public class Table extends InitializeObject implements Serializable {
     public Field getSingleKey() {
 	initialize();
 	return this.singleKey;
+    }
+
+    public List<AnnotationModel> getAnnotations() {
+	initialize();
+	return this.annotations;
+    }
+
+    public Table setAnnotations(List<AnnotationModel> annotations) {
+	assertNotInitialized();
+	this.annotations = annotations;
+	return this;
     }
 
     public JdbcSql getInsertSql() {

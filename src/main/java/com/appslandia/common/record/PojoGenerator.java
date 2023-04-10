@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
@@ -40,6 +41,7 @@ import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.models.EntityBase;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ReflectionException;
+import com.appslandia.common.utils.STR;
 import com.appslandia.common.utils.StringUtils;
 import com.appslandia.common.utils.ValueUtils;
 import com.appslandia.common.validators.MaxLength;
@@ -62,7 +64,7 @@ import net.bytebuddy.implementation.MethodCall;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class EntityGenerator extends InitializeObject {
+public class PojoGenerator extends InitializeObject {
 
     private String classPackage;
     private ClassLoader classLoader;
@@ -77,29 +79,29 @@ public class EntityGenerator extends InitializeObject {
 	}
     }
 
-    public EntityGenerator setClassLoader(ClassLoader classLoader) {
+    public PojoGenerator setClassLoader(ClassLoader classLoader) {
 	assertNotInitialized();
 	this.classLoader = classLoader;
 	return this;
     }
 
-    public EntityGenerator setClassPackage(String classPackage) {
+    public PojoGenerator setClassPackage(String classPackage) {
 	assertNotInitialized();
 	this.classPackage = classPackage;
 	return this;
     }
 
-    public EntityGenerator setClassPackage(Class<?> clazz) {
+    public PojoGenerator setClassPackage(Class<?> clazz) {
 	return setClassPackage(clazz.getPackageName());
     }
 
-    public EntityGenerator setClassPath(File classPath) {
+    public PojoGenerator setClassPath(File classPath) {
 	assertNotInitialized();
 	this.classPath = classPath;
 	return this;
     }
 
-    public EntityGenerator setIdGenType(GenerationType idGenType) {
+    public PojoGenerator setIdGenType(GenerationType idGenType) {
 	assertNotInitialized();
 	this.idGenType = idGenType;
 	return this;
@@ -115,6 +117,7 @@ public class EntityGenerator extends InitializeObject {
 
 	// Class annotations
 	List<AnnotationDescription> classAnnotations = new ArrayList<>();
+	table.getAnnotations().forEach(fa -> classAnnotations.add(toAnnotationDescription(fa)));
 
 	// @TableMtdt
 	classAnnotations.add(AnnotationDescription.Builder.ofType(TableMtdt.class).define("catalog", ValueUtils.valueOrAlt(table.getTableCat(), StringUtils.EMPTY_STRING))
@@ -131,6 +134,7 @@ public class EntityGenerator extends InitializeObject {
 
 	    // Field annotations
 	    List<AnnotationDescription> fieldAnnotations = new ArrayList<>();
+	    field.getAnnotations().forEach(fa -> fieldAnnotations.add(toAnnotationDescription(fa)));
 
 	    if (field.isKey()) {
 		// @Id
@@ -315,6 +319,83 @@ public class EntityGenerator extends InitializeObject {
 	}
     }
 
+    static AnnotationDescription toAnnotationDescription(AnnotationModel annotationModel) {
+	var builder = AnnotationDescription.Builder.ofType(annotationModel.getAnnotationType());
+	for (Map.Entry<String, Object> property : annotationModel.getProperties().entrySet()) {
+
+	    String key = Asserts.notNull(property.getKey());
+	    Object value = Asserts.notNull(property.getValue());
+	    Class<?> valueType = value.getClass();
+
+	    if (valueType == String.class) {
+		builder.define(key, (String) value);
+
+	    } else if (valueType == Boolean.class) {
+		builder.define(key, ((Boolean) value).booleanValue());
+
+	    } else if (valueType == Enum.class) {
+		builder.define(key, ((Enum<?>) value));
+
+	    } else if (valueType == Integer.class) {
+		builder.define(key, ((Integer) value).intValue());
+
+	    } else if (valueType == Long.class) {
+		builder.define(key, ((Long) value).longValue());
+
+	    } else if (valueType == Double.class) {
+		builder.define(key, ((Double) value).doubleValue());
+
+	    } else if (valueType == Class.class) {
+		builder.define(key, ((Class<?>) value));
+
+	    } else if (valueType == Byte.class) {
+		builder.define(key, ((Byte) value).byteValue());
+
+	    } else if (valueType == Short.class) {
+		builder.define(key, ((Short) value).shortValue());
+
+	    } else if (valueType == Float.class) {
+		builder.define(key, ((Float) value).floatValue());
+
+	    } else if (valueType == Character.class) {
+		builder.define(key, ((Character) value).charValue());
+	    }
+
+	    // Array
+	    if (valueType == String[].class) {
+		builder.defineArray(key, (String[]) value);
+
+	    } else if (valueType == boolean[].class) {
+		builder.defineArray(key, (boolean[]) value);
+
+	    } else if (valueType == int[].class) {
+		builder.defineArray(key, (int[]) value);
+
+	    } else if (valueType == long[].class) {
+		builder.defineArray(key, (long[]) value);
+
+	    } else if (valueType == double[].class) {
+		builder.defineArray(key, (double[]) value);
+
+	    } else if (valueType == byte[].class) {
+		builder.defineArray(key, (byte[]) value);
+
+	    } else if (valueType == short[].class) {
+		builder.defineArray(key, (short[]) value);
+
+	    } else if (valueType == float[].class) {
+		builder.defineArray(key, (float[]) value);
+
+	    } else if (valueType == char[].class) {
+		builder.defineArray(key, (char[]) value);
+
+	    } else {
+		throw new IllegalArgumentException(STR.fmt("Annotation property type '{}' is unsupported.", valueType));
+	    }
+	}
+	return builder.build();
+    }
+
     static ClassLoader getDefaultClassLoader() {
 	ClassLoader cl = null;
 	try {
@@ -322,7 +403,7 @@ public class EntityGenerator extends InitializeObject {
 	} catch (Exception ex) {
 	}
 	if (cl == null) {
-	    cl = EntityGenerator.class.getClassLoader();
+	    cl = PojoGenerator.class.getClassLoader();
 	    if (cl == null) {
 		try {
 		    cl = ClassLoader.getSystemClassLoader();
