@@ -43,11 +43,6 @@ public class CollectionUtils {
     }
 
     @SafeVarargs
-    public static <V> Set<V> unmodifiableSet(Set<V> s, V... elements) {
-	return Collections.unmodifiableSet(toSet(s, elements));
-    }
-
-    @SafeVarargs
     public static <V> Set<V> toSet(V... elements) {
 	return toSet(new HashSet<V>(), elements);
     }
@@ -64,11 +59,6 @@ public class CollectionUtils {
     }
 
     @SafeVarargs
-    public static <V> List<V> unmodifiableList(List<V> l, V... elements) {
-	return Collections.unmodifiableList(toList(l, elements));
-    }
-
-    @SafeVarargs
     public static <V> List<V> toList(V... elements) {
 	return toList(new ArrayList<V>(), elements);
     }
@@ -79,16 +69,16 @@ public class CollectionUtils {
 	return l;
     }
 
+    public static <V> Set<V> unmodifiable(Set<V> set) {
+	return ((set != null) && !set.isEmpty()) ? Collections.unmodifiableSet(set) : Collections.<V>emptySet();
+    }
+
     public static <V> List<V> unmodifiable(List<V> list) {
 	return ((list != null) && !list.isEmpty()) ? Collections.unmodifiableList(list) : Collections.<V>emptyList();
     }
 
     public static <K, V> Map<K, V> unmodifiable(Map<K, V> map) {
 	return ((map != null) && !map.isEmpty()) ? Collections.unmodifiableMap(map) : Collections.<K, V>emptyMap();
-    }
-
-    public static <V> Set<V> unmodifiable(Set<V> set) {
-	return ((set != null) && !set.isEmpty()) ? Collections.unmodifiableSet(set) : Collections.<V>emptySet();
     }
 
     public static <K, V> Map<V, K> inverse(Map<K, V> m, Map<V, K> newMap) {
