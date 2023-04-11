@@ -267,11 +267,11 @@ public class RecordGenerator extends InitializeObject {
 	return make(builder);
     }
 
-    public Class<?> generateModelClass(String recordClassName, List<Field> fields) throws Exception {
+    public Class<?> generateModelClass(String modelClassName, List<Field> fields) throws Exception {
 	initialize();
 	Asserts.notNull(fields);
 
-	String fullClass = this.classPackage != null ? this.classPackage + "." + recordClassName : recordClassName;
+	String fullClass = this.classPackage != null ? this.classPackage + "." + modelClassName : modelClassName;
 
 	// Object base
 	var builder = new ByteBuddy().subclass(Object.class).name(fullClass);
