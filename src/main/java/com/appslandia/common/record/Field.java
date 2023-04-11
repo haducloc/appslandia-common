@@ -73,7 +73,7 @@ public class Field extends InitializeObject implements Serializable {
 	    }
 	}
 
-	this.annotations = CollectionUtils.unmodifiableList(this.annotations);
+	this.annotations = CollectionUtils.unmodifiable(this.annotations);
     }
 
     public String getParamName() {

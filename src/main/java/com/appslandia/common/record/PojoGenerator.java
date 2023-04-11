@@ -149,9 +149,8 @@ public class PojoGenerator extends InitializeObject {
 		    }
 		}
 	    } else {
-		// Noy key
+		// @NotNull
 		if (!field.isNullable()) {
-		    // @NotNull
 		    fieldAnnotations.add(AnnotationDescription.Builder.ofType(NotNull.class).build());
 		}
 		// @MaxLength

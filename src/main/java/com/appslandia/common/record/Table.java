@@ -85,7 +85,7 @@ public class Table extends InitializeObject implements Serializable {
 	this.existsSql = new JdbcSql(this.buildExistsSQL());
 
 	this.fields = Collections.unmodifiableList(this.fields);
-	this.annotations = CollectionUtils.unmodifiableList(this.annotations);
+	this.annotations = CollectionUtils.unmodifiable(this.annotations);
     }
 
     public String[] getColumnLabels() {
