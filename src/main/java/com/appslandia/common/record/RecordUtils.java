@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
@@ -59,7 +60,7 @@ public final class RecordUtils {
 	return record;
     }
 
-    public static Table loadTable(Connection conn, String catalog, String schema, String tableName) throws SQLException {
+    public static Table loadTable(Connection conn, String catalog, String schema, String tableName, Consumer<Field> fieldInit) throws SQLException {
 	Asserts.notNull(conn);
 	Asserts.notNull(tableName);
 
@@ -115,6 +116,10 @@ public final class RecordUtils {
 		    field.setFieldType(autoIncr ? FieldType.KEY_INCR : FieldType.KEY);
 		} else {
 		    field.setFieldType(genCol ? FieldType.COL_GEN : FieldType.COL);
+		}
+
+		if (fieldInit != null) {
+		    fieldInit.accept(field);
 		}
 		fields.add(field);
 	    }
@@ -194,7 +199,7 @@ public final class RecordUtils {
 	return StringUtils.firstUpperCase(tableName, Locale.ENGLISH);
     }
 
-    public static List<Field> getFields(ResultSet rs) throws SQLException {
+    public static List<Field> getFields(ResultSet rs, Consumer<Field> fieldInit) throws SQLException {
 	ResultSetMetaData md = rs.getMetaData();
 	List<Field> fields = new ArrayList<>(md.getColumnCount());
 
@@ -209,6 +214,9 @@ public final class RecordUtils {
 	    field.setTableSchema(md.getSchemaName(col));
 	    field.setTableName(md.getTableName(col));
 
+	    if (fieldInit != null) {
+		fieldInit.accept(field);
+	    }
 	    fields.add(field);
 	}
 
