@@ -267,7 +267,7 @@ public class RecordGenerator extends InitializeObject {
 	return make(builder);
     }
 
-    public Class<?> generateRecordClass(String recordClassName, List<Field> fields) throws Exception {
+    public Class<?> generateModelClass(String recordClassName, List<Field> fields) throws Exception {
 	initialize();
 	Asserts.notNull(fields);
 
