@@ -21,31 +21,24 @@
 package com.appslandia.common.record;
 
 import java.io.File;
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.lang.reflect.Constructor;
+import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.models.EntityBase;
 import com.appslandia.common.utils.Asserts;
-import com.appslandia.common.utils.ReflectionException;
 import com.appslandia.common.utils.STR;
 import com.appslandia.common.utils.StringUtils;
 import com.appslandia.common.utils.ValueUtils;
 import com.appslandia.common.validators.MaxLength;
 
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -54,6 +47,7 @@ import jakarta.validation.constraints.NotNull;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.annotation.AnnotationDescription;
 import net.bytebuddy.description.modifier.Visibility;
+import net.bytebuddy.dynamic.DynamicType.Builder;
 import net.bytebuddy.dynamic.DynamicType.Unloaded;
 import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.Implementation.Composable;
@@ -64,7 +58,7 @@ import net.bytebuddy.implementation.MethodCall;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class PojoGenerator extends InitializeObject {
+public class RecordGenerator extends InitializeObject {
 
     private String classPackage;
     private ClassLoader classLoader;
@@ -79,41 +73,100 @@ public class PojoGenerator extends InitializeObject {
 	}
     }
 
-    public PojoGenerator setClassLoader(ClassLoader classLoader) {
+    public RecordGenerator setClassLoader(ClassLoader classLoader) {
 	assertNotInitialized();
 	this.classLoader = classLoader;
 	return this;
     }
 
-    public PojoGenerator setClassPackage(String classPackage) {
+    public RecordGenerator setClassPackage(String classPackage) {
 	assertNotInitialized();
 	this.classPackage = classPackage;
 	return this;
     }
 
-    public PojoGenerator setClassPackage(Class<?> clazz) {
+    public RecordGenerator setClassPackage(Class<?> clazz) {
 	return setClassPackage(clazz.getPackageName());
     }
 
-    public PojoGenerator setClassPath(File classPath) {
+    public RecordGenerator setClassPath(File classPath) {
 	assertNotInitialized();
 	this.classPath = classPath;
 	return this;
     }
 
-    public PojoGenerator setIdGenType(GenerationType idGenType) {
+    public RecordGenerator setIdGenType(GenerationType idGenType) {
 	assertNotInitialized();
 	this.idGenType = idGenType;
 	return this;
     }
 
+    private Class<?> generateEntityPk(Table table) throws Exception {
+	String pkClassName = table.getEntityClassName() + "Pk";
+	String fullClass = this.classPackage != null ? this.classPackage + "." + pkClassName : pkClassName;
+
+	// Pk annotations
+	List<AnnotationDescription> pkAnnotations = new ArrayList<>();
+
+	// @Embeddable
+	pkAnnotations.add(AnnotationDescription.Builder.ofType(Embeddable.class).build());
+	String[] keys = table.getFields().stream().filter(f -> f.isKey()).map(f -> f.getName()).toArray(len -> new String[len]);
+
+	// @TableMtdt
+	pkAnnotations.add(AnnotationDescription.Builder.ofType(TableMtdt.class).define("catalog", ValueUtils.valueOrAlt(table.getTableCat(), StringUtils.EMPTY_STRING))
+		.define("schema", ValueUtils.valueOrAlt(table.getTableSchema(), StringUtils.EMPTY_STRING)).define("table", table.getTableName()).define("keyClass", BaseGenPk.class)
+		.defineArray("keys", keys).build());
+
+	// EntityPkBase base
+	var builder = new ByteBuddy().subclass(BaseGenPk.class).name(fullClass).annotateType(pkAnnotations);
+
+	for (Field field : table.getFields()) {
+	    if (field.isKey()) {
+
+		// Field annotations
+		List<AnnotationDescription> fieldAnnotations = new ArrayList<>();
+		field.getAnnotations().forEach(fa -> fieldAnnotations.add(toAnnotationDescription(fa)));
+
+		// @NotNull
+		fieldAnnotations.add(AnnotationDescription.Builder.ofType(NotNull.class).build());
+
+		// @MaxLength
+		if (field.getJavaType() == String.class && field.getScaleOrLength() != null) {
+		    fieldAnnotations.add(AnnotationDescription.Builder.ofType(MaxLength.class).define("value", field.getScaleOrLength()).build());
+		}
+
+		builder = addField(builder, field.getName(), field.getJavaType(), fieldAnnotations);
+	    }
+	}
+
+	// Constructor
+	Composable ctor = MethodCall.invoke(BaseGenPk.class.getDeclaredConstructor()).onSuper();
+
+	int index = 0;
+	for (Field field : table.getFields()) {
+	    if (field.isKey()) {
+		ctor = ctor.andThen(FieldAccessor.ofField(field.getName()).setsArgumentAt(index++));
+	    }
+	}
+
+	List<Class<?>> fieldTypes = table.getFields().stream().filter(f -> f.isKey()).map(f -> f.getJavaType()).collect(Collectors.toList());
+	builder = builder.defineConstructor(Visibility.PUBLIC).withParameters(fieldTypes).intercept(ctor);
+
+	return make(builder);
+    }
+
     public Class<?> generateEntityClass(Table table) throws Exception {
 	initialize();
-
 	Asserts.notNull(table);
-	Asserts.notNull(table.getSingleKey(), "Only single key supported.");
+
+	Class<?> embeddedIdClass = null;
+
+	if (table.getSingleKey() == null) {
+	    embeddedIdClass = generateEntityPk(table);
+	}
 
 	String fullClass = this.classPackage != null ? this.classPackage + "." + table.getEntityClassName() : table.getEntityClassName();
+	String[] keys = table.getFields().stream().filter(f -> f.isKey()).map(f -> f.getName()).toArray(len -> new String[len]);
 
 	// Class annotations
 	List<AnnotationDescription> classAnnotations = new ArrayList<>();
@@ -122,13 +175,28 @@ public class PojoGenerator extends InitializeObject {
 	// @TableMtdt
 	classAnnotations.add(AnnotationDescription.Builder.ofType(TableMtdt.class).define("catalog", ValueUtils.valueOrAlt(table.getTableCat(), StringUtils.EMPTY_STRING))
 		.define("schema", ValueUtils.valueOrAlt(table.getTableSchema(), StringUtils.EMPTY_STRING)).define("table", table.getTableName())
-		.define("key", table.getSingleKey().getName()).build());
+		.define("keyClass", (embeddedIdClass != null) ? embeddedIdClass : table.getSingleKey().getJavaType()).defineArray("keys", keys).build());
 
 	// @Entity
 	classAnnotations.add(AnnotationDescription.Builder.ofType(Entity.class).build());
 
 	// EntityBase base
 	var builder = new ByteBuddy().subclass(EntityBase.class).name(fullClass).annotateType(classAnnotations);
+
+	// @EmbeddedId
+	if (embeddedIdClass != null) {
+
+	    // pk
+	    List<AnnotationDescription> pkFieldAnnotations = new ArrayList<>();
+	    pkFieldAnnotations.add(AnnotationDescription.Builder.ofType(NotNull.class).build());
+	    pkFieldAnnotations.add(AnnotationDescription.Builder.ofType(EmbeddedId.class).build());
+
+	    builder = addField(builder, "pk", embeddedIdClass, pkFieldAnnotations);
+	} else {
+
+	    // pk
+	    builder = builder.defineMethod("getPk", table.getSingleKey().getJavaType(), Visibility.PUBLIC).intercept(FieldAccessor.ofField(table.getSingleKey().getName()));
+	}
 
 	for (Field field : table.getFields()) {
 
@@ -137,18 +205,23 @@ public class PojoGenerator extends InitializeObject {
 	    field.getAnnotations().forEach(fa -> fieldAnnotations.add(toAnnotationDescription(fa)));
 
 	    if (field.isKey()) {
-		// @Id
-		fieldAnnotations.add(AnnotationDescription.Builder.ofType(Id.class).build());
+		if (embeddedIdClass == null) {
 
-		// @GeneratedValue
-		if (field.isKeyIncr()) {
-		    if (this.idGenType == null) {
-			fieldAnnotations.add(AnnotationDescription.Builder.ofType(GeneratedValue.class).build());
-		    } else {
-			fieldAnnotations.add(AnnotationDescription.Builder.ofType(GeneratedValue.class).define("strategy", this.idGenType).build());
+		    // @Id
+		    fieldAnnotations.add(AnnotationDescription.Builder.ofType(Id.class).build());
+
+		    // @GeneratedValue
+		    if (field.isKeyIncr()) {
+			if (this.idGenType == null) {
+			    fieldAnnotations.add(AnnotationDescription.Builder.ofType(GeneratedValue.class).build());
+			} else {
+			    fieldAnnotations.add(AnnotationDescription.Builder.ofType(GeneratedValue.class).define("strategy", this.idGenType).build());
+			}
 		    }
 		}
+
 	    } else {
+
 		// @NotNull
 		if (!field.isNullable()) {
 		    fieldAnnotations.add(AnnotationDescription.Builder.ofType(NotNull.class).build());
@@ -159,44 +232,43 @@ public class PojoGenerator extends InitializeObject {
 		}
 	    }
 
-	    // Field
-	    builder = builder.defineField(field.getName(), field.getJavaType(), Modifier.PUBLIC).annotateField(fieldAnnotations);
+	    if ((field.isKey() && embeddedIdClass == null) || !field.isKey()) {
 
-	    // Getter
-	    builder = builder.defineMethod(getGetterName(field.getName(), field.getJavaType()), field.getJavaType(), Visibility.PUBLIC)
-		    .intercept(FieldAccessor.ofField(field.getName()));
-
-	    // Setter
-	    builder = builder.defineMethod(getSetterName(field.getName(), field.getJavaType()), void.class, Visibility.PUBLIC).withParameter(field.getJavaType())
-		    .intercept(FieldAccessor.ofField(field.getName()));
+		builder = addField(builder, field.getName(), field.getJavaType(), fieldAnnotations);
+	    }
 	}
-
-	// pk
-	builder = builder.defineMethod("getPk", table.getSingleKey().getJavaType(), Visibility.PUBLIC).intercept(FieldAccessor.ofField(table.getSingleKey().getName()));
 
 	// Constructor
 	Composable ctor = MethodCall.invoke(EntityBase.class.getDeclaredConstructor()).onSuper();
 
+	List<Class<?>> paramTypes = new ArrayList<>();
 	int index = 0;
-	for (Field field : table.getFields()) {
-	    ctor = ctor.andThen(FieldAccessor.ofField(field.getName()).setsArgumentAt(index++));
+
+	if (embeddedIdClass != null) {
+	    ctor = ctor.andThen(FieldAccessor.ofField("pk").setsArgumentAt(index++));
+	    paramTypes.add(embeddedIdClass);
+
+	    for (Field field : table.getFields()) {
+		if (!field.isKey()) {
+
+		    ctor = ctor.andThen(FieldAccessor.ofField(field.getName()).setsArgumentAt(index++));
+		    paramTypes.add(field.getJavaType());
+		}
+	    }
+	} else {
+
+	    for (Field field : table.getFields()) {
+		ctor = ctor.andThen(FieldAccessor.ofField(field.getName()).setsArgumentAt(index++));
+		paramTypes.add(field.getJavaType());
+	    }
 	}
 
-	List<Class<?>> fieldTypes = table.getFields().stream().map(f -> f.getJavaType()).collect(Collectors.toList());
-	builder = builder.defineConstructor(Visibility.PUBLIC).withParameters(fieldTypes).intercept(ctor);
-
-	Unloaded<EntityBase> unloaded = builder.make();
-	if (this.classPath != null) {
-	    unloaded.saveIn(this.classPath);
-	}
-
-	ClassLoader loader = this.classLoader != null ? this.classLoader : getDefaultClassLoader();
-	return unloaded.load(loader).getLoaded();
+	builder = builder.defineConstructor(Visibility.PUBLIC).withParameters(paramTypes).intercept(ctor);
+	return make(builder);
     }
 
     public Class<?> generateRecordClass(String recordClassName, List<Field> fields) throws Exception {
 	initialize();
-
 	Asserts.notNull(fields);
 
 	String fullClass = this.classPackage != null ? this.classPackage + "." + recordClassName : recordClassName;
@@ -206,16 +278,11 @@ public class PojoGenerator extends InitializeObject {
 
 	for (Field field : fields) {
 
-	    // Field
-	    builder = builder.defineField(field.getName(), field.getJavaType(), Modifier.PUBLIC);
+	    // Field annotations
+	    List<AnnotationDescription> fieldAnnotations = new ArrayList<>();
+	    field.getAnnotations().forEach(fa -> fieldAnnotations.add(toAnnotationDescription(fa)));
 
-	    // Getter
-	    builder = builder.defineMethod(getGetterName(field.getName(), field.getJavaType()), field.getJavaType(), Visibility.PUBLIC)
-		    .intercept(FieldAccessor.ofField(field.getName()));
-
-	    // Setter
-	    builder = builder.defineMethod(getSetterName(field.getName(), field.getJavaType()), void.class, Visibility.PUBLIC).withParameter(field.getJavaType())
-		    .intercept(FieldAccessor.ofField(field.getName()));
+	    builder = addField(builder, field.getName(), field.getJavaType(), fieldAnnotations);
 	}
 
 	// Constructor
@@ -229,93 +296,29 @@ public class PojoGenerator extends InitializeObject {
 	List<Class<?>> fieldTypes = fields.stream().map(f -> f.getJavaType()).collect(Collectors.toList());
 	builder = builder.defineConstructor(Visibility.PUBLIC).withParameters(fieldTypes).intercept(ctor);
 
-	Unloaded<Object> unloaded = builder.make();
+	return make(builder);
+    }
+
+    private <T> Builder<T> addField(Builder<T> builder, String fieldName, Class<?> fieldType, List<AnnotationDescription> fieldAnnotations) {
+	// Field
+	builder = builder.defineField(fieldName, fieldType, Modifier.PUBLIC).annotateField(fieldAnnotations);
+
+	// Getter
+	builder = builder.defineMethod(getGetterName(fieldName, fieldType), fieldType, Visibility.PUBLIC).intercept(FieldAccessor.ofField(fieldName));
+
+	// Setter
+	builder = builder.defineMethod(getSetterName(fieldName, fieldType), void.class, Visibility.PUBLIC).withParameter(fieldType).intercept(FieldAccessor.ofField(fieldName));
+	return builder;
+    }
+
+    protected <T> Class<?> make(Builder<T> builder) throws IOException {
+	Unloaded<T> unloaded = builder.make();
 	if (this.classPath != null) {
 	    unloaded.saveIn(this.classPath);
 	}
 
 	ClassLoader loader = this.classLoader != null ? this.classLoader : getDefaultClassLoader();
 	return unloaded.load(loader).getLoaded();
-    }
-
-    @Documented
-    @Target(ElementType.TYPE)
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface TableMtdt {
-
-	String catalog();
-
-	String schema();
-
-	String table();
-
-	String key();
-    }
-
-    public static class Metadata {
-
-	final TableMtdt tableMtdt;
-	final Constructor<?> emptyConstructor;
-	final Constructor<?> paramConstructor;
-	final java.lang.reflect.Field pkField;
-
-	public Metadata(TableMtdt tableMtdt, Constructor<?> emptyConstructor, Constructor<?> paramConstructor, java.lang.reflect.Field pkField) {
-	    this.tableMtdt = tableMtdt;
-	    this.emptyConstructor = emptyConstructor;
-	    this.paramConstructor = paramConstructor;
-	    this.pkField = pkField;
-	}
-
-	public TableMtdt getTableMtdt() {
-	    return this.tableMtdt;
-	}
-
-	public Constructor<?> getEmptyConstructor() {
-	    return this.emptyConstructor;
-	}
-
-	public Constructor<?> getParamConstructor() {
-	    return this.paramConstructor;
-	}
-
-	public java.lang.reflect.Field getPkField() {
-	    return this.pkField;
-	}
-    }
-
-    static final ConcurrentMap<Class<?>, Metadata> METADATAS = new ConcurrentHashMap<>();
-
-    public static Metadata getMetadata(Class<?> genClass) {
-	return METADATAS.computeIfAbsent(genClass, clazz -> {
-
-	    // TableMtdt
-	    TableMtdt tableMtdt = clazz.getDeclaredAnnotation(TableMtdt.class);
-	    Asserts.notNull(tableMtdt);
-
-	    try {
-		java.lang.reflect.Field pkField = clazz.getDeclaredField(tableMtdt.key());
-
-		Constructor<?>[] ctors = clazz.getDeclaredConstructors();
-		Asserts.isTrue(ctors.length == 2);
-
-		Constructor<?> emptyConstructor = Arrays.stream(ctors).filter(c -> c.getParameterCount() == 0).findFirst().get();
-		Constructor<?> paramConstructor = Arrays.stream(ctors).filter(c -> c.getParameterCount() != 0).findFirst().get();
-
-		return new Metadata(tableMtdt, emptyConstructor, paramConstructor, pkField);
-
-	    } catch (NoSuchFieldException ex) {
-		throw new Error(ex);
-	    }
-	});
-    }
-
-    public static Object getPk(Object obj) {
-	try {
-	    return getMetadata(obj.getClass()).pkField.get(obj);
-
-	} catch (IllegalAccessException ex) {
-	    throw new ReflectionException(ex);
-	}
     }
 
     static AnnotationDescription toAnnotationDescription(AnnotationModel annotationModel) {
@@ -402,7 +405,7 @@ public class PojoGenerator extends InitializeObject {
 	} catch (Exception ex) {
 	}
 	if (cl == null) {
-	    cl = PojoGenerator.class.getClassLoader();
+	    cl = RecordGenerator.class.getClassLoader();
 	    if (cl == null) {
 		try {
 		    cl = ClassLoader.getSystemClassLoader();

@@ -214,4 +214,14 @@ public final class RecordUtils {
 
 	return fields;
     }
+
+    public static Object getFieldValue(Object obj, String fieldName) {
+	try {
+	    java.lang.reflect.Field field = obj.getClass().getDeclaredField(fieldName);
+	    return field.get(obj);
+
+	} catch (IllegalAccessException | NoSuchFieldException ex) {
+	    throw new ReflectionException(ex);
+	}
+    }
 }
