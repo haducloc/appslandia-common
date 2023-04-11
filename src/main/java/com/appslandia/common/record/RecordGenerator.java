@@ -299,7 +299,7 @@ public class RecordGenerator extends InitializeObject {
 	return make(builder);
     }
 
-    private <T> Builder<T> addField(Builder<T> builder, String fieldName, Class<?> fieldType, List<AnnotationDescription> fieldAnnotations) {
+    protected <T> Builder<T> addField(Builder<T> builder, String fieldName, Class<?> fieldType, List<AnnotationDescription> fieldAnnotations) {
 	// Field
 	builder = builder.defineField(fieldName, fieldType, Modifier.PUBLIC).annotateField(fieldAnnotations);
 
