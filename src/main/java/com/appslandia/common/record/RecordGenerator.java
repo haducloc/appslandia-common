@@ -149,8 +149,8 @@ public class RecordGenerator extends InitializeObject {
 	    }
 	}
 
-	List<Class<?>> fieldTypes = table.getFields().stream().filter(f -> f.isKey()).map(f -> f.getJavaType()).collect(Collectors.toList());
-	builder = builder.defineConstructor(Visibility.PUBLIC).withParameters(fieldTypes).intercept(ctor);
+	List<Class<?>> argsTypes = table.getFields().stream().filter(f -> f.isKey()).map(f -> f.getJavaType()).collect(Collectors.toList());
+	builder = builder.defineConstructor(Visibility.PUBLIC).withParameters(argsTypes).intercept(ctor);
 
 	return make(builder);
     }
@@ -241,29 +241,29 @@ public class RecordGenerator extends InitializeObject {
 	// Constructor
 	Composable ctor = MethodCall.invoke(EntityBase.class.getDeclaredConstructor()).onSuper();
 
-	List<Class<?>> paramTypes = new ArrayList<>();
+	List<Class<?>> argsTypes = new ArrayList<>();
 	int index = 0;
 
 	if (embeddedIdClass != null) {
 	    ctor = ctor.andThen(FieldAccessor.ofField("pk").setsArgumentAt(index++));
-	    paramTypes.add(embeddedIdClass);
+	    argsTypes.add(embeddedIdClass);
 
 	    for (Field field : table.getFields()) {
 		if (!field.isKey()) {
 
 		    ctor = ctor.andThen(FieldAccessor.ofField(field.getName()).setsArgumentAt(index++));
-		    paramTypes.add(field.getJavaType());
+		    argsTypes.add(field.getJavaType());
 		}
 	    }
 	} else {
 
 	    for (Field field : table.getFields()) {
 		ctor = ctor.andThen(FieldAccessor.ofField(field.getName()).setsArgumentAt(index++));
-		paramTypes.add(field.getJavaType());
+		argsTypes.add(field.getJavaType());
 	    }
 	}
 
-	builder = builder.defineConstructor(Visibility.PUBLIC).withParameters(paramTypes).intercept(ctor);
+	builder = builder.defineConstructor(Visibility.PUBLIC).withParameters(argsTypes).intercept(ctor);
 	return make(builder);
     }
 
@@ -293,8 +293,8 @@ public class RecordGenerator extends InitializeObject {
 	    ctor = ctor.andThen(FieldAccessor.ofField(field.getName()).setsArgumentAt(index++));
 	}
 
-	List<Class<?>> fieldTypes = fields.stream().map(f -> f.getJavaType()).collect(Collectors.toList());
-	builder = builder.defineConstructor(Visibility.PUBLIC).withParameters(fieldTypes).intercept(ctor);
+	List<Class<?>> argsTypes = fields.stream().map(f -> f.getJavaType()).collect(Collectors.toList());
+	builder = builder.defineConstructor(Visibility.PUBLIC).withParameters(argsTypes).intercept(ctor);
 
 	return make(builder);
     }
