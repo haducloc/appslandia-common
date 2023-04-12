@@ -39,10 +39,9 @@ public abstract class BaseGenPk implements Serializable {
 	if (this == obj) {
 	    return true;
 	}
-	if (obj.getClass() != this.getClass()) {
+	if (obj == null || this.getClass() != obj.getClass()) {
 	    return false;
 	}
-
 	TableMtdt tableMtdt = this.getClass().getDeclaredAnnotation(TableMtdt.class);
 	Asserts.notNull(tableMtdt);
 
