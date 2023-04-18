@@ -41,6 +41,8 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Negative;
 import jakarta.validation.constraints.NegativeOrZero;
 import jakarta.validation.constraints.NotNull;
@@ -271,12 +273,20 @@ public class AnnotationModel extends InitializeObject {
 	return new AnnotationModel().setAnnotationType(MinLength.class).define("value", minLen);
     }
 
-    public static AnnotationModel decimalMax(int maxVal, boolean inclusive) {
+    public static AnnotationModel decimalMax(String maxVal, boolean inclusive) {
 	return new AnnotationModel().setAnnotationType(DecimalMax.class).define("value", maxVal).define("inclusive", inclusive);
     }
 
-    public static AnnotationModel decimalMin(int minVal, boolean inclusive) {
+    public static AnnotationModel decimalMin(String minVal, boolean inclusive) {
 	return new AnnotationModel().setAnnotationType(DecimalMin.class).define("value", minVal).define("inclusive", inclusive);
+    }
+
+    public static AnnotationModel max(long maxVal) {
+	return new AnnotationModel().setAnnotationType(Max.class).define("value", maxVal);
+    }
+
+    public static AnnotationModel min(long minVal) {
+	return new AnnotationModel().setAnnotationType(Min.class).define("value", minVal);
     }
 
     public static AnnotationModel numberDigits(int integer, int fraction) {
