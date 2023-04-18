@@ -27,6 +27,27 @@ import java.util.Map;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
+import com.appslandia.common.validators.DigitOnly;
+import com.appslandia.common.validators.Email;
+import com.appslandia.common.validators.FixedLength;
+import com.appslandia.common.validators.MaxLength;
+import com.appslandia.common.validators.MinLength;
+import com.appslandia.common.validators.Password;
+import com.appslandia.common.validators.ValidInts;
+import com.appslandia.common.validators.ValidStrings;
+
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.Negative;
+import jakarta.validation.constraints.NegativeOrZero;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 /**
  *
@@ -188,5 +209,85 @@ public class AnnotationModel extends InitializeObject {
 	assertNotInitialized();
 	addProperty(property, value);
 	return this;
+    }
+
+    public static AnnotationModel notNull() {
+	return new AnnotationModel().setAnnotationType(NotNull.class);
+    }
+
+    public static AnnotationModel email() {
+	return new AnnotationModel().setAnnotationType(Email.class);
+    }
+
+    public static AnnotationModel password() {
+	return new AnnotationModel().setAnnotationType(Password.class);
+    }
+
+    public static AnnotationModel digitOnly(int len) {
+	return new AnnotationModel().setAnnotationType(DigitOnly.class).define("value", len);
+    }
+
+    public static AnnotationModel future() {
+	return new AnnotationModel().setAnnotationType(Future.class);
+    }
+
+    public static AnnotationModel futureOrPresent() {
+	return new AnnotationModel().setAnnotationType(FutureOrPresent.class);
+    }
+
+    public static AnnotationModel past() {
+	return new AnnotationModel().setAnnotationType(Past.class);
+    }
+
+    public static AnnotationModel pastOrPresent() {
+	return new AnnotationModel().setAnnotationType(PastOrPresent.class);
+    }
+
+    public static AnnotationModel positive() {
+	return new AnnotationModel().setAnnotationType(Positive.class);
+    }
+
+    public static AnnotationModel positiveOrZero() {
+	return new AnnotationModel().setAnnotationType(PositiveOrZero.class);
+    }
+
+    public static AnnotationModel negative() {
+	return new AnnotationModel().setAnnotationType(Negative.class);
+    }
+
+    public static AnnotationModel negativeOrZero() {
+	return new AnnotationModel().setAnnotationType(NegativeOrZero.class);
+    }
+
+    public static AnnotationModel fixedLength(int fixedLen) {
+	return new AnnotationModel().setAnnotationType(FixedLength.class).define("value", fixedLen);
+    }
+
+    public static AnnotationModel maxLength(int maxLen) {
+	return new AnnotationModel().setAnnotationType(MaxLength.class).define("value", maxLen);
+    }
+
+    public static AnnotationModel minLength(int minLen) {
+	return new AnnotationModel().setAnnotationType(MinLength.class).define("value", minLen);
+    }
+
+    public static AnnotationModel decimalMax(int maxVal, boolean inclusive) {
+	return new AnnotationModel().setAnnotationType(DecimalMax.class).define("value", maxVal).define("inclusive", inclusive);
+    }
+
+    public static AnnotationModel decimalMin(int minVal, boolean inclusive) {
+	return new AnnotationModel().setAnnotationType(DecimalMin.class).define("value", minVal).define("inclusive", inclusive);
+    }
+
+    public static AnnotationModel numberDigits(int integer, int fraction) {
+	return new AnnotationModel().setAnnotationType(Digits.class).define("integer", integer).define("fraction", fraction);
+    }
+
+    public static AnnotationModel validInts(int... values) {
+	return new AnnotationModel().setAnnotationType(ValidInts.class).defineArray("value", values);
+    }
+
+    public static AnnotationModel validStrings(String... values) {
+	return new AnnotationModel().setAnnotationType(ValidStrings.class).defineArray("value", values);
     }
 }
