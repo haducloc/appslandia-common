@@ -47,6 +47,7 @@ public class Field extends InitializeObject implements Serializable {
     private Integer sqlType;
     private Integer scaleOrLength;
     private boolean nullable = true;
+    private boolean updatable = true;
     private int position;
 
     private Class<?> javaType;
@@ -168,6 +169,17 @@ public class Field extends InitializeObject implements Serializable {
     public Field setNullable(boolean nullable) {
 	this.assertNotInitialized();
 	this.nullable = nullable;
+	return this;
+    }
+
+    public boolean isUpdatable() {
+	this.initialize();
+	return this.updatable;
+    }
+
+    public Field setUpdatable(boolean updatable) {
+	this.assertNotInitialized();
+	this.updatable = updatable;
 	return this;
     }
 
