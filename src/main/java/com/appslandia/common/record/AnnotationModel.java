@@ -289,7 +289,7 @@ public class AnnotationModel extends InitializeObject {
 	return new AnnotationModel().setAnnotationType(Min.class).define("value", minVal);
     }
 
-    public static AnnotationModel numberDigits(int integer, int fraction) {
+    public static AnnotationModel digits(int integer, int fraction) {
 	return new AnnotationModel().setAnnotationType(Digits.class).define("integer", integer).define("fraction", fraction);
     }
 
