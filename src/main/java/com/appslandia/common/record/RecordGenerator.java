@@ -117,7 +117,7 @@ public class RecordGenerator extends InitializeObject {
 		.define("schema", ValueUtils.valueOrAlt(table.getTableSchema(), StringUtils.EMPTY_STRING)).define("table", table.getTableName()).define("keyClass", BaseGenPk.class)
 		.defineArray("keys", keys).build());
 
-	// EntityPkBase base
+	// BaseGenPk base
 	var builder = new ByteBuddy().subclass(BaseGenPk.class).name(fullClass).annotateType(pkAnnotations);
 
 	for (Field field : table.getFields()) {
