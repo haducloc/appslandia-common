@@ -152,7 +152,7 @@ public class DateUtils {
     }
 
     public static boolean isPastTime(long timeMillis, int leewayMs) {
-	return System.currentTimeMillis() + leewayMs >= timeMillis;
+	return System.currentTimeMillis() + leewayMs > timeMillis;
     }
 
     public static String format(Date dt, String pattern) {
