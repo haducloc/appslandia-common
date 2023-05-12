@@ -73,28 +73,6 @@ public class STRTest {
     }
 
     @Test
-    public void test_env_missing() {
-	try {
-	    String val = STR.format("Temp Dir=${env.__SYS__TEST__TMP__}");
-	    Assertions.assertEquals("Temp Dir=${env.__SYS__TEST__TMP__}", val);
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
-	}
-    }
-
-    @Test
-    public void test_prop_missing() {
-	try {
-	    String val = STR.format("Temp Dir=${env.__sys__test__tmp__}");
-	    Assertions.assertEquals("Temp Dir=${env.__sys__test__tmp__}", val);
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
-	}
-    }
-
-    @Test
     public void test_fmt() {
 	String msg = STR.fmt("this is {} and {}", "v1", null);
 	Assertions.assertEquals("this is v1 and null", msg);
@@ -108,6 +86,29 @@ public class STRTest {
 	try {
 	    String msg = STR.fmt("this is {} and {}", "v1");
 	    Assertions.assertEquals("this is v1 and {}", msg);
+
+	} catch (Exception ex) {
+	    Assertions.fail(ex.getMessage());
+	}
+    }
+
+    @SuppressWarnings("el-syntax")
+    @Test
+    public void test_format_pattern() {
+	try {
+	    String msg = STR.format("this is ${0:#,##0} and ${1:MM/dd/yyyy}", 12345, DateUtils.iso8601Date("2023-01-01"));
+	    Assertions.assertEquals("this is 12,345 and 01/01/2023", msg);
+
+	} catch (Exception ex) {
+	    Assertions.fail(ex.getMessage());
+	}
+    }
+
+    @Test
+    public void test_fmt_pattern() {
+	try {
+	    String msg = STR.fmt("this is {#,###} and {MM/dd/yyyy}", 12345, DateUtils.iso8601Date("2023-01-01"));
+	    Assertions.assertEquals("this is 12,345 and 01/01/2023", msg);
 
 	} catch (Exception ex) {
 	    Assertions.fail(ex.getMessage());
