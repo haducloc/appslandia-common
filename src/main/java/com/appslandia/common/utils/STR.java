@@ -145,7 +145,7 @@ public class STR {
 	}
     }
 
-    private static final Pattern SEQ_HOLDER_PATTERN = Pattern.compile("\\{[^}]*}", Pattern.CASE_INSENSITIVE);
+    private static final Pattern SEQ_HOLDER_PATTERN = Pattern.compile("\\{}");
 
     public static String fmt(String str, Object... entries) {
 	if (str == null) {
@@ -165,9 +165,6 @@ public class STR {
 		out.append(str.substring(prevEnd, matcher.start()));
 	    }
 
-	    String parameterGroup = matcher.group();
-	    String pattern = parameterGroup.substring(parameterGroup.indexOf('{') + 1, parameterGroup.length() - 1).trim();
-
 	    // {}
 	    index++;
 	    Object entryValue = ((0 <= index) && (index < entries.length)) ? entries[index] : MISSED_VALUE;
@@ -178,22 +175,13 @@ public class STR {
 		out.append("null");
 
 	    } else {
-		if (pattern.isEmpty()) {
-		    out.append(entryValue.toString());
+		if (entryValue instanceof Iterable) {
+		    out.append(ObjectUtils.asString((Iterable<?>) entryValue));
+
+		} else if (entryValue.getClass().isArray()) {
+		    out.append(ObjectUtils.asString(entryValue));
 		} else {
-
-		    if (entryValue instanceof Number) {
-			out.append(new DecimalFormat(pattern).format(entryValue));
-
-		    } else if (entryValue instanceof java.util.Date) {
-			out.append(DateUtils.newDateFormat(pattern).format(entryValue));
-
-		    } else if (entryValue instanceof TemporalAccessor) {
-			out.append(DateUtils.getFormatter(pattern).format((TemporalAccessor) entryValue));
-
-		    } else {
-			out.append(entryValue.toString());
-		    }
+		    out.append(entryValue.toString());
 		}
 	    }
 	    prevEnd = matcher.end();
