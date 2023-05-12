@@ -98,8 +98,8 @@ public class STR {
 	    int patternIdx = parameterName.indexOf(':');
 
 	    if (patternIdx > 0) {
-		pattern = parameterName.substring(patternIdx + 1);
-		parameterName = parameterName.substring(0, patternIdx);
+		pattern = parameterName.substring(patternIdx + 1).trim();
+		parameterName = parameterName.substring(0, patternIdx).trim();
 	    }
 	    Asserts.isTrue(!parameterName.isEmpty(), () -> STR.fmt("Invalid expression '{}'.", parameterGroup));
 
