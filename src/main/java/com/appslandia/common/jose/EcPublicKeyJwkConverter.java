@@ -111,7 +111,7 @@ public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> implement
 	byte[] xBytes = JoseUtils.getJoseBase64().decode(x);
 	byte[] yBytes = JoseUtils.getJoseBase64().decode(y);
 
-	ECPoint ecPoint = new ECPoint(new BigInteger(1, xBytes), new BigInteger(1, yBytes));
+	ECPoint ecPoint = new ECPoint(new BigInteger(xBytes), new BigInteger(yBytes));
 	ECPublicKeySpec pubKeySpec = new ECPublicKeySpec(ecPoint, ecSpec);
 
 	PublicKey pk = this.keyFactoryUtil.toPublicKey(pubKeySpec);
