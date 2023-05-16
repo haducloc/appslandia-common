@@ -78,7 +78,7 @@ public class RSAPublicKeyJwkConverter extends JwkConverter<RSAPublicKey> impleme
 	byte[] nBytes = JoseUtils.getJoseBase64().decode(n);
 	byte[] eBytes = JoseUtils.getJoseBase64().decode(e);
 
-	RSAPublicKeySpec keySpec = new RSAPublicKeySpec(new BigInteger(1, nBytes), new BigInteger(1, eBytes));
+	RSAPublicKeySpec keySpec = new RSAPublicKeySpec(new BigInteger(nBytes), new BigInteger(eBytes));
 	PublicKey publicKey = this.keyFactoryUtil.toPublicKey(keySpec);
 
 	return (RSAPublicKey) publicKey;
