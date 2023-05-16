@@ -96,7 +96,7 @@ try (ConnectionImpl connScoped = new ConnectionImpl(javax.sql.DataSource)) {
 ```
 ### JWT
 ```java
-  // Gson or JsonB JoseGson.newJsonProcessor() or your implementation
+  // JoseJsonb or JoseGson.newJsonProcessor() or your implementation
   JsonProcessor jsonProcessor = JoseGson.newJsonProcessor();
   
   // JwtSigner - HS256/HS384/HS512
