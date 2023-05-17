@@ -35,7 +35,7 @@ import jakarta.mail.internet.MimeUtility;
  */
 public class EmailUtils {
 
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("(?=.{6,255}$)[_a-z\\d-\\+]+(\\.[_a-z\\d-]+)*@[a-z\\d-]+(\\.[a-z\\d-]+)*(\\.[a-z]{2,})", Pattern.CASE_INSENSITIVE);
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^(?=.{6,255}$)[_a-z\\d+-]+(\\.[_a-z\\d-]+)*@[a-z\\d-]+(\\.[a-z\\d-]+)*(\\.[a-z]{2,})$", Pattern.CASE_INSENSITIVE);
 
     public static boolean isValid(CharSequence email) {
 	if (email == null) {

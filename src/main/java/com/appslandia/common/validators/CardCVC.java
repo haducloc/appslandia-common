@@ -49,7 +49,7 @@ public @interface CardCVC {
 
     Class<? extends Payload>[] payload() default {};
 
-    static final Pattern CVC_PATTERN = Pattern.compile("\\d{3,4}");
+    static final Pattern CVC_PATTERN = Pattern.compile("^\\d{3,4}$");
 
     public static class ConstraintValidatorImpl implements ConstraintValidator<CardCVC, CharSequence> {
 

@@ -51,7 +51,7 @@ public @interface DigitOnly {
 
     int value() default 0;
 
-    static final Pattern DIGITS_PATTERN = Pattern.compile("\\d+");
+    static final Pattern DIGITS_PATTERN = Pattern.compile("^\\d+$");
 
     public static class ConstraintValidatorImpl implements ConstraintValidator<DigitOnly, CharSequence> {
 

@@ -49,7 +49,7 @@ public @interface UrlPath {
 
     Class<? extends Payload>[] payload() default {};
 
-    static final Pattern URL_PATH_PATTERN = Pattern.compile("[a-z\\d-]+", Pattern.CASE_INSENSITIVE);
+    static final Pattern URL_PATH_PATTERN = Pattern.compile("^[a-z\\d-]+$", Pattern.CASE_INSENSITIVE);
 
     public static class ConstraintValidatorImpl implements ConstraintValidator<UrlPath, String> {
 

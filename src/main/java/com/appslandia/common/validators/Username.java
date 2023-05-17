@@ -56,7 +56,7 @@ public @interface Username {
     // must start a-zA-Z
     // length 6-128
 
-    static final Pattern USERNAME_PATTERN = Pattern.compile("(?=.{6,128}$)(?!.*\\.\\.)(?!.*\\.$)[a-z][a-z\\d.]+", Pattern.CASE_INSENSITIVE);
+    static final Pattern USERNAME_PATTERN = Pattern.compile("^(?=.{6,128}$)(?!.*\\.\\.)(?!.*\\.$)[a-z][a-z\\d.]+$", Pattern.CASE_INSENSITIVE);
 
     public static class ConstraintValidatorImpl implements ConstraintValidator<Username, CharSequence> {
 

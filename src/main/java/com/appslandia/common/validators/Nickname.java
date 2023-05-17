@@ -55,7 +55,7 @@ public @interface Nickname {
     // start with a-z
     // length 3-45
 
-    static final Pattern NICKNAME_PATTERN = Pattern.compile("(?=.{3,45}$)[a-z]{1,}[\\d]*", Pattern.CASE_INSENSITIVE);
+    static final Pattern NICKNAME_PATTERN = Pattern.compile("^(?=.{3,45}$)[a-z]{1,}[\\d]*$", Pattern.CASE_INSENSITIVE);
 
     public static class ConstraintValidatorImpl implements ConstraintValidator<Nickname, CharSequence> {
 
