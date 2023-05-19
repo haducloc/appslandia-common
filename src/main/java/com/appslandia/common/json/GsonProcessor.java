@@ -31,6 +31,7 @@ import java.time.OffsetTime;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
@@ -100,6 +101,7 @@ public class GsonProcessor extends JsonProcessor {
 	builder.serializeNulls();
 	builder.setPrettyPrinting();
 	builder.setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE);
+	builder.setFieldNamingStrategy(FieldNamingPolicy.IDENTITY);
 
 	builder.setExclusionStrategies(new ExclusionStrategy() {
 

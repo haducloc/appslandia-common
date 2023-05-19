@@ -33,6 +33,7 @@ import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
 import jakarta.json.bind.JsonbException;
 import jakarta.json.bind.config.BinaryDataStrategy;
+import jakarta.json.bind.config.PropertyNamingStrategy;
 import jakarta.json.bind.config.PropertyVisibilityStrategy;
 
 /**
@@ -104,6 +105,7 @@ public class JsonbProcessor extends JsonProcessor {
 	JsonbConfig config = new JsonbConfig();
 	config.withNullValues(true);
 	config.withFormatting(true);
+	config.withPropertyNamingStrategy(PropertyNamingStrategy.IDENTITY);
 
 	config.withPropertyVisibilityStrategy(new PropertyVisibilityStrategy() {
 
