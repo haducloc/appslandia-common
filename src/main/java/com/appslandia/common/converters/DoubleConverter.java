@@ -20,7 +20,6 @@
 
 package com.appslandia.common.converters;
 
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 
@@ -64,10 +63,9 @@ public class DoubleConverter extends NumberConverter<Double> {
 	    NumberFormat nf = formatProvider.getNumberFormat(this.fractionDigits, this.roundingMode, false);
 	    return nf.format(obj);
 	}
-	double value = DecimalUtils.round(obj.doubleValue(), this.fractionDigits, this.roundingMode);
-	String str = new BigDecimal(Double.toString(value)).setScale(this.fractionDigits, this.roundingMode).toString();
 
-	return DecimalUtils.isNegativeZero(value) ? ('-' + str) : str;
+	double value = DecimalUtils.round(obj.doubleValue(), this.fractionDigits, this.roundingMode);
+	return getDecimalFormat(this.fractionDigits).format(value);
     }
 
     @Override

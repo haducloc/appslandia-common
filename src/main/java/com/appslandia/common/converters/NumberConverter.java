@@ -20,6 +20,7 @@
 
 package com.appslandia.common.converters;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 
@@ -38,5 +39,11 @@ public abstract class NumberConverter<T extends Number> implements Converter<T> 
 	    return parsedValue;
 	}
 	return null;
+    }
+
+    protected static DecimalFormat getDecimalFormat(int fractionDigits) {
+	DecimalFormat impl = new DecimalFormat("0." + "0".repeat(fractionDigits));
+	impl.setGroupingUsed(false);
+	return impl;
     }
 }

@@ -63,7 +63,7 @@ public class BigDecimalConverter extends NumberConverter<BigDecimal> {
 	    NumberFormat nf = formatProvider.getNumberFormat(this.fractionDigits, this.roundingMode, false);
 	    return nf.format(obj);
 	}
-	return obj.setScale(this.fractionDigits, this.roundingMode).toString();
+	return getDecimalFormat(this.fractionDigits).format(obj.setScale(this.fractionDigits, this.roundingMode));
     }
 
     @Override

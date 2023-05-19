@@ -20,7 +20,6 @@
 
 package com.appslandia.common.converters;
 
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 
@@ -65,10 +64,9 @@ public class FloatConverter extends NumberConverter<Float> {
 	    NumberFormat nf = formatProvider.getNumberFormat(this.fractionDigits, this.roundingMode, false);
 	    return nf.format(obj);
 	}
-	float value = DecimalUtils.round(obj.floatValue(), this.fractionDigits, this.roundingMode);
-	String str = new BigDecimal(Float.toString(value)).setScale(this.fractionDigits, this.roundingMode).toString();
 
-	return DecimalUtils.isNegativeZero(value) ? ('-' + str) : str;
+	float value = DecimalUtils.round(obj.floatValue(), this.fractionDigits, this.roundingMode);
+	return getDecimalFormat(this.fractionDigits).format(value);
     }
 
     @Override
