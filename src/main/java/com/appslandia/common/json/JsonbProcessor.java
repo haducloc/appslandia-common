@@ -49,7 +49,7 @@ public class JsonbProcessor extends JsonProcessor {
     @Override
     protected void init() throws Exception {
 	if (this.config == null) {
-	    this.config = newConfig();
+	    this.config = newConfig(true, false);
 	}
 	this.jsonb = JsonbBuilder.create(this.config);
     }
@@ -101,10 +101,10 @@ public class JsonbProcessor extends JsonProcessor {
 	return this;
     }
 
-    public static JsonbConfig newConfig() {
+    public static JsonbConfig newConfig(boolean serializeNulls, boolean formatting) {
 	JsonbConfig config = new JsonbConfig();
-	config.withNullValues(true);
-	config.withFormatting(true);
+	config.withNullValues(serializeNulls);
+	config.withFormatting(formatting);
 	config.withPropertyNamingStrategy(PropertyNamingStrategy.IDENTITY);
 
 	config.withPropertyVisibilityStrategy(new PropertyVisibilityStrategy() {

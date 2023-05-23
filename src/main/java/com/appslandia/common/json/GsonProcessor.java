@@ -51,7 +51,7 @@ public class GsonProcessor extends JsonProcessor {
     @Override
     protected void init() throws Exception {
 	if (this.builder == null) {
-	    this.builder = newBuilder();
+	    this.builder = newBuilder(true, false);
 	}
 	this.gson = this.builder.create();
     }
@@ -96,10 +96,17 @@ public class GsonProcessor extends JsonProcessor {
 	return this;
     }
 
-    public static GsonBuilder newBuilder() {
+    public static GsonBuilder newBuilder(boolean serializeNulls, boolean formatting) {
 	GsonBuilder builder = new GsonBuilder();
-	builder.serializeNulls();
-	builder.setPrettyPrinting();
+
+	if (serializeNulls) {
+	    builder.serializeNulls();
+	}
+
+	if (formatting) {
+	    builder.setPrettyPrinting();
+	}
+
 	builder.setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE);
 	builder.setFieldNamingStrategy(FieldNamingPolicy.IDENTITY);
 

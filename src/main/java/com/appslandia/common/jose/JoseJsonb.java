@@ -34,7 +34,7 @@ public class JoseJsonb {
 
     public static JsonbConfig newJsonbConfig() {
 	// @formatter:off
-	return JsonbProcessor.newConfig().withAdapters(
+	return JsonbProcessor.newConfig(true, false).withAdapters(
 
 		// JsonWebKey
 		new JsonbMapAdapter<>(true, m -> new JsonWebKey(m)) {},
