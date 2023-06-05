@@ -107,8 +107,9 @@ public class STR {
 
 	    if (parameterValue == MISSED_VALUE) {
 		parameterValue = parameterGroup;
+	    }
 
-	    } else if (parameterValue == null) {
+	    if (parameterValue == null) {
 		out.append("null");
 
 	    } else {
@@ -174,8 +175,8 @@ public class STR {
 
 	    if (entryValue == MISSED_VALUE) {
 		entryValue = parameterGroup;
-
-	    } else if (entryValue == null) {
+	    }
+	    if (entryValue == null) {
 		out.append("null");
 
 	    } else {
