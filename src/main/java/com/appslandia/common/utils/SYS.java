@@ -23,12 +23,28 @@ package com.appslandia.common.utils;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import com.appslandia.common.base.AssertException;
+import com.appslandia.common.base.BoolFormatException;
+
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
 public class SYS {
+
+    public static String getProp(String key, String defaultValue) {
+	String value = StringUtils.trimToNull(System.getProperty(key));
+	return (value != null) ? value : defaultValue;
+    }
+
+    public static String getRequiredProp(String key) {
+	String value = getProp(key, null);
+	if (value != null) {
+	    return null;
+	}
+	throw new AssertException(STR.fmt("No value found for the given property '{}'.", key));
+    }
 
     public static boolean getBoolProp(String key, boolean defaultValue) {
 	String value = StringUtils.trimToNull(System.getProperty(key));
@@ -50,14 +66,28 @@ public class SYS {
 	return (value != null) ? ParseUtils.parseDouble(value, defaultValue) : defaultValue;
     }
 
-    public static String getProp(String key, String defaultValue) {
-	String value = StringUtils.trimToNull(System.getProperty(key));
-	return (value != null) ? value : defaultValue;
+    public static boolean getRequiredBoolProp(String key) {
+	String value = getRequiredProp(key);
+
+	if (ParseUtils.isBoolValue(value)) {
+	    return ParseUtils.isTrueValue(value);
+	}
+	throw new BoolFormatException(value);
     }
 
-    public static String getRequiredProp(String key) {
-	String value = getProp(key, null);
-	return Asserts.notNull(value, () -> STR.fmt("No value associated with property '{}'.", key));
+    public static int getRequiredIntProp(String key) {
+	String value = getRequiredProp(key);
+	return Integer.parseInt(value);
+    }
+
+    public static long getRequiredLongProp(String key) {
+	String value = getRequiredProp(key);
+	return Long.parseLong(value);
+    }
+
+    public static double getRequiredDoubleProp(String key) {
+	String value = getRequiredProp(key);
+	return Double.parseDouble(value);
     }
 
     public static String getEnv(String key, String defaultValue) {
@@ -67,7 +97,54 @@ public class SYS {
 
     public static String getRequiredEnv(String key) {
 	String value = getEnv(key, null);
-	return Asserts.notNull(value, () -> STR.fmt("No value associated with env '{}'.", key));
+	if (value != null) {
+	    return null;
+	}
+	throw new AssertException(STR.fmt("No value found for the given env '{}'.", key));
+    }
+
+    public static boolean getBoolEnv(String key, boolean defaultValue) {
+	String value = StringUtils.trimToNull(System.getenv(key));
+	return (value != null) ? ParseUtils.parseBool(value, defaultValue) : defaultValue;
+    }
+
+    public static int getIntEnv(String key, int defaultValue) {
+	String value = StringUtils.trimToNull(System.getenv(key));
+	return (value != null) ? ParseUtils.parseInt(value, defaultValue) : defaultValue;
+    }
+
+    public static long getLongEnv(String key, long defaultValue) {
+	String value = StringUtils.trimToNull(System.getenv(key));
+	return (value != null) ? ParseUtils.parseLong(value, defaultValue) : defaultValue;
+    }
+
+    public static double getDoubleEnv(String key, double defaultValue) {
+	String value = StringUtils.trimToNull(System.getenv(key));
+	return (value != null) ? ParseUtils.parseDouble(value, defaultValue) : defaultValue;
+    }
+
+    public static boolean getRequiredBoolEnv(String key) {
+	String value = getRequiredEnv(key);
+
+	if (ParseUtils.isBoolValue(value)) {
+	    return ParseUtils.isTrueValue(value);
+	}
+	throw new BoolFormatException(value);
+    }
+
+    public static int getRequiredIntEnv(String key) {
+	String value = getRequiredEnv(key);
+	return Integer.parseInt(value);
+    }
+
+    public static long getRequiredLongEnv(String key) {
+	String value = getRequiredEnv(key);
+	return Long.parseLong(value);
+    }
+
+    public static double getRequiredDoubleEnv(String key) {
+	String value = getRequiredEnv(key);
+	return Double.parseDouble(value);
     }
 
     public static String resolveString(String str) {

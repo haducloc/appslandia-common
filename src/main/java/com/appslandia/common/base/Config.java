@@ -158,15 +158,10 @@ public interface Config {
     }
 
     default public boolean getRequiredBool(String key) {
-	String value = getString(key);
-	if (value == null) {
-	    throw toNoValueException(key);
-	}
-	if (ParseUtils.isTrueValue(value)) {
-	    return true;
-	}
-	if (ParseUtils.isFalseValue(value)) {
-	    return false;
+	String value = getRequiredString(key);
+
+	if (ParseUtils.isBoolValue(value)) {
+	    return ParseUtils.isTrueValue(value);
 	}
 	throw new BoolFormatException(value);
     }
@@ -180,10 +175,7 @@ public interface Config {
     }
 
     default public int getRequiredInt(String key) {
-	String value = getString(key);
-	if (value == null) {
-	    throw toNoValueException(key);
-	}
+	String value = getRequiredString(key);
 	return Integer.parseInt(value);
     }
 
@@ -196,10 +188,7 @@ public interface Config {
     }
 
     default public long getRequiredLong(String key) {
-	String value = getString(key);
-	if (value == null) {
-	    throw toNoValueException(key);
-	}
+	String value = getRequiredString(key);
 	return Long.parseLong(value);
     }
 
@@ -212,14 +201,11 @@ public interface Config {
     }
 
     default public double getRequiredDouble(String key) {
-	String value = getString(key);
-	if (value == null) {
-	    throw toNoValueException(key);
-	}
+	String value = getRequiredString(key);
 	return Double.parseDouble(value);
     }
 
     private static AssertException toNoValueException(String key) {
-	return new AssertException(STR.fmt("No value associated with key '{}'.", key));
+	return new AssertException(STR.fmt("No value found for the given key '{}'.", key));
     }
 }
