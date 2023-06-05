@@ -186,7 +186,7 @@ public class STR {
 		    out.append(ObjectUtils.asString(entryValue));
 		} else {
 
-		    if (StringUtils.isNullOrEmpty(pattern)) {
+		    if (pattern.isEmpty()) {
 			out.append(entryValue.toString());
 		    } else {
 
