@@ -77,7 +77,7 @@ public class SplitUtils {
 	return list.toArray(new String[list.size()]);
     }
 
-    public static String[] splitByCommaESC(String str) {
+    public static String[] splitEsc(String str, char separator) {
 	List<String> list = new ArrayList<>();
 
 	StringBuilder currentItem = new StringBuilder();
@@ -91,7 +91,7 @@ public class SplitUtils {
 	    } else if (c == '\\') {
 		escapeNextChar = true;
 
-	    } else if (c == ',') {
+	    } else if (c == separator) {
 		String item = currentItem.toString().trim();
 		if (!item.isEmpty()) {
 		    list.add(item);
