@@ -76,4 +76,37 @@ public class SplitUtils {
 	}
 	return list.toArray(new String[list.size()]);
     }
+
+    public static String[] splitByCommaESC(String str) {
+	List<String> list = new ArrayList<>();
+
+	StringBuilder currentItem = new StringBuilder();
+	boolean escapeNextChar = false;
+
+	for (char c : str.toCharArray()) {
+	    if (escapeNextChar) {
+		currentItem.append(c);
+		escapeNextChar = false;
+
+	    } else if (c == '\\') {
+		escapeNextChar = true;
+
+	    } else if (c == ',') {
+		String item = currentItem.toString().trim();
+		if (!item.isEmpty()) {
+		    list.add(item);
+		}
+		currentItem.setLength(0);
+
+	    } else {
+		currentItem.append(c);
+	    }
+	}
+
+	String item = currentItem.toString().trim();
+	if (!item.isEmpty()) {
+	    list.add(item);
+	}
+	return list.toArray(new String[list.size()]);
+    }
 }

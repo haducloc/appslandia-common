@@ -60,7 +60,7 @@ public interface Config {
 	if (value == null) {
 	    return StringUtils.EMPTY_ARRAY;
 	}
-	return SplitUtils.split(value, ',');
+	return SplitUtils.splitByCommaESC(value);
     }
 
     default public String getFormatted(String key) {
