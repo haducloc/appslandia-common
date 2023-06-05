@@ -47,22 +47,22 @@ public class SYS {
     }
 
     public static boolean getBoolProp(String key, boolean defaultValue) {
-	String value = StringUtils.trimToNull(System.getProperty(key));
+	String value = getProp(key, null);
 	return (value != null) ? ParseUtils.parseBool(value, defaultValue) : defaultValue;
     }
 
     public static int getIntProp(String key, int defaultValue) {
-	String value = StringUtils.trimToNull(System.getProperty(key));
+	String value = getProp(key, null);
 	return (value != null) ? ParseUtils.parseInt(value, defaultValue) : defaultValue;
     }
 
     public static long getLongProp(String key, long defaultValue) {
-	String value = StringUtils.trimToNull(System.getProperty(key));
+	String value = getProp(key, null);
 	return (value != null) ? ParseUtils.parseLong(value, defaultValue) : defaultValue;
     }
 
     public static double getDoubleProp(String key, double defaultValue) {
-	String value = StringUtils.trimToNull(System.getProperty(key));
+	String value = getProp(key, null);
 	return (value != null) ? ParseUtils.parseDouble(value, defaultValue) : defaultValue;
     }
 
@@ -104,22 +104,22 @@ public class SYS {
     }
 
     public static boolean getBoolEnv(String key, boolean defaultValue) {
-	String value = StringUtils.trimToNull(System.getenv(key));
+	String value = getEnv(key, null);
 	return (value != null) ? ParseUtils.parseBool(value, defaultValue) : defaultValue;
     }
 
     public static int getIntEnv(String key, int defaultValue) {
-	String value = StringUtils.trimToNull(System.getenv(key));
+	String value = getEnv(key, null);
 	return (value != null) ? ParseUtils.parseInt(value, defaultValue) : defaultValue;
     }
 
     public static long getLongEnv(String key, long defaultValue) {
-	String value = StringUtils.trimToNull(System.getenv(key));
+	String value = getEnv(key, null);
 	return (value != null) ? ParseUtils.parseLong(value, defaultValue) : defaultValue;
     }
 
     public static double getDoubleEnv(String key, double defaultValue) {
-	String value = StringUtils.trimToNull(System.getenv(key));
+	String value = getEnv(key, null);
 	return (value != null) ? ParseUtils.parseDouble(value, defaultValue) : defaultValue;
     }
 
