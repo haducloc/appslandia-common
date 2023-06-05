@@ -104,7 +104,6 @@ public class STR {
 	    Asserts.isTrue(!parameterName.isEmpty(), () -> STR.fmt("Invalid expression '{}'.", parameterGroup));
 
 	    Object parameterValue = parameters.apply(parameterName, parameterGroup);
-
 	    if (parameterValue == MISSED_VALUE) {
 		parameterValue = parameterGroup;
 	    }
@@ -172,10 +171,10 @@ public class STR {
 
 	    index++;
 	    Object entryValue = ((0 <= index) && (index < entries.length)) ? entries[index] : MISSED_VALUE;
-
 	    if (entryValue == MISSED_VALUE) {
 		entryValue = parameterGroup;
 	    }
+
 	    if (entryValue == null) {
 		out.append("null");
 
