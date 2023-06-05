@@ -41,7 +41,7 @@ public class SYS {
     public static String getRequiredProp(String key) {
 	String value = getProp(key, null);
 	if (value != null) {
-	    return null;
+	    return value;
 	}
 	throw new AssertException(STR.fmt("No value found for the given property '{}'.", key));
     }
@@ -98,7 +98,7 @@ public class SYS {
     public static String getRequiredEnv(String key) {
 	String value = getEnv(key, null);
 	if (value != null) {
-	    return null;
+	    return value;
 	}
 	throw new AssertException(STR.fmt("No value found for the given env '{}'.", key));
     }
