@@ -197,12 +197,6 @@ public class StringUtils {
 	if (elements.length == 0) {
 	    return null;
 	}
-	String sep = new String(new char[] { delimiter });
-	StringJoiner joiner = willWrap ? new StringJoiner(sep, sep, sep) : new StringJoiner(sep);
-
-	for (CharSequence cs : elements) {
-	    joiner.add(cs);
-	}
-	return joiner.toString();
+	return join(delimiter, willWrap, new ArrayIterable<>(elements));
     }
 }
