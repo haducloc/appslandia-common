@@ -68,7 +68,7 @@ public class ObjectUtils {
 	}
     }
 
-    public static String asString(Object[] array) {
+    public static <T> String asString(T[] array) {
 	if (array == null) {
 	    return NULL_STR;
 	}
@@ -76,20 +76,19 @@ public class ObjectUtils {
     }
 
     public static String asString(Object array) {
-	if (array != null) {
-	    Asserts.isTrue(array.getClass().isArray());
-	}
+	Asserts.isTrue((array == null) || array.getClass().isArray());
+
 	if (array == null) {
 	    return NULL_STR;
 	}
-	return StreamUtils.stream(ArrayUtils.iterator(array)).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
+	return StreamUtils.stream(new ArrayUtils.ArrayObjIterator(array)).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
     }
 
     public static String asString(Iterable<?> iterable) {
 	if (iterable == null) {
 	    return NULL_STR;
 	}
-	return StreamUtils.stream(iterable.iterator()).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
+	return StreamUtils.stream(iterable).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
     }
 
     public static String asString(Iterator<?> iterator) {
@@ -99,10 +98,10 @@ public class ObjectUtils {
 	return StreamUtils.stream(iterator).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
     }
 
-    public static String asString(Enumeration<?> enumeration) {
-	if (enumeration == null) {
+    public static String asString(Enumeration<?> enumer) {
+	if (enumer == null) {
 	    return NULL_STR;
 	}
-	return StreamUtils.stream(enumeration).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
+	return StreamUtils.stream(enumer).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
     }
 }

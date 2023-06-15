@@ -274,23 +274,75 @@ public class ArrayUtils {
 	return m;
     }
 
-    public static Iterator<Object> iterator(Object array) {
-	Asserts.notNull(array);
+    public static class ArrayObjIterator implements Iterator<Object> {
+	final Object array;
+	final int len;
+	int i = 0;
 
-	return new Iterator<Object>() {
+	public ArrayObjIterator(Object array) {
+	    Asserts.notNull(array);
+	    Asserts.isTrue(array.getClass().isArray());
 
-	    final int len = Array.getLength(array);
-	    int i = 0;
+	    this.array = array;
+	    this.len = Array.getLength(array);
+	}
 
-	    @Override
-	    public boolean hasNext() {
-		return this.i < this.len;
-	    }
+	@Override
+	public boolean hasNext() {
+	    return this.i < this.len;
+	}
 
-	    @Override
-	    public Object next() {
-		return Array.get(array, this.i++);
-	    }
-	};
+	@Override
+	public Object next() {
+	    return Array.get(this.array, this.i++);
+	}
+    }
+
+    public static class ArrayObjIterable implements Iterable<Object> {
+	final Object array;
+
+	public ArrayObjIterable(Object array) {
+	    Asserts.notNull(array);
+	    Asserts.isTrue(array.getClass().isArray());
+
+	    this.array = array;
+	}
+
+	@Override
+	public Iterator<Object> iterator() {
+	    return new ArrayObjIterator(this.array);
+	}
+    }
+
+    public static class ArrayIterator<T> implements Iterator<T> {
+	final T[] array;
+	int i = 0;
+
+	public ArrayIterator(T[] array) {
+	    this.array = Asserts.notNull(array);
+	}
+
+	@Override
+	public boolean hasNext() {
+	    return this.i < this.array.length;
+	}
+
+	@Override
+	public T next() {
+	    return this.array[i++];
+	}
+    }
+
+    public static class ArrayIterable<T> implements Iterable<T> {
+	private T[] array;
+
+	public ArrayIterable(T[] array) {
+	    this.array = Asserts.notNull(array);
+	}
+
+	@Override
+	public Iterator<T> iterator() {
+	    return new ArrayIterator<>(this.array);
+	}
     }
 }

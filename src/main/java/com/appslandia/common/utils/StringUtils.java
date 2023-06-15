@@ -197,6 +197,6 @@ public class StringUtils {
 	if (elements.length == 0) {
 	    return null;
 	}
-	return join(delimiter, willWrap, new ArrayIterable<>(elements));
+	return join(delimiter, willWrap, new ArrayUtils.ArrayIterable<>(elements));
     }
 }

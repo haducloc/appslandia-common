@@ -34,18 +34,18 @@ import java.util.stream.StreamSupport;
  */
 public class StreamUtils {
 
-    public static <T> Stream<T> stream(Enumeration<T> e) {
+    public static <T> Stream<T> stream(Enumeration<T> enumer) {
 
 	return StreamSupport.stream(Spliterators.spliteratorUnknownSize(new Iterator<T>() {
 
 	    @Override
 	    public T next() {
-		return e.nextElement();
+		return enumer.nextElement();
 	    }
 
 	    @Override
 	    public boolean hasNext() {
-		return e.hasMoreElements();
+		return enumer.hasMoreElements();
 	    }
 	}, Spliterator.ORDERED), false);
     }
@@ -55,6 +55,6 @@ public class StreamUtils {
     }
 
     public static <T> Stream<T> stream(Iterable<T> iter) {
-	return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iter.iterator(), Spliterator.ORDERED), false);
+	return StreamSupport.stream(iter.spliterator(), false);
     }
 }
