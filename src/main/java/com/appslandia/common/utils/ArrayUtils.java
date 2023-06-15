@@ -225,52 +225,48 @@ public class ArrayUtils {
     public static int min(int[] arr) {
 	Asserts.notNull(arr);
 	if (arr.length == 0) {
-	    throw new NoSuchElementException("min: arr is empty.");
+	    throw new NoSuchElementException("arr is empty.");
 	}
 	int m = arr[0];
 	for (int i = 1; i < arr.length; i++) {
 	    m = Math.min(m, arr[i]);
 	}
-
 	return m;
     }
 
     public static int max(int[] arr) {
 	Asserts.notNull(arr);
 	if (arr.length == 0) {
-	    throw new NoSuchElementException("max: arr is empty.");
+	    throw new NoSuchElementException("arr is empty.");
 	}
 	int m = arr[0];
 	for (int i = 1; i < arr.length; i++) {
 	    m = Math.max(m, arr[i]);
 	}
-
 	return m;
     }
 
     public static <T> T min(T[] arr, Comparator<T> comparator) {
 	Asserts.notNull(arr);
 	if (arr.length == 0) {
-	    throw new NoSuchElementException("min: arr is empty.");
+	    throw new NoSuchElementException("arr is empty.");
 	}
 	T m = arr[0];
 	for (int i = 1; i < arr.length; i++) {
 	    m = comparator.compare(m, arr[i]) <= 0 ? m : arr[i];
 	}
-
 	return m;
     }
 
     public static <T> T max(T[] arr, Comparator<T> comparator) {
 	Asserts.notNull(arr);
 	if (arr.length == 0) {
-	    throw new NoSuchElementException("max: arr is empty.");
+	    throw new NoSuchElementException("arr is empty.");
 	}
 	T m = arr[0];
 	for (int i = 1; i < arr.length; i++) {
 	    m = comparator.compare(m, arr[i]) <= 0 ? arr[i] : m;
 	}
-
 	return m;
     }
 
