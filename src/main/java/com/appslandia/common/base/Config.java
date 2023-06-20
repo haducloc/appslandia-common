@@ -49,9 +49,7 @@ public interface Config {
 
     default public String getRequiredString(String key) {
 	String value = getString(key);
-	if (value == null) {
-	    throw toNoValueException(key);
-	}
+	assertHasValue(key, value);
 	return value;
     }
 
@@ -82,9 +80,7 @@ public interface Config {
 
     default public String getRequiredFormatted(String key) {
 	String value = getFormatted(key);
-	if (value == null) {
-	    throw toNoValueException(key);
-	}
+	assertHasValue(key, value);
 	return value;
     }
 
@@ -112,9 +108,7 @@ public interface Config {
 
     default public String getRequiredFormatted(String key, Map<String, Object> parameters) {
 	String value = getFormatted(key, parameters);
-	if (value == null) {
-	    throw toNoValueException(key);
-	}
+	assertHasValue(key, value);
 	return value;
     }
 
@@ -146,9 +140,7 @@ public interface Config {
 
     default public String getRequiredFormatted(String key, Object... parameters) {
 	String value = getFormatted(key, parameters);
-	if (value == null) {
-	    throw toNoValueException(key);
-	}
+	assertHasValue(key, value);
 	return value;
     }
 
@@ -205,7 +197,9 @@ public interface Config {
 	return Double.parseDouble(value);
     }
 
-    private static AssertException toNoValueException(String key) {
-	return new AssertException(STR.fmt("No value found for the given key '{}'.", key));
+    private static void assertHasValue(String key, String value) {
+	if (value == null) {
+	    throw new AssertException(STR.fmt("No value found for the given key '{}'.", key));
+	}
     }
 }
