@@ -145,11 +145,6 @@ public class SecureConfig extends PropertyConfig implements Cloneable {
 	return this;
     }
 
-    public SecureConfig enc(String key, float value) throws CryptoException {
-	this.map.put(key, CryptoUtils.markEncValue(this.textEncryptor.encrypt(Float.toString(value))));
-	return this;
-    }
-
     public SecureConfig enc(String key, double value) throws CryptoException {
 	this.map.put(key, CryptoUtils.markEncValue(this.textEncryptor.encrypt(Double.toString(value))));
 	return this;

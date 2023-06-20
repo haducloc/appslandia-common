@@ -143,11 +143,6 @@ public class SecureProps extends Properties implements Config, Cloneable {
 	return this;
     }
 
-    public SecureProps enc(String key, float value) throws CryptoException {
-	super.put(key, CryptoUtils.markEncValue(this.textEncryptor.encrypt(Float.toString(value))));
-	return this;
-    }
-
     public SecureProps enc(String key, double value) throws CryptoException {
 	super.put(key, CryptoUtils.markEncValue(this.textEncryptor.encrypt(Double.toString(value))));
 	return this;
