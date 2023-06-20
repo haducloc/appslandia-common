@@ -57,33 +57,14 @@ public class SplitUtils {
 	if (str == null) {
 	    return StringUtils.EMPTY_ARRAY;
 	}
-	int startIdx = 0;
-	int endIdx;
+
 	List<String> list = new ArrayList<>();
-
-	while ((endIdx = str.indexOf(separator, startIdx)) != -1) {
-	    String item = str.substring(startIdx, endIdx).trim();
-	    if (!item.isEmpty()) {
-		list.add(item);
-	    }
-	    startIdx = endIdx + 1;
-	}
-	if (startIdx < str.length()) {
-	    String item = str.substring(startIdx).trim();
-	    if (!item.isEmpty()) {
-		list.add(item);
-	    }
-	}
-	return list.toArray(new String[list.size()]);
-    }
-
-    public static String[] splitEsc(String str, char separator) {
-	List<String> list = new ArrayList<>();
-
 	StringBuilder currentItem = new StringBuilder();
 	boolean escapeNextChar = false;
 
-	for (char c : str.toCharArray()) {
+	for (int i = 0; i < str.length(); i++) {
+	    char c = str.charAt(i);
+
 	    if (escapeNextChar) {
 		currentItem.append(c);
 		escapeNextChar = false;
