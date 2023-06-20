@@ -55,7 +55,7 @@ public class TokenGenerator extends InitializeObject implements TextGenerator {
     @Override
     public String generate() {
 	initialize();
-	int len = MathUtils.ceil(this.length, 4);
+	int len = MathUtils.toNearestMultipleOf(4, this.length);
 	byte[] bytes = RandomUtils.nextBytes((len * 3) / 4, this.random);
 
 	String base64 = BaseEncoder.BASE64_URL_NP.encode(bytes);

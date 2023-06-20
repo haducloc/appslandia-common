@@ -43,10 +43,11 @@ public class MathUtils {
 	return (n & (n - 1)) == 0;
     }
 
-    public static int ceil(int n, int base) {
-	Asserts.isTrue(n >= 0);
-	Asserts.isTrue(base > 0);
-	return ((n + base - 1) / base) * base;
+    public static int toNearestMultipleOf(int number, int minBound) {
+	Asserts.isTrue(minBound >= 0);
+	Asserts.isTrue(number > 0);
+
+	return ((minBound + number - 1) / number) * number;
     }
 
     public static byte[] toByteArray(int value) {

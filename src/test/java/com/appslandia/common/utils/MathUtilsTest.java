@@ -40,12 +40,12 @@ public class MathUtilsTest {
     }
 
     @Test
-    public void test_ceil() {
-	Assertions.assertEquals(0, MathUtils.ceil(0, 15));
+    public void test_toNearestMultipleOf() {
+	Assertions.assertEquals(0, MathUtils.toNearestMultipleOf(15, 0));
 
 	for (int n = 1; n < 15; n++) {
-	    Assertions.assertEquals(15, MathUtils.ceil(n, 15));
+	    Assertions.assertEquals(15, MathUtils.toNearestMultipleOf(15, n));
 	}
-	Assertions.assertEquals(30, MathUtils.ceil(16, 15));
+	Assertions.assertEquals(30, MathUtils.toNearestMultipleOf(15, 16));
     }
 }
