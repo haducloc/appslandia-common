@@ -22,7 +22,7 @@ package com.appslandia.common.jose;
 
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -55,7 +55,7 @@ public class JwsSigner<P> extends InitializeObject {
 
     protected Digester signer;
 
-    protected final List<JwsVerifier<P>> defaultVerifiers = new LinkedList<>();
+    protected final List<JwsVerifier<P>> defaultVerifiers = new ArrayList<>();
     protected List<JwsVerifier<P>> customVerifiers;
 
     protected Class<P> payloadClass;
@@ -242,7 +242,7 @@ public class JwsSigner<P> extends InitializeObject {
     public JwsSigner<P> addVerifier(JwsVerifier<P> verifier) {
 	assertNotInitialized();
 	if (this.customVerifiers == null) {
-	    this.customVerifiers = new LinkedList<>();
+	    this.customVerifiers = new ArrayList<>();
 	}
 	this.customVerifiers.add(verifier);
 	return this;

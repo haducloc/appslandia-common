@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -39,7 +40,12 @@ public class CollectionUtils {
 
     @SafeVarargs
     public static <V> Set<V> unmodifiableSet(V... elements) {
-	return Collections.unmodifiableSet(toSet(new HashSet<V>(), elements));
+	return unmodifiableSet(new LinkedHashSet<V>(), elements);
+    }
+
+    @SafeVarargs
+    public static <V> Set<V> unmodifiableSet(Set<V> s, V... elements) {
+	return Collections.unmodifiableSet(toSet(s, elements));
     }
 
     @SafeVarargs
@@ -55,7 +61,12 @@ public class CollectionUtils {
 
     @SafeVarargs
     public static <V> List<V> unmodifiableList(V... elements) {
-	return Collections.unmodifiableList(toList(new ArrayList<V>(), elements));
+	return unmodifiableList(new ArrayList<V>(), elements);
+    }
+
+    @SafeVarargs
+    public static <V> List<V> unmodifiableList(List<V> l, V... elements) {
+	return Collections.unmodifiableList(toList(l, elements));
     }
 
     @SafeVarargs
