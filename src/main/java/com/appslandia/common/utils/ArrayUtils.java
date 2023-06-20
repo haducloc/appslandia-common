@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
+import java.util.function.BiFunction;
 
 /**
  *
@@ -167,6 +168,30 @@ public class ArrayUtils {
 	for (int i = 0; i < matrix.length; i++) {
 	    Arrays.fill(matrix[i], value);
 	}
+    }
+
+    public static <T> T[][] toMatrix(T[] arr, int columns, BiFunction<Integer, Integer, T[][]> matrixCreator) {
+	Asserts.notNull(arr);
+	Asserts.isTrue(columns > 0);
+
+	int len = arr.length;
+	if (len == 0) {
+	    len = 1;
+	}
+
+	int rows = len / columns;
+	if (rows * columns < len) {
+	    rows += 1;
+	}
+	T[][] matrix = matrixCreator.apply(rows, columns);
+
+	for (int i = 0; i < arr.length; i++) {
+	    int row = i / columns;
+	    int col = i % columns;
+
+	    matrix[row][col] = arr[i];
+	}
+	return matrix;
     }
 
     public static Object[] toArray(Object arr) {
