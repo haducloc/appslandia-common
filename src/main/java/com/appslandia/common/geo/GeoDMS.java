@@ -22,7 +22,6 @@ package com.appslandia.common.geo;
 
 import java.util.regex.Pattern;
 
-import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
 
@@ -117,8 +116,8 @@ public class GeoDMS {
     static final Pattern DMS_SYMBOLS = Pattern.compile("(°|'|\")");
 
     public static GeoDMS toGeoDMS(String dms) {
-	Arguments.notNull(dms);
-	Arguments.isTrue(DMS_PATTERN.matcher(dms).matches(), () -> STR.fmt("dms {} is invalid.", dms));
+	Asserts.notNull(dms);
+	Asserts.isTrue(DMS_PATTERN.matcher(dms).matches(), () -> STR.fmt("dms {} is invalid.", dms));
 
 	String[] items = DMS_SYMBOLS.split(dms);
 
