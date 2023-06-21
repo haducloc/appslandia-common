@@ -251,11 +251,45 @@ public class DateUtils {
     }
 
     public static LocalDateTime atStartOfDay(LocalDate ld) {
+	if (ld == null) {
+	    return null;
+	}
 	return LocalDateTime.of(ld, LocalTime.MIN);
     }
 
     public static LocalDateTime atEndOfDay(LocalDate ld) {
+	if (ld == null) {
+	    return null;
+	}
 	return LocalDateTime.of(ld, LocalTime.MAX);
+    }
+
+    public static LocalDateTime atStartOfDay(LocalDateTime ldt) {
+	if (ldt == null) {
+	    return null;
+	}
+	return LocalDateTime.of(ldt.toLocalDate(), LocalTime.MIN);
+    }
+
+    public static LocalDateTime atEndOfDay(LocalDateTime ldt) {
+	if (ldt == null) {
+	    return null;
+	}
+	return LocalDateTime.of(ldt.toLocalDate(), LocalTime.MAX);
+    }
+
+    public static OffsetDateTime atStartOfDay(OffsetDateTime odt) {
+	if (odt == null) {
+	    return null;
+	}
+	return OffsetDateTime.of(odt.toLocalDate(), LocalTime.MIN, odt.getOffset());
+    }
+
+    public static OffsetDateTime atEndOfDay(OffsetDateTime odt) {
+	if (odt == null) {
+	    return null;
+	}
+	return OffsetDateTime.of(odt.toLocalDate(), LocalTime.MAX, odt.getOffset());
     }
 
     public static OffsetDateTime nowAt(String offsetId) {
@@ -271,19 +305,33 @@ public class DateUtils {
     }
 
     public static LocalDate firstDayOfMonth(LocalDate ld) {
+	if (ld == null) {
+	    return null;
+	}
 	return ld.with(TemporalAdjusters.firstDayOfMonth());
     }
 
     public static LocalDate lastDayOfMonth(LocalDate ld) {
+	if (ld == null) {
+	    return null;
+	}
 	return ld.with(TemporalAdjusters.lastDayOfMonth());
     }
 
     public static LocalDate firstDayOfWeek(LocalDate ld, Locale locale) {
+	Asserts.notNull(locale);
+	if (ld == null) {
+	    return null;
+	}
 	WeekFields weekFields = WeekFields.of(locale);
 	return ld.with(TemporalAdjusters.previousOrSame(weekFields.getFirstDayOfWeek()));
     }
 
     public static LocalDate lastDayOfWeek(LocalDate ld, Locale locale) {
+	Asserts.notNull(locale);
+	if (ld == null) {
+	    return null;
+	}
 	return firstDayOfWeek(ld, locale).plusDays(6);
     }
 
