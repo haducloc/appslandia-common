@@ -33,6 +33,7 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.WeekFields;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumMap;
@@ -215,6 +216,16 @@ public class DateUtils {
 	return ld.getYear() * 10000 + ld.getMonthValue() * 100 + ld.getDayOfMonth();
     }
 
+    // yyyyMMdd
+    public static Integer toWeekID(LocalDate ld, Locale locale) {
+	Asserts.notNull(locale);
+
+	if (ld == null) {
+	    return null;
+	}
+	return toDateID(firstDayOfWeek(ld, locale));
+    }
+
     // yyyyMM
     public static Integer toMonthID(LocalDate ld) {
 	if (ld == null) {
@@ -267,20 +278,13 @@ public class DateUtils {
 	return ld.with(TemporalAdjusters.lastDayOfMonth());
     }
 
-    public static LocalDateTime firstDayOfMonth(LocalDateTime ldt) {
-	return ldt.with(TemporalAdjusters.firstDayOfMonth());
+    public static LocalDate firstDayOfWeek(LocalDate ld, Locale locale) {
+	WeekFields weekFields = WeekFields.of(locale);
+	return ld.with(TemporalAdjusters.previousOrSame(weekFields.getFirstDayOfWeek()));
     }
 
-    public static LocalDateTime lastDayOfMonth(LocalDateTime ldt) {
-	return ldt.with(TemporalAdjusters.lastDayOfMonth());
-    }
-
-    public static OffsetDateTime firstDayOfMonth(OffsetDateTime odt) {
-	return odt.with(TemporalAdjusters.firstDayOfMonth());
-    }
-
-    public static OffsetDateTime lastDayOfMonth(OffsetDateTime odt) {
-	return odt.with(TemporalAdjusters.lastDayOfMonth());
+    public static LocalDate lastDayOfWeek(LocalDate ld, Locale locale) {
+	return firstDayOfWeek(ld, locale).plusDays(6);
     }
 
     public static LocalDate iso8601LocalDate(String date) throws DateTimeParseException {
