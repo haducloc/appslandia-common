@@ -20,6 +20,11 @@
 
 package com.appslandia.common.utils;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 /**
  * 
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
@@ -62,4 +67,22 @@ public class MimeTypes {
     public static final String APP_OCTET_STREAM = "application/octet-stream";
     public static final String MULTIPART_FORM_DATA = "multipart/form-data";
     public static final String APP_FORM_URLENCODED = "application/x-www-form-urlencoded";
+
+    public static String probeContentType(String fileName) {
+	Asserts.notNull(fileName);
+
+	return probeContentType(Paths.get(fileName));
+    }
+
+    public static String probeContentType(Path filePath) {
+	Asserts.notNull(filePath);
+
+	try {
+	    String ct = Files.probeContentType(filePath);
+	    return (ct != null) ? ct : APP_OCTET_STREAM;
+
+	} catch (IOException ex) {
+	    return APP_OCTET_STREAM;
+	}
+    }
 }
