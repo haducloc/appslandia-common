@@ -122,18 +122,6 @@ public class DateUtils {
 	cal.set(Calendar.MILLISECOND, 0);
     }
 
-    public static Calendar getCalendar(int dayOfWeek, int atHour, int atMinute) {
-	Calendar cal = new GregorianCalendar();
-
-	cal.set(Calendar.DAY_OF_WEEK, dayOfWeek);
-	cal.set(Calendar.HOUR_OF_DAY, atHour);
-	cal.set(Calendar.MINUTE, atMinute);
-
-	cal.set(Calendar.SECOND, 0);
-	cal.set(Calendar.MILLISECOND, 0);
-	return cal;
-    }
-
     public static Date copyTime(Date dest, Date src) {
 	Calendar destCal = new GregorianCalendar();
 	destCal.setTime(dest);

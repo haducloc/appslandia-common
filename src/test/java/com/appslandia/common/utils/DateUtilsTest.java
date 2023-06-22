@@ -27,7 +27,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -51,18 +50,6 @@ public class DateUtilsTest {
     public void test_todayAsLong() {
 	long today = DateUtils.todayAsLong();
 	Assertions.assertEquals(DateUtils.iso8601DateTime(new Date(DateUtils.clearTime(today))), DateUtils.iso8601DateTime(new Date(today)));
-    }
-
-    @Test
-    public void test_getCalendar() {
-	Calendar cal = DateUtils.getCalendar(3, 9, 30);
-
-	Assertions.assertEquals(3, cal.get(Calendar.DAY_OF_WEEK));
-	Assertions.assertEquals(9, cal.get(Calendar.HOUR_OF_DAY));
-	Assertions.assertEquals(30, cal.get(Calendar.MINUTE));
-
-	Assertions.assertEquals(0, cal.get(Calendar.SECOND));
-	Assertions.assertEquals(0, cal.get(Calendar.MILLISECOND));
     }
 
     @Test
