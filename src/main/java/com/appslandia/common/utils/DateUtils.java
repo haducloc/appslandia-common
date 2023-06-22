@@ -200,11 +200,11 @@ public class DateUtils {
 
     // Java8 Date/Time
 
-    public static ZoneOffset getCurZoneOffset(TimeZone timeZone) {
-	return (timeZone != null) ? getCurZoneOffset(timeZone.toZoneId()) : null;
+    public static ZoneOffset toZoneOffset(TimeZone timeZone) {
+	return (timeZone != null) ? toZoneOffset(timeZone.toZoneId()) : null;
     }
 
-    public static ZoneOffset getCurZoneOffset(ZoneId zoneId) {
+    public static ZoneOffset toZoneOffset(ZoneId zoneId) {
 	return (zoneId != null) ? zoneId.getRules().getOffset(Instant.now()) : null;
     }
 
@@ -244,10 +244,6 @@ public class DateUtils {
 
     public static DateTimeFormatter getFormatter(String pattern) {
 	return DateTimeFormattersHolder.FORMATTERS.computeIfAbsent(pattern, p -> DateTimeFormatter.ofPattern(p));
-    }
-
-    public static OffsetDateTime nowAtUTC() {
-	return nowAt(ZoneOffset.UTC);
     }
 
     public static LocalDateTime atStartOfDay(LocalDate ld) {
@@ -292,6 +288,10 @@ public class DateUtils {
 	return OffsetDateTime.of(odt.toLocalDate(), LocalTime.MAX, odt.getOffset());
     }
 
+    public static OffsetDateTime nowAtUTC() {
+	return nowAt(ZoneOffset.UTC);
+    }
+
     public static OffsetDateTime nowAt(String offsetId) {
 	return nowAt(ZoneOffset.of(offsetId));
     }
@@ -300,8 +300,19 @@ public class DateUtils {
 	return OffsetDateTime.now().withOffsetSameInstant(offset);
     }
 
-    public static OffsetDateTime atUTC(OffsetDateTime odt) {
-	return odt.withOffsetSameInstant(ZoneOffset.UTC);
+    public static OffsetDateTime toSameInstantUTC(OffsetDateTime odt) {
+	return toSameInstant(odt, ZoneOffset.UTC);
+    }
+
+    public static OffsetDateTime toSameInstant(OffsetDateTime odt, String offsetId) {
+	return toSameInstant(odt, ZoneOffset.of(offsetId));
+    }
+
+    public static OffsetDateTime toSameInstant(OffsetDateTime odt, ZoneOffset offset) {
+	if (odt == null) {
+	    return null;
+	}
+	return odt.withOffsetSameInstant(offset);
     }
 
     public static LocalDate firstDayOfMonth(LocalDate ld) {
