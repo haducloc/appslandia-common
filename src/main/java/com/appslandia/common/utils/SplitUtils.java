@@ -53,6 +53,10 @@ public class SplitUtils {
 	return list.toArray(new String[list.size()]);
     }
 
+    public static String[] splitByComma(String str) {
+	return split(str, ',');
+    }
+
     public static String[] split(String str, char separator) {
 	if (str == null) {
 	    return StringUtils.EMPTY_ARRAY;
