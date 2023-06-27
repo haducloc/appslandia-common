@@ -60,12 +60,20 @@ public class QueryImpl implements Query {
     }
 
     public <T> List<T> executeList() {
-	return ObjectUtils.cast(getResultList());
+	return ObjectUtils.cast(this.query.getResultList());
     }
 
     public <T> T executeSingle() {
 	try {
 	    return ObjectUtils.cast(this.query.getSingleResult());
+	} catch (NoResultException ex) {
+	    return null;
+	}
+    }
+
+    public <T> T firstOrNull() {
+	try {
+	    return ObjectUtils.cast(this.query.setMaxResults(1).getSingleResult());
 	} catch (NoResultException ex) {
 	    return null;
 	}

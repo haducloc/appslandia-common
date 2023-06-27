@@ -59,12 +59,20 @@ public class TypedQueryImpl<X> implements TypedQuery<X> {
     }
 
     public List<X> executeList() {
-	return getResultList();
+	return this.query.getResultList();
     }
 
     public X executeSingle() {
 	try {
 	    return this.query.getSingleResult();
+	} catch (NoResultException ex) {
+	    return null;
+	}
+    }
+
+    public X firstOrNull() {
+	try {
+	    return this.query.setMaxResults(1).getSingleResult();
 	} catch (NoResultException ex) {
 	    return null;
 	}
