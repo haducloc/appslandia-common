@@ -21,7 +21,6 @@
 package com.appslandia.common.jpa;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.appslandia.common.jdbc.JdbcSql;
 import com.appslandia.common.jdbc.LikeType;
@@ -60,12 +59,11 @@ public class QueryImpl implements Query {
 	return Asserts.notNull(this.sql, "sql is required.");
     }
 
-    public <T> T getFirstOrNull() {
-	Optional<T> val = ObjectUtils.cast(this.query.getResultStream().findFirst());
-	return val.orElse(null);
+    public <T> List<T> executeList() {
+	return ObjectUtils.cast(getResultList());
     }
 
-    public <T> T getSingleOrNull() {
+    public <T> T executeSingle() {
 	try {
 	    return ObjectUtils.cast(this.query.getSingleResult());
 	} catch (NoResultException ex) {
@@ -73,14 +71,15 @@ public class QueryImpl implements Query {
 	}
     }
 
-    public int getIntResult() {
-	Number val = (Number) this.query.getSingleResult();
-	Asserts.notNull(val);
-	return val.intValue();
+    @SuppressWarnings("unchecked")
+    public <S> S executeScalar() {
+	Object[] values = executeSingle();
+	return (values != null) ? (S) values[0] : null;
     }
 
-    public <T> List<T> getList() {
-	return ObjectUtils.cast(getResultList());
+    public long getLongScalar() {
+	Number n = Asserts.notNull(executeScalar());
+	return n.longValue();
     }
 
     // Set LIKE Parameters

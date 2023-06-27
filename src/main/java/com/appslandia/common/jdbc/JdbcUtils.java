@@ -142,11 +142,12 @@ public class JdbcUtils {
 	return t;
     }
 
-    public static boolean executeExists(ResultSet rs) throws SQLException {
+    @SuppressWarnings("unchecked")
+    public static <T> T executeScalar(ResultSet rs) throws SQLException {
 	while (rs.next()) {
-	    return true;
+	    return (T) rs.getObject(1);
 	}
-	return false;
+	return null;
     }
 
     public static void executeStream(ResultSetImpl rs, String streamLabel, OutputStream out, ResultSetHandler handler) throws Exception {

@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.appslandia.common.utils.Asserts;
-import com.appslandia.common.utils.ObjectUtils;
 
 /**
  *
@@ -120,7 +119,7 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public <K, V> Map<K, V> executeMap(String keyColumn, String valueColumn, Map<K, V> map) throws java.sql.SQLException {
-	try (ResultSetImpl rs = executeQuery()) {
+	try (ResultSet rs = this.stat.executeQuery()) {
 	    return JdbcUtils.executeMap(rs, keyColumn, valueColumn, map);
 	}
     }
@@ -133,7 +132,7 @@ public class StatementImpl implements PreparedStatement {
 	if (params != null) {
 	    JdbcUtils.setParameters(this, getSql(), params);
 	}
-	try (ResultSetImpl rs = executeQuery()) {
+	try (ResultSet rs = this.stat.executeQuery()) {
 	    return JdbcUtils.executeMap(rs, keyColumn, valueColumn, map);
 	}
     }
@@ -177,7 +176,9 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public <T> T executeScalar() throws java.sql.SQLException {
-	return executeSingle(rs -> ObjectUtils.cast(rs.getObject(1)));
+	try (ResultSet rs = this.stat.executeQuery()) {
+	    return JdbcUtils.executeScalar(rs);
+	}
     }
 
     public <T> T executeScalar(Object... params) throws java.sql.SQLException {
@@ -185,26 +186,27 @@ public class StatementImpl implements PreparedStatement {
     }
 
     public <T> T executeScalar(Map<String, Object> params) throws java.sql.SQLException {
-	return executeSingle(params, rs -> ObjectUtils.cast(rs.getObject(1)));
-    }
-
-    public boolean executeExists() throws java.sql.SQLException {
-	try (ResultSetImpl rs = executeQuery()) {
-	    return JdbcUtils.executeExists(rs);
-	}
-    }
-
-    public boolean executeExists(Object... params) throws java.sql.SQLException {
-	return executeExists(JdbcUtils.toParameters(params));
-    }
-
-    public boolean executeExists(Map<String, Object> params) throws java.sql.SQLException {
 	if (params != null) {
 	    JdbcUtils.setParameters(this, getSql(), params);
 	}
-	try (ResultSetImpl rs = executeQuery()) {
-	    return JdbcUtils.executeExists(rs);
+	try (ResultSet rs = this.stat.executeQuery()) {
+	    return JdbcUtils.executeScalar(rs);
 	}
+    }
+
+    public long getLongScalar() throws java.sql.SQLException {
+	Number n = Asserts.notNull(executeScalar());
+	return n.longValue();
+    }
+
+    public long getLongScalar(Object... params) throws java.sql.SQLException {
+	Number n = Asserts.notNull(executeScalar(params));
+	return n.longValue();
+    }
+
+    public long getLongScalar(Map<String, Object> params) throws java.sql.SQLException {
+	Number n = Asserts.notNull(executeScalar(params));
+	return n.longValue();
     }
 
     public void executeQuery(ResultSetHandler handler) throws Exception {

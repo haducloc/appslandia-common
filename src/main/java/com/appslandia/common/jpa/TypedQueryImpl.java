@@ -20,6 +20,8 @@
 
 package com.appslandia.common.jpa;
 
+import java.util.List;
+
 import com.appslandia.common.jdbc.JdbcSql;
 import com.appslandia.common.jdbc.LikeType;
 import com.appslandia.common.jdbc.SqlLikeEscaper;
@@ -56,22 +58,16 @@ public class TypedQueryImpl<X> implements TypedQuery<X> {
 	return Asserts.notNull(this.sql, "sql is required.");
     }
 
-    public X getFirstOrNull() {
-	return this.query.getResultStream().findFirst().orElse(null);
+    public List<X> executeList() {
+	return getResultList();
     }
 
-    public X getSingleOrNull() {
+    public X executeSingle() {
 	try {
 	    return this.query.getSingleResult();
 	} catch (NoResultException ex) {
 	    return null;
 	}
-    }
-
-    public int getIntResult() {
-	Number val = (Number) this.query.getSingleResult();
-	Asserts.notNull(val);
-	return val.intValue();
     }
 
     public TypedQueryImpl<X> asReadonly() {

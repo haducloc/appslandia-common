@@ -22,6 +22,7 @@ package com.appslandia.common.jdbc;
 
 import java.io.OutputStream;
 import java.io.Writer;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -31,7 +32,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.appslandia.common.utils.Asserts;
-import com.appslandia.common.utils.ObjectUtils;
 
 /**
  *
@@ -116,7 +116,7 @@ public class DbContext implements AutoCloseable {
     public <K, V> Map<K, V> executeMap(String pSql, Map<String, Object> params, String keyColumn, String valueColumn, Map<K, V> map) throws java.sql.SQLException {
 	StatementImpl stat = prepareStatement(pSql, params);
 
-	try (ResultSetImpl rs = stat.executeQuery()) {
+	try (ResultSet rs = stat.executeQuery()) {
 	    return JdbcUtils.executeMap(rs, keyColumn, valueColumn, map);
 	}
     }
@@ -154,7 +154,7 @@ public class DbContext implements AutoCloseable {
     }
 
     public <T> T executeScalar(String sql) throws java.sql.SQLException {
-	return executeSingle(sql, rs -> ObjectUtils.cast(rs.getObject(1)));
+	return this.conn.executeScalar(sql);
     }
 
     public <T> T executeScalar(String pSql, Object... params) throws java.sql.SQLException {
@@ -162,23 +162,26 @@ public class DbContext implements AutoCloseable {
     }
 
     public <T> T executeScalar(String pSql, Map<String, Object> params) throws java.sql.SQLException {
-	return executeSingle(pSql, params, rs -> ObjectUtils.cast(rs.getObject(1)));
-    }
-
-    public boolean executeExists(String sql) throws java.sql.SQLException {
-	return this.conn.executeExists(sql);
-    }
-
-    public boolean executeExists(String pSql, Object... params) throws java.sql.SQLException {
-	return executeExists(pSql, JdbcUtils.toParameters(params));
-    }
-
-    public boolean executeExists(String pSql, Map<String, Object> params) throws java.sql.SQLException {
 	StatementImpl stat = prepareStatement(pSql, params);
 
-	try (ResultSetImpl rs = stat.executeQuery()) {
-	    return JdbcUtils.executeExists(rs);
+	try (ResultSet rs = stat.executeQuery()) {
+	    return JdbcUtils.executeScalar(rs);
 	}
+    }
+
+    public long getLongScalar(String sql) throws java.sql.SQLException {
+	Number n = Asserts.notNull(executeScalar(sql));
+	return n.longValue();
+    }
+
+    public long getLongScalar(String pSql, Object... params) throws java.sql.SQLException {
+	Number n = Asserts.notNull(executeScalar(pSql, params));
+	return n.longValue();
+    }
+
+    public long getLongScalar(String pSql, Map<String, Object> params) throws java.sql.SQLException {
+	Number n = Asserts.notNull(executeScalar(pSql, params));
+	return n.longValue();
     }
 
     public void executeQuery(String sql, ResultSetHandler handler) throws Exception {
