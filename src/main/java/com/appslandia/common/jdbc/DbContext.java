@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.sql.DataSource;
+
 import com.appslandia.common.utils.Asserts;
 
 /**
@@ -42,17 +44,27 @@ public class DbContext implements AutoCloseable {
 
     final protected ConnectionImpl conn;
     final protected boolean bakAutoCommit;
+    final protected boolean internalConn;
 
     final protected Map<String, StatementImpl> stats = new LinkedHashMap<>();
-    protected Set<String> batchPSqls;
+    final Set<String> batchPSqls = new LinkedHashSet<>();
 
-    public DbContext() {
+    public DbContext() throws java.sql.SQLException {
 	this(ConnectionImpl.getCurrent());
     }
 
-    public DbContext(ConnectionImpl conn) {
+    public DbContext(DataSource dataSource) throws java.sql.SQLException {
+	this(new ConnectionImpl(dataSource), true);
+    }
+
+    public DbContext(ConnectionImpl conn) throws java.sql.SQLException {
+	this(conn, false);
+    }
+
+    protected DbContext(ConnectionImpl conn, boolean internalConn) throws java.sql.SQLException {
 	this.conn = conn;
-	this.bakAutoCommit = JdbcUtils.isAutoCommit(conn);
+	this.bakAutoCommit = conn.getAutoCommit();
+	this.internalConn = false;
     }
 
     // Update Utilities
@@ -264,25 +276,20 @@ public class DbContext implements AutoCloseable {
 
     protected void doBatch(String action) throws java.sql.SQLException {
 	Asserts.isTrue("execute".equals(action) || "clear".equals(action));
-	if (this.batchPSqls != null) {
 
-	    for (String pSql : this.batchPSqls) {
-		StatementImpl stat = Asserts.notNull(this.stats.get(pSql));
+	for (String pSql : this.batchPSqls) {
+	    StatementImpl stat = Asserts.notNull(this.stats.get(pSql));
 
-		if ("execute".equals(action)) {
-		    stat.executeBatch();
-		} else {
-		    stat.clearBatch();
-		}
+	    if ("execute".equals(action)) {
+		stat.executeBatch();
+	    } else {
+		stat.clearBatch();
 	    }
-	    this.batchPSqls.clear();
 	}
+	this.batchPSqls.clear();
     }
 
     protected void addBatch(StatementImpl stat, String pSql) throws java.sql.SQLException {
-	if (this.batchPSqls == null) {
-	    this.batchPSqls = new LinkedHashSet<>();
-	}
 	this.batchPSqls.add(pSql);
 	stat.addBatch();
     }
@@ -329,6 +336,10 @@ public class DbContext implements AutoCloseable {
 	    closeStatements();
 
 	    this.conn.setAutoCommit(this.bakAutoCommit);
+
+	    if (this.internalConn) {
+		this.conn.close();
+	    }
 	    this.closed = true;
 	}
     }

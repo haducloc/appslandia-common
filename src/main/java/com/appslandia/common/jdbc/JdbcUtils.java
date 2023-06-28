@@ -24,7 +24,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -46,14 +45,6 @@ import com.appslandia.common.utils.STR;
  *
  */
 public class JdbcUtils {
-
-    public static boolean isAutoCommit(Connection conn) throws UncheckedSQLException {
-	try {
-	    return conn.getAutoCommit();
-	} catch (SQLException ex) {
-	    throw new UncheckedSQLException(ex);
-	}
-    }
 
     public static String[] getColumnLabels(ResultSet rs) throws SQLException {
 	ResultSetMetaData md = rs.getMetaData();

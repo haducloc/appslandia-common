@@ -29,6 +29,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import javax.sql.DataSource;
+
 import com.appslandia.common.jdbc.ConnectionImpl;
 import com.appslandia.common.jdbc.DbContext;
 import com.appslandia.common.jdbc.JdbcParam;
@@ -47,11 +49,15 @@ import com.appslandia.common.utils.StringUtils;
  */
 public class RecordContext extends DbContext {
 
-    public RecordContext() {
+    public RecordContext() throws java.sql.SQLException {
 	super();
     }
 
-    public RecordContext(ConnectionImpl conn) {
+    public RecordContext(DataSource dataSource) throws java.sql.SQLException {
+	super(dataSource);
+    }
+
+    public RecordContext(ConnectionImpl conn) throws java.sql.SQLException {
 	super(conn);
     }
 
