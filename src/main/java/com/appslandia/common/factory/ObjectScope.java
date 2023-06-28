@@ -18,51 +18,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.objects;
-
-import java.util.function.Function;
+package com.appslandia.common.factory;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class ObjectInstance {
+public enum ObjectScope {
 
-    final ObjectDefinition definition;
-    private volatile Object instance;
-    final Function<ObjectDefinition, Object> factory;
-
-    final Object mutex = new Object();
-
-    public ObjectInstance(ObjectDefinition definition, Function<ObjectDefinition, Object> factory) {
-	this.definition = definition;
-	this.factory = factory;
-    }
-
-    public ObjectDefinition getDefinition() {
-	return this.definition;
-    }
-
-    public Object getInstance() {
-	// PROTOTYPE
-	if (this.definition.getScope() == ObjectScope.PROTOTYPE) {
-	    return factory.apply(this.definition);
-	}
-
-	// SINGLETON
-	Object obj = this.instance;
-	if (obj == null) {
-	    synchronized (this.mutex) {
-		if ((obj = this.instance) == null) {
-		    this.instance = obj = this.factory.apply(this.definition);
-		}
-	    }
-	}
-	return obj;
-    }
-
-    public void clearInstance() {
-	this.instance = null;
-    }
+    PROTOTYPE, SINGLETON
 }

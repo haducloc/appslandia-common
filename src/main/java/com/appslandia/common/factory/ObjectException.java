@@ -18,14 +18,25 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.objects;
+package com.appslandia.common.factory;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public enum ObjectScope {
+public class ObjectException extends RuntimeException {
+    private static final long serialVersionUID = 1L;
 
-    PROTOTYPE, SINGLETON
+    public ObjectException(String message) {
+	super(message);
+    }
+
+    public ObjectException(String message, Throwable cause) {
+	super(message, cause);
+    }
+
+    public ObjectException(Throwable cause) {
+	super(cause);
+    }
 }
