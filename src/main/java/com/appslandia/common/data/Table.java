@@ -18,7 +18,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.record;
+package com.appslandia.common.data;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -43,11 +43,11 @@ public class Table extends InitializeObject implements Serializable {
     private String tableSchema;
     private String tableName;
 
-    private List<Field> fields;
+    private List<Column> columns;
     private transient String entityClassName;
 
     @TSExcluded
-    private transient Field singleKey;
+    private transient Column singleKey;
     private List<AnnotationModel> annotations;
 
     private transient JdbcSql insertSql;
@@ -60,12 +60,12 @@ public class Table extends InitializeObject implements Serializable {
     @Override
     protected void init() throws Exception {
 	Asserts.notNull(this.tableName, "name is required.");
-	Asserts.hasElements(this.fields, "fields are required.");
+	Asserts.hasElements(this.columns, "columns are required.");
 
 	this.entityClassName = RecordUtils.toEntityClassName(this.tableName);
 
-	int keyIncr = (int) this.fields.stream().filter(field -> field.getFieldType() == FieldType.KEY_INCR).count();
-	int keyCount = (int) this.fields.stream().filter(field -> field.getFieldType() == FieldType.KEY_INCR || field.getFieldType() == FieldType.KEY).count();
+	int keyIncr = (int) this.columns.stream().filter(column -> column.getColumnType() == ColumnType.KEY_INCR).count();
+	int keyCount = (int) this.columns.stream().filter(column -> column.getColumnType() == ColumnType.KEY_INCR || column.getColumnType() == ColumnType.KEY).count();
 
 	if (keyCount == 0) {
 	    throw new IllegalArgumentException("No keys found.");
@@ -74,7 +74,7 @@ public class Table extends InitializeObject implements Serializable {
 	    throw new IllegalArgumentException("More than one auto-increment keys.");
 	}
 	if (keyCount == 1) {
-	    this.singleKey = this.fields.stream().filter(field -> field.getFieldType() == FieldType.KEY_INCR || field.getFieldType() == FieldType.KEY).findFirst().get();
+	    this.singleKey = this.columns.stream().filter(column -> column.getColumnType() == ColumnType.KEY_INCR || column.getColumnType() == ColumnType.KEY).findFirst().get();
 	}
 
 	this.insertSql = new JdbcSql(this.buildInsertSQL());
@@ -84,19 +84,19 @@ public class Table extends InitializeObject implements Serializable {
 	this.getSql = new JdbcSql(this.buildGetSQL());
 	this.existsSql = new JdbcSql(this.buildExistsSQL());
 
-	this.fields = Collections.unmodifiableList(this.fields);
+	this.columns = Collections.unmodifiableList(this.columns);
 	this.annotations = CollectionUtils.unmodifiable(this.annotations);
     }
 
     public String[] getColumnLabels() {
 	initialize();
 
-	return this.fields.stream().map(f -> f.getName()).toArray(String[]::new);
+	return this.columns.stream().map(f -> f.getName()).toArray(String[]::new);
     }
 
-    public Field getIncrKey() {
+    public Column getIncrKey() {
 	initialize();
-	if (this.singleKey == null || this.singleKey.getFieldType() != FieldType.KEY_INCR) {
+	if (this.singleKey == null || this.singleKey.getColumnType() != ColumnType.KEY_INCR) {
 	    return null;
 	}
 	return this.singleKey;
@@ -107,15 +107,15 @@ public class Table extends InitializeObject implements Serializable {
 	sb.append(" (");
 
 	boolean isFirst = true;
-	for (Field field : this.fields) {
+	for (Column column : this.columns) {
 
-	    if (field.getFieldType() != FieldType.KEY_INCR && field.getFieldType() != FieldType.COL_GEN) {
+	    if (column.getColumnType() != ColumnType.KEY_INCR && column.getColumnType() != ColumnType.NON_KEY_GEN) {
 
 		if (isFirst) {
-		    sb.append(field.getName());
+		    sb.append(column.getName());
 		    isFirst = false;
 		} else {
-		    sb.append(", ").append(field.getName());
+		    sb.append(", ").append(column.getName());
 		}
 	    }
 	}
@@ -123,14 +123,14 @@ public class Table extends InitializeObject implements Serializable {
 	sb.append(" VALUES (");
 
 	isFirst = true;
-	for (Field field : this.fields) {
-	    if (field.getFieldType() != FieldType.KEY_INCR && field.getFieldType() != FieldType.COL_GEN) {
+	for (Column column : this.columns) {
+	    if (column.getColumnType() != ColumnType.KEY_INCR && column.getColumnType() != ColumnType.NON_KEY_GEN) {
 
 		if (isFirst) {
-		    sb.append(field.getParamName());
+		    sb.append(column.getParamName());
 		    isFirst = false;
 		} else {
-		    sb.append(",").append(field.getParamName());
+		    sb.append(",").append(column.getParamName());
 		}
 	    }
 	}
@@ -143,16 +143,16 @@ public class Table extends InitializeObject implements Serializable {
 	sb.append(" SET ");
 
 	boolean isFirst = true;
-	for (Field field : this.fields) {
+	for (Column column : this.columns) {
 
 	    // Don't update Key & Generated columns
-	    if (field.getFieldType() == FieldType.COL) {
+	    if (column.getColumnType() == ColumnType.NON_KEY) {
 
 		if (isFirst) {
-		    sb.append(field.getName()).append("=").append(field.getParamName());
+		    sb.append(column.getName()).append("=").append(column.getParamName());
 		    isFirst = false;
 		} else {
-		    sb.append(",").append(field.getName()).append("=").append(field.getParamName());
+		    sb.append(",").append(column.getName()).append("=").append(column.getParamName());
 		}
 	    }
 	}
@@ -188,14 +188,14 @@ public class Table extends InitializeObject implements Serializable {
 
     protected void appendWhereKeyConditions(TextBuilder sqlBuilder) {
 	boolean isFirst = true;
-	for (Field field : this.fields) {
-	    if (field.getFieldType() == FieldType.KEY_INCR || field.getFieldType() == FieldType.KEY) {
+	for (Column column : this.columns) {
+	    if (column.getColumnType() == ColumnType.KEY_INCR || column.getColumnType() == ColumnType.KEY) {
 
 		if (isFirst) {
-		    sqlBuilder.append(field.getName()).append("=").append(field.getParamName());
+		    sqlBuilder.append(column.getName()).append("=").append(column.getParamName());
 		    isFirst = false;
 		} else {
-		    sqlBuilder.append(" AND ").append(field.getName()).append("=").append(field.getParamName());
+		    sqlBuilder.append(" AND ").append(column.getName()).append("=").append(column.getParamName());
 		}
 	    }
 	}
@@ -242,14 +242,14 @@ public class Table extends InitializeObject implements Serializable {
 	return this;
     }
 
-    public List<Field> getFields() {
+    public List<Column> getColumns() {
 	initialize();
-	return this.fields;
+	return this.columns;
     }
 
-    public Table setFields(List<Field> fields) {
+    public Table setColumns(List<Column> columns) {
 	assertNotInitialized();
-	this.fields = fields;
+	this.columns = columns;
 	return this;
     }
 
@@ -258,7 +258,7 @@ public class Table extends InitializeObject implements Serializable {
 	return this.entityClassName;
     }
 
-    public Field getSingleKey() {
+    public Column getSingleKey() {
 	initialize();
 	return this.singleKey;
     }

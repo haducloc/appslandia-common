@@ -18,11 +18,12 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.record;
+package com.appslandia.common.data;
 
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -52,15 +53,7 @@ import com.appslandia.common.utils.StringUtils;
  */
 public final class RecordUtils {
 
-    public static Record toRecord(ResultSet rs, String[] columnLabels) throws SQLException {
-	Record record = new Record();
-	for (int col = 1; col <= columnLabels.length; col++) {
-	    record.set(columnLabels[col - 1], rs.getObject(col));
-	}
-	return record;
-    }
-
-    public static Table loadTable(Connection conn, String catalog, String schema, String tableName, Consumer<Field> fieldInit) throws SQLException {
+    public static Table loadTable(Connection conn, String catalog, String schema, String tableName, Consumer<Column> columnInit) throws SQLException {
 	Asserts.notNull(conn);
 	Asserts.notNull(tableName);
 
@@ -87,8 +80,8 @@ public final class RecordUtils {
 	    }
 	}
 
-	// fields
-	List<Field> fields = new ArrayList<>();
+	// columns
+	List<Column> columns = new ArrayList<>();
 
 	try (ResultSet rs = conn.getMetaData().getColumns(catalog, schema, tableName, null)) {
 	    while (rs.next()) {
@@ -99,50 +92,58 @@ public final class RecordUtils {
 		boolean autoIncr = "YES".equals(rs.getString("IS_AUTOINCREMENT"));
 		boolean genCol = "YES".equals(rs.getString("IS_GENERATEDCOLUMN"));
 
-		Field field = new Field();
-		field.setName(columnName);
+		Column column = new Column();
+		column.setName(columnName);
 
-		field.setSqlType(rs.getInt("DATA_TYPE"));
-		field.setScaleOrLength(rs.getInt("COLUMN_SIZE"));
+		column.setSqlType(rs.getInt("DATA_TYPE"));
+		column.setScaleOrLength(rs.getInt("COLUMN_SIZE"));
 
-		field.setNullable("YES".equals(rs.getString("IS_NULLABLE")));
-		field.setPosition(rs.getInt("ORDINAL_POSITION"));
+		column.setNullable("YES".equals(rs.getString("IS_NULLABLE")));
+		column.setPosition(rs.getInt("ORDINAL_POSITION"));
 
-		field.setTableCat(rs.getString("TABLE_CAT"));
-		field.setTableSchema(rs.getString("TABLE_SCHEM"));
-		field.setTableName(rs.getString("TABLE_NAME"));
+		column.setTableCat(rs.getString("TABLE_CAT"));
+		column.setTableSchema(rs.getString("TABLE_SCHEM"));
+		column.setTableName(rs.getString("TABLE_NAME"));
 
 		if (isKey) {
-		    field.setFieldType(autoIncr ? FieldType.KEY_INCR : FieldType.KEY);
+		    column.setColumnType(autoIncr ? ColumnType.KEY_INCR : ColumnType.KEY);
 		} else {
-		    field.setFieldType(genCol ? FieldType.COL_GEN : FieldType.COL);
+		    column.setColumnType(genCol ? ColumnType.NON_KEY_GEN : ColumnType.NON_KEY);
 		}
 
-		if (fieldInit != null) {
-		    fieldInit.accept(field);
+		if (columnInit != null) {
+		    columnInit.accept(column);
 		}
-		fields.add(field);
+		columns.add(column);
 	    }
 	}
-	return table.setFields(fields);
+	return table.setColumns(columns);
     }
 
-    public static Record toRecord(Table table, Object entity) throws ReflectionException {
-	try {
-	    Record r = new Record();
-	    for (Field field : table.getFields()) {
-		for (PropertyDescriptor dpd : Introspector.getBeanInfo(entity.getClass()).getPropertyDescriptors()) {
+    public static DataRecord toRecord(ResultSet rs, String[] columnLabels) throws SQLException {
+	DataRecord dataRecord = new DataRecord();
+	for (int col = 1; col <= columnLabels.length; col++) {
+	    dataRecord.set(columnLabels[col - 1], rs.getObject(col));
+	}
+	return dataRecord;
+    }
 
-		    if (!field.getName().equalsIgnoreCase(dpd.getName())) {
+    public static DataRecord toRecord(Table table, Object entity) throws ReflectionException {
+	try {
+	    DataRecord dataRecord = new DataRecord();
+	    for (Column column : table.getColumns()) {
+		for (PropertyDescriptor pd : Introspector.getBeanInfo(entity.getClass()).getPropertyDescriptors()) {
+
+		    if (!column.getName().equalsIgnoreCase(pd.getName())) {
 			continue;
 		    }
-		    Asserts.notNull(dpd.getReadMethod());
-		    Asserts.notNull(dpd.getWriteMethod());
+		    Asserts.notNull(pd.getReadMethod());
+		    Asserts.notNull(pd.getWriteMethod());
 
-		    r.put(field.getName(), dpd.getReadMethod().invoke(entity));
+		    dataRecord.put(column.getName(), pd.getReadMethod().invoke(entity));
 		}
 	    }
-	    return r;
+	    return dataRecord;
 
 	} catch (ReflectiveOperationException ex) {
 	    throw new ReflectionException(ex);
@@ -156,30 +157,30 @@ public final class RecordUtils {
 	Asserts.notNull(pk);
 	Asserts.isTrue(PK_JAVA_TYPES.contains(pk.getClass()), "pk is invalid.");
 
-	Field keyField = table.getSingleKey();
-	Asserts.notNull(keyField, "table is invalid.");
+	Column keyColumn = table.getSingleKey();
+	Asserts.notNull(keyColumn, "table is invalid.");
 
-	return new Key().set(keyField.getName(), pk);
+	return new Key().set(keyColumn.getName(), pk);
     }
 
     private static final Set<Class<?>> PK_JAVA_TYPES = CollectionUtils.unmodifiableSet(Short.class, Integer.class, Long.class, Float.class, Double.class, BigDecimal.class,
 	    String.class, UUID.class, java.sql.Date.class, java.sql.Timestamp.class, LocalDate.class, LocalDateTime.class, OffsetDateTime.class);
 
-    public static String toFieldName(String dbFieldName) {
-	Asserts.notNull(dbFieldName);
+    public static String toColumnName(String dbColumnName) {
+	Asserts.notNull(dbColumnName);
 
 	// All Uppers
-	if (dbFieldName.equals(dbFieldName.toUpperCase(Locale.ENGLISH))) {
-	    return dbFieldName.toLowerCase(Locale.ENGLISH);
+	if (dbColumnName.equals(dbColumnName.toUpperCase(Locale.ENGLISH))) {
+	    return dbColumnName.toLowerCase(Locale.ENGLISH);
 	}
 
 	// All Lowers
-	if (dbFieldName.equals(dbFieldName.toLowerCase(Locale.ENGLISH))) {
-	    return dbFieldName;
+	if (dbColumnName.equals(dbColumnName.toLowerCase(Locale.ENGLISH))) {
+	    return dbColumnName;
 	}
 
 	// Mixed
-	return StringUtils.firstLowerCase(dbFieldName, Locale.ENGLISH);
+	return StringUtils.firstLowerCase(dbColumnName, Locale.ENGLISH);
     }
 
     public static String toEntityClassName(String tableName) {
@@ -199,33 +200,33 @@ public final class RecordUtils {
 	return StringUtils.firstUpperCase(tableName, Locale.ENGLISH);
     }
 
-    public static List<Field> getFields(ResultSet rs, Consumer<Field> fieldInit) throws SQLException {
+    public static List<Column> toColumns(ResultSet rs, Consumer<Column> columnInit) throws SQLException {
 	ResultSetMetaData md = rs.getMetaData();
-	List<Field> fields = new ArrayList<>(md.getColumnCount());
+	List<Column> columns = new ArrayList<>(md.getColumnCount());
 
 	for (int col = 1; col <= md.getColumnCount(); col++) {
-	    Field field = new Field();
+	    Column column = new Column();
 
-	    field.setName(md.getColumnLabel(col));
-	    field.setFieldType(FieldType.COL);
-	    field.setSqlType(md.getColumnType(col));
+	    column.setName(md.getColumnLabel(col));
+	    column.setColumnType(ColumnType.NON_KEY);
+	    column.setSqlType(md.getColumnType(col));
 
-	    field.setTableCat(md.getCatalogName(col));
-	    field.setTableSchema(md.getSchemaName(col));
-	    field.setTableName(md.getTableName(col));
+	    column.setTableCat(md.getCatalogName(col));
+	    column.setTableSchema(md.getSchemaName(col));
+	    column.setTableName(md.getTableName(col));
 
-	    if (fieldInit != null) {
-		fieldInit.accept(field);
+	    if (columnInit != null) {
+		columnInit.accept(column);
 	    }
-	    fields.add(field);
+	    columns.add(column);
 	}
 
-	return fields;
+	return columns;
     }
 
-    public static Object getFieldValue(Object obj, String fieldName) {
+    public static Object getFieldValue(Object obj, String columnName) {
 	try {
-	    java.lang.reflect.Field field = obj.getClass().getDeclaredField(fieldName);
+	    Field field = obj.getClass().getDeclaredField(columnName);
 	    return field.get(obj);
 
 	} catch (IllegalAccessException | NoSuchFieldException ex) {

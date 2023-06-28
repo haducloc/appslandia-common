@@ -18,14 +18,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.record;
+package com.appslandia.common.data;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public enum FieldType {
+public enum ColumnType {
 
-    KEY_INCR, KEY, COL, COL_GEN
+    KEY_INCR, KEY, NON_KEY, NON_KEY_GEN
 }

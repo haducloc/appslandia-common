@@ -18,7 +18,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.record;
+package com.appslandia.common.data;
 
 import java.io.Serializable;
 import java.util.List;
@@ -36,7 +36,7 @@ import com.appslandia.common.utils.TypeUtils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class Field extends InitializeObject implements Serializable {
+public class Column extends InitializeObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String tableCat;
@@ -52,20 +52,20 @@ public class Field extends InitializeObject implements Serializable {
 
     private Class<?> javaType;
 
-    private FieldType fieldType = FieldType.COL;
+    private ColumnType columnType = ColumnType.NON_KEY;
     private List<AnnotationModel> annotations;
 
     @Override
     protected void init() throws Exception {
 	Asserts.notNull(this.name, "name is required.");
-	Asserts.notNull(this.fieldType, "fieldType is required.");
+	Asserts.notNull(this.columnType, "columnType is required.");
 
 	if (this.javaType == null) {
 	    Class<?> javaType = (this.sqlType != null) ? SqlTypes.getJavaType(this.sqlType) : null;
 
 	    if (javaType != null) {
 
-		if (this.fieldType == FieldType.KEY_INCR || this.fieldType == FieldType.KEY) {
+		if (this.columnType == ColumnType.KEY_INCR || this.columnType == ColumnType.KEY) {
 		    this.javaType = TypeUtils.wrap(javaType);
 
 		} else {
@@ -84,13 +84,13 @@ public class Field extends InitializeObject implements Serializable {
     public boolean isKeyIncr() {
 	this.initialize();
 
-	return this.fieldType == FieldType.KEY_INCR;
+	return this.columnType == ColumnType.KEY_INCR;
     }
 
     public boolean isKey() {
 	this.initialize();
 
-	return this.fieldType == FieldType.KEY_INCR || this.fieldType == FieldType.KEY;
+	return this.columnType == ColumnType.KEY_INCR || this.columnType == ColumnType.KEY;
     }
 
     public String getTableCat() {
@@ -98,7 +98,7 @@ public class Field extends InitializeObject implements Serializable {
 	return this.tableCat;
     }
 
-    public Field setTableCat(String tableCat) {
+    public Column setTableCat(String tableCat) {
 	this.assertNotInitialized();
 	this.tableCat = tableCat;
 	return this;
@@ -109,7 +109,7 @@ public class Field extends InitializeObject implements Serializable {
 	return this.tableSchema;
     }
 
-    public Field setTableSchema(String tableSchema) {
+    public Column setTableSchema(String tableSchema) {
 	this.assertNotInitialized();
 	this.tableSchema = tableSchema;
 	return this;
@@ -120,7 +120,7 @@ public class Field extends InitializeObject implements Serializable {
 	return this.tableName;
     }
 
-    public Field setTableName(String tableName) {
+    public Column setTableName(String tableName) {
 	this.assertNotInitialized();
 	this.tableName = tableName;
 	return this;
@@ -131,10 +131,10 @@ public class Field extends InitializeObject implements Serializable {
 	return this.name;
     }
 
-    public Field setName(String name) {
+    public Column setName(String name) {
 	this.assertNotInitialized();
 	if (name != null) {
-	    this.name = RecordUtils.toFieldName(name);
+	    this.name = RecordUtils.toColumnName(name);
 	}
 	return this;
     }
@@ -144,7 +144,7 @@ public class Field extends InitializeObject implements Serializable {
 	return this.sqlType;
     }
 
-    public Field setSqlType(Integer sqlType) {
+    public Column setSqlType(Integer sqlType) {
 	this.assertNotInitialized();
 	this.sqlType = sqlType;
 	return this;
@@ -155,7 +155,7 @@ public class Field extends InitializeObject implements Serializable {
 	return this.scaleOrLength;
     }
 
-    public Field setScaleOrLength(Integer scaleOrLength) {
+    public Column setScaleOrLength(Integer scaleOrLength) {
 	this.assertNotInitialized();
 	this.scaleOrLength = scaleOrLength;
 	return this;
@@ -166,7 +166,7 @@ public class Field extends InitializeObject implements Serializable {
 	return this.nullable;
     }
 
-    public Field setNullable(boolean nullable) {
+    public Column setNullable(boolean nullable) {
 	this.assertNotInitialized();
 	this.nullable = nullable;
 	return this;
@@ -177,7 +177,7 @@ public class Field extends InitializeObject implements Serializable {
 	return this.updatable;
     }
 
-    public Field setUpdatable(boolean updatable) {
+    public Column setUpdatable(boolean updatable) {
 	this.assertNotInitialized();
 	this.updatable = updatable;
 	return this;
@@ -188,20 +188,20 @@ public class Field extends InitializeObject implements Serializable {
 	return this.position;
     }
 
-    public Field setPosition(int position) {
+    public Column setPosition(int position) {
 	this.assertNotInitialized();
 	this.position = position;
 	return this;
     }
 
-    public FieldType getFieldType() {
+    public ColumnType getColumnType() {
 	this.initialize();
-	return this.fieldType;
+	return this.columnType;
     }
 
-    public Field setFieldType(FieldType fieldType) {
+    public Column setColumnType(ColumnType columnType) {
 	this.assertNotInitialized();
-	this.fieldType = fieldType;
+	this.columnType = columnType;
 	return this;
     }
 
@@ -210,7 +210,7 @@ public class Field extends InitializeObject implements Serializable {
 	return this.javaType;
     }
 
-    public Field setJavaType(Class<?> javaType) {
+    public Column setJavaType(Class<?> javaType) {
 	this.assertNotInitialized();
 	this.javaType = javaType;
 	return this;
@@ -221,7 +221,7 @@ public class Field extends InitializeObject implements Serializable {
 	return this.annotations;
     }
 
-    public Field setAnnotations(List<AnnotationModel> annotations) {
+    public Column setAnnotations(List<AnnotationModel> annotations) {
 	assertNotInitialized();
 	this.annotations = annotations;
 	return this;
@@ -230,7 +230,7 @@ public class Field extends InitializeObject implements Serializable {
     @Override
     public String toString() {
 	this.initialize();
-	return STR.fmt("name={}, sqlType={}, scaleOrLength={}, nullable={}, position={}, fieldType={}, javaType={}, tableCat={}, tableSchema={}, tableName={}", this.name,
-		this.sqlType, this.scaleOrLength, this.nullable, this.position, this.fieldType, this.javaType, this.tableCat, this.tableSchema, this.tableName);
+	return STR.fmt("name={}, sqlType={}, scaleOrLength={}, nullable={}, position={}, columnType={}, javaType={}, tableCat={}, tableSchema={}, tableName={}", this.name,
+		this.sqlType, this.scaleOrLength, this.nullable, this.position, this.columnType, this.javaType, this.tableCat, this.tableSchema, this.tableName);
     }
 }

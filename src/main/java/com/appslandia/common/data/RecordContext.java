@@ -18,7 +18,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.record;
+package com.appslandia.common.data;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -55,11 +55,11 @@ public class RecordContext extends DbContext {
 	super(conn);
     }
 
-    public long insert(String tableName, Record record) throws java.sql.SQLException {
-	return this.insert(tableName, record, false);
+    public long insert(String tableName, DataRecord dataRecord) throws java.sql.SQLException {
+	return this.insert(tableName, dataRecord, false);
     }
 
-    public long insert(String tableName, Record record, boolean addBatch) throws java.sql.SQLException {
+    public long insert(String tableName, DataRecord dataRecord, boolean addBatch) throws java.sql.SQLException {
 	// StatementImpl
 	Table table = getTable(tableName);
 	StatementImpl stat = this.stats.get(table.getInsertSql().getPSql());
@@ -70,15 +70,15 @@ public class RecordContext extends DbContext {
 	}
 
 	// Parameters
-	for (Field field : table.getFields()) {
-	    if (field.getFieldType() != FieldType.KEY_INCR && field.getFieldType() != FieldType.COL_GEN) {
+	for (Column column : table.getColumns()) {
+	    if (column.getColumnType() != ColumnType.KEY_INCR && column.getColumnType() != ColumnType.NON_KEY_GEN) {
 
-		Object val = record.get(field.getName());
+		Object val = dataRecord.get(column.getName());
 
-		if (!field.isNullable()) {
-		    Asserts.notNull(val, () -> STR.fmt("The field '{}' is required.", field.getName()));
+		if (!column.isNullable()) {
+		    Asserts.notNull(val, () -> STR.fmt("The column value '{}' is required.", column.getName()));
 		}
-		stat.setObject(field.getName(), new JdbcParam(val, field.getSqlType(), field.getScaleOrLength()));
+		stat.setObject(column.getName(), new JdbcParam(val, column.getSqlType(), column.getScaleOrLength()));
 	    }
 	}
 
@@ -92,7 +92,7 @@ public class RecordContext extends DbContext {
 
 		    if (rs.next()) {
 			long generatedKey = rs.getLong(1);
-			record.set(table.getIncrKey().getName(), generatedKey);
+			dataRecord.set(table.getIncrKey().getName(), generatedKey);
 
 			return generatedKey;
 		    }
@@ -113,15 +113,15 @@ public class RecordContext extends DbContext {
 
     public long insert(String tableName, Object entity, boolean addBatch) throws java.sql.SQLException {
 	Table table = getTable(tableName);
-	Record record = RecordUtils.toRecord(table, entity);
-	return this.insert(tableName, record, addBatch);
+	DataRecord dataRecord = RecordUtils.toRecord(table, entity);
+	return this.insert(tableName, dataRecord, addBatch);
     }
 
-    public int update(String tableName, Record record) throws java.sql.SQLException {
-	return this.update(tableName, record, false);
+    public int update(String tableName, DataRecord dataRecord) throws java.sql.SQLException {
+	return this.update(tableName, dataRecord, false);
     }
 
-    public int update(String tableName, Record record, boolean addBatch) throws java.sql.SQLException {
+    public int update(String tableName, DataRecord dataRecord, boolean addBatch) throws java.sql.SQLException {
 	// StatementImpl
 	Table table = getTable(tableName);
 	StatementImpl stat = this.stats.get(table.getUpdateSql().getPSql());
@@ -132,14 +132,14 @@ public class RecordContext extends DbContext {
 	}
 
 	// Parameters
-	for (Field field : table.getFields()) {
-	    if (field.getFieldType() != FieldType.COL_GEN) {
-		Object val = record.get(field.getName());
+	for (Column column : table.getColumns()) {
+	    if (column.getColumnType() != ColumnType.NON_KEY_GEN) {
+		Object val = dataRecord.get(column.getName());
 
-		if (!field.isNullable()) {
-		    Asserts.notNull(val, () -> STR.fmt("The field '{}' is required.", field.getName()));
+		if (!column.isNullable()) {
+		    Asserts.notNull(val, () -> STR.fmt("The column value '{}' is required.", column.getName()));
 		}
-		stat.setObject(field.getName(), new JdbcParam(val, field.getSqlType(), field.getScaleOrLength()));
+		stat.setObject(column.getName(), new JdbcParam(val, column.getSqlType(), column.getScaleOrLength()));
 	    }
 	}
 
@@ -160,8 +160,8 @@ public class RecordContext extends DbContext {
 
     public int update(String tableName, Object entity, boolean addBatch) throws java.sql.SQLException {
 	Table table = getTable(tableName);
-	Record record = RecordUtils.toRecord(table, entity);
-	return this.update(tableName, record, addBatch);
+	DataRecord dataRecord = RecordUtils.toRecord(table, entity);
+	return this.update(tableName, dataRecord, addBatch);
     }
 
     public int delete(String tableName, Key key) throws java.sql.SQLException {
@@ -179,13 +179,13 @@ public class RecordContext extends DbContext {
 	}
 
 	// Parameters
-	for (Field field : table.getFields()) {
-	    if (field.isKey()) {
+	for (Column column : table.getColumns()) {
+	    if (column.isKey()) {
 
-		Object val = key.get(field.getName());
-		Asserts.notNull(val, () -> STR.fmt("The field '{}' is required.", field.getName()));
+		Object val = key.get(column.getName());
+		Asserts.notNull(val, () -> STR.fmt("The column value '{}' is required.", column.getName()));
 
-		stat.setObject(field.getName(), new JdbcParam(val, field.getSqlType(), field.getScaleOrLength()));
+		stat.setObject(column.getName(), new JdbcParam(val, column.getSqlType(), column.getScaleOrLength()));
 	    }
 	}
 
@@ -210,7 +210,7 @@ public class RecordContext extends DbContext {
 	return this.delete(tableName, key, addBatch);
     }
 
-    public Record getRecord(String tableName, Key key) throws java.sql.SQLException {
+    public DataRecord getRecord(String tableName, Key key) throws java.sql.SQLException {
 	// StatementImpl
 	Table table = getTable(tableName);
 	StatementImpl stat = this.stats.get(table.getGetSql().getPSql());
@@ -221,13 +221,13 @@ public class RecordContext extends DbContext {
 	}
 
 	// Parameters
-	for (Field field : table.getFields()) {
-	    if (field.isKey()) {
+	for (Column column : table.getColumns()) {
+	    if (column.isKey()) {
 
-		Object val = key.get(field.getName());
-		Asserts.notNull(val, () -> STR.fmt("The field '{}' is required.", field.getName()));
+		Object val = key.get(column.getName());
+		Asserts.notNull(val, () -> STR.fmt("The column value '{}' is required.", column.getName()));
 
-		stat.setObject(field.getName(), new JdbcParam(val, field.getSqlType(), field.getScaleOrLength()));
+		stat.setObject(column.getName(), new JdbcParam(val, column.getSqlType(), column.getScaleOrLength()));
 	    }
 	}
 
@@ -239,7 +239,7 @@ public class RecordContext extends DbContext {
 	}
     }
 
-    public Record getRecord(String tableName, Object pk) throws java.sql.SQLException {
+    public DataRecord getRecord(String tableName, Object pk) throws java.sql.SQLException {
 	Table table = getTable(tableName);
 	Key key = RecordUtils.toKey(table, pk);
 	return this.getRecord(tableName, key);
@@ -256,13 +256,13 @@ public class RecordContext extends DbContext {
 	}
 
 	// Parameters
-	for (Field field : table.getFields()) {
-	    if (field.isKey()) {
+	for (Column column : table.getColumns()) {
+	    if (column.isKey()) {
 
-		Object val = key.get(field.getName());
-		Asserts.notNull(val, () -> STR.fmt("The field '{}' is required.", field.getName()));
+		Object val = key.get(column.getName());
+		Asserts.notNull(val, () -> STR.fmt("The column value '{}' is required.", column.getName()));
 
-		stat.setObject(field.getName(), new JdbcParam(val, field.getSqlType(), field.getScaleOrLength()));
+		stat.setObject(column.getName(), new JdbcParam(val, column.getSqlType(), column.getScaleOrLength()));
 	    }
 	}
 
@@ -285,7 +285,7 @@ public class RecordContext extends DbContext {
 
     // Record utilities
 
-    public List<Record> executeList(String sql) throws java.sql.SQLException {
+    public List<DataRecord> executeList(String sql) throws java.sql.SQLException {
 	try (Statement stat = this.conn.createStatement()) {
 	    try (ResultSetImpl rs = new ResultSetImpl(stat.executeQuery(sql))) {
 
@@ -295,11 +295,11 @@ public class RecordContext extends DbContext {
 	}
     }
 
-    public <T> List<Record> executeList(String pSql, Object... params) throws java.sql.SQLException {
+    public <T> List<DataRecord> executeList(String pSql, Object... params) throws java.sql.SQLException {
 	return executeList(pSql, JdbcUtils.toParameters(params));
     }
 
-    public <T> List<Record> executeList(String pSql, Map<String, Object> params) throws java.sql.SQLException {
+    public <T> List<DataRecord> executeList(String pSql, Map<String, Object> params) throws java.sql.SQLException {
 	StatementImpl stat = prepareStatement(pSql, params);
 
 	try (ResultSetImpl rs = stat.executeQuery()) {
@@ -309,7 +309,7 @@ public class RecordContext extends DbContext {
 	}
     }
 
-    public Record executeSingle(String sql) throws java.sql.SQLException {
+    public DataRecord executeSingle(String sql) throws java.sql.SQLException {
 	return executeSingle(sql, rs -> {
 
 	    String[] columnLabels = JdbcUtils.getColumnLabels(rs);
@@ -317,11 +317,11 @@ public class RecordContext extends DbContext {
 	});
     }
 
-    public Record executeSingle(String pSql, Object... params) throws java.sql.SQLException {
+    public DataRecord executeSingle(String pSql, Object... params) throws java.sql.SQLException {
 	return executeSingle(pSql, JdbcUtils.toParameters(params));
     }
 
-    public Record executeSingle(String pSql, Map<String, Object> params) throws java.sql.SQLException {
+    public DataRecord executeSingle(String pSql, Map<String, Object> params) throws java.sql.SQLException {
 	return executeSingle(pSql, params, rs -> {
 
 	    String[] columnLabels = JdbcUtils.getColumnLabels(rs);

@@ -76,7 +76,7 @@ try (ConnectionImpl connScoped = new ConnectionImpl(javax.sql.DataSource)) {
   try (RecordContext db = new RecordContext()) {
   
     // Insert an user into the User table.
-    db.insert("UserTable", new Record().set("FirstName", fName)
+    db.insert("UserTable", new DataRecord().set("FirstName", fName)
                                        .set("LastName", lName)
                                        .set("Email", email));
   }

@@ -18,7 +18,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.record;
+package com.appslandia.common.data;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -31,14 +31,14 @@ import com.appslandia.common.utils.ObjectUtils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class Record extends CaseInsensitiveMap<Object> {
+public class DataRecord extends CaseInsensitiveMap<Object> {
     private static final long serialVersionUID = 1L;
 
-    public Record() {
+    public DataRecord() {
 	super(new LinkedHashMap<>());
     }
 
-    public Record set(String name, Object value) {
+    public DataRecord set(String name, Object value) {
 	super.put(name, value);
 	return this;
     }

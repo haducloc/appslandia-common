@@ -18,7 +18,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.record;
+package com.appslandia.common.data;
 
 import java.util.LinkedHashMap;
 
@@ -37,18 +37,18 @@ public class Key extends CaseInsensitiveMap<Object> {
 	super(new LinkedHashMap<>());
     }
 
-    public Key(String keyField, Object value) {
+    public Key(String keyColumn, Object value) {
 	super(new LinkedHashMap<>());
 
-	super.put(keyField, value);
+	super.put(keyColumn, value);
     }
 
-    public Key set(String keyField, Object value) {
-	super.put(keyField, value);
+    public Key set(String keyColumn, Object value) {
+	super.put(keyColumn, value);
 	return this;
     }
 
-    public <T> T get(String keyField) {
-	return ObjectUtils.cast(super.get(keyField));
+    public <T> T get(String keyColumn) {
+	return ObjectUtils.cast(super.get(keyColumn));
     }
 }

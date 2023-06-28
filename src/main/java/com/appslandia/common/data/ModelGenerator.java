@@ -18,7 +18,7 @@
 //LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.record;
+package com.appslandia.common.data;
 
 import java.io.File;
 import java.io.IOException;
@@ -58,7 +58,7 @@ import net.bytebuddy.implementation.MethodCall;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class RecordGenerator extends InitializeObject {
+public class ModelGenerator extends InitializeObject {
 
     private String classPackage;
     private ClassLoader classLoader;
@@ -73,29 +73,29 @@ public class RecordGenerator extends InitializeObject {
 	}
     }
 
-    public RecordGenerator setClassLoader(ClassLoader classLoader) {
+    public ModelGenerator setClassLoader(ClassLoader classLoader) {
 	assertNotInitialized();
 	this.classLoader = classLoader;
 	return this;
     }
 
-    public RecordGenerator setClassPackage(String classPackage) {
+    public ModelGenerator setClassPackage(String classPackage) {
 	assertNotInitialized();
 	this.classPackage = classPackage;
 	return this;
     }
 
-    public RecordGenerator setClassPackage(Class<?> clazz) {
+    public ModelGenerator setClassPackage(Class<?> clazz) {
 	return setClassPackage(clazz.getPackageName());
     }
 
-    public RecordGenerator setClassPath(File classPath) {
+    public ModelGenerator setClassPath(File classPath) {
 	assertNotInitialized();
 	this.classPath = classPath;
 	return this;
     }
 
-    public RecordGenerator setIdGenType(GenerationType idGenType) {
+    public ModelGenerator setIdGenType(GenerationType idGenType) {
 	assertNotInitialized();
 	this.idGenType = idGenType;
 	return this;
@@ -110,7 +110,7 @@ public class RecordGenerator extends InitializeObject {
 
 	// @Embeddable
 	pkAnnotations.add(AnnotationDescription.Builder.ofType(Embeddable.class).build());
-	String[] keys = table.getFields().stream().filter(f -> f.isKey()).map(f -> f.getName()).toArray(len -> new String[len]);
+	String[] keys = table.getColumns().stream().filter(f -> f.isKey()).map(f -> f.getName()).toArray(len -> new String[len]);
 
 	// @TableMtdt
 	pkAnnotations.add(AnnotationDescription.Builder.ofType(TableMtdt.class).define("catalog", ValueUtils.valueOrAlt(table.getTableCat(), StringUtils.EMPTY_STRING))
@@ -120,22 +120,22 @@ public class RecordGenerator extends InitializeObject {
 	// BaseGenPk base
 	var builder = new ByteBuddy().subclass(BaseGenPk.class).name(fullClass).annotateType(pkAnnotations);
 
-	for (Field field : table.getFields()) {
-	    if (field.isKey()) {
+	for (Column column : table.getColumns()) {
+	    if (column.isKey()) {
 
 		// Field annotations
 		List<AnnotationDescription> fieldAnnotations = new ArrayList<>();
-		field.getAnnotations().forEach(fa -> fieldAnnotations.add(toAnnotationDescription(fa)));
+		column.getAnnotations().forEach(fa -> fieldAnnotations.add(toAnnotationDescription(fa)));
 
 		// @NotNull
 		fieldAnnotations.add(AnnotationDescription.Builder.ofType(NotNull.class).build());
 
 		// @MaxLength
-		if (field.getJavaType() == String.class && field.getScaleOrLength() != null) {
-		    fieldAnnotations.add(AnnotationDescription.Builder.ofType(MaxLength.class).define("value", field.getScaleOrLength()).build());
+		if (column.getJavaType() == String.class && column.getScaleOrLength() != null) {
+		    fieldAnnotations.add(AnnotationDescription.Builder.ofType(MaxLength.class).define("value", column.getScaleOrLength()).build());
 		}
 
-		builder = addField(builder, field.getName(), field.getJavaType(), fieldAnnotations);
+		builder = addField(builder, column.getName(), column.getJavaType(), fieldAnnotations);
 	    }
 	}
 
@@ -143,13 +143,13 @@ public class RecordGenerator extends InitializeObject {
 	Composable ctor = MethodCall.invoke(BaseGenPk.class.getDeclaredConstructor()).onSuper();
 
 	int index = 0;
-	for (Field field : table.getFields()) {
-	    if (field.isKey()) {
-		ctor = ctor.andThen(FieldAccessor.ofField(field.getName()).setsArgumentAt(index++));
+	for (Column column : table.getColumns()) {
+	    if (column.isKey()) {
+		ctor = ctor.andThen(FieldAccessor.ofField(column.getName()).setsArgumentAt(index++));
 	    }
 	}
 
-	List<Class<?>> argsTypes = table.getFields().stream().filter(f -> f.isKey()).map(f -> f.getJavaType()).collect(Collectors.toList());
+	List<Class<?>> argsTypes = table.getColumns().stream().filter(f -> f.isKey()).map(f -> f.getJavaType()).collect(Collectors.toList());
 	builder = builder.defineConstructor(Visibility.PUBLIC).withParameters(argsTypes).intercept(ctor);
 
 	return make(builder);
@@ -166,7 +166,7 @@ public class RecordGenerator extends InitializeObject {
 	}
 
 	String fullClass = this.classPackage != null ? this.classPackage + "." + table.getEntityClassName() : table.getEntityClassName();
-	String[] keys = table.getFields().stream().filter(f -> f.isKey()).map(f -> f.getName()).toArray(len -> new String[len]);
+	String[] keys = table.getColumns().stream().filter(f -> f.isKey()).map(f -> f.getName()).toArray(len -> new String[len]);
 
 	// Class annotations
 	List<AnnotationDescription> classAnnotations = new ArrayList<>();
@@ -198,20 +198,20 @@ public class RecordGenerator extends InitializeObject {
 	    builder = builder.defineMethod("getPk", table.getSingleKey().getJavaType(), Visibility.PUBLIC).intercept(FieldAccessor.ofField(table.getSingleKey().getName()));
 	}
 
-	for (Field field : table.getFields()) {
+	for (Column column : table.getColumns()) {
 
 	    // Field annotations
 	    List<AnnotationDescription> fieldAnnotations = new ArrayList<>();
-	    field.getAnnotations().forEach(fa -> fieldAnnotations.add(toAnnotationDescription(fa)));
+	    column.getAnnotations().forEach(fa -> fieldAnnotations.add(toAnnotationDescription(fa)));
 
-	    if (field.isKey()) {
+	    if (column.isKey()) {
 		if (embeddedIdClass == null) {
 
 		    // @Id
 		    fieldAnnotations.add(AnnotationDescription.Builder.ofType(Id.class).build());
 
 		    // @GeneratedValue
-		    if (field.isKeyIncr()) {
+		    if (column.isKeyIncr()) {
 			if (this.idGenType == null) {
 			    fieldAnnotations.add(AnnotationDescription.Builder.ofType(GeneratedValue.class).build());
 			} else {
@@ -223,18 +223,18 @@ public class RecordGenerator extends InitializeObject {
 	    } else {
 
 		// @NotNull
-		if (!field.isNullable()) {
+		if (!column.isNullable()) {
 		    fieldAnnotations.add(AnnotationDescription.Builder.ofType(NotNull.class).build());
 		}
 		// @MaxLength
-		if (field.getJavaType() == String.class && field.getScaleOrLength() != null) {
-		    fieldAnnotations.add(AnnotationDescription.Builder.ofType(MaxLength.class).define("value", field.getScaleOrLength()).build());
+		if (column.getJavaType() == String.class && column.getScaleOrLength() != null) {
+		    fieldAnnotations.add(AnnotationDescription.Builder.ofType(MaxLength.class).define("value", column.getScaleOrLength()).build());
 		}
 	    }
 
-	    if ((field.isKey() && embeddedIdClass == null) || !field.isKey()) {
+	    if ((column.isKey() && embeddedIdClass == null) || !column.isKey()) {
 
-		builder = addField(builder, field.getName(), field.getJavaType(), fieldAnnotations);
+		builder = addField(builder, column.getName(), column.getJavaType(), fieldAnnotations);
 	    }
 	}
 
@@ -248,18 +248,18 @@ public class RecordGenerator extends InitializeObject {
 	    ctor = ctor.andThen(FieldAccessor.ofField("pk").setsArgumentAt(index++));
 	    argsTypes.add(embeddedIdClass);
 
-	    for (Field field : table.getFields()) {
-		if (!field.isKey()) {
+	    for (Column column : table.getColumns()) {
+		if (!column.isKey()) {
 
-		    ctor = ctor.andThen(FieldAccessor.ofField(field.getName()).setsArgumentAt(index++));
-		    argsTypes.add(field.getJavaType());
+		    ctor = ctor.andThen(FieldAccessor.ofField(column.getName()).setsArgumentAt(index++));
+		    argsTypes.add(column.getJavaType());
 		}
 	    }
 	} else {
 
-	    for (Field field : table.getFields()) {
-		ctor = ctor.andThen(FieldAccessor.ofField(field.getName()).setsArgumentAt(index++));
-		argsTypes.add(field.getJavaType());
+	    for (Column column : table.getColumns()) {
+		ctor = ctor.andThen(FieldAccessor.ofField(column.getName()).setsArgumentAt(index++));
+		argsTypes.add(column.getJavaType());
 	    }
 	}
 
@@ -267,33 +267,33 @@ public class RecordGenerator extends InitializeObject {
 	return make(builder);
     }
 
-    public Class<?> generateModelClass(String modelClassName, List<Field> fields) throws Exception {
+    public Class<?> generateModelClass(String modelClassName, List<Column> columns) throws Exception {
 	initialize();
-	Asserts.notNull(fields);
+	Asserts.notNull(columns);
 
 	String fullClass = this.classPackage != null ? this.classPackage + "." + modelClassName : modelClassName;
 
 	// Object base
 	var builder = new ByteBuddy().subclass(Object.class).name(fullClass);
 
-	for (Field field : fields) {
+	for (Column column : columns) {
 
 	    // Field annotations
 	    List<AnnotationDescription> fieldAnnotations = new ArrayList<>();
-	    field.getAnnotations().forEach(fa -> fieldAnnotations.add(toAnnotationDescription(fa)));
+	    column.getAnnotations().forEach(fa -> fieldAnnotations.add(toAnnotationDescription(fa)));
 
-	    builder = addField(builder, field.getName(), field.getJavaType(), fieldAnnotations);
+	    builder = addField(builder, column.getName(), column.getJavaType(), fieldAnnotations);
 	}
 
 	// Constructor
 	Composable ctor = MethodCall.invoke(Object.class.getDeclaredConstructor()).onSuper();
 
 	int index = 0;
-	for (Field field : fields) {
-	    ctor = ctor.andThen(FieldAccessor.ofField(field.getName()).setsArgumentAt(index++));
+	for (Column column : columns) {
+	    ctor = ctor.andThen(FieldAccessor.ofField(column.getName()).setsArgumentAt(index++));
 	}
 
-	List<Class<?>> argsTypes = fields.stream().map(f -> f.getJavaType()).collect(Collectors.toList());
+	List<Class<?>> argsTypes = columns.stream().map(f -> f.getJavaType()).collect(Collectors.toList());
 	builder = builder.defineConstructor(Visibility.PUBLIC).withParameters(argsTypes).intercept(ctor);
 
 	return make(builder);
@@ -405,7 +405,7 @@ public class RecordGenerator extends InitializeObject {
 	} catch (Exception ex) {
 	}
 	if (cl == null) {
-	    cl = RecordGenerator.class.getClassLoader();
+	    cl = ModelGenerator.class.getClassLoader();
 	    if (cl == null) {
 		try {
 		    cl = ClassLoader.getSystemClassLoader();
