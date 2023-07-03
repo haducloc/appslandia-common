@@ -38,20 +38,20 @@ public class DataRecord extends CaseInsensitiveMap<Object> {
 	super(new LinkedHashMap<>());
     }
 
-    public DataRecord set(String name, Object value) {
-	super.put(name, value);
+    public DataRecord set(String columnName, Object value) {
+	super.put(columnName, value);
 	return this;
     }
 
-    public <T> T get(String keyColumn) {
-	return ObjectUtils.cast(super.get(keyColumn));
+    public <T> T get(String columnName) {
+	return ObjectUtils.cast(super.get(columnName));
     }
 
     public Object[] toValues(Table table) {
 	return toValues(table.getColumnLabels());
     }
 
-    public Object[] toValues(String[] columnLabels) {
-	return Arrays.stream(columnLabels).map(l -> super.get(l)).toArray();
+    public Object[] toValues(String[] columnNames) {
+	return Arrays.stream(columnNames).map(l -> super.get(l)).toArray();
     }
 }
