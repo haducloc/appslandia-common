@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 
 import com.appslandia.common.base.CaseInsensitiveMap;
+import com.appslandia.common.utils.ObjectUtils;
 
 /**
  *
@@ -40,6 +41,10 @@ public class DataRecord extends CaseInsensitiveMap<Object> {
     public DataRecord set(String name, Object value) {
 	super.put(name, value);
 	return this;
+    }
+
+    public <T> T get(String keyColumn) {
+	return ObjectUtils.cast(super.get(keyColumn));
     }
 
     public Object[] toValues(Table table) {

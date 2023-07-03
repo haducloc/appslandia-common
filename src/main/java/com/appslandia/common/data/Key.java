@@ -23,6 +23,7 @@ package com.appslandia.common.data;
 import java.util.LinkedHashMap;
 
 import com.appslandia.common.base.CaseInsensitiveMap;
+import com.appslandia.common.utils.ObjectUtils;
 
 /**
  *
@@ -40,6 +41,10 @@ public class Key extends CaseInsensitiveMap<Object> {
 	super(new LinkedHashMap<>());
 
 	super.put(keyColumn, value);
+    }
+
+    public <T> T get(String keyColumn) {
+	return ObjectUtils.cast(super.get(keyColumn));
     }
 
     public Key set(String keyColumn, Object value) {
