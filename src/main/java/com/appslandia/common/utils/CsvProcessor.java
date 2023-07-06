@@ -212,7 +212,7 @@ public class CsvProcessor extends InitializeObject {
 
 	// ,value,
 	if (!this.escCrLf) {
-	    return value.toString();
+	    return StringUtils.trimToNull(value.toString());
 	}
 
 	// \\r \\n
@@ -233,6 +233,6 @@ public class CsvProcessor extends InitializeObject {
 		}
 	    }
 	}
-	return value.toString();
+	return StringUtils.trimToNull(value.toString());
     }
 }
