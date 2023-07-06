@@ -166,7 +166,7 @@ public class CsvProcessorTest {
 	try {
 	    String unescaped = csv.parse(new BufferedReader(new StringReader(value))).get(0)[0];
 
-	    Assertions.assertEquals(" ", unescaped);
+	    Assertions.assertNull(unescaped);
 	} catch (IOException ex) {
 	    Assertions.fail(ex);
 	}
