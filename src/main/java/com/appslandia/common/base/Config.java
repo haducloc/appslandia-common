@@ -20,8 +20,10 @@
 
 package com.appslandia.common.base;
 
+import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.appslandia.common.utils.ParseUtils;
 import com.appslandia.common.utils.STR;
@@ -49,7 +51,9 @@ public interface Config {
 
     default public String getRequiredString(String key) {
 	String value = getString(key);
-	assertHasValue(key, value);
+	if (value == null) {
+	    throw new AssertException(STR.fmt("No value found for the given key '{}'.", key));
+	}
 	return value;
     }
 
@@ -61,7 +65,7 @@ public interface Config {
 	return SplitUtils.split(value, ',');
     }
 
-    default public String getFormatted(String key) {
+    default public String resolve(String key) {
 	String value = getString(key);
 	if (value == null) {
 	    return null;
@@ -78,13 +82,7 @@ public interface Config {
 	});
     }
 
-    default public String getRequiredFormatted(String key) {
-	String value = getFormatted(key);
-	assertHasValue(key, value);
-	return value;
-    }
-
-    default public String getFormatted(String key, Map<String, Object> parameters) {
+    default public String resolve(String key, Map<String, Object> parameters) {
 	String value = getString(key);
 	if (value == null) {
 	    return null;
@@ -106,13 +104,7 @@ public interface Config {
 	});
     }
 
-    default public String getRequiredFormatted(String key, Map<String, Object> parameters) {
-	String value = getFormatted(key, parameters);
-	assertHasValue(key, value);
-	return value;
-    }
-
-    default public String getFormatted(String key, Object... parameters) {
+    default public String resolve(String key, Object... parameters) {
 	String value = getString(key);
 	if (value == null) {
 	    return null;
@@ -138,24 +130,17 @@ public interface Config {
 	});
     }
 
-    default public String getRequiredFormatted(String key, Object... parameters) {
-	String value = getFormatted(key, parameters);
-	assertHasValue(key, value);
-	return value;
-    }
-
     default public boolean getBool(String key, boolean defaultValue) {
 	String value = getString(key);
+	if (value == null) {
+	    return defaultValue;
+	}
 	return ParseUtils.parseBool(value, defaultValue);
     }
 
-    default public boolean getRequiredBool(String key) {
+    default public boolean getBool(String key) {
 	String value = getRequiredString(key);
-
-	if (ParseUtils.isBoolValue(value)) {
-	    return ParseUtils.isTrueValue(value);
-	}
-	throw new BoolFormatException(value);
+	return ParseUtils.parseBool(value);
     }
 
     default public int getInt(String key, int defaultValue) {
@@ -166,7 +151,7 @@ public interface Config {
 	return ParseUtils.parseInt(value, defaultValue);
     }
 
-    default public int getRequiredInt(String key) {
+    default public int getInt(String key) {
 	String value = getRequiredString(key);
 	return Integer.parseInt(value);
     }
@@ -179,7 +164,7 @@ public interface Config {
 	return ParseUtils.parseLong(value, defaultValue);
     }
 
-    default public long getRequiredLong(String key) {
+    default public long getLong(String key) {
 	String value = getRequiredString(key);
 	return Long.parseLong(value);
     }
@@ -192,14 +177,26 @@ public interface Config {
 	return ParseUtils.parseDouble(value, defaultValue);
     }
 
-    default public double getRequiredDouble(String key) {
+    default public double getDouble(String key) {
 	String value = getRequiredString(key);
 	return Double.parseDouble(value);
     }
 
-    private static void assertHasValue(String key, String value) {
+    default public BigDecimal getDecimal(String key) {
+	String value = getRequiredString(key);
+	return new BigDecimal(value);
+    }
+
+    default public BigDecimal getDecimal(String key, BigDecimal defaultValue) {
+	String value = getString(key);
 	if (value == null) {
-	    throw new AssertException(STR.fmt("No value found for the given key '{}'.", key));
+	    return defaultValue;
 	}
+	return ParseUtils.parseDecimal(value, defaultValue);
+    }
+
+    default public <T> T getValue(String key, Function<String, T> converter) {
+	String value = getString(key);
+	return ParseUtils.parseValue(value, converter);
     }
 }

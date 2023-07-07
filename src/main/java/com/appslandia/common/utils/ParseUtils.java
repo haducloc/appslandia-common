@@ -20,11 +20,10 @@
 
 package com.appslandia.common.utils;
 
-import java.util.Date;
+import java.math.BigDecimal;
+import java.util.function.Function;
 
 import com.appslandia.common.base.BoolFormatException;
-import com.appslandia.common.base.DateFormatException;
-import com.appslandia.common.base.Out;
 
 /**
  *
@@ -33,168 +32,9 @@ import com.appslandia.common.base.Out;
  */
 public class ParseUtils {
 
-    public static boolean parseBool(String value, boolean defaultValue) {
-	if (value == null) {
-	    return defaultValue;
-	}
-	if (isTrueValue(value)) {
-	    return true;
-	}
-	if (isFalseValue(value)) {
-	    return false;
-	}
-	return defaultValue;
-    }
+    public static boolean parseBool(String value) throws BoolFormatException {
+	Asserts.notNull(value);
 
-    public static int parseInt(String value, int defaultValue) {
-	if (value == null) {
-	    return defaultValue;
-	}
-	try {
-	    return Integer.parseInt(value);
-
-	} catch (NumberFormatException ex) {
-	    return defaultValue;
-	}
-    }
-
-    public static long parseLong(String value, long defaultValue) {
-	if (value == null) {
-	    return defaultValue;
-	}
-	try {
-	    return Long.parseLong(value);
-
-	} catch (NumberFormatException ex) {
-	    return defaultValue;
-	}
-    }
-
-    public static float parseFloat(String value, float defaultValue) {
-	if (value == null) {
-	    return defaultValue;
-	}
-	try {
-	    float val = Float.parseFloat(value);
-	    return !Float.isNaN(val) ? val : defaultValue;
-
-	} catch (NumberFormatException ex) {
-	    return defaultValue;
-	}
-    }
-
-    public static double parseDouble(String value, double defaultValue) {
-	if (value == null) {
-	    return defaultValue;
-	}
-	try {
-	    double val = Double.parseDouble(value);
-	    return !Double.isNaN(val) ? val : defaultValue;
-
-	} catch (NumberFormatException ex) {
-	    return defaultValue;
-	}
-    }
-
-    public static boolean parseBool(String value, Out<Boolean> valid) {
-	valid.value = Boolean.FALSE;
-	if (value == null) {
-	    return false;
-	}
-	valid.value = Boolean.TRUE;
-	if (isTrueValue(value)) {
-	    return true;
-	}
-	if (isFalseValue(value)) {
-	    return false;
-	}
-	valid.value = Boolean.FALSE;
-	return false;
-    }
-
-    public static int parseInt(String value, Out<Boolean> valid) {
-	valid.value = Boolean.FALSE;
-	if (value == null) {
-	    return 0;
-	}
-	try {
-	    int val = Integer.parseInt(value);
-	    valid.value = Boolean.TRUE;
-	    return val;
-
-	} catch (NumberFormatException ex) {
-	    return 0;
-	}
-    }
-
-    public static long parseLong(String value, Out<Boolean> valid) {
-	valid.value = Boolean.FALSE;
-	if (value == null) {
-	    return 0L;
-	}
-	try {
-	    long val = Long.parseLong(value);
-	    valid.value = Boolean.TRUE;
-	    return val;
-
-	} catch (NumberFormatException ex) {
-	    return 0L;
-	}
-    }
-
-    public static float parseFloat(String value, Out<Boolean> valid) {
-	valid.value = Boolean.FALSE;
-	if (value == null) {
-	    return 0.0f;
-	}
-	try {
-	    float val = Float.parseFloat(value);
-
-	    valid.value = !Float.isNaN(val);
-	    return valid.value ? val : 0.0f;
-
-	} catch (NumberFormatException ex) {
-	    return 0.0f;
-	}
-    }
-
-    public static double parseDouble(String value, Out<Boolean> valid) {
-	valid.value = Boolean.FALSE;
-	if (value == null) {
-	    return 0.0d;
-	}
-	try {
-	    double val = Double.parseDouble(value);
-
-	    valid.value = !Double.isNaN(val);
-	    return valid.value ? val : 0.0d;
-
-	} catch (NumberFormatException ex) {
-	    return 0.0d;
-	}
-    }
-
-    public static Date parseDate(String value, String pattern, Out<Boolean> valid) {
-	valid.value = Boolean.FALSE;
-
-	if (value == null) {
-	    valid.value = Boolean.TRUE;
-	    return null;
-	}
-	try {
-	    Date d = DateUtils.parse(value, pattern);
-	    valid.value = Boolean.TRUE;
-	    return d;
-
-	} catch (DateFormatException ex) {
-	    return null;
-	}
-    }
-
-    public static Boolean parseBoolean(String value) throws BoolFormatException {
-	if (value == null) {
-	    return null;
-	}
 	if (isTrueValue(value)) {
 	    return true;
 	}
@@ -204,28 +44,110 @@ public class ParseUtils {
 	throw new BoolFormatException(value);
     }
 
-    public static Integer parseInt(String value) throws NumberFormatException {
+    public static boolean parseBool(String value, boolean defaultValue) {
+	if (value == null) {
+	    return defaultValue;
+	}
+	try {
+	    return parseBool(value);
+
+	} catch (BoolFormatException ex) {
+	    return defaultValue;
+	}
+    }
+
+    public static int parseInt(String value) throws NumberFormatException {
+	Asserts.notNull(value);
+	return Integer.parseInt(value);
+    }
+
+    public static int parseInt(String value, int defaultValue) {
+	if (value == null) {
+	    return defaultValue;
+	}
+
+	try {
+	    return Integer.parseInt(value);
+	} catch (NumberFormatException ex) {
+	    return defaultValue;
+	}
+    }
+
+    public static long parseLong(String value) throws NumberFormatException {
+	Asserts.notNull(value);
+	return Long.parseLong(value);
+    }
+
+    public static long parseLong(String value, long defaultValue) {
+	if (value == null) {
+	    return defaultValue;
+	}
+
+	try {
+	    return Long.parseLong(value);
+	} catch (NumberFormatException ex) {
+	    return defaultValue;
+	}
+    }
+
+    public static double parseDouble(String value) throws NumberFormatException {
+	Asserts.notNull(value);
+	return Double.parseDouble(value);
+    }
+
+    public static double parseDouble(String value, double defaultValue) {
+	if (value == null) {
+	    return defaultValue;
+	}
+
+	try {
+	    return Double.parseDouble(value);
+	} catch (NumberFormatException ex) {
+	    return defaultValue;
+	}
+    }
+
+    public static BigDecimal parseDecimal(String value) throws NumberFormatException {
+	Asserts.notNull(value);
+	return new BigDecimal(value);
+    }
+
+    public static BigDecimal parseDecimal(String value, BigDecimal defaultValue) {
+	if (value == null) {
+	    return defaultValue;
+	}
+
+	try {
+	    return new BigDecimal(value);
+	} catch (NumberFormatException ex) {
+	    return defaultValue;
+	}
+    }
+
+    public static <T> T parseValue(String value, Function<String, T> converter) {
+	if (value == null) {
+	    return null;
+	}
+	return converter.apply(value);
+    }
+
+    public static Boolean parseBoolObj(String value) throws BoolFormatException {
+	if (value == null) {
+	    return null;
+	}
+	return parseBool(value);
+    }
+
+    public static Integer parseIntObj(String value) throws NumberFormatException {
 	return (value != null) ? Integer.parseInt(value) : null;
     }
 
-    public static Long parseLong(String value) throws NumberFormatException {
+    public static Long parseLongObj(String value) throws NumberFormatException {
 	return (value != null) ? Long.parseLong(value) : null;
     }
 
-    public static Float parseFloat(String value) throws NumberFormatException {
-	return (value != null) ? Float.parseFloat(value) : null;
-    }
-
-    public static Double parseDouble(String value) throws NumberFormatException {
+    public static Double parseDoubleObj(String value) throws NumberFormatException {
 	return (value != null) ? Double.parseDouble(value) : null;
-    }
-
-    public static Date parseDate(String value, String pattern) throws DateFormatException {
-	return DateUtils.parse(value, pattern);
-    }
-
-    public static boolean isBoolValue(String value) {
-	return isTrueValue(value) || isFalseValue(value);
     }
 
     public static boolean isTrueValue(String value) {

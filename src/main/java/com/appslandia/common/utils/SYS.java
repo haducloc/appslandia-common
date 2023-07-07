@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import com.appslandia.common.base.AssertException;
-import com.appslandia.common.base.BoolFormatException;
 
 /**
  *
@@ -40,52 +39,60 @@ public class SYS {
 
     public static String getRequiredProp(String key) {
 	String value = getProp(key, null);
-	if (value != null) {
-	    return value;
+	if (value == null) {
+	    throw new AssertException(STR.fmt("No value found for the given property '{}'.", key));
 	}
-	throw new AssertException(STR.fmt("No value found for the given property '{}'.", key));
+	return value;
     }
 
     public static boolean getBoolProp(String key, boolean defaultValue) {
 	String value = getProp(key, null);
-	return (value != null) ? ParseUtils.parseBool(value, defaultValue) : defaultValue;
+	if (value == null) {
+	    return defaultValue;
+	}
+	return ParseUtils.parseBool(value, defaultValue);
     }
 
     public static int getIntProp(String key, int defaultValue) {
 	String value = getProp(key, null);
-	return (value != null) ? ParseUtils.parseInt(value, defaultValue) : defaultValue;
+	if (value == null) {
+	    return defaultValue;
+	}
+	return ParseUtils.parseInt(value, defaultValue);
     }
 
     public static long getLongProp(String key, long defaultValue) {
 	String value = getProp(key, null);
-	return (value != null) ? ParseUtils.parseLong(value, defaultValue) : defaultValue;
+	if (value == null) {
+	    return defaultValue;
+	}
+	return ParseUtils.parseLong(value, defaultValue);
     }
 
     public static double getDoubleProp(String key, double defaultValue) {
 	String value = getProp(key, null);
-	return (value != null) ? ParseUtils.parseDouble(value, defaultValue) : defaultValue;
-    }
-
-    public static boolean getRequiredBoolProp(String key) {
-	String value = getRequiredProp(key);
-
-	if (ParseUtils.isBoolValue(value)) {
-	    return ParseUtils.isTrueValue(value);
+	if (value == null) {
+	    return defaultValue;
 	}
-	throw new BoolFormatException(value);
+	return ParseUtils.parseDouble(value, defaultValue);
     }
 
-    public static int getRequiredIntProp(String key) {
+    public static boolean getBoolProp(String key) {
+	String value = getRequiredProp(key);
+	return ParseUtils.parseBool(value);
+    }
+
+    public static int getIntProp(String key) {
 	String value = getRequiredProp(key);
 	return Integer.parseInt(value);
     }
 
-    public static long getRequiredLongProp(String key) {
+    public static long getLongProp(String key) {
 	String value = getRequiredProp(key);
 	return Long.parseLong(value);
     }
 
-    public static double getRequiredDoubleProp(String key) {
+    public static double getDoubleProp(String key) {
 	String value = getRequiredProp(key);
 	return Double.parseDouble(value);
     }
@@ -97,52 +104,60 @@ public class SYS {
 
     public static String getRequiredEnv(String key) {
 	String value = getEnv(key, null);
-	if (value != null) {
-	    return value;
+	if (value == null) {
+	    throw new AssertException(STR.fmt("No value found for the given env '{}'.", key));
 	}
-	throw new AssertException(STR.fmt("No value found for the given env '{}'.", key));
+	return value;
     }
 
     public static boolean getBoolEnv(String key, boolean defaultValue) {
 	String value = getEnv(key, null);
-	return (value != null) ? ParseUtils.parseBool(value, defaultValue) : defaultValue;
+	if (value == null) {
+	    return defaultValue;
+	}
+	return ParseUtils.parseBool(value, defaultValue);
     }
 
     public static int getIntEnv(String key, int defaultValue) {
 	String value = getEnv(key, null);
-	return (value != null) ? ParseUtils.parseInt(value, defaultValue) : defaultValue;
+	if (value == null) {
+	    return defaultValue;
+	}
+	return ParseUtils.parseInt(value, defaultValue);
     }
 
     public static long getLongEnv(String key, long defaultValue) {
 	String value = getEnv(key, null);
-	return (value != null) ? ParseUtils.parseLong(value, defaultValue) : defaultValue;
+	if (value == null) {
+	    return defaultValue;
+	}
+	return ParseUtils.parseLong(value, defaultValue);
     }
 
     public static double getDoubleEnv(String key, double defaultValue) {
 	String value = getEnv(key, null);
-	return (value != null) ? ParseUtils.parseDouble(value, defaultValue) : defaultValue;
-    }
-
-    public static boolean getRequiredBoolEnv(String key) {
-	String value = getRequiredEnv(key);
-
-	if (ParseUtils.isBoolValue(value)) {
-	    return ParseUtils.isTrueValue(value);
+	if (value == null) {
+	    return defaultValue;
 	}
-	throw new BoolFormatException(value);
+	return ParseUtils.parseDouble(value, defaultValue);
     }
 
-    public static int getRequiredIntEnv(String key) {
+    public static boolean getBoolEnv(String key) {
+	String value = getRequiredEnv(key);
+	return ParseUtils.parseBool(value);
+    }
+
+    public static int getIntEnv(String key) {
 	String value = getRequiredEnv(key);
 	return Integer.parseInt(value);
     }
 
-    public static long getRequiredLongEnv(String key) {
+    public static long getLongEnv(String key) {
 	String value = getRequiredEnv(key);
 	return Long.parseLong(value);
     }
 
-    public static double getRequiredDoubleEnv(String key) {
+    public static double getDoubleEnv(String key) {
 	String value = getRequiredEnv(key);
 	return Double.parseDouble(value);
     }

@@ -24,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import com.appslandia.common.base.InitializeObject;
 
@@ -126,13 +127,20 @@ public class CsvProcessor extends InitializeObject {
 	return useWrap ? buf.toString() : value;
     }
 
-    public List<String[]> parse(BufferedReader reader) throws IOException {
+    public List<CsvRecord> parseRecords(BufferedReader reader) throws IOException {
 	this.initialize();
-	List<String[]> records = new ArrayList<>();
+	List<CsvRecord> records = new ArrayList<>();
+
+	parse(reader, values -> records.add(new CsvRecord(values)));
+	return records;
+    }
+
+    public void parse(BufferedReader reader, Consumer<String[]> consumer) throws IOException {
+	this.initialize();
 
 	String line;
 	StringBuilder currentRecord = new StringBuilder();
-	Integer recordLen = 0;
+	Integer recordLen = null;
 
 	while ((line = reader.readLine()) != null) {
 
@@ -149,20 +157,19 @@ public class CsvProcessor extends InitializeObject {
 
 		String[] values = splitRecord(currentRecord.toString(), recordLen);
 		if (recordLen == null) {
-		    recordLen = values.length;
+		    recordLen = (values.length > 0) ? values.length : 1;
 		}
 
-		records.add(values);
+		consumer.accept(values);
 		currentRecord.setLength(0);
 	    }
 	}
-	if (records.isEmpty()) {
-	    records.add(new String[] { null });
-	}
-	return records;
     }
 
     private String[] splitRecord(String record, Integer recordLen) {
+	if (record.isEmpty()) {
+	    return new String[] { null };
+	}
 	List<String> values = (recordLen == null) ? new ArrayList<>() : new ArrayList<>(recordLen);
 	StringBuilder currentField = new StringBuilder();
 	boolean inQuotes = false;

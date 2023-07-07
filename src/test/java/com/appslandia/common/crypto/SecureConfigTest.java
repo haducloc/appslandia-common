@@ -65,7 +65,7 @@ public class SecureConfigTest {
     }
 
     @Test
-    public void test_formatted() {
+    public void test_resolve() {
 	SecureConfig config = new SecureConfig("password".toCharArray());
 	try {
 	    config.set("database", "db");
@@ -77,7 +77,7 @@ public class SecureConfigTest {
 	    Assertions.fail(ex.getMessage());
 	}
 	try {
-	    Assertions.assertEquals("database=db;user=user;password=pwd", config.getFormatted("url"));
+	    Assertions.assertEquals("database=db;user=user;password=pwd", config.resolve("url"));
 	} catch (Exception ex) {
 	    Assertions.fail(ex.getMessage());
 	}

@@ -20,8 +20,10 @@
 
 package com.appslandia.common.base;
 
+import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  *
@@ -64,33 +66,18 @@ public class ConfigWrapper implements Config {
     }
 
     @Override
-    public String getFormatted(String key) {
-	return this.cfg.getFormatted(key);
+    public String resolve(String key) {
+	return this.cfg.resolve(key);
     }
 
     @Override
-    public String getRequiredFormatted(String key) {
-	return this.cfg.getRequiredFormatted(key);
+    public String resolve(String key, Map<String, Object> parameters) {
+	return this.cfg.resolve(key, parameters);
     }
 
     @Override
-    public String getFormatted(String key, Map<String, Object> parameters) {
-	return this.cfg.getFormatted(key, parameters);
-    }
-
-    @Override
-    public String getRequiredFormatted(String key, Map<String, Object> parameters) {
-	return this.cfg.getRequiredFormatted(key, parameters);
-    }
-
-    @Override
-    public String getFormatted(String key, Object... parameters) {
-	return this.cfg.getFormatted(key, parameters);
-    }
-
-    @Override
-    public String getRequiredFormatted(String key, Object... parameters) {
-	return this.cfg.getRequiredFormatted(key, parameters);
+    public String resolve(String key, Object... parameters) {
+	return this.cfg.resolve(key, parameters);
     }
 
     @Override
@@ -99,8 +86,8 @@ public class ConfigWrapper implements Config {
     }
 
     @Override
-    public boolean getRequiredBool(String key) {
-	return this.cfg.getRequiredBool(key);
+    public boolean getBool(String key) {
+	return this.cfg.getBool(key);
     }
 
     @Override
@@ -109,8 +96,8 @@ public class ConfigWrapper implements Config {
     }
 
     @Override
-    public int getRequiredInt(String key) {
-	return this.cfg.getRequiredInt(key);
+    public int getInt(String key) {
+	return this.cfg.getInt(key);
     }
 
     @Override
@@ -119,8 +106,8 @@ public class ConfigWrapper implements Config {
     }
 
     @Override
-    public long getRequiredLong(String key) {
-	return this.cfg.getRequiredLong(key);
+    public long getLong(String key) {
+	return this.cfg.getLong(key);
     }
 
     @Override
@@ -129,7 +116,22 @@ public class ConfigWrapper implements Config {
     }
 
     @Override
-    public double getRequiredDouble(String key) {
-	return this.cfg.getRequiredDouble(key);
+    public double getDouble(String key) {
+	return this.cfg.getDouble(key);
+    }
+
+    @Override
+    public BigDecimal getDecimal(String key) {
+	return this.cfg.getDecimal(key);
+    }
+
+    @Override
+    public BigDecimal getDecimal(String key, BigDecimal defaultValue) {
+	return this.cfg.getDecimal(key, defaultValue);
+    }
+
+    @Override
+    public <T> T getValue(String key, Function<String, T> converter) {
+	return this.cfg.getValue(key, converter);
     }
 }

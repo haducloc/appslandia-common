@@ -66,7 +66,7 @@ public class SecurePropsTest {
     }
 
     @Test
-    public void test_formatted() {
+    public void test_resolve() {
 	SecureProps props = new SecureProps("password".toCharArray());
 	try {
 	    props.set("database", "db");
@@ -78,7 +78,7 @@ public class SecurePropsTest {
 	    Assertions.fail(ex.getMessage());
 	}
 	try {
-	    Assertions.assertEquals("database=db;user=user;password=pwd", props.getFormatted("url"));
+	    Assertions.assertEquals("database=db;user=user;password=pwd", props.resolve("url"));
 	} catch (Exception ex) {
 	    Assertions.fail(ex.getMessage());
 	}
