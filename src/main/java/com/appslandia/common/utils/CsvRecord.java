@@ -20,6 +20,7 @@
 
 package com.appslandia.common.utils;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Function;
@@ -90,6 +91,11 @@ public class CsvRecord {
     public Boolean getBoolObj(int index) {
 	Objects.checkIndex(index, this.values.length);
 	return ParseUtils.parseBoolObj(this.values[index]);
+    }
+
+    public BigDecimal getDecimal(int index) {
+	Objects.checkIndex(index, this.values.length);
+	return ParseUtils.parseDecimal(this.values[index]);
     }
 
     public <T> T getValue(int index, Function<String, T> converter) {
