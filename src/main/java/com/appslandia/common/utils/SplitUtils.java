@@ -106,6 +106,7 @@ public class SplitUtils {
 	    }
 	}
 
+	// Last item
 	String item = currentItem.toString().trim();
 	if (emptyToNullOrExcl) {
 	    list.add(!item.isEmpty() ? item : null);
