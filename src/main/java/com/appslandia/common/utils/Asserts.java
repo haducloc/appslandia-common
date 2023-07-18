@@ -104,11 +104,11 @@ public class Asserts {
 	return array;
     }
 
-    public static <T> T[] hasElements(T[] elements, Supplier<String> errorMessage) {
-	if ((elements == null) || (elements.length == 0)) {
+    public static <T> T[] hasElements(T[] array, Supplier<String> errorMessage) {
+	if ((array == null) || (array.length == 0)) {
 	    throw new AssertException(errorMessage.get());
 	}
-	return elements;
+	return array;
     }
 
     public static <T extends Collection<?>> T hasElements(T collection) {
