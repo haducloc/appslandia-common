@@ -20,7 +20,7 @@
 
 package com.appslandia.common.utils;
 
-import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -178,12 +178,18 @@ public class DateUtils {
 	return (dateTime != null) ? newDateFormat(ISO8601_DATETIME).format(dateTime) : null;
     }
 
-    public static Date parse(String dt, String pattern) throws DateFormatException {
-	try {
-	    return newDateFormat(pattern).parse(dt);
-	} catch (ParseException ex) {
-	    throw new DateFormatException(ex);
+    public static Date parse(String value, String pattern) throws DateFormatException {
+	if (value == null) {
+	    return null;
 	}
+
+	ParsePosition pos = new ParsePosition(0);
+	Date parsedValue = newDateFormat(pattern).parse(value, pos);
+
+	if ((pos.getErrorIndex() < 0) && (pos.getIndex() == value.length()) && (parsedValue != null)) {
+	    return parsedValue;
+	}
+	throw new DateFormatException(STR.fmt("Failed to parse java.util.Date from '{}' using the pattern '{}'.", value, pattern));
     }
 
     // Java8 Date/Time
