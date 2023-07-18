@@ -35,17 +35,18 @@ public class STRTest {
     @Test
     public void test_map() {
 	String msg = STR.format("this is ${p1} and ${p2}", new Params().set("p1", "v1").set("p2", null));
-	Assertions.assertEquals("this is v1 and null", msg);
+	Assertions.assertEquals("this is v1 and ${MISSED_VALUE}", msg);
 
 	msg = STR.format("this is ${p1} and ${p2}", new Params().set("p1", "v1").set("p2", "v2"));
 	Assertions.assertEquals("this is v1 and v2", msg);
     }
 
+    @SuppressWarnings("el-syntax")
     @Test
-    public void test_map_missing() {
+    public void test_map_optional() {
 	try {
-	    String msg = STR.format("this is ${p1} and ${p2}", new Params().set("p1", "v1"));
-	    Assertions.assertEquals("this is v1 and ${p2}", msg);
+	    String msg = STR.format("this is ${p1} and ${p2?}", new Params().set("p1", "v1"));
+	    Assertions.assertEquals("this is v1 and ", msg);
 
 	} catch (Exception ex) {
 	    Assertions.fail(ex.getMessage());
@@ -55,17 +56,18 @@ public class STRTest {
     @Test
     public void test_array() {
 	String msg = STR.format("this is ${0} and ${1}", "v1", null);
-	Assertions.assertEquals("this is v1 and null", msg);
+	Assertions.assertEquals("this is v1 and ${MISSED_VALUE}", msg);
 
 	msg = STR.format("this is ${0} and ${1}", "v1", "v2");
 	Assertions.assertEquals("this is v1 and v2", msg);
     }
 
+    @SuppressWarnings("el-syntax")
     @Test
-    public void test_array_missing() {
+    public void test_array_optional() {
 	try {
-	    String msg = STR.format("this is ${0} and ${1}", "v1");
-	    Assertions.assertEquals("this is v1 and ${1}", msg);
+	    String msg = STR.format("this is ${0} and ${1?}", "v1");
+	    Assertions.assertEquals("this is v1 and ", msg);
 
 	} catch (Exception ex) {
 	    Assertions.fail(ex.getMessage());
@@ -75,17 +77,17 @@ public class STRTest {
     @Test
     public void test_fmt() {
 	String msg = STR.fmt("this is {} and {}", "v1", null);
-	Assertions.assertEquals("this is v1 and null", msg);
+	Assertions.assertEquals("this is v1 and {MISSED_VALUE}", msg);
 
 	msg = STR.fmt("this is {} and {}", "v1", "v2");
 	Assertions.assertEquals("this is v1 and v2", msg);
     }
 
     @Test
-    public void test_fmt_missing() {
+    public void test_fmt_optional() {
 	try {
-	    String msg = STR.fmt("this is {} and {}", "v1");
-	    Assertions.assertEquals("this is v1 and {}", msg);
+	    String msg = STR.fmt("this is {} and {?}", "v1");
+	    Assertions.assertEquals("this is v1 and ", msg);
 
 	} catch (Exception ex) {
 	    Assertions.fail(ex.getMessage());
@@ -96,7 +98,19 @@ public class STRTest {
     @Test
     public void test_format_pattern() {
 	try {
-	    String msg = STR.format("this is ${0:#,##0} and ${1:MM/dd/yyyy}", 12345, DateUtils.iso8601Date("2023-01-01"));
+	    String msg = STR.format("this is ${0|#,##0} and ${1|MM/dd/yyyy}", 12345, DateUtils.iso8601Date("2023-01-01"));
+	    Assertions.assertEquals("this is 12,345 and 01/01/2023", msg);
+
+	} catch (Exception ex) {
+	    Assertions.fail(ex.getMessage());
+	}
+    }
+
+    @SuppressWarnings("el-syntax")
+    @Test
+    public void test_fmt_pattern() {
+	try {
+	    String msg = STR.fmt("this is {#,##0} and {MM/dd/yyyy}", 12345, DateUtils.iso8601Date("2023-01-01"));
 	    Assertions.assertEquals("this is 12,345 and 01/01/2023", msg);
 
 	} catch (Exception ex) {

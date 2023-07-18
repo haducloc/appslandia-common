@@ -38,7 +38,7 @@ public class STR {
     };
 
     // ${paramName}
-    private static final Pattern PARAM_HOLDER_PATTERN = Pattern.compile("\\$\\{[^}]*}", Pattern.CASE_INSENSITIVE);
+    private static final Pattern PARAM_HOLDER_PATTERN = Pattern.compile("\\$\\{\s*([a-z0-9_]+)(\\?)?(\s*\\|[^}]*)?\s*}", Pattern.CASE_INSENSITIVE);
 
     public static String format(String str, Map<String, Object> parameters) {
 	if (str == null) {
@@ -94,22 +94,22 @@ public class STR {
 	    String parameterGroup = matcher.group();
 	    String parameterName = parameterGroup.substring(parameterGroup.indexOf('{') + 1, parameterGroup.length() - 1).trim();
 
+	    int idxVB = parameterName.indexOf('|');
+
 	    String pattern = null;
-	    int patternIdx = parameterName.indexOf(':');
-
-	    if (patternIdx > 0) {
-		pattern = parameterName.substring(patternIdx + 1).trim();
-		parameterName = parameterName.substring(0, patternIdx).trim();
+	    if (idxVB > 0) {
+		pattern = parameterName.substring(idxVB + 1).trim();
+		parameterName = parameterName.substring(0, idxVB).trim();
 	    }
-	    Asserts.isTrue(!parameterName.isEmpty(), () -> STR.fmt("Invalid expression '{}'.", parameterGroup));
 
+	    boolean optional = parameterName.charAt(parameterName.length() - 1) == '?';
+	    if (optional) {
+		parameterName = parameterName.substring(0, parameterName.length() - 1);
+	    }
 	    Object parameterValue = parameters.apply(parameterName, parameterGroup);
-	    if (parameterValue == MISSED_VALUE) {
-		parameterValue = parameterGroup;
-	    }
 
-	    if (parameterValue == null) {
-		out.append("null");
+	    if (parameterValue == null || parameterValue == MISSED_VALUE) {
+		out.append(optional ? "" : "${MISSED_VALUE}");
 
 	    } else {
 		if (parameterValue instanceof Iterable) {
@@ -145,7 +145,7 @@ public class STR {
 	}
     }
 
-    private static final Pattern SEQ_HOLDER_PATTERN = Pattern.compile("\\{[^}]*}");
+    private static final Pattern SEQ_HOLDER_PATTERN = Pattern.compile("\\{\s*(\\?\s*\\|\s*)?([^}\s]*)\s*}");
 
     public static String fmt(String str, Object... entries) {
 	if (str == null) {
@@ -167,16 +167,37 @@ public class STR {
 
 	    // {}
 	    String parameterGroup = matcher.group();
-	    String pattern = parameterGroup.substring(parameterGroup.indexOf('{') + 1, parameterGroup.length() - 1).trim();
+	    String parameter = parameterGroup.substring(parameterGroup.indexOf('{') + 1, parameterGroup.length() - 1).trim();
+
+	    String pattern = null;
+	    boolean optional = false;
+
+	    if (!parameter.isEmpty()) {
+
+		if (parameter.charAt(0) == '?') {
+		    if (parameter.length() == 1) {
+			optional = true;
+
+		    } else {
+			String pt = parameter.substring(1).trim();
+			if ((pt.length() > 0) && (pt.charAt(0) == '|')) {
+
+			    optional = true;
+			    pattern = pt.substring(1).trim();
+			} else {
+			    pattern = parameter;
+			}
+		    }
+		} else {
+		    pattern = parameter;
+		}
+	    }
 
 	    index++;
 	    Object entryValue = ((0 <= index) && (index < entries.length)) ? entries[index] : MISSED_VALUE;
-	    if (entryValue == MISSED_VALUE) {
-		entryValue = parameterGroup;
-	    }
 
-	    if (entryValue == null) {
-		out.append("null");
+	    if (entryValue == null || entryValue == MISSED_VALUE) {
+		out.append(optional ? "" : "{MISSED_VALUE}");
 
 	    } else {
 		if (entryValue instanceof Iterable) {
@@ -186,7 +207,7 @@ public class STR {
 		    out.append(ObjectUtils.asString(entryValue));
 		} else {
 
-		    if (pattern.isEmpty()) {
+		    if (StringUtils.isNullOrEmpty(pattern)) {
 			out.append(entryValue.toString());
 		    } else {
 
