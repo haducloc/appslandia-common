@@ -21,9 +21,17 @@
 package com.appslandia.common.utils;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.util.Date;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import com.appslandia.common.base.BoolFormatException;
+import com.appslandia.common.base.DateFormatException;
 
 /**
  *
@@ -156,5 +164,42 @@ public class ParseUtils {
 
     public static boolean isFalseValue(String value) {
 	return "false".equalsIgnoreCase(value) || "f".equalsIgnoreCase(value) || "no".equalsIgnoreCase(value) || "n".equalsIgnoreCase(value);
+    }
+
+    public static Date parseDate(String value, String[] patterns) throws DateFormatException {
+	return parseDateObject(value, Date.class, patterns, (v, p) -> DateUtils.parse(v, p));
+    }
+
+    public static LocalDate parseLocalDate(String value, String[] patterns) throws DateFormatException {
+	return parseDateObject(value, LocalDate.class, patterns, (v, p) -> LocalDate.parse(v, DateUtils.getFormatter(p)));
+    }
+
+    public static LocalTime parseLocalTime(String value, String[] patterns) throws DateFormatException {
+	return parseDateObject(value, LocalTime.class, patterns, (v, p) -> LocalTime.parse(v, DateUtils.getFormatter(p)));
+    }
+
+    public static LocalDateTime parseLocalDateTime(String value, String[] patterns) throws DateFormatException {
+	return parseDateObject(value, LocalDateTime.class, patterns, (v, p) -> LocalDateTime.parse(v, DateUtils.getFormatter(p)));
+    }
+
+    public static OffsetTime parseOffsetTime(String value, String[] patterns) throws DateFormatException {
+	return parseDateObject(value, OffsetTime.class, patterns, (v, p) -> OffsetTime.parse(v, DateUtils.getFormatter(p)));
+    }
+
+    public static OffsetDateTime parseOffsetDateTime(String value, String[] patterns) throws DateFormatException {
+	return parseDateObject(value, OffsetDateTime.class, patterns, (v, p) -> OffsetDateTime.parse(v, DateUtils.getFormatter(p)));
+    }
+
+    private static <T> T parseDateObject(String value, Class<T> targetClass, String[] patterns, BiFunction<String, String, T> converter) throws DateFormatException {
+	if (value == null) {
+	    return null;
+	}
+	for (String pattern : patterns) {
+	    try {
+		return converter.apply(value, pattern);
+	    } catch (Exception ex) {
+	    }
+	}
+	throw new DateFormatException(STR.fmt("Failed to parse {} from '{}'.", targetClass, value));
     }
 }

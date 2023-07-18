@@ -30,6 +30,10 @@ import java.text.ParseException;
 public class DateFormatException extends IllegalArgumentException {
     private static final long serialVersionUID = 1L;
 
+    public DateFormatException(String message) {
+	super(message);
+    }
+
     public DateFormatException(ParseException cause) {
 	super(cause.getMessage(), cause);
     }
