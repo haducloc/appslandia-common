@@ -134,21 +134,21 @@ public class Asserts {
 
     public static <M extends Map<?, ?>> M hasEntries(M map) {
 	if ((map == null) || (map.size() == 0)) {
-	    throw new IllegalArgumentException("The map must have entries.");
+	    throw new AssertException("The map must have entries.");
 	}
 	return map;
     }
 
     public static <M extends Map<?, ?>> M hasEntries(M map, String errorMessage) {
 	if ((map == null) || (map.size() == 0)) {
-	    throw new IllegalArgumentException(errorMessage);
+	    throw new AssertException(errorMessage);
 	}
 	return map;
     }
 
     public static <M extends Map<?, ?>> M hasEntries(M map, Supplier<String> errorMessage) {
 	if ((map == null) || (map.size() == 0)) {
-	    throw new IllegalArgumentException(errorMessage.get());
+	    throw new AssertException(errorMessage.get());
 	}
 	return map;
     }
