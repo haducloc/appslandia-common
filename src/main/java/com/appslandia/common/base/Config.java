@@ -62,7 +62,7 @@ public interface Config {
 	if (value == null) {
 	    return StringUtils.EMPTY_ARRAY;
 	}
-	return SplitUtils.split(value, ',');
+	return SplitUtils.splitByComma(value);
     }
 
     default public String resolve(String key) {

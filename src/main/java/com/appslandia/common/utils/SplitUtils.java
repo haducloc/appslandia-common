@@ -41,7 +41,7 @@ public class SplitUtils {
 	return split(str, separator, false);
     }
 
-    public static String[] split(String str, Pattern separator, boolean emptyToNullOrExcl) {
+    public static String[] split(String str, Pattern separator, boolean emptyToNull) {
 	if (str == null) {
 	    return StringUtils.EMPTY_ARRAY;
 	}
@@ -51,7 +51,7 @@ public class SplitUtils {
 	for (String item : items) {
 	    item = item.trim();
 
-	    if (emptyToNullOrExcl) {
+	    if (emptyToNull) {
 		list.add(!item.isEmpty() ? item : null);
 	    } else {
 		if (!item.isEmpty()) {
@@ -70,7 +70,7 @@ public class SplitUtils {
 	return split(str, separator, false);
     }
 
-    public static String[] split(String str, char separator, boolean emptyToNullOrExcl) {
+    public static String[] split(String str, char separator, boolean emptyToNull) {
 	if (str == null) {
 	    return StringUtils.EMPTY_ARRAY;
 	}
@@ -92,7 +92,7 @@ public class SplitUtils {
 	    } else if (c == separator) {
 		String item = currentItem.toString().trim();
 
-		if (emptyToNullOrExcl) {
+		if (emptyToNull) {
 		    list.add(!item.isEmpty() ? item : null);
 		} else {
 		    if (!item.isEmpty()) {
@@ -108,7 +108,7 @@ public class SplitUtils {
 
 	// Last item
 	String item = currentItem.toString().trim();
-	if (emptyToNullOrExcl) {
+	if (emptyToNull) {
 	    list.add(!item.isEmpty() ? item : null);
 	} else {
 	    if (!item.isEmpty()) {
