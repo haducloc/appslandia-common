@@ -166,27 +166,27 @@ public class ParseUtils {
 	return "false".equalsIgnoreCase(value) || "f".equalsIgnoreCase(value) || "no".equalsIgnoreCase(value) || "n".equalsIgnoreCase(value);
     }
 
-    public static Date parseDate(String value, String[] patterns) throws DateFormatException {
+    public static Date parseDate(String value, String... patterns) throws DateFormatException {
 	return parseDateObject(value, Date.class, patterns, (v, p) -> DateUtils.parse(v, p));
     }
 
-    public static LocalDate parseLocalDate(String value, String[] patterns) throws DateFormatException {
+    public static LocalDate parseLocalDate(String value, String... patterns) throws DateFormatException {
 	return parseDateObject(value, LocalDate.class, patterns, (v, p) -> LocalDate.parse(v, DateUtils.getFormatter(p)));
     }
 
-    public static LocalTime parseLocalTime(String value, String[] patterns) throws DateFormatException {
+    public static LocalTime parseLocalTime(String value, String... patterns) throws DateFormatException {
 	return parseDateObject(value, LocalTime.class, patterns, (v, p) -> LocalTime.parse(v, DateUtils.getFormatter(p)));
     }
 
-    public static LocalDateTime parseLocalDateTime(String value, String[] patterns) throws DateFormatException {
+    public static LocalDateTime parseLocalDateTime(String value, String... patterns) throws DateFormatException {
 	return parseDateObject(value, LocalDateTime.class, patterns, (v, p) -> LocalDateTime.parse(v, DateUtils.getFormatter(p)));
     }
 
-    public static OffsetTime parseOffsetTime(String value, String[] patterns) throws DateFormatException {
+    public static OffsetTime parseOffsetTime(String value, String... patterns) throws DateFormatException {
 	return parseDateObject(value, OffsetTime.class, patterns, (v, p) -> OffsetTime.parse(v, DateUtils.getFormatter(p)));
     }
 
-    public static OffsetDateTime parseOffsetDateTime(String value, String[] patterns) throws DateFormatException {
+    public static OffsetDateTime parseOffsetDateTime(String value, String... patterns) throws DateFormatException {
 	return parseDateObject(value, OffsetDateTime.class, patterns, (v, p) -> OffsetDateTime.parse(v, DateUtils.getFormatter(p)));
     }
 
