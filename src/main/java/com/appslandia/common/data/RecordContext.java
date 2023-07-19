@@ -353,7 +353,8 @@ public class RecordContext extends DbContext {
 
 	return tables.computeIfAbsent(tableName, tn -> {
 	    try {
-		return RecordUtils.loadTable(this.conn, this.conn.getCatalog(), this.conn.getSchema(), tableName, null);
+		Table table = RecordUtils.loadTable(this.conn, this.conn.getCatalog(), this.conn.getSchema(), tableName, null);
+		return Asserts.notNull(table);
 
 	    } catch (SQLException ex) {
 		throw new UncheckedSQLException(ex);
