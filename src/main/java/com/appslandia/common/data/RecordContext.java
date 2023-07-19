@@ -336,7 +336,7 @@ public class RecordContext extends DbContext {
 	});
     }
 
-    public String getDataSourceID() throws UncheckedSQLException {
+    protected String getDataSourceID() throws UncheckedSQLException {
 	try {
 	    if (!StringUtils.isNullOrEmpty(this.conn.getDsName())) {
 		return this.conn.getDsName();

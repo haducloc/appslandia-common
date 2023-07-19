@@ -50,10 +50,10 @@ public class DbComparer {
 	    result.appendln("***** Data Source 1 vs Data Source 2 *****");
 	    result.appendln();
 
-	    if (!rc1.getDataSourceID().equalsIgnoreCase(rc2.getDataSourceID())) {
-		result.appendln(rc1.getDataSourceID());
+	    if (!rc1.getConnection().getMetaData().getURL().equalsIgnoreCase(rc2.getConnection().getMetaData().getURL())) {
+		result.appendln(rc1.getConnection().getMetaData().getURL());
 		result.appendln("!=");
-		result.appendln(rc2.getDataSourceID());
+		result.appendln(rc2.getConnection().getMetaData().getURL());
 		result.appendln();
 	    }
 
