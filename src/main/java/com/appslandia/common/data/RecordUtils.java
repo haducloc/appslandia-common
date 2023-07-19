@@ -72,6 +72,10 @@ public final class RecordUtils {
 	    }
 	}
 
+	if (table == null) {
+	    return null;
+	}
+
 	// Keys
 	Set<String> keys = new LinkedHashSet<>();
 	try (ResultSet rs = conn.getMetaData().getPrimaryKeys(catalog, schema, tableName)) {

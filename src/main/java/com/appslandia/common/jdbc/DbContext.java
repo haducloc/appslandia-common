@@ -67,6 +67,10 @@ public class DbContext implements AutoCloseable {
 	this.internalConn = false;
     }
 
+    public ConnectionImpl getConnection() {
+	return this.conn;
+    }
+
     // Update Utilities
 
     public int executeUpdate(String sql) throws java.sql.SQLException {

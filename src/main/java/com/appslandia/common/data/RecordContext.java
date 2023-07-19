@@ -336,7 +336,7 @@ public class RecordContext extends DbContext {
 	});
     }
 
-    protected String buildDataSourceID() throws UncheckedSQLException {
+    public String getDataSourceID() throws UncheckedSQLException {
 	try {
 	    if (!StringUtils.isNullOrEmpty(this.conn.getDsName())) {
 		return this.conn.getDsName();
@@ -349,11 +349,11 @@ public class RecordContext extends DbContext {
     }
 
     public Table getTable(String tableName) throws UncheckedSQLException {
-	ConcurrentMap<String, Table> tables = TABLES.computeIfAbsent(buildDataSourceID(), db -> new ConcurrentHashMap<>());
+	ConcurrentMap<String, Table> tables = TABLES.computeIfAbsent(getDataSourceID(), db -> new ConcurrentHashMap<>());
 
 	return tables.computeIfAbsent(tableName, tn -> {
 	    try {
-		return RecordUtils.loadTable(this.conn, null, null, tableName, null);
+		return RecordUtils.loadTable(this.conn, this.conn.getCatalog(), this.conn.getSchema(), tableName, null);
 
 	    } catch (SQLException ex) {
 		throw new UncheckedSQLException(ex);
