@@ -116,16 +116,16 @@ public class IOUtils {
 	return list;
     }
 
-    public static BufferedReader newReader(InputStream is, String readerEcoding) throws IOException {
-	Asserts.notNull(readerEcoding);
+    public static BufferedReader newReaderBOM(InputStream is, String altReaderEcoding) throws IOException {
+	Asserts.notNull(altReaderEcoding);
 
 	BOMInputStream bis = new BOMInputStream(is);
-	String encoding = (bis.getBOM() != null) ? bis.getBOM().getEncoding() : readerEcoding;
+	String encoding = (bis.getBOM() != null) ? bis.getBOM().getEncoding() : altReaderEcoding;
 
 	return new BufferedReader(new InputStreamReader(bis, encoding));
     }
 
-    public static BufferedWriter newWriter(OutputStream os, String writerEncoding) throws IOException {
+    public static BufferedWriter newWriterBOM(OutputStream os, String writerEncoding) throws IOException {
 	Asserts.notNull(writerEncoding);
 
 	BOM bom = BOM.parse(writerEncoding);
