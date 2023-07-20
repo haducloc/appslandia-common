@@ -21,7 +21,6 @@
 package com.appslandia.common.base;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -46,7 +45,7 @@ public class MemoryStream extends OutputStream implements Serializable {
     private NodeList nodeList;
 
     private long count;
-    private int lastLen;
+    private int nodeCount;
 
     public MemoryStream() {
 	this(512);
@@ -56,20 +55,24 @@ public class MemoryStream extends OutputStream implements Serializable {
 	Asserts.isTrue(blockSize > 0);
 
 	this.blockSize = blockSize;
-	this.nodeList = new NodeList(new byte[this.blockSize]);
+	this.nodeList = new NodeList(new Node(new byte[this.blockSize], 0));
+	this.nodeCount = 1;
     }
 
     @Override
     public void write(int b) throws IOException {
-	byte[] lastBuf = this.nodeList.last.buf;
-	int lenAv = lastBuf.length - this.lastLen;
+	Node lastNode = this.nodeList.last;
+	int lenAv = lastNode.buf.length - lastNode.curLen;
+
 	if (lenAv >= 1) {
-	    lastBuf[this.lastLen] = (byte) b;
-	    this.lastLen += 1;
+	    lastNode.buf[lastNode.curLen] = (byte) b;
+	    lastNode.curLen += 1;
+
 	} else {
-	    this.nodeList.insert(new byte[this.blockSize]);
-	    this.nodeList.last.buf[0] = (byte) b;
-	    this.lastLen = 1;
+	    byte[] newBuf = new byte[this.blockSize];
+	    newBuf[0] = (byte) b;
+	    this.nodeList.insert(new Node(newBuf, 1));
+	    this.nodeCount += 1;
 	}
 	this.count += 1;
     }
@@ -81,95 +84,81 @@ public class MemoryStream extends OutputStream implements Serializable {
 	} else if (len == 0) {
 	    return;
 	}
-	byte[] lastBuf = this.nodeList.last.buf;
-	int lenAv = lastBuf.length - this.lastLen;
+
+	Node lastNode = this.nodeList.last;
+	int lenAv = lastNode.buf.length - lastNode.curLen;
 
 	if (lenAv >= len) {
-	    System.arraycopy(b, off, lastBuf, this.lastLen, len);
-	    this.lastLen += len;
+	    System.arraycopy(b, off, lastNode.buf, lastNode.curLen, len);
+	    lastNode.curLen += len;
 
 	} else {
-	    int addLen = len - lenAv;
-	    int addBlk = addLen / (this.blockSize);
-	    if (addBlk * this.blockSize < addLen) {
-		addBlk++;
+	    int addBlocks = (len - lenAv) / (this.blockSize);
+	    if (addBlocks * this.blockSize < (len - lenAv)) {
+		addBlocks++;
 	    }
-	    this.nodeList.insert(new byte[addBlk * this.blockSize]);
+	    byte[] newBuf = new byte[addBlocks * this.blockSize];
 
 	    if (lenAv == 0) {
-		System.arraycopy(b, off, this.nodeList.last.buf, 0, len);
-		this.lastLen = len;
+		System.arraycopy(b, off, newBuf, 0, len);
 	    } else {
-		System.arraycopy(b, off, lastBuf, this.lastLen, lenAv);
-		System.arraycopy(b, off + lenAv, this.nodeList.last.buf, 0, len - lenAv);
-		this.lastLen = len - lenAv;
+		System.arraycopy(b, off, lastNode.buf, lastNode.curLen, lenAv);
+		lastNode.curLen = lastNode.buf.length;
+
+		System.arraycopy(b, off + lenAv, newBuf, 0, len - lenAv);
 	    }
+
+	    this.nodeList.insert(new Node(newBuf, len - lenAv));
+	    this.nodeCount += 1;
 	}
 	this.count += len;
     }
 
     public void writeTo(OutputStream out) throws IOException {
-	Node n = this.nodeList.first;
-	while (n != null) {
-	    if (n != this.nodeList.last) {
-		out.write(n.buf, 0, n.buf.length);
-	    } else {
-		out.write(n.buf, 0, this.lastLen);
-	    }
-	    n = n.next;
+	Node node = this.nodeList.first;
+	while (node != null) {
+
+	    out.write(node.buf, 0, node.curLen);
+	    node = node.next;
 	}
     }
 
     public byte[] toByteArray() {
 	byte[] bytes = new byte[(int) this.count];
 	int destPos = 0;
-	Node n = this.nodeList.first;
-	while (n != null) {
-	    if (n != this.nodeList.last) {
-		System.arraycopy(n.buf, 0, bytes, destPos, n.buf.length);
-		destPos += n.buf.length;
-	    } else {
-		System.arraycopy(n.buf, 0, bytes, destPos, this.lastLen);
-		destPos += this.lastLen;
-	    }
-	    n = n.next;
+	Node node = this.nodeList.first;
+
+	while (node != null) {
+	    System.arraycopy(node.buf, 0, bytes, destPos, node.curLen);
+	    destPos += node.curLen;
+
+	    node = node.next;
 	}
 	return bytes;
     }
 
     public int getNodeCount() {
-	int count = 0;
-	Node n = this.nodeList.first;
-	while (n != null) {
-	    count++;
-	    n = n.next;
-	}
-	return count;
+	return this.nodeCount;
     }
 
     public byte[] digest(String algorithm) throws NoSuchAlgorithmException {
 	MessageDigest md = MessageDigest.getInstance(algorithm);
-	Node n = this.nodeList.first;
-	while (n != null) {
-	    if (n != this.nodeList.last) {
-		md.update(n.buf, 0, n.buf.length);
-	    } else {
-		md.update(n.buf, 0, this.lastLen);
-	    }
-	    n = n.next;
+
+	Node node = this.nodeList.first;
+	while (node != null) {
+
+	    md.update(node.buf, 0, node.curLen);
+	    node = node.next;
 	}
 	return md.digest();
     }
 
     public void iterate(NodeIterator iterator) throws IOException {
-	Node n = this.nodeList.first;
-	while (n != null) {
-	    if (n != this.nodeList.last) {
-		iterator.nextNode(n.buf, n.buf.length);
-	    } else {
-		iterator.nextNode(n.buf, this.lastLen);
-	    }
-	    n = n.next;
+	Node node = this.nodeList.first;
+	while (node != null) {
+
+	    iterator.nextNode(node.buf, node.curLen);
+	    node = node.next;
 	}
     }
 
@@ -183,7 +172,7 @@ public class MemoryStream extends OutputStream implements Serializable {
 
     @Override
     public String toString() {
-	return STR.fmt("{}: size={}, blockSize={}, nodeCount={}", ObjectUtils.toIdHash(this), this.count, this.blockSize, this.getNodeCount());
+	return STR.fmt("{}: blockSize={}, nodeCount={}, size={}", ObjectUtils.toIdHash(this), this.blockSize, this.getNodeCount(), this.count);
     }
 
     public int getBlockSize() {
@@ -200,100 +189,46 @@ public class MemoryStream extends OutputStream implements Serializable {
 
     public void reset() {
 	this.nodeList.first.next = null;
+	this.nodeList.first.curLen = 0;
 	this.nodeList.last = this.nodeList.first;
 
 	this.count = 0;
-	this.lastLen = 0;
+	this.nodeCount = 1;
     }
 
-    public InputStream toInputStream() {
-	return new InputStream() {
-
-	    private Node curNode = nodeList.first;
-	    private int curPos = 0;
-
-	    @Override
-	    public int read() throws IOException {
-		if (this.curNode == null) {
-		    return -1;
-		}
-
-		if (this.curPos >= this.curNode.buf.length) {
-		    this.curNode = this.curNode.next;
-		    this.curPos = 0;
-		}
-
-		if (this.curNode == null) {
-		    return -1;
-		}
-
-		return this.curNode.buf[this.curPos++] & 0xFF;
-	    }
-
-	    @Override
-	    public int read(byte[] b, int off, int len) throws IOException {
-		if (this.curNode == null) {
-		    return -1;
-		}
-
-		int totalRead = 0;
-		while (len > 0 && this.curNode != null) {
-
-		    int bytesAv = this.curNode.buf.length - this.curPos;
-		    int bytesToRead = Math.min(bytesAv, len);
-		    System.arraycopy(this.curNode.buf, this.curPos, b, off, bytesToRead);
-
-		    off += bytesToRead;
-		    len -= bytesToRead;
-		    totalRead += bytesToRead;
-		    this.curPos += bytesToRead;
-
-		    if (this.curPos >= this.curNode.buf.length) {
-			this.curNode = this.curNode.next;
-			this.curPos = 0;
-		    }
-		}
-		return totalRead == 0 ? -1 : totalRead;
-	    }
-
-	    @Override
-	    public void close() throws IOException {
-	    }
-	};
-    }
     // Implements Serializable
 
     private void writeObject(ObjectOutputStream out) throws IOException {
 	out.writeInt(this.blockSize);
 	out.writeLong(this.count);
-	out.writeInt(this.lastLen);
 	out.writeInt(getNodeCount());
 
-	Node n = this.nodeList.first;
-	while (n != null) {
+	Node node = this.nodeList.first;
+	while (node != null) {
 
-	    out.writeInt(n.buf.length);
-	    out.write(n.buf, 0, n.buf.length);
+	    out.writeInt(node.buf.length);
+	    out.writeInt(node.curLen);
+	    out.write(node.buf, 0, node.buf.length);
 
-	    n = n.next;
+	    node = node.next;
 	}
     }
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
 	this.blockSize = in.readInt();
 	this.count = in.readLong();
-	this.lastLen = in.readInt();
 
 	int nodeCount = in.readInt();
 	while (nodeCount > 0) {
 
 	    byte[] buf = new byte[in.readInt()];
+	    int curLen = in.readInt();
 	    in.readFully(buf, 0, buf.length);
 
 	    if (this.nodeList == null) {
-		this.nodeList = new NodeList(buf);
+		this.nodeList = new NodeList(new Node(buf, curLen));
 	    } else {
-		this.nodeList.insert(buf);
+		this.nodeList.insert(new Node(buf, curLen));
 	    }
 	    nodeCount--;
 	}
@@ -307,23 +242,24 @@ public class MemoryStream extends OutputStream implements Serializable {
 	final Node first;
 	Node last;
 
-	public NodeList(byte[] buf) {
-	    this.last = this.first = new Node(buf);
+	public NodeList(Node first) {
+	    this.last = this.first = first;
 	}
 
-	public void insert(byte[] buf) {
-	    Node n = new Node(buf);
-	    this.last.next = n;
-	    this.last = n;
+	public void insert(Node node) {
+	    this.last.next = node;
+	    this.last = node;
 	}
     }
 
     private static class Node {
 	final byte[] buf;
 	Node next;
+	int curLen = 0;
 
-	public Node(byte[] buf) {
+	public Node(byte[] buf, int len) {
 	    this.buf = buf;
+	    this.curLen = len;
 	}
     }
 }
