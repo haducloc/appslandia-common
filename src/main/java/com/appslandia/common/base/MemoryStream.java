@@ -21,11 +21,11 @@
 package com.appslandia.common.base;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -177,8 +177,8 @@ public class MemoryStream extends OutputStream implements Serializable {
 	return new String(toByteArray(), 0, (int) this.count, charset);
     }
 
-    public String toString(String charset) throws UnsupportedEncodingException {
-	return new String(toByteArray(), 0, (int) this.count, charset);
+    public String toString(String charsetName) {
+	return toString(Charset.forName(charsetName));
     }
 
     @Override
@@ -206,6 +206,61 @@ public class MemoryStream extends OutputStream implements Serializable {
 	this.lastLen = 0;
     }
 
+    public InputStream toInputStream() {
+	return new InputStream() {
+
+	    private Node curNode = nodeList.first;
+	    private int curPos = 0;
+
+	    @Override
+	    public int read() throws IOException {
+		if (this.curNode == null) {
+		    return -1;
+		}
+
+		if (this.curPos >= this.curNode.buf.length) {
+		    this.curNode = this.curNode.next;
+		    this.curPos = 0;
+		}
+
+		if (this.curNode == null) {
+		    return -1;
+		}
+
+		return this.curNode.buf[this.curPos++] & 0xFF;
+	    }
+
+	    @Override
+	    public int read(byte[] b, int off, int len) throws IOException {
+		if (this.curNode == null) {
+		    return -1;
+		}
+
+		int totalRead = 0;
+		while (len > 0 && this.curNode != null) {
+
+		    int bytesAv = this.curNode.buf.length - this.curPos;
+		    int bytesToRead = Math.min(bytesAv, len);
+		    System.arraycopy(this.curNode.buf, this.curPos, b, off, bytesToRead);
+
+		    off += bytesToRead;
+		    len -= bytesToRead;
+		    totalRead += bytesToRead;
+		    this.curPos += bytesToRead;
+
+		    if (this.curPos >= this.curNode.buf.length) {
+			this.curNode = this.curNode.next;
+			this.curPos = 0;
+		    }
+		}
+		return totalRead == 0 ? -1 : totalRead;
+	    }
+
+	    @Override
+	    public void close() throws IOException {
+	    }
+	};
+    }
     // Implements Serializable
 
     private void writeObject(ObjectOutputStream out) throws IOException {
