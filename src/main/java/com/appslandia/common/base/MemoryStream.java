@@ -93,8 +93,9 @@ public class MemoryStream extends OutputStream implements Serializable {
 	    lastNode.curLen += len;
 
 	} else {
-	    int addBlocks = (len - lenAv) / (this.blockSize);
-	    if (addBlocks * this.blockSize < (len - lenAv)) {
+	    int moreLen = len - lenAv;
+	    int addBlocks = moreLen / (this.blockSize);
+	    if (addBlocks * this.blockSize < moreLen) {
 		addBlocks++;
 	    }
 	    byte[] newBuf = new byte[addBlocks * this.blockSize];
@@ -105,10 +106,10 @@ public class MemoryStream extends OutputStream implements Serializable {
 		System.arraycopy(b, off, lastNode.buf, lastNode.curLen, lenAv);
 		lastNode.curLen = lastNode.buf.length;
 
-		System.arraycopy(b, off + lenAv, newBuf, 0, len - lenAv);
+		System.arraycopy(b, off + lenAv, newBuf, 0, moreLen);
 	    }
 
-	    this.nodeList.insert(new Node(newBuf, len - lenAv));
+	    this.nodeList.insert(new Node(newBuf, moreLen));
 	    this.nodeCount += 1;
 	}
 	this.count += len;
