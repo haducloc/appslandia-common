@@ -24,8 +24,9 @@ import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.Objects;
+
+import com.appslandia.common.utils.DateUtils;
 
 /**
  *
@@ -144,13 +145,7 @@ public class FormatProviderImpl implements FormatProvider {
 	if (this.dateFormats != null) {
 	    return this.dateFormats;
 	}
-	return this.dateFormats = new ProviderMap<String, DateFormat>((pattern) -> {
-	    SimpleDateFormat impl = new SimpleDateFormat(pattern);
-
-	    // No lenient parsing
-	    impl.setLenient(false);
-	    return impl;
-	});
+	return this.dateFormats = new ProviderMap<String, DateFormat>((pattern) -> DateUtils.newDateFormat(pattern));
     }
 
     static final class NumberFormatKey {
