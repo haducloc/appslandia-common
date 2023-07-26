@@ -27,7 +27,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -262,9 +261,8 @@ public class ObjectFactory extends InitializeObject {
 
 		    // @Inject @Instance<T>
 		    Asserts.isTrue(field.getGenericType() instanceof ParameterizedType);
-		    Type argType = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
-		    Asserts.isTrue(argType instanceof Class);
-		    Class<?> type = (Class<?>) argType;
+		    Class<?> type = ReflectionUtils.getArgTypes1(field.getGenericType());
+		    Asserts.notNull(type);
 
 		    // InstanceImpl
 		    List<ObjectInstance> insts = getObjectInsts(type, qualifiers);
