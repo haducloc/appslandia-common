@@ -204,7 +204,7 @@ public class ReflectionUtils {
 	}
     }
 
-    public static Class<?> getListArgType(Type genericType) {
+    public static Class<?> getArgTypes1(Type genericType) {
 	if (!(genericType instanceof ParameterizedType)) {
 	    return null;
 	}
@@ -219,7 +219,7 @@ public class ReflectionUtils {
 	return (Class<?>) type;
     }
 
-    public static Class<?>[] getMapArgTypes(Type genericType) {
+    public static Class<?>[] getArgTypes2(Type genericType) {
 	if (!(genericType instanceof ParameterizedType)) {
 	    return null;
 	}
