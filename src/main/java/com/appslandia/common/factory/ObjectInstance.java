@@ -30,7 +30,7 @@ import java.util.function.Function;
 public class ObjectInstance {
 
     final ObjectDefinition definition;
-    private volatile Object instance;
+    volatile Object singleton;
     final Function<ObjectDefinition, Object> factory;
 
     final Object mutex = new Object();
@@ -51,18 +51,14 @@ public class ObjectInstance {
 	}
 
 	// SINGLETON
-	Object obj = this.instance;
+	Object obj = this.singleton;
 	if (obj == null) {
 	    synchronized (this.mutex) {
-		if ((obj = this.instance) == null) {
-		    this.instance = obj = this.factory.apply(this.definition);
+		if ((obj = this.singleton) == null) {
+		    this.singleton = obj = this.factory.apply(this.definition);
 		}
 	    }
 	}
 	return obj;
-    }
-
-    public void clearInstance() {
-	this.instance = null;
     }
 }

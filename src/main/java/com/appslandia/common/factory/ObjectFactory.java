@@ -417,7 +417,7 @@ public class ObjectFactory extends InitializeObject {
     @Override
     public void destroy() throws ObjectException {
 	for (ObjectInstance inst : this.instances) {
-	    Object obj = inst.getInstance();
+	    Object obj = inst.singleton;
 	    if (obj == null) {
 		continue;
 	    }
@@ -426,7 +426,7 @@ public class ObjectFactory extends InitializeObject {
 	    } else {
 		inst.definition.getProducer().destroy(obj);
 	    }
-	    inst.clearInstance();
+	    inst.singleton = null;
 	}
     }
 
