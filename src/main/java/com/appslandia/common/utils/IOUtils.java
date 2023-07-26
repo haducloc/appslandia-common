@@ -78,7 +78,7 @@ public class IOUtils {
 
     public static int copy(Reader r, Writer w) throws IOException {
 	int count = 0;
-	char[] buf = new char[DEFAULT_BUFFER_SIZE];
+	char[] buf = new char[DEFAULT_BUFFER_SIZE / 2];
 	int c = -1;
 	while ((c = r.read(buf, 0, buf.length)) != -1) {
 	    w.write(buf, 0, c);
