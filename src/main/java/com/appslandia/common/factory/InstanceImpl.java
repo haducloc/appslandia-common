@@ -21,10 +21,10 @@
 package com.appslandia.common.factory;
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -97,7 +97,7 @@ public class InstanceImpl<T> implements Instance<T> {
 	    return this;
 	}
 	Annotation[] childQualifiers = getChildQualifiers(qualifiers);
-	List<ObjectInstance> sub = new ArrayList<>();
+	List<ObjectInstance> sub = new LinkedList<>();
 
 	for (ObjectInstance objInst : this.instances) {
 	    if (AnnotationUtils.hasAnnotations(objInst.definition.getQualifiers(), childQualifiers)) {
@@ -115,7 +115,7 @@ public class InstanceImpl<T> implements Instance<T> {
 	    return ObjectUtils.cast(this);
 	}
 	Annotation[] childQualifiers = getChildQualifiers(qualifiers);
-	List<ObjectInstance> sub = new ArrayList<>();
+	List<ObjectInstance> sub = new LinkedList<>();
 
 	for (ObjectInstance objInst : this.instances) {
 	    if (AnnotationUtils.hasAnnotations(objInst.definition.getQualifiers(), childQualifiers)) {
