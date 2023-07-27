@@ -154,7 +154,8 @@ public class ObjectFactory extends InitializeObject {
 	if (qualifiers == null) {
 	    qualifiers = AnnotationUtils.parseQualifiers(producer);
 	}
-	ObjectInstance inst = new ObjectInstance(new ObjectDefinition().setTypes(types).setQualifiers(qualifiers).setScope(scope).setProducer(producer), (d) -> produceObject(d));
+	ObjectInstance inst = new ObjectInstance(this, new ObjectDefinition().setTypes(types).setQualifiers(qualifiers).setScope(scope).setProducer(producer),
+		(d) -> produceObject(d));
 	this.instances.add(inst);
 	return this;
     }
@@ -193,7 +194,8 @@ public class ObjectFactory extends InitializeObject {
 	if (qualifiers == null) {
 	    qualifiers = AnnotationUtils.parseQualifiers(implClass);
 	}
-	ObjectInstance inst = new ObjectInstance(
+
+	ObjectInstance inst = new ObjectInstance(this,
 		new ObjectDefinition().setTypes(expTypes.toArray(new Class<?>[expTypes.size()])).setQualifiers(qualifiers).setScope(scope).setImplClass(implClass),
 		(d) -> produceObject(d));
 	this.instances.add(inst);
@@ -225,9 +227,9 @@ public class ObjectFactory extends InitializeObject {
 	return unregister(type, AnnotationUtils.parseQualifiers(implClass));
     }
 
-    public <T> Instance<T> select(Class<T> subtype, Annotation... qualifiers) throws ObjectException {
-	List<ObjectInstance> insts = getObjectInsts(subtype, qualifiers);
-	return new InstanceImpl<>(subtype, qualifiers, insts);
+    public <T> Instance<T> select(Class<T> type, Annotation... qualifiers) throws ObjectException {
+	List<ObjectInstance> insts = getObjectInsts(type, qualifiers);
+	return new InstanceImpl<>(type, qualifiers, insts);
     }
 
     public ObjectFactory inject(final Object obj) throws ObjectException {
@@ -294,6 +296,7 @@ public class ObjectFactory extends InitializeObject {
     private Object[] createArguments(Parameter[] parameters) throws ObjectException {
 	Object[] args = new Object[parameters.length];
 	for (int i = 0; i < parameters.length; i++) {
+
 	    Parameter parameter = parameters[i];
 	    args[i] = getObject(parameter.getType(), AnnotationUtils.parseQualifiers(parameter));
 	}
@@ -310,6 +313,7 @@ public class ObjectFactory extends InitializeObject {
 	    // Constructor
 	    Constructor<?> emptyCtor = null, injectCtor = null;
 	    for (Constructor<?> ctor : definition.getImplClass().getDeclaredConstructors()) {
+
 		if (ctor.getDeclaredAnnotation(Inject.class) != null) {
 		    injectCtor = ctor;
 		    break;
@@ -321,6 +325,7 @@ public class ObjectFactory extends InitializeObject {
 	    if ((injectCtor == null) && (emptyCtor == null)) {
 		throw new ObjectException(STR.fmt("Couldn't instantiate '{}'.", definition.getImplClass()));
 	    }
+
 	    Object instance = null;
 	    if (injectCtor != null) {
 		injectCtor.setAccessible(true);
@@ -329,6 +334,8 @@ public class ObjectFactory extends InitializeObject {
 		emptyCtor.setAccessible(true);
 		instance = emptyCtor.newInstance(ReflectionUtils.EMPTY_OBJECTS);
 	    }
+
+	    // Inject & Invoke @PostConstruct
 	    return this.inject(instance).postConstruct(instance);
 
 	} catch (ObjectException ex) {
@@ -338,11 +345,11 @@ public class ObjectFactory extends InitializeObject {
 	}
     }
 
-    private List<ObjectInstance> getObjectInsts(Class<?> type, Annotation[] subQualifiers) throws ObjectException {
+    private List<ObjectInstance> getObjectInsts(Class<?> type, Annotation[] qualifiers) throws ObjectException {
 	List<ObjectInstance> insts = new ArrayList<>();
 	for (ObjectInstance inst : this.instances) {
 
-	    if ((inst.definition.hasType(type) || (type == Object.class)) && AnnotationUtils.hasAnnotations(inst.definition.getQualifiers(), subQualifiers)) {
+	    if ((inst.definition.hasType(type) || (type == Object.class)) && AnnotationUtils.hasAnnotations(inst.definition.getQualifiers(), qualifiers)) {
 		insts.add(inst);
 	    }
 	}
@@ -352,6 +359,7 @@ public class ObjectFactory extends InitializeObject {
     private ObjectInstance getObjectInst(Class<?> type, Annotation[] qualifiers) throws ObjectException {
 	ObjectInstance obj = null;
 	for (ObjectInstance inst : this.instances) {
+
 	    if ((inst.definition.hasType(type) || (type == Object.class)) && AnnotationUtils.equals(inst.definition.getQualifiers(), qualifiers)) {
 		if (obj != null) {
 		    throw new ObjectException(STR.fmt("Ambiguous dependency: type={}, qualifiers={}.", type, Arrays.toString(qualifiers)));
@@ -362,10 +370,6 @@ public class ObjectFactory extends InitializeObject {
 	return obj;
     }
 
-    public <T, I extends T> I getObject(Class<T> type) throws ObjectException {
-	return getObject(type, ReflectionUtils.EMPTY_ANNOTATIONS);
-    }
-
     public <T, I extends T> I getObject(Class<T> type, Annotation... qualifiers) throws ObjectException {
 	initialize();
 	Asserts.notNull(type);
@@ -374,6 +378,7 @@ public class ObjectFactory extends InitializeObject {
 	if (ObjectFactory.class.isAssignableFrom(type)) {
 	    return ObjectUtils.cast(this);
 	}
+
 	ObjectInstance inst = getObjectInst(type, qualifiers);
 	if (inst == null) {
 	    throw new ObjectException(STR.fmt("Unsatisfied dependency: type={}, qualifiers={}.", type, Arrays.toString(qualifiers)));
@@ -384,6 +389,7 @@ public class ObjectFactory extends InitializeObject {
     public <T> T postConstruct(T obj) throws ObjectException {
 	initialize();
 	Asserts.notNull(obj);
+
 	ReflectionUtils.traverse(obj.getClass(), new ReflectionUtils.MethodHandler() {
 
 	    @Override
@@ -407,30 +413,20 @@ public class ObjectFactory extends InitializeObject {
 	return obj;
     }
 
-    public <T> T preDestroy(T obj) throws ObjectException {
-	initialize();
-	Asserts.notNull(obj);
-	ObjectFactoryUtils.destroy(obj);
-	return obj;
-    }
-
     @Override
     public void destroy() throws ObjectException {
 	for (ObjectInstance inst : this.instances) {
 	    Object obj = inst.singleton;
+
 	    if (obj == null) {
 		continue;
 	    }
-	    if (inst.definition.getProducer() == null) {
-		preDestroy(obj);
-	    } else {
-		inst.definition.getProducer().destroy(obj);
-	    }
-	    inst.singleton = null;
+	    inst.destroy(obj);
 	}
     }
 
     public Iterator<ObjectDefinition> getDefinitionIterator() {
+	initialize();
 	return new Iterator<ObjectDefinition>() {
 	    int index = -1;
 
@@ -465,9 +461,11 @@ public class ObjectFactory extends InitializeObject {
 	public void traverse(Class<?> implClass) throws ObjectException {
 	    Class<?> clazz = null;
 	    if (isValidationContext()) {
+
 		// Constructor
 		for (Constructor<?> ctor : implClass.getDeclaredConstructors()) {
 		    if (ctor.getDeclaredAnnotation(Inject.class) != null) {
+
 			for (Parameter parameter : ctor.getParameters()) {
 			    onParameter(parameter);
 			}
@@ -479,6 +477,7 @@ public class ObjectFactory extends InitializeObject {
 		clazz = implClass;
 		while (clazz != Object.class) {
 		    Method[] methods = clazz.getDeclaredMethods();
+
 		    for (Method method : methods) {
 			if (method.getDeclaredAnnotation(Inject.class) != null) {
 			    for (Parameter parameter : method.getParameters()) {
@@ -494,6 +493,7 @@ public class ObjectFactory extends InitializeObject {
 	    clazz = implClass;
 	    while (clazz != Object.class) {
 		Field[] fields = clazz.getDeclaredFields();
+
 		for (Field field : fields) {
 		    if (field.getDeclaredAnnotation(Inject.class) != null) {
 			onField(field);
@@ -507,6 +507,7 @@ public class ObjectFactory extends InitializeObject {
 		clazz = implClass;
 		while (clazz != Object.class) {
 		    Method[] methods = clazz.getDeclaredMethods();
+
 		    for (Method method : methods) {
 			if (method.getDeclaredAnnotation(Inject.class) != null) {
 			    onMethod(method);

@@ -22,6 +22,8 @@ package com.appslandia.common.factory;
 
 import java.util.function.Function;
 
+import com.appslandia.common.utils.Asserts;
+
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
@@ -29,15 +31,17 @@ import java.util.function.Function;
  */
 public class ObjectInstance {
 
+    final ObjectFactory factory;
     final ObjectDefinition definition;
-    volatile Object singleton;
-    final Function<ObjectDefinition, Object> factory;
+    final Function<ObjectDefinition, Object> producer;
 
+    volatile Object singleton;
     final Object mutex = new Object();
 
-    public ObjectInstance(ObjectDefinition definition, Function<ObjectDefinition, Object> factory) {
-	this.definition = definition;
+    public ObjectInstance(ObjectFactory factory, ObjectDefinition definition, Function<ObjectDefinition, Object> producer) {
 	this.factory = factory;
+	this.definition = definition;
+	this.producer = producer;
     }
 
     public ObjectDefinition getDefinition() {
@@ -47,7 +51,7 @@ public class ObjectInstance {
     public Object getInstance() {
 	// PROTOTYPE
 	if (this.definition.getScope() == ObjectScope.PROTOTYPE) {
-	    return factory.apply(this.definition);
+	    return producer.apply(this.definition);
 	}
 
 	// SINGLETON
@@ -55,10 +59,39 @@ public class ObjectInstance {
 	if (obj == null) {
 	    synchronized (this.mutex) {
 		if ((obj = this.singleton) == null) {
-		    this.singleton = obj = this.factory.apply(this.definition);
+		    this.singleton = obj = this.producer.apply(this.definition);
 		}
 	    }
 	}
 	return obj;
+    }
+
+    public boolean destroy(Object impl) {
+	Asserts.notNull(impl);
+
+	if (impl == this.singleton) {
+	    Asserts.isTrue(this.definition.getScope() == ObjectScope.SINGLETON);
+
+	    if (this.definition.getProducer() != null) {
+		this.definition.getProducer().destroy(impl);
+	    } else {
+		ObjectFactoryUtils.preDestroy(impl);
+	    }
+
+	    this.singleton = null;
+	    return true;
+
+	} else {
+	    Asserts.isTrue(this.definition.getScope() == ObjectScope.PROTOTYPE);
+
+	    for (Class<?> type : this.definition.getTypes()) {
+		if (type.isInstance(impl)) {
+
+		    ObjectFactoryUtils.preDestroy(impl);
+		    return true;
+		}
+	    }
+	    return false;
+	}
     }
 }

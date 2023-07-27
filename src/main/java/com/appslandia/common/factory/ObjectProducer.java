@@ -20,8 +20,6 @@
 
 package com.appslandia.common.factory;
 
-import com.appslandia.common.utils.Asserts;
-
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
@@ -33,7 +31,5 @@ public interface ObjectProducer<T> {
     T produce(ObjectFactory factory) throws ObjectException;
 
     default void destroy(Object obj) throws ObjectException {
-	Asserts.notNull(obj);
-	ObjectFactoryUtils.destroy(obj);
     }
 }

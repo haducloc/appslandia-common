@@ -35,10 +35,11 @@ import jakarta.annotation.PreDestroy;
  */
 public class ObjectFactoryUtils {
 
-    public static void destroy(Object obj) throws ObjectException {
+    public static void preDestroy(Object obj) throws ObjectException {
 	Asserts.notNull(obj);
 
 	ReflectionUtils.traverse(obj.getClass(), new ReflectionUtils.MethodHandler() {
+
 	    @Override
 	    public boolean matches(Method m) {
 		return m.getDeclaredAnnotation(PreDestroy.class) != null;

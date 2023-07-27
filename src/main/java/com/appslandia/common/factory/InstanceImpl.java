@@ -119,6 +119,7 @@ public class InstanceImpl<T> implements Instance<T> {
 
 	for (ObjectInstance objInst : this.instances) {
 	    if (AnnotationUtils.hasAnnotations(objInst.definition.getQualifiers(), childQualifiers)) {
+
 		if (subtype.isInstance(objInst.getInstance())) {
 		    sub.add(objInst);
 		}
@@ -143,9 +144,13 @@ public class InstanceImpl<T> implements Instance<T> {
     }
 
     @Override
-    public void destroy(T instance) {
-	Asserts.notNull(instance);
-	ObjectFactoryUtils.destroy(instance);
+    public void destroy(T impl) {
+	for (ObjectInstance objInst : this.instances) {
+	    if (objInst.destroy(impl)) {
+		return;
+	    }
+	}
+	throw new UnsupportedOperationException("destroy(" + impl.getClass().getName() + ")");
     }
 
     private Annotation[] getChildQualifiers(Annotation[] qualifiers) {
