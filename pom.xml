@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.appslandia</groupId>
 	<artifactId>appslandia-common</artifactId>
-	<version>16.6.6</version>
+	<version>16.6.8</version>
 	<name>appslandia-common</name>
 	<packaging>jar</packaging>
 	<description>AppsLandia Common - Java Utilities</description>
