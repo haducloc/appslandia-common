@@ -24,6 +24,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -212,6 +213,18 @@ public class ArrayUtils {
 	    Array.set(ca, i, Array.get(arr, i));
 	}
 	return (Object[]) ca;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T[] toArray(Enumeration<T> enumer, Class<T> elementType) {
+	if (enumer == null) {
+	    return null;
+	}
+	List<T> values = new ArrayList<>();
+	while (enumer.hasMoreElements()) {
+	    values.add(enumer.nextElement());
+	}
+	return values.toArray((T[]) Array.newInstance(elementType, values.size()));
     }
 
     public static List<Object> toList(Object arr) {
