@@ -132,30 +132,71 @@ public class ParseUtils {
 	}
     }
 
-    public static <T> T parseValue(String value, Function<String, T> converter) {
-	if (value == null) {
-	    return null;
-	}
-	return converter.apply(value);
+    public static Boolean parseBoolObj(String value) throws BoolFormatException {
+	return (value != null) ? parseBool(value) : null;
     }
 
-    public static Boolean parseBoolObj(String value) throws BoolFormatException {
+    public static Boolean parseBoolObj(String value, Boolean defaultValue) {
 	if (value == null) {
 	    return null;
 	}
-	return parseBool(value);
+	try {
+	    return parseBool(value);
+	} catch (BoolFormatException ex) {
+	    return defaultValue;
+	}
     }
 
     public static Integer parseIntObj(String value) throws NumberFormatException {
 	return (value != null) ? Integer.parseInt(value) : null;
     }
 
+    public static Integer parseIntObj(String value, Integer defaultValue) {
+	if (value == null) {
+	    return null;
+	}
+	try {
+	    return Integer.parseInt(value);
+	} catch (NumberFormatException ex) {
+	    return defaultValue;
+	}
+    }
+
     public static Long parseLongObj(String value) throws NumberFormatException {
 	return (value != null) ? Long.parseLong(value) : null;
     }
 
+    public static Long parseLongObj(String value, Long defaultValue) {
+	if (value == null) {
+	    return null;
+	}
+	try {
+	    return Long.parseLong(value);
+	} catch (NumberFormatException ex) {
+	    return defaultValue;
+	}
+    }
+
     public static Double parseDoubleObj(String value) throws NumberFormatException {
 	return (value != null) ? Double.parseDouble(value) : null;
+    }
+
+    public static Double parseDoubleObj(String value, Double defaultValue) {
+	if (value == null) {
+	    return null;
+	}
+	try {
+	    return Double.parseDouble(value);
+	} catch (NumberFormatException ex) {
+	    return defaultValue;
+	}
+    }
+
+    public static <T> T parseValue(String value, Function<String, T> converter) {
+	if (value == null) {
+	    return null;
+	}
+	return converter.apply(value);
     }
 
     public static boolean isTrueValue(String value) {
