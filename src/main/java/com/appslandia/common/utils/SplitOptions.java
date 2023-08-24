@@ -20,37 +20,22 @@
 
 package com.appslandia.common.utils;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Locale;
-
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class CharsetUtils {
+public class SplitOptions {
 
-    public static String parseCharset(String contentType) {
-	if (contentType == null) {
-	    return StandardCharsets.UTF_8.name();
-	}
-	return parseCharset(contentType, StandardCharsets.UTF_8.name());
+    public static int TRIM_ENTRIES = 1;
+
+    public static int REMOVE_EMPTY_ENTRIES = 2;
+
+    public static boolean isTrimEntries(int flag) {
+	return (flag & TRIM_ENTRIES) == TRIM_ENTRIES;
     }
 
-    public static String parseCharset(String contentType, String defaultValue) {
-	if (contentType == null) {
-	    return defaultValue;
-	}
-
-	int idx = contentType.indexOf(';');
-	if (idx < 0) {
-	    return defaultValue;
-	}
-	String charset = contentType.substring(idx + 1).trim();
-
-	if (charset.toLowerCase(Locale.ENGLISH).startsWith("charset=")) {
-	    return charset.substring(8);
-	}
-	return defaultValue;
+    public static boolean isRemoveEmptyEntries(int flag) {
+	return (flag & REMOVE_EMPTY_ENTRIES) == REMOVE_EMPTY_ENTRIES;
     }
 }

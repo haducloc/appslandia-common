@@ -79,7 +79,7 @@ public class DMSLocation {
 	Asserts.notNull(dmsLocation);
 	Asserts.isTrue(DMS_LOCATION_PATTERN.matcher(dmsLocation).matches(), () -> STR.fmt("dmsLocation {} is invalid.", dmsLocation));
 
-	String[] items = SplitUtils.split(dmsLocation, ',');
+	String[] items = SplitUtils.splitByComma(dmsLocation);
 
 	GeoDMS dms1 = GeoDMS.toGeoDMS(items[0]);
 	GeoDMS dms2 = GeoDMS.toGeoDMS(items[1]);

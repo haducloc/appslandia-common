@@ -67,7 +67,7 @@ public class TagUtils {
 
 	// Parse tags
 	final Out<Boolean> valid = new Out<>();
-	for (String tag : SplitUtils.split(tags, ',')) {
+	for (String tag : SplitUtils.splitByComma(tags)) {
 	    tag = toTag(tag, valid);
 
 	    if ((tag != null) && !result.contains(tag)) {

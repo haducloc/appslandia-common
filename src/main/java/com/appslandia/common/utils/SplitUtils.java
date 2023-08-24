@@ -34,14 +34,14 @@ public class SplitUtils {
     private static final Pattern NEWLINE_SEP_PATTERN = Pattern.compile("(\r?\n)+");
 
     public static String[] splitByLine(String str) {
-	return split(str, NEWLINE_SEP_PATTERN, false);
+	return split(str, NEWLINE_SEP_PATTERN);
     }
 
     public static String[] split(String str, Pattern separator) {
-	return split(str, separator, false);
+	return split(str, separator, SplitOptions.TRIM_ENTRIES | SplitOptions.REMOVE_EMPTY_ENTRIES);
     }
 
-    public static String[] split(String str, Pattern separator, boolean emptyToNull) {
+    public static String[] split(String str, Pattern separator, int splitOptions) {
 	if (str == null) {
 	    return StringUtils.EMPTY_ARRAY;
 	}
@@ -49,28 +49,30 @@ public class SplitUtils {
 	List<String> list = new ArrayList<>(items.length);
 
 	for (String item : items) {
-	    item = item.trim();
+	    if (SplitOptions.isTrimEntries(splitOptions)) {
+		item = item.trim();
+	    }
 
-	    if (emptyToNull) {
-		list.add(!item.isEmpty() ? item : null);
-	    } else {
+	    if (SplitOptions.isRemoveEmptyEntries(splitOptions)) {
 		if (!item.isEmpty()) {
 		    list.add(item);
 		}
+	    } else {
+		list.add(!item.isEmpty() ? item : null);
 	    }
 	}
 	return list.toArray(new String[list.size()]);
     }
 
     public static String[] splitByComma(String str) {
-	return split(str, ',', false);
+	return split(str, ',');
     }
 
     public static String[] split(String str, char separator) {
-	return split(str, separator, false);
+	return split(str, separator, SplitOptions.TRIM_ENTRIES | SplitOptions.REMOVE_EMPTY_ENTRIES);
     }
 
-    public static String[] split(String str, char separator, boolean emptyToNull) {
+    public static String[] split(String str, char separator, int splitOptions) {
 	if (str == null) {
 	    return StringUtils.EMPTY_ARRAY;
 	}
@@ -90,14 +92,18 @@ public class SplitUtils {
 		escapeNextChar = true;
 
 	    } else if (c == separator) {
-		String item = currentItem.toString().trim();
+		String item = currentItem.toString();
 
-		if (emptyToNull) {
-		    list.add(!item.isEmpty() ? item : null);
-		} else {
+		if (SplitOptions.isTrimEntries(splitOptions)) {
+		    item = item.trim();
+		}
+
+		if (SplitOptions.isRemoveEmptyEntries(splitOptions)) {
 		    if (!item.isEmpty()) {
 			list.add(item);
 		    }
+		} else {
+		    list.add(!item.isEmpty() ? item : null);
 		}
 		currentItem.setLength(0);
 
@@ -107,13 +113,18 @@ public class SplitUtils {
 	}
 
 	// Last item
-	String item = currentItem.toString().trim();
-	if (emptyToNull) {
-	    list.add(!item.isEmpty() ? item : null);
-	} else {
+	String item = currentItem.toString();
+
+	if (SplitOptions.isTrimEntries(splitOptions)) {
+	    item = item.trim();
+	}
+
+	if (SplitOptions.isRemoveEmptyEntries(splitOptions)) {
 	    if (!item.isEmpty()) {
 		list.add(item);
 	    }
+	} else {
+	    list.add(!item.isEmpty() ? item : null);
 	}
 	return list.toArray(new String[list.size()]);
     }
