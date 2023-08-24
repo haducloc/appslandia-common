@@ -27,6 +27,8 @@ package com.appslandia.common.utils;
  */
 public class SplitOptions {
 
+    public static int DONT_APPLY = 0;
+
     public static int TRIM_ENTRIES = 1;
 
     public static int REMOVE_EMPTY_ENTRIES = 2;
