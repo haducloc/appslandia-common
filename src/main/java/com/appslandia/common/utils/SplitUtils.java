@@ -38,10 +38,10 @@ public class SplitUtils {
     }
 
     public static String[] split(String str, Pattern separator) {
-	return split(str, separator, SplitOptions.TRIM_ENTRIES | SplitOptions.REMOVE_EMPTY_ENTRIES);
+	return split(str, separator, SplitOptions.TRIM_REMOVE_NULL);
     }
 
-    public static String[] split(String str, Pattern separator, int splitOptions) {
+    public static String[] split(String str, Pattern separator, SplitOptions splitOptions) {
 	if (str == null) {
 	    return StringUtils.EMPTY_ARRAY;
 	}
@@ -49,16 +49,14 @@ public class SplitUtils {
 	List<String> list = new ArrayList<>(items.length);
 
 	for (String item : items) {
-	    if (SplitOptions.isTrimEntries(splitOptions)) {
-		item = item.trim();
-	    }
+	    item = convertItem(item, splitOptions);
 
-	    if (SplitOptions.isRemoveEmptyEntries(splitOptions)) {
-		if (!item.isEmpty()) {
-		    list.add(item);
-		}
+	    if (item != null) {
+		list.add(item);
 	    } else {
-		list.add(!item.isEmpty() ? item : null);
+		if (splitOptions != SplitOptions.TRIM_REMOVE_NULL) {
+		    list.add(null);
+		}
 	    }
 	}
 	return list.toArray(new String[list.size()]);
@@ -69,10 +67,10 @@ public class SplitUtils {
     }
 
     public static String[] split(String str, char separator) {
-	return split(str, separator, SplitOptions.TRIM_ENTRIES | SplitOptions.REMOVE_EMPTY_ENTRIES);
+	return split(str, separator, SplitOptions.TRIM_REMOVE_NULL);
     }
 
-    public static String[] split(String str, char separator, int splitOptions) {
+    public static String[] split(String str, char separator, SplitOptions splitOptions) {
 	if (str == null) {
 	    return StringUtils.EMPTY_ARRAY;
 	}
@@ -92,40 +90,41 @@ public class SplitUtils {
 		escapeNextChar = true;
 
 	    } else if (c == separator) {
-		String item = currentItem.toString();
+		String item = convertItem(currentItem.toString(), splitOptions);
 
-		if (SplitOptions.isTrimEntries(splitOptions)) {
-		    item = item.trim();
-		}
-
-		if (SplitOptions.isRemoveEmptyEntries(splitOptions)) {
-		    if (!item.isEmpty()) {
-			list.add(item);
-		    }
+		if (item != null) {
+		    list.add(item);
 		} else {
-		    list.add(!item.isEmpty() ? item : null);
+		    if (splitOptions != SplitOptions.TRIM_REMOVE_NULL) {
+			list.add(null);
+		    }
 		}
-		currentItem.setLength(0);
 
+		currentItem.setLength(0);
 	    } else {
 		currentItem.append(c);
 	    }
 	}
 
 	// Last item
-	String item = currentItem.toString();
+	String item = convertItem(currentItem.toString(), splitOptions);
 
-	if (SplitOptions.isTrimEntries(splitOptions)) {
-	    item = item.trim();
-	}
-
-	if (SplitOptions.isRemoveEmptyEntries(splitOptions)) {
-	    if (!item.isEmpty()) {
-		list.add(item);
-	    }
+	if (item != null) {
+	    list.add(item);
 	} else {
-	    list.add(!item.isEmpty() ? item : null);
+	    if (splitOptions != SplitOptions.TRIM_REMOVE_NULL) {
+		list.add(null);
+	    }
 	}
 	return list.toArray(new String[list.size()]);
+    }
+
+    private static String convertItem(String item, SplitOptions splitOptions) {
+	if (splitOptions == null || splitOptions == SplitOptions.NONE) {
+	    return item;
+	} else {
+	    item = item.trim();
+	    return !item.isEmpty() ? item : null;
+	}
     }
 }

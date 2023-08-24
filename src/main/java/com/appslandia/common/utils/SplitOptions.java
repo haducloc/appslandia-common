@@ -25,19 +25,7 @@ package com.appslandia.common.utils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class SplitOptions {
+public enum SplitOptions {
 
-    public static int DONT_APPLY = 0;
-
-    public static int TRIM_ENTRIES = 1;
-
-    public static int REMOVE_EMPTY_ENTRIES = 2;
-
-    public static boolean isTrimEntries(int flag) {
-	return (flag & TRIM_ENTRIES) == TRIM_ENTRIES;
-    }
-
-    public static boolean isRemoveEmptyEntries(int flag) {
-	return (flag & REMOVE_EMPTY_ENTRIES) == REMOVE_EMPTY_ENTRIES;
-    }
+    NONE, TRIM_TO_NULL, TRIM_REMOVE_NULL
 }
