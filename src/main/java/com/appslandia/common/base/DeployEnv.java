@@ -22,8 +22,10 @@ package com.appslandia.common.base;
 
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.STR;
 import com.appslandia.common.utils.SYS;
 
 /**
@@ -123,16 +125,19 @@ public class DeployEnv {
     }
 
     public static void setCurrent(String env) {
-	setCurrent(getDeployEnv(env));
+	Asserts.notNull(env);
+	setCurrent(toDeployEnv(env));
     }
 
     @SuppressWarnings("el-syntax")
     private static DeployEnv initDeployEnv() {
 	String env = SYS.resolve("${deploy_env,env.DEPLOY_ENV:Development}");
-	return getDeployEnv(env);
+	return toDeployEnv(env);
     }
 
-    private static DeployEnv getDeployEnv(String env) {
+    private static final Pattern ENV_NAME_PATTERN = Pattern.compile("^[a-z][a-z\\d_]*", Pattern.CASE_INSENSITIVE);
+
+    private static DeployEnv toDeployEnv(String env) {
 	if (DEVELOPMENT.name.equalsIgnoreCase(env)) {
 	    return DEVELOPMENT;
 	}
@@ -144,6 +149,10 @@ public class DeployEnv {
 	}
 	if (PRODUCTION.name.equalsIgnoreCase(env)) {
 	    return PRODUCTION;
+	}
+
+	if (!ENV_NAME_PATTERN.matcher(env).matches()) {
+	    throw new IllegalArgumentException(STR.fmt("The env '{}' is invalid.", env));
 	}
 	return new DeployEnv(env);
     }
