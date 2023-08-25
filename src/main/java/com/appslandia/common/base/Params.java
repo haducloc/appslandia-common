@@ -20,7 +20,6 @@
 
 package com.appslandia.common.base;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -43,9 +42,5 @@ public class Params extends FluentMap<String, Object> {
     public Params set(String key, Object value) {
 	this.map.put(key, value);
 	return this;
-    }
-
-    public static Params of(String key, Object value) {
-	return new Params(new HashMap<>(1)).set(key, value);
     }
 }

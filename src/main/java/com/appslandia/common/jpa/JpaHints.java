@@ -46,15 +46,15 @@ public class JpaHints {
     public static final String HINT_PESSIMISTIC_LOCK_SCOPE = "jakarta.persistence.lock.scope";
     public static final String HINT_PESSIMISTIC_LOCK_TIMEOUT = "jakarta.persistence.lock.timeout";
 
-    public static final Map<String, Object> HINT_PROP_CACHE_STORE_USE = Collections.unmodifiableMap(Params.of(HINT_CACHE_STORE_MODE, CacheStoreMode.USE));
-    public static final Map<String, Object> HINT_PROP_CACHE_STORE_REFRESH = Collections.unmodifiableMap(Params.of(HINT_CACHE_STORE_MODE, CacheStoreMode.REFRESH));
-    public static final Map<String, Object> HINT_PROP_CACHE_STORE_BYPASS = Collections.unmodifiableMap(Params.of(HINT_CACHE_STORE_MODE, CacheStoreMode.BYPASS));
+    public static final Map<String, Object> HINT_PROP_CACHE_STORE_USE = Collections.unmodifiableMap(new Params().set(HINT_CACHE_STORE_MODE, CacheStoreMode.USE));
+    public static final Map<String, Object> HINT_PROP_CACHE_STORE_REFRESH = Collections.unmodifiableMap(new Params().set(HINT_CACHE_STORE_MODE, CacheStoreMode.REFRESH));
+    public static final Map<String, Object> HINT_PROP_CACHE_STORE_BYPASS = Collections.unmodifiableMap(new Params().set(HINT_CACHE_STORE_MODE, CacheStoreMode.BYPASS));
 
-    public static final Map<String, Object> HINT_PROP_CACHE_RETRIEVE_USE = Collections.unmodifiableMap(Params.of(HINT_CACHE_RETRIEVE_MODE, CacheRetrieveMode.USE));
-    public static final Map<String, Object> HINT_PROP_CACHE_RETRIEVE_BYPASS = Collections.unmodifiableMap(Params.of(HINT_CACHE_RETRIEVE_MODE, CacheRetrieveMode.BYPASS));
+    public static final Map<String, Object> HINT_PROP_CACHE_RETRIEVE_USE = Collections.unmodifiableMap(new Params().set(HINT_CACHE_RETRIEVE_MODE, CacheRetrieveMode.USE));
+    public static final Map<String, Object> HINT_PROP_CACHE_RETRIEVE_BYPASS = Collections.unmodifiableMap(new Params().set(HINT_CACHE_RETRIEVE_MODE, CacheRetrieveMode.BYPASS));
 
     public static final Map<String, Object> HINT_PROP_PESSIMISTIC_LOCK_EXTENDED = Collections
-	    .unmodifiableMap(Params.of(HINT_PESSIMISTIC_LOCK_SCOPE, PessimisticLockScope.EXTENDED));
+	    .unmodifiableMap(new Params().set(HINT_PESSIMISTIC_LOCK_SCOPE, PessimisticLockScope.EXTENDED));
 
     public static final String HINT_QUERY_READONLY = "hint.query_readonly";
 

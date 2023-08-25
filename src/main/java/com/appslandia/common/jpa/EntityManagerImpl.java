@@ -99,11 +99,11 @@ public class EntityManagerImpl implements EntityManager {
     }
 
     public <T> T findFetch(Class<T> entityClass, Object primaryKey, String graphName) {
-	return em().find(entityClass, primaryKey, Params.of(JpaHints.HINT_JPA_FETCH_GRAPH, em().createEntityGraph(graphName)));
+	return em().find(entityClass, primaryKey, new Params().set(JpaHints.HINT_JPA_FETCH_GRAPH, em().createEntityGraph(graphName)));
     }
 
     public <T> T findLoad(Class<T> entityClass, Object primaryKey, String graphName) {
-	return em().find(entityClass, primaryKey, Params.of(JpaHints.HINT_JPA_LOAD_GRAPH, em().createEntityGraph(graphName)));
+	return em().find(entityClass, primaryKey, new Params().set(JpaHints.HINT_JPA_LOAD_GRAPH, em().createEntityGraph(graphName)));
     }
 
     public <T> TypedQueryImpl<T> createQueryFetch(String qlString, Class<T> resultClass, String graphName) {
