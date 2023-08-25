@@ -19,14 +19,14 @@
 <dependency>
     <groupId>com.appslandia</groupId>
     <artifactId>appslandia-common</artifactId>
-    <version>16.8.0</version>
+    <version>{LATEST_VERSION}</version>
 </dependency>
 ```
 
 ### Gradle
 ```
 dependencies {
-   compile 'com.appslandia:appslandia-common:16.8.0'
+   compile 'com.appslandia:appslandia-common:{LATEST_VERSION}'
 }
 ```
 
