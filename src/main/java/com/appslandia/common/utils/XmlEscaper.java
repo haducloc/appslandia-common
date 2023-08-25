@@ -35,12 +35,6 @@ public class XmlEscaper {
 
     private static final int HIGHEST_SPECIAL = '>';
 
-    private static char[][] ESCAPE_XML_CONTENT = new char[HIGHEST_SPECIAL + 1][];
-    static {
-	ESCAPE_XML_CONTENT['&'] = "&amp;".toCharArray();
-	ESCAPE_XML_CONTENT['<'] = "&lt;".toCharArray();
-	ESCAPE_XML_CONTENT['>'] = "&gt;".toCharArray();
-    }
     private static char[][] ESCAPE_XML = new char[HIGHEST_SPECIAL + 1][];
     static {
 	ESCAPE_XML['&'] = "&amp;".toCharArray();
@@ -50,25 +44,8 @@ public class XmlEscaper {
 	ESCAPE_XML['\''] = "&#39;".toCharArray();
     }
 
-    public static void escapeXmlContent(Writer out, String s) throws IOException {
-	writeEscapeXml(out, s, ESCAPE_XML_CONTENT);
-    }
-
     public static void escapeXml(Writer out, String s) throws IOException {
 	writeEscapeXml(out, s, ESCAPE_XML);
-    }
-
-    public static String escapeXmlContent(String s) {
-	if (s == null) {
-	    return null;
-	}
-	try (StringWriter out = new StringWriter((int) (s.length() * 1.25f))) {
-	    writeEscapeXml(out, s, ESCAPE_XML_CONTENT);
-	    return out.toString();
-
-	} catch (IOException ex) {
-	    throw new UncheckedIOException(ex);
-	}
     }
 
     public static String escapeXml(String s) {
