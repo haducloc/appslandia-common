@@ -27,5 +27,5 @@ package com.appslandia.common.utils;
  */
 public enum SplitOptions {
 
-    NONE, TRIM_TO_NULL, TRIM_REMOVE_NULL
+    NONE, TRIM_NULL, EXCLUDE_NULL
 }

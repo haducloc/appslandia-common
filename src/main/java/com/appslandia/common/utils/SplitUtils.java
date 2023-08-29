@@ -34,11 +34,15 @@ public class SplitUtils {
     private static final Pattern NEWLINE_SEP_PATTERN = Pattern.compile("(\r?\n)+");
 
     public static String[] splitByLine(String str) {
-	return split(str, NEWLINE_SEP_PATTERN);
+	return splitByLine(str, SplitOptions.EXCLUDE_NULL);
+    }
+
+    public static String[] splitByLine(String str, SplitOptions splitOptions) {
+	return split(str, NEWLINE_SEP_PATTERN, splitOptions);
     }
 
     public static String[] split(String str, Pattern separator) {
-	return split(str, separator, SplitOptions.TRIM_REMOVE_NULL);
+	return split(str, separator, SplitOptions.EXCLUDE_NULL);
     }
 
     public static String[] split(String str, Pattern separator, SplitOptions splitOptions) {
@@ -54,7 +58,7 @@ public class SplitUtils {
 	    if (item != null) {
 		list.add(item);
 	    } else {
-		if (splitOptions != SplitOptions.TRIM_REMOVE_NULL) {
+		if (splitOptions != SplitOptions.EXCLUDE_NULL) {
 		    list.add(null);
 		}
 	    }
@@ -63,11 +67,15 @@ public class SplitUtils {
     }
 
     public static String[] splitByComma(String str) {
-	return split(str, ',');
+	return splitByComma(str, SplitOptions.EXCLUDE_NULL);
+    }
+
+    public static String[] splitByComma(String str, SplitOptions splitOptions) {
+	return split(str, ',', splitOptions);
     }
 
     public static String[] split(String str, char separator) {
-	return split(str, separator, SplitOptions.TRIM_REMOVE_NULL);
+	return split(str, separator, SplitOptions.EXCLUDE_NULL);
     }
 
     public static String[] split(String str, char separator, SplitOptions splitOptions) {
@@ -95,7 +103,7 @@ public class SplitUtils {
 		if (item != null) {
 		    list.add(item);
 		} else {
-		    if (splitOptions != SplitOptions.TRIM_REMOVE_NULL) {
+		    if (splitOptions != SplitOptions.EXCLUDE_NULL) {
 			list.add(null);
 		    }
 		}
@@ -112,7 +120,7 @@ public class SplitUtils {
 	if (item != null) {
 	    list.add(item);
 	} else {
-	    if (splitOptions != SplitOptions.TRIM_REMOVE_NULL) {
+	    if (splitOptions != SplitOptions.EXCLUDE_NULL) {
 		list.add(null);
 	    }
 	}
