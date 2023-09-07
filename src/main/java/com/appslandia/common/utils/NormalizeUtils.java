@@ -82,14 +82,16 @@ public class NormalizeUtils {
 	return normalize(text, CRLF3_PATTERNS, StringUtils.DOUBLE_LINE_SEP);
     }
 
-    private static final Pattern[] WTSP_PATTERNS = PatternUtils.compile("\\s+");
+    private static final Pattern[] CRLF_PATTERNS = PatternUtils.compile("\r?\n");
 
-    public static String normalizeString(String simpleStr) {
-	if (simpleStr == null) {
+    public static String removeCrLf(String str) {
+	if (str == null) {
 	    return null;
 	}
-	return normalize(simpleStr, WTSP_PATTERNS, " ");
+	return normalize(str, CRLF_PATTERNS, "");
     }
+
+    private static final Pattern[] WTSP_PATTERNS = PatternUtils.compile("\\s+");
 
     public static String removeSp(String str) {
 	if (str == null) {
