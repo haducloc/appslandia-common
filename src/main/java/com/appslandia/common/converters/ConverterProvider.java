@@ -49,9 +49,17 @@ public class ConverterProvider extends InitializeObject {
 	this.converters.putIfAbsent(Converter.INTEGER, new IntegerConverter());
 	this.converters.putIfAbsent(Converter.LONG, new LongConverter());
 
-	this.converters.putIfAbsent(Converter.FLOAT, new FloatConverter(3, RoundingMode.HALF_EVEN));
-	this.converters.putIfAbsent(Converter.DOUBLE, new DoubleConverter(3, RoundingMode.HALF_EVEN));
-	this.converters.putIfAbsent(Converter.BIGDECIMAL, new BigDecimalConverter(3, RoundingMode.HALF_EVEN));
+	this.converters.putIfAbsent(Converter.FLOAT, new FloatConverter(2, RoundingMode.HALF_EVEN));
+	this.converters.putIfAbsent(Converter.DOUBLE, new DoubleConverter(2, RoundingMode.HALF_EVEN));
+	this.converters.putIfAbsent(Converter.BIGDECIMAL, new BigDecimalConverter(2, RoundingMode.HALF_EVEN));
+
+	this.converters.putIfAbsent(Converter.FLOAT3, new FloatConverter(3, RoundingMode.HALF_EVEN));
+	this.converters.putIfAbsent(Converter.DOUBLE3, new DoubleConverter(3, RoundingMode.HALF_EVEN));
+	this.converters.putIfAbsent(Converter.BIGDECIMAL3, new BigDecimalConverter(3, RoundingMode.HALF_EVEN));
+
+	this.converters.putIfAbsent(Converter.FLOAT6, new FloatConverter(6, RoundingMode.HALF_EVEN));
+	this.converters.putIfAbsent(Converter.DOUBLE6, new DoubleConverter(6, RoundingMode.HALF_EVEN));
+	this.converters.putIfAbsent(Converter.BIGDECIMAL6, new BigDecimalConverter(6, RoundingMode.HALF_EVEN));
 
 	this.converters.putIfAbsent(Converter.BOOLEAN, new BooleanConverter());
 

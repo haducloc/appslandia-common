@@ -38,6 +38,14 @@ public interface Converter<T> {
     public static final String DOUBLE = "Double";
     public static final String BIGDECIMAL = "BigDecimal";
 
+    public static final String FLOAT3 = "Float3";
+    public static final String DOUBLE3 = "Double3";
+    public static final String BIGDECIMAL3 = "BigDecimal3";
+
+    public static final String FLOAT6 = "Float6";
+    public static final String DOUBLE6 = "Double6";
+    public static final String BIGDECIMAL6 = "BigDecimal6";
+
     public static final String DATE = "Date";
 
     public static final String TIME = "Time";
