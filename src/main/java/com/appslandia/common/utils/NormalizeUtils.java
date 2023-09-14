@@ -82,7 +82,7 @@ public class NormalizeUtils {
 	return normalize(text, CRLF3_PATTERNS, StringUtils.DOUBLE_LINE_SEP);
     }
 
-    private static final Pattern[] CRLF_PATTERNS = PatternUtils.compile("\r?\n");
+    private static final Pattern[] CRLF_PATTERNS = PatternUtils.compile("\\s*\r?\n\\s*");
 
     public static String removeCrLf(String str) {
 	if (str == null) {
