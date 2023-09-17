@@ -40,7 +40,7 @@ public class CollectionUtils {
 
     @SafeVarargs
     public static <V> Set<V> unmodifiableSet(V... elements) {
-	return unmodifiableSet(new LinkedHashSet<V>(), elements);
+	return (elements.length > 0) ? unmodifiableSet(new LinkedHashSet<V>(), elements) : Collections.emptySet();
     }
 
     @SafeVarargs
@@ -61,7 +61,7 @@ public class CollectionUtils {
 
     @SafeVarargs
     public static <V> List<V> unmodifiableList(V... elements) {
-	return unmodifiableList(new ArrayList<V>(), elements);
+	return (elements.length > 0) ? unmodifiableList(new ArrayList<V>(), elements) : Collections.emptyList();
     }
 
     @SafeVarargs
@@ -81,15 +81,15 @@ public class CollectionUtils {
     }
 
     public static <V> Set<V> unmodifiable(Set<V> set) {
-	return ((set != null) && !set.isEmpty()) ? Collections.unmodifiableSet(set) : Collections.<V>emptySet();
+	return ((set != null) && !set.isEmpty()) ? Collections.unmodifiableSet(set) : Collections.emptySet();
     }
 
     public static <V> List<V> unmodifiable(List<V> list) {
-	return ((list != null) && !list.isEmpty()) ? Collections.unmodifiableList(list) : Collections.<V>emptyList();
+	return ((list != null) && !list.isEmpty()) ? Collections.unmodifiableList(list) : Collections.emptyList();
     }
 
     public static <K, V> Map<K, V> unmodifiable(Map<K, V> map) {
-	return ((map != null) && !map.isEmpty()) ? Collections.unmodifiableMap(map) : Collections.<K, V>emptyMap();
+	return ((map != null) && !map.isEmpty()) ? Collections.unmodifiableMap(map) : Collections.emptyMap();
     }
 
     public static <K, V> Map<V, K> inverse(Map<K, V> m, Map<V, K> newMap) {
