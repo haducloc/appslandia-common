@@ -28,12 +28,12 @@ import org.junit.jupiter.api.Test;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class GroupFormatTest {
+public class StringFormatTest {
 
     @Test
     public void test() {
 	try {
-	    GroupFormat format = new GroupFormat("({3}) {3}-{4}");
+	    StringFormat format = new StringFormat("({3}) {3}-{4}");
 	    String result = format.format("4024130224");
 
 	    Assertions.assertEquals(10, format.getInputLength());
@@ -47,7 +47,7 @@ public class GroupFormatTest {
     @Test
     public void test_spaces() {
 	try {
-	    GroupFormat format = new GroupFormat("({ 3 }) {  3}-{4}");
+	    StringFormat format = new StringFormat("({ 3 }) {  3}-{4}");
 	    String result = format.format("4024130224");
 
 	    Assertions.assertEquals(10, format.getInputLength());
@@ -61,7 +61,7 @@ public class GroupFormatTest {
     @Test
     public void test_noGroup() {
 	try {
-	    new GroupFormat("()");
+	    new StringFormat("()");
 	    Assertions.fail();
 
 	} catch (Exception ex) {
@@ -71,12 +71,23 @@ public class GroupFormatTest {
     @Test
     public void test_skippedFormat() {
 	try {
-	    GroupFormat format = new GroupFormat("({3}) {3}-{4}");
+	    StringFormat format = new StringFormat("({3}) {3}-{4}");
 	    String result = format.format("402413022");
 	    Assertions.assertEquals("402413022", result);
 
 	} catch (Exception ex) {
 	    Assertions.fail(ex.getMessage());
+	}
+    }
+
+    @Test
+    public void test_validate() {
+	try {
+	    StringFormat format = new StringFormat("({3}) {3}-{4}", true);
+	    format.format("402413022");
+	    Assertions.fail();
+
+	} catch (Exception ex) {
 	}
     }
 }

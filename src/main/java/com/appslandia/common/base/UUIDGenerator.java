@@ -33,7 +33,7 @@ public class UUIDGenerator implements TextGenerator {
 
     public static final UUIDGenerator INSTANCE = new UUIDGenerator();
 
-    static final GroupFormat UUID_FORMAT = new GroupFormat("{8}-{4}-{4}-{4}-{12}");
+    static final StringFormat UUID_FORMAT = new StringFormat("{8}-{4}-{4}-{4}-{12}");
 
     @Override
     public String generate() {

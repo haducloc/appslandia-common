@@ -33,22 +33,29 @@ import com.appslandia.common.utils.STR;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class GroupFormat {
-    private static final Pattern GROUP_SIZE_PATTERN = Pattern.compile("\\{\\s*\\d+\\s*}");
+public class StringFormat {
+    private static final Pattern GROUP_PATTERN = Pattern.compile("\\{\\s*\\d+\\s*}");
 
     final String format;
+    final boolean validate;
 
     private Group[] groups;
     private int inputLength;
     private int outputLength;
 
-    public GroupFormat(String format) {
+    public StringFormat(String format) {
+	this(format, false);
+    }
+
+    public StringFormat(String format, boolean validate) {
 	this.format = Asserts.notNull(format, "format is required.");
+	this.validate = validate;
+
 	this.parseFormat(format);
     }
 
     private void parseFormat(String format) {
-	Matcher matcher = GROUP_SIZE_PATTERN.matcher(format);
+	Matcher matcher = GROUP_PATTERN.matcher(format);
 	List<Group> list = new ArrayList<>();
 
 	int inputLength = 0;
@@ -87,16 +94,25 @@ public class GroupFormat {
 	return this.inputLength;
     }
 
+    public boolean isValidate() {
+	return this.validate;
+    }
+
     public String format(String str) {
 	if (str == null) {
 	    return null;
 	}
 	if (str.length() != this.inputLength) {
+	    if (this.validate) {
+		throw new IllegalArgumentException(STR.fmt("The given string '{}' has an invalid length for formatting.", str));
+	    }
 	    return str;
 	}
+
 	StringBuilder sb = new StringBuilder(this.outputLength);
 	int pos = 0;
 	for (Group group : this.groups) {
+
 	    if (group.length > 0) {
 		sb.append(str.substring(pos, group.length + pos));
 		pos += group.length;
