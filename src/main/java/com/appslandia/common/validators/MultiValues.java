@@ -27,6 +27,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Arrays;
 
+import com.appslandia.common.base.AssertException;
+import com.appslandia.common.utils.STR;
 import com.appslandia.common.utils.SplitOptions;
 import com.appslandia.common.utils.SplitUtils;
 
@@ -52,7 +54,9 @@ public @interface MultiValues {
 
     Class<? extends Payload>[] payload() default {};
 
-    String[] value();
+    String[] value() default {};
+
+    int[] ints() default {};
 
     public static class ConstraintValidatorImpl implements ConstraintValidator<MultiValues, String> {
 
@@ -60,7 +64,14 @@ public @interface MultiValues {
 
 	@Override
 	public void initialize(MultiValues annotation) {
-	    this.validValues = annotation.value();
+	    String[] values = annotation.value();
+	    if (values.length == 0) {
+		values = Arrays.stream(annotation.ints()).mapToObj(v -> Integer.toString(v)).toArray(String[]::new);
+	    }
+	    if (values.length == 0) {
+		throw new AssertException(STR.fmt("The given @MultiValues {} is invalid.", annotation));
+	    }
+	    this.validValues = values;
 	}
 
 	@Override

@@ -25,6 +25,10 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.Arrays;
+
+import com.appslandia.common.base.AssertException;
+import com.appslandia.common.utils.STR;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
@@ -48,7 +52,9 @@ public @interface ValidValues {
 
     Class<? extends Payload>[] payload() default {};
 
-    String[] value();
+    String[] value() default {};
+
+    int[] ints() default {};
 
     public static class ConstraintValidatorImpl implements ConstraintValidator<ValidValues, Object> {
 
@@ -56,7 +62,14 @@ public @interface ValidValues {
 
 	@Override
 	public void initialize(ValidValues annotation) {
-	    this.validValues = annotation.value();
+	    String[] values = annotation.value();
+	    if (values.length == 0) {
+		values = Arrays.stream(annotation.ints()).mapToObj(v -> Integer.toString(v)).toArray(String[]::new);
+	    }
+	    if (values.length == 0) {
+		throw new AssertException(STR.fmt("The given @ValidValues {} is invalid.", annotation));
+	    }
+	    this.validValues = values;
 	}
 
 	@Override
