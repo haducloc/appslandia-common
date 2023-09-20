@@ -23,7 +23,6 @@ package com.appslandia.common.utils;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -46,10 +45,6 @@ public class ObjectUtils {
     @SuppressWarnings("unchecked")
     public static <F, T> T cast(F obj) throws ClassCastException {
 	return (T) obj;
-    }
-
-    public static boolean strEquals(Object a, Object b) {
-	return Objects.equals(toStringOrNull(a), toStringOrNull(b));
     }
 
     public static String toIdHash(Object obj) {

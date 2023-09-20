@@ -124,6 +124,10 @@ public class StringUtils {
 	return (str == null) || str.isEmpty();
     }
 
+    public static boolean stricmp(String str1, String str2) {
+	return (str1 == null) ? (str2 == null) : str1.equalsIgnoreCase(str2);
+    }
+
     private static final Pattern WTSP_PATTERN = Pattern.compile("\\s+");
 
     public static boolean isNullOrBlank(String str) {
