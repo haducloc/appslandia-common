@@ -25,6 +25,10 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.Arrays;
+
+import com.appslandia.common.utils.SplitOptions;
+import com.appslandia.common.utils.SplitUtils;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
@@ -38,39 +42,40 @@ import jakarta.validation.Payload;
  */
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = { ValidInts.ConstraintValidatorImpl.class })
+@Constraint(validatedBy = { MultiValues.ConstraintValidatorImpl.class })
 @Documented
-public @interface ValidInts {
+public @interface MultiValues {
 
-    String message() default "{com.appslandia.common.validators.ValidInts.message}";
+    String message() default "{com.appslandia.common.validators.MultiValues.message}";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
 
-    int[] value();
+    String[] value();
 
-    public static class ConstraintValidatorImpl implements ConstraintValidator<ValidInts, Number> {
+    public static class ConstraintValidatorImpl implements ConstraintValidator<MultiValues, String> {
 
-	private int[] validValues;
+	private String[] validValues;
 
 	@Override
-	public void initialize(ValidInts annotation) {
+	public void initialize(MultiValues annotation) {
 	    this.validValues = annotation.value();
 	}
 
 	@Override
-	public boolean isValid(Number value, ConstraintValidatorContext context) {
-	    if (value == null) {
+	public boolean isValid(String values, ConstraintValidatorContext context) {
+	    if (values == null) {
 		return true;
 	    }
-	    int valueToCheck = value.intValue();
-	    for (int validValue : this.validValues) {
-		if (validValue == valueToCheck) {
-		    return true;
+	    String[] vals = SplitUtils.splitByComma(values, SplitOptions.EXCLUDE_NULL);
+	    for (String value : vals) {
+
+		if (!Arrays.stream(this.validValues).anyMatch(v -> v.equalsIgnoreCase(value))) {
+		    return false;
 		}
 	    }
-	    return false;
+	    return true;
 	}
     }
 }

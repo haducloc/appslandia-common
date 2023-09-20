@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class ValidIntsTest {
+public class ValidValuesTest {
 
     @Test
     public void test() {
@@ -58,7 +58,7 @@ public class ValidIntsTest {
 
     private static class TestModel {
 
-	@ValidInts({ 1, 2 })
+	@ValidValues({ "1", "2" })
 	public Integer gender;
     }
 }

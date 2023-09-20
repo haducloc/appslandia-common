@@ -38,11 +38,11 @@ import jakarta.validation.Payload;
  */
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = { ValidStrings.ConstraintValidatorImpl.class })
+@Constraint(validatedBy = { ValidValues.ConstraintValidatorImpl.class })
 @Documented
-public @interface ValidStrings {
+public @interface ValidValues {
 
-    String message() default "{com.appslandia.common.validators.ValidStrings.message}";
+    String message() default "{com.appslandia.common.validators.ValidValues.message}";
 
     Class<?>[] groups() default {};
 
@@ -50,22 +50,22 @@ public @interface ValidStrings {
 
     String[] value();
 
-    public static class ConstraintValidatorImpl implements ConstraintValidator<ValidStrings, String> {
+    public static class ConstraintValidatorImpl implements ConstraintValidator<ValidValues, Object> {
 
 	private String[] validValues;
 
 	@Override
-	public void initialize(ValidStrings annotation) {
+	public void initialize(ValidValues annotation) {
 	    this.validValues = annotation.value();
 	}
 
 	@Override
-	public boolean isValid(String value, ConstraintValidatorContext context) {
+	public boolean isValid(Object value, ConstraintValidatorContext context) {
 	    if (value == null) {
 		return true;
 	    }
 	    for (String validValue : this.validValues) {
-		if (validValue.equalsIgnoreCase(value)) {
+		if (validValue.equalsIgnoreCase(value.toString())) {
 		    return true;
 		}
 	    }

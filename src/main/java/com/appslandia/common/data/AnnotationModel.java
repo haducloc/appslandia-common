@@ -21,6 +21,7 @@
 package com.appslandia.common.data;
 
 import java.lang.annotation.Annotation;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -32,9 +33,9 @@ import com.appslandia.common.validators.Email;
 import com.appslandia.common.validators.FixedLength;
 import com.appslandia.common.validators.MaxLength;
 import com.appslandia.common.validators.MinLength;
+import com.appslandia.common.validators.MultiValues;
 import com.appslandia.common.validators.Password;
-import com.appslandia.common.validators.ValidInts;
-import com.appslandia.common.validators.ValidStrings;
+import com.appslandia.common.validators.ValidValues;
 
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
@@ -293,11 +294,21 @@ public class AnnotationModel extends InitializeObject {
 	return new AnnotationModel().setAnnotationType(Digits.class).define("integer", integer).define("fraction", fraction);
     }
 
-    public static AnnotationModel validInts(int... values) {
-	return new AnnotationModel().setAnnotationType(ValidInts.class).defineArray("value", values);
+    public static AnnotationModel validValues(int... values) {
+	String[] vals = Arrays.stream(values).mapToObj(v -> Integer.toString(v)).toArray(String[]::new);
+	return validValues(vals);
     }
 
-    public static AnnotationModel validStrings(String... values) {
-	return new AnnotationModel().setAnnotationType(ValidStrings.class).defineArray("value", values);
+    public static AnnotationModel validValues(String... values) {
+	return new AnnotationModel().setAnnotationType(ValidValues.class).defineArray("value", values);
+    }
+
+    public static AnnotationModel multiValues(int... values) {
+	String[] vals = Arrays.stream(values).mapToObj(v -> Integer.toString(v)).toArray(String[]::new);
+	return multiValues(vals);
+    }
+
+    public static AnnotationModel multiValues(String... values) {
+	return new AnnotationModel().setAnnotationType(MultiValues.class).defineArray("value", values);
     }
 }
