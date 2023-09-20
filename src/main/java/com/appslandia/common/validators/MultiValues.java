@@ -58,6 +58,8 @@ public @interface MultiValues {
 
     int[] ints() default {};
 
+    Class<?> type() default String.class;
+
     public static class ConstraintValidatorImpl implements ConstraintValidator<MultiValues, String> {
 
 	private String[] validValues;
@@ -69,9 +71,14 @@ public @interface MultiValues {
 		values = Arrays.stream(annotation.ints()).mapToObj(v -> Integer.toString(v)).toArray(String[]::new);
 	    }
 	    if (values.length == 0) {
-		throw new AssertException(STR.fmt("The given @MultiValues {} is invalid.", annotation));
+		throw new AssertException(STR.fmt("The given {} is invalid. value or ints is required.", annotation));
 	    }
 	    this.validValues = values;
+
+	    // Validate type
+	    if ((annotation.type() != String.class) && (annotation.type() != int.class) && (annotation.type() != double.class)) {
+		throw new AssertException(STR.fmt("The given {} is invalid. type must be String.class|int.class|double.class", annotation));
+	    }
 	}
 
 	@Override

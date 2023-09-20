@@ -67,7 +67,7 @@ public @interface ValidValues {
 		values = Arrays.stream(annotation.ints()).mapToObj(v -> Integer.toString(v)).toArray(String[]::new);
 	    }
 	    if (values.length == 0) {
-		throw new AssertException(STR.fmt("The given @ValidValues {} is invalid.", annotation));
+		throw new AssertException(STR.fmt("The given {} is invalid. value or ints is required.", annotation));
 	    }
 	    this.validValues = values;
 	}
