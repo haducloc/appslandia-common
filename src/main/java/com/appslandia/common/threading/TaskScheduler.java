@@ -20,78 +20,100 @@
 
 package com.appslandia.common.threading;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
-
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
+import java.lang.ref.WeakReference;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
+
 public class TaskScheduler<T> {
 
-    protected final boolean cancelMayInterruptIfRunning;
-
     protected final ScheduledExecutorService executor;
-    protected final AtomicReference<ScheduledFuture<?>> taskRef = new AtomicReference<>();
+    protected final AtomicLong taskIdGenerator = new AtomicLong(1);
+    protected final Map<Long, WeakTask> taskMap = new ConcurrentHashMap<>();
 
     public TaskScheduler() {
-	this(false);
+	this(Executors.newSingleThreadScheduledExecutor());
     }
 
-    public TaskScheduler(boolean cancelMayInterruptIfRunning) {
-	this.cancelMayInterruptIfRunning = cancelMayInterruptIfRunning;
-	this.executor = Executors.newSingleThreadScheduledExecutor();
-    }
-
-    public TaskScheduler(boolean cancelMayInterruptIfRunning, ThreadFactory threadFactory) {
-	this.cancelMayInterruptIfRunning = cancelMayInterruptIfRunning;
-	this.executor = Executors.newSingleThreadScheduledExecutor(threadFactory);
-    }
-
-    public TaskScheduler(boolean cancelMayInterruptIfRunning, ScheduledExecutorService executor) {
-	this.cancelMayInterruptIfRunning = cancelMayInterruptIfRunning;
+    public TaskScheduler(ScheduledExecutorService executor) {
 	this.executor = executor;
     }
 
-    public void scheduleAtFixedRate(Task<T> task, long initialDelay, long period, TimeUnit unit) {
-	cancel();
-	this.taskRef.set(this.executor.scheduleAtFixedRate(task, initialDelay, period, unit));
+    public long scheduleAtFixedRate(Task<T> task, long initialDelay, long period, TimeUnit unit) {
+	long taskId = this.taskIdGenerator.getAndIncrement();
+	ScheduledFuture<?> scheduledFuture = this.executor.scheduleAtFixedRate(task, initialDelay, period, unit);
+
+	this.taskMap.put(taskId, new WeakTask(scheduledFuture, task.cancelMayInterruptIfRunning));
+	return taskId;
     }
 
-    public void scheduleWithFixedDelay(Task<T> task, long initialDelay, long delay, TimeUnit unit) {
-	cancel();
-	this.taskRef.set(this.executor.scheduleWithFixedDelay(task, initialDelay, delay, unit));
+    public long scheduleWithFixedDelay(Task<T> task, long initialDelay, long delay, TimeUnit unit) {
+	long taskId = this.taskIdGenerator.getAndIncrement();
+	ScheduledFuture<?> scheduledFuture = this.executor.scheduleWithFixedDelay(task, initialDelay, delay, unit);
+
+	this.taskMap.put(taskId, new WeakTask(scheduledFuture, task.cancelMayInterruptIfRunning));
+	return taskId;
     }
 
-    public void cancel() {
-	ScheduledFuture<?> t = this.taskRef.getAndSet(null);
-	if (t != null) {
-	    t.cancel(this.cancelMayInterruptIfRunning);
+    public void cancel(long taskId) {
+	WeakTask weakTask = this.taskMap.remove(taskId);
+	if (weakTask != null) {
+	    ScheduledFuture<?> t = weakTask.get();
+	    if (t != null) {
+		t.cancel(weakTask.cancelMayInterruptIfRunning);
+	    }
 	}
     }
 
-    public void shutdownNow() {
-	this.executor.shutdownNow();
+    public Set<Long> getTaskIds() {
+	return Collections.unmodifiableSet(this.taskMap.keySet());
     }
 
-    public boolean hasTask() {
-	return this.taskRef.get() != null;
+    public void shutdown() {
+	this.executor.shutdown();
+    }
+
+    public List<Task<?>> shutdownNow() {
+	List<Runnable> unstartedTasks = this.executor.shutdownNow();
+	return unstartedTasks.stream().map(t -> (Task<?>) t).collect(Collectors.toList());
     }
 
     public static abstract class Task<T> implements Runnable {
+
+	protected final boolean cancelMayInterruptIfRunning;
 	protected final T data;
 
-	public Task() {
-	    this(null);
+	public Task(T data) {
+	    this(data, true);
 	}
 
-	public Task(T data) {
+	public Task(T data, boolean cancelMayInterruptIfRunning) {
 	    this.data = data;
+	    this.cancelMayInterruptIfRunning = cancelMayInterruptIfRunning;
+	}
+    }
+
+    private static class WeakTask extends WeakReference<ScheduledFuture<?>> {
+
+	protected final boolean cancelMayInterruptIfRunning;
+
+	public WeakTask(ScheduledFuture<?> referent, boolean cancelMayInterruptIfRunning) {
+	    super(referent);
+
+	    this.cancelMayInterruptIfRunning = cancelMayInterruptIfRunning;
 	}
     }
 }
