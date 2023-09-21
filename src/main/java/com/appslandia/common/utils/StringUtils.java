@@ -128,19 +128,6 @@ public class StringUtils {
 	return (str1 == null) ? (str2 == null) : str1.equalsIgnoreCase(str2);
     }
 
-    public static int icmp(String str1, String str2, boolean nullsLess) {
-	if (str1 == null && str2 == null) {
-	    return 0;
-	}
-	if (str1 == null) {
-	    return nullsLess ? -1 : 1;
-	}
-	if (str2 == null) {
-	    return nullsLess ? 1 : -1;
-	}
-	return str1.compareToIgnoreCase(str2);
-    }
-
     private static final Pattern WTSP_PATTERN = Pattern.compile("\\s+");
 
     public static boolean isNullOrBlank(String str) {
