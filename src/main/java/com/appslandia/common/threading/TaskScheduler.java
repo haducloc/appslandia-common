@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 public class TaskScheduler<T> {
 
     protected final ScheduledExecutorService executor;
-    protected final AtomicLong taskIdGenerator = new AtomicLong(1);
+    protected final AtomicLong taskIdGenerator = new AtomicLong(0);
     protected final Map<Long, WeakTask> taskMap = new ConcurrentHashMap<>();
 
     public TaskScheduler() {
@@ -52,8 +52,20 @@ public class TaskScheduler<T> {
 	this.executor = executor;
     }
 
+    protected long nextTaskId() {
+	return this.taskIdGenerator.incrementAndGet();
+    }
+
+    public long schedule(Task<T> task, long delay, TimeUnit unit) {
+	long taskId = nextTaskId();
+	ScheduledFuture<?> scheduledFuture = this.executor.schedule(task, delay, unit);
+
+	this.taskMap.put(taskId, new WeakTask(scheduledFuture, task.cancelMayInterruptIfRunning));
+	return taskId;
+    }
+
     public long scheduleAtFixedRate(Task<T> task, long initialDelay, long period, TimeUnit unit) {
-	long taskId = this.taskIdGenerator.getAndIncrement();
+	long taskId = nextTaskId();
 	ScheduledFuture<?> scheduledFuture = this.executor.scheduleAtFixedRate(task, initialDelay, period, unit);
 
 	this.taskMap.put(taskId, new WeakTask(scheduledFuture, task.cancelMayInterruptIfRunning));
@@ -61,7 +73,7 @@ public class TaskScheduler<T> {
     }
 
     public long scheduleWithFixedDelay(Task<T> task, long initialDelay, long delay, TimeUnit unit) {
-	long taskId = this.taskIdGenerator.getAndIncrement();
+	long taskId = nextTaskId();
 	ScheduledFuture<?> scheduledFuture = this.executor.scheduleWithFixedDelay(task, initialDelay, delay, unit);
 
 	this.taskMap.put(taskId, new WeakTask(scheduledFuture, task.cancelMayInterruptIfRunning));
