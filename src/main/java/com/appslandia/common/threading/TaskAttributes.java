@@ -20,44 +20,26 @@
 
 package com.appslandia.common.threading;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.locks.ReentrantLock;
-
-import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.utils.Asserts;
-
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class LockService<K> extends InitializeObject {
+public interface TaskAttributes {
 
-    private final Map<K, ReentrantLock> lockMap = new HashMap<>();
-    private final Object mutex = new Object();
+    String getTaskId();
 
-    @Override
-    protected void init() throws Exception {
+    long getSubmittedTime();
+
+    default String getTaskName() {
+	return getTaskId();
     }
 
-    protected ReentrantLock produceLock() {
-	return new ReentrantLock();
+    default String getDescription() {
+	return null;
     }
 
-    public ReentrantLock getLock(K key) {
-	Asserts.notNull(key);
-
-	ReentrantLock lock = this.lockMap.get(key);
-	if (lock == null) {
-	    synchronized (this.mutex) {
-		if ((lock = this.lockMap.get(key)) == null) {
-
-		    lock = produceLock();
-		    this.lockMap.put(key, lock);
-		}
-	    }
-	}
-	return lock;
+    default boolean isInterruptThreadOnCancel() {
+	return true;
     }
 }

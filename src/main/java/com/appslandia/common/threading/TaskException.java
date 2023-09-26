@@ -20,63 +20,26 @@
 
 package com.appslandia.common.threading;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-
-import com.appslandia.common.utils.Asserts;
-
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public abstract class TaskMutexService<K> extends MutexService<K> {
+public class TaskException extends RuntimeException {
+    private static final long serialVersionUID = 1L;
 
-    protected abstract ExecutorService getExecutorService();
-
-    public <V> Future<V> execute(final K mutexKey, final Callable<V> task) throws Exception {
-	this.initialize();
-	Asserts.notNull(mutexKey);
-
-	return this.getExecutorService().submit(new Callable<V>() {
-
-	    @Override
-	    public V call() throws Exception {
-		synchronized (getMutex(mutexKey)) {
-		    return task.call();
-		}
-	    }
-	});
+    public TaskException() {
     }
 
-    public void execute(final K mutexKey, final Runnable task) throws Exception {
-	this.initialize();
-	Asserts.notNull(mutexKey);
-
-	this.getExecutorService().submit(new Runnable() {
-
-	    @Override
-	    public void run() {
-		synchronized (getMutex(mutexKey)) {
-		    task.run();
-		}
-	    }
-	});
+    public TaskException(String message) {
+	super(message);
     }
 
-    public <V> Future<V> execute(final K mutexKey, final Runnable task, V result) throws Exception {
-	this.initialize();
-	Asserts.notNull(mutexKey);
+    public TaskException(String message, Throwable cause) {
+	super(message, cause);
+    }
 
-	return this.getExecutorService().submit(new Runnable() {
-
-	    @Override
-	    public void run() {
-		synchronized (getMutex(mutexKey)) {
-		    task.run();
-		}
-	    }
-	}, result);
+    public TaskException(Throwable cause) {
+	super(cause);
     }
 }

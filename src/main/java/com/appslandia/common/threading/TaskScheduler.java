@@ -20,112 +20,59 @@
 
 package com.appslandia.common.threading;
 
-/**
- *
- * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
- *
- */
-import java.lang.ref.WeakReference;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
 
-public class TaskScheduler<T> {
+import com.appslandia.common.utils.Asserts;
 
-    protected final ScheduledExecutorService executor;
-    protected final AtomicLong taskIdGenerator = new AtomicLong(0);
-    protected final Map<Long, WeakTask> taskMap = new ConcurrentHashMap<>();
+public abstract class TaskScheduler {
 
-    public TaskScheduler() {
-	this(Executors.newSingleThreadScheduledExecutor());
+    protected final Map<String, ScheduledTask> scheduledTasks = new ConcurrentHashMap<>();
+
+    protected abstract ScheduledExecutorService getExecutor();
+
+    public String scheduleAtFixedRate(Task<?> task, long initialDelay, long period, TimeUnit unit) {
+	ScheduledFuture<?> scheduledFuture = this.getExecutor().scheduleAtFixedRate(task, initialDelay, period, unit);
+
+	this.scheduledTasks.put(task.attributes.getTaskId(), new ScheduledTask(scheduledFuture, task.attributes));
+	return task.attributes.getTaskId();
     }
 
-    public TaskScheduler(ScheduledExecutorService executor) {
-	this.executor = executor;
+    public String scheduleWithFixedDelay(Task<?> task, long initialDelay, long delay, TimeUnit unit) {
+	ScheduledFuture<?> scheduledFuture = this.getExecutor().scheduleWithFixedDelay(task, initialDelay, delay, unit);
+
+	this.scheduledTasks.put(task.attributes.getTaskId(), new ScheduledTask(scheduledFuture, task.attributes));
+	return task.attributes.getTaskId();
     }
 
-    protected long nextTaskId() {
-	return this.taskIdGenerator.incrementAndGet();
+    public boolean cancel(String taskId) {
+	ScheduledTask scheduledTask = this.scheduledTasks.remove(taskId);
+	Asserts.notNull(scheduledTask);
+
+	return scheduledTask.future.cancel(scheduledTask.attributes.isInterruptThreadOnCancel());
     }
 
-    public long schedule(Task<T> task, long delay, TimeUnit unit) {
-	long taskId = nextTaskId();
-	ScheduledFuture<?> scheduledFuture = this.executor.schedule(task, delay, unit);
-
-	this.taskMap.put(taskId, new WeakTask(scheduledFuture, task.cancelMayInterruptIfRunning));
-	return taskId;
-    }
-
-    public long scheduleAtFixedRate(Task<T> task, long initialDelay, long period, TimeUnit unit) {
-	long taskId = nextTaskId();
-	ScheduledFuture<?> scheduledFuture = this.executor.scheduleAtFixedRate(task, initialDelay, period, unit);
-
-	this.taskMap.put(taskId, new WeakTask(scheduledFuture, task.cancelMayInterruptIfRunning));
-	return taskId;
-    }
-
-    public long scheduleWithFixedDelay(Task<T> task, long initialDelay, long delay, TimeUnit unit) {
-	long taskId = nextTaskId();
-	ScheduledFuture<?> scheduledFuture = this.executor.scheduleWithFixedDelay(task, initialDelay, delay, unit);
-
-	this.taskMap.put(taskId, new WeakTask(scheduledFuture, task.cancelMayInterruptIfRunning));
-	return taskId;
-    }
-
-    public void cancel(long taskId) {
-	WeakTask weakTask = this.taskMap.remove(taskId);
-	if (weakTask != null) {
-	    ScheduledFuture<?> t = weakTask.get();
-	    if (t != null) {
-		t.cancel(weakTask.cancelMayInterruptIfRunning);
-	    }
-	}
-    }
-
-    public Set<Long> getTaskIds() {
-	return Collections.unmodifiableSet(this.taskMap.keySet());
+    public List<TaskAttributes> getScheduledTasks() {
+	return this.scheduledTasks.values().stream().map(t -> t.attributes).sorted((t1, t2) -> Long.compare(t2.getSubmittedTime(), t1.getSubmittedTime())).toList();
     }
 
     public void shutdown() {
-	this.executor.shutdown();
+	this.getExecutor().shutdown();
     }
 
-    public List<Task<?>> shutdownNow() {
-	List<Runnable> unstartedTasks = this.executor.shutdownNow();
-	return unstartedTasks.stream().map(t -> (Task<?>) t).collect(Collectors.toList());
-    }
+    static class ScheduledTask {
 
-    public static abstract class Task<T> implements Runnable {
+	final ScheduledFuture<?> future;
+	final TaskAttributes attributes;
 
-	protected final boolean cancelMayInterruptIfRunning;
-	protected final T data;
+	public ScheduledTask(ScheduledFuture<?> future, TaskAttributes attributes) {
 
-	public Task(T data) {
-	    this(data, true);
-	}
-
-	public Task(T data, boolean cancelMayInterruptIfRunning) {
-	    this.data = data;
-	    this.cancelMayInterruptIfRunning = cancelMayInterruptIfRunning;
-	}
-    }
-
-    private static class WeakTask extends WeakReference<ScheduledFuture<?>> {
-
-	protected final boolean cancelMayInterruptIfRunning;
-
-	public WeakTask(ScheduledFuture<?> referent, boolean cancelMayInterruptIfRunning) {
-	    super(referent);
-
-	    this.cancelMayInterruptIfRunning = cancelMayInterruptIfRunning;
+	    this.future = future;
+	    this.attributes = attributes;
 	}
     }
 }
