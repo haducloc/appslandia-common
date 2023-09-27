@@ -20,6 +20,7 @@
 
 package com.appslandia.common.jdbc;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -83,6 +84,55 @@ public class ResultSetImpl implements ResultSet {
 	return this.rs.getObject(columnLabel, OffsetDateTime.class);
     }
 
+    // Get with defaultValues
+
+    public boolean getBoolean(String columnLabel, boolean defaultValue) throws java.sql.SQLException {
+	boolean value = this.rs.getBoolean(columnLabel);
+	return !this.rs.wasNull() ? value : defaultValue;
+    }
+
+    public byte getByte(String columnLabel, byte defaultValue) throws java.sql.SQLException {
+	byte value = this.rs.getByte(columnLabel);
+	return !this.rs.wasNull() ? value : defaultValue;
+    }
+
+    public short getShort(String columnLabel, short defaultValue) throws java.sql.SQLException {
+	short value = this.rs.getShort(columnLabel);
+	return !this.rs.wasNull() ? value : defaultValue;
+    }
+
+    public int getInt(String columnLabel, int defaultValue) throws java.sql.SQLException {
+	int value = this.rs.getInt(columnLabel);
+	return !this.rs.wasNull() ? value : defaultValue;
+    }
+
+    public long getLong(String columnLabel, long defaultValue) throws java.sql.SQLException {
+	long value = this.rs.getLong(columnLabel);
+	return !this.rs.wasNull() ? value : defaultValue;
+    }
+
+    public float getFloat(String columnLabel, float defaultValue) throws java.sql.SQLException {
+	float value = this.rs.getFloat(columnLabel);
+	return !this.rs.wasNull() ? value : defaultValue;
+    }
+
+    public double getDouble(String columnLabel, double defaultValue) throws java.sql.SQLException {
+	double value = this.rs.getDouble(columnLabel);
+	return !this.rs.wasNull() ? value : defaultValue;
+    }
+
+    public BigDecimal getBigDecimal(String columnLabel, double defaultValue) throws java.sql.SQLException {
+	BigDecimal value = this.rs.getBigDecimal(columnLabel);
+	return !this.rs.wasNull() ? value : new BigDecimal(Double.toString(defaultValue));
+    }
+
+    public String getString(String columnLabel, String defaultValue) throws java.sql.SQLException {
+	Asserts.notNull(defaultValue);
+
+	String value = this.rs.getString(columnLabel);
+	return !this.rs.wasNull() ? value : defaultValue;
+    }
+
     // Get Primitive Wrappers
 
     public Boolean getBoolean2(String columnLabel) throws java.sql.SQLException {
@@ -117,41 +167,6 @@ public class ResultSetImpl implements ResultSet {
 
     public Double getDouble2(String columnLabel) throws java.sql.SQLException {
 	double value = this.rs.getDouble(columnLabel);
-	return !this.rs.wasNull() ? value : null;
-    }
-
-    public Boolean getBoolean2(int columnIndex) throws java.sql.SQLException {
-	boolean value = this.rs.getBoolean(columnIndex);
-	return !this.rs.wasNull() ? value : null;
-    }
-
-    public Byte getByte2(int columnIndex) throws java.sql.SQLException {
-	byte value = this.rs.getByte(columnIndex);
-	return !this.rs.wasNull() ? value : null;
-    }
-
-    public Short getShort2(int columnIndex) throws java.sql.SQLException {
-	short value = this.rs.getShort(columnIndex);
-	return !this.rs.wasNull() ? value : null;
-    }
-
-    public Integer getInt2(int columnIndex) throws java.sql.SQLException {
-	int value = this.rs.getInt(columnIndex);
-	return !this.rs.wasNull() ? value : null;
-    }
-
-    public Long getLong2(int columnIndex) throws java.sql.SQLException {
-	long value = this.rs.getLong(columnIndex);
-	return !this.rs.wasNull() ? value : null;
-    }
-
-    public Float getFloat2(int columnIndex) throws java.sql.SQLException {
-	float value = this.rs.getFloat(columnIndex);
-	return !this.rs.wasNull() ? value : null;
-    }
-
-    public Double getDouble2(int columnIndex) throws java.sql.SQLException {
-	double value = this.rs.getDouble(columnIndex);
 	return !this.rs.wasNull() ? value : null;
     }
 
