@@ -23,15 +23,13 @@ package com.appslandia.common.jdbc;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.OffsetDateTime;
-import java.time.OffsetTime;
 import java.util.Arrays;
+import java.util.Locale;
 
+import com.appslandia.common.base.AssertException;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.NormalizeUtils;
+import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -62,29 +60,33 @@ public class ResultSetImpl implements ResultSet {
 	return NormalizeUtils.valuesAsID(values);
     }
 
-    // Java 8+ Date/Time
+    // UpperCase/LowerCase with Locale.ENGLISH
 
-    public LocalDate getLocalDate(String columnLabel) throws java.sql.SQLException {
-	return this.rs.getObject(columnLabel, LocalDate.class);
+    public String getUCString(String columnLabel) throws java.sql.SQLException {
+	String value = this.rs.getString(columnLabel);
+	return !this.rs.wasNull() ? value.toUpperCase(Locale.ENGLISH) : null;
     }
 
-    public LocalTime getLocalTime(String columnLabel) throws java.sql.SQLException {
-	return this.rs.getObject(columnLabel, LocalTime.class);
+    public String getUCString(String columnLabel, String defaultValue) throws java.sql.SQLException {
+	Asserts.notNull(defaultValue);
+
+	String value = this.rs.getString(columnLabel);
+	return !this.rs.wasNull() ? value.toUpperCase(Locale.ENGLISH) : defaultValue.toUpperCase(Locale.ENGLISH);
     }
 
-    public LocalDateTime getLocalDateTime(String columnLabel) throws java.sql.SQLException {
-	return this.rs.getObject(columnLabel, LocalDateTime.class);
+    public String getLCString(String columnLabel) throws java.sql.SQLException {
+	String value = this.rs.getString(columnLabel);
+	return !this.rs.wasNull() ? value.toLowerCase(Locale.ENGLISH) : null;
     }
 
-    public OffsetTime getOffsetTime(String columnLabel) throws java.sql.SQLException {
-	return this.rs.getObject(columnLabel, OffsetTime.class);
+    public String getLCString(String columnLabel, String defaultValue) throws java.sql.SQLException {
+	Asserts.notNull(defaultValue);
+
+	String value = this.rs.getString(columnLabel);
+	return !this.rs.wasNull() ? value.toLowerCase(Locale.ENGLISH) : defaultValue.toLowerCase(Locale.ENGLISH);
     }
 
-    public OffsetDateTime getOffsetDateTime(String columnLabel) throws java.sql.SQLException {
-	return this.rs.getObject(columnLabel, OffsetDateTime.class);
-    }
-
-    // Get with defaultValues
+    // Get with default values
 
     public boolean getBoolean(String columnLabel, boolean defaultValue) throws java.sql.SQLException {
 	boolean value = this.rs.getBoolean(columnLabel);
@@ -131,6 +133,100 @@ public class ResultSetImpl implements ResultSet {
 
 	String value = this.rs.getString(columnLabel);
 	return !this.rs.wasNull() ? value : defaultValue;
+    }
+
+    // Get required values
+
+    private AssertException mustbeNotNullException(String columnLabel) {
+	return new AssertException(STR.fmt("The read value under the label '{}' must be not null.", columnLabel));
+    }
+
+    public boolean getRequiredBoolean(String columnLabel) throws java.sql.SQLException {
+	boolean value = this.rs.getBoolean(columnLabel);
+	if (this.rs.wasNull()) {
+	    throw mustbeNotNullException(columnLabel);
+	}
+	return value;
+    }
+
+    public byte getRequiredByte(String columnLabel) throws java.sql.SQLException {
+	byte value = this.rs.getByte(columnLabel);
+	if (this.rs.wasNull()) {
+	    throw mustbeNotNullException(columnLabel);
+	}
+	return value;
+    }
+
+    public short getRequiredShort(String columnLabel) throws java.sql.SQLException {
+	short value = this.rs.getShort(columnLabel);
+	if (this.rs.wasNull()) {
+	    throw mustbeNotNullException(columnLabel);
+	}
+	return value;
+    }
+
+    public int getRequiredInt(String columnLabel) throws java.sql.SQLException {
+	int value = this.rs.getInt(columnLabel);
+	if (this.rs.wasNull()) {
+	    throw mustbeNotNullException(columnLabel);
+	}
+	return value;
+    }
+
+    public long getRequiredLong(String columnLabel) throws java.sql.SQLException {
+	long value = this.rs.getLong(columnLabel);
+	if (this.rs.wasNull()) {
+	    throw mustbeNotNullException(columnLabel);
+	}
+	return value;
+    }
+
+    public float getRequiredFloat(String columnLabel) throws java.sql.SQLException {
+	float value = this.rs.getFloat(columnLabel);
+	if (this.rs.wasNull()) {
+	    throw mustbeNotNullException(columnLabel);
+	}
+	return value;
+    }
+
+    public double getRequiredDouble(String columnLabel) throws java.sql.SQLException {
+	double value = this.rs.getDouble(columnLabel);
+	if (this.rs.wasNull()) {
+	    throw mustbeNotNullException(columnLabel);
+	}
+	return value;
+    }
+
+    public BigDecimal getRequiredDecimal(String columnLabel) throws java.sql.SQLException {
+	BigDecimal value = this.rs.getBigDecimal(columnLabel);
+	if (this.rs.wasNull()) {
+	    throw mustbeNotNullException(columnLabel);
+	}
+	return value;
+    }
+
+    public String getRequiredString(String columnLabel) throws java.sql.SQLException {
+	String value = this.rs.getString(columnLabel);
+	if (this.rs.wasNull()) {
+	    throw mustbeNotNullException(columnLabel);
+	}
+	return value;
+    }
+
+    public String getRequiredNString(String columnLabel) throws java.sql.SQLException {
+	String value = this.rs.getNString(columnLabel);
+	if (this.rs.wasNull()) {
+	    throw mustbeNotNullException(columnLabel);
+	}
+	return value;
+    }
+
+    public <T> T getRequiredObject(String columnLabel, Class<T> target) throws java.sql.SQLException {
+	T value = this.rs.getObject(columnLabel, target);
+	if (this.rs.wasNull()) {
+	    throw mustbeNotNullException(columnLabel);
+	}
+	return value;
     }
 
     // Get Primitive Wrappers
