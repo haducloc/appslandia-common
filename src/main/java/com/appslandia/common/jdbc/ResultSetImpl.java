@@ -145,7 +145,7 @@ public class ResultSetImpl implements ResultSet {
     // Get required values
 
     private AssertException notNullException(String columnLabel) {
-	return new AssertException(STR.fmt("The read value under the label '{}' must be not null.", columnLabel));
+	return new AssertException(STR.fmt("The value read under the label '{}' must be not null.", columnLabel));
     }
 
     public boolean getRequiredBoolean(String columnLabel) throws java.sql.SQLException {
