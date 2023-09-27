@@ -135,6 +135,13 @@ public class ResultSetImpl implements ResultSet {
 	return !this.rs.wasNull() ? value : defaultValue;
     }
 
+    public String getNString(String columnLabel, String defaultValue) throws java.sql.SQLException {
+	Asserts.notNull(defaultValue);
+
+	String value = this.rs.getNString(columnLabel);
+	return !this.rs.wasNull() ? value : defaultValue;
+    }
+
     // Get required values
 
     private AssertException notNullException(String columnLabel) {
