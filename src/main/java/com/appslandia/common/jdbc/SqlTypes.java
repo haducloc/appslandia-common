@@ -113,8 +113,8 @@ public class SqlTypes {
 	map.put(Types.INTEGER, int.class);
 	map.put(Types.BIGINT, long.class);
 
-	map.put(Types.FLOAT, float.class);
 	map.put(Types.REAL, float.class);
+	map.put(Types.FLOAT, double.class);
 	map.put(Types.DOUBLE, double.class);
 	map.put(Types.NUMERIC, BigDecimal.class);
 	map.put(Types.DECIMAL, BigDecimal.class);
