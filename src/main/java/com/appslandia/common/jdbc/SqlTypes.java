@@ -108,7 +108,7 @@ public class SqlTypes {
 	map.put(Types.BIT, boolean.class);
 	map.put(Types.BOOLEAN, boolean.class);
 
-	map.put(Types.TINYINT, short.class);
+	map.put(Types.TINYINT, byte.class);
 	map.put(Types.SMALLINT, short.class);
 	map.put(Types.INTEGER, int.class);
 	map.put(Types.BIGINT, long.class);
@@ -122,12 +122,12 @@ public class SqlTypes {
 	map.put(Types.CHAR, String.class);
 	map.put(Types.VARCHAR, String.class);
 	map.put(Types.LONGVARCHAR, String.class);
-	map.put(Types.CLOB, java.io.InputStream.class);
+	map.put(Types.CLOB, java.io.Reader.class);
 
 	map.put(Types.NCHAR, String.class);
 	map.put(Types.NVARCHAR, String.class);
 	map.put(Types.LONGNVARCHAR, String.class);
-	map.put(Types.NCLOB, java.io.InputStream.class);
+	map.put(Types.NCLOB, java.io.Reader.class);
 
 	map.put(Types.DATE, java.sql.Date.class);
 	map.put(Types.TIME, java.sql.Time.class);
