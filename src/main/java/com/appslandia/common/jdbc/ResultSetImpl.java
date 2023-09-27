@@ -137,14 +137,14 @@ public class ResultSetImpl implements ResultSet {
 
     // Get required values
 
-    private AssertException mustbeNotNullException(String columnLabel) {
+    private AssertException notNullException(String columnLabel) {
 	return new AssertException(STR.fmt("The read value under the label '{}' must be not null.", columnLabel));
     }
 
     public boolean getRequiredBoolean(String columnLabel) throws java.sql.SQLException {
 	boolean value = this.rs.getBoolean(columnLabel);
 	if (this.rs.wasNull()) {
-	    throw mustbeNotNullException(columnLabel);
+	    throw notNullException(columnLabel);
 	}
 	return value;
     }
@@ -152,7 +152,7 @@ public class ResultSetImpl implements ResultSet {
     public byte getRequiredByte(String columnLabel) throws java.sql.SQLException {
 	byte value = this.rs.getByte(columnLabel);
 	if (this.rs.wasNull()) {
-	    throw mustbeNotNullException(columnLabel);
+	    throw notNullException(columnLabel);
 	}
 	return value;
     }
@@ -160,7 +160,7 @@ public class ResultSetImpl implements ResultSet {
     public short getRequiredShort(String columnLabel) throws java.sql.SQLException {
 	short value = this.rs.getShort(columnLabel);
 	if (this.rs.wasNull()) {
-	    throw mustbeNotNullException(columnLabel);
+	    throw notNullException(columnLabel);
 	}
 	return value;
     }
@@ -168,7 +168,7 @@ public class ResultSetImpl implements ResultSet {
     public int getRequiredInt(String columnLabel) throws java.sql.SQLException {
 	int value = this.rs.getInt(columnLabel);
 	if (this.rs.wasNull()) {
-	    throw mustbeNotNullException(columnLabel);
+	    throw notNullException(columnLabel);
 	}
 	return value;
     }
@@ -176,7 +176,7 @@ public class ResultSetImpl implements ResultSet {
     public long getRequiredLong(String columnLabel) throws java.sql.SQLException {
 	long value = this.rs.getLong(columnLabel);
 	if (this.rs.wasNull()) {
-	    throw mustbeNotNullException(columnLabel);
+	    throw notNullException(columnLabel);
 	}
 	return value;
     }
@@ -184,7 +184,7 @@ public class ResultSetImpl implements ResultSet {
     public float getRequiredFloat(String columnLabel) throws java.sql.SQLException {
 	float value = this.rs.getFloat(columnLabel);
 	if (this.rs.wasNull()) {
-	    throw mustbeNotNullException(columnLabel);
+	    throw notNullException(columnLabel);
 	}
 	return value;
     }
@@ -192,7 +192,7 @@ public class ResultSetImpl implements ResultSet {
     public double getRequiredDouble(String columnLabel) throws java.sql.SQLException {
 	double value = this.rs.getDouble(columnLabel);
 	if (this.rs.wasNull()) {
-	    throw mustbeNotNullException(columnLabel);
+	    throw notNullException(columnLabel);
 	}
 	return value;
     }
@@ -200,7 +200,7 @@ public class ResultSetImpl implements ResultSet {
     public BigDecimal getRequiredDecimal(String columnLabel) throws java.sql.SQLException {
 	BigDecimal value = this.rs.getBigDecimal(columnLabel);
 	if (this.rs.wasNull()) {
-	    throw mustbeNotNullException(columnLabel);
+	    throw notNullException(columnLabel);
 	}
 	return value;
     }
@@ -208,7 +208,7 @@ public class ResultSetImpl implements ResultSet {
     public String getRequiredString(String columnLabel) throws java.sql.SQLException {
 	String value = this.rs.getString(columnLabel);
 	if (this.rs.wasNull()) {
-	    throw mustbeNotNullException(columnLabel);
+	    throw notNullException(columnLabel);
 	}
 	return value;
     }
@@ -216,7 +216,7 @@ public class ResultSetImpl implements ResultSet {
     public String getRequiredNString(String columnLabel) throws java.sql.SQLException {
 	String value = this.rs.getNString(columnLabel);
 	if (this.rs.wasNull()) {
-	    throw mustbeNotNullException(columnLabel);
+	    throw notNullException(columnLabel);
 	}
 	return value;
     }
@@ -224,7 +224,7 @@ public class ResultSetImpl implements ResultSet {
     public <T> T getRequiredObject(String columnLabel, Class<T> target) throws java.sql.SQLException {
 	T value = this.rs.getObject(columnLabel, target);
 	if (this.rs.wasNull()) {
-	    throw mustbeNotNullException(columnLabel);
+	    throw notNullException(columnLabel);
 	}
 	return value;
     }
