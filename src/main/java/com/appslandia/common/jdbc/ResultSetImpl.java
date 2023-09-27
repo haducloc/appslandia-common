@@ -67,11 +67,11 @@ public class ResultSetImpl implements ResultSet {
 	return !this.rs.wasNull() ? value.toUpperCase(Locale.ENGLISH) : null;
     }
 
-    public String getUCString(String columnLabel, String defaultValue) throws java.sql.SQLException {
-	Asserts.notNull(defaultValue);
+    public String getUCString(String columnLabel, String valueIfNull) throws java.sql.SQLException {
+	Asserts.notNull(valueIfNull);
 
 	String value = this.rs.getString(columnLabel);
-	return !this.rs.wasNull() ? value.toUpperCase(Locale.ENGLISH) : defaultValue.toUpperCase(Locale.ENGLISH);
+	return !this.rs.wasNull() ? value.toUpperCase(Locale.ENGLISH) : valueIfNull.toUpperCase(Locale.ENGLISH);
     }
 
     public String getLCString(String columnLabel) throws java.sql.SQLException {
@@ -79,67 +79,67 @@ public class ResultSetImpl implements ResultSet {
 	return !this.rs.wasNull() ? value.toLowerCase(Locale.ENGLISH) : null;
     }
 
-    public String getLCString(String columnLabel, String defaultValue) throws java.sql.SQLException {
-	Asserts.notNull(defaultValue);
+    public String getLCString(String columnLabel, String valueIfNull) throws java.sql.SQLException {
+	Asserts.notNull(valueIfNull);
 
 	String value = this.rs.getString(columnLabel);
-	return !this.rs.wasNull() ? value.toLowerCase(Locale.ENGLISH) : defaultValue.toLowerCase(Locale.ENGLISH);
+	return !this.rs.wasNull() ? value.toLowerCase(Locale.ENGLISH) : valueIfNull.toLowerCase(Locale.ENGLISH);
     }
 
     // Get with default values
 
-    public boolean getBoolean(String columnLabel, boolean defaultValue) throws java.sql.SQLException {
+    public boolean getBoolean(String columnLabel, boolean valueIfNull) throws java.sql.SQLException {
 	boolean value = this.rs.getBoolean(columnLabel);
-	return !this.rs.wasNull() ? value : defaultValue;
+	return !this.rs.wasNull() ? value : valueIfNull;
     }
 
-    public byte getByte(String columnLabel, byte defaultValue) throws java.sql.SQLException {
+    public byte getByte(String columnLabel, byte valueIfNull) throws java.sql.SQLException {
 	byte value = this.rs.getByte(columnLabel);
-	return !this.rs.wasNull() ? value : defaultValue;
+	return !this.rs.wasNull() ? value : valueIfNull;
     }
 
-    public short getShort(String columnLabel, short defaultValue) throws java.sql.SQLException {
+    public short getShort(String columnLabel, short valueIfNull) throws java.sql.SQLException {
 	short value = this.rs.getShort(columnLabel);
-	return !this.rs.wasNull() ? value : defaultValue;
+	return !this.rs.wasNull() ? value : valueIfNull;
     }
 
-    public int getInt(String columnLabel, int defaultValue) throws java.sql.SQLException {
+    public int getInt(String columnLabel, int valueIfNull) throws java.sql.SQLException {
 	int value = this.rs.getInt(columnLabel);
-	return !this.rs.wasNull() ? value : defaultValue;
+	return !this.rs.wasNull() ? value : valueIfNull;
     }
 
-    public long getLong(String columnLabel, long defaultValue) throws java.sql.SQLException {
+    public long getLong(String columnLabel, long valueIfNull) throws java.sql.SQLException {
 	long value = this.rs.getLong(columnLabel);
-	return !this.rs.wasNull() ? value : defaultValue;
+	return !this.rs.wasNull() ? value : valueIfNull;
     }
 
-    public float getFloat(String columnLabel, float defaultValue) throws java.sql.SQLException {
+    public float getFloat(String columnLabel, float valueIfNull) throws java.sql.SQLException {
 	float value = this.rs.getFloat(columnLabel);
-	return !this.rs.wasNull() ? value : defaultValue;
+	return !this.rs.wasNull() ? value : valueIfNull;
     }
 
-    public double getDouble(String columnLabel, double defaultValue) throws java.sql.SQLException {
+    public double getDouble(String columnLabel, double valueIfNull) throws java.sql.SQLException {
 	double value = this.rs.getDouble(columnLabel);
-	return !this.rs.wasNull() ? value : defaultValue;
+	return !this.rs.wasNull() ? value : valueIfNull;
     }
 
-    public BigDecimal getBigDecimal(String columnLabel, double defaultValue) throws java.sql.SQLException {
+    public BigDecimal getBigDecimal(String columnLabel, double valueIfNull) throws java.sql.SQLException {
 	BigDecimal value = this.rs.getBigDecimal(columnLabel);
-	return !this.rs.wasNull() ? value : new BigDecimal(Double.toString(defaultValue));
+	return !this.rs.wasNull() ? value : new BigDecimal(Double.toString(valueIfNull));
     }
 
-    public String getString(String columnLabel, String defaultValue) throws java.sql.SQLException {
-	Asserts.notNull(defaultValue);
+    public String getString(String columnLabel, String valueIfNull) throws java.sql.SQLException {
+	Asserts.notNull(valueIfNull);
 
 	String value = this.rs.getString(columnLabel);
-	return !this.rs.wasNull() ? value : defaultValue;
+	return !this.rs.wasNull() ? value : valueIfNull;
     }
 
-    public String getNString(String columnLabel, String defaultValue) throws java.sql.SQLException {
-	Asserts.notNull(defaultValue);
+    public String getNString(String columnLabel, String valueIfNull) throws java.sql.SQLException {
+	Asserts.notNull(valueIfNull);
 
 	String value = this.rs.getNString(columnLabel);
-	return !this.rs.wasNull() ? value : defaultValue;
+	return !this.rs.wasNull() ? value : valueIfNull;
     }
 
     // Get required values
