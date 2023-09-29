@@ -452,7 +452,7 @@ public class DateUtils {
 	return res;
     }
 
-    public static TimeUnit nextLowerUnit(TimeUnit unit) {
+    private static TimeUnit nextLowerUnit(TimeUnit unit) {
 	switch (unit) {
 	case DAYS:
 	    return TimeUnit.HOURS;
