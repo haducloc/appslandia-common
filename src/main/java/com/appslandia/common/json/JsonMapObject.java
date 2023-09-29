@@ -68,7 +68,7 @@ public abstract class JsonMapObject extends MapWrapper<String, Object> {
 	return this;
     }
 
-    public Object getReq(String key) {
+    public Object getRequired(String key) {
 	Object value = this.get(key);
 	return Asserts.notNull(value, "The value is required.");
     }
