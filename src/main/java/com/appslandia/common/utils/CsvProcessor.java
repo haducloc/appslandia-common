@@ -35,6 +35,8 @@ import com.appslandia.common.base.InitializeObject;
  */
 public class CsvProcessor extends InitializeObject {
 
+    public static final CsvProcessor INSTANCE = new CsvProcessor();
+
     private boolean writeNull;
     private char separator = ',';
     private boolean escCrLf;

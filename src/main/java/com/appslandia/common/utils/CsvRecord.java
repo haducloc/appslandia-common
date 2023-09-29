@@ -237,6 +237,6 @@ public class CsvRecord {
 
     @Override
     public String toString() {
-	return Arrays.stream(this.values).map(v -> new CsvProcessor().separator(',').escape(v)).collect(Collectors.joining(","));
+	return Arrays.stream(this.values).map(v -> CsvProcessor.INSTANCE.escape(v)).collect(Collectors.joining(","));
     }
 }
