@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import com.appslandia.common.base.InitializeException;
 import com.appslandia.common.base.InitializeObject;
 
 /**
@@ -35,7 +36,7 @@ import com.appslandia.common.base.InitializeObject;
  */
 public class CsvProcessor extends InitializeObject {
 
-    public static final CsvProcessor INSTANCE = new CsvProcessor();
+    public static final CsvProcessor INSTANCE = new CsvProcessor().initialize();
 
     private boolean writeNull;
     private char separator = ',';
@@ -44,6 +45,12 @@ public class CsvProcessor extends InitializeObject {
     @Override
     protected void init() throws Exception {
 	// Validate separator?
+    }
+
+    @Override
+    public CsvProcessor initialize() throws InitializeException {
+	super.initialize();
+	return this;
     }
 
     public CsvProcessor writeNull() {
