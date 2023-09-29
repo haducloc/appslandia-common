@@ -229,6 +229,12 @@ public class CsvRecord {
 	return (value != null) ? ParseUtils.parseOffsetTime(value, patterns) : null;
     }
 
+    public CsvRecord set(int index, Object value) {
+	Objects.checkIndex(index, this.values.length);
+	this.values[index] = (value != null) ? value.toString() : null;
+	return this;
+    }
+
     @Override
     public String toString() {
 	return Arrays.stream(this.values).map(v -> new CsvProcessor().separator(',').escape(v)).collect(Collectors.joining(","));
