@@ -20,10 +20,12 @@
 
 package com.appslandia.common.utils;
 
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 import com.appslandia.common.base.AssertException;
+import com.appslandia.common.base.BoolFormatException;
 
 /**
  *
@@ -32,135 +34,195 @@ import com.appslandia.common.base.AssertException;
  */
 public class SYS {
 
+    // System.getProperty
+
+    public static String getProp(String key) {
+	return StringUtils.trimToNull(System.getProperty(key));
+    }
+
     public static String getProp(String key, String defaultValue) {
-	String value = StringUtils.trimToNull(System.getProperty(key));
+	String value = getProp(key);
 	return (value != null) ? value : defaultValue;
     }
 
-    public static String getRequiredProp(String key) {
-	String value = getProp(key, null);
+    public static String getPropReq(String key) {
+	String value = getProp(key);
 	if (value == null) {
 	    throw new AssertException(STR.fmt("No value found for the given property '{}'.", key));
 	}
 	return value;
     }
 
-    public static boolean getBoolProp(String key, boolean defaultValue) {
-	String value = getProp(key, null);
-	if (value == null) {
-	    return defaultValue;
-	}
-	return ParseUtils.parseBool(value, defaultValue);
-    }
-
-    public static int getIntProp(String key, int defaultValue) {
-	String value = getProp(key, null);
-	if (value == null) {
-	    return defaultValue;
-	}
-	return ParseUtils.parseInt(value, defaultValue);
-    }
-
-    public static long getLongProp(String key, long defaultValue) {
-	String value = getProp(key, null);
-	if (value == null) {
-	    return defaultValue;
-	}
-	return ParseUtils.parseLong(value, defaultValue);
-    }
-
-    public static double getDoubleProp(String key, double defaultValue) {
-	String value = getProp(key, null);
-	if (value == null) {
-	    return defaultValue;
-	}
-	return ParseUtils.parseDouble(value, defaultValue);
-    }
-
-    public static boolean getBoolProp(String key) {
-	String value = getRequiredProp(key);
+    public static boolean getBoolProp(String key) throws BoolFormatException {
+	String value = getPropReq(key);
 	return ParseUtils.parseBool(value);
     }
 
-    public static int getIntProp(String key) {
-	String value = getRequiredProp(key);
+    public static boolean getBoolProp(String key, boolean defaultValIfInvalid) {
+	String value = getProp(key);
+	return (value == null) ? ParseUtils.parseBool(value, defaultValIfInvalid) : defaultValIfInvalid;
+    }
+
+    public static Boolean getBoolPropOpt(String key) throws BoolFormatException {
+	String value = getProp(key);
+	return (value != null) ? ParseUtils.parseBool(value) : null;
+    }
+
+    public static int getIntProp(String key) throws NumberFormatException {
+	String value = getPropReq(key);
 	return Integer.parseInt(value);
     }
 
-    public static long getLongProp(String key) {
-	String value = getRequiredProp(key);
+    public static int getIntProp(String key, int defaultValIfInvalid) {
+	String value = getProp(key);
+	return (value == null) ? ParseUtils.parseInt(value, defaultValIfInvalid) : defaultValIfInvalid;
+    }
+
+    public static Integer getIntPropOpt(String key) throws NumberFormatException {
+	String value = getProp(key);
+	return (value != null) ? ParseUtils.parseInt(value) : null;
+    }
+
+    public static long getLongProp(String key) throws NumberFormatException {
+	String value = getPropReq(key);
 	return Long.parseLong(value);
     }
 
-    public static double getDoubleProp(String key) {
-	String value = getRequiredProp(key);
+    public static long getLongProp(String key, long defaultValIfInvalid) {
+	String value = getProp(key);
+	return (value == null) ? ParseUtils.parseLong(value, defaultValIfInvalid) : defaultValIfInvalid;
+    }
+
+    public static Long getLongPropOpt(String key) throws NumberFormatException {
+	String value = getProp(key);
+	return (value != null) ? ParseUtils.parseLong(value) : null;
+    }
+
+    public static double getDoubleProp(String key) throws NumberFormatException {
+	String value = getPropReq(key);
 	return Double.parseDouble(value);
     }
 
+    public static double getDoubleProp(String key, double defaultValIfInvalid) {
+	String value = getProp(key);
+	return (value == null) ? ParseUtils.parseDouble(value, defaultValIfInvalid) : defaultValIfInvalid;
+    }
+
+    public static Double getDoublePropOpt(String key) throws NumberFormatException {
+	String value = getProp(key);
+	return (value != null) ? ParseUtils.parseDouble(value) : null;
+    }
+
+    public static BigDecimal getDecimalPropReq(String key) throws NumberFormatException {
+	String value = getPropReq(key);
+	return new BigDecimal(value);
+    }
+
+    public static BigDecimal getDecimalProp(String key) throws NumberFormatException {
+	String value = getProp(key);
+	return (value != null) ? new BigDecimal(value) : null;
+    }
+
+    public static BigDecimal getDecimalProp(String key, double defaultValIfInvalid) {
+	String value = getProp(key);
+	return ParseUtils.parseDecimal(value, defaultValIfInvalid);
+    }
+
+    // System.getenv
+
+    public static String getEnv(String key) {
+	return StringUtils.trimToNull(System.getenv(key));
+    }
+
     public static String getEnv(String key, String defaultValue) {
-	String value = StringUtils.trimToNull(System.getenv(key));
+	String value = getEnv(key);
 	return (value != null) ? value : defaultValue;
     }
 
-    public static String getRequiredEnv(String key) {
-	String value = getEnv(key, null);
+    public static String getEnvReq(String key) {
+	String value = getEnv(key);
 	if (value == null) {
 	    throw new AssertException(STR.fmt("No value found for the given env '{}'.", key));
 	}
 	return value;
     }
 
-    public static boolean getBoolEnv(String key, boolean defaultValue) {
-	String value = getEnv(key, null);
-	if (value == null) {
-	    return defaultValue;
-	}
-	return ParseUtils.parseBool(value, defaultValue);
-    }
-
-    public static int getIntEnv(String key, int defaultValue) {
-	String value = getEnv(key, null);
-	if (value == null) {
-	    return defaultValue;
-	}
-	return ParseUtils.parseInt(value, defaultValue);
-    }
-
-    public static long getLongEnv(String key, long defaultValue) {
-	String value = getEnv(key, null);
-	if (value == null) {
-	    return defaultValue;
-	}
-	return ParseUtils.parseLong(value, defaultValue);
-    }
-
-    public static double getDoubleEnv(String key, double defaultValue) {
-	String value = getEnv(key, null);
-	if (value == null) {
-	    return defaultValue;
-	}
-	return ParseUtils.parseDouble(value, defaultValue);
-    }
-
-    public static boolean getBoolEnv(String key) {
-	String value = getRequiredEnv(key);
+    public static boolean getBoolEnv(String key) throws BoolFormatException {
+	String value = getEnvReq(key);
 	return ParseUtils.parseBool(value);
     }
 
-    public static int getIntEnv(String key) {
-	String value = getRequiredEnv(key);
+    public static boolean getBoolEnv(String key, boolean defaultValIfInvalid) {
+	String value = getEnv(key);
+	return (value == null) ? ParseUtils.parseBool(value, defaultValIfInvalid) : defaultValIfInvalid;
+    }
+
+    public static Boolean getBoolEnvOpt(String key) throws BoolFormatException {
+	String value = getEnv(key);
+	return (value != null) ? ParseUtils.parseBool(value) : null;
+    }
+
+    public static int getIntEnv(String key) throws NumberFormatException {
+	String value = getEnvReq(key);
 	return Integer.parseInt(value);
     }
 
-    public static long getLongEnv(String key) {
-	String value = getRequiredEnv(key);
+    public static int getIntEnv(String key, int defaultValIfInvalid) {
+	String value = getEnv(key);
+	return (value == null) ? ParseUtils.parseInt(value, defaultValIfInvalid) : defaultValIfInvalid;
+    }
+
+    public static Integer getIntEnvOpt(String key) throws NumberFormatException {
+	String value = getEnv(key);
+	return (value != null) ? ParseUtils.parseInt(value) : null;
+    }
+
+    public static long getLongEnv(String key) throws NumberFormatException {
+	String value = getEnvReq(key);
 	return Long.parseLong(value);
     }
 
-    public static double getDoubleEnv(String key) {
-	String value = getRequiredEnv(key);
+    public static long getLongEnv(String key, long defaultValIfInvalid) {
+	String value = getEnv(key);
+	return (value == null) ? ParseUtils.parseLong(value, defaultValIfInvalid) : defaultValIfInvalid;
+    }
+
+    public static Long getLongEnvOpt(String key) throws NumberFormatException {
+	String value = getEnv(key);
+	return (value != null) ? ParseUtils.parseLong(value) : null;
+    }
+
+    public static double getDoubleEnv(String key) throws NumberFormatException {
+	String value = getEnvReq(key);
 	return Double.parseDouble(value);
     }
+
+    public static double getDoubleEnv(String key, double defaultValIfInvalid) {
+	String value = getEnv(key);
+	return (value == null) ? ParseUtils.parseDouble(value, defaultValIfInvalid) : defaultValIfInvalid;
+    }
+
+    public static Double getDoubleEnvOpt(String key) throws NumberFormatException {
+	String value = getEnv(key);
+	return (value != null) ? ParseUtils.parseDouble(value) : null;
+    }
+
+    public static BigDecimal getDecimalEnvReq(String key) throws NumberFormatException {
+	String value = getEnvReq(key);
+	return new BigDecimal(value);
+    }
+
+    public static BigDecimal getDecimalEnv(String key) throws NumberFormatException {
+	String value = getEnv(key);
+	return (value != null) ? new BigDecimal(value) : null;
+    }
+
+    public static BigDecimal getDecimalEnv(String key, double defaultValIfInvalid) {
+	String value = getEnv(key);
+	return ParseUtils.parseDecimal(value, defaultValIfInvalid);
+    }
+
+    // resolveString
 
     public static String resolveString(String str) {
 	if (str == null) {

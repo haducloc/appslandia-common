@@ -21,10 +21,19 @@
 package com.appslandia.common.utils;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import com.appslandia.common.base.AssertException;
+import com.appslandia.common.base.BoolFormatException;
+import com.appslandia.common.base.DateFormatException;
 
 /**
  *
@@ -43,64 +52,181 @@ public class CsvRecord {
 	return this.values.length;
     }
 
+    public String getStringReq(int index) {
+	String value = getString(index);
+	if (value == null) {
+	    throw new AssertException(STR.fmt("The value read under the index '{}' must be not null.", index));
+	}
+	return value;
+    }
+
     public String getString(int index) {
 	Objects.checkIndex(index, this.values.length);
 	return this.values[index];
     }
 
-    public String getRequiredString(int index) {
-	Objects.checkIndex(index, this.values.length);
-	return Asserts.notNull(this.values[index]);
+    public String getString(int index, String defaultValue) {
+	String value = getString(index);
+	return (value != null) ? value : defaultValue;
     }
 
-    public int getInt(int index) {
-	Objects.checkIndex(index, this.values.length);
-	return ParseUtils.parseInt(this.values[index]);
+    public int getInt(int index) throws NumberFormatException {
+	String value = getStringReq(index);
+	return ParseUtils.parseInt(value);
     }
 
-    public Integer getIntObj(int index) {
-	Objects.checkIndex(index, this.values.length);
-	return ParseUtils.parseIntObj(this.values[index]);
+    public int getInt(int index, int defaultValIfInvalid) {
+	String value = getString(index);
+	return ParseUtils.parseInt(value, defaultValIfInvalid);
     }
 
-    public long getLong(int index) {
-	Objects.checkIndex(index, this.values.length);
-	return ParseUtils.parseLong(this.values[index]);
+    public Integer getIntOpt(int index) throws NumberFormatException {
+	String value = getString(index);
+	return (value != null) ? ParseUtils.parseInt(value) : null;
     }
 
-    public Long getLongObj(int index) {
-	Objects.checkIndex(index, this.values.length);
-	return ParseUtils.parseLongObj(this.values[index]);
+    public long getLong(int index) throws NumberFormatException {
+	String value = getStringReq(index);
+	return ParseUtils.parseLong(value);
     }
 
-    public double getDouble(int index) {
-	Objects.checkIndex(index, this.values.length);
-	return ParseUtils.parseDouble(this.values[index]);
+    public long getLong(int index, long defaultValIfInvalid) {
+	String value = getString(index);
+	return ParseUtils.parseLong(value, defaultValIfInvalid);
     }
 
-    public Double getDoubleObj(int index) {
-	Objects.checkIndex(index, this.values.length);
-	return ParseUtils.parseDoubleObj(this.values[index]);
+    public Long getLongOpt(int index) throws NumberFormatException {
+	String value = getString(index);
+	return (value != null) ? ParseUtils.parseLong(value) : null;
     }
 
-    public boolean getBool(int index) {
-	Objects.checkIndex(index, this.values.length);
-	return ParseUtils.parseBool(this.values[index]);
+    public double getDouble(int index) throws NumberFormatException {
+	String value = getStringReq(index);
+	return ParseUtils.parseDouble(value);
     }
 
-    public Boolean getBoolObj(int index) {
-	Objects.checkIndex(index, this.values.length);
-	return ParseUtils.parseBoolObj(this.values[index]);
+    public double getDouble(int index, double defaultValIfInvalid) {
+	String value = getString(index);
+	return ParseUtils.parseDouble(value, defaultValIfInvalid);
     }
 
-    public BigDecimal getDecimal(int index) {
-	Objects.checkIndex(index, this.values.length);
-	return ParseUtils.parseDecimal(this.values[index]);
+    public Double getDoubleOpt(int index) throws NumberFormatException {
+	String value = getString(index);
+	return (value != null) ? ParseUtils.parseDouble(value) : null;
     }
 
-    public <T> T getValue(int index, Function<String, T> converter) {
-	Objects.checkIndex(index, this.values.length);
-	return ParseUtils.parseValue(this.values[index], converter);
+    public boolean getBool(int index) throws BoolFormatException {
+	String value = getStringReq(index);
+	return ParseUtils.parseBool(value);
+    }
+
+    public boolean getBool(int index, boolean defaultValIfInvalid) {
+	String value = getString(index);
+	return ParseUtils.parseBool(value, defaultValIfInvalid);
+    }
+
+    public Boolean getBoolOpt(int index) throws BoolFormatException {
+	String value = getString(index);
+	return (value != null) ? ParseUtils.parseBool(value) : null;
+    }
+
+    public BigDecimal getDecimalReq(int index) throws NumberFormatException {
+	String value = getStringReq(index);
+	return new BigDecimal(value);
+    }
+
+    public BigDecimal getDecimal(int index) throws NumberFormatException {
+	String value = getString(index);
+	return (value != null) ? new BigDecimal(value) : null;
+    }
+
+    public BigDecimal getDecimal(int index, double defaultValIfInvalid) {
+	String value = getString(index);
+	return ParseUtils.parseDecimal(value, defaultValIfInvalid);
+    }
+
+    public Date getDateReq(int index, String... patterns) throws DateFormatException {
+	Asserts.hasElements(patterns);
+
+	String value = getStringReq(index);
+	return ParseUtils.parseDate(value, patterns);
+    }
+
+    public Date getDate(int index, String... patterns) throws DateFormatException {
+	Asserts.hasElements(patterns);
+
+	String value = getString(index);
+	return (value != null) ? ParseUtils.parseDate(value, patterns) : null;
+    }
+
+    public LocalDate getLocalDateReq(int index, String... patterns) throws DateFormatException {
+	Asserts.hasElements(patterns);
+
+	String value = getStringReq(index);
+	return ParseUtils.parseLocalDate(value, patterns);
+    }
+
+    public LocalDate getLocalDate(int index, String... patterns) throws DateFormatException {
+	Asserts.hasElements(patterns);
+
+	String value = getString(index);
+	return (value != null) ? ParseUtils.parseLocalDate(value, patterns) : null;
+    }
+
+    public LocalDateTime getLocalDateTimeReq(int index, String... patterns) throws DateFormatException {
+	Asserts.hasElements(patterns);
+
+	String value = getStringReq(index);
+	return ParseUtils.parseLocalDateTime(value, patterns);
+    }
+
+    public LocalDateTime getLocalDateTime(int index, String... patterns) throws DateFormatException {
+	Asserts.hasElements(patterns);
+
+	String value = getString(index);
+	return (value != null) ? ParseUtils.parseLocalDateTime(value, patterns) : null;
+    }
+
+    public LocalTime getLocalTimeReq(int index, String... patterns) throws DateFormatException {
+	Asserts.hasElements(patterns);
+
+	String value = getStringReq(index);
+	return ParseUtils.parseLocalTime(value, patterns);
+    }
+
+    public LocalTime getLocalTime(int index, String... patterns) throws DateFormatException {
+	Asserts.hasElements(patterns);
+
+	String value = getString(index);
+	return (value != null) ? ParseUtils.parseLocalTime(value, patterns) : null;
+    }
+
+    public OffsetDateTime getOffsetDateTimeReq(int index, String... patterns) throws DateFormatException {
+	Asserts.hasElements(patterns);
+
+	String value = getStringReq(index);
+	return ParseUtils.parseOffsetDateTime(value, patterns);
+    }
+
+    public OffsetDateTime getOffsetDateTime(int index, String... patterns) throws DateFormatException {
+	Asserts.hasElements(patterns);
+
+	String value = getString(index);
+	return (value != null) ? ParseUtils.parseOffsetDateTime(value, patterns) : null;
+    }
+
+    public OffsetTime getOffsetTimeReq(int index, String... patterns) throws DateFormatException {
+	Asserts.hasElements(patterns);
+
+	String value = getStringReq(index);
+	return ParseUtils.parseOffsetTime(value, patterns);
+    }
+
+    public OffsetTime getOffsetTime(int index, String... patterns) throws DateFormatException {
+	Asserts.hasElements(patterns);
+
+	String value = getString(index);
+	return (value != null) ? ParseUtils.parseOffsetTime(value, patterns) : null;
     }
 
     @Override

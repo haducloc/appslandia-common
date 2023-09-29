@@ -23,7 +23,6 @@ package com.appslandia.common.base;
 import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  *
@@ -41,13 +40,13 @@ public class ConfigWrapper implements Config {
     // com.appslandia.common.base.Config
 
     @Override
-    public String getString(String key) {
-	return this.cfg.getString(key);
+    public Iterator<String> getKeyIterator() {
+	return this.cfg.getKeyIterator();
     }
 
     @Override
-    public Iterator<String> getKeyIterator() {
-	return this.cfg.getKeyIterator();
+    public String getString(String key) {
+	return this.cfg.getString(key);
     }
 
     @Override
@@ -56,8 +55,8 @@ public class ConfigWrapper implements Config {
     }
 
     @Override
-    public String getRequiredString(String key) {
-	return this.cfg.getRequiredString(key);
+    public String getStringReq(String key) {
+	return this.cfg.getStringReq(key);
     }
 
     @Override
@@ -81,57 +80,77 @@ public class ConfigWrapper implements Config {
     }
 
     @Override
-    public boolean getBool(String key, boolean defaultValue) {
-	return this.cfg.getBool(key, defaultValue);
+    public boolean getBool(String key, boolean defaultValIfInvalid) {
+	return this.cfg.getBool(key, defaultValIfInvalid);
     }
 
     @Override
-    public boolean getBool(String key) {
+    public boolean getBool(String key) throws BoolFormatException {
 	return this.cfg.getBool(key);
     }
 
     @Override
-    public int getInt(String key, int defaultValue) {
-	return this.cfg.getInt(key, defaultValue);
+    public Boolean getBoolOpt(String key) throws BoolFormatException {
+	return this.cfg.getBoolOpt(key);
     }
 
     @Override
-    public int getInt(String key) {
+    public int getInt(String key, int defaultValIfInvalid) {
+	return this.cfg.getInt(key, defaultValIfInvalid);
+    }
+
+    @Override
+    public int getInt(String key) throws NumberFormatException {
 	return this.cfg.getInt(key);
     }
 
     @Override
-    public long getLong(String key, long defaultValue) {
-	return this.cfg.getLong(key, defaultValue);
+    public Integer getIntOpt(String key) throws NumberFormatException {
+	return this.cfg.getIntOpt(key);
     }
 
     @Override
-    public long getLong(String key) {
+    public long getLong(String key, long defaultValIfInvalid) {
+	return this.cfg.getLong(key, defaultValIfInvalid);
+    }
+
+    @Override
+    public long getLong(String key) throws NumberFormatException {
 	return this.cfg.getLong(key);
     }
 
     @Override
-    public double getDouble(String key, double defaultValue) {
-	return this.cfg.getDouble(key, defaultValue);
+    public Long getLongOpt(String key) throws NumberFormatException {
+	return this.cfg.getLongOpt(key);
     }
 
     @Override
-    public double getDouble(String key) {
+    public double getDouble(String key, double defaultValIfInvalid) {
+	return this.cfg.getDouble(key, defaultValIfInvalid);
+    }
+
+    @Override
+    public double getDouble(String key) throws NumberFormatException {
 	return this.cfg.getDouble(key);
     }
 
     @Override
-    public BigDecimal getDecimal(String key) {
+    public Double getDoubleOpt(String key) throws NumberFormatException {
+	return this.cfg.getDoubleOpt(key);
+    }
+
+    @Override
+    public BigDecimal getDecimal(String key, double defaultValIfInvalid) {
+	return this.cfg.getDecimal(key, defaultValIfInvalid);
+    }
+
+    @Override
+    public BigDecimal getDecimalReq(String key) throws NumberFormatException {
+	return this.cfg.getDecimalReq(key);
+    }
+
+    @Override
+    public BigDecimal getDecimal(String key) throws NumberFormatException {
 	return this.cfg.getDecimal(key);
-    }
-
-    @Override
-    public BigDecimal getDecimal(String key, BigDecimal defaultValue) {
-	return this.cfg.getDecimal(key, defaultValue);
-    }
-
-    @Override
-    public <T> T getValue(String key, Function<String, T> converter) {
-	return this.cfg.getValue(key, converter);
     }
 }

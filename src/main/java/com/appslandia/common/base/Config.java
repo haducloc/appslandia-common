@@ -23,7 +23,6 @@ package com.appslandia.common.base;
 import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.function.Function;
 
 import com.appslandia.common.utils.ParseUtils;
 import com.appslandia.common.utils.STR;
@@ -49,7 +48,7 @@ public interface Config {
 	return (value != null) ? value : defaultValue;
     }
 
-    default public String getRequiredString(String key) {
+    default public String getStringReq(String key) {
 	String value = getString(key);
 	if (value == null) {
 	    throw new AssertException(STR.fmt("No value found for the given key '{}'.", key));
@@ -59,10 +58,7 @@ public interface Config {
 
     default public String[] getStringArray(String key) {
 	String value = getString(key);
-	if (value == null) {
-	    return StringUtils.EMPTY_ARRAY;
-	}
-	return SplitUtils.splitByComma(value);
+	return (value != null) ? SplitUtils.splitByComma(value) : StringUtils.EMPTY_ARRAY;
     }
 
     default public String resolve(String key) {
@@ -130,73 +126,78 @@ public interface Config {
 	});
     }
 
-    default public boolean getBool(String key, boolean defaultValue) {
+    default public boolean getBool(String key, boolean defaultValIfInvalid) {
 	String value = getString(key);
-	if (value == null) {
-	    return defaultValue;
-	}
-	return ParseUtils.parseBool(value, defaultValue);
+	return (value != null) ? ParseUtils.parseBool(value, defaultValIfInvalid) : defaultValIfInvalid;
     }
 
-    default public boolean getBool(String key) {
-	String value = getRequiredString(key);
+    default public boolean getBool(String key) throws BoolFormatException {
+	String value = getStringReq(key);
 	return ParseUtils.parseBool(value);
     }
 
-    default public int getInt(String key, int defaultValue) {
+    default public Boolean getBoolOpt(String key) throws BoolFormatException {
 	String value = getString(key);
-	if (value == null) {
-	    return defaultValue;
-	}
-	return ParseUtils.parseInt(value, defaultValue);
+	return (value != null) ? ParseUtils.parseBool(value) : null;
     }
 
-    default public int getInt(String key) {
-	String value = getRequiredString(key);
+    default public int getInt(String key, int defaultValIfInvalid) {
+	String value = getString(key);
+	return (value != null) ? ParseUtils.parseInt(value, defaultValIfInvalid) : defaultValIfInvalid;
+    }
+
+    default public int getInt(String key) throws NumberFormatException {
+	String value = getStringReq(key);
 	return Integer.parseInt(value);
     }
 
-    default public long getLong(String key, long defaultValue) {
+    default public Integer getIntOpt(String key) throws NumberFormatException {
 	String value = getString(key);
-	if (value == null) {
-	    return defaultValue;
-	}
-	return ParseUtils.parseLong(value, defaultValue);
+	return (value != null) ? Integer.parseInt(value) : null;
     }
 
-    default public long getLong(String key) {
-	String value = getRequiredString(key);
+    default public long getLong(String key, long defaultValIfInvalid) {
+	String value = getString(key);
+	return (value != null) ? ParseUtils.parseLong(value, defaultValIfInvalid) : defaultValIfInvalid;
+    }
+
+    default public long getLong(String key) throws NumberFormatException {
+	String value = getStringReq(key);
 	return Long.parseLong(value);
     }
 
-    default public double getDouble(String key, double defaultValue) {
+    default public Long getLongOpt(String key) throws NumberFormatException {
 	String value = getString(key);
-	if (value == null) {
-	    return defaultValue;
-	}
-	return ParseUtils.parseDouble(value, defaultValue);
+	return (value != null) ? Long.parseLong(value) : null;
     }
 
-    default public double getDouble(String key) {
-	String value = getRequiredString(key);
+    default public double getDouble(String key, double defaultValIfInvalid) {
+	String value = getString(key);
+	return (value != null) ? ParseUtils.parseDouble(value, defaultValIfInvalid) : defaultValIfInvalid;
+    }
+
+    default public double getDouble(String key) throws NumberFormatException {
+	String value = getStringReq(key);
 	return Double.parseDouble(value);
     }
 
-    default public BigDecimal getDecimal(String key) {
-	String value = getRequiredString(key);
+    default public Double getDoubleOpt(String key) throws NumberFormatException {
+	String value = getString(key);
+	return (value != null) ? Double.parseDouble(value) : null;
+    }
+
+    default public BigDecimal getDecimal(String key, double defaultValIfInvalid) {
+	String value = getString(key);
+	return ParseUtils.parseDecimal(value, defaultValIfInvalid);
+    }
+
+    default public BigDecimal getDecimalReq(String key) throws NumberFormatException {
+	String value = getStringReq(key);
 	return new BigDecimal(value);
     }
 
-    default public BigDecimal getDecimal(String key, BigDecimal defaultValue) {
+    default public BigDecimal getDecimal(String key) throws NumberFormatException {
 	String value = getString(key);
-	if (value == null) {
-	    return defaultValue;
-	}
-	return ParseUtils.parseDecimal(value, defaultValue);
-    }
-
-    default public <T> T getValue(String key, Function<String, T> converter) {
-	String value = getString(key);
-	return ParseUtils.parseValue(value, converter);
+	return (value != null) ? new BigDecimal(value) : null;
     }
 }
