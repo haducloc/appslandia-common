@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
+import java.time.temporal.Temporal;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
@@ -43,6 +44,10 @@ import com.appslandia.common.base.DateFormatException;
 public class CsvRecord {
 
     final String[] values;
+
+    public CsvRecord(int fieldCount) {
+	this.values = new String[fieldCount];
+    }
 
     public CsvRecord(String[] fieldValues) {
 	this.values = Asserts.notNull(fieldValues);
@@ -233,6 +238,48 @@ public class CsvRecord {
 	Objects.checkIndex(index, this.values.length);
 	this.values[index] = (value != null) ? value.toString() : null;
 	return this;
+    }
+
+    public CsvRecord set(int index, String value) {
+	Objects.checkIndex(index, this.values.length);
+	this.values[index] = (value != null) ? value : null;
+	return this;
+    }
+
+    public CsvRecord set(int index, boolean value) {
+	return set(index, Boolean.toString(value));
+    }
+
+    public CsvRecord set(int index, byte value) {
+	return set(index, Byte.toString(value));
+    }
+
+    public CsvRecord set(int index, short value) {
+	return set(index, Short.toString(value));
+    }
+
+    public CsvRecord set(int index, int value) {
+	return set(index, Integer.toString(value));
+    }
+
+    public CsvRecord set(int index, long value) {
+	return set(index, Long.toString(value));
+    }
+
+    public CsvRecord set(int index, float value) {
+	return set(index, Float.toString(value));
+    }
+
+    public CsvRecord set(int index, double value) {
+	return set(index, Double.toString(value));
+    }
+
+    public CsvRecord set(int index, Date value, String pattern) {
+	return set(index, (value != null) ? DateUtils.newDateFormat(pattern).format(value) : null);
+    }
+
+    public CsvRecord set(int index, Temporal value, String pattern) {
+	return set(index, (value != null) ? DateUtils.getFormatter(pattern).format(value) : null);
     }
 
     @Override
