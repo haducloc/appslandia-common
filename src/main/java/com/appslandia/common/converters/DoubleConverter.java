@@ -38,6 +38,10 @@ public class DoubleConverter extends NumberConverter<Double> {
     final int fractionDigits;
     final RoundingMode roundingMode;
 
+    public DoubleConverter() {
+	this(3);
+    }
+
     public DoubleConverter(int fractionDigits) {
 	this(fractionDigits, RoundingMode.HALF_EVEN);
     }

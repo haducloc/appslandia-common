@@ -39,6 +39,10 @@ public class BigDecimalConverter extends NumberConverter<BigDecimal> {
     final int fractionDigits;
     final RoundingMode roundingMode;
 
+    public BigDecimalConverter() {
+	this(3);
+    }
+
     public BigDecimalConverter(int fractionDigits) {
 	this(fractionDigits, RoundingMode.HALF_EVEN);
     }

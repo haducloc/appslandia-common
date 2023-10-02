@@ -48,9 +48,9 @@ public class ConverterProvider extends InitializeObject {
 	this.converters.putIfAbsent(Converter.INTEGER, new IntegerConverter());
 	this.converters.putIfAbsent(Converter.LONG, new LongConverter());
 
-	this.converters.putIfAbsent(Converter.FLOAT, new FloatConverter(2));
-	this.converters.putIfAbsent(Converter.DOUBLE, new DoubleConverter(2));
-	this.converters.putIfAbsent(Converter.BIGDECIMAL, new BigDecimalConverter(2));
+	this.converters.putIfAbsent(Converter.FLOAT, new FloatConverter());
+	this.converters.putIfAbsent(Converter.DOUBLE, new DoubleConverter());
+	this.converters.putIfAbsent(Converter.BIGDECIMAL, new BigDecimalConverter());
 
 	for (int fractionDigits = 1; fractionDigits <= 8; fractionDigits++) {
 	    this.converters.putIfAbsent(Converter.FLOAT + fractionDigits, new FloatConverter(fractionDigits));

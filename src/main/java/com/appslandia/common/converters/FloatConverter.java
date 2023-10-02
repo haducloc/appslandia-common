@@ -39,6 +39,10 @@ public class FloatConverter extends NumberConverter<Float> {
     final int fractionDigits;
     final RoundingMode roundingMode;
 
+    public FloatConverter() {
+	this(3);
+    }
+
     public FloatConverter(int fractionDigits) {
 	this(fractionDigits, RoundingMode.HALF_EVEN);
     }
