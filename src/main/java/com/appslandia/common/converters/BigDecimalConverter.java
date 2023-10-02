@@ -39,6 +39,10 @@ public class BigDecimalConverter extends NumberConverter<BigDecimal> {
     final int fractionDigits;
     final RoundingMode roundingMode;
 
+    public BigDecimalConverter(int fractionDigits) {
+	this(fractionDigits, RoundingMode.HALF_EVEN);
+    }
+
     public BigDecimalConverter(int fractionDigits, RoundingMode roundingMode) {
 	this.fractionDigits = fractionDigits;
 	this.roundingMode = roundingMode;
@@ -63,9 +67,7 @@ public class BigDecimalConverter extends NumberConverter<BigDecimal> {
 	    NumberFormat nf = formatProvider.getNumberFormat(this.fractionDigits, this.roundingMode, false);
 	    return nf.format(obj);
 	}
-
-	BigDecimal value = obj.setScale(this.fractionDigits, this.roundingMode);
-	return getDecimalFormat(this.fractionDigits).format(value);
+	return formatProvider.getDecimalFormat(this.fractionDigits, this.roundingMode).format(obj);
     }
 
     @Override

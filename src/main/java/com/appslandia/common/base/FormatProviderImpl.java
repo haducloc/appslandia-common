@@ -43,6 +43,7 @@ public class FormatProviderImpl implements FormatProvider {
     protected ProviderMap<NumberFormatKey, NumberFormat> currencyFormats;
 
     protected ProviderMap<String, DateFormat> dateFormats;
+    protected ProviderMap<NumberFormatKey, DecimalFormat> decimalFormats;
 
     public FormatProviderImpl() {
 	this(Language.getDefault());
@@ -72,10 +73,10 @@ public class FormatProviderImpl implements FormatProvider {
 
     @Override
     public NumberFormat getNumberFormat(int fractionDigits, RoundingMode roundingMode, boolean grouping) {
-	return this.getDecimalFormats().get(new NumberFormatKey(fractionDigits, roundingMode, grouping));
+	return this.getNumberFormats().get(new NumberFormatKey(fractionDigits, roundingMode, grouping));
     }
 
-    protected ProviderMap<NumberFormatKey, NumberFormat> getDecimalFormats() {
+    protected ProviderMap<NumberFormatKey, NumberFormat> getNumberFormats() {
 	if (this.numberFormats != null) {
 	    return this.numberFormats;
 	}
@@ -146,6 +147,23 @@ public class FormatProviderImpl implements FormatProvider {
 	    return this.dateFormats;
 	}
 	return this.dateFormats = new ProviderMap<String, DateFormat>((pattern) -> DateUtils.newDateFormat(pattern));
+    }
+
+    @Override
+    public DecimalFormat getDecimalFormat(int fractionDigits, RoundingMode roundingMode) {
+	return this.getDecimalFormats().get(new NumberFormatKey(fractionDigits, roundingMode, false));
+    }
+
+    protected ProviderMap<NumberFormatKey, DecimalFormat> getDecimalFormats() {
+	if (this.decimalFormats != null) {
+	    return this.decimalFormats;
+	}
+	return this.decimalFormats = new ProviderMap<NumberFormatKey, DecimalFormat>((key) -> {
+	    DecimalFormat impl = new DecimalFormat("0." + "0".repeat(key.fractionDigits));
+	    impl.setGroupingUsed(false);
+	    impl.setRoundingMode(key.roundingMode);
+	    return impl;
+	});
     }
 
     static final class NumberFormatKey {

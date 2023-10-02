@@ -20,7 +20,6 @@
 
 package com.appslandia.common.converters;
 
-import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
@@ -49,14 +48,14 @@ public class ConverterProvider extends InitializeObject {
 	this.converters.putIfAbsent(Converter.INTEGER, new IntegerConverter());
 	this.converters.putIfAbsent(Converter.LONG, new LongConverter());
 
-	this.converters.putIfAbsent(Converter.FLOAT, new FloatConverter(2, RoundingMode.HALF_EVEN));
-	this.converters.putIfAbsent(Converter.DOUBLE, new DoubleConverter(2, RoundingMode.HALF_EVEN));
-	this.converters.putIfAbsent(Converter.BIGDECIMAL, new BigDecimalConverter(2, RoundingMode.HALF_EVEN));
+	this.converters.putIfAbsent(Converter.FLOAT, new FloatConverter(2));
+	this.converters.putIfAbsent(Converter.DOUBLE, new DoubleConverter(2));
+	this.converters.putIfAbsent(Converter.BIGDECIMAL, new BigDecimalConverter(2));
 
 	for (int fractionDigits = 1; fractionDigits <= 8; fractionDigits++) {
-	    this.converters.putIfAbsent(Converter.FLOAT + fractionDigits, new FloatConverter(fractionDigits, RoundingMode.HALF_EVEN));
-	    this.converters.putIfAbsent(Converter.DOUBLE + fractionDigits, new DoubleConverter(fractionDigits, RoundingMode.HALF_EVEN));
-	    this.converters.putIfAbsent(Converter.BIGDECIMAL + fractionDigits, new BigDecimalConverter(fractionDigits, RoundingMode.HALF_EVEN));
+	    this.converters.putIfAbsent(Converter.FLOAT + fractionDigits, new FloatConverter(fractionDigits));
+	    this.converters.putIfAbsent(Converter.DOUBLE + fractionDigits, new DoubleConverter(fractionDigits));
+	    this.converters.putIfAbsent(Converter.BIGDECIMAL + fractionDigits, new BigDecimalConverter(fractionDigits));
 	}
 	this.converters.putIfAbsent(Converter.BOOLEAN, new BooleanConverter());
 

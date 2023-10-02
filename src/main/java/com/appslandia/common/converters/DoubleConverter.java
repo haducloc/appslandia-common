@@ -24,7 +24,6 @@ import java.math.RoundingMode;
 import java.text.NumberFormat;
 
 import com.appslandia.common.base.FormatProvider;
-import com.appslandia.common.utils.DecimalUtils;
 import com.appslandia.common.utils.StringUtils;
 
 /**
@@ -38,6 +37,10 @@ public class DoubleConverter extends NumberConverter<Double> {
 
     final int fractionDigits;
     final RoundingMode roundingMode;
+
+    public DoubleConverter(int fractionDigits) {
+	this(fractionDigits, RoundingMode.HALF_EVEN);
+    }
 
     public DoubleConverter(int fractionDigits, RoundingMode roundingMode) {
 	this.fractionDigits = fractionDigits;
@@ -63,9 +66,7 @@ public class DoubleConverter extends NumberConverter<Double> {
 	    NumberFormat nf = formatProvider.getNumberFormat(this.fractionDigits, this.roundingMode, false);
 	    return nf.format(obj);
 	}
-
-	double value = DecimalUtils.round(obj.doubleValue(), this.fractionDigits, this.roundingMode);
-	return getDecimalFormat(this.fractionDigits).format(value);
+	return formatProvider.getDecimalFormat(this.fractionDigits, this.roundingMode).format(obj);
     }
 
     @Override

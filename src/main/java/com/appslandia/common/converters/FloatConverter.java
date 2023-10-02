@@ -24,7 +24,6 @@ import java.math.RoundingMode;
 import java.text.NumberFormat;
 
 import com.appslandia.common.base.FormatProvider;
-import com.appslandia.common.utils.DecimalUtils;
 import com.appslandia.common.utils.StringUtils;
 import com.appslandia.common.utils.ValueUtils;
 
@@ -39,6 +38,10 @@ public class FloatConverter extends NumberConverter<Float> {
 
     final int fractionDigits;
     final RoundingMode roundingMode;
+
+    public FloatConverter(int fractionDigits) {
+	this(fractionDigits, RoundingMode.HALF_EVEN);
+    }
 
     public FloatConverter(int fractionDigits, RoundingMode roundingMode) {
 	this.fractionDigits = fractionDigits;
@@ -64,9 +67,7 @@ public class FloatConverter extends NumberConverter<Float> {
 	    NumberFormat nf = formatProvider.getNumberFormat(this.fractionDigits, this.roundingMode, false);
 	    return nf.format(obj);
 	}
-
-	float value = DecimalUtils.round(obj.floatValue(), this.fractionDigits, this.roundingMode);
-	return getDecimalFormat(this.fractionDigits).format(value);
+	return formatProvider.getDecimalFormat(this.fractionDigits, this.roundingMode).format(obj);
     }
 
     @Override
