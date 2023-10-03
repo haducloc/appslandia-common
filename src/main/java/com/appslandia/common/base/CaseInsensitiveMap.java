@@ -82,7 +82,9 @@ public class CaseInsensitiveMap<V> implements Map<String, V>, Serializable {
 
     @Override
     public void putAll(Map<? extends String, ? extends V> m) {
-	throw new UnsupportedOperationException();
+	for (Entry<? extends String, ? extends V> entry : m.entrySet()) {
+	    this.map.put(toLowerCase(entry.getKey()), entry.getValue());
+	}
     }
 
     @Override
