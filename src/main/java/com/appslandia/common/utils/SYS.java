@@ -320,7 +320,7 @@ public class SYS {
 	} else {
 	    // PROP
 	    String expr1 = expr.substring(0, commaIdx).trim();
-	    String resolvedValue = getProp(expr1, null);
+	    String resolvedValue = getProp(expr1);
 	    if (resolvedValue != null) {
 		return resolvedValue;
 	    }
