@@ -79,6 +79,11 @@ public class ResultSetImpl implements ResultSet {
 	return (value != null) ? value.toUpperCase(Locale.ENGLISH) : valueIfNull.toUpperCase(Locale.ENGLISH);
     }
 
+    public String getStringUCReq(String columnLabel) throws java.sql.SQLException {
+	String value = getStringReq(columnLabel);
+	return value.toUpperCase(Locale.ENGLISH);
+    }
+
     public String getStringLC(String columnLabel) throws java.sql.SQLException {
 	String value = this.rs.getString(columnLabel);
 	return (value != null) ? value.toLowerCase(Locale.ENGLISH) : null;
@@ -89,6 +94,11 @@ public class ResultSetImpl implements ResultSet {
 
 	String value = this.rs.getString(columnLabel);
 	return (value != null) ? value.toLowerCase(Locale.ENGLISH) : valueIfNull.toLowerCase(Locale.ENGLISH);
+    }
+
+    public String getStringLCReq(String columnLabel) throws java.sql.SQLException {
+	String value = getStringReq(columnLabel);
+	return value.toLowerCase(Locale.ENGLISH);
     }
 
     // Get with default values

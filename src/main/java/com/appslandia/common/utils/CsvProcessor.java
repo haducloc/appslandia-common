@@ -24,7 +24,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import com.appslandia.common.base.InitializeException;
 import com.appslandia.common.base.InitializeObject;
@@ -41,6 +45,8 @@ public class CsvProcessor extends InitializeObject {
     private boolean writeNull;
     private char separator = ',';
     private boolean escCrLf;
+
+    final Map<Integer, Function<String, String>> postProcessors = new TreeMap<>();
 
     @Override
     protected void init() throws Exception {
@@ -71,6 +77,14 @@ public class CsvProcessor extends InitializeObject {
 	assertNotInitialized();
 
 	this.escCrLf = true;
+	return this;
+    }
+
+    public CsvProcessor addPostProcessor(int fieldIndex, Function<String, String> postProcessor) {
+	assertNotInitialized();
+	Asserts.notNull(postProcessor);
+
+	this.postProcessors.put(fieldIndex, postProcessor);
 	return this;
     }
 
@@ -167,6 +181,14 @@ public class CsvProcessor extends InitializeObject {
 		String[] values = splitRecord(currentRecord.toString(), recordLen);
 		if (recordLen == null) {
 		    recordLen = (values.length > 0) ? values.length : 1;
+		}
+
+		// Handle postProcessors
+		for (Entry<Integer, Function<String, String>> pp : this.postProcessors.entrySet()) {
+		    int index = pp.getKey();
+		    Asserts.isTrue(index >= 0 && index < values.length);
+
+		    values[index] = pp.getValue().apply(values[index]);
 		}
 
 		consumer.accept(values);

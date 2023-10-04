@@ -29,6 +29,7 @@ import java.time.OffsetTime;
 import java.time.temporal.Temporal;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -73,6 +74,40 @@ public class CsvRecord {
     public String getString(int index, String defaultValue) {
 	String value = getString(index);
 	return (value != null) ? value : defaultValue;
+    }
+
+    public String getStringUC(int index) {
+	String value = getString(index);
+	return (value != null) ? value.toUpperCase(Locale.ENGLISH) : null;
+    }
+
+    public String getStringUC(int index, String valueIfNull) {
+	Asserts.notNull(valueIfNull);
+
+	String value = getString(index);
+	return (value != null) ? value.toUpperCase(Locale.ENGLISH) : valueIfNull.toUpperCase(Locale.ENGLISH);
+    }
+
+    public String getStringUCReq(int index) {
+	String value = getStringReq(index);
+	return value.toUpperCase(Locale.ENGLISH);
+    }
+
+    public String getStringLC(int index) {
+	String value = getString(index);
+	return (value != null) ? value.toLowerCase(Locale.ENGLISH) : null;
+    }
+
+    public String getStringLC(int index, String valueIfNull) {
+	Asserts.notNull(valueIfNull);
+
+	String value = getString(index);
+	return (value != null) ? value.toLowerCase(Locale.ENGLISH) : valueIfNull.toLowerCase(Locale.ENGLISH);
+    }
+
+    public String getStringLCReq(int index) {
+	String value = getStringReq(index);
+	return value.toLowerCase(Locale.ENGLISH);
     }
 
     public int getInt(int index) throws NumberFormatException {
