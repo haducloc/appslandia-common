@@ -31,6 +31,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.appslandia.common.base.AssertException;
@@ -52,6 +53,16 @@ public class CsvRecord {
 
     public CsvRecord(String[] fieldValues) {
 	this.values = Asserts.notNull(fieldValues);
+    }
+
+    public void process(int[] indexes, Function<String, String> processor) {
+	Asserts.notNull(processor);
+
+	for (int i : indexes) {
+	    Objects.checkIndex(i, this.values.length);
+
+	    this.values[i] = processor.apply(this.values[i]);
+	}
     }
 
     public int length() {
