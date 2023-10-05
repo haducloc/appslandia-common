@@ -212,7 +212,7 @@ public class CsvProcessor extends InitializeObject {
 	}
 
 	values.add(unescape(currentField));
-	return values.toArray(new String[0]);
+	return values.toArray(new String[values.size()]);
     }
 
     protected String unescape(StringBuilder value) {
