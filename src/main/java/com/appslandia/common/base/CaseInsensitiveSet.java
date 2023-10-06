@@ -111,6 +111,6 @@ public class CaseInsensitiveSet implements Set<String>, Serializable {
     }
 
     static String toLowerCase(String key) {
-	return (key != null) ? key.toLowerCase(Locale.ENGLISH) : null;
+	return (key != null) ? key.toLowerCase(Locale.ROOT) : null;
     }
 }

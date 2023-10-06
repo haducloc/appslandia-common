@@ -89,36 +89,36 @@ public class CsvRecord {
 
     public String getStringUC(int index) {
 	String value = getString(index);
-	return (value != null) ? value.toUpperCase(Locale.ENGLISH) : null;
+	return (value != null) ? value.toUpperCase(Locale.ROOT) : null;
     }
 
     public String getStringUC(int index, String valueIfNull) {
 	Asserts.notNull(valueIfNull);
 
 	String value = getString(index);
-	return (value != null) ? value.toUpperCase(Locale.ENGLISH) : valueIfNull.toUpperCase(Locale.ENGLISH);
+	return (value != null) ? value.toUpperCase(Locale.ROOT) : valueIfNull.toUpperCase(Locale.ROOT);
     }
 
     public String getStringUCReq(int index) {
 	String value = getStringReq(index);
-	return value.toUpperCase(Locale.ENGLISH);
+	return value.toUpperCase(Locale.ROOT);
     }
 
     public String getStringLC(int index) {
 	String value = getString(index);
-	return (value != null) ? value.toLowerCase(Locale.ENGLISH) : null;
+	return (value != null) ? value.toLowerCase(Locale.ROOT) : null;
     }
 
     public String getStringLC(int index, String valueIfNull) {
 	Asserts.notNull(valueIfNull);
 
 	String value = getString(index);
-	return (value != null) ? value.toLowerCase(Locale.ENGLISH) : valueIfNull.toLowerCase(Locale.ENGLISH);
+	return (value != null) ? value.toLowerCase(Locale.ROOT) : valueIfNull.toLowerCase(Locale.ROOT);
     }
 
     public String getStringLCReq(int index) {
 	String value = getStringReq(index);
-	return value.toLowerCase(Locale.ENGLISH);
+	return value.toLowerCase(Locale.ROOT);
     }
 
     public int getInt(int index) throws NumberFormatException {

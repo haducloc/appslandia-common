@@ -65,40 +65,40 @@ public class ResultSetImpl implements ResultSet {
 	return NormalizeUtils.valuesAsID(values);
     }
 
-    // UpperCase/LowerCase with Locale.ENGLISH
+    // UpperCase/LowerCase with Locale.ROOT
 
     public String getStringUC(String columnLabel) throws java.sql.SQLException {
 	String value = this.rs.getString(columnLabel);
-	return (value != null) ? value.toUpperCase(Locale.ENGLISH) : null;
+	return (value != null) ? value.toUpperCase(Locale.ROOT) : null;
     }
 
     public String getStringUC(String columnLabel, String valueIfNull) throws java.sql.SQLException {
 	Asserts.notNull(valueIfNull);
 
 	String value = this.rs.getString(columnLabel);
-	return (value != null) ? value.toUpperCase(Locale.ENGLISH) : valueIfNull.toUpperCase(Locale.ENGLISH);
+	return (value != null) ? value.toUpperCase(Locale.ROOT) : valueIfNull.toUpperCase(Locale.ROOT);
     }
 
     public String getStringUCReq(String columnLabel) throws java.sql.SQLException {
 	String value = getStringReq(columnLabel);
-	return value.toUpperCase(Locale.ENGLISH);
+	return value.toUpperCase(Locale.ROOT);
     }
 
     public String getStringLC(String columnLabel) throws java.sql.SQLException {
 	String value = this.rs.getString(columnLabel);
-	return (value != null) ? value.toLowerCase(Locale.ENGLISH) : null;
+	return (value != null) ? value.toLowerCase(Locale.ROOT) : null;
     }
 
     public String getStringLC(String columnLabel, String valueIfNull) throws java.sql.SQLException {
 	Asserts.notNull(valueIfNull);
 
 	String value = this.rs.getString(columnLabel);
-	return (value != null) ? value.toLowerCase(Locale.ENGLISH) : valueIfNull.toLowerCase(Locale.ENGLISH);
+	return (value != null) ? value.toLowerCase(Locale.ROOT) : valueIfNull.toLowerCase(Locale.ROOT);
     }
 
     public String getStringLCReq(String columnLabel) throws java.sql.SQLException {
 	String value = getStringReq(columnLabel);
-	return value.toLowerCase(Locale.ENGLISH);
+	return value.toLowerCase(Locale.ROOT);
     }
 
     // Get with default values

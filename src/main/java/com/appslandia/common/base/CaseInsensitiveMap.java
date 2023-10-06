@@ -108,6 +108,6 @@ public class CaseInsensitiveMap<V> implements Map<String, V>, Serializable {
     }
 
     static String toLowerCase(String key) {
-	return (key != null) ? key.toLowerCase(Locale.ENGLISH) : null;
+	return (key != null) ? key.toLowerCase(Locale.ROOT) : null;
     }
 }
