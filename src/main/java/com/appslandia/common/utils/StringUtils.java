@@ -39,39 +39,33 @@ public class StringUtils {
     public static final String DOUBLE_LINE_SEP = System.lineSeparator() + System.lineSeparator();
 
     public static String toLowerCase(String str, Locale locale) {
-	if (str == null) {
+	if (str == null || str.isEmpty()) {
 	    return null;
 	}
 	return str.toLowerCase(locale);
     }
 
     public static String toUpperCase(String str, Locale locale) {
-	if (str == null) {
+	if (str == null || str.isEmpty()) {
 	    return null;
 	}
 	return str.toUpperCase(locale);
     }
 
     public static String firstLowerCase(String str, Locale locale) {
-	if (str == null) {
+	if (str == null || str.isEmpty()) {
 	    return null;
 	}
-	if (!str.isEmpty()) {
-	    StringBuilder sb = new StringBuilder(str.length());
-	    return sb.append(str.substring(0, 1).toLowerCase(locale)).append(str.substring(1)).toString();
-	}
-	return str;
+	StringBuilder sb = new StringBuilder(str.length());
+	return sb.append(str.substring(0, 1).toLowerCase(locale)).append(str.substring(1)).toString();
     }
 
     public static String firstUpperCase(String str, Locale locale) {
-	if (str == null) {
+	if (str == null || str.isEmpty()) {
 	    return null;
 	}
-	if (!str.isEmpty()) {
-	    StringBuilder sb = new StringBuilder(str.length());
-	    return sb.append(str.substring(0, 1).toUpperCase(locale)).append(str.substring(1)).toString();
-	}
-	return str;
+	StringBuilder sb = new StringBuilder(str.length());
+	return sb.append(str.substring(0, 1).toUpperCase(locale)).append(str.substring(1)).toString();
     }
 
     public static String trimToNull(String str) {
@@ -83,7 +77,7 @@ public class StringUtils {
     }
 
     public static String trimToDefault(String str, String defaultValue) {
-	if (str == null) {
+	if (str == null || str.isEmpty()) {
 	    return defaultValue;
 	}
 	str = str.trim();
@@ -104,20 +98,6 @@ public class StringUtils {
 	    return null;
 	}
 	return str.substring(start, end + 1);
-    }
-
-    public static String nullOrLowerCase(String str, Locale locale) {
-	if (str == null) {
-	    return null;
-	}
-	return !str.isEmpty() ? str.toLowerCase(locale) : null;
-    }
-
-    public static String nullOrUpperCase(String str, Locale locale) {
-	if (str == null) {
-	    return null;
-	}
-	return !str.isEmpty() ? str.toUpperCase(locale) : null;
     }
 
     public static boolean isNullOrEmpty(String str) {
