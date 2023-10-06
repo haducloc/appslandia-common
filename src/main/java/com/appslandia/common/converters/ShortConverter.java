@@ -63,7 +63,7 @@ public class ShortConverter extends NumberConverter<Short> {
 	    if (!ValueUtils.isShortRange(value)) {
 		throw toNumberOverflowError(str);
 	    }
-	    return Short.valueOf((short) value);
+	    return (short) value;
 
 	} catch (NumberFormatException ex) {
 	    throw toParsingError(str, getTargetType().getName());

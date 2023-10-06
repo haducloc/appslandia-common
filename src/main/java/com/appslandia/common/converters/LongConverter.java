@@ -57,7 +57,7 @@ public class LongConverter extends NumberConverter<Long> {
 	    return null;
 	}
 	try {
-	    return Long.valueOf(Long.parseLong(str));
+	    return Long.parseLong(str);
 
 	} catch (NumberFormatException ex) {
 	}

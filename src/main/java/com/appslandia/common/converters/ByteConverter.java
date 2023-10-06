@@ -63,7 +63,7 @@ public class ByteConverter extends NumberConverter<Byte> {
 	    if (!ValueUtils.isByteRange(value)) {
 		throw toNumberOverflowError(str);
 	    }
-	    return Byte.valueOf((byte) value);
+	    return (byte) value;
 
 	} catch (NumberFormatException ex) {
 	}

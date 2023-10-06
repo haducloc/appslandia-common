@@ -63,7 +63,7 @@ public class IntegerConverter extends NumberConverter<Integer> {
 	    if (!ValueUtils.isIntRange(value)) {
 		throw toNumberOverflowError(str);
 	    }
-	    return Integer.valueOf((int) value);
+	    return (int) value;
 
 	} catch (NumberFormatException ex) {
 	}
