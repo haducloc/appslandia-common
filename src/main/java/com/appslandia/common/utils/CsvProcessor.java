@@ -24,7 +24,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 import com.appslandia.common.base.InitializeException;
 import com.appslandia.common.base.InitializeObject;
@@ -138,18 +138,19 @@ public class CsvProcessor extends InitializeObject {
 
     public List<CsvRecord> parseRecords(BufferedReader reader) throws IOException {
 	this.initialize();
-	List<CsvRecord> records = new ArrayList<>();
+	List<CsvRecord> records = new ArrayList<>(128);
 
-	parse(reader, values -> records.add(new CsvRecord(values)));
+	parse(reader, (idx, csvRecord) -> records.add(csvRecord));
 	return records;
     }
 
-    public void parse(BufferedReader reader, Consumer<String[]> consumer) throws IOException {
+    public void parse(BufferedReader reader, BiConsumer<Integer, CsvRecord> consumer) throws IOException {
 	this.initialize();
 
 	String line;
 	StringBuilder currentRecord = new StringBuilder();
 	Integer recordLen = null;
+	int recordIdx = 0;
 
 	while ((line = reader.readLine()) != null) {
 
@@ -169,7 +170,7 @@ public class CsvProcessor extends InitializeObject {
 		    recordLen = (values.length > 0) ? values.length : 1;
 		}
 
-		consumer.accept(values);
+		consumer.accept(recordIdx++, new CsvRecord(values));
 		currentRecord.setLength(0);
 	    }
 	}
