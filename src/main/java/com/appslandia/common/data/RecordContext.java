@@ -25,16 +25,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
+import com.appslandia.common.base.Out;
 import com.appslandia.common.base.TextBuilder;
 import com.appslandia.common.jdbc.ConnectionImpl;
 import com.appslandia.common.jdbc.DbContext;
@@ -44,7 +42,6 @@ import com.appslandia.common.jdbc.ResultSetImpl;
 import com.appslandia.common.jdbc.StatementImpl;
 import com.appslandia.common.jdbc.UncheckedSQLException;
 import com.appslandia.common.utils.Asserts;
-import com.appslandia.common.utils.NormalizeUtils;
 import com.appslandia.common.utils.STR;
 import com.appslandia.common.utils.StringUtils;
 
@@ -391,57 +388,16 @@ public class RecordContext extends DbContext {
 
     private static final ConcurrentMap<String, ConcurrentMap<String, Table>> TABLES = new ConcurrentHashMap<>();
 
-    private static final String TABLE_NAME_PATSTR = "[^,\\s]+";
-    private static final String COLUMN_NAME_PATSTR = "[^,\\s]+";
-    private static final String COLUMN_TYPE_PATSTR = "[^,\\s]+(?:\\(\\d+,\\d+\\))?";
-
-    private static final Pattern TABLE_SPEC_PATTERN = Pattern.compile("^\\s*(" + TABLE_NAME_PATSTR + ")\\s*\\(\\s*(" + COLUMN_NAME_PATSTR + "\\s+" + COLUMN_TYPE_PATSTR
-	    + "\\s*(,\\s*" + COLUMN_NAME_PATSTR + "\\s+" + COLUMN_TYPE_PATSTR + "\\s*)*)\\)\\s*$");
-
     public Table createTable(String tableSpec, boolean lowercase) throws UncheckedSQLException {
-	Matcher matcher = TABLE_SPEC_PATTERN.matcher(tableSpec);
-	if (!matcher.matches()) {
-	    throw new IllegalArgumentException(STR.fmt("The given tableSpec is invalid: {}", NormalizeUtils.removeCrLf(tableSpec)));
-	}
+	Out<String> tableName = new Out<>();
+	String tableScript = TableUtils.toTableScript(tableSpec, lowercase, tableName);
 
-	// Build script
-	TextBuilder script = new TextBuilder(tableSpec.length() + 256);
-	String tableName = matcher.group(1);
-	script.append("CREATE TABLE ").append(lowercase ? tableName.toLowerCase(Locale.ROOT) : tableName).append("(").appendln();
-
-	String columns = matcher.group(2);
-	StringBuilder colDef = new StringBuilder();
-	boolean inParentheses = false;
-
-	for (char c : columns.toCharArray()) {
-	    if (c == '(') {
-		inParentheses = true;
-	    } else if (c == ')') {
-		inParentheses = false;
-	    }
-
-	    if (c == ',' && !inParentheses) {
-		String[] colParts = colDef.toString().trim().split("\\s+");
-		script.appendsp(4).append(lowercase ? colParts[0].toLowerCase(Locale.ROOT) : colParts[0]).append(" ").append(colParts[1].toUpperCase(Locale.ROOT)).append(",")
-			.appendln();
-
-		colDef.setLength(0);
-	    } else {
-		colDef.append(c);
-	    }
-	}
-
-	String[] colParts = colDef.toString().trim().split("\\s+");
-	script.appendsp(4).append(lowercase ? colParts[0].toLowerCase(Locale.ROOT) : colParts[0]).append(" ").append(colParts[1].toUpperCase(Locale.ROOT)).appendln();
-
-	script.append(")");
-
-	// Execute the script
 	try {
-	    this.conn.executeUpdate(script.toString());
+	    this.conn.executeUpdate(tableScript);
+	    return getTable(tableName.value);
+
 	} catch (SQLException ex) {
 	    throw new UncheckedSQLException(ex);
 	}
-	return getTable(tableName);
     }
 }
