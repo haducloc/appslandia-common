@@ -88,7 +88,7 @@ public class NormalizeUtils {
 	if (str == null) {
 	    return null;
 	}
-	return normalize(str, CRLF_PATTERNS, "");
+	return normalize(str, CRLF_PATTERNS, " ");
     }
 
     private static final Pattern[] WTSP_PATTERNS = PatternUtils.compile("\\s+");
