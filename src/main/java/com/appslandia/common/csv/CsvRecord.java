@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
+import java.time.temporal.Temporal;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Objects;
@@ -36,6 +37,7 @@ import com.appslandia.common.base.AssertException;
 import com.appslandia.common.base.BoolFormatException;
 import com.appslandia.common.base.DateFormatException;
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.ParseUtils;
 import com.appslandia.common.utils.STR;
 
@@ -351,6 +353,30 @@ public class CsvRecord {
 
     public CsvRecord set(int index, double value) {
 	return set(index, Double.toString(value));
+    }
+
+    public CsvRecord set(int index, LocalDate value, String pattern) {
+	return setTemporal(index, value, (pattern != null) ? pattern : DateUtils.ISO8601_DATE);
+    }
+
+    public CsvRecord set(int index, LocalTime value, String pattern) {
+	return setTemporal(index, value, (pattern != null) ? pattern : DateUtils.ISO8601_TIME_N3);
+    }
+
+    public CsvRecord set(int index, LocalDateTime value, String pattern) {
+	return setTemporal(index, value, (pattern != null) ? pattern : DateUtils.ISO8601_DATETIME_N3);
+    }
+
+    public CsvRecord set(int index, OffsetTime value, String pattern) {
+	return setTemporal(index, value, (pattern != null) ? pattern : DateUtils.ISO8601_TIMEZ_N3);
+    }
+
+    public CsvRecord set(int index, OffsetDateTime value, String pattern) {
+	return setTemporal(index, value, (pattern != null) ? pattern : DateUtils.ISO8601_DATETIMEZ_N3);
+    }
+
+    private CsvRecord setTemporal(int index, Temporal value, String pattern) {
+	return set(index, (value != null) ? DateUtils.getFormatter(pattern).format(value) : null);
     }
 
     @Override
