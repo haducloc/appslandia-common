@@ -24,7 +24,9 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -285,7 +287,11 @@ public class DbContext implements AutoCloseable {
 	    StatementImpl stat = Asserts.notNull(this.stats.get(pSql));
 
 	    if ("execute".equals(action)) {
-		stat.executeBatch();
+		int[] updateCounts = stat.executeBatch();
+
+		if (Arrays.stream(updateCounts).anyMatch(code -> code == Statement.EXECUTE_FAILED)) {
+		    throw new SQLException("executeBatch returns Statement.EXECUTE_FAILED.");
+		}
 	    } else {
 		stat.clearBatch();
 	    }
