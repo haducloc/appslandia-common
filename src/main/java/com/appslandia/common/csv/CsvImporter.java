@@ -24,6 +24,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.sql.SQLXML;
 import java.time.LocalDate;
@@ -312,6 +314,14 @@ public class CsvImporter extends InitializeObject {
 	    xml.setString(value);
 
 	    return xml;
+	}
+
+	// URL
+	if (type == URL.class) {
+	    try {
+		return new URL(value);
+	    } catch (MalformedURLException ex) {
+	    }
 	}
 	throw new IllegalArgumentException(STR.fmt("Failed to convert value for the column {}.", column.toString()));
     }

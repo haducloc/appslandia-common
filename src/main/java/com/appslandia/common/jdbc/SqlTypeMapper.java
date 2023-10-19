@@ -21,6 +21,7 @@
 package com.appslandia.common.jdbc;
 
 import java.math.BigDecimal;
+import java.net.URL;
 import java.sql.Types;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -36,7 +37,7 @@ import java.util.Map;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public abstract class SqlTypeMapper {
+public class SqlTypeMapper {
 
     private static final Map<Integer, Class<?>> SQL_TYPE_JAVA_TYPES;
     static {
@@ -78,18 +79,13 @@ public abstract class SqlTypeMapper {
 	map.put(Types.BLOB, java.io.InputStream.class);
 
 	map.put(Types.SQLXML, String.class);
+	map.put(Types.DATALINK, URL.class);
 
 	SQL_TYPE_JAVA_TYPES = Collections.unmodifiableMap(map);
     }
 
-    protected abstract Class<?> doGetJavaType(int sqlType);
-
-    public Class<?> getJavaType(int sqlType) {
-	Class<?> type = doGetJavaType(sqlType);
-	if (type != null) {
-	    return type;
-	}
-	type = SQL_TYPE_JAVA_TYPES.get(sqlType);
+    public static Class<?> getJavaType(int sqlType) {
+	Class<?> type = SQL_TYPE_JAVA_TYPES.get(sqlType);
 	if (type != null) {
 	    return type;
 	}

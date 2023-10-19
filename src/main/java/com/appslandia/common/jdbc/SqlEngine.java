@@ -30,16 +30,9 @@ import com.appslandia.common.utils.STR;
  */
 public enum SqlEngine {
 
-    MSSQL(new MssqlSqlTypeMapper()), MYSQL(new MySqlTypeMapper()), POSTGRESQL(new PostgresqlSqlTypeMapper()), ORACLE(new OracleSqlTypeMapper()), SQLITE(new SqliteSqlTypeMapper());
+    MSSQL(), MYSQL(), POSTGRESQL(), ORACLE(), SQLITE();
 
-    final SqlTypeMapper sqlTypeMapper;
-
-    private SqlEngine(SqlTypeMapper sqlTypeMapper) {
-	this.sqlTypeMapper = sqlTypeMapper;
-    }
-
-    public SqlTypeMapper getSqlTypeMapper() {
-	return this.sqlTypeMapper;
+    private SqlEngine() {
     }
 
     public static SqlEngine parse(String url) {
@@ -61,45 +54,5 @@ public enum SqlEngine {
 	    return SQLITE;
 	}
 	throw new IllegalArgumentException(STR.fmt("Failed to parse SqlEngine from the given url: {}", url));
-    }
-
-    private static class MssqlSqlTypeMapper extends SqlTypeMapper {
-
-	@Override
-	protected Class<?> doGetJavaType(int sqlType) {
-	    return null;
-	}
-    }
-
-    private static class MySqlTypeMapper extends SqlTypeMapper {
-
-	@Override
-	protected Class<?> doGetJavaType(int sqlType) {
-	    return null;
-	}
-    }
-
-    private static class PostgresqlSqlTypeMapper extends SqlTypeMapper {
-
-	@Override
-	protected Class<?> doGetJavaType(int sqlType) {
-	    return null;
-	}
-    }
-
-    private static class OracleSqlTypeMapper extends SqlTypeMapper {
-
-	@Override
-	protected Class<?> doGetJavaType(int sqlType) {
-	    return null;
-	}
-    }
-
-    private static class SqliteSqlTypeMapper extends SqlTypeMapper {
-
-	@Override
-	protected Class<?> doGetJavaType(int sqlType) {
-	    return null;
-	}
     }
 }

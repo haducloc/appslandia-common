@@ -39,6 +39,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import com.appslandia.common.jdbc.ConnectionImpl;
+import com.appslandia.common.jdbc.SqlTypeMapper;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.ReflectionException;
@@ -114,7 +115,7 @@ public final class RecordUtils {
 		column.setTableName(rs.getString("TABLE_NAME"));
 
 		// Java Type
-		column.setJavaType(conn.getSqlEngine().getSqlTypeMapper().getJavaType(sqlType));
+		column.setJavaType(SqlTypeMapper.getJavaType(sqlType));
 
 		if (isKey) {
 		    column.setColumnType(autoIncr ? ColumnType.KEY_INCR : ColumnType.KEY);
