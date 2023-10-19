@@ -59,7 +59,7 @@ public class DoubleConverterTest {
     }
 
     @Test
-    public void test_java_format() {
+    public void test_decimal_format() {
 	DoubleConverter converter = new DoubleConverter(3, RoundingMode.HALF_EVEN);
 	FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
 	try {

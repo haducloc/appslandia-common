@@ -33,10 +33,6 @@ public class JdbcParam {
     final Integer sqlType;
     final Integer scaleOrLength;
 
-    public JdbcParam(Object value) {
-	this(value, null);
-    }
-
     public JdbcParam(Object value, Integer sqlType) {
 	this(value, sqlType, null);
     }
@@ -61,6 +57,6 @@ public class JdbcParam {
 
     @Override
     public String toString() {
-	return STR.fmt("value={}, sqlType={}, scaleOrLength={}", this.value, this.sqlType, this.scaleOrLength);
+	return STR.fmt("value={?}, sqlType={?}, scaleOrLength={?}", this.value, this.sqlType, this.scaleOrLength);
     }
 }

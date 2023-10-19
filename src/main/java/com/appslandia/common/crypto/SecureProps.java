@@ -21,7 +21,6 @@
 package com.appslandia.common.crypto;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -148,7 +147,7 @@ public class SecureProps extends Properties implements Config, Cloneable {
 	return this;
     }
 
-    public void store(File file, String comments) throws IOException {
+    public void store(String file, String comments) throws IOException {
 	BufferedWriter bw = null;
 	try {
 	    bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
@@ -158,10 +157,6 @@ public class SecureProps extends Properties implements Config, Cloneable {
 		bw.close();
 	    }
 	}
-    }
-
-    public void store(String file, String comments) throws IOException {
-	store(new File(file), comments);
     }
 
     @Override

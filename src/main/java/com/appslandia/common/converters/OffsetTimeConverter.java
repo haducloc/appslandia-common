@@ -36,7 +36,7 @@ public class OffsetTimeConverter extends Java8DateConverter<OffsetTime> {
     public static final String ERROR_MSG_KEY = OffsetTimeConverter.class.getName() + ".message";
 
     public OffsetTimeConverter() {
-	super(DateUtils.ISO8601_TIME_Z);
+	super(DateUtils.ISO8601_TIMEZ_N3);
     }
 
     public OffsetTimeConverter(String isoPattern) {

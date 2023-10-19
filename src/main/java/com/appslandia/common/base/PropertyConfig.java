@@ -22,7 +22,6 @@ package com.appslandia.common.base;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -74,7 +73,7 @@ public class PropertyConfig extends ConfigMap {
 	return this;
     }
 
-    public PropertyConfig load(File file) throws IOException {
+    public PropertyConfig load(String file) throws IOException {
 	BufferedReader br = null;
 	try {
 	    br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
@@ -84,10 +83,6 @@ public class PropertyConfig extends ConfigMap {
 		br.close();
 	    }
 	}
-    }
-
-    public PropertyConfig load(String file) throws IOException {
-	return load(new File(file));
     }
 
     protected void fromProperties(Properties props) {
@@ -101,7 +96,7 @@ public class PropertyConfig extends ConfigMap {
 	}
     }
 
-    public void store(File file, String comments) throws IOException {
+    public void store(String file, String comments) throws IOException {
 	BufferedWriter bw = null;
 	try {
 	    bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
@@ -111,10 +106,6 @@ public class PropertyConfig extends ConfigMap {
 		bw.close();
 	    }
 	}
-    }
-
-    public void store(String file, String comments) throws IOException {
-	store(new File(file), comments);
     }
 
     public void store(OutputStream os, String comments) throws IOException {

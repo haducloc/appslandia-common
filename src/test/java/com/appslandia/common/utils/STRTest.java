@@ -20,6 +20,8 @@
 
 package com.appslandia.common.utils;
 
+import java.time.LocalDate;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -98,7 +100,7 @@ public class STRTest {
     @Test
     public void test_format_pattern() {
 	try {
-	    String msg = STR.format("this is ${0|#,##0} and ${1|MM/dd/yyyy}", 12345, DateUtils.iso8601Date("2023-01-01"));
+	    String msg = STR.format("this is ${0|#,##0} and ${1|MM/dd/yyyy}", 12345, LocalDate.of(2023, 1, 1));
 	    Assertions.assertEquals("this is 12,345 and 01/01/2023", msg);
 
 	} catch (Exception ex) {
@@ -110,7 +112,7 @@ public class STRTest {
     @Test
     public void test_fmt_pattern() {
 	try {
-	    String msg = STR.fmt("this is {#,##0} and {MM/dd/yyyy}", 12345, DateUtils.iso8601Date("2023-01-01"));
+	    String msg = STR.fmt("this is {#,##0} and {MM/dd/yyyy}", 12345, LocalDate.of(2023, 1, 1));
 	    Assertions.assertEquals("this is 12,345 and 01/01/2023", msg);
 
 	} catch (Exception ex) {

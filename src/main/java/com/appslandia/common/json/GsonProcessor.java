@@ -123,12 +123,6 @@ public class GsonProcessor extends JsonProcessor {
 	    }
 	});
 
-	// Date/Time
-	builder.registerTypeAdapter(java.util.Date.class, new DateAdapter());
-	builder.registerTypeAdapter(java.sql.Date.class, new SqlDateAdapter());
-	builder.registerTypeAdapter(java.sql.Time.class, new SqlTimeAdapter());
-	builder.registerTypeAdapter(java.sql.Timestamp.class, new SqlDateTimeAdapter());
-
 	// Java8 Date/Time
 	builder.registerTypeAdapter(LocalDate.class, new LocalDateAdapter());
 	builder.registerTypeAdapter(LocalTime.class, new LocalTimeAdapter());

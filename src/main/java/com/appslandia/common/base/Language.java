@@ -20,13 +20,10 @@
 
 package com.appslandia.common.base;
 
-import java.text.DateFormat;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Supplier;
 
 import com.appslandia.common.utils.Asserts;
@@ -58,14 +55,14 @@ public class Language extends InitializeObject {
 	if (this.languageId == null) {
 	    this.languageId = this.locale.getLanguage();
 	}
+
 	String datePattern = this.temporalPatterns.get(DateUtils.ISO8601_DATE);
 	if (datePattern != null) {
-
-	    Asserts.isTrue(datePattern.length() == 10 && datePattern.contains("yyyy") && datePattern.contains("MM") && datePattern.contains("dd"),
-		    STR.fmt("datePattern '{}' is invalid (10 length, use yyyy, MM, and dd).", datePattern));
+	    // Validate datePattern
 	}
+
 	if (datePattern == null) {
-	    datePattern = parseDatePattern(this.locale);
+	    datePattern = DateUtils.toDatePattern(this.locale);
 	    Asserts.notNull(datePattern, () -> STR.fmt("Couldn't determine datePattern for the locale '{}'.", this.locale));
 
 	    this.temporalPatterns.put(DateUtils.ISO8601_DATE, datePattern);
@@ -75,18 +72,44 @@ public class Language extends InitializeObject {
 	this.temporalPatterns.put(DateUtils.ISO8601_YEAR_MONTH, parseYearMonthPattern(datePattern));
 
 	this.temporalPatterns.put(DateUtils.ISO8601_TIME_M, DateUtils.ISO8601_TIME_M);
-	this.temporalPatterns.put(DateUtils.ISO8601_TIME_MZ, DateUtils.ISO8601_TIME_MZ);
 	this.temporalPatterns.put(DateUtils.ISO8601_TIME_S, DateUtils.ISO8601_TIME_S);
-	this.temporalPatterns.put(DateUtils.ISO8601_TIME_SZ, DateUtils.ISO8601_TIME_SZ);
-	this.temporalPatterns.put(DateUtils.ISO8601_TIME, DateUtils.ISO8601_TIME);
-	this.temporalPatterns.put(DateUtils.ISO8601_TIME_Z, DateUtils.ISO8601_TIME_Z);
+	this.temporalPatterns.put(DateUtils.ISO8601_TIME_N1, DateUtils.ISO8601_TIME_N1);
+	this.temporalPatterns.put(DateUtils.ISO8601_TIME_N2, DateUtils.ISO8601_TIME_N2);
+	this.temporalPatterns.put(DateUtils.ISO8601_TIME_N3, DateUtils.ISO8601_TIME_N3);
+	this.temporalPatterns.put(DateUtils.ISO8601_TIME_N4, DateUtils.ISO8601_TIME_N4);
+	this.temporalPatterns.put(DateUtils.ISO8601_TIME_N5, DateUtils.ISO8601_TIME_N5);
+	this.temporalPatterns.put(DateUtils.ISO8601_TIME_N6, DateUtils.ISO8601_TIME_N6);
+	this.temporalPatterns.put(DateUtils.ISO8601_TIME_N7, DateUtils.ISO8601_TIME_N7);
+
+	this.temporalPatterns.put(DateUtils.ISO8601_TIMEZ_M, DateUtils.ISO8601_TIMEZ_M);
+	this.temporalPatterns.put(DateUtils.ISO8601_TIMEZ_S, DateUtils.ISO8601_TIMEZ_S);
+	this.temporalPatterns.put(DateUtils.ISO8601_TIMEZ_N1, DateUtils.ISO8601_TIMEZ_N1);
+	this.temporalPatterns.put(DateUtils.ISO8601_TIMEZ_N2, DateUtils.ISO8601_TIMEZ_N2);
+	this.temporalPatterns.put(DateUtils.ISO8601_TIMEZ_N3, DateUtils.ISO8601_TIMEZ_N3);
+	this.temporalPatterns.put(DateUtils.ISO8601_TIMEZ_N4, DateUtils.ISO8601_TIMEZ_N4);
+	this.temporalPatterns.put(DateUtils.ISO8601_TIMEZ_N5, DateUtils.ISO8601_TIMEZ_N5);
+	this.temporalPatterns.put(DateUtils.ISO8601_TIMEZ_N6, DateUtils.ISO8601_TIMEZ_N6);
+	this.temporalPatterns.put(DateUtils.ISO8601_TIMEZ_N7, DateUtils.ISO8601_TIMEZ_N7);
 
 	this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_M, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_M));
-	this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_MZ, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_MZ));
 	this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_S, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_S));
-	this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_SZ, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_SZ));
-	this.temporalPatterns.put(DateUtils.ISO8601_DATETIME, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME));
-	this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_Z, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_Z));
+	this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_N1, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_N1));
+	this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_N2, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_N2));
+	this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_N3, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_N3));
+	this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_N4, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_N4));
+	this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_N5, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_N5));
+	this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_N6, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_N6));
+	this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_N7, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_N7));
+
+	this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_M, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_M));
+	this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_S, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_S));
+	this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N1, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N1));
+	this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N2, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N2));
+	this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N3, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N3));
+	this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N4, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N4));
+	this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N5, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N5));
+	this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N6, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N6));
+	this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N7, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N7));
 
 	this.temporalPatterns = Collections.unmodifiableMap(this.temporalPatterns);
 
@@ -133,9 +156,9 @@ public class Language extends InitializeObject {
 	return Asserts.notNull(this.temporalPatterns.get(isoPattern));
     }
 
-    public Language setTemporalPattern(String isoPattern, String localizedPattern) {
+    public Language setDatePattern(String datePattern) {
 	this.assertNotInitialized();
-	this.temporalPatterns.put(isoPattern, localizedPattern);
+	this.temporalPatterns.put(DateUtils.ISO8601_DATE, datePattern);
 	return this;
     }
 
@@ -221,53 +244,6 @@ public class Language extends InitializeObject {
 	} catch (Exception ex) {
 	    throw new InitializeException(ex);
 	}
-    }
-
-    static String parseDatePattern(Locale locale) {
-	DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, locale);
-	String isoDate = df.format(DateUtils.iso8601Date("3333-11-22"));
-
-	Set<Character> letters = new LinkedHashSet<>();
-	Character separator = null;
-
-	for (int i = 0; i < isoDate.length(); i++) {
-	    char ch = isoDate.charAt(i);
-
-	    if (ch == '1') {
-		letters.add('M');
-	    } else if (ch == '2') {
-		letters.add('d');
-	    } else if (ch == '3') {
-		letters.add('y');
-	    } else {
-		if (separator == null) {
-		    if (ch == '-' || ch == '/' || ch == '.') {
-			separator = ch;
-		    }
-		}
-	    }
-	}
-
-	// If separator known & letters are yMd
-	if ((separator != null) && (letters.size() == 3)) {
-
-	    StringBuilder datePt = new StringBuilder(10);
-
-	    for (Character ch : letters) {
-		if (datePt.length() > 0) {
-		    datePt.append(separator);
-		}
-		datePt.append(ch);
-		datePt.append(ch);
-
-		if (ch.equals('y')) {
-		    datePt.append(ch);
-		    datePt.append(ch);
-		}
-	    }
-	    return datePt.toString();
-	}
-	return null;
     }
 
     static String parseYearMonthPattern(String datePattern) {

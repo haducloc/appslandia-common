@@ -21,7 +21,6 @@
 package com.appslandia.common.base;
 
 import java.math.RoundingMode;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
@@ -41,8 +40,6 @@ public interface FormatProvider {
     NumberFormat getPercentFormat(int fractionDigits, RoundingMode roundingMode, boolean grouping);
 
     NumberFormat getCurrencyFormat(int fractionDigits, RoundingMode roundingMode, boolean grouping);
-
-    DateFormat getDateFormat(String pattern);
 
     /**
      * Return a locale-independent decimal notation format based on the given number of fraction digits and rounding mode.

@@ -25,23 +25,22 @@ import java.time.LocalDate;
 
 import com.appslandia.common.utils.DateUtils;
 import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class LocalDateAdapter extends Java8DateAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
+public class LocalDateAdapter extends Java8DateAdapter<LocalDate> {
 
-    @Override
-    public JsonElement serialize(LocalDate src, Type typeOfSrc, JsonSerializationContext context) {
-	return new JsonPrimitive(getFormatter(DateUtils.ISO8601_DATE).format(src));
+    public LocalDateAdapter() {
+	this(DateUtils.ISO8601_DATE);
+    }
+
+    public LocalDateAdapter(String serializeIsoPattern) {
+	super(serializeIsoPattern);
     }
 
     @Override

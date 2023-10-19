@@ -18,46 +18,29 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.converters;
+package com.appslandia.common.csv;
 
-import com.appslandia.common.base.FormatProvider;
-import com.appslandia.common.utils.DateUtils;
-import com.appslandia.common.utils.StringUtils;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import com.appslandia.common.base.BOMInputStream;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class SqlTimeConverter extends DateConverter<java.sql.Time> {
+public class CsvUtils {
 
-    public static final String ERROR_MSG_KEY = SqlTimeConverter.class.getName() + ".message";
-
-    public SqlTimeConverter() {
-	super(DateUtils.ISO8601_TIME);
+    public static BufferedReader csvReader(InputStream is, String encodingIfNoBOM) throws IOException {
+	var bomIS = new BOMInputStream(is);
+	return new BufferedReader(new InputStreamReader(bomIS, bomIS.getBOM() != null ? bomIS.getBOM().getEncoding() : encodingIfNoBOM));
     }
 
-    public SqlTimeConverter(String isoPattern) {
-	super(isoPattern);
-    }
-
-    @Override
-    public String getErrorMsgKey() {
-	return ERROR_MSG_KEY;
-    }
-
-    @Override
-    public Class<java.sql.Time> getTargetType() {
-	return java.sql.Time.class;
-    }
-
-    @Override
-    public java.sql.Time parse(String str, FormatProvider formatProvider) throws ConverterException {
-	str = StringUtils.trimToNull(str);
-	if (str == null) {
-	    return null;
-	}
-	java.util.Date d = doParse(str, formatProvider);
-	return (d != null) ? new java.sql.Time(d.getTime()) : null;
+    public static BufferedReader csvReader(String csvFile, String encodingIfNoBOM) throws IOException {
+	return csvReader(new FileInputStream(csvFile), encodingIfNoBOM);
     }
 }

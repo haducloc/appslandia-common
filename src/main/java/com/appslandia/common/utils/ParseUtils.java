@@ -26,7 +26,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
-import java.util.Date;
 import java.util.function.BiFunction;
 
 import com.appslandia.common.base.BoolFormatException;
@@ -62,6 +61,38 @@ public class ParseUtils {
 	}
     }
 
+    public static byte parseByte(String value) throws NumberFormatException {
+	Asserts.notNull(value);
+	return Byte.parseByte(value);
+    }
+
+    public static byte parseByte(String value, byte defaultValIfInvalid) {
+	if (value == null) {
+	    return defaultValIfInvalid;
+	}
+	try {
+	    return Byte.parseByte(value);
+	} catch (NumberFormatException ex) {
+	    return defaultValIfInvalid;
+	}
+    }
+
+    public static short parseShort(String value) throws NumberFormatException {
+	Asserts.notNull(value);
+	return Short.parseShort(value);
+    }
+
+    public static short parseShort(String value, short defaultValIfInvalid) {
+	if (value == null) {
+	    return defaultValIfInvalid;
+	}
+	try {
+	    return Short.parseShort(value);
+	} catch (NumberFormatException ex) {
+	    return defaultValIfInvalid;
+	}
+    }
+
     public static int parseInt(String value) throws NumberFormatException {
 	Asserts.notNull(value);
 	return Integer.parseInt(value);
@@ -89,6 +120,22 @@ public class ParseUtils {
 	}
 	try {
 	    return Long.parseLong(value);
+	} catch (NumberFormatException ex) {
+	    return defaultValIfInvalid;
+	}
+    }
+
+    public static float parseFloat(String value) throws NumberFormatException {
+	Asserts.notNull(value);
+	return Float.parseFloat(value);
+    }
+
+    public static float parseFloat(String value, float defaultValIfInvalid) {
+	if (value == null) {
+	    return defaultValIfInvalid;
+	}
+	try {
+	    return Float.parseFloat(value);
 	} catch (NumberFormatException ex) {
 	    return defaultValIfInvalid;
 	}
@@ -141,6 +188,36 @@ public class ParseUtils {
 	}
     }
 
+    public static Byte parseByteOpt(String value) throws NumberFormatException {
+	return (value != null) ? Byte.parseByte(value) : null;
+    }
+
+    public static Byte parseByteOpt(String value, Byte defaultValIfInvalid) {
+	if (value == null) {
+	    return null;
+	}
+	try {
+	    return Byte.parseByte(value);
+	} catch (NumberFormatException ex) {
+	    return defaultValIfInvalid;
+	}
+    }
+
+    public static Short parseShortOpt(String value) throws NumberFormatException {
+	return (value != null) ? Short.parseShort(value) : null;
+    }
+
+    public static Short parseShortOpt(String value, Short defaultValIfInvalid) {
+	if (value == null) {
+	    return null;
+	}
+	try {
+	    return Short.parseShort(value);
+	} catch (NumberFormatException ex) {
+	    return defaultValIfInvalid;
+	}
+    }
+
     public static Integer parseIntOpt(String value) throws NumberFormatException {
 	return (value != null) ? Integer.parseInt(value) : null;
     }
@@ -171,6 +248,22 @@ public class ParseUtils {
 	}
     }
 
+    public static Float parseFloatOpt(String value) throws NumberFormatException {
+	return (value != null) ? parseFloat(value) : null;
+    }
+
+    public static Float parseFloatOpt(String value, Float defaultValIfInvalid) {
+	if (value == null) {
+	    return null;
+	}
+	try {
+	    return parseFloat(value);
+
+	} catch (NumberFormatException ex) {
+	    return defaultValIfInvalid;
+	}
+    }
+
     public static Double parseDoubleOpt(String value) throws NumberFormatException {
 	return (value != null) ? Double.parseDouble(value) : null;
     }
@@ -192,11 +285,6 @@ public class ParseUtils {
 
     public static boolean isFalseValue(String value) {
 	return "false".equalsIgnoreCase(value) || "f".equalsIgnoreCase(value) || "no".equalsIgnoreCase(value) || "n".equalsIgnoreCase(value);
-    }
-
-    public static Date parseDate(String value, String... patterns) throws DateFormatException {
-	Asserts.hasElements(patterns);
-	return doParseDate(value, Date.class, patterns, (v, p) -> DateUtils.parse(v, p));
     }
 
     public static LocalDate parseLocalDate(String value, String... patterns) throws DateFormatException {

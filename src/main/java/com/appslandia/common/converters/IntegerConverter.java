@@ -22,7 +22,6 @@ package com.appslandia.common.converters;
 
 import com.appslandia.common.base.FormatProvider;
 import com.appslandia.common.utils.StringUtils;
-import com.appslandia.common.utils.ValueUtils;
 
 /**
  *
@@ -58,12 +57,7 @@ public class IntegerConverter extends NumberConverter<Integer> {
 	    return null;
 	}
 	try {
-	    long value = Long.parseLong(str);
-
-	    if (!ValueUtils.isIntRange(value)) {
-		throw toNumberOverflowError(str);
-	    }
-	    return (int) value;
+	    return Integer.parseInt(str);
 
 	} catch (NumberFormatException ex) {
 	}

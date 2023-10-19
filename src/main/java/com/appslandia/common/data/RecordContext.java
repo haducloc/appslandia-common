@@ -32,7 +32,6 @@ import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
-import com.appslandia.common.base.Out;
 import com.appslandia.common.base.TextBuilder;
 import com.appslandia.common.jdbc.ConnectionImpl;
 import com.appslandia.common.jdbc.DbContext;
@@ -350,6 +349,14 @@ public class RecordContext extends DbContext {
 	}
     }
 
+    public int deleteTable(String tableName, long callerDateTimeID) throws java.sql.SQLException {
+	return this.conn.dropTable(tableName, callerDateTimeID);
+    }
+
+    public int truncateTable(String tableName, long callerDateTimeID) throws java.sql.SQLException {
+	return this.conn.truncateTable(tableName, callerDateTimeID);
+    }
+
     public Table getTable(String tableName) throws UncheckedSQLException {
 	ConcurrentMap<String, Table> tables = TABLES.computeIfAbsent(getDataSourceID(), db -> new ConcurrentHashMap<>());
 
@@ -387,17 +394,4 @@ public class RecordContext extends DbContext {
     }
 
     private static final ConcurrentMap<String, ConcurrentMap<String, Table>> TABLES = new ConcurrentHashMap<>();
-
-    public Table createTable(String tableSpec, boolean lowercase) throws UncheckedSQLException {
-	Out<String> tableName = new Out<>();
-	String tableScript = TableUtils.toTableScript(tableSpec, lowercase, tableName);
-
-	try {
-	    this.conn.executeUpdate(tableScript);
-	    return getTable(tableName.value);
-
-	} catch (SQLException ex) {
-	    throw new UncheckedSQLException(ex);
-	}
-    }
 }

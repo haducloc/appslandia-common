@@ -26,6 +26,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.util.List;
 import java.util.Map;
 
@@ -507,6 +512,51 @@ public class StatementImpl implements PreparedStatement {
 
 	for (int i = 0; i < arrayLen; i++) {
 	    setTime(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
+	}
+    }
+
+    public void setLocalDateArray(String parameterName, LocalDate[] values) throws java.sql.SQLException {
+	int arrayLen = this.getSql().getArrayLen(parameterName);
+	Asserts.isTrue(values.length <= arrayLen);
+
+	for (int i = 0; i < arrayLen; i++) {
+	    setLocalDate(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
+	}
+    }
+
+    public void setLocalDateTimeArray(String parameterName, LocalDateTime[] values) throws java.sql.SQLException {
+	int arrayLen = this.getSql().getArrayLen(parameterName);
+	Asserts.isTrue(values.length <= arrayLen);
+
+	for (int i = 0; i < arrayLen; i++) {
+	    setLocalDateTime(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
+	}
+    }
+
+    public void setLocalTimeArray(String parameterName, LocalTime[] values) throws java.sql.SQLException {
+	int arrayLen = this.getSql().getArrayLen(parameterName);
+	Asserts.isTrue(values.length <= arrayLen);
+
+	for (int i = 0; i < arrayLen; i++) {
+	    setLocalTime(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
+	}
+    }
+
+    public void setOffsetDateTimeArray(String parameterName, OffsetDateTime[] values) throws java.sql.SQLException {
+	int arrayLen = this.getSql().getArrayLen(parameterName);
+	Asserts.isTrue(values.length <= arrayLen);
+
+	for (int i = 0; i < arrayLen; i++) {
+	    setOffsetDateTime(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
+	}
+    }
+
+    public void setOffsetTimeArray(String parameterName, OffsetTime[] values) throws java.sql.SQLException {
+	int arrayLen = this.getSql().getArrayLen(parameterName);
+	Asserts.isTrue(values.length <= arrayLen);
+
+	for (int i = 0; i < arrayLen; i++) {
+	    setOffsetTime(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
 	}
     }
 
@@ -1034,22 +1084,20 @@ public class StatementImpl implements PreparedStatement {
 	if (x instanceof JdbcParam) {
 	    JdbcParam par = (JdbcParam) x;
 
-	    Integer targetSqlType = ((par.getSqlType() != null) && SqlTypes.isSqlType(par.getSqlType())) ? par.getSqlType() : null;
-
 	    if (par.getValue() == null) {
-		if (targetSqlType == null) {
+		if (par.getSqlType() == null) {
 		    this.stat.setObject(parameterIndex, null);
 		} else {
-		    this.stat.setNull(parameterIndex, targetSqlType);
+		    this.stat.setNull(parameterIndex, par.getSqlType());
 		}
 	    } else {
-		if (targetSqlType == null) {
+		if (par.getSqlType() == null) {
 		    this.stat.setObject(parameterIndex, par.getValue());
 		} else {
 		    if (par.getScaleOrLength() == null) {
-			this.stat.setObject(parameterIndex, par.getValue(), targetSqlType);
+			this.stat.setObject(parameterIndex, par.getValue(), par.getSqlType());
 		    } else {
-			this.stat.setObject(parameterIndex, par.getValue(), targetSqlType, par.getScaleOrLength());
+			this.stat.setObject(parameterIndex, par.getValue(), par.getSqlType(), par.getScaleOrLength());
 		    }
 		}
 	    }

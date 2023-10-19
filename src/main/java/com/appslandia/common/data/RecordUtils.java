@@ -25,9 +25,7 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -40,6 +38,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import com.appslandia.common.jdbc.ConnectionImpl;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.ReflectionException;
@@ -53,7 +52,7 @@ import com.appslandia.common.utils.StringUtils;
  */
 public final class RecordUtils {
 
-    public static Table loadTable(Connection conn, String catalog, String schema, String tableName, Consumer<Column> columnInit) throws SQLException {
+    public static Table loadTable(ConnectionImpl conn, String catalog, String schema, String tableName, Consumer<Column> columnInit) throws SQLException {
 	Asserts.notNull(conn);
 	Asserts.notNull(tableName);
 
@@ -99,8 +98,13 @@ public final class RecordUtils {
 		Column column = new Column();
 		column.setName(columnName);
 
-		column.setSqlType(rs.getInt("DATA_TYPE"));
-		column.setScaleOrLength(rs.getInt("COLUMN_SIZE"));
+		int sqlType = rs.getInt("DATA_TYPE");
+		column.setSqlType(sqlType);
+
+		column.setColumnSize(rs.getInt("COLUMN_SIZE"));
+
+		int fractionDigits = rs.getInt("DECIMAL_DIGITS");
+		column.setFractionDigits(!rs.wasNull() ? fractionDigits : null);
 
 		column.setNullable("YES".equals(rs.getString("IS_NULLABLE")));
 		column.setPosition(rs.getInt("ORDINAL_POSITION"));
@@ -108,6 +112,9 @@ public final class RecordUtils {
 		column.setTableCat(rs.getString("TABLE_CAT"));
 		column.setTableSchema(rs.getString("TABLE_SCHEM"));
 		column.setTableName(rs.getString("TABLE_NAME"));
+
+		// Java Type
+		column.setJavaType(conn.getSqlEngine().getSqlTypeMapper().getJavaType(sqlType));
 
 		if (isKey) {
 		    column.setColumnType(autoIncr ? ColumnType.KEY_INCR : ColumnType.KEY);
@@ -202,30 +209,6 @@ public final class RecordUtils {
 
 	// Mixed
 	return StringUtils.firstUpperCase(tableName, Locale.ENGLISH);
-    }
-
-    public static List<Column> toColumns(ResultSet rs, Consumer<Column> columnInit) throws SQLException {
-	ResultSetMetaData md = rs.getMetaData();
-	List<Column> columns = new ArrayList<>(md.getColumnCount());
-
-	for (int col = 1; col <= md.getColumnCount(); col++) {
-	    Column column = new Column();
-
-	    column.setName(md.getColumnLabel(col));
-	    column.setColumnType(ColumnType.NON_KEY);
-	    column.setSqlType(md.getColumnType(col));
-
-	    column.setTableCat(md.getCatalogName(col));
-	    column.setTableSchema(md.getSchemaName(col));
-	    column.setTableName(md.getTableName(col));
-
-	    if (columnInit != null) {
-		columnInit.accept(column);
-	    }
-	    columns.add(column);
-	}
-
-	return columns;
     }
 
     public static Object getFieldValue(Object obj, String columnName) {

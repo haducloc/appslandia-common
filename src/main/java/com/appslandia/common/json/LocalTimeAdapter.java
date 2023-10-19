@@ -27,40 +27,50 @@ import java.time.format.DateTimeParseException;
 import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.STR;
 import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class LocalTimeAdapter extends Java8DateAdapter implements JsonSerializer<LocalTime>, JsonDeserializer<LocalTime> {
+public class LocalTimeAdapter extends Java8DateAdapter<LocalTime> {
 
-    @Override
-    public JsonElement serialize(LocalTime src, Type typeOfSrc, JsonSerializationContext context) {
-	return new JsonPrimitive(getFormatter(DateUtils.ISO8601_TIME).format(src));
+    public LocalTimeAdapter() {
+	this(DateUtils.ISO8601_TIME_N3);
     }
+
+    public LocalTimeAdapter(String serializeIsoPattern) {
+	super(serializeIsoPattern);
+    }
+
+    // @formatter:off
+    static final String[] PATTERNS = new String[] {
+	    DateUtils.ISO8601_TIME_M,
+	    DateUtils.ISO8601_TIME_S,
+	    DateUtils.ISO8601_TIME_N1,
+	    DateUtils.ISO8601_TIME_N2,
+	    DateUtils.ISO8601_TIME_N3,
+	    DateUtils.ISO8601_TIME_N4,
+	    DateUtils.ISO8601_TIME_N5,
+	    DateUtils.ISO8601_TIME_N6,
+	    DateUtils.ISO8601_TIME_N7
+	};
+    // @formatter:on    
 
     @Override
     public LocalTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 	String value = json.getAsString();
 
-	try {
-	    if (DateUtils.ISO8601_TIME_M.length() == value.length()) {
-		return LocalTime.parse(value, getFormatter(DateUtils.ISO8601_TIME_M));
-
-	    } else if (DateUtils.ISO8601_TIME_S.length() == value.length()) {
-		return LocalTime.parse(value, getFormatter(DateUtils.ISO8601_TIME_S));
-
-	    } else if (DateUtils.ISO8601_TIME.length() == value.length()) {
-		return LocalTime.parse(value, getFormatter(DateUtils.ISO8601_TIME));
+	for (String pattern : PATTERNS) {
+	    if (pattern.length() == value.length()) {
+		try {
+		    return LocalTime.parse(value, getFormatter(pattern));
+		} catch (DateTimeParseException ex) {
+		}
+		break;
 	    }
-	} catch (DateTimeParseException ex) {
 	}
 	throw new IllegalArgumentException(STR.fmt("Couldn't parse '{}' to LocalTime.", value));
     }

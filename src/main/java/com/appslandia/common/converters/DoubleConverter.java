@@ -84,6 +84,7 @@ public class DoubleConverter extends NumberConverter<Double> {
 
 	} catch (NumberFormatException ex) {
 	}
+
 	Number number = this.parseNumber(str, formatProvider.getNumberParser());
 	if (number != null) {
 	    return (number instanceof Double) ? (Double) number : number.doubleValue();

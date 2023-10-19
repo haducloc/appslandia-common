@@ -20,14 +20,11 @@
 
 package com.appslandia.common.utils;
 
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Assertions;
@@ -39,54 +36,6 @@ import org.junit.jupiter.api.Test;
  *
  */
 public class DateUtilsTest {
-
-    @Test
-    public void test_todaySqlDate() {
-	java.sql.Date today = DateUtils.todaySqlDate();
-	Assertions.assertEquals(DateUtils.iso8601DateTime(DateUtils.clearTime(today)), DateUtils.iso8601DateTime(today));
-    }
-
-    @Test
-    public void test_todayAsLong() {
-	long today = DateUtils.todayAsLong();
-	Assertions.assertEquals(DateUtils.iso8601DateTime(new Date(DateUtils.clearTime(today))), DateUtils.iso8601DateTime(new Date(today)));
-    }
-
-    @Test
-    public void test_copyTime() {
-	Date d1 = DateUtils.iso8601DateTime("2017-11-02T09:45:00.000");
-	Date d2 = DateUtils.iso8601DateTime("2017-11-02T09:45:00.999");
-	d2 = DateUtils.copyTime(d2, d1);
-	Assertions.assertEquals("09:45:00.000", DateUtils.iso8601Time(d2));
-    }
-
-    @Test
-    public void test_clearTime_dt() {
-	Date time = DateUtils.iso8601DateTime("2017-11-02T09:45:00.999");
-	Date noTime = DateUtils.clearTime(time);
-	Assertions.assertEquals("2017-11-02T00:00:00.000", DateUtils.iso8601DateTime(noTime));
-    }
-
-    @Test
-    public void test_clearTime_long() {
-	long time = DateUtils.iso8601DateTime("2017-11-02T09:45:00.999").getTime();
-	long noTime = DateUtils.clearTime(time);
-	Assertions.assertEquals("2017-11-02T00:00:00.000", DateUtils.iso8601DateTime(new Date(noTime)));
-    }
-
-    @Test
-    public void test_clearMs_dt() {
-	Date time = DateUtils.iso8601DateTime("2017-11-02T09:45:00.999");
-	Date noMs = DateUtils.clearMs(time);
-	Assertions.assertEquals("2017-11-02T09:45:00.000", DateUtils.iso8601DateTime(noMs));
-    }
-
-    @Test
-    public void test_clearMs_long() {
-	long time = DateUtils.iso8601DateTime("2017-11-02T09:45:00.999").getTime();
-	long noMs = DateUtils.clearMs(time);
-	Assertions.assertEquals("2017-11-02T09:45:00.000", DateUtils.iso8601DateTime(new Date(noMs)));
-    }
 
     @Test
     public void test_translateToMs() {
@@ -105,45 +54,6 @@ public class DateUtilsTest {
 	    DateUtils.translateToMs("1d 4hr 8min");
 	    Assertions.fail();
 	} catch (Exception ex) {
-	}
-    }
-
-    @Test
-    public void test_parse_date() {
-	try {
-	    Date t = DateUtils.iso8601Date("2017-11-02");
-	    String s = DateUtils.iso8601Date(t);
-
-	    Assertions.assertEquals("2017-11-02", s);
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
-	}
-    }
-
-    @Test
-    public void test_parse_time() {
-	try {
-	    Time t = DateUtils.iso8601Time("09:45:00.999");
-	    String s = DateUtils.iso8601Time(t);
-
-	    Assertions.assertEquals("09:45:00.999", s);
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
-	}
-    }
-
-    @Test
-    public void test_parse_dateTime() {
-	try {
-	    Timestamp t = DateUtils.iso8601DateTime("2017-11-02T09:45:00.999");
-	    String s = DateUtils.iso8601DateTime(t);
-
-	    Assertions.assertEquals("2017-11-02T09:45:00.999", s);
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
 	}
     }
 

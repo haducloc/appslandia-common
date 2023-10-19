@@ -31,8 +31,10 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import com.appslandia.common.base.AssertException;
+import com.appslandia.common.base.Out;
 import com.appslandia.common.threading.ThreadLocalStorage;
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -44,6 +46,8 @@ public class ConnectionImpl implements Connection {
     protected final Connection conn;
     protected final String dsName;
     protected ConnectionImpl outer;
+
+    protected final SqlEngine sqlEngine;
 
     public ConnectionImpl(DataSource dataSource) throws java.sql.SQLException {
 	this(dataSource, "");
@@ -57,6 +61,7 @@ public class ConnectionImpl implements Connection {
 	this.conn = dataSource.getConnection();
 	this.dsName = Asserts.notNull(dsName, "dsName must be not null.");
 
+	this.sqlEngine = SqlEngine.parse(this.conn.getMetaData().getURL());
 	CONNECTION_HOLDER.set(this);
     }
 
@@ -66,6 +71,10 @@ public class ConnectionImpl implements Connection {
 
     public String getDsName() {
 	return this.dsName;
+    }
+
+    public SqlEngine getSqlEngine() {
+	return this.sqlEngine;
     }
 
     // PrepareStatement utilities
@@ -95,6 +104,28 @@ public class ConnectionImpl implements Connection {
     }
 
     // Update Utilities
+
+    public int dropTable(String tableName, long callerDateTimeID) throws java.sql.SQLException {
+	Asserts.notNull(callerDateTimeID);
+	Asserts.authorize(callerDateTimeID);
+
+	return executeUpdate(STR.fmt("DROP TABLE IF EXISTS {}", tableName));
+    }
+
+    public int truncateTable(String tableName, long callerDateTimeID) throws java.sql.SQLException {
+	Asserts.notNull(callerDateTimeID);
+	Asserts.authorize(callerDateTimeID);
+
+	return executeUpdate(STR.fmt("TRUNCATE TABLE {}", tableName));
+    }
+
+    public String createTable(String tableSpec) throws java.sql.SQLException {
+	Out<String> tableName = new Out<>();
+	String tableScript = TableUtils.toTableScript(tableSpec, tableName);
+
+	executeUpdate(tableScript);
+	return tableName.value;
+    }
 
     public int executeUpdate(String sql) throws java.sql.SQLException {
 	try (Statement stat = this.conn.createStatement()) {

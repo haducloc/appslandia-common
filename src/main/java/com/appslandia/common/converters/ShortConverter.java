@@ -22,7 +22,6 @@ package com.appslandia.common.converters;
 
 import com.appslandia.common.base.FormatProvider;
 import com.appslandia.common.utils.StringUtils;
-import com.appslandia.common.utils.ValueUtils;
 
 /**
  *
@@ -58,15 +57,10 @@ public class ShortConverter extends NumberConverter<Short> {
 	    return null;
 	}
 	try {
-	    long value = Long.parseLong(str);
-
-	    if (!ValueUtils.isShortRange(value)) {
-		throw toNumberOverflowError(str);
-	    }
-	    return (short) value;
+	    return Short.parseShort(str);
 
 	} catch (NumberFormatException ex) {
-	    throw toParsingError(str, getTargetType().getName());
 	}
+	throw toParsingError(str, getTargetType().getName());
     }
 }

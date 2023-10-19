@@ -59,7 +59,7 @@ public class FloatConverterTest {
     }
 
     @Test
-    public void test_java_format() {
+    public void test_decimal_format() {
 	FloatConverter converter = new FloatConverter(2, RoundingMode.HALF_EVEN);
 	FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
 	try {

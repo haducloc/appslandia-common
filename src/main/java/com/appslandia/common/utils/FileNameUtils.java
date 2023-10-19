@@ -20,7 +20,7 @@
 
 package com.appslandia.common.utils;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import com.appslandia.common.base.UUIDGenerator;
 
@@ -32,7 +32,7 @@ import com.appslandia.common.base.UUIDGenerator;
 public class FileNameUtils {
 
     public static String toFileNameNow(String fileName) {
-	return toFileName(fileName, DateUtils.format(new Date(), "yyyyMMdd-HHmmss-SSS"));
+	return toFileName(fileName, DateUtils.getFormatter("yyyyMMdd-HHmmss-SSS").format(LocalDateTime.now()));
     }
 
     public static String toFileNameUUID(String fileName) {

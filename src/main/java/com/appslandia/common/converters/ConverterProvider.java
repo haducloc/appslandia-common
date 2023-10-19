@@ -70,17 +70,6 @@ public class ConverterProvider extends InitializeObject {
 	this.converters.putIfAbsent(Converter.KEYWORDS, new KeywordsConverter());
 	this.converters.putIfAbsent(Converter.TEXT, new TextConverter());
 
-	// Date/Time
-	this.converters.putIfAbsent(Converter.DATE, new SqlDateConverter());
-
-	this.converters.putIfAbsent(Converter.TIME, new SqlTimeConverter());
-	this.converters.putIfAbsent(Converter.TIME_M, new SqlTimeConverter(DateUtils.ISO8601_TIME_M));
-	this.converters.putIfAbsent(Converter.TIME_S, new SqlTimeConverter(DateUtils.ISO8601_TIME_S));
-
-	this.converters.putIfAbsent(Converter.TIMESTAMP, new SqlTimestampConverter());
-	this.converters.putIfAbsent(Converter.TIMESTAMP_M, new SqlTimestampConverter(DateUtils.ISO8601_DATETIME_M));
-	this.converters.putIfAbsent(Converter.TIMESTAMP_S, new SqlTimestampConverter(DateUtils.ISO8601_DATETIME_S));
-
 	// Java8 Date/Time
 	this.converters.putIfAbsent(Converter.LOCAL_DATE, new LocalDateConverter());
 	this.converters.putIfAbsent(Converter.YEAR_MONTH, new YearMonthConverter());
@@ -88,18 +77,46 @@ public class ConverterProvider extends InitializeObject {
 	this.converters.putIfAbsent(Converter.LOCAL_TIME, new LocalTimeConverter());
 	this.converters.putIfAbsent(Converter.LOCAL_TIME_M, new LocalTimeConverter(DateUtils.ISO8601_TIME_M));
 	this.converters.putIfAbsent(Converter.LOCAL_TIME_S, new LocalTimeConverter(DateUtils.ISO8601_TIME_S));
+	this.converters.putIfAbsent(Converter.LOCAL_TIME_N1, new LocalTimeConverter(DateUtils.ISO8601_TIME_N1));
+	this.converters.putIfAbsent(Converter.LOCAL_TIME_N2, new LocalTimeConverter(DateUtils.ISO8601_TIME_N2));
+	this.converters.putIfAbsent(Converter.LOCAL_TIME_N3, new LocalTimeConverter(DateUtils.ISO8601_TIME_N3));
+	this.converters.putIfAbsent(Converter.LOCAL_TIME_N4, new LocalTimeConverter(DateUtils.ISO8601_TIME_N4));
+	this.converters.putIfAbsent(Converter.LOCAL_TIME_N5, new LocalTimeConverter(DateUtils.ISO8601_TIME_N5));
+	this.converters.putIfAbsent(Converter.LOCAL_TIME_N6, new LocalTimeConverter(DateUtils.ISO8601_TIME_N6));
+	this.converters.putIfAbsent(Converter.LOCAL_TIME_N7, new LocalTimeConverter(DateUtils.ISO8601_TIME_N7));
 
 	this.converters.putIfAbsent(Converter.LOCAL_DATETIME, new LocalDateTimeConverter());
 	this.converters.putIfAbsent(Converter.LOCAL_DATETIME_M, new LocalDateTimeConverter(DateUtils.ISO8601_DATETIME_M));
 	this.converters.putIfAbsent(Converter.LOCAL_DATETIME_S, new LocalDateTimeConverter(DateUtils.ISO8601_DATETIME_S));
+	this.converters.putIfAbsent(Converter.LOCAL_DATETIME_N1, new LocalDateTimeConverter(DateUtils.ISO8601_DATETIME_N1));
+	this.converters.putIfAbsent(Converter.LOCAL_DATETIME_N2, new LocalDateTimeConverter(DateUtils.ISO8601_DATETIME_N2));
+	this.converters.putIfAbsent(Converter.LOCAL_DATETIME_N3, new LocalDateTimeConverter(DateUtils.ISO8601_DATETIME_N3));
+	this.converters.putIfAbsent(Converter.LOCAL_DATETIME_N4, new LocalDateTimeConverter(DateUtils.ISO8601_DATETIME_N4));
+	this.converters.putIfAbsent(Converter.LOCAL_DATETIME_N5, new LocalDateTimeConverter(DateUtils.ISO8601_DATETIME_N5));
+	this.converters.putIfAbsent(Converter.LOCAL_DATETIME_N6, new LocalDateTimeConverter(DateUtils.ISO8601_DATETIME_N6));
+	this.converters.putIfAbsent(Converter.LOCAL_DATETIME_N7, new LocalDateTimeConverter(DateUtils.ISO8601_DATETIME_N7));
 
 	this.converters.putIfAbsent(Converter.OFFSET_TIME, new OffsetTimeConverter());
-	this.converters.putIfAbsent(Converter.OFFSET_TIME_M, new OffsetTimeConverter(DateUtils.ISO8601_TIME_MZ));
-	this.converters.putIfAbsent(Converter.OFFSET_TIME_S, new OffsetTimeConverter(DateUtils.ISO8601_TIME_SZ));
+	this.converters.putIfAbsent(Converter.OFFSET_TIME_M, new OffsetTimeConverter(DateUtils.ISO8601_TIMEZ_M));
+	this.converters.putIfAbsent(Converter.OFFSET_TIME_S, new OffsetTimeConverter(DateUtils.ISO8601_TIMEZ_S));
+	this.converters.putIfAbsent(Converter.OFFSET_TIME_N1, new OffsetTimeConverter(DateUtils.ISO8601_TIMEZ_N1));
+	this.converters.putIfAbsent(Converter.OFFSET_TIME_N2, new OffsetTimeConverter(DateUtils.ISO8601_TIMEZ_N2));
+	this.converters.putIfAbsent(Converter.OFFSET_TIME_N3, new OffsetTimeConverter(DateUtils.ISO8601_TIMEZ_N3));
+	this.converters.putIfAbsent(Converter.OFFSET_TIME_N4, new OffsetTimeConverter(DateUtils.ISO8601_TIMEZ_N4));
+	this.converters.putIfAbsent(Converter.OFFSET_TIME_N5, new OffsetTimeConverter(DateUtils.ISO8601_TIMEZ_N5));
+	this.converters.putIfAbsent(Converter.OFFSET_TIME_N6, new OffsetTimeConverter(DateUtils.ISO8601_TIMEZ_N6));
+	this.converters.putIfAbsent(Converter.OFFSET_TIME_N7, new OffsetTimeConverter(DateUtils.ISO8601_TIMEZ_N7));
 
 	this.converters.putIfAbsent(Converter.OFFSET_DATETIME, new OffsetDateTimeConverter());
-	this.converters.putIfAbsent(Converter.OFFSET_DATETIME_M, new OffsetDateTimeConverter(DateUtils.ISO8601_DATETIME_MZ));
-	this.converters.putIfAbsent(Converter.OFFSET_DATETIME_S, new OffsetDateTimeConverter(DateUtils.ISO8601_DATETIME_SZ));
+	this.converters.putIfAbsent(Converter.OFFSET_DATETIME_M, new OffsetDateTimeConverter(DateUtils.ISO8601_DATETIMEZ_M));
+	this.converters.putIfAbsent(Converter.OFFSET_DATETIME_S, new OffsetDateTimeConverter(DateUtils.ISO8601_DATETIMEZ_S));
+	this.converters.putIfAbsent(Converter.OFFSET_DATETIME_N1, new OffsetDateTimeConverter(DateUtils.ISO8601_DATETIMEZ_N1));
+	this.converters.putIfAbsent(Converter.OFFSET_DATETIME_N2, new OffsetDateTimeConverter(DateUtils.ISO8601_DATETIMEZ_N2));
+	this.converters.putIfAbsent(Converter.OFFSET_DATETIME_N3, new OffsetDateTimeConverter(DateUtils.ISO8601_DATETIMEZ_N3));
+	this.converters.putIfAbsent(Converter.OFFSET_DATETIME_N4, new OffsetDateTimeConverter(DateUtils.ISO8601_DATETIMEZ_N4));
+	this.converters.putIfAbsent(Converter.OFFSET_DATETIME_N5, new OffsetDateTimeConverter(DateUtils.ISO8601_DATETIMEZ_N5));
+	this.converters.putIfAbsent(Converter.OFFSET_DATETIME_N6, new OffsetDateTimeConverter(DateUtils.ISO8601_DATETIMEZ_N6));
+	this.converters.putIfAbsent(Converter.OFFSET_DATETIME_N7, new OffsetDateTimeConverter(DateUtils.ISO8601_DATETIMEZ_N7));
 
 	this.converters = Collections.unmodifiableMap(this.converters);
     }

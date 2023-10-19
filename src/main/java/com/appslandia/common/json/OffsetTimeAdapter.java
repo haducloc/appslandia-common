@@ -27,32 +27,43 @@ import java.time.format.DateTimeParseException;
 import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.STR;
 import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class OffsetTimeAdapter extends Java8DateAdapter implements JsonSerializer<OffsetTime>, JsonDeserializer<OffsetTime> {
+public class OffsetTimeAdapter extends Java8DateAdapter<OffsetTime> {
 
-    @Override
-    public JsonElement serialize(OffsetTime src, Type typeOfSrc, JsonSerializationContext context) {
-	return new JsonPrimitive(getFormatter(DateUtils.ISO8601_TIME_Z).format(src));
+    public OffsetTimeAdapter() {
+	this(DateUtils.ISO8601_TIMEZ_N3);
     }
 
-    static final String[] TZ_PATTERNS = new String[] { DateUtils.ISO8601_TIME_MZ, DateUtils.ISO8601_TIME_SZ, DateUtils.ISO8601_TIME_Z };
+    public OffsetTimeAdapter(String serializeIsoPattern) {
+	super(serializeIsoPattern);
+    }
+
+    // @formatter:off
+    static final String[] PATTERNS = new String[] {
+        DateUtils.ISO8601_TIMEZ_M,
+        DateUtils.ISO8601_TIMEZ_S,
+        DateUtils.ISO8601_TIMEZ_N1,
+        DateUtils.ISO8601_TIMEZ_N2,
+        DateUtils.ISO8601_TIMEZ_N3,
+        DateUtils.ISO8601_TIMEZ_N4,
+        DateUtils.ISO8601_TIMEZ_N5,
+        DateUtils.ISO8601_TIMEZ_N6,
+        DateUtils.ISO8601_TIMEZ_N7
+    };
+    // @formatter:on
 
     @Override
     public OffsetTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 	String value = json.getAsString();
 
-	for (String pattern : TZ_PATTERNS) {
+	for (String pattern : PATTERNS) {
 	    try {
 		return OffsetTime.parse(value, getFormatter(pattern));
 	    } catch (DateTimeParseException ex) {

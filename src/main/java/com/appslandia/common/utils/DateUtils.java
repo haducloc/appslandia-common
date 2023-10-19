@@ -20,33 +20,33 @@
 
 package com.appslandia.common.utils;
 
-import java.text.ParsePosition;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DateTimeException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
+import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumMap;
-import java.util.GregorianCalendar;
+import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
-
-import com.appslandia.common.base.DateFormatException;
 
 /**
  *
@@ -60,80 +60,47 @@ public class DateUtils {
     public static final String ISO8601_YEAR_MONTH = "yyyy-MM";
 
     public static final String ISO8601_TIME_M = "HH:mm";
-    public static final String ISO8601_TIME_MZ = "HH:mmXXX";
-
     public static final String ISO8601_TIME_S = "HH:mm:ss";
-    public static final String ISO8601_TIME_SZ = "HH:mm:ssXXX";
+    public static final String ISO8601_TIME_N1 = "HH:mm:ss.S";
+    public static final String ISO8601_TIME_N2 = "HH:mm:ss.SS";
+    public static final String ISO8601_TIME_N3 = "HH:mm:ss.SSS";
+    public static final String ISO8601_TIME_N4 = "HH:mm:ss.SSSS";
+    public static final String ISO8601_TIME_N5 = "HH:mm:ss.SSSSS";
+    public static final String ISO8601_TIME_N6 = "HH:mm:ss.SSSSSS";
+    public static final String ISO8601_TIME_N7 = "HH:mm:ss.SSSSSSS";
 
-    public static final String ISO8601_TIME = "HH:mm:ss.SSS";
-    public static final String ISO8601_TIME_Z = "HH:mm:ss.SSSXXX";
+    public static final String ISO8601_TIMEZ_M = "HH:mmXXX";
+    public static final String ISO8601_TIMEZ_S = "HH:mm:ssXXX";
+    public static final String ISO8601_TIMEZ_N1 = "HH:mm:ss.SXXX";
+    public static final String ISO8601_TIMEZ_N2 = "HH:mm:ss.SSXXX";
+    public static final String ISO8601_TIMEZ_N3 = "HH:mm:ss.SSSXXX";
+    public static final String ISO8601_TIMEZ_N4 = "HH:mm:ss.SSSSXXX";
+    public static final String ISO8601_TIMEZ_N5 = "HH:mm:ss.SSSSSXXX";
+    public static final String ISO8601_TIMEZ_N6 = "HH:mm:ss.SSSSSSXXX";
+    public static final String ISO8601_TIMEZ_N7 = "HH:mm:ss.SSSSSSSXXX";
 
     public static final String ISO8601_DATETIME_M = "yyyy-MM-dd'T'HH:mm";
-    public static final String ISO8601_DATETIME_MZ = "yyyy-MM-dd'T'HH:mmXXX";
-
     public static final String ISO8601_DATETIME_S = "yyyy-MM-dd'T'HH:mm:ss";
-    public static final String ISO8601_DATETIME_SZ = "yyyy-MM-dd'T'HH:mm:ssXXX";
+    public static final String ISO8601_DATETIME_N1 = "yyyy-MM-dd'T'HH:mm:ss.S";
+    public static final String ISO8601_DATETIME_N2 = "yyyy-MM-dd'T'HH:mm:ss.SS";
+    public static final String ISO8601_DATETIME_N3 = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+    public static final String ISO8601_DATETIME_N4 = "yyyy-MM-dd'T'HH:mm:ss.SSSS";
+    public static final String ISO8601_DATETIME_N5 = "yyyy-MM-dd'T'HH:mm:ss.SSSSS";
+    public static final String ISO8601_DATETIME_N6 = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS";
+    public static final String ISO8601_DATETIME_N7 = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS";
 
-    public static final String ISO8601_DATETIME = "yyyy-MM-dd'T'HH:mm:ss.SSS";
-    public static final String ISO8601_DATETIME_Z = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
-
-    public static java.sql.Date todaySqlDate() {
-	return new java.sql.Date(todayAsLong());
-    }
-
-    public static long todayAsLong() {
-	return todayCalendar().getTimeInMillis();
-    }
-
-    public static Calendar todayCalendar() {
-	Calendar cal = new GregorianCalendar();
-	clearTime(cal);
-	return cal;
-    }
-
-    public static java.sql.Timestamp nowTimestamp() {
-	return new java.sql.Timestamp(System.currentTimeMillis());
-    }
+    public static final String ISO8601_DATETIMEZ_M = "yyyy-MM-dd'T'HH:mmXXX";
+    public static final String ISO8601_DATETIMEZ_S = "yyyy-MM-dd'T'HH:mm:ssXXX";
+    public static final String ISO8601_DATETIMEZ_N1 = "yyyy-MM-dd'T'HH:mm:ss.SXXX";
+    public static final String ISO8601_DATETIMEZ_N2 = "yyyy-MM-dd'T'HH:mm:ss.SSXXX";
+    public static final String ISO8601_DATETIMEZ_N3 = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+    public static final String ISO8601_DATETIMEZ_N4 = "yyyy-MM-dd'T'HH:mm:ss.SSSSXXX";
+    public static final String ISO8601_DATETIMEZ_N5 = "yyyy-MM-dd'T'HH:mm:ss.SSSSSXXX";
+    public static final String ISO8601_DATETIMEZ_N6 = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX";
+    public static final String ISO8601_DATETIMEZ_N7 = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSXXX";
 
     public static long clearMs(long timeInMs) {
 	return (timeInMs / 1000) * 1000;
-    }
-
-    public static Date clearMs(Date dt) {
-	return new Date(clearMs(dt.getTime()));
-    }
-
-    public static long clearTime(long timeInMs) {
-	return clearTime(new Date(timeInMs)).getTime();
-    }
-
-    public static Date clearTime(Date dt) {
-	Calendar cal = new GregorianCalendar();
-	cal.setTime(dt);
-
-	clearTime(cal);
-	return cal.getTime();
-    }
-
-    public static void clearTime(Calendar cal) {
-	cal.set(Calendar.HOUR_OF_DAY, 0);
-	cal.set(Calendar.MINUTE, 0);
-	cal.set(Calendar.SECOND, 0);
-	cal.set(Calendar.MILLISECOND, 0);
-    }
-
-    public static Date copyTime(Date dest, Date src) {
-	Calendar destCal = new GregorianCalendar();
-	destCal.setTime(dest);
-
-	Calendar srcCal = new GregorianCalendar();
-	srcCal.setTime(src);
-
-	destCal.set(Calendar.HOUR_OF_DAY, srcCal.get(Calendar.HOUR_OF_DAY));
-	destCal.set(Calendar.MINUTE, srcCal.get(Calendar.MINUTE));
-	destCal.set(Calendar.SECOND, srcCal.get(Calendar.SECOND));
-	destCal.set(Calendar.MILLISECOND, srcCal.get(Calendar.MILLISECOND));
-	return destCal.getTime();
     }
 
     public static boolean isFutureTime(long timeMillis, int leewayMs) {
@@ -144,59 +111,7 @@ public class DateUtils {
 	return System.currentTimeMillis() + leewayMs > timeMillis;
     }
 
-    public static String format(Date dt, String pattern) {
-	return newDateFormat(pattern).format(dt);
-    }
-
-    public static SimpleDateFormat newDateFormat(String pattern) {
-	SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-	sdf.setLenient(false);
-	return sdf;
-    }
-
-    public static java.sql.Date iso8601Date(String date) throws DateFormatException {
-	return (date != null) ? new java.sql.Date(parse(date, ISO8601_DATE).getTime()) : null;
-    }
-
-    public static String iso8601Date(Date date) {
-	return (date != null) ? newDateFormat(ISO8601_DATE).format(date) : null;
-    }
-
-    public static java.sql.Time iso8601Time(String time) throws DateFormatException {
-	return (time != null) ? new java.sql.Time(parse(time, ISO8601_TIME).getTime()) : null;
-    }
-
-    public static String iso8601Time(Date time) {
-	return (time != null) ? newDateFormat(ISO8601_TIME).format(time) : null;
-    }
-
-    public static java.sql.Timestamp iso8601DateTime(String dateTime) throws DateFormatException {
-	return (dateTime != null) ? new java.sql.Timestamp(parse(dateTime, ISO8601_DATETIME).getTime()) : null;
-    }
-
-    public static String iso8601DateTime(Date dateTime) {
-	return (dateTime != null) ? newDateFormat(ISO8601_DATETIME).format(dateTime) : null;
-    }
-
-    public static Date parse(String value, String pattern) throws DateFormatException {
-	if (value == null) {
-	    return null;
-	}
-
-	ParsePosition pos = new ParsePosition(0);
-	Date parsedValue = newDateFormat(pattern).parse(value, pos);
-
-	if ((pos.getErrorIndex() < 0) && (pos.getIndex() == value.length()) && (parsedValue != null)) {
-	    return parsedValue;
-	}
-	throw new DateFormatException(STR.fmt("Failed to parse java.util.Date from '{}' using the pattern '{}'.", value, pattern));
-    }
-
     // Java8 Date/Time
-
-    public static ZoneOffset toZoneOffset(TimeZone timeZone) {
-	return (timeZone != null) ? toZoneOffset(timeZone.toZoneId()) : null;
-    }
 
     public static ZoneOffset toZoneOffset(ZoneId zoneId) {
 	return (zoneId != null) ? zoneId.getRules().getOffset(Instant.now()) : null;
@@ -207,13 +122,26 @@ public class DateUtils {
 	if (ld == null) {
 	    return null;
 	}
-	return ld.getYear() * 10000 + ld.getMonthValue() * 100 + ld.getDayOfMonth();
+	return ld.getYear() * 1_00_00 + ld.getMonthValue() * 1_00 + ld.getDayOfMonth();
+    }
+
+    public static LocalDate fromDateID(Integer dateID) throws DateTimeException {
+	if (dateID == null) {
+	    return null;
+	}
+
+	int day = dateID % 100;
+	dateID /= 100;
+
+	int month = dateID % 100;
+	int year = dateID / 100;
+
+	return LocalDate.of(year, month, day);
     }
 
     // yyyyMMdd
     public static Integer toWeekID(LocalDate ld, Locale locale) {
 	Asserts.notNull(locale);
-
 	if (ld == null) {
 	    return null;
 	}
@@ -228,8 +156,63 @@ public class DateUtils {
 	return ld.getYear() * 100 + ld.getMonthValue();
     }
 
+    public static Integer toMonthID(YearMonth ym) {
+	if (ym == null) {
+	    return null;
+	}
+	return ym.getYear() * 100 + ym.getMonthValue();
+    }
+
+    public static YearMonth fromMonthID(Integer monthID) throws DateTimeException {
+	if (monthID == null) {
+	    return null;
+	}
+
+	int month = monthID % 100;
+	int year = monthID / 100;
+
+	return YearMonth.of(year, month);
+    }
+
+    // yyyyMMddHHmm
+    public static Long toDateTimeID(LocalDateTime dateTime) {
+	if (dateTime == null) {
+	    return null;
+	}
+	return dateTime.getYear() * 1_00_00_00_00L + dateTime.getMonthValue() * 1_00_00_00L + dateTime.getDayOfMonth() * 1_00_00L + dateTime.getHour() * 1_00L
+		+ dateTime.getMinute();
+    }
+
+    public static LocalDateTime fromDateTimeID(Long dateTimeID) throws DateTimeException {
+	if (dateTimeID == null) {
+	    return null;
+	}
+
+	int minute = (int) (dateTimeID % 100);
+	dateTimeID /= 100;
+
+	int hour = (int) (dateTimeID % 100);
+	dateTimeID /= 100;
+
+	int day = (int) (dateTimeID % 100);
+	dateTimeID /= 100;
+
+	int month = (int) (dateTimeID % 100);
+	int year = (int) (dateTimeID / 100);
+
+	return LocalDateTime.of(year, month, day, hour, minute);
+    }
+
     public static LocalDate toLocalDate(Date date) {
 	return (date != null) ? Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate() : null;
+    }
+
+    public static LocalTime toLocalTime(Date time) {
+	return (time != null) ? Instant.ofEpochMilli(time.getTime()).atZone(ZoneId.systemDefault()).toLocalTime() : null;
+    }
+
+    public static LocalDateTime toLocalDateTime(Date dt) {
+	return (dt != null) ? Instant.ofEpochMilli(dt.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime() : null;
     }
 
     private static final class DateTimeFormattersHolder {
@@ -349,35 +332,35 @@ public class DateUtils {
     }
 
     public static LocalTime iso8601LocalTime(String time) throws DateTimeParseException {
-	return (time != null) ? LocalTime.parse(time, getFormatter(ISO8601_TIME)) : null;
+	return (time != null) ? LocalTime.parse(time, getFormatter(ISO8601_TIME_N3)) : null;
     }
 
     public static String iso8601LocalTime(LocalTime time) {
-	return (time != null) ? getFormatter(ISO8601_TIME).format(time) : null;
+	return (time != null) ? getFormatter(ISO8601_TIME_N3).format(time) : null;
     }
 
     public static LocalDateTime iso8601LocalDateTime(String dateTime) throws DateTimeParseException {
-	return (dateTime != null) ? LocalDateTime.parse(dateTime, getFormatter(ISO8601_DATETIME)) : null;
+	return (dateTime != null) ? LocalDateTime.parse(dateTime, getFormatter(ISO8601_DATETIME_N3)) : null;
     }
 
     public static String iso8601LocalDateTime(LocalDateTime dateTime) {
-	return (dateTime != null) ? getFormatter(ISO8601_DATETIME).format(dateTime) : null;
+	return (dateTime != null) ? getFormatter(ISO8601_DATETIME_N3).format(dateTime) : null;
     }
 
     public static OffsetTime iso8601OffsetTime(String timeZ) throws DateTimeParseException {
-	return (timeZ != null) ? OffsetTime.parse(timeZ, getFormatter(ISO8601_TIME_Z)) : null;
+	return (timeZ != null) ? OffsetTime.parse(timeZ, getFormatter(ISO8601_TIMEZ_N3)) : null;
     }
 
     public static String iso8601OffsetTime(OffsetTime timeZ) {
-	return (timeZ != null) ? getFormatter(ISO8601_TIME_Z).format(timeZ) : null;
+	return (timeZ != null) ? getFormatter(ISO8601_TIMEZ_N3).format(timeZ) : null;
     }
 
     public static OffsetDateTime iso8601OffsetDateTime(String dateTimeZ) throws DateTimeParseException {
-	return (dateTimeZ != null) ? OffsetDateTime.parse(dateTimeZ, getFormatter(ISO8601_DATETIME_Z)) : null;
+	return (dateTimeZ != null) ? OffsetDateTime.parse(dateTimeZ, getFormatter(ISO8601_DATETIMEZ_N3)) : null;
     }
 
     public static String iso8601OffsetDateTime(OffsetDateTime dateTimeZ) {
-	return (dateTimeZ != null) ? getFormatter(ISO8601_DATETIME_Z).format(dateTimeZ) : null;
+	return (dateTimeZ != null) ? getFormatter(ISO8601_DATETIMEZ_N3).format(dateTimeZ) : null;
     }
 
     // 1w 2d 3h 4m 50s 500ms
@@ -469,5 +452,57 @@ public class DateUtils {
 	default:
 	    throw new Error();
 	}
+    }
+
+    public static String toDatePattern(Locale locale) {
+	DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, locale);
+	String isoDate = null;
+	try {
+	    isoDate = df.format(new SimpleDateFormat(DateUtils.ISO8601_DATE).parse("3333-11-22"));
+	} catch (ParseException ex) {
+	    throw new Error(ex);
+	}
+
+	Set<Character> letters = new LinkedHashSet<>();
+	Character separator = null;
+
+	for (int i = 0; i < isoDate.length(); i++) {
+	    char ch = isoDate.charAt(i);
+
+	    if (ch == '1') {
+		letters.add('M');
+	    } else if (ch == '2') {
+		letters.add('d');
+	    } else if (ch == '3') {
+		letters.add('y');
+	    } else {
+		if (separator == null) {
+		    if (ch == '-' || ch == '/' || ch == '.') {
+			separator = ch;
+		    }
+		}
+	    }
+	}
+
+	// If separator known & letters are yMd
+	if ((separator != null) && (letters.size() == 3)) {
+
+	    StringBuilder datePt = new StringBuilder(10);
+
+	    for (Character ch : letters) {
+		if (datePt.length() > 0) {
+		    datePt.append(separator);
+		}
+		datePt.append(ch);
+		datePt.append(ch);
+
+		if (ch.equals('y')) {
+		    datePt.append(ch);
+		    datePt.append(ch);
+		}
+	    }
+	    return datePt.toString();
+	}
+	return null;
     }
 }

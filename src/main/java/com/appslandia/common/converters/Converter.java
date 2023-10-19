@@ -38,34 +38,52 @@ public interface Converter<T> {
     public static final String DOUBLE = "Double";
     public static final String BIGDECIMAL = "BigDecimal";
 
-    public static final String DATE = "Date";
-
-    public static final String TIME = "Time";
-    public static final String TIME_M = "TimeM";
-    public static final String TIME_S = "TimeS";
-
-    public static final String TIMESTAMP = "Timestamp";
-    public static final String TIMESTAMP_M = "TimestampM";
-    public static final String TIMESTAMP_S = "TimestampS";
-
     public static final String LOCAL_DATE = "LocalDate";
     public static final String YEAR_MONTH = "YearMonth";
 
     public static final String LOCAL_TIME = "LocalTime";
     public static final String LOCAL_TIME_M = "LocalTimeM";
     public static final String LOCAL_TIME_S = "LocalTimeS";
+    public static final String LOCAL_TIME_N1 = "LocalTimeN1";
+    public static final String LOCAL_TIME_N2 = "LocalTimeN2";
+    public static final String LOCAL_TIME_N3 = "LocalTimeN3";
+    public static final String LOCAL_TIME_N4 = "LocalTimeN4";
+    public static final String LOCAL_TIME_N5 = "LocalTimeN5";
+    public static final String LOCAL_TIME_N6 = "LocalTimeN6";
+    public static final String LOCAL_TIME_N7 = "LocalTimeN7";
 
     public static final String LOCAL_DATETIME = "LocalDateTime";
     public static final String LOCAL_DATETIME_M = "LocalDateTimeM";
     public static final String LOCAL_DATETIME_S = "LocalDateTimeS";
+    public static final String LOCAL_DATETIME_N1 = "LocalDateTimeN1";
+    public static final String LOCAL_DATETIME_N2 = "LocalDateTimeN2";
+    public static final String LOCAL_DATETIME_N3 = "LocalDateTimeN3";
+    public static final String LOCAL_DATETIME_N4 = "LocalDateTimeN4";
+    public static final String LOCAL_DATETIME_N5 = "LocalDateTimeN5";
+    public static final String LOCAL_DATETIME_N6 = "LocalDateTimeN6";
+    public static final String LOCAL_DATETIME_N7 = "LocalDateTimeN7";
 
     public static final String OFFSET_TIME = "OffsetTime";
     public static final String OFFSET_TIME_M = "OffsetTimeM";
     public static final String OFFSET_TIME_S = "OffsetTimeS";
+    public static final String OFFSET_TIME_N1 = "OffsetTimeN1";
+    public static final String OFFSET_TIME_N2 = "OffsetTimeN2";
+    public static final String OFFSET_TIME_N3 = "OffsetTimeN3";
+    public static final String OFFSET_TIME_N4 = "OffsetTimeN4";
+    public static final String OFFSET_TIME_N5 = "OffsetTimeN5";
+    public static final String OFFSET_TIME_N6 = "OffsetTimeN6";
+    public static final String OFFSET_TIME_N7 = "OffsetTimeN7";
 
     public static final String OFFSET_DATETIME = "OffsetDateTime";
     public static final String OFFSET_DATETIME_M = "OffsetDateTimeM";
     public static final String OFFSET_DATETIME_S = "OffsetDateTimeS";
+    public static final String OFFSET_DATETIME_N1 = "OffsetDateTimeN1";
+    public static final String OFFSET_DATETIME_N2 = "OffsetDateTimeN2";
+    public static final String OFFSET_DATETIME_N3 = "OffsetDateTimeN3";
+    public static final String OFFSET_DATETIME_N4 = "OffsetDateTimeN4";
+    public static final String OFFSET_DATETIME_N5 = "OffsetDateTimeN5";
+    public static final String OFFSET_DATETIME_N6 = "OffsetDateTimeN6";
+    public static final String OFFSET_DATETIME_N7 = "OffsetDateTimeN7";
 
     public static final String BOOLEAN = "Boolean";
 

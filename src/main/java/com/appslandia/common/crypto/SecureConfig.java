@@ -20,7 +20,6 @@
 
 package com.appslandia.common.crypto;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -70,12 +69,6 @@ public class SecureConfig extends PropertyConfig implements Cloneable {
     @Override
     public SecureConfig load(Reader r) throws IOException {
 	super.load(r);
-	return this;
-    }
-
-    @Override
-    public SecureConfig load(File file) throws IOException {
-	super.load(file);
 	return this;
     }
 

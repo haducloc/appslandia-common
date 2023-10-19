@@ -22,84 +22,21 @@ package com.appslandia.common.jdbc;
 
 import java.math.BigDecimal;
 import java.sql.Types;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
-
-import com.appslandia.common.utils.Asserts;
-import com.appslandia.common.utils.STR;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class SqlTypes {
-
-    static final Set<Integer> TYPES;
-
-    static {
-	Set<Integer> types = new LinkedHashSet<>();
-
-	types.add(Types.BIT);
-	types.add(Types.BOOLEAN);
-
-	types.add(Types.TINYINT);
-	types.add(Types.SMALLINT);
-	types.add(Types.INTEGER);
-	types.add(Types.BIGINT);
-
-	types.add(Types.FLOAT);
-	types.add(Types.REAL);
-	types.add(Types.DOUBLE);
-	types.add(Types.NUMERIC);
-	types.add(Types.DECIMAL);
-
-	types.add(Types.CHAR);
-	types.add(Types.VARCHAR);
-	types.add(Types.LONGVARCHAR);
-	types.add(Types.CLOB);
-
-	types.add(Types.NCHAR);
-	types.add(Types.NVARCHAR);
-	types.add(Types.LONGNVARCHAR);
-	types.add(Types.NCLOB);
-
-	types.add(Types.DATE);
-	types.add(Types.TIME);
-	types.add(Types.TIMESTAMP);
-	types.add(Types.TIME_WITH_TIMEZONE);
-	types.add(Types.TIMESTAMP_WITH_TIMEZONE);
-
-	types.add(Types.BINARY);
-	types.add(Types.VARBINARY);
-	types.add(Types.LONGVARBINARY);
-	types.add(Types.BLOB);
-
-	types.add(Types.NULL);
-	types.add(Types.OTHER);
-	types.add(Types.JAVA_OBJECT);
-	types.add(Types.DISTINCT);
-	types.add(Types.STRUCT);
-	types.add(Types.ARRAY);
-
-	types.add(Types.REF);
-	types.add(Types.DATALINK);
-	types.add(Types.ROWID);
-
-	types.add(Types.SQLXML);
-	types.add(Types.REF_CURSOR);
-
-	TYPES = Collections.unmodifiableSet(types);
-    }
-
-    public static boolean isSqlType(int sqlType) {
-	return TYPES.contains(sqlType);
-    }
+public abstract class SqlTypeMapper {
 
     private static final Map<Integer, Class<?>> SQL_TYPE_JAVA_TYPES;
     static {
@@ -129,9 +66,9 @@ public class SqlTypes {
 	map.put(Types.LONGNVARCHAR, String.class);
 	map.put(Types.NCLOB, java.io.Reader.class);
 
-	map.put(Types.DATE, java.sql.Date.class);
-	map.put(Types.TIME, java.sql.Time.class);
-	map.put(Types.TIMESTAMP, java.sql.Timestamp.class);
+	map.put(Types.DATE, LocalDate.class);
+	map.put(Types.TIME, LocalTime.class);
+	map.put(Types.TIMESTAMP, LocalDateTime.class);
 	map.put(Types.TIME_WITH_TIMEZONE, OffsetTime.class);
 	map.put(Types.TIMESTAMP_WITH_TIMEZONE, OffsetDateTime.class);
 
@@ -140,11 +77,22 @@ public class SqlTypes {
 	map.put(Types.LONGVARBINARY, byte[].class);
 	map.put(Types.BLOB, java.io.InputStream.class);
 
+	map.put(Types.SQLXML, String.class);
+
 	SQL_TYPE_JAVA_TYPES = Collections.unmodifiableMap(map);
     }
 
-    public static Class<?> getJavaType(int sqlType) {
-	Class<?> type = SQL_TYPE_JAVA_TYPES.get(sqlType);
-	return Asserts.notNull(type, () -> STR.fmt("Failed to getJavaType({})", sqlType));
+    protected abstract Class<?> doGetJavaType(int sqlType);
+
+    public Class<?> getJavaType(int sqlType) {
+	Class<?> type = doGetJavaType(sqlType);
+	if (type != null) {
+	    return type;
+	}
+	type = SQL_TYPE_JAVA_TYPES.get(sqlType);
+	if (type != null) {
+	    return type;
+	}
+	return Object.class;
     }
 }

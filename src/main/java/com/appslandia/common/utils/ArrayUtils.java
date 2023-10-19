@@ -98,6 +98,15 @@ public class ArrayUtils {
 	return arr;
     }
 
+    public static int[] copy(int[] src) {
+	if ((src == null) || (src.length == 0)) {
+	    return src;
+	}
+	int[] arr = new int[src.length];
+	System.arraycopy(src, 0, arr, 0, src.length);
+	return arr;
+    }
+
     public static String[] copy(String[] src) {
 	if ((src == null) || (src.length == 0)) {
 	    return src;

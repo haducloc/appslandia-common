@@ -18,7 +18,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.utils;
+package com.appslandia.common.csv;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -28,7 +28,6 @@ import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.temporal.Temporal;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Function;
@@ -37,6 +36,10 @@ import java.util.stream.Collectors;
 import com.appslandia.common.base.AssertException;
 import com.appslandia.common.base.BoolFormatException;
 import com.appslandia.common.base.DateFormatException;
+import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.DateUtils;
+import com.appslandia.common.utils.ParseUtils;
+import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -55,8 +58,9 @@ public class CsvRecord {
 	this.values = Asserts.notNull(fieldValues);
     }
 
-    public void process(int[] indexes, Function<String, String> processor) {
+    public void applyProcessor(Function<String, String> processor, int... indexes) {
 	Asserts.notNull(processor);
+	Asserts.hasElements(indexes);
 
 	for (int i : indexes) {
 	    Objects.checkIndex(i, this.values.length);
@@ -121,6 +125,51 @@ public class CsvRecord {
 	return value.toLowerCase(Locale.ROOT);
     }
 
+    public boolean getBool(int index) throws BoolFormatException {
+	String value = getStringReq(index);
+	return ParseUtils.parseBool(value);
+    }
+
+    public boolean getBool(int index, boolean defaultValIfInvalid) {
+	String value = getString(index);
+	return ParseUtils.parseBool(value, defaultValIfInvalid);
+    }
+
+    public Boolean getBoolOpt(int index) throws BoolFormatException {
+	String value = getString(index);
+	return (value != null) ? ParseUtils.parseBool(value) : null;
+    }
+
+    public byte getByte(int index) throws NumberFormatException {
+	String value = getStringReq(index);
+	return ParseUtils.parseByte(value);
+    }
+
+    public byte getByte(int index, byte defaultValIfInvalid) {
+	String value = getString(index);
+	return ParseUtils.parseByte(value, defaultValIfInvalid);
+    }
+
+    public Byte getByteOpt(int index) throws NumberFormatException {
+	String value = getString(index);
+	return (value != null) ? ParseUtils.parseByte(value) : null;
+    }
+
+    public short getShort(int index) throws NumberFormatException {
+	String value = getStringReq(index);
+	return ParseUtils.parseShort(value);
+    }
+
+    public short getShort(int index, short defaultValIfInvalid) {
+	String value = getString(index);
+	return ParseUtils.parseShort(value, defaultValIfInvalid);
+    }
+
+    public Short getShortOpt(int index) throws NumberFormatException {
+	String value = getString(index);
+	return (value != null) ? ParseUtils.parseShort(value) : null;
+    }
+
     public int getInt(int index) throws NumberFormatException {
 	String value = getStringReq(index);
 	return ParseUtils.parseInt(value);
@@ -151,6 +200,21 @@ public class CsvRecord {
 	return (value != null) ? ParseUtils.parseLong(value) : null;
     }
 
+    public float getFloat(int index) throws NumberFormatException {
+	String value = getStringReq(index);
+	return ParseUtils.parseFloat(value);
+    }
+
+    public float getFloat(int index, float defaultValIfInvalid) {
+	String value = getString(index);
+	return ParseUtils.parseFloat(value, defaultValIfInvalid);
+    }
+
+    public Float getFloatOpt(int index) throws NumberFormatException {
+	String value = getString(index);
+	return (value != null) ? ParseUtils.parseFloat(value) : null;
+    }
+
     public double getDouble(int index) throws NumberFormatException {
 	String value = getStringReq(index);
 	return ParseUtils.parseDouble(value);
@@ -166,21 +230,6 @@ public class CsvRecord {
 	return (value != null) ? ParseUtils.parseDouble(value) : null;
     }
 
-    public boolean getBool(int index) throws BoolFormatException {
-	String value = getStringReq(index);
-	return ParseUtils.parseBool(value);
-    }
-
-    public boolean getBool(int index, boolean defaultValIfInvalid) {
-	String value = getString(index);
-	return ParseUtils.parseBool(value, defaultValIfInvalid);
-    }
-
-    public Boolean getBoolOpt(int index) throws BoolFormatException {
-	String value = getString(index);
-	return (value != null) ? ParseUtils.parseBool(value) : null;
-    }
-
     public BigDecimal getDecimalReq(int index) throws NumberFormatException {
 	String value = getStringReq(index);
 	return new BigDecimal(value);
@@ -194,20 +243,6 @@ public class CsvRecord {
     public BigDecimal getDecimal(int index, double defaultValIfInvalid) {
 	String value = getString(index);
 	return ParseUtils.parseDecimal(value, defaultValIfInvalid);
-    }
-
-    public Date getDateReq(int index, String... patterns) throws DateFormatException {
-	Asserts.hasElements(patterns);
-
-	String value = getStringReq(index);
-	return ParseUtils.parseDate(value, patterns);
-    }
-
-    public Date getDate(int index, String... patterns) throws DateFormatException {
-	Asserts.hasElements(patterns);
-
-	String value = getString(index);
-	return (value != null) ? ParseUtils.parseDate(value, patterns) : null;
     }
 
     public LocalDate getLocalDateReq(int index, String... patterns) throws DateFormatException {
@@ -320,11 +355,27 @@ public class CsvRecord {
 	return set(index, Double.toString(value));
     }
 
-    public CsvRecord set(int index, Date value, String pattern) {
-	return set(index, (value != null) ? DateUtils.newDateFormat(pattern).format(value) : null);
+    public CsvRecord set(int index, LocalDate value, String pattern) {
+	return setTemporal(index, value, (pattern != null) ? pattern : DateUtils.ISO8601_DATE);
     }
 
-    public CsvRecord set(int index, Temporal value, String pattern) {
+    public CsvRecord set(int index, LocalTime value, String pattern) {
+	return setTemporal(index, value, (pattern != null) ? pattern : DateUtils.ISO8601_TIME_N3);
+    }
+
+    public CsvRecord set(int index, LocalDateTime value, String pattern) {
+	return setTemporal(index, value, (pattern != null) ? pattern : DateUtils.ISO8601_DATETIME_N3);
+    }
+
+    public CsvRecord set(int index, OffsetTime value, String pattern) {
+	return setTemporal(index, value, (pattern != null) ? pattern : DateUtils.ISO8601_TIMEZ_N3);
+    }
+
+    public CsvRecord set(int index, OffsetDateTime value, String pattern) {
+	return setTemporal(index, value, (pattern != null) ? pattern : DateUtils.ISO8601_DATETIMEZ_N3);
+    }
+
+    private CsvRecord setTemporal(int index, Temporal value, String pattern) {
 	return set(index, (value != null) ? DateUtils.getFormatter(pattern).format(value) : null);
     }
 

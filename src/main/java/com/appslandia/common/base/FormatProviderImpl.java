@@ -21,12 +21,9 @@
 package com.appslandia.common.base;
 
 import java.math.RoundingMode;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Objects;
-
-import com.appslandia.common.utils.DateUtils;
 
 /**
  *
@@ -42,7 +39,6 @@ public class FormatProviderImpl implements FormatProvider {
     protected ProviderMap<NumberFormatKey, NumberFormat> percentFormats;
     protected ProviderMap<NumberFormatKey, NumberFormat> currencyFormats;
 
-    protected ProviderMap<String, DateFormat> dateFormats;
     protected ProviderMap<NumberFormatKey, DecimalFormat> decimalFormats;
 
     public FormatProviderImpl() {
@@ -135,18 +131,6 @@ public class FormatProviderImpl implements FormatProvider {
 
 	    return impl;
 	});
-    }
-
-    @Override
-    public DateFormat getDateFormat(String pattern) {
-	return this.getDateFormats().get(pattern);
-    }
-
-    protected ProviderMap<String, DateFormat> getDateFormats() {
-	if (this.dateFormats != null) {
-	    return this.dateFormats;
-	}
-	return this.dateFormats = new ProviderMap<String, DateFormat>((pattern) -> DateUtils.newDateFormat(pattern));
     }
 
     @Override

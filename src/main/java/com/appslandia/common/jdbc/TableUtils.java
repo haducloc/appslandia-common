@@ -18,7 +18,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.data;
+package com.appslandia.common.jdbc;
 
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -44,7 +44,7 @@ public class TableUtils {
     private static final Pattern TABLE_SPEC_PATTERN = Pattern.compile("^\\s*(" + TABLE_NAME_PAT + ")\\s*\\(\\s*(" + COLUMN_NAME_PAT + "\\s+" + COLUMN_TYPE_PAT + "\\s*(,\\s*"
 	    + COLUMN_NAME_PAT + "\\s+" + COLUMN_TYPE_PAT + "\\s*)*)\\)\\s*$", Pattern.CASE_INSENSITIVE);
 
-    public static String toTableScript(String tableSpec, boolean lowercase, Out<String> tableName) {
+    public static String toTableScript(String tableSpec, Out<String> tableName) {
 	tableSpec = NormalizeUtils.removeCrLf(tableSpec);
 	Asserts.notNull(tableSpec);
 
@@ -56,7 +56,7 @@ public class TableUtils {
 	// Build script
 	TextBuilder script = new TextBuilder(tableSpec.length() + 256);
 	tableName.value = matcher.group(1);
-	script.append("CREATE TABLE ").append(lowercase ? tableName.value.toLowerCase(Locale.ROOT) : tableName.value).append("(").appendln();
+	script.append("CREATE TABLE ").append(tableName.value).append("(").appendln();
 
 	String columns = matcher.group(2);
 	StringBuilder colDef = new StringBuilder();
@@ -71,8 +71,7 @@ public class TableUtils {
 
 	    if (c == ',' && !inParentheses) {
 		String[] colParts = parseColumnParts(colDef.toString().trim());
-		script.appendsp(4).append(lowercase ? colParts[0].toLowerCase(Locale.ROOT) : colParts[0]).append(" ").append(colParts[1].toUpperCase(Locale.ROOT)).append(",")
-			.appendln();
+		script.appendsp(4).append(colParts[0]).append(" ").append(colParts[1]).append(",").appendln();
 
 		colDef.setLength(0);
 	    } else {
@@ -81,7 +80,7 @@ public class TableUtils {
 	}
 
 	String[] colParts = parseColumnParts(colDef.toString().trim());
-	script.appendsp(4).append(lowercase ? colParts[0].toLowerCase(Locale.ROOT) : colParts[0]).append(" ").append(colParts[1].toUpperCase(Locale.ROOT)).appendln();
+	script.appendsp(4).append(colParts[0]).append(" ").append(colParts[1]).appendln();
 
 	script.append(")");
 	return script.toString();
@@ -89,6 +88,6 @@ public class TableUtils {
 
     private static String[] parseColumnParts(String columnDef) {
 	int idx = columnDef.indexOf(' ');
-	return new String[] { columnDef.substring(0, idx).trim(), columnDef.substring(idx).trim() };
+	return new String[] { columnDef.substring(0, idx).trim(), columnDef.substring(idx).trim().toUpperCase(Locale.ROOT) };
     }
 }

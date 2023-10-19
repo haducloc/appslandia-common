@@ -18,30 +18,17 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.jose;
+package com.appslandia.common.csv;
 
-import java.util.Date;
-
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
-import com.appslandia.common.utils.DateUtils;
+import com.appslandia.common.data.DataRecord;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JoseUtilsTest {
+@FunctionalInterface
+public interface CsvDebugger {
 
-    @Test
-    public void test_toNumericDate() {
-	Date dt = DateUtils.iso8601DateTime("2010-10-10T10:10:10.999");
-
-	Long numericDate = JoseUtils.toNumericDate(dt.getTime());
-	Date restoredDate = JoseUtils.toDate(numericDate);
-
-	Assertions.assertEquals("2010-10-10T10:10:10.000", DateUtils.iso8601DateTime(restoredDate));
-	Assertions.assertEquals((dt.getTime() / 1000) * 1000, restoredDate.getTime());
-    }
+    void apply(int index, CsvRecord csvRecord, DataRecord dataRecord);
 }

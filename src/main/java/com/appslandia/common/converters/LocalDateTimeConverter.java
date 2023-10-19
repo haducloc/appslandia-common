@@ -36,7 +36,7 @@ public class LocalDateTimeConverter extends Java8DateConverter<LocalDateTime> {
     public static final String ERROR_MSG_KEY = LocalDateTimeConverter.class.getName() + ".message";
 
     public LocalDateTimeConverter() {
-	super(DateUtils.ISO8601_DATETIME);
+	super(DateUtils.ISO8601_DATETIME_N3);
     }
 
     public LocalDateTimeConverter(String isoPattern) {

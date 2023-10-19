@@ -20,18 +20,37 @@
 
 package com.appslandia.common.json;
 
+import java.lang.reflect.Type;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.Temporal;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public abstract class Java8DateAdapter {
+public abstract class Java8DateAdapter<T extends Temporal> implements JsonSerializer<T>, JsonDeserializer<T> {
 
     private static final ConcurrentMap<String, DateTimeFormatter> FORMATTERS = new ConcurrentHashMap<>();
+
+    protected final String serializeIsoPattern;
+
+    public Java8DateAdapter(String serializeIsoPattern) {
+	this.serializeIsoPattern = serializeIsoPattern;
+    }
+
+    @Override
+    public JsonElement serialize(T src, Type typeOfSrc, JsonSerializationContext context) {
+	return new JsonPrimitive(getFormatter(this.serializeIsoPattern).format(src));
+    }
 
     protected static DateTimeFormatter getFormatter(String pattern) {
 	return FORMATTERS.computeIfAbsent(pattern, p -> DateTimeFormatter.ofPattern(p));

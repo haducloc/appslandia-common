@@ -60,7 +60,7 @@ public class BigDecimalConverterTest {
     }
 
     @Test
-    public void test_java_format() {
+    public void test_decimal_format() {
 	BigDecimalConverter converter = new BigDecimalConverter(3, RoundingMode.HALF_EVEN);
 	FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
 	try {

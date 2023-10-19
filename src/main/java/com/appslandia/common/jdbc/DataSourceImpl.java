@@ -21,7 +21,6 @@
 package com.appslandia.common.jdbc;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -138,7 +137,7 @@ public class DataSourceImpl extends InitializeObject implements DataSource {
 	return this;
     }
 
-    public DataSourceImpl load(File file) {
+    public DataSourceImpl load(String file) {
 	assertNotInitialized();
 	try (Reader r = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
 	    return load(r);
@@ -148,10 +147,6 @@ public class DataSourceImpl extends InitializeObject implements DataSource {
 	} catch (Exception ex) {
 	    throw new InitializeException(ex);
 	}
-    }
-
-    public DataSourceImpl load(String file) {
-	return load(new File(file));
     }
 
     public DataSourceImpl loadProps(Map<String, String> props) {

@@ -21,6 +21,7 @@
 package com.appslandia.common.utils;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.time.temporal.TemporalAccessor;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -127,7 +128,7 @@ public class STR {
 			    out.append(new DecimalFormat(pattern).format(parameterValue));
 
 			} else if (parameterValue instanceof java.util.Date) {
-			    out.append(DateUtils.newDateFormat(pattern).format(parameterValue));
+			    out.append(new SimpleDateFormat(pattern).format(parameterValue));
 
 			} else if (parameterValue instanceof TemporalAccessor) {
 			    out.append(DateUtils.getFormatter(pattern).format((TemporalAccessor) parameterValue));
@@ -215,7 +216,7 @@ public class STR {
 			    out.append(new DecimalFormat(pattern).format(entryValue));
 
 			} else if (entryValue instanceof java.util.Date) {
-			    out.append(DateUtils.newDateFormat(pattern).format(entryValue));
+			    out.append(new SimpleDateFormat(pattern).format(entryValue));
 
 			} else if (entryValue instanceof TemporalAccessor) {
 			    out.append(DateUtils.getFormatter(pattern).format((TemporalAccessor) entryValue));

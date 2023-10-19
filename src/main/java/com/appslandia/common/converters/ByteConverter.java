@@ -22,7 +22,6 @@ package com.appslandia.common.converters;
 
 import com.appslandia.common.base.FormatProvider;
 import com.appslandia.common.utils.StringUtils;
-import com.appslandia.common.utils.ValueUtils;
 
 /**
  *
@@ -58,12 +57,7 @@ public class ByteConverter extends NumberConverter<Byte> {
 	    return null;
 	}
 	try {
-	    long value = Long.parseLong(str);
-
-	    if (!ValueUtils.isByteRange(value)) {
-		throw toNumberOverflowError(str);
-	    }
-	    return (byte) value;
+	    return Byte.parseByte(str);
 
 	} catch (NumberFormatException ex) {
 	}

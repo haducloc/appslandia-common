@@ -21,11 +21,11 @@
 package com.appslandia.common.data;
 
 import java.io.Serializable;
+import java.sql.Types;
 import java.util.List;
 
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.jdbc.JdbcSql;
-import com.appslandia.common.jdbc.SqlTypes;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.STR;
@@ -44,34 +44,30 @@ public class Column extends InitializeObject implements Serializable {
     private String tableName;
 
     private String name;
-    private Integer sqlType;
-    private Integer scaleOrLength;
+    private int sqlType;
+    private int columnSize;
+    private Integer fractionDigits;
+
     private boolean nullable = true;
     private boolean updatable = true;
     private int position;
 
     private Class<?> javaType;
 
-    private ColumnType columnType = ColumnType.NON_KEY;
+    private ColumnType columnType;
     private List<AnnotationModel> annotations;
 
     @Override
     protected void init() throws Exception {
 	Asserts.notNull(this.name, "name is required.");
-	Asserts.notNull(this.columnType, "columnType is required.");
+	Asserts.notNull(this.javaType, "javaType is required.");
 
-	if (this.javaType == null) {
-	    Class<?> javaType = (this.sqlType != null) ? SqlTypes.getJavaType(this.sqlType) : null;
+	if (this.columnType == null) {
+	    this.columnType = ColumnType.NON_KEY;
+	}
 
-	    if (javaType != null) {
-
-		if (this.columnType == ColumnType.KEY_INCR || this.columnType == ColumnType.KEY) {
-		    this.javaType = TypeUtils.wrap(javaType);
-
-		} else {
-		    this.javaType = this.nullable ? TypeUtils.wrap(javaType) : javaType;
-		}
-	    }
+	if (this.nullable || this.columnType == ColumnType.KEY_INCR || this.columnType == ColumnType.KEY) {
+	    this.javaType = TypeUtils.wrap(this.javaType);
 	}
 
 	this.annotations = CollectionUtils.unmodifiable(this.annotations);
@@ -81,15 +77,18 @@ public class Column extends InitializeObject implements Serializable {
 	return JdbcSql.getParamPrefix() + getName();
     }
 
+    public int getScaleOrLength() {
+	this.initialize();
+	return (this.sqlType == Types.DECIMAL || this.sqlType == Types.NUMERIC) ? Asserts.notNull(this.fractionDigits) : this.columnSize;
+    }
+
     public boolean isKeyIncr() {
 	this.initialize();
-
 	return this.columnType == ColumnType.KEY_INCR;
     }
 
     public boolean isKey() {
 	this.initialize();
-
 	return this.columnType == ColumnType.KEY_INCR || this.columnType == ColumnType.KEY;
     }
 
@@ -139,25 +138,36 @@ public class Column extends InitializeObject implements Serializable {
 	return this;
     }
 
-    public Integer getSqlType() {
+    public int getSqlType() {
 	this.initialize();
 	return this.sqlType;
     }
 
-    public Column setSqlType(Integer sqlType) {
+    public Column setSqlType(int sqlType) {
 	this.assertNotInitialized();
 	this.sqlType = sqlType;
 	return this;
     }
 
-    public Integer getScaleOrLength() {
+    public int getColumnSize() {
 	this.initialize();
-	return this.scaleOrLength;
+	return this.columnSize;
     }
 
-    public Column setScaleOrLength(Integer scaleOrLength) {
+    public Column setColumnSize(int columnSize) {
 	this.assertNotInitialized();
-	this.scaleOrLength = scaleOrLength;
+	this.columnSize = columnSize;
+	return this;
+    }
+
+    public Integer getFractionDigits() {
+	this.initialize();
+	return this.fractionDigits;
+    }
+
+    public Column setFractionDigits(Integer fractionDigits) {
+	this.assertNotInitialized();
+	this.fractionDigits = fractionDigits;
 	return this;
     }
 
@@ -230,7 +240,8 @@ public class Column extends InitializeObject implements Serializable {
     @Override
     public String toString() {
 	this.initialize();
-	return STR.fmt("name={}, sqlType={}, scaleOrLength={}, nullable={}, position={}, columnType={}, javaType={}, tableCat={}, tableSchema={}, tableName={}", this.name,
-		this.sqlType, this.scaleOrLength, this.nullable, this.position, this.columnType, this.javaType, this.tableCat, this.tableSchema, this.tableName);
+	return STR.fmt("name={}, sqlType={}, columnSize={}, fractionDigits={?}, nullable={}, position={}, columnType={}, javaType={}, tableCat={}, tableSchema={}, tableName={}",
+		this.name, this.sqlType, this.columnSize, this.fractionDigits, this.nullable, this.position, this.columnType, this.javaType, this.tableCat, this.tableSchema,
+		this.tableName);
     }
 }
