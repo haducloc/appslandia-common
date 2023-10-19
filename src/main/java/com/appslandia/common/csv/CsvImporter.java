@@ -89,9 +89,11 @@ public class CsvImporter extends InitializeObject {
     @Override
     protected void init() throws Exception {
 	Asserts.notNull(this.tableName);
-	Asserts.notNull(this.connection);
 	Asserts.notNull(this.csvInput);
 
+	if (this.connection == null) {
+	    this.connection = ConnectionImpl.getCurrent();
+	}
 	if (this.csvReader == null) {
 	    this.csvReader = CsvProcessor.INSTANCE;
 	}
