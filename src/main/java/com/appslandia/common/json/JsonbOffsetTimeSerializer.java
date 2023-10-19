@@ -21,30 +21,30 @@
 package com.appslandia.common.json;
 
 import java.lang.reflect.Type;
-import java.time.LocalDate;
+import java.time.OffsetTime;
 
 import com.appslandia.common.utils.DateUtils;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
+
+import jakarta.json.bind.serializer.DeserializationContext;
+import jakarta.json.stream.JsonParser;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class LocalDateAdapter extends Java8DateAdapter<LocalDate> {
+public class JsonbOffsetTimeSerializer extends JsonbTemporalSerializer<OffsetTime> {
 
-    public LocalDateAdapter() {
-	this(DateUtils.ISO8601_DATE);
+    public JsonbOffsetTimeSerializer() {
+	this(DateUtils.ISO8601_TIMEZ_N3);
     }
 
-    public LocalDateAdapter(String serializeIsoPattern) {
+    public JsonbOffsetTimeSerializer(String serializeIsoPattern) {
 	super(serializeIsoPattern);
     }
 
     @Override
-    public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-	return LocalDate.parse(json.getAsString(), getFormatter(DateUtils.ISO8601_DATE));
+    public OffsetTime deserialize(JsonParser parser, DeserializationContext ctx, Type rtType) {
+	return parseOffsetTime(parser.getString());
     }
 }

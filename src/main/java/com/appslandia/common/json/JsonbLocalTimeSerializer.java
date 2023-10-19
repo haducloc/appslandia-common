@@ -22,56 +22,29 @@ package com.appslandia.common.json;
 
 import java.lang.reflect.Type;
 import java.time.LocalTime;
-import java.time.format.DateTimeParseException;
 
 import com.appslandia.common.utils.DateUtils;
-import com.appslandia.common.utils.STR;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
+
+import jakarta.json.bind.serializer.DeserializationContext;
+import jakarta.json.stream.JsonParser;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class LocalTimeAdapter extends Java8DateAdapter<LocalTime> {
+public class JsonbLocalTimeSerializer extends JsonbTemporalSerializer<LocalTime> {
 
-    public LocalTimeAdapter() {
+    public JsonbLocalTimeSerializer() {
 	this(DateUtils.ISO8601_TIME_N3);
     }
 
-    public LocalTimeAdapter(String serializeIsoPattern) {
+    public JsonbLocalTimeSerializer(String serializeIsoPattern) {
 	super(serializeIsoPattern);
     }
 
-    // @formatter:off
-    static final String[] PATTERNS = new String[] {
-	    DateUtils.ISO8601_TIME_M,
-	    DateUtils.ISO8601_TIME_S,
-	    DateUtils.ISO8601_TIME_N1,
-	    DateUtils.ISO8601_TIME_N2,
-	    DateUtils.ISO8601_TIME_N3,
-	    DateUtils.ISO8601_TIME_N4,
-	    DateUtils.ISO8601_TIME_N5,
-	    DateUtils.ISO8601_TIME_N6,
-	    DateUtils.ISO8601_TIME_N7
-	};
-    // @formatter:on    
-
     @Override
-    public LocalTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-	String value = json.getAsString();
-
-	for (String pattern : PATTERNS) {
-	    if (pattern.length() == value.length()) {
-		try {
-		    return LocalTime.parse(value, getFormatter(pattern));
-		} catch (DateTimeParseException ex) {
-		}
-		break;
-	    }
-	}
-	throw new IllegalArgumentException(STR.fmt("Couldn't parse '{}' to LocalTime.", value));
+    public LocalTime deserialize(JsonParser parser, DeserializationContext ctx, Type rtType) {
+	return parseLocalTime(parser.getString());
     }
 }

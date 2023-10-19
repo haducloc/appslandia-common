@@ -21,38 +21,30 @@
 package com.appslandia.common.json;
 
 import java.lang.reflect.Type;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.Temporal;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.time.OffsetDateTime;
 
-import com.google.gson.JsonDeserializer;
+import com.appslandia.common.utils.DateUtils;
+import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
+import com.google.gson.JsonParseException;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public abstract class Java8DateAdapter<T extends Temporal> implements JsonSerializer<T>, JsonDeserializer<T> {
+public class GsonOffsetDateTimeSerializer extends GsonTemporalSerializer<OffsetDateTime> {
 
-    private static final ConcurrentMap<String, DateTimeFormatter> FORMATTERS = new ConcurrentHashMap<>();
+    public GsonOffsetDateTimeSerializer() {
+	this(DateUtils.ISO8601_DATETIMEZ_N3);
+    }
 
-    protected final String serializeIsoPattern;
-
-    public Java8DateAdapter(String serializeIsoPattern) {
-	this.serializeIsoPattern = serializeIsoPattern;
+    public GsonOffsetDateTimeSerializer(String serializeIsoPattern) {
+	super(serializeIsoPattern);
     }
 
     @Override
-    public JsonElement serialize(T src, Type typeOfSrc, JsonSerializationContext context) {
-	return new JsonPrimitive(getFormatter(this.serializeIsoPattern).format(src));
-    }
-
-    protected static DateTimeFormatter getFormatter(String pattern) {
-	return FORMATTERS.computeIfAbsent(pattern, p -> DateTimeFormatter.ofPattern(p));
+    public OffsetDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+	return parseOffsetDateTime(json.getAsString());
     }
 }

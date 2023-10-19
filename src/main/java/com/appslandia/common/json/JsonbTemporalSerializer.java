@@ -18,40 +18,29 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.jose;
+package com.appslandia.common.json;
 
-import com.appslandia.common.json.JsonbMapAdapter;
-import com.appslandia.common.json.JsonbProcessor;
-import com.appslandia.common.utils.ObjectUtils;
+import java.time.temporal.Temporal;
 
-import jakarta.json.bind.JsonbConfig;
+import jakarta.json.bind.serializer.JsonbDeserializer;
+import jakarta.json.bind.serializer.JsonbSerializer;
+import jakarta.json.bind.serializer.SerializationContext;
+import jakarta.json.stream.JsonGenerator;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JoseJsonb {
+public abstract class JsonbTemporalSerializer<T extends Temporal> extends JsonTemporalSerializer implements JsonbSerializer<T>, JsonbDeserializer<T> {
 
-    public static JsonbConfig newJsonbConfig(boolean serializeNulls, boolean formatting) {
-	// @formatter:off
-	return JsonbProcessor.newConfig(serializeNulls, formatting).withAdapters(
-
-		// JsonWebKey
-		new JsonbMapAdapter<>(true, m -> new JsonWebKey(m)) {},
-
-		// JoseHeader
-		new JsonbMapAdapter<JoseHeader>(true, m -> new JoseHeader(m)) {}
-			.setValueConverter(new String[] {"jwk"}, m -> new JsonWebKey(ObjectUtils.cast(m))),
-
-		// JwtPayload
-		new JsonbMapAdapter<JwtPayload>(true, m -> new JwtPayload(m)) {}
-			.setValueConverter(new String[] {"jwks\\[\\d+]"}, m -> new JsonWebKey(ObjectUtils.cast(m)))
-		);
-	// @formatter:on
+    public JsonbTemporalSerializer(String serializeIsoPattern) {
+	super(serializeIsoPattern);
     }
 
-    public static JsonbProcessor newJsonProcessor() {
-	return new JsonbProcessor().setConfig(newJsonbConfig(true, false));
+    @Override
+    public void serialize(T obj, JsonGenerator generator, SerializationContext ctx) {
+	String formattedValue = getFormatter(this.serializeIsoPattern).format(obj);
+	generator.write(formattedValue);
     }
 }

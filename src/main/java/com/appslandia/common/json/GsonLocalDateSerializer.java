@@ -18,40 +18,33 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.jose;
+package com.appslandia.common.json;
 
-import com.appslandia.common.json.JsonbMapAdapter;
-import com.appslandia.common.json.JsonbProcessor;
-import com.appslandia.common.utils.ObjectUtils;
+import java.lang.reflect.Type;
+import java.time.LocalDate;
 
-import jakarta.json.bind.JsonbConfig;
+import com.appslandia.common.utils.DateUtils;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JoseJsonb {
+public class GsonLocalDateSerializer extends GsonTemporalSerializer<LocalDate> {
 
-    public static JsonbConfig newJsonbConfig(boolean serializeNulls, boolean formatting) {
-	// @formatter:off
-	return JsonbProcessor.newConfig(serializeNulls, formatting).withAdapters(
-
-		// JsonWebKey
-		new JsonbMapAdapter<>(true, m -> new JsonWebKey(m)) {},
-
-		// JoseHeader
-		new JsonbMapAdapter<JoseHeader>(true, m -> new JoseHeader(m)) {}
-			.setValueConverter(new String[] {"jwk"}, m -> new JsonWebKey(ObjectUtils.cast(m))),
-
-		// JwtPayload
-		new JsonbMapAdapter<JwtPayload>(true, m -> new JwtPayload(m)) {}
-			.setValueConverter(new String[] {"jwks\\[\\d+]"}, m -> new JsonWebKey(ObjectUtils.cast(m)))
-		);
-	// @formatter:on
+    public GsonLocalDateSerializer() {
+	this(DateUtils.ISO8601_DATE);
     }
 
-    public static JsonbProcessor newJsonProcessor() {
-	return new JsonbProcessor().setConfig(newJsonbConfig(true, false));
+    public GsonLocalDateSerializer(String serializeIsoPattern) {
+	super(serializeIsoPattern);
+    }
+
+    @Override
+    public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+	return LocalDate.parse(json.getAsString(), getFormatter(DateUtils.ISO8601_DATE));
     }
 }

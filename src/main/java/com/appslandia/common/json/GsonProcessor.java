@@ -124,12 +124,12 @@ public class GsonProcessor extends JsonProcessor {
 	});
 
 	// Java8 Date/Time
-	builder.registerTypeAdapter(LocalDate.class, new LocalDateAdapter());
-	builder.registerTypeAdapter(LocalTime.class, new LocalTimeAdapter());
-	builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+	builder.registerTypeAdapter(LocalDate.class, new GsonLocalDateSerializer());
+	builder.registerTypeAdapter(LocalTime.class, new GsonLocalTimeSerializer());
+	builder.registerTypeAdapter(LocalDateTime.class, new GsonLocalDateTimeSerializer());
 
-	builder.registerTypeAdapter(OffsetDateTime.class, new OffsetDateTimeAdapter());
-	builder.registerTypeAdapter(OffsetTime.class, new OffsetTimeAdapter());
+	builder.registerTypeAdapter(OffsetDateTime.class, new GsonOffsetDateTimeSerializer());
+	builder.registerTypeAdapter(OffsetTime.class, new GsonOffsetTimeSerializer());
 
 	return builder;
     }

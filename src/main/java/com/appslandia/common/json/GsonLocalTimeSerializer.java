@@ -21,11 +21,9 @@
 package com.appslandia.common.json;
 
 import java.lang.reflect.Type;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
+import java.time.LocalTime;
 
 import com.appslandia.common.utils.DateUtils;
-import com.appslandia.common.utils.STR;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
@@ -35,43 +33,18 @@ import com.google.gson.JsonParseException;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class LocalDateTimeAdapter extends Java8DateAdapter<LocalDateTime> {
+public class GsonLocalTimeSerializer extends GsonTemporalSerializer<LocalTime> {
 
-    public LocalDateTimeAdapter() {
-	this(DateUtils.ISO8601_DATETIME_N3);
+    public GsonLocalTimeSerializer() {
+	this(DateUtils.ISO8601_TIME_N3);
     }
 
-    public LocalDateTimeAdapter(String serializeIsoPattern) {
+    public GsonLocalTimeSerializer(String serializeIsoPattern) {
 	super(serializeIsoPattern);
     }
 
-    // @formatter:off
-    static final String[] PATTERNS = new String[] {
-        DateUtils.ISO8601_DATETIME_M,
-        DateUtils.ISO8601_DATETIME_S,
-        DateUtils.ISO8601_DATETIME_N1,
-        DateUtils.ISO8601_DATETIME_N2,
-        DateUtils.ISO8601_DATETIME_N3,
-        DateUtils.ISO8601_DATETIME_N4,
-        DateUtils.ISO8601_DATETIME_N5,
-        DateUtils.ISO8601_DATETIME_N6,
-        DateUtils.ISO8601_DATETIME_N7
-    };
-    // @formatter:on
-
     @Override
-    public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-	String value = json.getAsString();
-
-	for (String pattern : PATTERNS) {
-	    if (pattern.length() == value.length() + 2) {
-		try {
-		    return LocalDateTime.parse(value, getFormatter(pattern));
-		} catch (DateTimeParseException ex) {
-		}
-		break;
-	    }
-	}
-	throw new IllegalArgumentException(STR.fmt("Couldn't parse '{}' to LocalDateTime.", value));
+    public LocalTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+	return parseLocalTime(json.getAsString());
     }
 }

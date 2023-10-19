@@ -21,54 +21,30 @@
 package com.appslandia.common.json;
 
 import java.lang.reflect.Type;
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeParseException;
+import java.time.LocalDateTime;
 
 import com.appslandia.common.utils.DateUtils;
-import com.appslandia.common.utils.STR;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
+
+import jakarta.json.bind.serializer.DeserializationContext;
+import jakarta.json.stream.JsonParser;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class OffsetDateTimeAdapter extends Java8DateAdapter<OffsetDateTime> {
+public class JsonbLocalDateTimeSerializer extends JsonbTemporalSerializer<LocalDateTime> {
 
-    public OffsetDateTimeAdapter() {
-	this(DateUtils.ISO8601_DATETIMEZ_N3);
+    public JsonbLocalDateTimeSerializer() {
+	this(DateUtils.ISO8601_DATETIME_N3);
     }
 
-    public OffsetDateTimeAdapter(String serializeIsoPattern) {
+    public JsonbLocalDateTimeSerializer(String serializeIsoPattern) {
 	super(serializeIsoPattern);
     }
 
-    // @formatter:off
-    static final String[] PATTERNS = new String[] {
-        DateUtils.ISO8601_DATETIMEZ_M,
-        DateUtils.ISO8601_DATETIMEZ_S,
-        DateUtils.ISO8601_DATETIMEZ_N1,
-        DateUtils.ISO8601_DATETIMEZ_N2,
-        DateUtils.ISO8601_DATETIMEZ_N3,
-        DateUtils.ISO8601_DATETIMEZ_N4,
-        DateUtils.ISO8601_DATETIMEZ_N5,
-        DateUtils.ISO8601_DATETIMEZ_N6,
-        DateUtils.ISO8601_DATETIMEZ_N7
-    };
-    // @formatter:on
-
     @Override
-    public OffsetDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-	String value = json.getAsString();
-
-	for (String pattern : PATTERNS) {
-	    try {
-		return OffsetDateTime.parse(value, getFormatter(pattern));
-	    } catch (DateTimeParseException ex) {
-	    }
-	}
-	throw new IllegalArgumentException(STR.fmt("Couldn't parse '{}' to OffsetDateTime.", value));
+    public LocalDateTime deserialize(JsonParser parser, DeserializationContext ctx, Type rtType) {
+	return parseLocalDateTime(parser.getString());
     }
 }

@@ -18,13 +18,11 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.jose;
+package com.appslandia.common.json;
 
 import java.util.Map;
 import java.util.function.Function;
 
-import com.appslandia.common.json.JsonObjectParser;
-import com.appslandia.common.json.JsonbJsonValueConverter;
 import com.appslandia.common.utils.ObjectUtils;
 
 import jakarta.json.Json;
