@@ -167,7 +167,7 @@ public class CsvImporter extends InitializeObject {
 	}
     }
 
-    public int importCsv() throws IOException, SQLException {
+    public int execute() throws IOException, SQLException {
 	initialize();
 
 	try (RecordContext ctx = new RecordContext(this.connection)) {
