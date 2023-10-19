@@ -39,7 +39,7 @@ public class TableUtils {
 
     private static final String TABLE_NAME_PAT = "[a-z_]+[a-z\\d_]*";
     private static final String COLUMN_NAME_PAT = "[a-z_]+[a-z\\d_]*";
-    private static final String COLUMN_TYPE_PAT = "[a-z]+[a-z\\d\\s_]*\\s*(\\(\\s*\\d+\\s*(,\\s*\\d+\\s*)?\\))?\\s*(\\s+NOT\\s+NULL|\\s+NULL)?\\s*(\\s+PRIMARY\\s+KEY)?\\s*(\\s+UNIQUE)?";
+    private static final String COLUMN_TYPE_PAT = "[a-z]+[a-z\\d\\s_]*\\s*(\\(\\s*\\d+\\s*(,\\s*\\d+\\s*)?\\))?\\s*(\\s+[^\\s]+.*)?";
 
     private static final Pattern TABLE_SPEC_PATTERN = Pattern.compile("^\\s*(" + TABLE_NAME_PAT + ")\\s*\\(\\s*(" + COLUMN_NAME_PAT + "\\s+" + COLUMN_TYPE_PAT + "\\s*(,\\s*"
 	    + COLUMN_NAME_PAT + "\\s+" + COLUMN_TYPE_PAT + "\\s*)*)\\)\\s*$", Pattern.CASE_INSENSITIVE);
