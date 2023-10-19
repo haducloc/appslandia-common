@@ -22,6 +22,7 @@ package com.appslandia.common.converters;
 
 import com.appslandia.common.base.FormatProvider;
 import com.appslandia.common.utils.STR;
+import com.appslandia.common.utils.TypeUtils;
 
 /**
  *
@@ -112,7 +113,7 @@ public interface Converter<T> {
 	return new ConverterException(STR.fmt("An error occurred while parsing '{}' to {}.", str, targetName), getErrorMsgKey());
     }
 
-    default ConverterException toNumberOverflowError(String str) {
-	return new ConverterException(STR.fmt("A number overflow occurred while parsing '{}' to {}.", str, getTargetType().getName()), getErrorMsgKey());
+    public static String toConverterId(Class<?> targetType) {
+	return TypeUtils.wrap(targetType).getSimpleName();
     }
 }

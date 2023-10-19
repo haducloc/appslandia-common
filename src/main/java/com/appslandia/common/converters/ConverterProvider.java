@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Assertions;
 
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.utils.DateUtils;
-import com.appslandia.common.utils.TypeUtils;
+import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -126,21 +126,29 @@ public class ConverterProvider extends InitializeObject {
 	this.converters.put(converterId, converter);
     }
 
-    public <T> Converter<T> getConverter(String converterId, Class<?> targetType) {
+    public <T> Converter<T> getConverter(Class<?> targetType) throws IllegalArgumentException {
 	this.initialize();
-	return (converterId != null) ? getConverter(converterId) : getConverter(targetType);
+	return getConverter(Converter.toConverterId(targetType));
     }
 
     @SuppressWarnings("unchecked")
-    public <T> Converter<T> getConverter(Class<?> targetType) {
+    public <T> Converter<T> getConverter(String converterId) throws IllegalArgumentException {
 	this.initialize();
-	return (Converter<T>) this.converters.get(TypeUtils.wrap(targetType).getSimpleName());
+	Converter<T> t = (Converter<T>) this.converters.get(converterId);
+	if (t == null) {
+	    throw new IllegalArgumentException(STR.fmt("No converter found with the id '{}'.", converterId));
+	}
+	return t;
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> Converter<T> getConverter(String converterId) {
+    public boolean hasConverter(Class<?> targetType) {
 	this.initialize();
-	return (Converter<T>) this.converters.get(converterId);
+	return hasConverter(Converter.toConverterId(targetType));
+    }
+
+    public boolean hasConverter(String converterId) {
+	this.initialize();
+	return this.converters.containsKey(converterId);
     }
 
     private static volatile ConverterProvider __default;
