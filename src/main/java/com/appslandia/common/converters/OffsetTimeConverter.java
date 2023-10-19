@@ -31,7 +31,7 @@ import com.appslandia.common.utils.DateUtils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class OffsetTimeConverter extends Java8DateConverter<OffsetTime> {
+public class OffsetTimeConverter extends TemporalConverter<OffsetTime> {
 
     public static final String ERROR_MSG_KEY = OffsetTimeConverter.class.getName() + ".message";
 

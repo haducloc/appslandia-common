@@ -33,11 +33,11 @@ import com.appslandia.common.utils.StringUtils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public abstract class Java8DateConverter<T extends Temporal> implements Converter<T> {
+public abstract class TemporalConverter<T extends Temporal> implements Converter<T> {
 
     final String isoPattern;
 
-    public Java8DateConverter(String isoPattern) {
+    public TemporalConverter(String isoPattern) {
 	this.isoPattern = isoPattern;
     }
 

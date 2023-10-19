@@ -31,7 +31,7 @@ import com.appslandia.common.utils.DateUtils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class YearMonthConverter extends Java8DateConverter<YearMonth> {
+public class YearMonthConverter extends TemporalConverter<YearMonth> {
 
     public static final String ERROR_MSG_KEY = YearMonthConverter.class.getName() + ".message";
 

@@ -31,7 +31,7 @@ import com.appslandia.common.utils.DateUtils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class LocalTimeConverter extends Java8DateConverter<LocalTime> {
+public class LocalTimeConverter extends TemporalConverter<LocalTime> {
 
     public static final String ERROR_MSG_KEY = LocalTimeConverter.class.getName() + ".message";
 
