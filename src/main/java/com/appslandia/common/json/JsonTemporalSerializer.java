@@ -109,9 +109,12 @@ public abstract class JsonTemporalSerializer {
 
     protected LocalTime parseLocalTime(String value) {
 	for (String pattern : TIME_PATTERNS) {
-	    try {
-		return LocalTime.parse(value, getFormatter(pattern));
-	    } catch (DateTimeParseException ex) {
+	    if (pattern.length() == value.length()) {
+		try {
+		    return LocalTime.parse(value, getFormatter(pattern));
+		} catch (DateTimeParseException ex) {
+		}
+		break;
 	    }
 	}
 	throw new IllegalArgumentException(STR.fmt("Couldn't parse '{}' to LocalTime.", value));
@@ -129,9 +132,12 @@ public abstract class JsonTemporalSerializer {
 
     protected LocalDateTime parseLocalDateTime(String value) {
 	for (String pattern : DATETIME_PATTERNS) {
-	    try {
-		return LocalDateTime.parse(value, getFormatter(pattern));
-	    } catch (DateTimeParseException ex) {
+	    if (pattern.length() == value.length() + 2) {
+		try {
+		    return LocalDateTime.parse(value, getFormatter(pattern));
+		} catch (DateTimeParseException ex) {
+		}
+		break;
 	    }
 	}
 	throw new IllegalArgumentException(STR.fmt("Couldn't parse '{}' to LocalDateTime.", value));
