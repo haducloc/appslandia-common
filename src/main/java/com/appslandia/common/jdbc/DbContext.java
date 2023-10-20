@@ -66,7 +66,7 @@ public class DbContext implements AutoCloseable {
     protected DbContext(ConnectionImpl conn, boolean internalConn) throws java.sql.SQLException {
 	this.conn = conn;
 	this.bakAutoCommit = conn.getAutoCommit();
-	this.internalConn = false;
+	this.internalConn = internalConn;
     }
 
     public ConnectionImpl getConnection() {
