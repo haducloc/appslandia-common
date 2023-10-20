@@ -82,7 +82,7 @@ public class CsvImporter extends InitializeObject {
     private String[] offsetDateTimePatterns;
 
     final Map<Indexes, Function<String, String>> postProcessors = new LinkedHashMap<>();
-    final Map<Integer, Function<String, Object>> dbConverters = new HashMap<>();
+    final Map<Integer, CsvDbConverter> dbConverters = new HashMap<>();
 
     private static final Language DEFAULT_LANGUAGE;
     static {
@@ -262,9 +262,9 @@ public class CsvImporter extends InitializeObject {
 	String value = csv.getString(idx);
 
 	// dbConverter
-	Function<String, Object> dbConverter = this.dbConverters.get(idx);
+	CsvDbConverter dbConverter = this.dbConverters.get(idx);
 	if (dbConverter != null) {
-	    return dbConverter.apply(value);
+	    return dbConverter.apply(value, conn);
 	}
 
 	// Null
@@ -422,7 +422,7 @@ public class CsvImporter extends InitializeObject {
 	return this;
     }
 
-    public CsvImporter dbConverter(int index, Function<String, Object> converter) {
+    public CsvImporter dbConverter(int index, CsvDbConverter converter) {
 	assertNotInitialized();
 
 	Asserts.notNull(converter);
