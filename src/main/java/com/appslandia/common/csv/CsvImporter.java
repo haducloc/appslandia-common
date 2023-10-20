@@ -35,6 +35,7 @@ import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -80,7 +81,8 @@ public class CsvImporter extends InitializeObject {
     private String[] offsetTimePatterns;
     private String[] offsetDateTimePatterns;
 
-    final Map<Indexes, Function<String, String>> processors = new LinkedHashMap<>();
+    final Map<Indexes, Function<String, String>> postProcessors = new LinkedHashMap<>();
+    final Map<Integer, Function<String, Object>> dbConverters = new HashMap<>();
 
     private static final Language DEFAULT_LANGUAGE;
     static {
@@ -195,7 +197,7 @@ public class CsvImporter extends InitializeObject {
 		    }
 
 		    // Processors
-		    for (Map.Entry<Indexes, Function<String, String>> processor : this.processors.entrySet()) {
+		    for (Map.Entry<Indexes, Function<String, String>> processor : this.postProcessors.entrySet()) {
 			csvRecord.applyProcessor(processor.getValue(), processor.getKey().indexes);
 		    }
 
@@ -258,18 +260,29 @@ public class CsvImporter extends InitializeObject {
 
     protected Object toColumnValue(CsvRecord csv, int idx, Column column, ConnectionImpl conn) throws SQLException {
 	String value = csv.getString(idx);
+
+	// dbConverter
+	Function<String, Object> dbConverter = this.dbConverters.get(idx);
+	if (dbConverter != null) {
+	    return dbConverter.apply(value);
+	}
+
+	// Null
 	if (value == null) {
 	    return new JdbcParam(null, column.getSqlType());
 	}
 	Class<?> type = TypeUtils.wrap(column.getJavaType());
 
+	// String
 	if (type == String.class || type == Reader.class) {
 	    return value;
 	}
+	// Boolean
 	if (type == Boolean.class) {
 	    return csv.getBool(idx);
 	}
 
+	// Numeric Types
 	if (type == Byte.class) {
 	    return csv.getByte(idx);
 	}
@@ -292,6 +305,7 @@ public class CsvImporter extends InitializeObject {
 	    return csv.getDecimal(idx);
 	}
 
+	// Temporals
 	if (type == LocalDate.class) {
 	    return csv.getLocalDate(idx, this.datePatterns);
 	}
@@ -398,13 +412,22 @@ public class CsvImporter extends InitializeObject {
 	return this;
     }
 
-    public CsvImporter mapProcessor(Function<String, String> processor, int... indexes) {
+    public CsvImporter postProcessor(Function<String, String> processor, int... indexes) {
 	assertNotInitialized();
 
 	Asserts.notNull(processor);
 	Asserts.hasElements(indexes);
 
-	this.processors.put(new Indexes(indexes), processor);
+	this.postProcessors.put(new Indexes(indexes), processor);
+	return this;
+    }
+
+    public CsvImporter dbConverter(int index, Function<String, Object> converter) {
+	assertNotInitialized();
+
+	Asserts.notNull(converter);
+
+	this.dbConverters.put(index, converter);
 	return this;
     }
 
