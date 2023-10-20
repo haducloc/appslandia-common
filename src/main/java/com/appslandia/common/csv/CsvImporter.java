@@ -21,12 +21,10 @@
 package com.appslandia.common.csv;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.sql.SQLXML;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -51,7 +49,6 @@ import com.appslandia.common.data.RecordContext;
 import com.appslandia.common.data.Table;
 import com.appslandia.common.jdbc.ConnectionImpl;
 import com.appslandia.common.jdbc.JdbcParam;
-import com.appslandia.common.jdbc.UncheckedSQLException;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.DateUtils;
@@ -173,7 +170,7 @@ public class CsvImporter extends InitializeObject {
 	}
     }
 
-    public int execute() throws IOException, SQLException {
+    public int execute() throws Exception {
 	initialize();
 
 	try (RecordContext ctx = new RecordContext(this.connection)) {
@@ -201,37 +198,32 @@ public class CsvImporter extends InitializeObject {
 			csvRecord.applyProcessor(processor.getValue(), processor.getKey().indexes);
 		    }
 
-		    try {
-			// Build record
-			DataRecord dataRecord = new DataRecord();
-			for (int colIdx = 0; colIdx < table.getColumns().size(); colIdx++) {
+		    // Build record
+		    DataRecord dataRecord = new DataRecord();
+		    for (int colIdx = 0; colIdx < table.getColumns().size(); colIdx++) {
 
-			    Column col = table.getColumns().get(colIdx);
-			    dataRecord.set(col.getName(), toColumnValue(csvRecord, colIdx, col, ctx.getConnection()));
-			}
+			Column col = table.getColumns().get(colIdx);
+			dataRecord.set(col.getName(), toColumnValue(csvRecord, colIdx, col, ctx.getConnection()));
+		    }
 
-			// csvDebugger
-			if (this.csvDebugger != null) {
-			    this.csvDebugger.apply(counter.get(), csvRecord, dataRecord);
-			}
+		    // csvDebugger
+		    if (this.csvDebugger != null) {
+			this.csvDebugger.apply(counter.get(), csvRecord, dataRecord);
+		    }
 
-			// Insert the record (batch)
+		    // Insert the record (batch)
+		    if (this.executeInserts) {
+			ctx.insert(table.getName(), dataRecord, true);
+		    }
+
+		    int inserts = counter.incrementAndGet();
+
+		    // executeBatch markers
+		    if (inserts > 0 && inserts % 100 == 0) {
+
 			if (this.executeInserts) {
-			    ctx.insert(table.getName(), dataRecord, true);
+			    ctx.executeBatch();
 			}
-
-			int inserts = counter.incrementAndGet();
-
-			// executeBatch markers
-			if (inserts > 0 && inserts % 100 == 0) {
-
-			    if (this.executeInserts) {
-				ctx.executeBatch();
-			    }
-			}
-
-		    } catch (SQLException ex) {
-			throw new UncheckedSQLException(ex);
 		    }
 		});
 
@@ -258,7 +250,7 @@ public class CsvImporter extends InitializeObject {
 	}
     }
 
-    protected Object toColumnValue(CsvRecord csv, int idx, Column column, ConnectionImpl conn) throws SQLException {
+    protected Object toColumnValue(CsvRecord csv, int idx, Column column, ConnectionImpl conn) throws Exception {
 	String value = csv.getString(idx);
 
 	// dbConverter

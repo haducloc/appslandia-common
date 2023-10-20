@@ -21,10 +21,8 @@
 package com.appslandia.common.csv;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
 
 import com.appslandia.common.base.InitializeException;
 import com.appslandia.common.base.InitializeObject;
@@ -137,7 +135,7 @@ public class CsvProcessor extends InitializeObject {
 	return useWrap ? buf.toString() : value;
     }
 
-    public List<CsvRecord> parseRecords(BufferedReader reader) throws IOException {
+    public List<CsvRecord> parseRecords(BufferedReader reader) throws Exception {
 	this.initialize();
 	List<CsvRecord> records = new ArrayList<>(128);
 
@@ -145,7 +143,7 @@ public class CsvProcessor extends InitializeObject {
 	return records;
     }
 
-    public void parse(BufferedReader reader, BiConsumer<Integer, CsvRecord> consumer) throws IOException {
+    public void parse(BufferedReader reader, CsvConsumer consumer) throws Exception {
 	this.initialize();
 
 	String line;
@@ -171,7 +169,7 @@ public class CsvProcessor extends InitializeObject {
 		    recordLen = (values.length > 0) ? values.length : 1;
 		}
 
-		consumer.accept(recordIdx++, new CsvRecord(values));
+		consumer.apply(recordIdx++, new CsvRecord(values));
 		currentRecord.setLength(0);
 	    }
 	}

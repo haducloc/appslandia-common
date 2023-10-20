@@ -21,7 +21,6 @@
 package com.appslandia.common.csv;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 
@@ -144,7 +143,7 @@ public class CsvProcessorTest {
 	    Assertions.assertTrue(rec.length() == 1);
 	    Assertions.assertEquals("abc", rec.getString(0));
 
-	} catch (IOException ex) {
+	} catch (Exception ex) {
 	    Assertions.fail(ex);
 	}
     }
@@ -162,7 +161,7 @@ public class CsvProcessorTest {
 	    Assertions.assertTrue(rec.length() == 1);
 	    Assertions.assertNull(rec.getString(0));
 
-	} catch (IOException ex) {
+	} catch (Exception ex) {
 	    Assertions.fail(ex);
 	}
     }
@@ -180,7 +179,7 @@ public class CsvProcessorTest {
 	    Assertions.assertTrue(rec.length() == 1);
 	    Assertions.assertNull(rec.getString(0));
 
-	} catch (IOException ex) {
+	} catch (Exception ex) {
 	    Assertions.fail(ex);
 	}
     }
@@ -198,7 +197,7 @@ public class CsvProcessorTest {
 	    Assertions.assertTrue(rec.length() == 1);
 	    Assertions.assertEquals("null", rec.getString(0));
 
-	} catch (IOException ex) {
+	} catch (Exception ex) {
 	    Assertions.fail(ex);
 	}
     }
@@ -216,7 +215,7 @@ public class CsvProcessorTest {
 	    Assertions.assertTrue(rec.length() == 1);
 	    Assertions.assertNull(rec.getString(0));
 
-	} catch (IOException ex) {
+	} catch (Exception ex) {
 	    Assertions.fail(ex);
 	}
     }
@@ -234,7 +233,7 @@ public class CsvProcessorTest {
 	    Assertions.assertTrue(rec.length() == 1);
 	    Assertions.assertEquals("abc\r\ndef", rec.getString(0));
 
-	} catch (IOException ex) {
+	} catch (Exception ex) {
 	    Assertions.fail(ex);
 	}
     }
