@@ -18,35 +18,17 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.models;
+package com.appslandia.common.csv;
 
-import java.io.Serializable;
-import java.util.Objects;
+import com.appslandia.common.jdbc.ConnectionImpl;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public abstract class EntityBase implements Serializable {
-    private static final long serialVersionUID = 1L;
+@FunctionalInterface
+public interface CsvToDbConverter {
 
-    public abstract Serializable getPk();
-
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj) {
-	    return true;
-	}
-	if (!(obj instanceof EntityBase)) {
-	    return false;
-	}
-	EntityBase other = (EntityBase) obj;
-	return Objects.equals(this.getPk(), other.getPk());
-    }
-
-    @Override
-    public int hashCode() {
-	return Objects.hashCode(this.getPk());
-    }
+    Object apply(String value, ConnectionImpl conn) throws Exception;
 }

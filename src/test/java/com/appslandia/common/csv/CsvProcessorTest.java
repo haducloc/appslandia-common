@@ -45,7 +45,7 @@ public class CsvProcessorTest {
 
     @Test
     public void test_writeNull() {
-	CsvProcessor csv = new CsvProcessor().writeNull();
+	CsvProcessor csv = new CsvProcessor().setWriteNull(true);
 
 	String csvContent = null;
 	String escaped = csv.escape(csvContent);
@@ -112,7 +112,7 @@ public class CsvProcessorTest {
 
     @Test
     public void test_escCrLf() {
-	CsvProcessor csv = new CsvProcessor().escCrLf();
+	CsvProcessor csv = new CsvProcessor().setEscCrLf(true);
 
 	String csvContent = "abc\r\ndef";
 	String escaped = csv.escape(csvContent);
@@ -122,7 +122,7 @@ public class CsvProcessorTest {
 
     @Test
     public void test_separator() {
-	CsvProcessor csv = new CsvProcessor().separator(';');
+	CsvProcessor csv = new CsvProcessor().setSeparator(';');
 
 	String csvContent = "abc;def";
 	String escaped = csv.escape(csvContent);
@@ -204,7 +204,7 @@ public class CsvProcessorTest {
 
     @Test
     public void test_parse_writeNull() {
-	CsvProcessor csv = new CsvProcessor().writeNull();
+	CsvProcessor csv = new CsvProcessor().setWriteNull(true);
 	String csvContent = "null\r\n";
 
 	try {
@@ -222,7 +222,7 @@ public class CsvProcessorTest {
 
     @Test
     public void test_parse_crLf() {
-	CsvProcessor csv = new CsvProcessor().escCrLf();
+	CsvProcessor csv = new CsvProcessor().setEscCrLf(true);
 
 	String csvContent = "abc\\r\\ndef\r\n";
 	try {

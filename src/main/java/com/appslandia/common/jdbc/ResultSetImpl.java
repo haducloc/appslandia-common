@@ -23,15 +23,18 @@ package com.appslandia.common.jdbc;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import com.appslandia.common.base.AssertException;
+import com.appslandia.common.data.ResultSetColumn;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.NormalizeUtils;
 import com.appslandia.common.utils.STR;
@@ -44,18 +47,26 @@ import com.appslandia.common.utils.STR;
 public class ResultSetImpl implements ResultSet {
 
     protected final ResultSet rs;
+    protected List<ResultSetColumn> columns;
 
     public ResultSetImpl(ResultSet rs) {
 	Asserts.isTrue(!(rs instanceof ResultSetImpl));
 	this.rs = Asserts.notNull(rs);
     }
 
+    public List<ResultSetColumn> getColumns() throws java.sql.SQLException {
+	if (this.columns == null) {
+	    this.columns = JdbcUtils.getResultSetColumns(this.rs);
+	}
+	return this.columns;
+    }
+
     public String valuesAsID(String... columnLabels) throws UncheckedSQLException {
 	Asserts.hasElements(columnLabels);
 
-	Object[] values = Arrays.stream(columnLabels).map(l -> {
+	Object[] values = Arrays.stream(columnLabels).map(columnLabel -> {
 	    try {
-		return this.rs.getObject(l);
+		return this.rs.getObject(columnLabel);
 
 	    } catch (SQLException ex) {
 		throw new UncheckedSQLException(ex);
@@ -243,8 +254,8 @@ public class ResultSetImpl implements ResultSet {
 	return value;
     }
 
-    public <T> T getObjectReq(String columnLabel, Class<T> target) throws java.sql.SQLException {
-	T value = this.rs.getObject(columnLabel, target);
+    public <T> T getObjectReq(String columnLabel, Class<T> type) throws java.sql.SQLException {
+	T value = this.rs.getObject(columnLabel, type);
 	if (value == null) {
 	    throw mustbeNotNullException(columnLabel);
 	}
@@ -521,12 +532,29 @@ public class ResultSetImpl implements ResultSet {
 
     @Override
     public Object getObject(String columnLabel) throws java.sql.SQLException {
-	return this.rs.getObject(columnLabel);
+	int columnIndex = this.rs.findColumn(columnLabel);
+	return getObject(columnIndex);
     }
 
     @Override
     public Object getObject(int columnIndex) throws java.sql.SQLException {
-	return this.rs.getObject(columnIndex);
+	ResultSetColumn col = this.getColumns().get(columnIndex - 1);
+
+	switch (col.getSqlType()) {
+	case Types.DATE:
+	    return rs.getObject(columnIndex, LocalDate.class);
+	case Types.TIME:
+	    return rs.getObject(columnIndex, LocalTime.class);
+	case Types.TIMESTAMP:
+	    return rs.getObject(columnIndex, LocalDateTime.class);
+
+	case Types.TIME_WITH_TIMEZONE:
+	    return rs.getObject(columnIndex, OffsetTime.class);
+	case Types.TIMESTAMP_WITH_TIMEZONE:
+	    return rs.getObject(columnIndex, OffsetDateTime.class);
+	default:
+	    return this.rs.getObject(columnIndex);
+	}
     }
 
     @Override

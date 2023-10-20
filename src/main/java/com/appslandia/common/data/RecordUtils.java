@@ -39,6 +39,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import com.appslandia.common.jdbc.ConnectionImpl;
+import com.appslandia.common.jdbc.ResultSetImpl;
 import com.appslandia.common.jdbc.SqlTypeMapper;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
@@ -132,10 +133,11 @@ public final class RecordUtils {
 	return table.setColumns(columns);
     }
 
-    public static DataRecord toRecord(ResultSet rs, String[] columnLabels) throws SQLException {
+    public static DataRecord toRecord(ResultSetImpl rs) throws SQLException {
 	DataRecord dataRecord = new DataRecord();
-	for (int col = 1; col <= columnLabels.length; col++) {
-	    dataRecord.set(columnLabels[col - 1], rs.getObject(col));
+
+	for (ResultSetColumn column : rs.getColumns()) {
+	    dataRecord.set(column.name, rs.getObject(column.index));
 	}
 	return dataRecord;
     }

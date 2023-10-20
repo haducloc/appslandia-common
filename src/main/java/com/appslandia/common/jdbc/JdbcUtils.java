@@ -27,12 +27,15 @@ import java.io.Writer;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.appslandia.common.data.ResultSetColumn;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.IOUtils;
@@ -46,14 +49,14 @@ import com.appslandia.common.utils.STR;
  */
 public class JdbcUtils {
 
-    public static String[] getColumnLabels(ResultSet rs) throws SQLException {
+    public static List<ResultSetColumn> getResultSetColumns(ResultSet rs) throws SQLException {
 	ResultSetMetaData md = rs.getMetaData();
-	String[] labels = new String[md.getColumnCount()];
+	List<ResultSetColumn> cols = new ArrayList<>(md.getColumnCount());
 
 	for (int col = 1; col <= md.getColumnCount(); col++) {
-	    labels[col - 1] = md.getColumnLabel(col);
+	    cols.add(new ResultSetColumn(col, md.getColumnLabel(col), md.getColumnType(col)));
 	}
-	return labels;
+	return Collections.unmodifiableList(cols);
     }
 
     public static Map<String, Object> toParameters(Object[] params) {

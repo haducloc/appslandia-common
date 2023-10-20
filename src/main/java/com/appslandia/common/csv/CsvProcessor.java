@@ -52,24 +52,39 @@ public class CsvProcessor extends InitializeObject {
 	return this;
     }
 
-    public CsvProcessor writeNull() {
+    public boolean isWriteNull() {
+	this.initialize();
+	return this.writeNull;
+    }
+
+    public CsvProcessor setWriteNull(boolean writeNull) {
 	assertNotInitialized();
 
-	this.writeNull = true;
+	this.writeNull = writeNull;
 	return this;
     }
 
-    public CsvProcessor separator(char separator) {
+    public char getSeparator() {
+	this.initialize();
+	return this.separator;
+    }
+
+    public CsvProcessor setSeparator(char separator) {
 	assertNotInitialized();
 
 	this.separator = separator;
 	return this;
     }
 
-    public CsvProcessor escCrLf() {
+    public boolean isEscCrLf() {
+	this.initialize();
+	return this.escCrLf;
+    }
+
+    public CsvProcessor setEscCrLf(boolean escCrLf) {
 	assertNotInitialized();
 
-	this.escCrLf = true;
+	this.escCrLf = escCrLf;
 	return this;
     }
 

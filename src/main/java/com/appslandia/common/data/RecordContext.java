@@ -241,9 +241,7 @@ public class RecordContext extends DbContext {
 
 	// Execute
 	try (ResultSetImpl rs = stat.executeQuery()) {
-
-	    String[] columnLabels = JdbcUtils.getColumnLabels(rs);
-	    return JdbcUtils.executeSingle(rs, r -> RecordUtils.toRecord(r, columnLabels));
+	    return JdbcUtils.executeSingle(rs, r -> RecordUtils.toRecord(r));
 	}
     }
 
@@ -297,8 +295,7 @@ public class RecordContext extends DbContext {
 	try (Statement stat = this.conn.createStatement()) {
 	    try (ResultSetImpl rs = new ResultSetImpl(stat.executeQuery(sql))) {
 
-		String[] columnLabels = JdbcUtils.getColumnLabels(rs);
-		return JdbcUtils.executeList(rs, r -> RecordUtils.toRecord(r, columnLabels), new ArrayList<>());
+		return JdbcUtils.executeList(rs, r -> RecordUtils.toRecord(r), new ArrayList<>());
 	    }
 	}
     }
@@ -312,16 +309,14 @@ public class RecordContext extends DbContext {
 
 	try (ResultSetImpl rs = stat.executeQuery()) {
 
-	    String[] columnLabels = JdbcUtils.getColumnLabels(rs);
-	    return JdbcUtils.executeList(rs, r -> RecordUtils.toRecord(r, columnLabels), new ArrayList<>());
+	    return JdbcUtils.executeList(rs, r -> RecordUtils.toRecord(r), new ArrayList<>());
 	}
     }
 
     public DataRecord executeSingle(String sql) throws java.sql.SQLException {
 	return executeSingle(sql, rs -> {
 
-	    String[] columnLabels = JdbcUtils.getColumnLabels(rs);
-	    return RecordUtils.toRecord(rs, columnLabels);
+	    return RecordUtils.toRecord(rs);
 	});
     }
 
@@ -332,8 +327,7 @@ public class RecordContext extends DbContext {
     public DataRecord executeSingle(String pSql, Map<String, Object> params) throws java.sql.SQLException {
 	return executeSingle(pSql, params, rs -> {
 
-	    String[] columnLabels = JdbcUtils.getColumnLabels(rs);
-	    return RecordUtils.toRecord(rs, columnLabels);
+	    return RecordUtils.toRecord(rs);
 	});
     }
 

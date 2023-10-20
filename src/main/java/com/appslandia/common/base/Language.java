@@ -189,8 +189,8 @@ public class Language extends InitializeObject {
 	if (!(obj instanceof Language)) {
 	    return false;
 	}
-	Language another = (Language) obj;
-	return this.getLanguageId().equals(another.getLanguageId());
+	Language other = (Language) obj;
+	return this.getLanguageId().equals(other.getLanguageId());
     }
 
     private static volatile Language __default;

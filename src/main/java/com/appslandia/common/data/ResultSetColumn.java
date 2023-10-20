@@ -18,58 +18,47 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.models;
+package com.appslandia.common.data;
 
-import java.util.Objects;
-
-import com.appslandia.common.utils.Asserts;
-import com.appslandia.common.utils.StringUtils;
+import com.appslandia.common.utils.STR;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class SelectItemImpl implements SelectItem {
+public class ResultSetColumn {
 
-    public static final SelectItemImpl EMPTY = new SelectItemImpl(null, StringUtils.EMPTY_STRING);
-
-    final Object value;
-    final String displayName;
+    final int index;
     final String name;
+    final int sqlType;
 
-    public SelectItemImpl(Object value, String displayName) {
-	this(value, displayName, null);
-    }
-
-    public SelectItemImpl(Object value, String displayName, String name) {
-	this.value = value;
-	this.displayName = displayName;
+    public ResultSetColumn(int index, String name, int sqlType) {
+	this.index = index;
 	this.name = name;
+	this.sqlType = sqlType;
     }
 
-    public int intValue() {
-	return (Integer) Asserts.notNull(this.value);
+    public int getIndex() {
+	return this.index;
     }
 
-    @Override
-    public Object getValue() {
-	return this.value;
-    }
-
-    @Override
-    public String getDisplayName() {
-	return this.displayName;
-    }
-
-    @Override
     public String getName() {
-	return (this.name != null) ? this.name : this.displayName;
+	return this.name;
+    }
+
+    public int getSqlType() {
+	return this.sqlType;
+    }
+
+    @Override
+    public String toString() {
+	return STR.fmt("index={}, name={}, sqlType={}", this.name, this.index, this.sqlType);
     }
 
     @Override
     public int hashCode() {
-	return Objects.hashCode(this.value);
+	return Integer.hashCode(this.index);
     }
 
     @Override
@@ -77,10 +66,10 @@ public class SelectItemImpl implements SelectItem {
 	if (this == obj) {
 	    return true;
 	}
-	if (!(obj instanceof SelectItemImpl)) {
+	if (!(obj instanceof ResultSetColumn)) {
 	    return false;
 	}
-	SelectItemImpl other = (SelectItemImpl) obj;
-	return Objects.equals(this.value, other.value);
+	ResultSetColumn other = (ResultSetColumn) obj;
+	return this.index == other.index;
     }
 }

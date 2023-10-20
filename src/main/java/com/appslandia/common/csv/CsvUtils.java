@@ -21,12 +21,18 @@
 package com.appslandia.common.csv;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
 import com.appslandia.common.base.BOMInputStream;
+import com.appslandia.common.base.BOMOutputStream;
+import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -36,11 +42,22 @@ import com.appslandia.common.base.BOMInputStream;
 public class CsvUtils {
 
     public static BufferedReader csvReader(InputStream is, String encodingIfNoBOM) throws IOException {
+	Asserts.notNull(encodingIfNoBOM);
+
 	var bomIS = new BOMInputStream(is);
 	return new BufferedReader(new InputStreamReader(bomIS, bomIS.getBOM() != null ? bomIS.getBOM().getEncoding() : encodingIfNoBOM));
     }
 
     public static BufferedReader csvReader(String csvFile, String encodingIfNoBOM) throws IOException {
 	return csvReader(new FileInputStream(csvFile), encodingIfNoBOM);
+    }
+
+    public static BufferedWriter csvWriter(OutputStream os, String encoding) throws IOException {
+	Asserts.notNull(encoding);
+	return new BufferedWriter(new OutputStreamWriter(new BOMOutputStream(os, encoding), encoding));
+    }
+
+    public static BufferedWriter csvWriter(String csvFile, String encoding) throws IOException {
+	return csvWriter(new FileOutputStream(csvFile), encoding);
     }
 }

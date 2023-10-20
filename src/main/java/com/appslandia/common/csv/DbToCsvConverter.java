@@ -20,15 +20,13 @@
 
 package com.appslandia.common.csv;
 
-import com.appslandia.common.jdbc.ConnectionImpl;
-
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
 @FunctionalInterface
-public interface CsvDbConverter {
+public interface DbToCsvConverter {
 
-    Object apply(String value, ConnectionImpl conn) throws Exception;
+    String apply(Object value) throws Exception;
 }

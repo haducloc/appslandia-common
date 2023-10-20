@@ -66,7 +66,7 @@ public class CsvImporter extends InitializeObject {
     private boolean csvHeader;
     private ConnectionImpl connection;
     private String tableName;
-    private CsvProcessor csvReader;
+    private CsvProcessor csvProcessor;
 
     private boolean executeInserts;
     private CsvDebugger csvDebugger;
@@ -79,7 +79,7 @@ public class CsvImporter extends InitializeObject {
     private String[] offsetDateTimePatterns;
 
     final Map<Indexes, Function<String, String>> postProcessors = new LinkedHashMap<>();
-    final Map<Integer, CsvDbConverter> dbConverters = new HashMap<>();
+    final Map<Integer, CsvToDbConverter> converters = new HashMap<>();
 
     private static final Language DEFAULT_LANGUAGE;
     static {
@@ -95,8 +95,8 @@ public class CsvImporter extends InitializeObject {
 	if (this.connection == null) {
 	    this.connection = ConnectionImpl.getCurrent();
 	}
-	if (this.csvReader == null) {
-	    this.csvReader = CsvProcessor.INSTANCE;
+	if (this.csvProcessor == null) {
+	    this.csvProcessor = CsvProcessor.INSTANCE;
 	}
 
 	// Default patterns
@@ -184,7 +184,7 @@ public class CsvImporter extends InitializeObject {
 
 		final AtomicInteger counter = new AtomicInteger(0);
 
-		this.csvReader.parse(this.csvInput, (idx, csvRecord) -> {
+		this.csvProcessor.parse(this.csvInput, (idx, csvRecord) -> {
 		    Asserts.isTrue(table.getColumns().size() == csvRecord.length(), "The number of columns does not match.");
 
 		    if (this.csvHeader) {
@@ -254,7 +254,7 @@ public class CsvImporter extends InitializeObject {
 	String value = csv.getString(idx);
 
 	// dbConverter
-	CsvDbConverter dbConverter = this.dbConverters.get(idx);
+	CsvToDbConverter dbConverter = this.converters.get(idx);
 	if (dbConverter != null) {
 	    return dbConverter.apply(value, conn);
 	}
@@ -356,9 +356,9 @@ public class CsvImporter extends InitializeObject {
 	return this;
     }
 
-    public CsvImporter setCsvReader(CsvProcessor csvReader) {
+    public CsvImporter setCsvProcessor(CsvProcessor csvProcessor) {
 	assertNotInitialized();
-	this.csvReader = csvReader;
+	this.csvProcessor = csvProcessor;
 	return this;
     }
 
@@ -404,7 +404,7 @@ public class CsvImporter extends InitializeObject {
 	return this;
     }
 
-    public CsvImporter postProcessor(Function<String, String> processor, int... indexes) {
+    public CsvImporter setPostProcessor(Function<String, String> processor, int... indexes) {
 	assertNotInitialized();
 
 	Asserts.notNull(processor);
@@ -414,12 +414,12 @@ public class CsvImporter extends InitializeObject {
 	return this;
     }
 
-    public CsvImporter dbConverter(int index, CsvDbConverter converter) {
+    public CsvImporter setCsvToDbConverter(int index, CsvToDbConverter converter) {
 	assertNotInitialized();
 
 	Asserts.notNull(converter);
 
-	this.dbConverters.put(index, converter);
+	this.converters.put(index, converter);
 	return this;
     }
 
