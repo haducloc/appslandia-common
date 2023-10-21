@@ -36,8 +36,34 @@ public interface Converter<T> {
     public static final String LONG = "Long";
 
     public static final String FLOAT = "Float";
+    public static final String FLOAT1 = "Float1";
+    public static final String FLOAT2 = "Float2";
+    public static final String FLOAT3 = "Float3";
+    public static final String FLOAT4 = "Float4";
+    public static final String FLOAT5 = "Float5";
+    public static final String FLOAT6 = "Float6";
+    public static final String FLOAT7 = "Float7";
+    public static final String FLOAT8 = "Float8";
+
     public static final String DOUBLE = "Double";
+    public static final String DOUBLE1 = "Double1";
+    public static final String DOUBLE2 = "Double2";
+    public static final String DOUBLE3 = "Double3";
+    public static final String DOUBLE4 = "Double4";
+    public static final String DOUBLE5 = "Double5";
+    public static final String DOUBLE6 = "Double6";
+    public static final String DOUBLE7 = "Double7";
+    public static final String DOUBLE8 = "Double8";
+
     public static final String BIGDECIMAL = "BigDecimal";
+    public static final String BIGDECIMAL1 = "BigDecimal1";
+    public static final String BIGDECIMAL2 = "BigDecimal2";
+    public static final String BIGDECIMAL3 = "BigDecimal3";
+    public static final String BIGDECIMAL4 = "BigDecimal4";
+    public static final String BIGDECIMAL5 = "BigDecimal5";
+    public static final String BIGDECIMAL6 = "BigDecimal6";
+    public static final String BIGDECIMAL7 = "BigDecimal7";
+    public static final String BIGDECIMAL8 = "BigDecimal8";
 
     public static final String LOCAL_DATE = "LocalDate";
     public static final String YEAR_MONTH = "YearMonth";

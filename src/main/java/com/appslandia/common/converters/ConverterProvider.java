@@ -49,14 +49,35 @@ public class ConverterProvider extends InitializeObject {
 	this.converters.putIfAbsent(Converter.LONG, new LongConverter());
 
 	this.converters.putIfAbsent(Converter.FLOAT, new FloatConverter());
-	this.converters.putIfAbsent(Converter.DOUBLE, new DoubleConverter());
-	this.converters.putIfAbsent(Converter.BIGDECIMAL, new BigDecimalConverter());
+	this.converters.putIfAbsent(Converter.FLOAT1, new FloatConverter(1));
+	this.converters.putIfAbsent(Converter.FLOAT2, new FloatConverter(2));
+	this.converters.putIfAbsent(Converter.FLOAT3, new FloatConverter(3));
+	this.converters.putIfAbsent(Converter.FLOAT4, new FloatConverter(4));
+	this.converters.putIfAbsent(Converter.FLOAT5, new FloatConverter(5));
+	this.converters.putIfAbsent(Converter.FLOAT6, new FloatConverter(6));
+	this.converters.putIfAbsent(Converter.FLOAT7, new FloatConverter(7));
+	this.converters.putIfAbsent(Converter.FLOAT8, new FloatConverter(8));
 
-	for (int fractionDigits = 1; fractionDigits <= 8; fractionDigits++) {
-	    this.converters.putIfAbsent(Converter.FLOAT + fractionDigits, new FloatConverter(fractionDigits));
-	    this.converters.putIfAbsent(Converter.DOUBLE + fractionDigits, new DoubleConverter(fractionDigits));
-	    this.converters.putIfAbsent(Converter.BIGDECIMAL + fractionDigits, new BigDecimalConverter(fractionDigits));
-	}
+	this.converters.putIfAbsent(Converter.DOUBLE, new DoubleConverter());
+	this.converters.putIfAbsent(Converter.DOUBLE1, new DoubleConverter(1));
+	this.converters.putIfAbsent(Converter.DOUBLE2, new DoubleConverter(2));
+	this.converters.putIfAbsent(Converter.DOUBLE3, new DoubleConverter(3));
+	this.converters.putIfAbsent(Converter.DOUBLE4, new DoubleConverter(4));
+	this.converters.putIfAbsent(Converter.DOUBLE5, new DoubleConverter(5));
+	this.converters.putIfAbsent(Converter.DOUBLE6, new DoubleConverter(6));
+	this.converters.putIfAbsent(Converter.DOUBLE7, new DoubleConverter(7));
+	this.converters.putIfAbsent(Converter.DOUBLE8, new DoubleConverter(8));
+
+	this.converters.putIfAbsent(Converter.BIGDECIMAL, new BigDecimalConverter());
+	this.converters.putIfAbsent(Converter.BIGDECIMAL1, new BigDecimalConverter(1));
+	this.converters.putIfAbsent(Converter.BIGDECIMAL2, new BigDecimalConverter(2));
+	this.converters.putIfAbsent(Converter.BIGDECIMAL3, new BigDecimalConverter(3));
+	this.converters.putIfAbsent(Converter.BIGDECIMAL4, new BigDecimalConverter(4));
+	this.converters.putIfAbsent(Converter.BIGDECIMAL5, new BigDecimalConverter(5));
+	this.converters.putIfAbsent(Converter.BIGDECIMAL6, new BigDecimalConverter(6));
+	this.converters.putIfAbsent(Converter.BIGDECIMAL7, new BigDecimalConverter(7));
+	this.converters.putIfAbsent(Converter.BIGDECIMAL8, new BigDecimalConverter(8));
+
 	this.converters.putIfAbsent(Converter.BOOLEAN, new BooleanConverter());
 
 	this.converters.putIfAbsent(Converter.STRING, new StringConverter());
