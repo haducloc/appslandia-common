@@ -68,23 +68,6 @@ public class SignatureSignerTest {
     }
 
     @Test
-    public void test_clone() {
-	SignatureSigner impl = new SignatureSigner();
-	impl.setAlgorithm("SHA256withDSA");
-	impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
-	impl = impl.clone();
-	try {
-	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-	    byte[] sign = impl.digest(data);
-
-	    Assertions.assertTrue(impl.verify(data, sign));
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
-	}
-    }
-
-    @Test
     public void test_invalid() {
 	SignatureSigner impl = new SignatureSigner();
 	impl.setAlgorithm("SHA256withDSA");

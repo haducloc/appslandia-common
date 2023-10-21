@@ -60,7 +60,7 @@ public class JsonbProcessor extends JsonProcessor {
 	    try {
 		this.jsonb.close();
 	    } catch (Exception ex) {
-		throw new DestroyException(ex);
+		throw new DestroyException(ex.getMessage(), ex);
 	    }
 	}
     }

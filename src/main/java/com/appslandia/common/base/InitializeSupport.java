@@ -29,5 +29,6 @@ public interface InitializeSupport {
 
     InitializeSupport initialize() throws InitializeException;
 
-    void destroy() throws DestroyException;
+    default void destroy() throws DestroyException {
+    }
 }

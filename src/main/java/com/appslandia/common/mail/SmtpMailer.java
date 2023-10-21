@@ -120,10 +120,7 @@ public class SmtpMailer extends InitializeObject {
 
     public SmtpMailer setProps(SecureProps props) {
 	assertNotInitialized();
-
-	if (props != null) {
-	    this.props = props.clone();
-	}
+	this.props = props;
 	return this;
     }
 }

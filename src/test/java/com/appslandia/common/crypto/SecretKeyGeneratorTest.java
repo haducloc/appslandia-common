@@ -47,21 +47,6 @@ public class SecretKeyGeneratorTest {
     }
 
     @Test
-    public void test_clone() {
-	SecretKeyGenerator impl = new SecretKeyGenerator();
-	impl = impl.clone();
-	try {
-	    byte[] key = impl.generate("password".toCharArray(), "salt".getBytes(), 1000, 16);
-
-	    Assertions.assertNotNull(key);
-	    Assertions.assertTrue(key.length == 16);
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
-	}
-    }
-
-    @Test
     public void test_anySize() {
 	SecretKeyGenerator impl = new SecretKeyGenerator();
 	try {

@@ -49,25 +49,4 @@ public class TextEncryptorTest {
 	    Assertions.fail(ex.getMessage());
 	}
     }
-
-    @Test
-    public void test_clone() {
-	PbeEncryptor encryptor = new PbeEncryptor();
-	encryptor.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
-	encryptor.setPassword("password".toCharArray());
-	encryptor.setAlgParamSpec(PbeEncryptor::toIvParameterSpec);
-
-	TextEncryptor impl = new TextEncryptor().setEncryptor(encryptor);
-	impl = impl.clone();
-
-	try {
-	    String message = "data";
-	    String encrypted = impl.encrypt(message);
-	    String decrypted = impl.decrypt(encrypted);
-
-	    Assertions.assertEquals(message, decrypted);
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
-	}
-    }
 }

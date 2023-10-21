@@ -164,18 +164,4 @@ public class PbeDigester extends PbeObject implements Digester {
 	super.setSecretKeyGenerator(secretKeyGenerator);
 	return this;
     }
-
-    @Override
-    public PbeDigester clone() {
-	PbeDigester impl = new PbeDigester().setAlgorithm(this.algorithm).setProvider(this.provider);
-	impl.setSaltSize(this.saltSize).setIterationCount(this.iterationCount).setKeySize(this.keySize);
-
-	if (this.password != null) {
-	    impl.setPassword(this.password);
-	}
-	if (this.secretKeyGenerator != null) {
-	    impl.secretKeyGenerator = this.secretKeyGenerator.clone();
-	}
-	return impl;
-    }
 }

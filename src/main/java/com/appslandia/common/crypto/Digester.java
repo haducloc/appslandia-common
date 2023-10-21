@@ -27,11 +27,9 @@ import com.appslandia.common.base.InitializeSupport;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public interface Digester extends InitializeSupport, Cloneable {
+public interface Digester extends InitializeSupport {
 
     byte[] digest(byte[] message) throws CryptoException;
 
     boolean verify(byte[] message, byte[] digested) throws CryptoException;
-
-    Digester clone();
 }

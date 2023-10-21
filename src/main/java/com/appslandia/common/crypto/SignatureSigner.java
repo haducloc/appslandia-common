@@ -96,7 +96,9 @@ public class SignatureSigner extends InitializeObject implements Digester {
 
     @Override
     public void destroy() throws DestroyException {
-	CryptoUtils.destroyQuietly(this.privateKey);
+	if (this.privateKey != null) {
+	    CryptoUtils.destroyQuietly(this.privateKey);
+	}
     }
 
     @Override
@@ -185,19 +187,5 @@ public class SignatureSigner extends InitializeObject implements Digester {
 	assertNotInitialized();
 	this.algParamSpec = algParamSpec;
 	return this;
-    }
-
-    @Override
-    public SignatureSigner clone() {
-	SignatureSigner impl = new SignatureSigner().setAlgorithm(this.algorithm).setProvider(this.provider);
-
-	if (this.privateKey != null) {
-	    impl.privateKey = new KeyFactoryUtil(this.privateKey.getAlgorithm()).copy(this.privateKey);
-	}
-	if (this.publicKey != null) {
-	    impl.publicKey = new KeyFactoryUtil(this.publicKey.getAlgorithm()).copy(this.publicKey);
-	}
-	impl.algParamSpec = this.algParamSpec;
-	return impl;
     }
 }

@@ -94,7 +94,9 @@ public class KeyStoreUtil extends InitializeObject {
 
     @Override
     public void destroy() throws DestroyException {
-	CryptoUtils.clear(this.password);
+	if (this.password != null) {
+	    CryptoUtils.clear(this.password);
+	}
     }
 
     public void save(OutputStream out) throws CryptoException, IOException {

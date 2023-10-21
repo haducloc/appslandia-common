@@ -47,23 +47,6 @@ public class TextDigesterTest {
     }
 
     @Test
-    public void test_clone() {
-	TextDigester impl = new TextDigester();
-	impl.setDigester(new DigesterImpl("MD5"));
-	impl = impl.clone();
-	try {
-
-	    String message = "data";
-	    String hash = impl.digest(message);
-
-	    Assertions.assertTrue(impl.verify(message, hash));
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
-	}
-    }
-
-    @Test
     public void test_invalid() {
 	TextDigester impl = new TextDigester();
 	impl.setDigester(new DigesterImpl("MD5"));

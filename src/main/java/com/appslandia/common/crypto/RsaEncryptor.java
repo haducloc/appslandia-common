@@ -116,7 +116,9 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 
     @Override
     public void destroy() throws DestroyException {
-	CryptoUtils.destroyQuietly(this.privateKey);
+	if (this.privateKey != null) {
+	    CryptoUtils.destroyQuietly(this.privateKey);
+	}
     }
 
     @Override
@@ -220,21 +222,6 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 	assertNotInitialized();
 	this.algParamSpec = algParamSpec;
 	return this;
-    }
-
-    @Override
-    public RsaEncryptor clone() {
-	RsaEncryptor impl = new RsaEncryptor().setTransformation(this.transformation).setProvider(this.provider);
-
-	if (this.privateKey != null) {
-	    impl.privateKey = new KeyFactoryUtil(this.privateKey.getAlgorithm()).copy(this.privateKey);
-	}
-	if (this.publicKey != null) {
-	    impl.publicKey = new KeyFactoryUtil(this.publicKey.getAlgorithm()).copy(this.publicKey);
-	}
-
-	impl.algParamSpec = this.algParamSpec;
-	return impl;
     }
 
     // Optimal Asymmetric Encryption

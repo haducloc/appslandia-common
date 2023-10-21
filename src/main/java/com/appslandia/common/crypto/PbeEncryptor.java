@@ -231,22 +231,6 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 	return this;
     }
 
-    @Override
-    public PbeEncryptor clone() {
-	PbeEncryptor impl = new PbeEncryptor().setTransformation(this.transformation).setProvider(this.provider);
-	impl.setSaltSize(this.saltSize).setIterationCount(this.iterationCount).setKeySize(this.keySize);
-
-	if (this.password != null) {
-	    impl.setPassword(this.password);
-	}
-	if (this.secretKeyGenerator != null) {
-	    impl.secretKeyGenerator = this.secretKeyGenerator.clone();
-	}
-	impl.ivSize = this.ivSize;
-	impl.algParamSpec = this.algParamSpec;
-	return impl;
-    }
-
     public static IvParameterSpec toIvParameterSpec(String[] algs, byte[] iv) {
 	return new IvParameterSpec(iv);
     }

@@ -51,6 +51,13 @@ public class TextEncryptor extends TextBasedCrypto {
 	this.baseEncoder = ValueUtils.valueOrAlt(this.baseEncoder, BaseEncoder.BASE64);
     }
 
+    @Override
+    public void destroy() throws DestroyException {
+	if (this.encryptor != null) {
+	    this.encryptor.destroy();
+	}
+    }
+
     public String encrypt(String message) throws CryptoException {
 	this.initialize();
 	Asserts.notNull(message, "message is required.");
@@ -63,13 +70,6 @@ public class TextEncryptor extends TextBasedCrypto {
 	Asserts.notNull(message, "message is required.");
 
 	return new String(this.encryptor.decrypt(this.baseEncoder.decode(message)), this.textCharset);
-    }
-
-    @Override
-    public void destroy() throws DestroyException {
-	if (this.encryptor != null) {
-	    this.encryptor.destroy();
-	}
     }
 
     public TextEncryptor setEncryptor(Encryptor encryptor) {
@@ -94,15 +94,5 @@ public class TextEncryptor extends TextBasedCrypto {
     public TextEncryptor setBaseEncoder(BaseEncoder baseEncoder) {
 	super.setBaseEncoder(baseEncoder);
 	return this;
-    }
-
-    @Override
-    public TextEncryptor clone() {
-	TextEncryptor impl = new TextEncryptor();
-	impl.setTextCharset(this.textCharset).setBaseEncoder(this.baseEncoder);
-	if (this.encryptor != null) {
-	    impl.encryptor = this.encryptor.clone();
-	}
-	return impl;
     }
 }

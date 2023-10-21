@@ -128,11 +128,4 @@ public class MacSigner extends InitializeObject implements Digester {
 	}
 	return this;
     }
-
-    @Override
-    public MacSigner clone() {
-	MacSigner impl = new MacSigner().setAlgorithm(this.algorithm).setProvider(this.provider);
-	impl.secret = ArrayUtils.copy(this.secret);
-	return impl;
-    }
 }

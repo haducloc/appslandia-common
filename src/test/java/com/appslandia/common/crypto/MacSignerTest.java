@@ -51,23 +51,6 @@ public class MacSignerTest {
     }
 
     @Test
-    public void test_clone() {
-	MacSigner impl = new MacSigner().setAlgorithm("HmacMD5");
-	impl.setSecret("secret".getBytes(StandardCharsets.UTF_8));
-	impl = impl.clone();
-
-	try {
-	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-	    byte[] digest = impl.digest(data);
-
-	    Assertions.assertTrue(impl.verify(data, digest));
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
-	}
-    }
-
-    @Test
     public void test_invalid() {
 	MacSigner impl = new MacSigner().setAlgorithm("HmacMD5");
 	impl.setSecret("secret".getBytes(StandardCharsets.UTF_8));

@@ -29,6 +29,7 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 
+import com.appslandia.common.base.DestroyException;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.FieldNamingPolicy;
@@ -54,6 +55,10 @@ public class GsonProcessor extends JsonProcessor {
 	    this.builder = newBuilder(true, false);
 	}
 	this.gson = this.builder.create();
+    }
+
+    @Override
+    public void destroy() throws DestroyException {
     }
 
     @Override

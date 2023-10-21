@@ -48,22 +48,6 @@ public class PasswordDigesterTest {
     }
 
     @Test
-    public void test_clone() {
-	PasswordDigester impl = new PasswordDigester();
-	impl = impl.clone();
-	try {
-
-	    String password = "password";
-	    String digested = impl.digest(password);
-
-	    Assertions.assertTrue(impl.verify(password, digested));
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
-	}
-    }
-
-    @Test
     public void test_invalid() {
 	PasswordDigester impl = new PasswordDigester();
 	try {

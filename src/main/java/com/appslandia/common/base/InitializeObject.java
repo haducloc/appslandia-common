@@ -55,10 +55,6 @@ public abstract class InitializeObject implements InitializeSupport {
 
     protected abstract void init() throws Exception;
 
-    @Override
-    public void destroy() throws DestroyException {
-    }
-
     protected void assertNotInitialized() {
 	if (this.initialized) {
 	    throw new AssertException("initialized.");

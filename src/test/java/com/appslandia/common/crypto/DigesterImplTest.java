@@ -49,21 +49,6 @@ public class DigesterImplTest {
     }
 
     @Test
-    public void test_clone() {
-	DigesterImpl impl = new DigesterImpl("MD5");
-	impl = impl.clone();
-	try {
-	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-	    byte[] hash = impl.digest(data);
-
-	    Assertions.assertTrue(impl.verify(data, hash));
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
-	}
-    }
-
-    @Test
     public void test_invalid() {
 	DigesterImpl impl = new DigesterImpl("MD5");
 	try {

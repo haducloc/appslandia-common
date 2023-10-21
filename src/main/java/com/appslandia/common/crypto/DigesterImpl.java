@@ -108,9 +108,4 @@ public class DigesterImpl extends InitializeObject implements Digester {
 	this.provider = provider;
 	return this;
     }
-
-    @Override
-    public DigesterImpl clone() {
-	return new DigesterImpl().setAlgorithm(this.algorithm).setProvider(this.provider);
-    }
 }

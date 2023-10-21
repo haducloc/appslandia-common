@@ -33,6 +33,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
@@ -414,7 +415,7 @@ public class ObjectFactory extends InitializeObject {
     }
 
     @Override
-    public void destroy() throws ObjectException {
+    public void destroy() throws DestroyException {
 	for (ObjectInstance inst : this.instances) {
 	    Object obj = inst.singleton;
 

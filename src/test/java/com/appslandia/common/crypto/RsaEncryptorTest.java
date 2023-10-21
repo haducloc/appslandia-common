@@ -70,26 +70,6 @@ public class RsaEncryptorTest {
     }
 
     @Test
-    public void test_clone() {
-	RsaEncryptor impl = new RsaEncryptor();
-	impl.setTransformation("RSA/ECB/PKCS1Padding");
-	impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
-	impl.setAlgParamSpec(RsaEncryptor::toOAEPParameterSpec);
-
-	impl = impl.clone();
-
-	try {
-	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-	    byte[] enc = impl.encrypt(data);
-
-	    Assertions.assertArrayEquals(data, impl.decrypt(enc));
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
-	}
-    }
-
-    @Test
     public void test_OAEPPadding() {
 	RsaEncryptor impl = new RsaEncryptor();
 	impl.setTransformation("RSA/ECB/OAEPPadding");

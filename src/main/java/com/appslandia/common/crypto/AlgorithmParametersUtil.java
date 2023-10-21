@@ -32,7 +32,7 @@ import com.appslandia.common.utils.Asserts;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class AlgorithmParametersUtil<T extends AlgorithmParameterSpec> extends InitializeObject implements Cloneable {
+public class AlgorithmParametersUtil<T extends AlgorithmParameterSpec> extends InitializeObject {
 
     private String algorithm, provider;
     private AlgorithmParameters algorithmParameters;
@@ -112,10 +112,5 @@ public class AlgorithmParametersUtil<T extends AlgorithmParameterSpec> extends I
 	assertNotInitialized();
 	this.algParamSpec = algParamSpec;
 	return this;
-    }
-
-    @Override
-    public AlgorithmParametersUtil<T> clone() {
-	return new AlgorithmParametersUtil<T>().setAlgorithm(this.algorithm).setProvider(this.provider).setParamSpecClass(this.paramSpecClass).setAlgParamSpec(this.algParamSpec);
     }
 }

@@ -34,7 +34,7 @@ import com.appslandia.common.utils.ValueUtils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class SecretKeyGenerator extends InitializeObject implements Cloneable {
+public class SecretKeyGenerator extends InitializeObject {
 
     public static final SecretKeyGenerator PBKDF2_HMAC_SHA512 = new SecretKeyGenerator("PBKDF2WithHmacSHA512");
 
@@ -106,10 +106,5 @@ public class SecretKeyGenerator extends InitializeObject implements Cloneable {
 	this.assertNotInitialized();
 	this.provider = provider;
 	return this;
-    }
-
-    @Override
-    public SecretKeyGenerator clone() {
-	return new SecretKeyGenerator().setAlgorithm(this.algorithm).setProvider(this.provider);
     }
 }

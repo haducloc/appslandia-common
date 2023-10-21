@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 
+import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.PropertyConfig;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.StringUtils;
@@ -33,7 +34,7 @@ import com.appslandia.common.utils.StringUtils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class SecureConfig extends PropertyConfig implements Cloneable {
+public class SecureConfig extends PropertyConfig {
     private static final long serialVersionUID = 1L;
 
     final TextEncryptor textEncryptor;
@@ -58,6 +59,10 @@ public class SecureConfig extends PropertyConfig implements Cloneable {
     public SecureConfig(TextEncryptor textEncryptor) {
 	Asserts.notNull(textEncryptor);
 	this.textEncryptor = textEncryptor;
+    }
+
+    public void destroy() throws DestroyException {
+	this.textEncryptor.destroy();
     }
 
     @Override
@@ -141,12 +146,5 @@ public class SecureConfig extends PropertyConfig implements Cloneable {
     public SecureConfig enc(String key, double value) throws CryptoException {
 	this.map.put(key, CryptoUtils.markEncValue(this.textEncryptor.encrypt(Double.toString(value))));
 	return this;
-    }
-
-    @Override
-    public SecureConfig clone() {
-	SecureConfig impl = new SecureConfig(this.textEncryptor.clone());
-	impl.map.putAll(this.map);
-	return impl;
     }
 }

@@ -173,12 +173,4 @@ public class PasswordDigester extends TextDigester {
     public PasswordDigester setTextCharset(String textCharset) {
 	throw new UnsupportedOperationException();
     }
-
-    @Override
-    public PasswordDigester clone() {
-	PasswordDigester impl = new PasswordDigester();
-	impl.setSaltSize(this.saltSize).setIterationCount(this.iterationCount).setKeySize(this.keySize);
-	impl.setSecretKeyAlgorithm(this.secretKeyAlgorithm).setProvider(this.provider);
-	return impl;
-    }
 }

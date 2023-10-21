@@ -51,6 +51,13 @@ public class TextDigester extends TextBasedCrypto {
 	this.baseEncoder = ValueUtils.valueOrAlt(this.baseEncoder, BaseEncoder.BASE64);
     }
 
+    @Override
+    public void destroy() throws DestroyException {
+	if (this.digester != null) {
+	    this.digester.destroy();
+	}
+    }
+
     public String digest(String message) throws CryptoException {
 	this.initialize();
 	Asserts.notNull(message, "message is required.");
@@ -64,13 +71,6 @@ public class TextDigester extends TextBasedCrypto {
 	Asserts.notNull(digested, "digested is required.");
 
 	return this.digester.verify(message.getBytes(this.textCharset), this.baseEncoder.decode(digested));
-    }
-
-    @Override
-    public void destroy() throws DestroyException {
-	if (this.digester != null) {
-	    this.digester.destroy();
-	}
     }
 
     public TextDigester setDigester(Digester digester) {
@@ -95,15 +95,5 @@ public class TextDigester extends TextBasedCrypto {
     public TextDigester setBaseEncoder(BaseEncoder baseEncoder) {
 	super.setBaseEncoder(baseEncoder);
 	return this;
-    }
-
-    @Override
-    public TextDigester clone() {
-	TextDigester impl = new TextDigester();
-	impl.setTextCharset(this.textCharset).setBaseEncoder(this.baseEncoder);
-	if (this.digester != null) {
-	    impl.digester = this.digester.clone();
-	}
-	return impl;
     }
 }

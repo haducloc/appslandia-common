@@ -51,23 +51,6 @@ public class PbeDigesterTest {
     }
 
     @Test
-    public void test_clone() {
-	PbeDigester impl = new PbeDigester().setAlgorithm("HmacMD5");
-	impl.setKeySize(16).setPassword("password".toCharArray());
-	impl = impl.clone();
-
-	try {
-	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-	    byte[] digest = impl.digest(data);
-
-	    Assertions.assertTrue(impl.verify(data, digest));
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
-	}
-    }
-
-    @Test
     public void test_invalid() {
 	PbeDigester impl = new PbeDigester().setAlgorithm("HmacMD5");
 	impl.setKeySize(16).setPassword("password".toCharArray());
