@@ -22,7 +22,6 @@ package com.appslandia.common.models;
 
 import java.util.Objects;
 
-import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.StringUtils;
 
 /**
@@ -46,10 +45,6 @@ public class SelectItemImpl implements SelectItem {
 	this.value = value;
 	this.displayName = displayName;
 	this.name = name;
-    }
-
-    public int intValue() {
-	return (Integer) Asserts.notNull(this.value);
     }
 
     @Override
