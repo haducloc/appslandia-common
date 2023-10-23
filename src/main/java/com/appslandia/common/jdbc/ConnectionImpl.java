@@ -250,44 +250,29 @@ public class ConnectionImpl implements Connection {
 	}
     }
 
-    public <T> T executeScalar(String sql) throws java.sql.SQLException {
+    public <T> T executeScalar(String sql, Class<T> type) throws java.sql.SQLException {
 	try (Statement stat = this.conn.createStatement()) {
 	    try (ResultSet rs = stat.executeQuery(sql)) {
 
-		return JdbcUtils.executeScalar(rs);
+		return JdbcUtils.executeScalar(rs, type);
 	    }
 	}
     }
 
-    public <T> T executeScalar(String pSql, Object... params) throws java.sql.SQLException {
-	return executeScalar(pSql, JdbcUtils.toParameters(params));
+    public <T> T executeScalar(String pSql, Object[] params, Class<T> type) throws java.sql.SQLException {
+	return executeScalar(pSql, JdbcUtils.toParameters(params), type);
     }
 
-    public <T> T executeScalar(String pSql, Map<String, Object> params) throws java.sql.SQLException {
+    public <T> T executeScalar(String pSql, Map<String, Object> params, Class<T> type) throws java.sql.SQLException {
 	JdbcSql sql = new JdbcSql(pSql);
 	try (StatementImpl stat = prepareStatement(sql)) {
 	    if (params != null) {
 		JdbcUtils.setParameters(stat, sql, params);
 	    }
 	    try (ResultSetImpl rs = stat.executeQuery()) {
-		return JdbcUtils.executeScalar(rs);
+		return JdbcUtils.executeScalar(rs, type);
 	    }
 	}
-    }
-
-    public long getLongScalar(String sql) throws java.sql.SQLException {
-	Number n = Asserts.notNull(executeScalar(sql));
-	return n.longValue();
-    }
-
-    public long getLongScalar(String pSql, Object... params) throws java.sql.SQLException {
-	Number n = Asserts.notNull(executeScalar(pSql, params));
-	return n.longValue();
-    }
-
-    public long getLongScalar(String pSql, Map<String, Object> params) throws java.sql.SQLException {
-	Number n = Asserts.notNull(executeScalar(pSql, params));
-	return n.longValue();
     }
 
     public void executeQuery(String sql, ResultSetHandler handler) throws Exception {

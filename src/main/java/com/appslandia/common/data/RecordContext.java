@@ -273,11 +273,8 @@ public class RecordContext extends DbContext {
 	}
 
 	// Execute
-	Number count = stat.executeScalar();
-	if (count == null) {
-	    return false;
-	}
-	if (count.longValue() > 1) {
+	Long count = stat.executeScalar(Long.class);
+	if (count > 1) {
 	    throw new SQLException("Duplicated keys.");
 	}
 	return true;

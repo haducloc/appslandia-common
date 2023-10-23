@@ -136,10 +136,9 @@ public class JdbcUtils {
 	return t;
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T> T executeScalar(ResultSet rs) throws SQLException {
+    public static <T> T executeScalar(ResultSet rs, Class<T> type) throws SQLException {
 	while (rs.next()) {
-	    return (T) rs.getObject(1);
+	    return (T) rs.getObject(1, type);
 	}
 	return null;
     }

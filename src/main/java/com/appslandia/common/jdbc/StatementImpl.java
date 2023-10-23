@@ -180,38 +180,23 @@ public class StatementImpl implements PreparedStatement {
 	}
     }
 
-    public <T> T executeScalar() throws java.sql.SQLException {
+    public <T> T executeScalar(Class<T> type) throws java.sql.SQLException {
 	try (ResultSet rs = this.stat.executeQuery()) {
-	    return JdbcUtils.executeScalar(rs);
+	    return JdbcUtils.executeScalar(rs, type);
 	}
     }
 
-    public <T> T executeScalar(Object... params) throws java.sql.SQLException {
-	return executeScalar(JdbcUtils.toParameters(params));
+    public <T> T executeScalar(Object[] params, Class<T> type) throws java.sql.SQLException {
+	return executeScalar(JdbcUtils.toParameters(params), type);
     }
 
-    public <T> T executeScalar(Map<String, Object> params) throws java.sql.SQLException {
+    public <T> T executeScalar(Map<String, Object> params, Class<T> type) throws java.sql.SQLException {
 	if (params != null) {
 	    JdbcUtils.setParameters(this, getSql(), params);
 	}
 	try (ResultSet rs = this.stat.executeQuery()) {
-	    return JdbcUtils.executeScalar(rs);
+	    return JdbcUtils.executeScalar(rs, type);
 	}
-    }
-
-    public long getLongScalar() throws java.sql.SQLException {
-	Number n = Asserts.notNull(executeScalar());
-	return n.longValue();
-    }
-
-    public long getLongScalar(Object... params) throws java.sql.SQLException {
-	Number n = Asserts.notNull(executeScalar(params));
-	return n.longValue();
-    }
-
-    public long getLongScalar(Map<String, Object> params) throws java.sql.SQLException {
-	Number n = Asserts.notNull(executeScalar(params));
-	return n.longValue();
     }
 
     public void executeQuery(ResultSetHandler handler) throws Exception {
