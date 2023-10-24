@@ -21,7 +21,6 @@
 package com.appslandia.common.utils;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.FilterInputStream;
@@ -30,17 +29,12 @@ import java.io.FilterReader;
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.appslandia.common.base.BOM;
-import com.appslandia.common.base.BOMInputStream;
-import com.appslandia.common.base.BOMOutputStream;
 import com.appslandia.common.base.StringWriter;
 
 /**
@@ -114,26 +108,6 @@ public class IOUtils {
 	    list.add(line);
 	}
 	return list;
-    }
-
-    public static BufferedReader newReaderBOM(InputStream is, String altReaderEcoding) throws IOException {
-	Asserts.notNull(altReaderEcoding);
-
-	BOMInputStream bis = new BOMInputStream(is);
-	String encoding = (bis.getBOM() != null) ? bis.getBOM().getEncoding() : altReaderEcoding;
-
-	return new BufferedReader(new InputStreamReader(bis, encoding));
-    }
-
-    public static BufferedWriter newWriterBOM(OutputStream os, String writerEncoding) throws IOException {
-	Asserts.notNull(writerEncoding);
-
-	BOM bom = BOM.parse(writerEncoding);
-	if (bom == null) {
-	    return new BufferedWriter(new OutputStreamWriter(os, writerEncoding));
-	} else {
-	    return new BufferedWriter(new OutputStreamWriter(new BOMOutputStream(os, bom), writerEncoding));
-	}
     }
 
     public static void closeQuietly(Closeable closeable) {
