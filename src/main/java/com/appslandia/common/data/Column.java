@@ -26,6 +26,7 @@ import java.util.List;
 
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.jdbc.JdbcSql;
+import com.appslandia.common.jdbc.JdbcUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.STR;
@@ -133,7 +134,7 @@ public class Column extends InitializeObject implements Serializable {
     public Column setName(String name) {
 	this.assertNotInitialized();
 	if (name != null) {
-	    this.name = RecordUtils.toColumnName(name);
+	    this.name = JdbcUtils.toColumnName(name);
 	}
 	return this;
     }

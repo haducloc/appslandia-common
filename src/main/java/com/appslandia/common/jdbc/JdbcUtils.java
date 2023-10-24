@@ -31,15 +31,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import com.appslandia.common.data.ResultSetColumn;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.IOUtils;
 import com.appslandia.common.utils.STR;
+import com.appslandia.common.utils.StringUtils;
 
 /**
  *
@@ -56,6 +57,23 @@ public class JdbcUtils {
 	    cols.add(new ResultSetColumn(col, md.getColumnLabel(col), md.getColumnType(col)));
 	}
 	return Collections.unmodifiableList(cols);
+    }
+
+    public static String toColumnName(String dbColumnName) {
+	Asserts.notNull(dbColumnName);
+
+	// All Uppers
+	if (dbColumnName.equals(dbColumnName.toUpperCase(Locale.ENGLISH))) {
+	    return dbColumnName.toLowerCase(Locale.ENGLISH);
+	}
+
+	// All Lowers
+	if (dbColumnName.equals(dbColumnName.toLowerCase(Locale.ENGLISH))) {
+	    return dbColumnName;
+	}
+
+	// Mixed
+	return StringUtils.firstLowerCase(dbColumnName, Locale.ENGLISH);
     }
 
     public static Map<String, Object> toParameters(Object[] params) {

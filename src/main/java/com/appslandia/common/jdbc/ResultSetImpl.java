@@ -34,7 +34,6 @@ import java.util.List;
 import java.util.Locale;
 
 import com.appslandia.common.base.AssertException;
-import com.appslandia.common.data.ResultSetColumn;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.NormalizeUtils;
 import com.appslandia.common.utils.STR;

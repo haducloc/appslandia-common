@@ -26,11 +26,13 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -39,6 +41,8 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import com.appslandia.common.jdbc.ConnectionImpl;
+import com.appslandia.common.jdbc.JdbcUtils;
+import com.appslandia.common.jdbc.ResultSetColumn;
 import com.appslandia.common.jdbc.ResultSetImpl;
 import com.appslandia.common.jdbc.SqlTypeMapper;
 import com.appslandia.common.utils.Asserts;
@@ -53,6 +57,28 @@ import com.appslandia.common.utils.StringUtils;
  *
  */
 public final class RecordUtils {
+
+    public static List<Column> getColumns(ResultSet rs) throws SQLException {
+	ResultSetMetaData md = rs.getMetaData();
+	List<Column> cols = new ArrayList<>(md.getColumnCount());
+
+	for (int col = 1; col <= md.getColumnCount(); col++) {
+	    Column column = new Column();
+	    column.setName(JdbcUtils.toColumnName(md.getColumnLabel(col)));
+	    column.setPosition(col);
+	    column.setSqlType(md.getColumnType(col));
+
+	    column.setColumnSize(md.getPrecision(col));
+	    column.setFractionDigits(md.getScale(col));
+
+	    column.setTableCat(md.getCatalogName(col));
+	    column.setTableSchema(md.getSchemaName(col));
+	    column.setTableName(md.getTableName(col));
+
+	    cols.add(column);
+	}
+	return Collections.unmodifiableList(cols);
+    }
 
     public static Table loadTable(ConnectionImpl conn, String catalog, String schema, String tableName, Consumer<Column> columnInit) throws SQLException {
 	Asserts.notNull(conn);
@@ -137,7 +163,7 @@ public final class RecordUtils {
 	DataRecord dataRecord = new DataRecord();
 
 	for (ResultSetColumn column : rs.getColumns()) {
-	    dataRecord.set(column.name, rs.getObject(column.index));
+	    dataRecord.set(column.getName(), rs.getObject(column.getIndex()));
 	}
 	return dataRecord;
     }
@@ -179,23 +205,6 @@ public final class RecordUtils {
 
     private static final Set<Class<?>> PK_JAVA_TYPES = CollectionUtils.unmodifiableSet(Short.class, Integer.class, Long.class, Float.class, Double.class, BigDecimal.class,
 	    String.class, UUID.class, java.sql.Date.class, java.sql.Timestamp.class, LocalDate.class, LocalDateTime.class, OffsetDateTime.class);
-
-    public static String toColumnName(String dbColumnName) {
-	Asserts.notNull(dbColumnName);
-
-	// All Uppers
-	if (dbColumnName.equals(dbColumnName.toUpperCase(Locale.ENGLISH))) {
-	    return dbColumnName.toLowerCase(Locale.ENGLISH);
-	}
-
-	// All Lowers
-	if (dbColumnName.equals(dbColumnName.toLowerCase(Locale.ENGLISH))) {
-	    return dbColumnName;
-	}
-
-	// Mixed
-	return StringUtils.firstLowerCase(dbColumnName, Locale.ENGLISH);
-    }
 
     public static String toEntityClassName(String tableName) {
 	Asserts.notNull(tableName);

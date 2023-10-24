@@ -29,8 +29,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
 import com.appslandia.common.data.RecordContext;
-import com.appslandia.common.data.ResultSetColumn;
 import com.appslandia.common.jdbc.ConnectionImpl;
+import com.appslandia.common.jdbc.ResultSetColumn;
 import com.appslandia.common.utils.Asserts;
 
 /**
