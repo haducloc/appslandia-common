@@ -66,7 +66,10 @@ public final class RecordUtils {
 	    Column column = new Column();
 	    column.setName(JdbcUtils.toColumnName(md.getColumnLabel(col)));
 	    column.setPosition(col);
-	    column.setSqlType(md.getColumnType(col));
+
+	    int sqlType = md.getColumnType(col);
+	    column.setSqlType(sqlType);
+	    column.setJavaType(SqlTypeMapper.getJavaType(sqlType));
 
 	    column.setColumnSize(md.getPrecision(col));
 	    column.setFractionDigits(md.getScale(col));
