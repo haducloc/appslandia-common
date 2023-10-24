@@ -21,6 +21,7 @@
 package com.appslandia.common.utils;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.FilterInputStream;
@@ -29,12 +30,16 @@ import java.io.FilterReader;
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.appslandia.common.base.BOMInputStream;
+import com.appslandia.common.base.BOMOutputStream;
 import com.appslandia.common.base.StringWriter;
 
 /**
@@ -108,6 +113,18 @@ public class IOUtils {
 	    list.add(line);
 	}
 	return list;
+    }
+
+    public static BufferedReader textReaderBOM(InputStream is, String encodingIfNoBOM) throws IOException {
+	Asserts.notNull(encodingIfNoBOM);
+
+	var bomIS = new BOMInputStream(is);
+	return new BufferedReader(new InputStreamReader(bomIS, bomIS.getBOM() != null ? bomIS.getBOM().getEncoding() : encodingIfNoBOM));
+    }
+
+    public static BufferedWriter textWriterBOM(OutputStream os, String encoding) throws IOException {
+	Asserts.notNull(encoding);
+	return new BufferedWriter(new OutputStreamWriter(new BOMOutputStream(os, encoding), encoding));
     }
 
     public static void closeQuietly(Closeable closeable) {
