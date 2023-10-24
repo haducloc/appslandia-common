@@ -71,9 +71,6 @@ public final class RecordUtils {
 	    column.setSqlType(sqlType);
 	    column.setJavaType(SqlTypeMapper.getJavaType(sqlType));
 
-	    column.setColumnSize(md.getPrecision(col));
-	    column.setFractionDigits(md.getScale(col));
-
 	    column.setTableCat(md.getCatalogName(col));
 	    column.setTableSchema(md.getSchemaName(col));
 	    column.setTableName(md.getTableName(col));
