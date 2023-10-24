@@ -123,22 +123,6 @@ public class DbContext implements AutoCloseable {
 	}
     }
 
-    public <K, V> Map<K, V> executeMap(String sql, String keyColumn, String valueColumn, Map<K, V> map) throws java.sql.SQLException {
-	return this.conn.executeMap(sql, keyColumn, valueColumn, map);
-    }
-
-    public <K, V> Map<K, V> executeMap(String pSql, Object[] params, String keyColumn, String valueColumn, Map<K, V> map) throws java.sql.SQLException {
-	return executeMap(pSql, JdbcUtils.toParameters(params), keyColumn, valueColumn, map);
-    }
-
-    public <K, V> Map<K, V> executeMap(String pSql, Map<String, Object> params, String keyColumn, String valueColumn, Map<K, V> map) throws java.sql.SQLException {
-	StatementImpl stat = prepareStatement(pSql, params);
-
-	try (ResultSet rs = stat.executeQuery()) {
-	    return JdbcUtils.executeMap(rs, keyColumn, valueColumn, map);
-	}
-    }
-
     public <T> List<T> executeList(String sql, ResultSetMapper<T> mapper, List<T> list) throws java.sql.SQLException {
 	return this.conn.executeList(sql, mapper, list);
     }

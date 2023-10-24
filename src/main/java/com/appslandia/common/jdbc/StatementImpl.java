@@ -123,25 +123,6 @@ public class StatementImpl implements PreparedStatement {
 	}
     }
 
-    public <K, V> Map<K, V> executeMap(String keyColumn, String valueColumn, Map<K, V> map) throws java.sql.SQLException {
-	try (ResultSet rs = this.stat.executeQuery()) {
-	    return JdbcUtils.executeMap(rs, keyColumn, valueColumn, map);
-	}
-    }
-
-    public <K, V> Map<K, V> executeMap(Object[] params, String keyColumn, String valueColumn, Map<K, V> map) throws java.sql.SQLException {
-	return executeMap(JdbcUtils.toParameters(params), keyColumn, valueColumn, map);
-    }
-
-    public <K, V> Map<K, V> executeMap(Map<String, Object> params, String keyColumn, String valueColumn, Map<K, V> map) throws java.sql.SQLException {
-	if (params != null) {
-	    JdbcUtils.setParameters(this, getSql(), params);
-	}
-	try (ResultSet rs = this.stat.executeQuery()) {
-	    return JdbcUtils.executeMap(rs, keyColumn, valueColumn, map);
-	}
-    }
-
     public <T> List<T> executeList(ResultSetMapper<T> mapper, List<T> list) throws java.sql.SQLException {
 	try (ResultSetImpl rs = executeQuery()) {
 	    return JdbcUtils.executeList(rs, mapper, list);

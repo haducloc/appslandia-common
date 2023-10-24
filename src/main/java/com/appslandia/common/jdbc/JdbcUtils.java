@@ -39,7 +39,6 @@ import com.appslandia.common.data.ResultSetColumn;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.IOUtils;
-import com.appslandia.common.utils.ObjectUtils;
 import com.appslandia.common.utils.STR;
 
 /**
@@ -91,17 +90,6 @@ public class JdbcUtils {
     }
 
     // Execute ResultSets
-
-    public static <K, V> Map<K, V> executeMap(ResultSet rs, String keyColumn, String valueColumn, Map<K, V> map) throws SQLException {
-	while (rs.next()) {
-
-	    K k = ObjectUtils.cast(rs.getObject(keyColumn));
-	    V v = ObjectUtils.cast(rs.getObject(valueColumn));
-
-	    map.put(k, v);
-	}
-	return map;
-    }
 
     public static <K, V> Map<K, V> executeMap(ResultSetImpl rs, ResultSetMapper<K> keyMapper, ResultSetMapper<V> valueMapper, Map<K, V> map) throws SQLException {
 	while (rs.next()) {

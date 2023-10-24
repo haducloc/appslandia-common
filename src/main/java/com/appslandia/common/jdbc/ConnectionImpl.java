@@ -175,31 +175,6 @@ public class ConnectionImpl implements Connection {
 	}
     }
 
-    public <K, V> Map<K, V> executeMap(String sql, String keyColumn, String valueColumn, Map<K, V> map) throws java.sql.SQLException {
-	try (Statement stat = this.conn.createStatement()) {
-	    try (ResultSet rs = stat.executeQuery(sql)) {
-
-		return JdbcUtils.executeMap(rs, keyColumn, valueColumn, map);
-	    }
-	}
-    }
-
-    public <K, V> Map<K, V> executeMap(String pSql, Object[] params, String keyColumn, String valueColumn, Map<K, V> map) throws java.sql.SQLException {
-	return executeMap(pSql, JdbcUtils.toParameters(params), keyColumn, valueColumn, map);
-    }
-
-    public <K, V> Map<K, V> executeMap(String pSql, Map<String, Object> params, String keyColumn, String valueColumn, Map<K, V> map) throws java.sql.SQLException {
-	JdbcSql sql = new JdbcSql(pSql);
-	try (StatementImpl stat = prepareStatement(sql)) {
-	    if (params != null) {
-		JdbcUtils.setParameters(stat, sql, params);
-	    }
-	    try (ResultSet rs = stat.executeQuery()) {
-		return JdbcUtils.executeMap(rs, keyColumn, valueColumn, map);
-	    }
-	}
-    }
-
     public <T> List<T> executeList(String sql, ResultSetMapper<T> mapper, List<T> list) throws java.sql.SQLException {
 	try (Statement stat = this.conn.createStatement()) {
 	    try (ResultSetImpl rs = new ResultSetImpl(stat.executeQuery(sql))) {
