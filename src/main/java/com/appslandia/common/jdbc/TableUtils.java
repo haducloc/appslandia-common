@@ -45,7 +45,7 @@ public class TableUtils {
 	    + COLUMN_NAME_PAT + "\\s+" + COLUMN_TYPE_PAT + "\\s*)*)\\)\\s*$", Pattern.CASE_INSENSITIVE);
 
     public static String toTableScript(String tableSpec, Out<String> tableName) {
-	tableSpec = NormalizeUtils.removeCrLf(tableSpec);
+	tableSpec = NormalizeUtils.toSingleLine(tableSpec);
 	Asserts.notNull(tableSpec);
 
 	Matcher matcher = TABLE_SPEC_PATTERN.matcher(tableSpec);
