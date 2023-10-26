@@ -58,10 +58,10 @@ public class JoiningAsStringCollector<T> implements Collector<T, StringBuilder, 
 	return (sb, t) -> {
 	    this.count++;
 
-	    sb.append(t).append(System.lineSeparator());
+	    sb.append(t).append(this.lineSeparator);
 
 	    if (this.count > 0 && this.count % this.groupSize == 0) {
-		sb.append(System.lineSeparator());
+		sb.append(this.lineSeparator);
 	    }
 	};
     }
