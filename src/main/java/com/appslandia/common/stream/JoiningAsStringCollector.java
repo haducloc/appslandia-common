@@ -37,13 +37,15 @@ public class JoiningAsStringCollector<T> implements Collector<T, StringBuilder, 
 
     private int count = 0;
     final int groupSize;
+    final String lineSeparator;
 
     public JoiningAsStringCollector() {
-	this(5);
+	this(5, System.lineSeparator());
     }
 
-    public JoiningAsStringCollector(final int groupSize) {
+    public JoiningAsStringCollector(int groupSize, String lineSeparator) {
 	this.groupSize = groupSize;
+	this.lineSeparator = lineSeparator;
     }
 
     @Override
