@@ -73,12 +73,14 @@ public class NormalizeUtils {
 	return StringUtils.toLowerCase(str, Locale.ROOT);
     }
 
+    private static final Pattern[] SP2_PATTERNS = PatternUtils.compile("( ){2,}");
     private static final Pattern[] CRLF3_PATTERNS = PatternUtils.compile("(\r?\n){3,}");
 
     public static String normalizeText(String text) {
 	if (text == null) {
 	    return null;
 	}
+	text = normalize(text, SP2_PATTERNS, " ");
 	return normalize(text, CRLF3_PATTERNS, "\n\n");
     }
 
