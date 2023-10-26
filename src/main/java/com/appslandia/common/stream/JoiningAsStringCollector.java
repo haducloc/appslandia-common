@@ -71,7 +71,7 @@ public class JoiningAsStringCollector<T> implements Collector<T, StringBuilder, 
 
     @Override
     public Function<StringBuilder, String> finisher() {
-	return StringBuilder::toString;
+	return sb -> sb.toString().trim();
     }
 
     @Override
