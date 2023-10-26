@@ -47,13 +47,6 @@ public class TextBuilder implements Serializable, CharSequence {
 	this.lineSeparator = lineSeparator;
     }
 
-    public TextBuilder appendlnIfNotEmpty() {
-	if (this.sb.length() > 0) {
-	    return appendln(1);
-	}
-	return this;
-    }
-
     public TextBuilder appendln() {
 	return appendln(1);
     }
