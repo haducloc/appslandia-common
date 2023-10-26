@@ -30,14 +30,21 @@ import java.io.Serializable;
 public class TextBuilder implements Serializable, CharSequence {
     private static final long serialVersionUID = 1L;
 
+    final String lineSeparator;
     final StringBuilder sb;
 
     public TextBuilder() {
 	this.sb = new StringBuilder();
+	this.lineSeparator = System.lineSeparator();
     }
 
     public TextBuilder(int capacity) {
+	this(capacity, System.lineSeparator());
+    }
+
+    public TextBuilder(int capacity, String lineSeparator) {
 	this.sb = new StringBuilder(capacity);
+	this.lineSeparator = lineSeparator;
     }
 
     public TextBuilder appendlnIfNotEmpty() {
@@ -53,7 +60,7 @@ public class TextBuilder implements Serializable, CharSequence {
 
     public TextBuilder appendln(int num) {
 	for (int i = 0; i < num; i++) {
-	    this.sb.append(System.lineSeparator());
+	    this.sb.append(this.lineSeparator);
 	}
 	return this;
     }

@@ -36,8 +36,6 @@ public class StringUtils {
     public static final String EMPTY_STRING = "";
     public static final String[] EMPTY_ARRAY = {};
 
-    public static final String DOUBLE_LINE_SEP = System.lineSeparator() + System.lineSeparator();
-
     public static String toLowerCase(String str, Locale locale) {
 	if (str == null || str.isEmpty()) {
 	    return null;

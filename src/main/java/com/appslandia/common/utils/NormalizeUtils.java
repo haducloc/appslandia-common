@@ -79,7 +79,7 @@ public class NormalizeUtils {
 	if (text == null) {
 	    return null;
 	}
-	return normalize(text, CRLF3_PATTERNS, StringUtils.DOUBLE_LINE_SEP);
+	return normalize(text, CRLF3_PATTERNS, "\n\n");
     }
 
     private static final Pattern[] WTSP_PATTERNS = PatternUtils.compile("\\s+");
