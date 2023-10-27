@@ -370,7 +370,7 @@ public class StatementImpl implements PreparedStatement {
 	    if (i < values.length) {
 		setBoolean(JdbcSql.toParamName(parameterName, i), values[i]);
 	    } else {
-		setBoolean2(JdbcSql.toParamName(parameterName, i), null);
+		setBooleanOpt(JdbcSql.toParamName(parameterName, i), null);
 	    }
 	}
     }
@@ -383,7 +383,7 @@ public class StatementImpl implements PreparedStatement {
 	    if (i < values.length) {
 		setByte(JdbcSql.toParamName(parameterName, i), values[i]);
 	    } else {
-		setByte2(JdbcSql.toParamName(parameterName, i), null);
+		setByteOpt(JdbcSql.toParamName(parameterName, i), null);
 	    }
 	}
     }
@@ -396,7 +396,7 @@ public class StatementImpl implements PreparedStatement {
 	    if (i < values.length) {
 		setShort(JdbcSql.toParamName(parameterName, i), values[i]);
 	    } else {
-		setShort2(JdbcSql.toParamName(parameterName, i), null);
+		setShortOpt(JdbcSql.toParamName(parameterName, i), null);
 	    }
 	}
     }
@@ -409,7 +409,7 @@ public class StatementImpl implements PreparedStatement {
 	    if (i < values.length) {
 		setInt(JdbcSql.toParamName(parameterName, i), values[i]);
 	    } else {
-		setInt2(JdbcSql.toParamName(parameterName, i), null);
+		setIntOpt(JdbcSql.toParamName(parameterName, i), null);
 	    }
 	}
     }
@@ -422,7 +422,7 @@ public class StatementImpl implements PreparedStatement {
 	    if (i < values.length) {
 		setLong(JdbcSql.toParamName(parameterName, i), values[i]);
 	    } else {
-		setLong2(JdbcSql.toParamName(parameterName, i), null);
+		setLongOpt(JdbcSql.toParamName(parameterName, i), null);
 	    }
 	}
     }
@@ -435,7 +435,7 @@ public class StatementImpl implements PreparedStatement {
 	    if (i < values.length) {
 		setFloat(JdbcSql.toParamName(parameterName, i), values[i]);
 	    } else {
-		setFloat2(JdbcSql.toParamName(parameterName, i), null);
+		setFloatOpt(JdbcSql.toParamName(parameterName, i), null);
 	    }
 	}
     }
@@ -448,7 +448,7 @@ public class StatementImpl implements PreparedStatement {
 	    if (i < values.length) {
 		setDouble(JdbcSql.toParamName(parameterName, i), values[i]);
 	    } else {
-		setDouble2(JdbcSql.toParamName(parameterName, i), null);
+		setDoubleOpt(JdbcSql.toParamName(parameterName, i), null);
 	    }
 	}
     }
@@ -545,7 +545,7 @@ public class StatementImpl implements PreparedStatement {
 
     // Set Primitive Wrapper Parameters
 
-    public void setBoolean2(String parameterName, Boolean value) throws java.sql.SQLException {
+    public void setBooleanOpt(String parameterName, Boolean value) throws java.sql.SQLException {
 	if (value == null) {
 	    setNull(parameterName, Types.BIT);
 	} else {
@@ -553,7 +553,7 @@ public class StatementImpl implements PreparedStatement {
 	}
     }
 
-    public void setByte2(String parameterName, Byte value) throws java.sql.SQLException {
+    public void setByteOpt(String parameterName, Byte value) throws java.sql.SQLException {
 	if (value == null) {
 	    setNull(parameterName, Types.TINYINT);
 	} else {
@@ -561,7 +561,7 @@ public class StatementImpl implements PreparedStatement {
 	}
     }
 
-    public void setShort2(String parameterName, Short value) throws java.sql.SQLException {
+    public void setShortOpt(String parameterName, Short value) throws java.sql.SQLException {
 	if (value == null) {
 	    setNull(parameterName, Types.SMALLINT);
 	} else {
@@ -569,7 +569,7 @@ public class StatementImpl implements PreparedStatement {
 	}
     }
 
-    public void setInt2(String parameterName, Integer value) throws java.sql.SQLException {
+    public void setIntOpt(String parameterName, Integer value) throws java.sql.SQLException {
 	if (value == null) {
 	    setNull(parameterName, Types.INTEGER);
 	} else {
@@ -577,7 +577,7 @@ public class StatementImpl implements PreparedStatement {
 	}
     }
 
-    public void setLong2(String parameterName, Long value) throws java.sql.SQLException {
+    public void setLongOpt(String parameterName, Long value) throws java.sql.SQLException {
 	if (value == null) {
 	    setNull(parameterName, Types.BIGINT);
 	} else {
@@ -585,7 +585,7 @@ public class StatementImpl implements PreparedStatement {
 	}
     }
 
-    public void setFloat2(String parameterName, Float value) throws java.sql.SQLException {
+    public void setFloatOpt(String parameterName, Float value) throws java.sql.SQLException {
 	if (value == null) {
 	    setNull(parameterName, Types.REAL);
 	} else {
@@ -593,7 +593,7 @@ public class StatementImpl implements PreparedStatement {
 	}
     }
 
-    public void setDouble2(String parameterName, Double value) throws java.sql.SQLException {
+    public void setDoubleOpt(String parameterName, Double value) throws java.sql.SQLException {
 	if (value == null) {
 	    setNull(parameterName, Types.DOUBLE);
 	} else {
