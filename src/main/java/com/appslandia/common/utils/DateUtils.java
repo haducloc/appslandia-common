@@ -113,7 +113,7 @@ public class DateUtils {
 
     // Java8 Date/Time
 
-    public static ZoneOffset toZoneOffset(ZoneId zoneId) {
+    public static ZoneOffset toCurrentOffset(ZoneId zoneId) {
 	return (zoneId != null) ? zoneId.getRules().getOffset(Instant.now()) : null;
     }
 
@@ -203,20 +203,20 @@ public class DateUtils {
 	return LocalDateTime.of(year, month, day, hour, minute);
     }
 
-    public static LocalDate toLocalDate(Date date) {
-	return (date != null) ? Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate() : null;
+    public static LocalDate toLocalDate(Date date, ZoneOffset offset) {
+	return (date != null) ? Instant.ofEpochMilli(date.getTime()).atOffset(offset).toLocalDate() : null;
     }
 
-    public static LocalTime toLocalTime(Date time) {
-	return (time != null) ? Instant.ofEpochMilli(time.getTime()).atZone(ZoneId.systemDefault()).toLocalTime() : null;
+    public static LocalTime toLocalTime(Date time, ZoneOffset offset) {
+	return (time != null) ? Instant.ofEpochMilli(time.getTime()).atOffset(offset).toLocalTime() : null;
     }
 
-    public static LocalDateTime toLocalDateTime(Date dt) {
-	return (dt != null) ? Instant.ofEpochMilli(dt.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime() : null;
+    public static LocalDateTime toLocalDateTime(Date dt, ZoneOffset offset) {
+	return (dt != null) ? Instant.ofEpochMilli(dt.getTime()).atOffset(offset).toLocalDateTime() : null;
     }
 
-    public static LocalDateTime toLocalDateTime(Long timeMillis) {
-	return (timeMillis != null) ? Instant.ofEpochMilli(timeMillis).atZone(ZoneId.systemDefault()).toLocalDateTime() : null;
+    public static LocalDateTime toLocalDateTime(Long timeMillis, ZoneOffset offset) {
+	return (timeMillis != null) ? Instant.ofEpochMilli(timeMillis).atOffset(offset).toLocalDateTime() : null;
     }
 
     private static final class DateTimeFormattersHolder {
