@@ -50,9 +50,9 @@ public abstract class TemporalConverter<T extends Temporal> implements Converter
 	}
 	if (localize) {
 	    String pattern = formatProvider.getLanguage().getTemporalPattern(this.isoPattern);
-	    return getFormatter(pattern).format(obj);
+	    return DateUtils.getFormatter(pattern).format(obj);
 	}
-	return getFormatter(this.isoPattern).format(obj);
+	return DateUtils.getFormatter(this.isoPattern).format(obj);
     }
 
     @Override
@@ -62,20 +62,16 @@ public abstract class TemporalConverter<T extends Temporal> implements Converter
 	    return null;
 	}
 	try {
-	    return parse(str, getFormatter(this.isoPattern));
+	    return parse(str, DateUtils.getFormatter(this.isoPattern));
 	} catch (DateTimeParseException ex) {
 	}
 
 	try {
 	    String pattern = formatProvider.getLanguage().getTemporalPattern(this.isoPattern);
-	    return parse(str, getFormatter(pattern));
+	    return parse(str, DateUtils.getFormatter(pattern));
 
 	} catch (DateTimeParseException ex) {
 	}
 	throw toParsingError(str, getTargetType().getName());
-    }
-
-    protected static DateTimeFormatter getFormatter(String pattern) {
-	return DateUtils.getFormatter(pattern);
     }
 }

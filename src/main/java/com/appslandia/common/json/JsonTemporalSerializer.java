@@ -24,10 +24,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.STR;
@@ -39,16 +36,10 @@ import com.appslandia.common.utils.STR;
  */
 public abstract class JsonTemporalSerializer {
 
-    private static final ConcurrentMap<String, DateTimeFormatter> FORMATTERS = new ConcurrentHashMap<>();
-
     protected final String serializeIsoPattern;
 
     public JsonTemporalSerializer(String serializeIsoPattern) {
 	this.serializeIsoPattern = serializeIsoPattern;
-    }
-
-    protected static DateTimeFormatter getFormatter(String pattern) {
-	return FORMATTERS.computeIfAbsent(pattern, p -> DateTimeFormatter.ofPattern(p));
     }
 
     // @formatter:off
@@ -111,7 +102,7 @@ public abstract class JsonTemporalSerializer {
 	for (String pattern : TIME_PATTERNS) {
 	    if (pattern.length() == value.length()) {
 		try {
-		    return LocalTime.parse(value, getFormatter(pattern));
+		    return LocalTime.parse(value, DateUtils.getFormatter(pattern));
 		} catch (DateTimeParseException ex) {
 		}
 		break;
@@ -123,7 +114,7 @@ public abstract class JsonTemporalSerializer {
     protected OffsetTime parseOffsetTime(String value) {
 	for (String pattern : TIMEZ_PATTERNS) {
 	    try {
-		return OffsetTime.parse(value, getFormatter(pattern));
+		return OffsetTime.parse(value, DateUtils.getFormatter(pattern));
 	    } catch (DateTimeParseException ex) {
 	    }
 	}
@@ -134,7 +125,7 @@ public abstract class JsonTemporalSerializer {
 	for (String pattern : DATETIME_PATTERNS) {
 	    if (pattern.length() == value.length() + 2) {
 		try {
-		    return LocalDateTime.parse(value, getFormatter(pattern));
+		    return LocalDateTime.parse(value, DateUtils.getFormatter(pattern));
 		} catch (DateTimeParseException ex) {
 		}
 		break;
@@ -146,7 +137,7 @@ public abstract class JsonTemporalSerializer {
     protected OffsetDateTime parseOffsetDateTime(String value) {
 	for (String pattern : DATETIMEZ_PATTERNS) {
 	    try {
-		return OffsetDateTime.parse(value, getFormatter(pattern));
+		return OffsetDateTime.parse(value, DateUtils.getFormatter(pattern));
 	    } catch (DateTimeParseException ex) {
 	    }
 	}

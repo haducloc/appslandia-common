@@ -23,6 +23,7 @@ package com.appslandia.common.json;
 import java.lang.reflect.Type;
 import java.time.temporal.Temporal;
 
+import com.appslandia.common.utils.DateUtils;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
@@ -42,6 +43,6 @@ public abstract class GsonTemporalSerializer<T extends Temporal> extends JsonTem
 
     @Override
     public JsonElement serialize(T src, Type typeOfSrc, JsonSerializationContext context) {
-	return new JsonPrimitive(getFormatter(this.serializeIsoPattern).format(src));
+	return new JsonPrimitive(DateUtils.getFormatter(this.serializeIsoPattern).format(src));
     }
 }

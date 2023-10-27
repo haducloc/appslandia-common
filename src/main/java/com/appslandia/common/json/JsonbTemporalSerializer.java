@@ -22,6 +22,8 @@ package com.appslandia.common.json;
 
 import java.time.temporal.Temporal;
 
+import com.appslandia.common.utils.DateUtils;
+
 import jakarta.json.bind.serializer.JsonbDeserializer;
 import jakarta.json.bind.serializer.JsonbSerializer;
 import jakarta.json.bind.serializer.SerializationContext;
@@ -40,7 +42,7 @@ public abstract class JsonbTemporalSerializer<T extends Temporal> extends JsonTe
 
     @Override
     public void serialize(T obj, JsonGenerator generator, SerializationContext ctx) {
-	String formattedValue = getFormatter(this.serializeIsoPattern).format(obj);
+	String formattedValue = DateUtils.getFormatter(this.serializeIsoPattern).format(obj);
 	generator.write(formattedValue);
     }
 }
