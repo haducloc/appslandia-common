@@ -215,6 +215,10 @@ public class DateUtils {
 	return (dt != null) ? Instant.ofEpochMilli(dt.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime() : null;
     }
 
+    public static LocalDateTime toLocalDateTime(Long timeMillis) {
+	return (timeMillis != null) ? Instant.ofEpochMilli(timeMillis).atZone(ZoneId.systemDefault()).toLocalDateTime() : null;
+    }
+
     private static final class DateTimeFormattersHolder {
 	private static final ConcurrentMap<String, DateTimeFormatter> FORMATTERS = new ConcurrentHashMap<>();
     }
