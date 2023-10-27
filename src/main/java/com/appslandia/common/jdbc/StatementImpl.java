@@ -265,27 +265,27 @@ public class StatementImpl implements PreparedStatement {
     // :name = '' OR name LIKE :name
 
     public void setLike(String parameterName, String value) throws java.sql.SQLException {
-	setString(parameterName, SqlLikeEscaper.toLikePattern(value, LikeType.CONTAINS));
+	setString(parameterName, toLikeParamValue(value, LikeType.CONTAINS));
     }
 
     public void setLikeSW(String parameterName, String value) throws java.sql.SQLException {
-	setString(parameterName, SqlLikeEscaper.toLikePattern(value, LikeType.STARTS_WITH));
+	setString(parameterName, toLikeParamValue(value, LikeType.STARTS_WITH));
     }
 
     public void setLikeEW(String parameterName, String value) throws java.sql.SQLException {
-	setString(parameterName, SqlLikeEscaper.toLikePattern(value, LikeType.ENDS_WITH));
+	setString(parameterName, toLikeParamValue(value, LikeType.ENDS_WITH));
     }
 
     public void setNLike(String parameterName, String value) throws java.sql.SQLException {
-	setNString(parameterName, SqlLikeEscaper.toLikePattern(value, LikeType.CONTAINS));
+	setNString(parameterName, toLikeParamValue(value, LikeType.CONTAINS));
     }
 
     public void setNLikeSW(String parameterName, String value) throws java.sql.SQLException {
-	setNString(parameterName, SqlLikeEscaper.toLikePattern(value, LikeType.STARTS_WITH));
+	setNString(parameterName, toLikeParamValue(value, LikeType.STARTS_WITH));
     }
 
     public void setNLikeEW(String parameterName, String value) throws java.sql.SQLException {
-	setNString(parameterName, SqlLikeEscaper.toLikePattern(value, LikeType.ENDS_WITH));
+	setNString(parameterName, toLikeParamValue(value, LikeType.ENDS_WITH));
     }
 
     // Set LIKE_ANY Parameters
@@ -308,7 +308,7 @@ public class StatementImpl implements PreparedStatement {
 	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
-	    setString(JdbcSql.toParamName(parameterName, i), (i < values.length) ? SqlLikeEscaper.toLikePattern(values[i], likeType) : falsePattern);
+	    setString(JdbcSql.toParamName(parameterName, i), (i < values.length) ? toLikeParamValue(values[i], likeType) : falsePattern);
 	}
     }
 
@@ -329,7 +329,15 @@ public class StatementImpl implements PreparedStatement {
 	Asserts.isTrue(values.length <= arrayLen);
 
 	for (int i = 0; i < arrayLen; i++) {
-	    setNString(JdbcSql.toParamName(parameterName, i), (i < values.length) ? SqlLikeEscaper.toLikePattern(values[i], likeType) : falsePattern);
+	    setNString(JdbcSql.toParamName(parameterName, i), (i < values.length) ? toLikeParamValue(values[i], likeType) : falsePattern);
+	}
+    }
+
+    protected String toLikeParamValue(String value, LikeType likeType) {
+	if (value != null && value.startsWith("***")) {
+	    return value.substring(3);
+	} else {
+	    return SqlLikeEscaper.toLikePattern(value, likeType);
 	}
     }
 
