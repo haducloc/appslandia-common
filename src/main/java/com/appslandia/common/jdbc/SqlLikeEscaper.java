@@ -20,8 +20,6 @@
 
 package com.appslandia.common.jdbc;
 
-import java.util.stream.IntStream;
-
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.StringUtils;
@@ -66,13 +64,6 @@ public class SqlLikeEscaper {
 	    }
 	}
 	return sb.toString();
-    }
-
-    public boolean hasEscapeSignChar(String value) {
-	if (value == null) {
-	    return false;
-	}
-	return IntStream.range(0, value.length() - 1).anyMatch(index -> value.charAt(index) == getEscapeSignChar());
     }
 
     private static volatile SqlLikeEscaper __default;
