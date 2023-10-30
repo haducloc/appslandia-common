@@ -94,9 +94,10 @@ public class JulAppLoggerManager extends AppLoggerManager {
 		return java.util.logging.Level.WARNING;
 	    case ERROR:
 		return java.util.logging.Level.SEVERE;
-	    default:
+	    case OFF:
 		return java.util.logging.Level.OFF;
 	    }
+	    throw new Error();
 	}
     }
 }

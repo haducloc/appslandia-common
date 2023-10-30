@@ -137,9 +137,10 @@ public class Log4JAppLoggerManager extends AppLoggerManager {
 		return org.apache.logging.log4j.Level.WARN;
 	    case ERROR:
 		return org.apache.logging.log4j.Level.ERROR;
-	    default:
+	    case OFF:
 		return org.apache.logging.log4j.Level.OFF;
 	    }
+	    throw new Error();
 	}
     }
 }
