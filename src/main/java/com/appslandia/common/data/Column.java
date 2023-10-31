@@ -255,8 +255,8 @@ public class Column extends InitializeObject implements Serializable {
     public String toString() {
 	this.initialize();
 	return STR.fmt(
-		"name={}, typeName={}, sqlType={}, columnSize={?}, fractionDigits={?}, nullable={}, position={}, columnType={}, javaType={}, tableCat={}, tableSchema={}, tableName={}",
-		this.name, this.typeName, this.sqlType, this.columnSize, this.fractionDigits, this.nullable, this.position, this.columnType, this.javaType, this.tableCat,
+		"name={}, typeName={}, sqlType={}, columnSize={?}, fractionDigits={?}, nullable={}, position={}, columnType={}, javaType={}, tableCat={?}, tableSchema={?}, tableName={?}",
+		this.name, this.typeName, this.sqlType, this.columnSize, this.fractionDigits, this.nullable, this.position, this.columnType, this.javaType.getName(), this.tableCat,
 		this.tableSchema, this.tableName);
     }
 }
