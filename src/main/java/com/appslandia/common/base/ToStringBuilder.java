@@ -187,19 +187,15 @@ public class ToStringBuilder {
 		return;
 	    }
 	    if (obj.getClass() == Long.class) {
-		builder.append(obj).append("L");
+		builder.append(obj).append(" (L)");
 		return;
 	    }
 	    if (obj.getClass() == Float.class) {
-		builder.append(obj).append("f");
-		return;
-	    }
-	    if (obj.getClass() == Double.class) {
-		builder.append(obj).append("d");
+		builder.append(obj).append(" (F)");
 		return;
 	    }
 	    if (obj.getClass() == BigDecimal.class) {
-		builder.append(obj).append("m");
+		builder.append(obj).append(" (BD)");
 		return;
 	    }
 	    builder.append(obj);
