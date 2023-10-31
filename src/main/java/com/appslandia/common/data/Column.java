@@ -45,6 +45,7 @@ public class Column extends InitializeObject implements Serializable {
     private String tableName;
 
     private String name;
+    private String typeName;
     private int sqlType;
     private int columnSize;
     private Integer fractionDigits;
@@ -136,6 +137,17 @@ public class Column extends InitializeObject implements Serializable {
 	if (name != null) {
 	    this.name = JdbcUtils.toColumnName(name);
 	}
+	return this;
+    }
+
+    public String getTypeName() {
+	this.initialize();
+	return this.typeName;
+    }
+
+    public Column setTypeName(String typeName) {
+	this.assertNotInitialized();
+	this.typeName = typeName;
 	return this;
     }
 
@@ -241,8 +253,9 @@ public class Column extends InitializeObject implements Serializable {
     @Override
     public String toString() {
 	this.initialize();
-	return STR.fmt("name={}, sqlType={}, columnSize={}, fractionDigits={?}, nullable={}, position={}, columnType={}, javaType={}, tableCat={}, tableSchema={}, tableName={}",
-		this.name, this.sqlType, this.columnSize, this.fractionDigits, this.nullable, this.position, this.columnType, this.javaType, this.tableCat, this.tableSchema,
-		this.tableName);
+	return STR.fmt(
+		"name={}, typeName={}, sqlType={}, columnSize={}, fractionDigits={?}, nullable={}, position={}, columnType={}, javaType={}, tableCat={}, tableSchema={}, tableName={}",
+		this.name, this.typeName, this.sqlType, this.columnSize, this.fractionDigits, this.nullable, this.position, this.columnType, this.javaType, this.tableCat,
+		this.tableSchema, this.tableName);
     }
 }

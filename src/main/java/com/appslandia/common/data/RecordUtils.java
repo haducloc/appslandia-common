@@ -125,6 +125,7 @@ public final class RecordUtils {
 
 		Column column = new Column();
 		column.setName(columnName);
+		column.setTypeName(rs.getString("TYPE_NAME"));
 
 		int sqlType = rs.getInt("DATA_TYPE");
 		column.setSqlType(sqlType);
