@@ -131,7 +131,7 @@ public class ModelGenerator extends InitializeObject {
 		fieldAnnotations.add(AnnotationDescription.Builder.ofType(NotNull.class).build());
 
 		// @MaxLength
-		if (column.getJavaType() == String.class) {
+		if (column.getJavaType() == String.class && column.getColumnSize() != null) {
 		    fieldAnnotations.add(AnnotationDescription.Builder.ofType(MaxLength.class).define("value", column.getColumnSize()).build());
 		}
 
@@ -227,7 +227,7 @@ public class ModelGenerator extends InitializeObject {
 		    fieldAnnotations.add(AnnotationDescription.Builder.ofType(NotNull.class).build());
 		}
 		// @MaxLength
-		if (column.getJavaType() == String.class) {
+		if (column.getJavaType() == String.class && column.getColumnSize() != null) {
 		    fieldAnnotations.add(AnnotationDescription.Builder.ofType(MaxLength.class).define("value", column.getColumnSize()).build());
 		}
 	    }

@@ -46,8 +46,8 @@ public class Column extends InitializeObject implements Serializable {
 
     private String name;
     private String typeName;
-    private int sqlType;
-    private int columnSize;
+    private Integer sqlType;
+    private Integer columnSize;
     private Integer fractionDigits;
 
     private boolean nullable = true;
@@ -62,6 +62,7 @@ public class Column extends InitializeObject implements Serializable {
     @Override
     protected void init() throws Exception {
 	Asserts.notNull(this.name, "name is required.");
+	Asserts.notNull(this.sqlType, "sqlType is required.");
 	Asserts.notNull(this.javaType, "javaType is required.");
 
 	if (this.columnType == null) {
@@ -79,9 +80,9 @@ public class Column extends InitializeObject implements Serializable {
 	return JdbcSql.getParamPrefix() + getName();
     }
 
-    public int getScaleOrLength() {
+    public Integer getScaleOrLength() {
 	this.initialize();
-	return (this.sqlType == Types.DECIMAL || this.sqlType == Types.NUMERIC) ? Asserts.notNull(this.fractionDigits) : this.columnSize;
+	return (this.sqlType == Types.DECIMAL || this.sqlType == Types.NUMERIC) ? this.fractionDigits : this.columnSize;
     }
 
     public boolean isKeyIncr() {
@@ -151,23 +152,23 @@ public class Column extends InitializeObject implements Serializable {
 	return this;
     }
 
-    public int getSqlType() {
+    public Integer getSqlType() {
 	this.initialize();
 	return this.sqlType;
     }
 
-    public Column setSqlType(int sqlType) {
+    public Column setSqlType(Integer sqlType) {
 	this.assertNotInitialized();
 	this.sqlType = sqlType;
 	return this;
     }
 
-    public int getColumnSize() {
+    public Integer getColumnSize() {
 	this.initialize();
 	return this.columnSize;
     }
 
-    public Column setColumnSize(int columnSize) {
+    public Column setColumnSize(Integer columnSize) {
 	this.assertNotInitialized();
 	this.columnSize = columnSize;
 	return this;
@@ -254,7 +255,7 @@ public class Column extends InitializeObject implements Serializable {
     public String toString() {
 	this.initialize();
 	return STR.fmt(
-		"name={}, typeName={}, sqlType={}, columnSize={}, fractionDigits={?}, nullable={}, position={}, columnType={}, javaType={}, tableCat={}, tableSchema={}, tableName={}",
+		"name={}, typeName={}, sqlType={}, columnSize={?}, fractionDigits={?}, nullable={}, position={}, columnType={}, javaType={}, tableCat={}, tableSchema={}, tableName={}",
 		this.name, this.typeName, this.sqlType, this.columnSize, this.fractionDigits, this.nullable, this.position, this.columnType, this.javaType, this.tableCat,
 		this.tableSchema, this.tableName);
     }

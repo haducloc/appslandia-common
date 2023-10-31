@@ -155,7 +155,7 @@ public class DbComparer {
     }
 
     static String toString(Column col) {
-	return STR.fmt("name={}, sqlType={}, columnSize={}, fractionDigits={?}, nullable={}, columnType={}", col.getName(), col.getSqlType(), col.getColumnSize(),
-		col.getFractionDigits(), col.isNullable(), col.getColumnType());
+	return STR.fmt("name={}, typeName={}, sqlType={}, columnSize={?}, fractionDigits={?}, nullable={}, columnType={}", col.getName(), col.getTypeName(), col.getSqlType(),
+		col.getColumnSize(), col.getFractionDigits(), col.isNullable(), col.getColumnType());
     }
 }
