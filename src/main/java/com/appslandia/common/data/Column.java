@@ -73,6 +73,10 @@ public class Column extends InitializeObject implements Serializable {
 	    this.javaType = TypeUtils.wrap(this.javaType);
 	}
 
+	if (this.columnType == ColumnType.KEY_INCR || this.columnType == ColumnType.KEY) {
+	    this.nullable = false;
+	    this.updatable = false;
+	}
 	this.annotations = CollectionUtils.unmodifiable(this.annotations);
     }
 
