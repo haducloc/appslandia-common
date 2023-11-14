@@ -32,34 +32,34 @@ import org.junit.jupiter.api.Test;
  */
 public class ValidateTest {
 
-    static {
-	ModelValidator.addValidator("confirmPasswordValidator", new ModelValidator<ResetPasswordModel>() {
+	static {
+		ModelValidator.addValidator("confirmPasswordValidator", new ModelValidator<ResetPasswordModel>() {
 
-	    @Override
-	    public boolean validate(ResetPasswordModel model) {
-		if (model.password == null || model.confirmPassword == null) {
-		    return true;
-		}
-		return model.confirmPassword.equals(model.password);
-	    }
-	});
-    }
+			@Override
+			public boolean validate(ResetPasswordModel model) {
+				if (model.password == null || model.confirmPassword == null) {
+					return true;
+				}
+				return model.confirmPassword.equals(model.password);
+			}
+		});
+	}
 
-    @Test
-    public void test() {
-	ResetPasswordModel m = new ResetPasswordModel();
-	m.password = "123456";
-	m.confirmPassword = "123457";
+	@Test
+	public void test() {
+		ResetPasswordModel m = new ResetPasswordModel();
+		m.password = "123456";
+		m.confirmPassword = "123457";
 
-	Set<?> errors = ValidatorUtils.getValidator().validate(m);
-	Assertions.assertTrue(!errors.isEmpty());
-    }
+		Set<?> errors = ValidatorUtils.getValidator().validate(m);
+		Assertions.assertTrue(!errors.isEmpty());
+	}
 
-    @Validate(modelValidator = "confirmPasswordValidator", message = "{confirmPasswordValidator.message}", reportProperty = "confirmPassword")
-    private static class ResetPasswordModel {
+	@Validate(modelValidator = "confirmPasswordValidator", message = "{confirmPasswordValidator.message}", reportProperty = "confirmPassword")
+	private static class ResetPasswordModel {
 
-	public String password;
+		public String password;
 
-	public String confirmPassword;
-    }
+		public String confirmPassword;
+	}
 }

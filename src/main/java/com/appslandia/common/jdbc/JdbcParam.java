@@ -29,34 +29,34 @@ import com.appslandia.common.utils.STR;
  */
 public class JdbcParam {
 
-    final Object value;
-    final Integer sqlType;
-    final Integer scaleOrLength;
+	final Object value;
+	final Integer sqlType;
+	final Integer scaleOrLength;
 
-    public JdbcParam(Object value, Integer sqlType) {
-	this(value, sqlType, null);
-    }
+	public JdbcParam(Object value, Integer sqlType) {
+		this(value, sqlType, null);
+	}
 
-    public JdbcParam(Object value, Integer sqlType, Integer scaleOrLength) {
-	this.value = value;
-	this.sqlType = sqlType;
-	this.scaleOrLength = scaleOrLength;
-    }
+	public JdbcParam(Object value, Integer sqlType, Integer scaleOrLength) {
+		this.value = value;
+		this.sqlType = sqlType;
+		this.scaleOrLength = scaleOrLength;
+	}
 
-    public Object getValue() {
-	return this.value;
-    }
+	public Object getValue() {
+		return this.value;
+	}
 
-    public Integer getSqlType() {
-	return this.sqlType;
-    }
+	public Integer getSqlType() {
+		return this.sqlType;
+	}
 
-    public Integer getScaleOrLength() {
-	return this.scaleOrLength;
-    }
+	public Integer getScaleOrLength() {
+		return this.scaleOrLength;
+	}
 
-    @Override
-    public String toString() {
-	return STR.fmt("value={?}, sqlType={?}, scaleOrLength={?}", this.value, this.sqlType, this.scaleOrLength);
-    }
+	@Override
+	public String toString() {
+		return STR.fmt("value={?}, sqlType={?}, scaleOrLength={?}", this.value, this.sqlType, this.scaleOrLength);
+	}
 }

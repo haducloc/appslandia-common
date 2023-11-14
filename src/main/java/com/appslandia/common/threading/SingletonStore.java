@@ -29,31 +29,31 @@ import java.util.function.Supplier;
  */
 public class SingletonStore<T> implements Supplier<T> {
 
-    private volatile T t;
-    private Supplier<T> supplier;
+	private volatile T t;
+	private Supplier<T> supplier;
 
-    final Object mutex = new Object();
+	final Object mutex = new Object();
 
-    public SingletonStore(Supplier<T> supplier) {
-	this.supplier = supplier;
-    }
+	public SingletonStore(Supplier<T> supplier) {
+		this.supplier = supplier;
+	}
 
-    @Override
-    public T get() {
-	T obj = this.t;
-	if (obj == null) {
-	    synchronized (this.mutex) {
-		if ((obj = this.t) == null) {
-		    this.t = obj = supplier.get();
+	@Override
+	public T get() {
+		T obj = this.t;
+		if (obj == null) {
+			synchronized (this.mutex) {
+				if ((obj = this.t) == null) {
+					this.t = obj = supplier.get();
+				}
+			}
 		}
-	    }
+		return obj;
 	}
-	return obj;
-    }
 
-    public void reset() {
-	synchronized (this.mutex) {
-	    t = null;
+	public void reset() {
+		synchronized (this.mutex) {
+			t = null;
+		}
 	}
-    }
 }

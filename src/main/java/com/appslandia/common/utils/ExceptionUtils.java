@@ -33,41 +33,41 @@ import com.appslandia.common.base.UncheckedException;
  */
 public class ExceptionUtils {
 
-    public static Exception tryUnwrap(InvocationTargetException ex) {
-	Throwable te = ex.getTargetException();
-	if (te instanceof Exception) {
-	    return (Exception) te;
+	public static Exception tryUnwrap(InvocationTargetException ex) {
+		Throwable te = ex.getTargetException();
+		if (te instanceof Exception) {
+			return (Exception) te;
+		}
+		return ex;
 	}
-	return ex;
-    }
 
-    public static String toStackTrace(Throwable ex) {
-	StringWriter out = new StringWriter();
-	PrintWriter w = new PrintWriter(out);
-	ex.printStackTrace(w);
-	w.close();
-	return out.toString();
-    }
-
-    public static String buildMessage(Throwable ex) {
-	StringBuilder sb = new StringBuilder();
-	sb.append(ex.getClass().getName());
-	sb.append('(');
-	sb.append("message=").append(ex.getMessage());
-	sb.append("; cause=");
-	if (ex.getCause() != null) {
-	    sb.append(ex.getCause().getClass().getName());
-	} else {
-	    sb.append("null");
+	public static String toStackTrace(Throwable ex) {
+		StringWriter out = new StringWriter();
+		PrintWriter w = new PrintWriter(out);
+		ex.printStackTrace(w);
+		w.close();
+		return out.toString();
 	}
-	sb.append(')');
-	return sb.toString();
-    }
 
-    public static RuntimeException toUncheckedException(Throwable ex) {
-	if (ex instanceof RuntimeException) {
-	    return (RuntimeException) ex;
+	public static String buildMessage(Throwable ex) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(ex.getClass().getName());
+		sb.append('(');
+		sb.append("message=").append(ex.getMessage());
+		sb.append("; cause=");
+		if (ex.getCause() != null) {
+			sb.append(ex.getCause().getClass().getName());
+		} else {
+			sb.append("null");
+		}
+		sb.append(')');
+		return sb.toString();
 	}
-	return new UncheckedException(ex);
-    }
+
+	public static RuntimeException toUncheckedException(Throwable ex) {
+		if (ex instanceof RuntimeException) {
+			return (RuntimeException) ex;
+		}
+		return new UncheckedException(ex);
+	}
 }

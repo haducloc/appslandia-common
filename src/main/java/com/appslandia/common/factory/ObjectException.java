@@ -26,17 +26,17 @@ package com.appslandia.common.factory;
  *
  */
 public class ObjectException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public ObjectException(String message) {
-	super(message);
-    }
+	public ObjectException(String message) {
+		super(message);
+	}
 
-    public ObjectException(String message, Throwable cause) {
-	super(message, cause);
-    }
+	public ObjectException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-    public ObjectException(Throwable cause) {
-	super(cause);
-    }
+	public ObjectException(Throwable cause) {
+		super(cause);
+	}
 }

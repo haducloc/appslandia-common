@@ -32,17 +32,17 @@ import org.junit.jupiter.api.Test;
  */
 public class CaseInsensitiveSetTest {
 
-    @Test
-    public void test() {
-	CaseInsensitiveSet m = new CaseInsensitiveSet(new LinkedHashSet<>());
-	m.add("k1");
+	@Test
+	public void test() {
+		CaseInsensitiveSet m = new CaseInsensitiveSet(new LinkedHashSet<>());
+		m.add("k1");
 
-	Assertions.assertTrue(m.contains("K1"));
-	Assertions.assertTrue(m.contains("k1"));
+		Assertions.assertTrue(m.contains("K1"));
+		Assertions.assertTrue(m.contains("k1"));
 
-	m.add("K2");
+		m.add("K2");
 
-	Assertions.assertTrue(m.contains("k2"));
-	Assertions.assertTrue(m.contains("K2"));
-    }
+		Assertions.assertTrue(m.contains("k2"));
+		Assertions.assertTrue(m.contains("K2"));
+	}
 }

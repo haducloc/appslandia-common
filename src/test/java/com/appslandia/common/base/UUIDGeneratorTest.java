@@ -30,15 +30,15 @@ import org.junit.jupiter.api.Test;
  */
 public class UUIDGeneratorTest {
 
-    @Test
-    public void test() {
-	for (int i = 1; i <= 1000; i++) {
+	@Test
+	public void test() {
+		for (int i = 1; i <= 1000; i++) {
 
-	    UUIDGenerator impl = new UUIDGenerator();
-	    String str = impl.generate();
-	    Assertions.assertEquals(32, str.length());
+			UUIDGenerator impl = new UUIDGenerator();
+			String str = impl.generate();
+			Assertions.assertEquals(32, str.length());
 
-	    Assertions.assertTrue(impl.verify(str));
+			Assertions.assertTrue(impl.verify(str));
+		}
 	}
-    }
 }

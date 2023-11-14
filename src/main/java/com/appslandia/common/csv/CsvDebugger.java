@@ -30,5 +30,5 @@ import com.appslandia.common.data.DataRecord;
 @FunctionalInterface
 public interface CsvDebugger {
 
-    void apply(int index, CsvRecord csvRecord, DataRecord dataRecord) throws Exception;
+	void apply(int index, CsvRecord csvRecord, DataRecord dataRecord) throws Exception;
 }

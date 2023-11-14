@@ -30,135 +30,135 @@ import org.junit.jupiter.api.Test;
  */
 public class FileNameUtilsTest {
 
-    @Test
-    public void test_toFileName() {
-	String fn = FileNameUtils.toFileName("doc.pdf", null);
-	Assertions.assertEquals("doc.pdf", fn);
+	@Test
+	public void test_toFileName() {
+		String fn = FileNameUtils.toFileName("doc.pdf", null);
+		Assertions.assertEquals("doc.pdf", fn);
 
-	fn = FileNameUtils.toFileName("doc .pdf", null);
-	Assertions.assertEquals("doc.pdf", fn);
+		fn = FileNameUtils.toFileName("doc .pdf", null);
+		Assertions.assertEquals("doc.pdf", fn);
 
-	fn = FileNameUtils.toFileName(" doc.pdf", null);
-	Assertions.assertEquals("doc.pdf", fn);
+		fn = FileNameUtils.toFileName(" doc.pdf", null);
+		Assertions.assertEquals("doc.pdf", fn);
 
-	fn = FileNameUtils.toFileName("d oc.pdf", null);
-	Assertions.assertEquals("d-oc.pdf", fn);
+		fn = FileNameUtils.toFileName("d oc.pdf", null);
+		Assertions.assertEquals("d-oc.pdf", fn);
 
-	// extra
-	fn = FileNameUtils.toFileName("doc.pdf", "1");
-	Assertions.assertEquals("doc-1.pdf", fn);
+		// extra
+		fn = FileNameUtils.toFileName("doc.pdf", "1");
+		Assertions.assertEquals("doc-1.pdf", fn);
 
-	fn = FileNameUtils.toFileName("doc .pdf", "1");
-	Assertions.assertEquals("doc-1.pdf", fn);
+		fn = FileNameUtils.toFileName("doc .pdf", "1");
+		Assertions.assertEquals("doc-1.pdf", fn);
 
-	fn = FileNameUtils.toFileName(" doc.pdf", "1");
-	Assertions.assertEquals("doc-1.pdf", fn);
+		fn = FileNameUtils.toFileName(" doc.pdf", "1");
+		Assertions.assertEquals("doc-1.pdf", fn);
 
-	fn = FileNameUtils.toFileName("d oc.pdf", "1");
-	Assertions.assertEquals("d-oc-1.pdf", fn);
-    }
+		fn = FileNameUtils.toFileName("d oc.pdf", "1");
+		Assertions.assertEquals("d-oc-1.pdf", fn);
+	}
 
-    @Test
-    public void test_toFileName_Null() {
-	String fn = FileNameUtils.toFileName("$.$", null);
-	Assertions.assertNull(fn);
+	@Test
+	public void test_toFileName_Null() {
+		String fn = FileNameUtils.toFileName("$.$", null);
+		Assertions.assertNull(fn);
 
-	// extra
-	fn = FileNameUtils.toFileName("$.$", "1");
-	Assertions.assertNull(fn);
-    }
+		// extra
+		fn = FileNameUtils.toFileName("$.$", "1");
+		Assertions.assertNull(fn);
+	}
 
-    @Test
-    public void test_toFileName_NoExt() {
-	String fn = FileNameUtils.toFileName("doc", null);
-	Assertions.assertEquals("doc", fn);
+	@Test
+	public void test_toFileName_NoExt() {
+		String fn = FileNameUtils.toFileName("doc", null);
+		Assertions.assertEquals("doc", fn);
 
-	fn = FileNameUtils.toFileName("doc ", null);
-	Assertions.assertEquals("doc", fn);
+		fn = FileNameUtils.toFileName("doc ", null);
+		Assertions.assertEquals("doc", fn);
 
-	fn = FileNameUtils.toFileName(" doc", null);
-	Assertions.assertEquals("doc", fn);
+		fn = FileNameUtils.toFileName(" doc", null);
+		Assertions.assertEquals("doc", fn);
 
-	fn = FileNameUtils.toFileName("d oc", null);
-	Assertions.assertEquals("d-oc", fn);
+		fn = FileNameUtils.toFileName("d oc", null);
+		Assertions.assertEquals("d-oc", fn);
 
-	fn = FileNameUtils.toFileName("doc.$", null);
-	Assertions.assertEquals("doc", fn);
+		fn = FileNameUtils.toFileName("doc.$", null);
+		Assertions.assertEquals("doc", fn);
 
-	// extra
-	fn = FileNameUtils.toFileName("doc", "1");
-	Assertions.assertEquals("doc-1", fn);
+		// extra
+		fn = FileNameUtils.toFileName("doc", "1");
+		Assertions.assertEquals("doc-1", fn);
 
-	fn = FileNameUtils.toFileName("doc ", "1");
-	Assertions.assertEquals("doc-1", fn);
+		fn = FileNameUtils.toFileName("doc ", "1");
+		Assertions.assertEquals("doc-1", fn);
 
-	fn = FileNameUtils.toFileName(" doc", "1");
-	Assertions.assertEquals("doc-1", fn);
+		fn = FileNameUtils.toFileName(" doc", "1");
+		Assertions.assertEquals("doc-1", fn);
 
-	fn = FileNameUtils.toFileName("d oc", "1");
-	Assertions.assertEquals("d-oc-1", fn);
+		fn = FileNameUtils.toFileName("d oc", "1");
+		Assertions.assertEquals("d-oc-1", fn);
 
-	fn = FileNameUtils.toFileName("doc.$", "1");
-	Assertions.assertEquals("doc-1", fn);
-    }
+		fn = FileNameUtils.toFileName("doc.$", "1");
+		Assertions.assertEquals("doc-1", fn);
+	}
 
-    @Test
-    public void test_toFileName_NoName() {
-	String fn = FileNameUtils.toFileName(".pdf", null);
-	Assertions.assertEquals(".pdf", fn);
+	@Test
+	public void test_toFileName_NoName() {
+		String fn = FileNameUtils.toFileName(".pdf", null);
+		Assertions.assertEquals(".pdf", fn);
 
-	fn = FileNameUtils.toFileName("$.pdf", null);
-	Assertions.assertEquals(".pdf", fn);
+		fn = FileNameUtils.toFileName("$.pdf", null);
+		Assertions.assertEquals(".pdf", fn);
 
-	// extra
-	fn = FileNameUtils.toFileName(".pdf", "1");
-	Assertions.assertEquals("1.pdf", fn);
+		// extra
+		fn = FileNameUtils.toFileName(".pdf", "1");
+		Assertions.assertEquals("1.pdf", fn);
 
-	fn = FileNameUtils.toFileName("$.pdf", "1");
-	Assertions.assertEquals("1.pdf", fn);
-    }
+		fn = FileNameUtils.toFileName("$.pdf", "1");
+		Assertions.assertEquals("1.pdf", fn);
+	}
 
-    @Test
-    public void test_toFileName_PunctName() {
-	String fn = FileNameUtils.toFileName("doc$.pdf", null);
-	Assertions.assertEquals("doc.pdf", fn);
+	@Test
+	public void test_toFileName_PunctName() {
+		String fn = FileNameUtils.toFileName("doc$.pdf", null);
+		Assertions.assertEquals("doc.pdf", fn);
 
-	fn = FileNameUtils.toFileName("$doc.pdf", null);
-	Assertions.assertEquals("doc.pdf", fn);
+		fn = FileNameUtils.toFileName("$doc.pdf", null);
+		Assertions.assertEquals("doc.pdf", fn);
 
-	fn = FileNameUtils.toFileName("d$oc.pdf", null);
-	Assertions.assertEquals("d-oc.pdf", fn);
+		fn = FileNameUtils.toFileName("d$oc.pdf", null);
+		Assertions.assertEquals("d-oc.pdf", fn);
 
-	// extra
-	fn = FileNameUtils.toFileName("doc$.pdf", "1");
-	Assertions.assertEquals("doc-1.pdf", fn);
+		// extra
+		fn = FileNameUtils.toFileName("doc$.pdf", "1");
+		Assertions.assertEquals("doc-1.pdf", fn);
 
-	fn = FileNameUtils.toFileName("$doc.pdf", "1");
-	Assertions.assertEquals("doc-1.pdf", fn);
+		fn = FileNameUtils.toFileName("$doc.pdf", "1");
+		Assertions.assertEquals("doc-1.pdf", fn);
 
-	fn = FileNameUtils.toFileName("d$oc.pdf", "1");
-	Assertions.assertEquals("d-oc-1.pdf", fn);
-    }
+		fn = FileNameUtils.toFileName("d$oc.pdf", "1");
+		Assertions.assertEquals("d-oc-1.pdf", fn);
+	}
 
-    @Test
-    public void test_toFileName_PunctExt() {
-	String fn = FileNameUtils.toFileName("doc.pdf$", null);
-	Assertions.assertEquals("doc.pdf", fn);
+	@Test
+	public void test_toFileName_PunctExt() {
+		String fn = FileNameUtils.toFileName("doc.pdf$", null);
+		Assertions.assertEquals("doc.pdf", fn);
 
-	fn = FileNameUtils.toFileName("doc.$pdf", null);
-	Assertions.assertEquals("doc.pdf", fn);
+		fn = FileNameUtils.toFileName("doc.$pdf", null);
+		Assertions.assertEquals("doc.pdf", fn);
 
-	fn = FileNameUtils.toFileName("doc.p$df", null);
-	Assertions.assertEquals("doc.p-df", fn);
+		fn = FileNameUtils.toFileName("doc.p$df", null);
+		Assertions.assertEquals("doc.p-df", fn);
 
-	// extra
-	fn = FileNameUtils.toFileName("doc.pdf$", "1");
-	Assertions.assertEquals("doc-1.pdf", fn);
+		// extra
+		fn = FileNameUtils.toFileName("doc.pdf$", "1");
+		Assertions.assertEquals("doc-1.pdf", fn);
 
-	fn = FileNameUtils.toFileName("doc.$pdf", "1");
-	Assertions.assertEquals("doc-1.pdf", fn);
+		fn = FileNameUtils.toFileName("doc.$pdf", "1");
+		Assertions.assertEquals("doc-1.pdf", fn);
 
-	fn = FileNameUtils.toFileName("doc.p$df", "1");
-	Assertions.assertEquals("doc-1.p-df", fn);
-    }
+		fn = FileNameUtils.toFileName("doc.p$df", "1");
+		Assertions.assertEquals("doc-1.p-df", fn);
+	}
 }

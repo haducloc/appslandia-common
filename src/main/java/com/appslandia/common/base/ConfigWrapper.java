@@ -31,126 +31,126 @@ import java.util.Map;
  */
 public class ConfigWrapper implements Config {
 
-    final Config cfg;
+	final Config cfg;
 
-    public ConfigWrapper(Config cfg) {
-	this.cfg = cfg;
-    }
+	public ConfigWrapper(Config cfg) {
+		this.cfg = cfg;
+	}
 
-    // com.appslandia.common.base.Config
+	// com.appslandia.common.base.Config
 
-    @Override
-    public Iterator<String> getKeyIterator() {
-	return this.cfg.getKeyIterator();
-    }
+	@Override
+	public Iterator<String> getKeyIterator() {
+		return this.cfg.getKeyIterator();
+	}
 
-    @Override
-    public String getString(String key) {
-	return this.cfg.getString(key);
-    }
+	@Override
+	public String getString(String key) {
+		return this.cfg.getString(key);
+	}
 
-    @Override
-    public String getString(String key, String defaultValue) {
-	return this.cfg.getString(key, defaultValue);
-    }
+	@Override
+	public String getString(String key, String defaultValue) {
+		return this.cfg.getString(key, defaultValue);
+	}
 
-    @Override
-    public String getStringReq(String key) {
-	return this.cfg.getStringReq(key);
-    }
+	@Override
+	public String getStringReq(String key) {
+		return this.cfg.getStringReq(key);
+	}
 
-    @Override
-    public String[] getStringArray(String key) {
-	return this.cfg.getStringArray(key);
-    }
+	@Override
+	public String[] getStringArray(String key) {
+		return this.cfg.getStringArray(key);
+	}
 
-    @Override
-    public String resolve(String key) {
-	return this.cfg.resolve(key);
-    }
+	@Override
+	public String resolve(String key) {
+		return this.cfg.resolve(key);
+	}
 
-    @Override
-    public String resolve(String key, Map<String, Object> parameters) {
-	return this.cfg.resolve(key, parameters);
-    }
+	@Override
+	public String resolve(String key, Map<String, Object> parameters) {
+		return this.cfg.resolve(key, parameters);
+	}
 
-    @Override
-    public String resolve(String key, Object... parameters) {
-	return this.cfg.resolve(key, parameters);
-    }
+	@Override
+	public String resolve(String key, Object... parameters) {
+		return this.cfg.resolve(key, parameters);
+	}
 
-    @Override
-    public boolean getBool(String key, boolean defaultValIfInvalid) {
-	return this.cfg.getBool(key, defaultValIfInvalid);
-    }
+	@Override
+	public boolean getBool(String key, boolean defaultValIfInvalid) {
+		return this.cfg.getBool(key, defaultValIfInvalid);
+	}
 
-    @Override
-    public boolean getBool(String key) throws BoolFormatException {
-	return this.cfg.getBool(key);
-    }
+	@Override
+	public boolean getBool(String key) throws BoolFormatException {
+		return this.cfg.getBool(key);
+	}
 
-    @Override
-    public Boolean getBoolOpt(String key) throws BoolFormatException {
-	return this.cfg.getBoolOpt(key);
-    }
+	@Override
+	public Boolean getBoolOpt(String key) throws BoolFormatException {
+		return this.cfg.getBoolOpt(key);
+	}
 
-    @Override
-    public int getInt(String key, int defaultValIfInvalid) {
-	return this.cfg.getInt(key, defaultValIfInvalid);
-    }
+	@Override
+	public int getInt(String key, int defaultValIfInvalid) {
+		return this.cfg.getInt(key, defaultValIfInvalid);
+	}
 
-    @Override
-    public int getInt(String key) throws NumberFormatException {
-	return this.cfg.getInt(key);
-    }
+	@Override
+	public int getInt(String key) throws NumberFormatException {
+		return this.cfg.getInt(key);
+	}
 
-    @Override
-    public Integer getIntOpt(String key) throws NumberFormatException {
-	return this.cfg.getIntOpt(key);
-    }
+	@Override
+	public Integer getIntOpt(String key) throws NumberFormatException {
+		return this.cfg.getIntOpt(key);
+	}
 
-    @Override
-    public long getLong(String key, long defaultValIfInvalid) {
-	return this.cfg.getLong(key, defaultValIfInvalid);
-    }
+	@Override
+	public long getLong(String key, long defaultValIfInvalid) {
+		return this.cfg.getLong(key, defaultValIfInvalid);
+	}
 
-    @Override
-    public long getLong(String key) throws NumberFormatException {
-	return this.cfg.getLong(key);
-    }
+	@Override
+	public long getLong(String key) throws NumberFormatException {
+		return this.cfg.getLong(key);
+	}
 
-    @Override
-    public Long getLongOpt(String key) throws NumberFormatException {
-	return this.cfg.getLongOpt(key);
-    }
+	@Override
+	public Long getLongOpt(String key) throws NumberFormatException {
+		return this.cfg.getLongOpt(key);
+	}
 
-    @Override
-    public double getDouble(String key, double defaultValIfInvalid) {
-	return this.cfg.getDouble(key, defaultValIfInvalid);
-    }
+	@Override
+	public double getDouble(String key, double defaultValIfInvalid) {
+		return this.cfg.getDouble(key, defaultValIfInvalid);
+	}
 
-    @Override
-    public double getDouble(String key) throws NumberFormatException {
-	return this.cfg.getDouble(key);
-    }
+	@Override
+	public double getDouble(String key) throws NumberFormatException {
+		return this.cfg.getDouble(key);
+	}
 
-    @Override
-    public Double getDoubleOpt(String key) throws NumberFormatException {
-	return this.cfg.getDoubleOpt(key);
-    }
+	@Override
+	public Double getDoubleOpt(String key) throws NumberFormatException {
+		return this.cfg.getDoubleOpt(key);
+	}
 
-    @Override
-    public BigDecimal getDecimal(String key, double defaultValIfInvalid) {
-	return this.cfg.getDecimal(key, defaultValIfInvalid);
-    }
+	@Override
+	public BigDecimal getDecimal(String key, double defaultValIfInvalid) {
+		return this.cfg.getDecimal(key, defaultValIfInvalid);
+	}
 
-    @Override
-    public BigDecimal getDecimalReq(String key) throws NumberFormatException {
-	return this.cfg.getDecimalReq(key);
-    }
+	@Override
+	public BigDecimal getDecimalReq(String key) throws NumberFormatException {
+		return this.cfg.getDecimalReq(key);
+	}
 
-    @Override
-    public BigDecimal getDecimal(String key) throws NumberFormatException {
-	return this.cfg.getDecimal(key);
-    }
+	@Override
+	public BigDecimal getDecimal(String key) throws NumberFormatException {
+		return this.cfg.getDecimal(key);
+	}
 }

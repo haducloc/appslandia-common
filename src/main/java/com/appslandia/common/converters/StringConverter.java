@@ -30,25 +30,25 @@ import com.appslandia.common.utils.StringUtils;
  */
 public class StringConverter implements Converter<String> {
 
-    public static final String ERROR_MSG_KEY = StringConverter.class.getName() + ".message";
+	public static final String ERROR_MSG_KEY = StringConverter.class.getName() + ".message";
 
-    @Override
-    public String getErrorMsgKey() {
-	return ERROR_MSG_KEY;
-    }
+	@Override
+	public String getErrorMsgKey() {
+		return ERROR_MSG_KEY;
+	}
 
-    @Override
-    public Class<String> getTargetType() {
-	return String.class;
-    }
+	@Override
+	public Class<String> getTargetType() {
+		return String.class;
+	}
 
-    @Override
-    public String format(String obj, FormatProvider formatProvider, boolean localize) {
-	return obj;
-    }
+	@Override
+	public String format(String obj, FormatProvider formatProvider, boolean localize) {
+		return obj;
+	}
 
-    @Override
-    public String parse(String str, FormatProvider formatProvider) throws ConverterException {
-	return StringUtils.trimToNull(str);
-    }
+	@Override
+	public String parse(String str, FormatProvider formatProvider) throws ConverterException {
+		return StringUtils.trimToNull(str);
+	}
 }

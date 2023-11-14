@@ -27,27 +27,27 @@ import com.appslandia.common.utils.Asserts;
 
 public class GeoUtils {
 
-    // https://en.wikipedia.org/wiki/Earth_radius: 3958.7613 Miles
-    public static final double EARTH_RADIUS_METER = 6371008.74559;
+	// https://en.wikipedia.org/wiki/Earth_radius: 3958.7613 Miles
+	public static final double EARTH_RADIUS_METER = 6371008.74559;
 
-    // https://en.wikipedia.org/wiki/Earth%27s_circumference
-    public static final double POLAR_CIRCUMFERENCE_MILES = 24_859.734;
+	// https://en.wikipedia.org/wiki/Earth%27s_circumference
+	public static final double POLAR_CIRCUMFERENCE_MILES = 24_859.734;
 
-    public static final double EQUATOR_CIRCUMFERENCE_MILES = 24_901.461;
+	public static final double EQUATOR_CIRCUMFERENCE_MILES = 24_901.461;
 
-    public static double toDecimalDegrees(int degrees, int minutes, double seconds) {
-	Asserts.isTrue(degrees >= 0);
-	Asserts.isTrue(minutes >= 0);
-	Asserts.isTrue(seconds >= 0.0d);
+	public static double toDecimalDegrees(int degrees, int minutes, double seconds) {
+		Asserts.isTrue(degrees >= 0);
+		Asserts.isTrue(minutes >= 0);
+		Asserts.isTrue(seconds >= 0.0d);
 
-	return degrees + minutes / 60.0 + seconds / 3600;
-    }
+		return degrees + minutes / 60.0 + seconds / 3600;
+	}
 
-    public static String format(double minOrSec, int decimals) {
-	StringBuilder fmt = new StringBuilder(3 + decimals);
-	fmt.append("00.");
-	IntStream.range(0, decimals).forEach(p -> fmt.append('0'));
+	public static String format(double minOrSec, int decimals) {
+		StringBuilder fmt = new StringBuilder(3 + decimals);
+		fmt.append("00.");
+		IntStream.range(0, decimals).forEach(p -> fmt.append('0'));
 
-	return new DecimalFormat(fmt.toString()).format(minOrSec);
-    }
+		return new DecimalFormat(fmt.toString()).format(minOrSec);
+	}
 }

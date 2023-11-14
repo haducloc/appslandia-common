@@ -34,54 +34,54 @@ import com.appslandia.common.base.Language;
  */
 public class BooleanConverterTest {
 
-    @Test
-    public void test_targetType() {
-	BooleanConverter converter = new BooleanConverter();
-	Assertions.assertEquals(Boolean.class, converter.getTargetType());
-    }
-
-    @Test
-    public void test() {
-	BooleanConverter converter = new BooleanConverter();
-	FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-	try {
-	    Boolean v = converter.parse("true", formatProvider);
-	    Assertions.assertTrue(v);
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+	@Test
+	public void test_targetType() {
+		BooleanConverter converter = new BooleanConverter();
+		Assertions.assertEquals(Boolean.class, converter.getTargetType());
 	}
-	try {
-	    Boolean val = converter.parse("false", formatProvider);
-	    Assertions.assertFalse(val);
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
-	}
-    }
 
-    @Test
-    public void test_null() {
-	BooleanConverter converter = new BooleanConverter();
-	FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-	try {
-	    Boolean val = converter.parse(null, formatProvider);
-	    Assertions.assertNull(val);
-
-	    val = converter.parse("", formatProvider);
-	    Assertions.assertNull(val);
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+	@Test
+	public void test() {
+		BooleanConverter converter = new BooleanConverter();
+		FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+		try {
+			Boolean v = converter.parse("true", formatProvider);
+			Assertions.assertTrue(v);
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
+		try {
+			Boolean val = converter.parse("false", formatProvider);
+			Assertions.assertFalse(val);
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_invalid() {
-	BooleanConverter converter = new BooleanConverter();
-	FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-	try {
-	    converter.parse("yes", formatProvider);
-	    Assertions.fail();
-	} catch (Exception ex) {
-	    Assertions.assertTrue(ex instanceof ConverterException);
+	@Test
+	public void test_null() {
+		BooleanConverter converter = new BooleanConverter();
+		FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+		try {
+			Boolean val = converter.parse(null, formatProvider);
+			Assertions.assertNull(val);
+
+			val = converter.parse("", formatProvider);
+			Assertions.assertNull(val);
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
+
+	@Test
+	public void test_invalid() {
+		BooleanConverter converter = new BooleanConverter();
+		FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+		try {
+			converter.parse("yes", formatProvider);
+			Assertions.fail();
+		} catch (Exception ex) {
+			Assertions.assertTrue(ex instanceof ConverterException);
+		}
+	}
 }

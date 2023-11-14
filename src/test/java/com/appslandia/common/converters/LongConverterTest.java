@@ -34,73 +34,73 @@ import com.appslandia.common.base.Language;
  */
 public class LongConverterTest {
 
-    @Test
-    public void test_targetType() {
-	LongConverter converter = new LongConverter();
-	Assertions.assertEquals(Long.class, converter.getTargetType());
-    }
-
-    @Test
-    public void test() {
-	LongConverter converter = new LongConverter();
-	FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-	try {
-	    Long v = converter.parse("12345", formatProvider);
-	    Assertions.assertEquals(12345, v.longValue());
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+	@Test
+	public void test_targetType() {
+		LongConverter converter = new LongConverter();
+		Assertions.assertEquals(Long.class, converter.getTargetType());
 	}
-    }
 
-    @Test
-    public void test_null() {
-	LongConverter converter = new LongConverter();
-	FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-	try {
-	    Long val = converter.parse(null, formatProvider);
-	    Assertions.assertNull(val);
+	@Test
+	public void test() {
+		LongConverter converter = new LongConverter();
+		FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+		try {
+			Long v = converter.parse("12345", formatProvider);
+			Assertions.assertEquals(12345, v.longValue());
 
-	    val = converter.parse("", formatProvider);
-	    Assertions.assertNull(val);
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_invalid() {
-	LongConverter converter = new LongConverter();
-	FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-	try {
-	    converter.parse("12,345", formatProvider);
-	    Assertions.fail();
-	} catch (Exception ex) {
-	    Assertions.assertTrue(ex instanceof ConverterException);
-	}
-	try {
-	    converter.parse("12345.67", formatProvider);
-	    Assertions.fail();
-	} catch (Exception ex) {
-	    Assertions.assertTrue(ex instanceof ConverterException);
-	}
-    }
+	@Test
+	public void test_null() {
+		LongConverter converter = new LongConverter();
+		FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+		try {
+			Long val = converter.parse(null, formatProvider);
+			Assertions.assertNull(val);
 
-    @Test
-    public void test_maxMin() {
-	LongConverter converter = new LongConverter();
-	FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-	try {
-	    Long v = converter.parse(Long.toString(Long.MAX_VALUE), formatProvider);
-	    Assertions.assertEquals(Long.MAX_VALUE, v.longValue());
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+			val = converter.parse("", formatProvider);
+			Assertions.assertNull(val);
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-	try {
-	    Long v = converter.parse(Long.toString(Long.MIN_VALUE), formatProvider);
-	    Assertions.assertEquals(Long.MIN_VALUE, v.longValue());
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+
+	@Test
+	public void test_invalid() {
+		LongConverter converter = new LongConverter();
+		FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+		try {
+			converter.parse("12,345", formatProvider);
+			Assertions.fail();
+		} catch (Exception ex) {
+			Assertions.assertTrue(ex instanceof ConverterException);
+		}
+		try {
+			converter.parse("12345.67", formatProvider);
+			Assertions.fail();
+		} catch (Exception ex) {
+			Assertions.assertTrue(ex instanceof ConverterException);
+		}
 	}
-    }
+
+	@Test
+	public void test_maxMin() {
+		LongConverter converter = new LongConverter();
+		FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+		try {
+			Long v = converter.parse(Long.toString(Long.MAX_VALUE), formatProvider);
+			Assertions.assertEquals(Long.MAX_VALUE, v.longValue());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
+		try {
+			Long v = converter.parse(Long.toString(Long.MIN_VALUE), formatProvider);
+			Assertions.assertEquals(Long.MIN_VALUE, v.longValue());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
+	}
 }

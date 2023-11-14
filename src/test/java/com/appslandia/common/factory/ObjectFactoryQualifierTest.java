@@ -39,53 +39,53 @@ import jakarta.inject.Qualifier;
  */
 public class ObjectFactoryQualifierTest {
 
-    @Test
-    public void test() {
-	try {
-	    ObjectFactory factory = new ObjectFactory();
-	    factory.register(TestDao.class, TestDaoImpl.class);
-	    Assertions.assertNotNull(factory.getObject(TestDao.class, TestQualifier.IMPL));
+	@Test
+	public void test() {
+		try {
+			ObjectFactory factory = new ObjectFactory();
+			factory.register(TestDao.class, TestDaoImpl.class);
+			Assertions.assertNotNull(factory.getObject(TestDao.class, TestQualifier.IMPL));
 
-	    factory.getObject(TestDao.class);
-	    Assertions.fail();
+			factory.getObject(TestDao.class);
+			Assertions.fail();
 
-	} catch (Exception ex) {
-	    Assertions.assertTrue(ex instanceof ObjectException);
+		} catch (Exception ex) {
+			Assertions.assertTrue(ex instanceof ObjectException);
+		}
 	}
-    }
 
-    @Test
-    public void test_objectType() {
-	try {
-	    ObjectFactory factory = new ObjectFactory();
-	    factory.register(TestDao.class, TestDaoImpl.class);
-	    Assertions.assertNotNull(factory.getObject(Object.class, TestQualifier.IMPL));
+	@Test
+	public void test_objectType() {
+		try {
+			ObjectFactory factory = new ObjectFactory();
+			factory.register(TestDao.class, TestDaoImpl.class);
+			Assertions.assertNotNull(factory.getObject(Object.class, TestQualifier.IMPL));
 
-	    factory.getObject(Object.class);
-	    Assertions.fail();
+			factory.getObject(Object.class);
+			Assertions.fail();
 
-	} catch (Exception ex) {
-	    Assertions.assertTrue(ex instanceof ObjectException);
+		} catch (Exception ex) {
+			Assertions.assertTrue(ex instanceof ObjectException);
+		}
 	}
-    }
 
-    static class TestDao {
-    }
-
-    @TestQualifier
-    static class TestDaoImpl extends TestDao {
-    }
-
-    @Qualifier
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.TYPE, ElementType.FIELD })
-    @Documented
-    public @interface TestQualifier {
-	public static final TestQualifier IMPL = new ImplLiteral();
-
-	@SuppressWarnings("all")
-	static class ImplLiteral extends AnnotationLiteral<TestQualifier> implements TestQualifier {
-	    private static final long serialVersionUID = 1L;
+	static class TestDao {
 	}
-    }
+
+	@TestQualifier
+	static class TestDaoImpl extends TestDao {
+	}
+
+	@Qualifier
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ ElementType.TYPE, ElementType.FIELD })
+	@Documented
+	public @interface TestQualifier {
+		public static final TestQualifier IMPL = new ImplLiteral();
+
+		@SuppressWarnings("all")
+		static class ImplLiteral extends AnnotationLiteral<TestQualifier> implements TestQualifier {
+			private static final long serialVersionUID = 1L;
+		}
+	}
 }

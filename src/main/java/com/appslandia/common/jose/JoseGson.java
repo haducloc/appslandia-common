@@ -32,28 +32,30 @@ import com.google.gson.GsonBuilder;
  */
 public class JoseGson {
 
-    public static GsonBuilder newGsonBuilder(boolean serializeNulls, boolean formatting) {
-	// @formatter:off
-	return GsonProcessor.newBuilder(serializeNulls, formatting)
+	public static GsonBuilder newGsonBuilder(boolean serializeNulls, boolean formatting) {
+		// @formatter:off
+		return GsonProcessor.newBuilder(serializeNulls, formatting)
 
-		// JsonWebKey
-		.registerTypeAdapter(JsonWebKey.class, new GsonMapAdapter<>(true, m -> new JsonWebKey(m)))
-		
-		// JoseHeader
-		.registerTypeAdapter(JoseHeader.class, 
-			new GsonMapAdapter<>(true, m -> new JoseHeader(m))
-				.setValueConverter(new String[] {"jwk"}, m -> new JsonWebKey(ObjectUtils.cast(m)))
-			)
-		
-		// JwtPayload
-		.registerTypeAdapter(JwtPayload.class, 
-			new GsonMapAdapter<>(true, (m) -> new JwtPayload(m))
-				.setValueConverter(new String[] {"jwks\\[\\d+]"}, m -> new JsonWebKey(ObjectUtils.cast(m)))
-			);
-	// @formatter:on
-    }
+				// JsonWebKey
+				.registerTypeAdapter(JsonWebKey.class,
+						new GsonMapAdapter<>(true, m -> new JsonWebKey(m)))
 
-    public static GsonProcessor newJsonProcessor() {
-	return new GsonProcessor().setBuilder(newGsonBuilder(true, false));
-    }
+				// JoseHeader
+				.registerTypeAdapter(JoseHeader.class,
+						new GsonMapAdapter<>(true, m -> new JoseHeader(m))
+								.setValueConverter(new String[]{"jwk"},
+										m -> new JsonWebKey(
+												ObjectUtils.cast(m))))
+
+				// JwtPayload
+				.registerTypeAdapter(JwtPayload.class, new GsonMapAdapter<>(
+						true, (m) -> new JwtPayload(m))
+						.setValueConverter(new String[]{"jwks\\[\\d+]"},
+								m -> new JsonWebKey(ObjectUtils.cast(m))));
+		// @formatter:on
+	}
+
+	public static GsonProcessor newJsonProcessor() {
+		return new GsonProcessor().setBuilder(newGsonBuilder(true, false));
+	}
 }

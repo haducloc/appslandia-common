@@ -28,8 +28,8 @@ package com.appslandia.common.factory;
 @FunctionalInterface
 public interface ObjectProducer<T> {
 
-    T produce(ObjectFactory factory) throws ObjectException;
+	T produce(ObjectFactory factory) throws ObjectException;
 
-    default void destroy(Object obj) throws ObjectException {
-    }
+	default void destroy(Object obj) throws ObjectException {
+	}
 }

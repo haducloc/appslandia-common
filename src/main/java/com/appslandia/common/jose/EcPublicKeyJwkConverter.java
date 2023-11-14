@@ -45,115 +45,115 @@ import com.appslandia.common.utils.STR;
  */
 public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> implements Cloneable {
 
-    private String ecKeyFactoryProvider;
+	private String ecKeyFactoryProvider;
 
-    final ConcurrentMap<String, AlgorithmParametersUtil<ECParameterSpec>> algorithmParametersUtils = new ConcurrentHashMap<>();
-    private KeyFactoryUtil keyFactoryUtil;
+	final ConcurrentMap<String, AlgorithmParametersUtil<ECParameterSpec>> algorithmParametersUtils = new ConcurrentHashMap<>();
+	private KeyFactoryUtil keyFactoryUtil;
 
-    public EcPublicKeyJwkConverter() {
-	super("EC");
-    }
-
-    @Override
-    protected void init() throws Exception {
-	this.keyFactoryUtil = new KeyFactoryUtil("EC", this.ecKeyFactoryProvider);
-    }
-
-    @Override
-    public JsonWebKey toJsonWebKey(ECPublicKey key) {
-	this.initialize();
-	Asserts.isTrue("EC".equals(key.getAlgorithm()));
-
-	// jwk
-	JsonWebKey jwk = new JsonWebKey();
-	jwk.setKty(this.kty);
-
-	// curve
-	String curve = getCurveName(key.getParams().getCurve());
-	jwk.put("crv", curve);
-
-	// ecPoint
-	ECPoint ecPoint = key.getW();
-
-	byte[] xBytes = CryptoUtils.stripLeadingZeros(ecPoint.getAffineX().toByteArray());
-	byte[] yBytes = CryptoUtils.stripLeadingZeros(ecPoint.getAffineY().toByteArray());
-
-	jwk.put("x", JoseUtils.getJoseBase64().encode(xBytes));
-	jwk.put("y", JoseUtils.getJoseBase64().encode(yBytes));
-	return jwk;
-    }
-
-    @Override
-    public ECPublicKey fromJsonWebKey(JsonWebKey jwk) throws CryptoException {
-	this.initialize();
-	Asserts.isTrue(this.kty.equals(kty), "kty doesn't match.");
-
-	String curve = Asserts.notNull((String) jwk.get("crv"), "crv is required.");
-	String stdName = getStdName(curve);
-
-	String x = Asserts.notNull((String) jwk.get("x"), "x is required.");
-	String y = Asserts.notNull((String) jwk.get("y"), "y is required.");
-
-	// algorithmParametersUtil
-	AlgorithmParametersUtil<ECParameterSpec> algorithmParametersUtil = this.algorithmParametersUtils.computeIfAbsent(stdName, (name) -> {
-
-	    AlgorithmParametersUtil<ECParameterSpec> impl = new AlgorithmParametersUtil<>("EC", this.ecKeyFactoryProvider);
-	    impl.setParamSpecClass(ECParameterSpec.class);
-	    impl.setAlgParamSpec(new ECGenParameterSpec(name));
-
-	    return impl;
-	});
-
-	// algorithmParametersUtil
-	ECParameterSpec ecSpec = algorithmParametersUtil.getParameterSpec();
-
-	// ecPoint
-	byte[] xBytes = JoseUtils.getJoseBase64().decode(x);
-	byte[] yBytes = JoseUtils.getJoseBase64().decode(y);
-
-	ECPoint ecPoint = new ECPoint(new BigInteger(xBytes), new BigInteger(yBytes));
-	ECPublicKeySpec pubKeySpec = new ECPublicKeySpec(ecPoint, ecSpec);
-
-	PublicKey pk = this.keyFactoryUtil.toPublicKey(pubKeySpec);
-	return (ECPublicKey) pk;
-    }
-
-    public EcPublicKeyJwkConverter setEcKeyFactoryProvider(String ecKeyFactoryProvider) {
-	assertNotInitialized();
-	this.ecKeyFactoryProvider = ecKeyFactoryProvider;
-	return this;
-    }
-
-    @Override
-    public EcPublicKeyJwkConverter clone() {
-	return new EcPublicKeyJwkConverter().setEcKeyFactoryProvider(this.ecKeyFactoryProvider);
-    }
-
-    protected String getCurveName(EllipticCurve curve) {
-	switch (curve.getField().getFieldSize()) {
-	case 256:
-	    return "P-256";
-	case 384:
-	    return "P-384";
-	case 521:
-	    return "P-521";
-	default:
-	    break;
+	public EcPublicKeyJwkConverter() {
+		super("EC");
 	}
-	throw new IllegalArgumentException(STR.fmt("Unsupported curve: {}", curve));
-    }
 
-    protected String getStdName(String curve) {
-	switch (curve) {
-	case "P-256":
-	    return "secp256r1";
-	case "P-384":
-	    return "secp384r1";
-	case "P-521":
-	    return "secp521r1";
-	default:
-	    break;
+	@Override
+	protected void init() throws Exception {
+		this.keyFactoryUtil = new KeyFactoryUtil("EC", this.ecKeyFactoryProvider);
 	}
-	throw new IllegalArgumentException(STR.fmt("Unsupported curve: {}", curve));
-    }
+
+	@Override
+	public JsonWebKey toJsonWebKey(ECPublicKey key) {
+		this.initialize();
+		Asserts.isTrue("EC".equals(key.getAlgorithm()));
+
+		// jwk
+		JsonWebKey jwk = new JsonWebKey();
+		jwk.setKty(this.kty);
+
+		// curve
+		String curve = getCurveName(key.getParams().getCurve());
+		jwk.put("crv", curve);
+
+		// ecPoint
+		ECPoint ecPoint = key.getW();
+
+		byte[] xBytes = CryptoUtils.stripLeadingZeros(ecPoint.getAffineX().toByteArray());
+		byte[] yBytes = CryptoUtils.stripLeadingZeros(ecPoint.getAffineY().toByteArray());
+
+		jwk.put("x", JoseUtils.getJoseBase64().encode(xBytes));
+		jwk.put("y", JoseUtils.getJoseBase64().encode(yBytes));
+		return jwk;
+	}
+
+	@Override
+	public ECPublicKey fromJsonWebKey(JsonWebKey jwk) throws CryptoException {
+		this.initialize();
+		Asserts.isTrue(this.kty.equals(kty), "kty doesn't match.");
+
+		String curve = Asserts.notNull((String) jwk.get("crv"), "crv is required.");
+		String stdName = getStdName(curve);
+
+		String x = Asserts.notNull((String) jwk.get("x"), "x is required.");
+		String y = Asserts.notNull((String) jwk.get("y"), "y is required.");
+
+		// algorithmParametersUtil
+		AlgorithmParametersUtil<ECParameterSpec> algorithmParametersUtil = this.algorithmParametersUtils.computeIfAbsent(stdName, (name) -> {
+
+			AlgorithmParametersUtil<ECParameterSpec> impl = new AlgorithmParametersUtil<>("EC", this.ecKeyFactoryProvider);
+			impl.setParamSpecClass(ECParameterSpec.class);
+			impl.setAlgParamSpec(new ECGenParameterSpec(name));
+
+			return impl;
+		});
+
+		// algorithmParametersUtil
+		ECParameterSpec ecSpec = algorithmParametersUtil.getParameterSpec();
+
+		// ecPoint
+		byte[] xBytes = JoseUtils.getJoseBase64().decode(x);
+		byte[] yBytes = JoseUtils.getJoseBase64().decode(y);
+
+		ECPoint ecPoint = new ECPoint(new BigInteger(xBytes), new BigInteger(yBytes));
+		ECPublicKeySpec pubKeySpec = new ECPublicKeySpec(ecPoint, ecSpec);
+
+		PublicKey pk = this.keyFactoryUtil.toPublicKey(pubKeySpec);
+		return (ECPublicKey) pk;
+	}
+
+	public EcPublicKeyJwkConverter setEcKeyFactoryProvider(String ecKeyFactoryProvider) {
+		assertNotInitialized();
+		this.ecKeyFactoryProvider = ecKeyFactoryProvider;
+		return this;
+	}
+
+	@Override
+	public EcPublicKeyJwkConverter clone() {
+		return new EcPublicKeyJwkConverter().setEcKeyFactoryProvider(this.ecKeyFactoryProvider);
+	}
+
+	protected String getCurveName(EllipticCurve curve) {
+		switch (curve.getField().getFieldSize()) {
+		case 256:
+			return "P-256";
+		case 384:
+			return "P-384";
+		case 521:
+			return "P-521";
+		default:
+			break;
+		}
+		throw new IllegalArgumentException(STR.fmt("Unsupported curve: {}", curve));
+	}
+
+	protected String getStdName(String curve) {
+		switch (curve) {
+		case "P-256":
+			return "secp256r1";
+		case "P-384":
+			return "secp384r1";
+		case "P-521":
+			return "secp521r1";
+		default:
+			break;
+		}
+		throw new IllegalArgumentException(STR.fmt("Unsupported curve: {}", curve));
+	}
 }

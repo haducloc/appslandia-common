@@ -43,134 +43,134 @@ import com.appslandia.common.utils.ValueUtils;
  */
 public class PasswordDigester extends TextDigester {
 
-    public static final PasswordDigester DEFAULT = new PasswordDigester();
+	public static final PasswordDigester DEFAULT = new PasswordDigester();
 
-    private int saltSize;
-    private int iterationCount;
-    private int keySize;
+	private int saltSize;
+	private int iterationCount;
+	private int keySize;
 
-    private String secretKeyAlgorithm, provider;
-    private SecretKeyFactory secretKeyFactory;
+	private String secretKeyAlgorithm, provider;
+	private SecretKeyFactory secretKeyFactory;
 
-    final Object mutex = new Object();
-    final Random random = new SecureRandom();
+	final Object mutex = new Object();
+	final Random random = new SecureRandom();
 
-    @Override
-    protected void init() throws Exception {
-	// baseEncoder
-	this.baseEncoder = ValueUtils.valueOrAlt(this.baseEncoder, BaseEncoder.BASE64);
+	@Override
+	protected void init() throws Exception {
+		// baseEncoder
+		this.baseEncoder = ValueUtils.valueOrAlt(this.baseEncoder, BaseEncoder.BASE64);
 
-	// key
-	this.keySize = ValueUtils.valueOrMin(this.keySize, 32);
-	this.saltSize = ValueUtils.valueOrMin(this.saltSize, this.keySize);
-	this.iterationCount = ValueUtils.valueOrMin(this.iterationCount, 10_000);
+		// key
+		this.keySize = ValueUtils.valueOrMin(this.keySize, 32);
+		this.saltSize = ValueUtils.valueOrMin(this.saltSize, this.keySize);
+		this.iterationCount = ValueUtils.valueOrMin(this.iterationCount, 10_000);
 
-	this.secretKeyAlgorithm = ValueUtils.valueOrAlt(this.secretKeyAlgorithm, "PBKDF2WithHmacSHA512");
+		this.secretKeyAlgorithm = ValueUtils.valueOrAlt(this.secretKeyAlgorithm, "PBKDF2WithHmacSHA512");
 
-	// secretKeyFactory
-	if (this.provider == null) {
-	    this.secretKeyFactory = SecretKeyFactory.getInstance(this.secretKeyAlgorithm);
-	} else {
-	    this.secretKeyFactory = SecretKeyFactory.getInstance(this.secretKeyAlgorithm, this.provider);
+		// secretKeyFactory
+		if (this.provider == null) {
+			this.secretKeyFactory = SecretKeyFactory.getInstance(this.secretKeyAlgorithm);
+		} else {
+			this.secretKeyFactory = SecretKeyFactory.getInstance(this.secretKeyAlgorithm, this.provider);
+		}
 	}
-    }
 
-    @Override
-    public String digest(String password) throws CryptoException {
-	this.initialize();
-	Asserts.notNull(password, "password is required.");
+	@Override
+	public String digest(String password) throws CryptoException {
+		this.initialize();
+		Asserts.notNull(password, "password is required.");
 
-	byte[] salt = RandomUtils.nextBytes(this.saltSize, this.random);
-	char[] pwdChars = password.toCharArray();
-	try {
-	    byte[] secKey = generateSecret(pwdChars, salt);
-	    return this.baseEncoder.encode(ArrayUtils.append(salt, secKey));
-	} finally {
-	    CryptoUtils.clear(pwdChars);
+		byte[] salt = RandomUtils.nextBytes(this.saltSize, this.random);
+		char[] pwdChars = password.toCharArray();
+		try {
+			byte[] secKey = generateSecret(pwdChars, salt);
+			return this.baseEncoder.encode(ArrayUtils.append(salt, secKey));
+		} finally {
+			CryptoUtils.clear(pwdChars);
+		}
 	}
-    }
 
-    @Override
-    public boolean verify(String password, String digested) throws CryptoException {
-	this.initialize();
-	Asserts.notNull(password, "password is required.");
-	Asserts.notNull(digested, "digested is required.");
+	@Override
+	public boolean verify(String password, String digested) throws CryptoException {
+		this.initialize();
+		Asserts.notNull(password, "password is required.");
+		Asserts.notNull(digested, "digested is required.");
 
-	byte[] dg = this.baseEncoder.decode(digested);
-	Asserts.isTrue(dg.length > this.saltSize, "digested is invalid.");
+		byte[] dg = this.baseEncoder.decode(digested);
+		Asserts.isTrue(dg.length > this.saltSize, "digested is invalid.");
 
-	byte[] salt = new byte[this.saltSize];
-	byte[] secKey = new byte[dg.length - this.saltSize];
-	ArrayUtils.copy(dg, salt, secKey);
+		byte[] salt = new byte[this.saltSize];
+		byte[] secKey = new byte[dg.length - this.saltSize];
+		ArrayUtils.copy(dg, salt, secKey);
 
-	char[] pwdChars = password.toCharArray();
-	try {
-	    byte[] computedSecKey = generateSecret(pwdChars, salt);
-	    return Arrays.equals(computedSecKey, secKey);
-	} finally {
-	    CryptoUtils.clear(pwdChars);
+		char[] pwdChars = password.toCharArray();
+		try {
+			byte[] computedSecKey = generateSecret(pwdChars, salt);
+			return Arrays.equals(computedSecKey, secKey);
+		} finally {
+			CryptoUtils.clear(pwdChars);
+		}
 	}
-    }
 
-    private byte[] generateSecret(char[] password, byte[] salt) throws CryptoException {
-	PBEKeySpec keySpec = new PBEKeySpec(password, salt, this.iterationCount, this.keySize * 8);
-	SecretKey secretkey = null;
-	synchronized (this.mutex) {
-	    try {
-		secretkey = this.secretKeyFactory.generateSecret(keySpec);
-	    } catch (GeneralSecurityException ex) {
-		throw new CryptoException(ex);
-	    } finally {
-		keySpec.clearPassword();
-	    }
+	private byte[] generateSecret(char[] password, byte[] salt) throws CryptoException {
+		PBEKeySpec keySpec = new PBEKeySpec(password, salt, this.iterationCount, this.keySize * 8);
+		SecretKey secretkey = null;
+		synchronized (this.mutex) {
+			try {
+				secretkey = this.secretKeyFactory.generateSecret(keySpec);
+			} catch (GeneralSecurityException ex) {
+				throw new CryptoException(ex);
+			} finally {
+				keySpec.clearPassword();
+			}
+		}
+		byte[] key = secretkey.getEncoded();
+		CryptoUtils.destroyQuietly(secretkey);
+		return key;
 	}
-	byte[] key = secretkey.getEncoded();
-	CryptoUtils.destroyQuietly(secretkey);
-	return key;
-    }
 
-    public PasswordDigester setSaltSize(int saltSize) {
-	this.assertNotInitialized();
-	this.saltSize = saltSize;
-	return this;
-    }
+	public PasswordDigester setSaltSize(int saltSize) {
+		this.assertNotInitialized();
+		this.saltSize = saltSize;
+		return this;
+	}
 
-    public PasswordDigester setIterationCount(int iterationCount) {
-	this.assertNotInitialized();
-	this.iterationCount = iterationCount;
-	return this;
-    }
+	public PasswordDigester setIterationCount(int iterationCount) {
+		this.assertNotInitialized();
+		this.iterationCount = iterationCount;
+		return this;
+	}
 
-    public PasswordDigester setKeySize(int keySize) {
-	this.assertNotInitialized();
-	this.keySize = keySize;
-	return this;
-    }
+	public PasswordDigester setKeySize(int keySize) {
+		this.assertNotInitialized();
+		this.keySize = keySize;
+		return this;
+	}
 
-    public PasswordDigester setSecretKeyAlgorithm(String secretKeyAlgorithm) {
-	this.assertNotInitialized();
-	this.secretKeyAlgorithm = secretKeyAlgorithm;
-	return this;
-    }
+	public PasswordDigester setSecretKeyAlgorithm(String secretKeyAlgorithm) {
+		this.assertNotInitialized();
+		this.secretKeyAlgorithm = secretKeyAlgorithm;
+		return this;
+	}
 
-    public PasswordDigester setProvider(String provider) {
-	this.assertNotInitialized();
-	this.provider = provider;
-	return this;
-    }
+	public PasswordDigester setProvider(String provider) {
+		this.assertNotInitialized();
+		this.provider = provider;
+		return this;
+	}
 
-    @Override
-    public PasswordDigester setDigester(Digester digester) {
-	throw new UnsupportedOperationException();
-    }
+	@Override
+	public PasswordDigester setDigester(Digester digester) {
+		throw new UnsupportedOperationException();
+	}
 
-    @Override
-    public PasswordDigester setTextCharset(Charset charset) {
-	throw new UnsupportedOperationException();
-    }
+	@Override
+	public PasswordDigester setTextCharset(Charset charset) {
+		throw new UnsupportedOperationException();
+	}
 
-    @Override
-    public PasswordDigester setTextCharset(String textCharset) {
-	throw new UnsupportedOperationException();
-    }
+	@Override
+	public PasswordDigester setTextCharset(String textCharset) {
+		throw new UnsupportedOperationException();
+	}
 }

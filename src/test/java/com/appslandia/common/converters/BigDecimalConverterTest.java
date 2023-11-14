@@ -37,68 +37,68 @@ import com.appslandia.common.base.Language;
  */
 public class BigDecimalConverterTest {
 
-    @Test
-    public void test_targetType() {
-	BigDecimalConverter converter = new BigDecimalConverter(3, RoundingMode.HALF_EVEN);
-	Assertions.assertEquals(BigDecimal.class, converter.getTargetType());
-    }
-
-    @Test
-    public void test() {
-	BigDecimalConverter converter = new BigDecimalConverter(3, RoundingMode.HALF_EVEN);
-	FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
-	try {
-	    BigDecimal v = converter.parse("1234,1235", formatProvider);
-	    Assertions.assertEquals(1234.1235, v.doubleValue(), 0.00001);
-
-	    Assertions.assertEquals("1234,124", converter.format(v, formatProvider, true));
-	    Assertions.assertEquals("1234.124", converter.format(v, formatProvider, false));
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+	@Test
+	public void test_targetType() {
+		BigDecimalConverter converter = new BigDecimalConverter(3, RoundingMode.HALF_EVEN);
+		Assertions.assertEquals(BigDecimal.class, converter.getTargetType());
 	}
-    }
 
-    @Test
-    public void test_decimal_format() {
-	BigDecimalConverter converter = new BigDecimalConverter(3, RoundingMode.HALF_EVEN);
-	FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
-	try {
-	    BigDecimal v = converter.parse("1234.1235", formatProvider);
-	    Assertions.assertEquals(1234.1235, v.doubleValue(), 0.00001);
+	@Test
+	public void test() {
+		BigDecimalConverter converter = new BigDecimalConverter(3, RoundingMode.HALF_EVEN);
+		FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
+		try {
+			BigDecimal v = converter.parse("1234,1235", formatProvider);
+			Assertions.assertEquals(1234.1235, v.doubleValue(), 0.00001);
 
-	    Assertions.assertEquals("1234,124", converter.format(v, formatProvider, true));
-	    Assertions.assertEquals("1234.124", converter.format(v, formatProvider, false));
+			Assertions.assertEquals("1234,124", converter.format(v, formatProvider, true));
+			Assertions.assertEquals("1234.124", converter.format(v, formatProvider, false));
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_null() {
-	BigDecimalConverter converter = new BigDecimalConverter(3, RoundingMode.HALF_EVEN);
-	FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
-	try {
-	    BigDecimal val = converter.parse(null, formatProvider);
-	    Assertions.assertNull(val);
+	@Test
+	public void test_decimal_format() {
+		BigDecimalConverter converter = new BigDecimalConverter(3, RoundingMode.HALF_EVEN);
+		FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
+		try {
+			BigDecimal v = converter.parse("1234.1235", formatProvider);
+			Assertions.assertEquals(1234.1235, v.doubleValue(), 0.00001);
 
-	    val = converter.parse("", formatProvider);
-	    Assertions.assertNull(val);
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+			Assertions.assertEquals("1234,124", converter.format(v, formatProvider, true));
+			Assertions.assertEquals("1234.124", converter.format(v, formatProvider, false));
+
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_invalid() {
-	BigDecimalConverter converter = new BigDecimalConverter(3, RoundingMode.HALF_EVEN);
-	FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
-	try {
-	    converter.parse("12.345,678", formatProvider);
-	    Assertions.fail();
-	} catch (Exception ex) {
-	    Assertions.assertTrue(ex instanceof ConverterException);
+	@Test
+	public void test_null() {
+		BigDecimalConverter converter = new BigDecimalConverter(3, RoundingMode.HALF_EVEN);
+		FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
+		try {
+			BigDecimal val = converter.parse(null, formatProvider);
+			Assertions.assertNull(val);
+
+			val = converter.parse("", formatProvider);
+			Assertions.assertNull(val);
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
+
+	@Test
+	public void test_invalid() {
+		BigDecimalConverter converter = new BigDecimalConverter(3, RoundingMode.HALF_EVEN);
+		FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
+		try {
+			converter.parse("12.345,678", formatProvider);
+			Assertions.fail();
+		} catch (Exception ex) {
+			Assertions.assertTrue(ex instanceof ConverterException);
+		}
+	}
 }

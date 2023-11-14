@@ -33,120 +33,120 @@ import com.appslandia.common.utils.Asserts;
  *
  */
 public class JwtPayload extends JoseMapObject {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public static final String ISS = "iss";
-    public static final String SUB = "sub";
-    public static final String AUD = "aud";
-    public static final String EXP = "exp";
-    public static final String NBF = "nbf";
-    public static final String IAT = "iat";
-    public static final String JTI = "jti";
+	public static final String ISS = "iss";
+	public static final String SUB = "sub";
+	public static final String AUD = "aud";
+	public static final String EXP = "exp";
+	public static final String NBF = "nbf";
+	public static final String IAT = "iat";
+	public static final String JTI = "jti";
 
-    public JwtPayload() {
-    }
-
-    public JwtPayload(Map<String, Object> map) {
-	super(map);
-    }
-
-    public boolean hasAudience(String checkingAudience) {
-	Asserts.notNull(checkingAudience);
-
-	List<String> aud = getAud();
-	if (aud == null) {
-	    return false;
+	public JwtPayload() {
 	}
-	return aud.contains(checkingAudience);
-    }
 
-    @Override
-    public JwtPayload set(String key, Object value) {
-	super.set(key, value);
-	return this;
-    }
+	public JwtPayload(Map<String, Object> map) {
+		super(map);
+	}
 
-    @Override
-    public JwtPayload setNumericDate(String key, Date value) {
-	super.setNumericDate(key, value);
-	return this;
-    }
+	public boolean hasAudience(String checkingAudience) {
+		Asserts.notNull(checkingAudience);
 
-    @Override
-    public JwtPayload setNumericDate(String key, long timeInMs) {
-	super.setNumericDate(key, timeInMs);
-	return this;
-    }
+		List<String> aud = getAud();
+		if (aud == null) {
+			return false;
+		}
+		return aud.contains(checkingAudience);
+	}
 
-    public String getIss() {
-	return (String) this.get(ISS);
-    }
+	@Override
+	public JwtPayload set(String key, Object value) {
+		super.set(key, value);
+		return this;
+	}
 
-    public JwtPayload setIss(String value) {
-	this.put(ISS, value);
-	return this;
-    }
+	@Override
+	public JwtPayload setNumericDate(String key, Date value) {
+		super.setNumericDate(key, value);
+		return this;
+	}
 
-    public String getSub() {
-	return (String) this.get(SUB);
-    }
+	@Override
+	public JwtPayload setNumericDate(String key, long timeInMs) {
+		super.setNumericDate(key, timeInMs);
+		return this;
+	}
 
-    public JwtPayload setSub(String value) {
-	this.put(SUB, value);
-	return this;
-    }
+	public String getIss() {
+		return (String) this.get(ISS);
+	}
 
-    public List<String> getAud() {
-	return getList(AUD);
-    }
+	public JwtPayload setIss(String value) {
+		this.put(ISS, value);
+		return this;
+	}
 
-    public JwtPayload setAud(String... values) {
-	this.put(AUD, values);
-	return this;
-    }
+	public String getSub() {
+		return (String) this.get(SUB);
+	}
 
-    public Date getExp() {
-	return getNumericDate(EXP);
-    }
+	public JwtPayload setSub(String value) {
+		this.put(SUB, value);
+		return this;
+	}
 
-    public JwtPayload setExp(Date value) {
-	setNumericDate(EXP, value);
-	return this;
-    }
+	public List<String> getAud() {
+		return getList(AUD);
+	}
 
-    public JwtPayload setExp(long expiresIn, TimeUnit unit) {
-	setNumericDate(EXP, System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(expiresIn, unit));
-	return this;
-    }
+	public JwtPayload setAud(String... values) {
+		this.put(AUD, values);
+		return this;
+	}
 
-    public Date getNbf() {
-	return getNumericDate(NBF);
-    }
+	public Date getExp() {
+		return getNumericDate(EXP);
+	}
 
-    public JwtPayload setNbf(Date value) {
-	setNumericDate(NBF, value);
-	return this;
-    }
+	public JwtPayload setExp(Date value) {
+		setNumericDate(EXP, value);
+		return this;
+	}
 
-    public Date getIat() {
-	return getNumericDate(IAT);
-    }
+	public JwtPayload setExp(long expiresIn, TimeUnit unit) {
+		setNumericDate(EXP, System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(expiresIn, unit));
+		return this;
+	}
 
-    public JwtPayload setIat(Date value) {
-	setNumericDate(IAT, value);
-	return this;
-    }
+	public Date getNbf() {
+		return getNumericDate(NBF);
+	}
 
-    public JwtPayload setIatNow() {
-	return setIat(new Date());
-    }
+	public JwtPayload setNbf(Date value) {
+		setNumericDate(NBF, value);
+		return this;
+	}
 
-    public String getJti() {
-	return (String) this.get(JTI);
-    }
+	public Date getIat() {
+		return getNumericDate(IAT);
+	}
 
-    public JwtPayload setJti(String value) {
-	this.put(JTI, value);
-	return this;
-    }
+	public JwtPayload setIat(Date value) {
+		setNumericDate(IAT, value);
+		return this;
+	}
+
+	public JwtPayload setIatNow() {
+		return setIat(new Date());
+	}
+
+	public String getJti() {
+		return (String) this.get(JTI);
+	}
+
+	public JwtPayload setJti(String value) {
+		this.put(JTI, value);
+		return this;
+	}
 }

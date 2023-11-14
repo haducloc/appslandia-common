@@ -27,8 +27,8 @@ package com.appslandia.common.base;
  */
 public interface InitializeSupport {
 
-    InitializeSupport initialize() throws InitializeException;
+	InitializeSupport initialize() throws InitializeException;
 
-    default void destroy() throws DestroyException {
-    }
+	default void destroy() throws DestroyException {
+	}
 }

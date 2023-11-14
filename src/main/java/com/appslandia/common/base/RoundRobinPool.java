@@ -27,21 +27,21 @@ package com.appslandia.common.base;
  */
 public class RoundRobinPool<T> {
 
-    final T[] pool;
-    final Object mutex = new Object();
+	final T[] pool;
+	final Object mutex = new Object();
 
-    private volatile int current = 0;
+	private volatile int current = 0;
 
-    public RoundRobinPool(T[] services) {
-	this.pool = services;
-    }
-
-    public T next() {
-	int index;
-	synchronized (this.mutex) {
-	    index = this.current;
-	    this.current = (this.current + 1) % this.pool.length;
+	public RoundRobinPool(T[] services) {
+		this.pool = services;
 	}
-	return this.pool[index];
-    }
+
+	public T next() {
+		int index;
+		synchronized (this.mutex) {
+			index = this.current;
+			this.current = (this.current + 1) % this.pool.length;
+		}
+		return this.pool[index];
+	}
 }

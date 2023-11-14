@@ -30,57 +30,56 @@ import org.junit.jupiter.api.Test;
  */
 public class SecurePropsTest {
 
-    @Test
-    public void test() {
-	Encryptor encryptor = new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(16).setPassword("password".toCharArray())
-		.setAlgParamSpec(PbeEncryptor::toIvParameterSpec);
+	@Test
+	public void test() {
+		Encryptor encryptor = new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(16).setPassword("password".toCharArray());
 
-	TextEncryptor textEncryptor = new TextEncryptor().setEncryptor(encryptor);
-	SecureProps props = new SecureProps(textEncryptor);
+		TextEncryptor textEncryptor = new TextEncryptor().setEncryptor(encryptor);
+		SecureProps props = new SecureProps(textEncryptor);
 
-	try {
-	    props.enc("config", "value");
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		try {
+			props.enc("config", "value");
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
+		try {
+			Assertions.assertEquals("value", props.getString("config"));
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-	try {
-	    Assertions.assertEquals("value", props.getString("config"));
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
-	}
-    }
 
-    @Test
-    public void test_password() {
-	SecureProps props = new SecureProps("password".toCharArray());
-	try {
-	    props.enc("config", "value");
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+	@Test
+	public void test_password() {
+		SecureProps props = new SecureProps("password".toCharArray());
+		try {
+			props.enc("config", "value");
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
+		try {
+			Assertions.assertEquals("value", props.getString("config"));
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-	try {
-	    Assertions.assertEquals("value", props.getString("config"));
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
-	}
-    }
 
-    @Test
-    public void test_resolve() {
-	SecureProps props = new SecureProps("password".toCharArray());
-	try {
-	    props.set("database", "db");
-	    props.set("user", "user");
-	    props.enc("password", "pwd");
-	    props.set("url", "database=${database};user=${user};password=${password}");
+	@Test
+	public void test_resolve() {
+		SecureProps props = new SecureProps("password".toCharArray());
+		try {
+			props.set("database", "db");
+			props.set("user", "user");
+			props.enc("password", "pwd");
+			props.set("url", "database=${database};user=${user};password=${password}");
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
+		try {
+			Assertions.assertEquals("database=db;user=user;password=pwd", props.resolve("url"));
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-	try {
-	    Assertions.assertEquals("database=db;user=user;password=pwd", props.resolve("url"));
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
-	}
-    }
 }

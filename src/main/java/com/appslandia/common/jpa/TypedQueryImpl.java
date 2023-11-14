@@ -41,293 +41,293 @@ import jakarta.persistence.TypedQuery;
  */
 public class TypedQueryImpl<X> implements TypedQuery<X> {
 
-    final TypedQuery<X> query;
-    final JpaSql sql;
+	final TypedQuery<X> query;
+	final JpaSql sql;
 
-    public TypedQueryImpl(TypedQuery<X> query) {
-	this(query, null);
-    }
-
-    public TypedQueryImpl(TypedQuery<X> query, JpaSql sql) {
-	Asserts.isTrue(!(query instanceof TypedQueryImpl));
-	this.query = query;
-	this.sql = sql;
-    }
-
-    protected JpaSql getSql() {
-	return Asserts.notNull(this.sql, "sql is required.");
-    }
-
-    public List<X> executeList() {
-	return this.query.getResultList();
-    }
-
-    public X executeSingle() {
-	try {
-	    return this.query.getSingleResult();
-	} catch (NoResultException ex) {
-	    return null;
+	public TypedQueryImpl(TypedQuery<X> query) {
+		this(query, null);
 	}
-    }
 
-    public X firstOrNull() {
-	try {
-	    return this.query.setMaxResults(1).getSingleResult();
-	} catch (NoResultException ex) {
-	    return null;
+	public TypedQueryImpl(TypedQuery<X> query, JpaSql sql) {
+		Asserts.isTrue(!(query instanceof TypedQueryImpl));
+		this.query = query;
+		this.sql = sql;
 	}
-    }
 
-    public TypedQueryImpl<X> asReadonly() {
-	this.query.setHint(JpaHints.getHintMapper().getHint(JpaHints.HINT_QUERY_READONLY), true);
-	return this;
-    }
-
-    // Set LIKE Parameters
-    // :name IS NULL OR name LIKE :name
-    // :name = '' OR name LIKE :name
-
-    public TypedQueryImpl<X> setLike(String parameterName, String value) {
-	this.query.setParameter(parameterName, SqlLikeEscaper.toLikePattern(value, LikeType.CONTAINS));
-	return this;
-    }
-
-    public TypedQueryImpl<X> setLikeSW(String parameterName, String value) {
-	this.query.setParameter(parameterName, SqlLikeEscaper.toLikePattern(value, LikeType.STARTS_WITH));
-	return this;
-    }
-
-    public TypedQueryImpl<X> setLikeEW(String parameterName, String value) {
-	this.query.setParameter(parameterName, SqlLikeEscaper.toLikePattern(value, LikeType.ENDS_WITH));
-	return this;
-    }
-
-    // Set LIKE_ANY Parameters
-    // name LIKE_ANY :names
-
-    public TypedQueryImpl<X> setLikeAny(String parameterName, String[] values) {
-	return setLikeAny(parameterName, values, LikeType.CONTAINS, null);
-    }
-
-    public TypedQueryImpl<X> setLikeAnySW(String parameterName, String[] values) {
-	return setLikeAny(parameterName, values, LikeType.STARTS_WITH, null);
-    }
-
-    public TypedQueryImpl<X> setLikeAnyEW(String parameterName, String[] values) {
-	return setLikeAny(parameterName, values, LikeType.ENDS_WITH, null);
-    }
-
-    public TypedQueryImpl<X> setLikeAny(String parameterName, String[] values, LikeType likeType, String falsePattern) {
-	int arrayLen = this.getSql().getArrayLen(parameterName);
-	Asserts.isTrue(values.length <= arrayLen);
-
-	for (int i = 0; i < arrayLen; i++) {
-	    setParameter(JdbcSql.toParamName(parameterName, i), (i < values.length) ? SqlLikeEscaper.toLikePattern(values[i], likeType) : falsePattern);
+	protected JpaSql getSql() {
+		return Asserts.notNull(this.sql, "sql is required.");
 	}
-	return this;
-    }
 
-    // Set IN Parameters
-    // type IN :types
-
-    public TypedQueryImpl<X> setObjectArray(String parameterName, Object[] values) {
-	int arrayLen = this.getSql().getArrayLen(parameterName);
-	Asserts.isTrue(values.length <= arrayLen);
-
-	for (int i = 0; i < arrayLen; i++) {
-	    setParameter(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
+	public List<X> executeList() {
+		return this.query.getResultList();
 	}
-	return this;
-    }
 
-    public TypedQueryImpl<X> setDateArray(String parameterName, java.util.Date[] values, TemporalType temporalType) {
-	int arrayLen = this.getSql().getArrayLen(parameterName);
-	Asserts.isTrue(values.length <= arrayLen);
-
-	for (int i = 0; i < arrayLen; i++) {
-	    setParameter(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null, temporalType);
+	public X executeSingle() {
+		try {
+			return this.query.getSingleResult();
+		} catch (NoResultException ex) {
+			return null;
+		}
 	}
-	return this;
-    }
 
-    // Query & TypedQuery
+	public X firstOrNull() {
+		try {
+			return this.query.setMaxResults(1).getSingleResult();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
 
-    @Override
-    public java.util.Map<String, Object> getHints() {
-	return this.query.getHints();
-    }
+	public TypedQueryImpl<X> asReadonly() {
+		this.query.setHint(JpaHints.getHintMapper().getHint(JpaHints.HINT_QUERY_READONLY), true);
+		return this;
+	}
 
-    @Override
-    public int getFirstResult() {
-	return this.query.getFirstResult();
-    }
+	// Set LIKE Parameters
+	// :name IS NULL OR name LIKE :name
+	// :name = '' OR name LIKE :name
 
-    @Override
-    public FlushModeType getFlushMode() {
-	return this.query.getFlushMode();
-    }
+	public TypedQueryImpl<X> setLike(String parameterName, String value) {
+		this.query.setParameter(parameterName, SqlLikeEscaper.toLikePattern(value, LikeType.CONTAINS));
+		return this;
+	}
 
-    @Override
-    public LockModeType getLockMode() {
-	return this.query.getLockMode();
-    }
+	public TypedQueryImpl<X> setLikeSW(String parameterName, String value) {
+		this.query.setParameter(parameterName, SqlLikeEscaper.toLikePattern(value, LikeType.STARTS_WITH));
+		return this;
+	}
 
-    @Override
-    public int getMaxResults() {
-	return this.query.getMaxResults();
-    }
+	public TypedQueryImpl<X> setLikeEW(String parameterName, String value) {
+		this.query.setParameter(parameterName, SqlLikeEscaper.toLikePattern(value, LikeType.ENDS_WITH));
+		return this;
+	}
 
-    @Override
-    public Parameter<?> getParameter(int position) {
-	return this.query.getParameter(position);
-    }
+	// Set LIKE_ANY Parameters
+	// name LIKE_ANY :names
 
-    @Override
-    public Parameter<?> getParameter(String name) {
-	return this.query.getParameter(name);
-    }
+	public TypedQueryImpl<X> setLikeAny(String parameterName, String[] values) {
+		return setLikeAny(parameterName, values, LikeType.CONTAINS, null);
+	}
 
-    @Override
-    public <T> Parameter<T> getParameter(int position, Class<T> type) {
-	return this.query.getParameter(position, type);
-    }
+	public TypedQueryImpl<X> setLikeAnySW(String parameterName, String[] values) {
+		return setLikeAny(parameterName, values, LikeType.STARTS_WITH, null);
+	}
 
-    @Override
-    public <T> Parameter<T> getParameter(String name, Class<T> type) {
-	return this.query.getParameter(name, type);
-    }
+	public TypedQueryImpl<X> setLikeAnyEW(String parameterName, String[] values) {
+		return setLikeAny(parameterName, values, LikeType.ENDS_WITH, null);
+	}
 
-    @Override
-    public Object getParameterValue(int position) {
-	return this.query.getParameterValue(position);
-    }
+	public TypedQueryImpl<X> setLikeAny(String parameterName, String[] values, LikeType likeType, String falsePattern) {
+		int arrayLen = this.getSql().getArrayLen(parameterName);
+		Asserts.isTrue(values.length <= arrayLen);
 
-    @Override
-    public Object getParameterValue(String name) {
-	return this.query.getParameterValue(name);
-    }
+		for (int i = 0; i < arrayLen; i++) {
+			setParameter(JdbcSql.toParamName(parameterName, i), (i < values.length) ? SqlLikeEscaper.toLikePattern(values[i], likeType) : falsePattern);
+		}
+		return this;
+	}
 
-    @Override
-    public <T> T getParameterValue(Parameter<T> param) {
-	return this.query.getParameterValue(param);
-    }
+	// Set IN Parameters
+	// type IN :types
 
-    @Override
-    public java.util.Set<Parameter<?>> getParameters() {
-	return this.query.getParameters();
-    }
+	public TypedQueryImpl<X> setObjectArray(String parameterName, Object[] values) {
+		int arrayLen = this.getSql().getArrayLen(parameterName);
+		Asserts.isTrue(values.length <= arrayLen);
 
-    @Override
-    public java.util.List<X> getResultList() {
-	return this.query.getResultList();
-    }
+		for (int i = 0; i < arrayLen; i++) {
+			setParameter(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
+		}
+		return this;
+	}
 
-    @Override
-    public java.util.stream.Stream<X> getResultStream() {
-	return this.query.getResultStream();
-    }
+	public TypedQueryImpl<X> setDateArray(String parameterName, java.util.Date[] values, TemporalType temporalType) {
+		int arrayLen = this.getSql().getArrayLen(parameterName);
+		Asserts.isTrue(values.length <= arrayLen);
 
-    @Override
-    public X getSingleResult() {
-	return this.query.getSingleResult();
-    }
+		for (int i = 0; i < arrayLen; i++) {
+			setParameter(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null, temporalType);
+		}
+		return this;
+	}
 
-    @Override
-    public TypedQueryImpl<X> setHint(String hintName, Object value) {
-	this.query.setHint(hintName, value);
-	return this;
-    }
+	// Query & TypedQuery
 
-    @Override
-    public TypedQueryImpl<X> setFirstResult(int startPosition) {
-	this.query.setFirstResult(startPosition);
-	return this;
-    }
+	@Override
+	public java.util.Map<String, Object> getHints() {
+		return this.query.getHints();
+	}
 
-    @Override
-    public TypedQueryImpl<X> setFlushMode(FlushModeType flushMode) {
-	this.query.setFlushMode(flushMode);
-	return this;
-    }
+	@Override
+	public int getFirstResult() {
+		return this.query.getFirstResult();
+	}
 
-    @Override
-    public TypedQueryImpl<X> setLockMode(LockModeType lockMode) {
-	this.query.setLockMode(lockMode);
-	return this;
-    }
+	@Override
+	public FlushModeType getFlushMode() {
+		return this.query.getFlushMode();
+	}
 
-    @Override
-    public TypedQueryImpl<X> setMaxResults(int maxResult) {
-	this.query.setMaxResults(maxResult);
-	return this;
-    }
+	@Override
+	public LockModeType getLockMode() {
+		return this.query.getLockMode();
+	}
 
-    @Override
-    public TypedQueryImpl<X> setParameter(int position, Object value) {
-	this.query.setParameter(position, value);
-	return this;
-    }
+	@Override
+	public int getMaxResults() {
+		return this.query.getMaxResults();
+	}
 
-    @Override
-    public TypedQueryImpl<X> setParameter(String name, Object value) {
-	this.query.setParameter(name, value);
-	return this;
-    }
+	@Override
+	public Parameter<?> getParameter(int position) {
+		return this.query.getParameter(position);
+	}
 
-    @Override
-    public <T> TypedQueryImpl<X> setParameter(Parameter<T> param, T value) {
-	this.query.setParameter(param, value);
-	return this;
-    }
+	@Override
+	public Parameter<?> getParameter(String name) {
+		return this.query.getParameter(name);
+	}
 
-    @Override
-    public TypedQueryImpl<X> setParameter(int position, java.util.Calendar value, TemporalType temporalType) {
-	this.query.setParameter(position, value, temporalType);
-	return this;
-    }
+	@Override
+	public <T> Parameter<T> getParameter(int position, Class<T> type) {
+		return this.query.getParameter(position, type);
+	}
 
-    @Override
-    public TypedQueryImpl<X> setParameter(int position, java.util.Date value, TemporalType temporalType) {
-	this.query.setParameter(position, value, temporalType);
-	return this;
-    }
+	@Override
+	public <T> Parameter<T> getParameter(String name, Class<T> type) {
+		return this.query.getParameter(name, type);
+	}
 
-    @Override
-    public TypedQueryImpl<X> setParameter(String name, java.util.Calendar value, TemporalType temporalType) {
-	this.query.setParameter(name, value, temporalType);
-	return this;
-    }
+	@Override
+	public Object getParameterValue(int position) {
+		return this.query.getParameterValue(position);
+	}
 
-    @Override
-    public TypedQueryImpl<X> setParameter(String name, java.util.Date value, TemporalType temporalType) {
-	this.query.setParameter(name, value, temporalType);
-	return this;
-    }
+	@Override
+	public Object getParameterValue(String name) {
+		return this.query.getParameterValue(name);
+	}
 
-    @Override
-    public TypedQueryImpl<X> setParameter(Parameter<java.util.Calendar> param, java.util.Calendar value, TemporalType temporalType) {
-	this.query.setParameter(param, value, temporalType);
-	return this;
-    }
+	@Override
+	public <T> T getParameterValue(Parameter<T> param) {
+		return this.query.getParameterValue(param);
+	}
 
-    @Override
-    public TypedQueryImpl<X> setParameter(Parameter<java.util.Date> param, java.util.Date value, TemporalType temporalType) {
-	this.query.setParameter(param, value, temporalType);
-	return this;
-    }
+	@Override
+	public java.util.Set<Parameter<?>> getParameters() {
+		return this.query.getParameters();
+	}
 
-    @Override
-    public int executeUpdate() {
-	return this.query.executeUpdate();
-    }
+	@Override
+	public java.util.List<X> getResultList() {
+		return this.query.getResultList();
+	}
 
-    @Override
-    public boolean isBound(Parameter<?> param) {
-	return this.query.isBound(param);
-    }
+	@Override
+	public java.util.stream.Stream<X> getResultStream() {
+		return this.query.getResultStream();
+	}
 
-    @Override
-    public <T> T unwrap(Class<T> cls) {
-	return this.query.unwrap(cls);
-    }
+	@Override
+	public X getSingleResult() {
+		return this.query.getSingleResult();
+	}
+
+	@Override
+	public TypedQueryImpl<X> setHint(String hintName, Object value) {
+		this.query.setHint(hintName, value);
+		return this;
+	}
+
+	@Override
+	public TypedQueryImpl<X> setFirstResult(int startPosition) {
+		this.query.setFirstResult(startPosition);
+		return this;
+	}
+
+	@Override
+	public TypedQueryImpl<X> setFlushMode(FlushModeType flushMode) {
+		this.query.setFlushMode(flushMode);
+		return this;
+	}
+
+	@Override
+	public TypedQueryImpl<X> setLockMode(LockModeType lockMode) {
+		this.query.setLockMode(lockMode);
+		return this;
+	}
+
+	@Override
+	public TypedQueryImpl<X> setMaxResults(int maxResult) {
+		this.query.setMaxResults(maxResult);
+		return this;
+	}
+
+	@Override
+	public TypedQueryImpl<X> setParameter(int position, Object value) {
+		this.query.setParameter(position, value);
+		return this;
+	}
+
+	@Override
+	public TypedQueryImpl<X> setParameter(String name, Object value) {
+		this.query.setParameter(name, value);
+		return this;
+	}
+
+	@Override
+	public <T> TypedQueryImpl<X> setParameter(Parameter<T> param, T value) {
+		this.query.setParameter(param, value);
+		return this;
+	}
+
+	@Override
+	public TypedQueryImpl<X> setParameter(int position, java.util.Calendar value, TemporalType temporalType) {
+		this.query.setParameter(position, value, temporalType);
+		return this;
+	}
+
+	@Override
+	public TypedQueryImpl<X> setParameter(int position, java.util.Date value, TemporalType temporalType) {
+		this.query.setParameter(position, value, temporalType);
+		return this;
+	}
+
+	@Override
+	public TypedQueryImpl<X> setParameter(String name, java.util.Calendar value, TemporalType temporalType) {
+		this.query.setParameter(name, value, temporalType);
+		return this;
+	}
+
+	@Override
+	public TypedQueryImpl<X> setParameter(String name, java.util.Date value, TemporalType temporalType) {
+		this.query.setParameter(name, value, temporalType);
+		return this;
+	}
+
+	@Override
+	public TypedQueryImpl<X> setParameter(Parameter<java.util.Calendar> param, java.util.Calendar value, TemporalType temporalType) {
+		this.query.setParameter(param, value, temporalType);
+		return this;
+	}
+
+	@Override
+	public TypedQueryImpl<X> setParameter(Parameter<java.util.Date> param, java.util.Date value, TemporalType temporalType) {
+		this.query.setParameter(param, value, temporalType);
+		return this;
+	}
+
+	@Override
+	public int executeUpdate() {
+		return this.query.executeUpdate();
+	}
+
+	@Override
+	public boolean isBound(Parameter<?> param) {
+		return this.query.isBound(param);
+	}
+
+	@Override
+	public <T> T unwrap(Class<T> cls) {
+		return this.query.unwrap(cls);
+	}
 }

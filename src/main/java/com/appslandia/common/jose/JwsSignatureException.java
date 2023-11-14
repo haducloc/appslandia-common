@@ -26,17 +26,17 @@ package com.appslandia.common.jose;
  *
  */
 public class JwsSignatureException extends JoseVerificationException {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public JwsSignatureException(String message) {
-	super(message);
-    }
+	public JwsSignatureException(String message) {
+		super(message);
+	}
 
-    public JwsSignatureException(Throwable cause) {
-	super(cause);
-    }
+	public JwsSignatureException(Throwable cause) {
+		super(cause);
+	}
 
-    public JwsSignatureException(String message, Throwable cause) {
-	super(message, cause);
-    }
+	public JwsSignatureException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }

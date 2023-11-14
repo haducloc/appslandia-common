@@ -34,42 +34,42 @@ import jakarta.interceptor.InvocationContext;
  *
  */
 public abstract class ConnScopedInterceptor implements Serializable {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public Object intercept(InvocationContext context) throws Exception {
+	public Object intercept(InvocationContext context) throws Exception {
 
-	// @ConnScoped
-	ConnScoped connScoped = context.getMethod().getAnnotation(ConnScoped.class);
-	ConnType type = connScoped.value();
+		// @ConnScoped
+		ConnScoped connScoped = context.getMethod().getAnnotation(ConnScoped.class);
+		ConnType type = connScoped.value();
 
-	// REQUIRES_NEW
-	if (type == ConnType.REQUIRES_NEW) {
+		// REQUIRES_NEW
+		if (type == ConnType.REQUIRES_NEW) {
 
-	    try (ConnectionImpl newConn = new ConnectionImpl(getDataSource(connScoped.ds()))) {
-		return context.proceed();
-	    }
-	}
-
-	// REQUIRED
-	if (ConnectionImpl.hasCurrent()) {
-
-	    // Same DS
-	    if (connScoped.ds().equals(ConnectionImpl.getCurrent().getDsName())) {
-		return context.proceed();
-
-	    } else {
-		// Different DS
-		try (ConnectionImpl newConn = new ConnectionImpl(getDataSource(connScoped.ds()))) {
-		    return context.proceed();
+			try (ConnectionImpl newConn = new ConnectionImpl(getDataSource(connScoped.ds()))) {
+				return context.proceed();
+			}
 		}
-	    }
-	} else {
 
-	    try (ConnectionImpl newConn = new ConnectionImpl(getDataSource(connScoped.ds()))) {
-		return context.proceed();
-	    }
+		// REQUIRED
+		if (ConnectionImpl.hasCurrent()) {
+
+			// Same DS
+			if (connScoped.ds().equals(ConnectionImpl.getCurrent().getDsName())) {
+				return context.proceed();
+
+			} else {
+				// Different DS
+				try (ConnectionImpl newConn = new ConnectionImpl(getDataSource(connScoped.ds()))) {
+					return context.proceed();
+				}
+			}
+		} else {
+
+			try (ConnectionImpl newConn = new ConnectionImpl(getDataSource(connScoped.ds()))) {
+				return context.proceed();
+			}
+		}
 	}
-    }
 
-    protected abstract DataSource getDataSource(String name);
+	protected abstract DataSource getDataSource(String name);
 }

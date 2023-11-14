@@ -28,11 +28,11 @@ import com.appslandia.common.utils.Asserts;
  *
  */
 public class UncheckedException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public UncheckedException(Throwable throwable) {
-	super(throwable);
+	public UncheckedException(Throwable throwable) {
+		super(throwable);
 
-	Asserts.isTrue(!(throwable instanceof RuntimeException), "The throwable must be java.lang.Error or check exception.");
-    }
+		Asserts.isTrue(!(throwable instanceof RuntimeException), "The throwable must be java.lang.Error or check exception.");
+	}
 }

@@ -23,7 +23,6 @@ package com.appslandia.common.crypto;
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 import java.security.spec.AlgorithmParameterSpec;
-import java.util.Locale;
 import java.util.Random;
 import java.util.function.BiFunction;
 
@@ -35,7 +34,6 @@ import javax.crypto.spec.IvParameterSpec;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.RandomUtils;
-import com.appslandia.common.utils.ValueUtils;
 
 /**
  *
@@ -43,200 +41,193 @@ import com.appslandia.common.utils.ValueUtils;
  *
  */
 public class PbeEncryptor extends PbeObject implements Encryptor {
-    private String transformation, provider;
-    private String[] algorithms;
+	private String transformation, provider;
+	private CipherOperations operations;
 
-    private Integer ivSize;
-    private BiFunction<String[], byte[], AlgorithmParameterSpec> algParamSpec;
+	// -1: IV unsupported
+	private int ivSize;
+	private BiFunction<CipherOperations, byte[], AlgorithmParameterSpec> algParamSpec;
 
-    private Cipher cipher;
+	private Cipher cipher;
+	final Object mutex = new Object();
+	final Random random = new SecureRandom();
 
-    final Object mutex = new Object();
-    final Random random = new SecureRandom();
+	@Override
+	protected void init() throws Exception {
+		super.init();
 
-    @Override
-    protected void init() throws Exception {
-	super.init();
+		Asserts.notNull(this.transformation, "transformation is required.");
+		CipherOperations operations = new CipherOperations(this.transformation);
 
-	// transformation
-	Asserts.notNull(this.transformation, "transformation is required.");
+		Asserts.isTrue(!"RSA".equals(operations.getAlgorithm()), "Use RsaEncryptor instead.");
+		this.operations = operations;
 
-	this.algorithms = this.transformation.split("/");
-	Asserts.isTrue(this.algorithms.length == 3, "transformation is invalid.");
-
-	this.algorithms[0] = this.algorithms[0].toUpperCase(Locale.ENGLISH);
-	this.algorithms[1] = this.algorithms[1].toUpperCase(Locale.ENGLISH);
-
-	Asserts.isTrue(!"RSA".equals(this.algorithms[0]), "Use RsaEncryptor instead.");
-
-	// algParamSpec
-	if (this.algParamSpec == null) {
-	    this.algParamSpec = (algs, iv) -> null;
-	}
-
-	// cipher
-	if (this.provider == null) {
-	    this.cipher = Cipher.getInstance(this.transformation);
-	} else {
-	    this.cipher = Cipher.getInstance(this.transformation, this.provider);
-	}
-    }
-
-    private boolean isIVSpec() {
-	return !"ECB".equals(this.algorithms[1]);
-    }
-
-    private int getIVSize() {
-	return ValueUtils.valueOrAlt(this.ivSize, this.cipher.getBlockSize());
-    }
-
-    @Override
-    public byte[] encrypt(byte[] message) throws CryptoException {
-	this.initialize();
-	Asserts.notNull(message, "message is required.");
-
-	byte[] salt = RandomUtils.nextBytes(this.saltSize, this.random);
-	SecretKey secretKey = buildSecretKey(salt, this.algorithms[0]);
-	byte[] iv = isIVSpec() ? RandomUtils.nextBytes(this.getIVSize(), this.random) : null;
-
-	try {
-	    byte[] encMsg = null;
-	    synchronized (this.mutex) {
-		AlgorithmParameterSpec spec = this.algParamSpec.apply(this.algorithms, iv);
-
-		if (spec == null) {
-		    this.cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-		} else {
-		    this.cipher.init(Cipher.ENCRYPT_MODE, secretKey, spec);
+		// algParamSpec
+		if (this.algParamSpec == null) {
+			this.algParamSpec = (opers, iv) -> toAlgParamSpec(opers, iv);
 		}
-		encMsg = this.cipher.doFinal(message);
-	    }
-	    return (iv != null) ? ArrayUtils.append(iv, salt, encMsg) : ArrayUtils.append(salt, encMsg);
 
-	} catch (GeneralSecurityException ex) {
-	    throw new CryptoException(ex);
-	} finally {
-	    CryptoUtils.destroyQuietly(secretKey);
-	}
-    }
-
-    @Override
-    public byte[] decrypt(byte[] message) throws CryptoException {
-	this.initialize();
-
-	Asserts.notNull(message, "message is required.");
-
-	byte[] salt = new byte[this.saltSize];
-	byte[] iv = isIVSpec() ? new byte[this.getIVSize()] : null;
-
-	if (iv == null) {
-	    Asserts.isTrue(message.length >= this.saltSize, "message is invalid.");
-	    ArrayUtils.copy(message, salt);
-	} else {
-	    Asserts.isTrue(message.length >= this.getIVSize() + this.saltSize, "message is invalid.");
-	    ArrayUtils.copy(message, iv, salt);
-	}
-
-	SecretKey secretKey = buildSecretKey(salt, this.algorithms[0]);
-	try {
-	    synchronized (this.mutex) {
-		AlgorithmParameterSpec spec = this.algParamSpec.apply(this.algorithms, iv);
-
-		if (spec == null) {
-		    this.cipher.init(Cipher.DECRYPT_MODE, secretKey);
+		// cipher
+		if (this.provider == null) {
+			this.cipher = Cipher.getInstance(this.transformation);
 		} else {
-		    this.cipher.init(Cipher.DECRYPT_MODE, secretKey, spec);
+			this.cipher = Cipher.getInstance(this.transformation, this.provider);
 		}
+
+		// ivSize
+		if (this.ivSize == 0) {
+			this.ivSize = this.cipher.getBlockSize();
+		}
+	}
+
+	@Override
+	public byte[] encrypt(byte[] message) throws CryptoException {
+		this.initialize();
+		Asserts.notNull(message, "message is required.");
+
+		byte[] salt = RandomUtils.nextBytes(this.saltSize, this.random);
+		SecretKey secretKey = buildSecretKey(salt, this.operations.getAlgorithm());
+		byte[] iv = (this.ivSize > 0) ? RandomUtils.nextBytes(this.ivSize, this.random) : null;
+
+		try {
+			byte[] encMsg = null;
+			synchronized (this.mutex) {
+				AlgorithmParameterSpec spec = this.algParamSpec.apply(this.operations, iv);
+
+				if (spec == null) {
+					this.cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+				} else {
+					this.cipher.init(Cipher.ENCRYPT_MODE, secretKey, spec);
+				}
+				encMsg = this.cipher.doFinal(message);
+			}
+			return (iv != null) ? ArrayUtils.append(iv, salt, encMsg) : ArrayUtils.append(salt, encMsg);
+
+		} catch (GeneralSecurityException ex) {
+			throw new CryptoException(ex);
+		} finally {
+			CryptoUtils.destroyQuietly(secretKey);
+		}
+	}
+
+	@Override
+	public byte[] decrypt(byte[] message) throws CryptoException {
+		this.initialize();
+
+		Asserts.notNull(message, "message is required.");
+
+		byte[] salt = new byte[this.saltSize];
+		byte[] iv = (this.ivSize > 0) ? new byte[this.ivSize] : null;
 
 		if (iv == null) {
-		    return this.cipher.doFinal(message, salt.length, message.length - salt.length);
+			Asserts.isTrue(message.length >= this.saltSize, "message is invalid.");
+			ArrayUtils.copy(message, salt);
 		} else {
-		    return this.cipher.doFinal(message, iv.length + salt.length, message.length - iv.length - salt.length);
+			Asserts.isTrue(message.length >= this.ivSize + this.saltSize, "message is invalid.");
+			ArrayUtils.copy(message, iv, salt);
 		}
-	    }
-	} catch (GeneralSecurityException ex) {
-	    throw new CryptoException(ex);
-	} finally {
-	    CryptoUtils.destroyQuietly(secretKey);
+
+		SecretKey secretKey = buildSecretKey(salt, this.operations.getAlgorithm());
+		try {
+			synchronized (this.mutex) {
+				AlgorithmParameterSpec spec = this.algParamSpec.apply(this.operations, iv);
+
+				if (spec == null) {
+					this.cipher.init(Cipher.DECRYPT_MODE, secretKey);
+				} else {
+					this.cipher.init(Cipher.DECRYPT_MODE, secretKey, spec);
+				}
+
+				if (iv == null) {
+					return this.cipher.doFinal(message, salt.length, message.length - salt.length);
+				} else {
+					return this.cipher.doFinal(message, iv.length + salt.length, message.length - iv.length - salt.length);
+				}
+			}
+		} catch (GeneralSecurityException ex) {
+			throw new CryptoException(ex);
+		} finally {
+			CryptoUtils.destroyQuietly(secretKey);
+		}
 	}
-    }
 
-    public String getTransformation() {
-	this.initialize();
-	return this.transformation;
-    }
+	public String getTransformation() {
+		this.initialize();
+		return this.transformation;
+	}
 
-    public PbeEncryptor setTransformation(String transformation) {
-	this.assertNotInitialized();
-	this.transformation = transformation;
-	return this;
-    }
+	public PbeEncryptor setTransformation(String transformation) {
+		this.assertNotInitialized();
+		this.transformation = transformation;
+		return this;
+	}
 
-    public String getProvider() {
-	this.initialize();
-	return this.provider;
-    }
+	public String getProvider() {
+		this.initialize();
+		return this.provider;
+	}
 
-    public PbeEncryptor setProvider(String provider) {
-	this.assertNotInitialized();
-	this.provider = provider;
-	return this;
-    }
+	public PbeEncryptor setProvider(String provider) {
+		this.assertNotInitialized();
+		this.provider = provider;
+		return this;
+	}
 
-    @Override
-    public PbeEncryptor setSaltSize(int saltSize) {
-	super.setSaltSize(saltSize);
-	return this;
-    }
+	@Override
+	public PbeEncryptor setSaltSize(int saltSize) {
+		super.setSaltSize(saltSize);
+		return this;
+	}
 
-    @Override
-    public PbeEncryptor setIterationCount(int iterationCount) {
-	super.setIterationCount(iterationCount);
-	return this;
-    }
+	@Override
+	public PbeEncryptor setIterationCount(int iterationCount) {
+		super.setIterationCount(iterationCount);
+		return this;
+	}
 
-    @Override
-    public PbeEncryptor setKeySize(int keySize) {
-	super.setKeySize(keySize);
-	return this;
-    }
+	@Override
+	public PbeEncryptor setKeySize(int keySize) {
+		super.setKeySize(keySize);
+		return this;
+	}
 
-    @Override
-    public PbeEncryptor setPassword(char[] password) {
-	super.setPassword(password);
-	return this;
-    }
+	@Override
+	public PbeEncryptor setPassword(char[] password) {
+		super.setPassword(password);
+		return this;
+	}
 
-    @Override
-    public PbeEncryptor setPassword(String passwordOrEnv) {
-	super.setPassword(passwordOrEnv);
-	return this;
-    }
+	@Override
+	public PbeEncryptor setPassword(String passwordOrEnv) {
+		super.setPassword(passwordOrEnv);
+		return this;
+	}
 
-    @Override
-    public PbeEncryptor setSecretKeyGenerator(SecretKeyGenerator secretKeyGenerator) {
-	super.setSecretKeyGenerator(secretKeyGenerator);
-	return this;
-    }
+	@Override
+	public PbeEncryptor setSecretKeyGenerator(SecretKeyGenerator secretKeyGenerator) {
+		super.setSecretKeyGenerator(secretKeyGenerator);
+		return this;
+	}
 
-    public PbeEncryptor setIvSize(int ivSize) {
-	assertNotInitialized();
-	this.ivSize = ivSize;
-	return this;
-    }
+	public PbeEncryptor setIvSize(int ivSize) {
+		assertNotInitialized();
+		this.ivSize = ivSize;
+		return this;
+	}
 
-    public PbeEncryptor setAlgParamSpec(BiFunction<String[], byte[], AlgorithmParameterSpec> algParamSpec) {
-	assertNotInitialized();
-	this.algParamSpec = algParamSpec;
-	return this;
-    }
+	public PbeEncryptor setAlgParamSpec(BiFunction<CipherOperations, byte[], AlgorithmParameterSpec> algParamSpec) {
+		assertNotInitialized();
+		this.algParamSpec = algParamSpec;
+		return this;
+	}
 
-    public static IvParameterSpec toIvParameterSpec(String[] algs, byte[] iv) {
-	return new IvParameterSpec(iv);
-    }
-
-    public static GCMParameterSpec toGCMParameterSpec(String[] algs, byte[] iv) {
-	final int tSize = 16;
-	return new GCMParameterSpec(tSize * 8, iv);
-    }
+	static AlgorithmParameterSpec toAlgParamSpec(CipherOperations operations, byte[] iv) {
+		if (iv != null) {
+			if ("GCM".equals(operations.getMode())) {
+				return new GCMParameterSpec(128, iv);
+			}
+			return new IvParameterSpec(iv);
+		}
+		return null;
+	}
 }

@@ -26,9 +26,9 @@ package com.appslandia.common.base;
  *
  */
 public class BoolFormatException extends IllegalArgumentException {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public BoolFormatException(String value) {
-	super("For input string: \"" + value + "\"");
-    }
+	public BoolFormatException(String value) {
+		super("For input string: \"" + value + "\"");
+	}
 }

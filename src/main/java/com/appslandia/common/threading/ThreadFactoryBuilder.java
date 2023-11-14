@@ -33,74 +33,74 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class ThreadFactoryBuilder {
 
-    private String nameFormat;
-    private Boolean daemon;
-    private Integer priority;
-    private UncaughtExceptionHandler uncaughtExceptionHandler;
-    private ThreadFactory backingThreadFactory;
+	private String nameFormat;
+	private Boolean daemon;
+	private Integer priority;
+	private UncaughtExceptionHandler uncaughtExceptionHandler;
+	private ThreadFactory backingThreadFactory;
 
-    public ThreadFactoryBuilder setNameFormat(String nameFormat) {
-	this.nameFormat = nameFormat;
-	return this;
-    }
+	public ThreadFactoryBuilder setNameFormat(String nameFormat) {
+		this.nameFormat = nameFormat;
+		return this;
+	}
 
-    public ThreadFactoryBuilder setDaemon(boolean daemon) {
-	this.daemon = daemon;
-	return this;
-    }
+	public ThreadFactoryBuilder setDaemon(boolean daemon) {
+		this.daemon = daemon;
+		return this;
+	}
 
-    public ThreadFactoryBuilder setPriority(int priority) {
-	this.priority = priority;
-	return this;
-    }
+	public ThreadFactoryBuilder setPriority(int priority) {
+		this.priority = priority;
+		return this;
+	}
 
-    public ThreadFactoryBuilder setUncaughtExceptionHandler(UncaughtExceptionHandler uncaughtExceptionHandler) {
-	this.uncaughtExceptionHandler = uncaughtExceptionHandler;
-	return this;
-    }
+	public ThreadFactoryBuilder setUncaughtExceptionHandler(UncaughtExceptionHandler uncaughtExceptionHandler) {
+		this.uncaughtExceptionHandler = uncaughtExceptionHandler;
+		return this;
+	}
 
-    public ThreadFactoryBuilder setBackingThreadFactory(ThreadFactory backingThreadFactory) {
-	this.backingThreadFactory = backingThreadFactory;
-	return this;
-    }
+	public ThreadFactoryBuilder setBackingThreadFactory(ThreadFactory backingThreadFactory) {
+		this.backingThreadFactory = backingThreadFactory;
+		return this;
+	}
 
-    public ThreadFactory build() {
-	return doBuild(this);
-    }
+	public ThreadFactory build() {
+		return doBuild(this);
+	}
 
-    private static ThreadFactory doBuild(ThreadFactoryBuilder builder) {
+	private static ThreadFactory doBuild(ThreadFactoryBuilder builder) {
 
-	String nameFormat = builder.nameFormat;
-	Boolean daemon = builder.daemon;
-	Integer priority = builder.priority;
-	UncaughtExceptionHandler uncaughtExceptionHandler = builder.uncaughtExceptionHandler;
-	ThreadFactory backingThreadFactory = (builder.backingThreadFactory != null) ? builder.backingThreadFactory : Executors.defaultThreadFactory();
+		String nameFormat = builder.nameFormat;
+		Boolean daemon = builder.daemon;
+		Integer priority = builder.priority;
+		UncaughtExceptionHandler uncaughtExceptionHandler = builder.uncaughtExceptionHandler;
+		ThreadFactory backingThreadFactory = (builder.backingThreadFactory != null) ? builder.backingThreadFactory : Executors.defaultThreadFactory();
 
-	AtomicLong count = (nameFormat != null) ? new AtomicLong(0) : null;
+		AtomicLong count = (nameFormat != null) ? new AtomicLong(0) : null;
 
-	return new ThreadFactory() {
+		return new ThreadFactory() {
 
-	    @Override
-	    public Thread newThread(Runnable runnable) {
-		Thread thread = backingThreadFactory.newThread(runnable);
-		if (nameFormat != null) {
-		    thread.setName(format(nameFormat, count.getAndIncrement()));
-		}
-		if (daemon != null) {
-		    thread.setDaemon(daemon);
-		}
-		if (priority != null) {
-		    thread.setPriority(priority);
-		}
-		if (uncaughtExceptionHandler != null) {
-		    thread.setUncaughtExceptionHandler(uncaughtExceptionHandler);
-		}
-		return thread;
-	    }
-	};
-    }
+			@Override
+			public Thread newThread(Runnable runnable) {
+				Thread thread = backingThreadFactory.newThread(runnable);
+				if (nameFormat != null) {
+					thread.setName(format(nameFormat, count.getAndIncrement()));
+				}
+				if (daemon != null) {
+					thread.setDaemon(daemon);
+				}
+				if (priority != null) {
+					thread.setPriority(priority);
+				}
+				if (uncaughtExceptionHandler != null) {
+					thread.setUncaughtExceptionHandler(uncaughtExceptionHandler);
+				}
+				return thread;
+			}
+		};
+	}
 
-    private static String format(String format, Object... args) {
-	return String.format(Locale.ROOT, format, args);
-    }
+	private static String format(String format, Object... args) {
+		return String.format(Locale.ROOT, format, args);
+	}
 }

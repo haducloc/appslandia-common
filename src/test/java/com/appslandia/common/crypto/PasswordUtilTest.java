@@ -30,14 +30,14 @@ import org.junit.jupiter.api.Test;
  */
 public class PasswordUtilTest {
 
-    @Test
-    public void test() {
-	final PasswordUtil impl = new PasswordUtil();
+	@Test
+	public void test() {
+		final PasswordUtil impl = new PasswordUtil();
 
-	for (int i = 1; i <= 1000; i++) {
-	    String password = new String(impl.generatePassword(8, 32));
+		for (int i = 1; i <= 1000; i++) {
+			String password = new String(impl.generatePassword(8, 32));
 
-	    Assertions.assertTrue(PasswordUtil.isValid(password));
+			Assertions.assertTrue(PasswordUtil.isValid(password));
+		}
 	}
-    }
 }

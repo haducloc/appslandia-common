@@ -33,45 +33,45 @@ import com.appslandia.common.utils.URLEncoding;
  */
 public class URLEncodingTest {
 
-    @Test
-    public void test_encodeParam() {
-	String s = new String(PasswordUtil.generatePassword(1024));
+	@Test
+	public void test_encodeParam() {
+		String s = new String(PasswordUtil.generatePassword(1024));
 
-	String enc = URLEncoding.encodeParam(s);
-	String dec = URLEncoding.decodeParam(enc);
+		String enc = URLEncoding.encodeParam(s);
+		String dec = URLEncoding.decodeParam(enc);
 
-	Assertions.assertEquals(s, dec);
-    }
+		Assertions.assertEquals(s, dec);
+	}
 
-    @Test
-    public void test_encodeParam_spaceToPlus() {
-	String s = " ";
+	@Test
+	public void test_encodeParam_spaceToPlus() {
+		String s = " ";
 
-	String enc = URLEncoding.encodeParam(s);
-	String dec = URLEncoding.decodeParam(enc);
+		String enc = URLEncoding.encodeParam(s);
+		String dec = URLEncoding.decodeParam(enc);
 
-	Assertions.assertEquals("+", enc);
-	Assertions.assertEquals(" ", dec);
-    }
+		Assertions.assertEquals("+", enc);
+		Assertions.assertEquals(" ", dec);
+	}
 
-    @Test
-    public void test_encodeParam_escSpace() {
-	String s = " ";
+	@Test
+	public void test_encodeParam_escSpace() {
+		String s = " ";
 
-	String enc = URLEncoding.encodeParam(s, false);
-	String dec = URLEncoding.decodeParam(enc);
+		String enc = URLEncoding.encodeParam(s, false);
+		String dec = URLEncoding.decodeParam(enc);
 
-	Assertions.assertEquals("%20", enc);
-	Assertions.assertEquals(" ", dec);
-    }
+		Assertions.assertEquals("%20", enc);
+		Assertions.assertEquals(" ", dec);
+	}
 
-    @Test
-    public void test_encodePath() {
-	String s = new String(PasswordUtil.generatePassword(1024));
+	@Test
+	public void test_encodePath() {
+		String s = new String(PasswordUtil.generatePassword(1024));
 
-	String enc = URLEncoding.encodePath(s);
-	String dec = URLEncoding.decodePath(enc);
+		String enc = URLEncoding.encodePath(s);
+		String dec = URLEncoding.decodePath(enc);
 
-	Assertions.assertEquals(s, dec);
-    }
+		Assertions.assertEquals(s, dec);
+	}
 }

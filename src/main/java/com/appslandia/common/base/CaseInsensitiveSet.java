@@ -33,84 +33,84 @@ import java.util.Set;
  *
  */
 public class CaseInsensitiveSet implements Set<String>, Serializable {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    final Set<String> elements;
+	final Set<String> elements;
 
-    public CaseInsensitiveSet() {
-	this(new HashSet<String>());
-    }
+	public CaseInsensitiveSet() {
+		this(new HashSet<String>());
+	}
 
-    public CaseInsensitiveSet(Set<String> newSet) {
-	this.elements = newSet;
-    }
+	public CaseInsensitiveSet(Set<String> newSet) {
+		this.elements = newSet;
+	}
 
-    @Override
-    public int size() {
-	return this.elements.size();
-    }
+	@Override
+	public int size() {
+		return this.elements.size();
+	}
 
-    @Override
-    public boolean isEmpty() {
-	return this.elements.isEmpty();
-    }
+	@Override
+	public boolean isEmpty() {
+		return this.elements.isEmpty();
+	}
 
-    @Override
-    public boolean contains(Object e) {
-	return this.elements.contains(toLowerCase((String) e));
-    }
+	@Override
+	public boolean contains(Object e) {
+		return this.elements.contains(toLowerCase((String) e));
+	}
 
-    @Override
-    public Iterator<String> iterator() {
-	return this.elements.iterator();
-    }
+	@Override
+	public Iterator<String> iterator() {
+		return this.elements.iterator();
+	}
 
-    @Override
-    public Object[] toArray() {
-	return this.elements.toArray();
-    }
+	@Override
+	public Object[] toArray() {
+		return this.elements.toArray();
+	}
 
-    @Override
-    public <T> T[] toArray(T[] a) {
-	return this.elements.toArray(a);
-    }
+	@Override
+	public <T> T[] toArray(T[] a) {
+		return this.elements.toArray(a);
+	}
 
-    @Override
-    public boolean add(String e) {
-	return this.elements.add(toLowerCase(e));
-    }
+	@Override
+	public boolean add(String e) {
+		return this.elements.add(toLowerCase(e));
+	}
 
-    @Override
-    public boolean remove(Object e) {
-	return this.elements.remove(toLowerCase((String) e));
-    }
+	@Override
+	public boolean remove(Object e) {
+		return this.elements.remove(toLowerCase((String) e));
+	}
 
-    @Override
-    public boolean containsAll(Collection<?> c) {
-	throw new UnsupportedOperationException();
-    }
+	@Override
+	public boolean containsAll(Collection<?> c) {
+		throw new UnsupportedOperationException();
+	}
 
-    @Override
-    public boolean addAll(Collection<? extends String> c) {
-	throw new UnsupportedOperationException();
-    }
+	@Override
+	public boolean addAll(Collection<? extends String> c) {
+		throw new UnsupportedOperationException();
+	}
 
-    @Override
-    public boolean retainAll(Collection<?> c) {
-	throw new UnsupportedOperationException();
-    }
+	@Override
+	public boolean retainAll(Collection<?> c) {
+		throw new UnsupportedOperationException();
+	}
 
-    @Override
-    public boolean removeAll(Collection<?> c) {
-	throw new UnsupportedOperationException();
-    }
+	@Override
+	public boolean removeAll(Collection<?> c) {
+		throw new UnsupportedOperationException();
+	}
 
-    @Override
-    public void clear() {
-	this.elements.clear();
-    }
+	@Override
+	public void clear() {
+		this.elements.clear();
+	}
 
-    static String toLowerCase(String key) {
-	return (key != null) ? key.toLowerCase(Locale.ROOT) : null;
-    }
+	static String toLowerCase(String key) {
+		return (key != null) ? key.toLowerCase(Locale.ROOT) : null;
+	}
 }

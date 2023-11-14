@@ -37,58 +37,58 @@ import com.auth0.jwt.interfaces.DecodedJWT;
  */
 public class HsJwtSignerTest {
 
-    @Test
-    public void test_hs() {
-	try {
-	    // signer
-	    JwtSigner signer = HsJwtSigner.HS256().setJsonProcessor(JoseGson.newJsonProcessor()).setSecret("secret".getBytes()).setIss("Issuer1").build();
+	@Test
+	public void test_hs() {
+		try {
+			// signer
+			JwtSigner signer = HsJwtSigner.HS256().setJsonProcessor(JoseGson.newJsonProcessor()).setSecret("secret".getBytes()).setIss("Issuer1").build();
 
-	    JoseHeader header = signer.newHeader();
-	    JwtPayload payload = signer.newPayload().setExp(1, TimeUnit.DAYS).setIatNow();
+			JoseHeader header = signer.newHeader();
+			JwtPayload payload = signer.newPayload().setExp(1, TimeUnit.DAYS).setIatNow();
 
-	    String token = signer.sign(new JwtToken(header, payload));
-	    Assertions.assertNotNull(token);
+			String token = signer.sign(new JwtToken(header, payload));
+			Assertions.assertNotNull(token);
 
-	    // AUTH0
+			// AUTH0
 
-	    Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-	    JWTVerifier verifier = JWT.require(algorithm).withIssuer("Issuer1").build();
+			Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+			JWTVerifier verifier = JWT.require(algorithm).withIssuer("Issuer1").build();
 
-	    DecodedJWT decodedJWT = verifier.verify(token);
+			DecodedJWT decodedJWT = verifier.verify(token);
 
-	    Assertions.assertEquals("JWT", decodedJWT.getType());
-	    Assertions.assertEquals("HS256", decodedJWT.getAlgorithm());
-	    Assertions.assertEquals("Issuer1", decodedJWT.getIssuer());
+			Assertions.assertEquals("JWT", decodedJWT.getType());
+			Assertions.assertEquals("HS256", decodedJWT.getAlgorithm());
+			Assertions.assertEquals("Issuer1", decodedJWT.getIssuer());
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_hs_verify() {
-	try {
-	    // AUTH0
+	@Test
+	public void test_hs_verify() {
+		try {
+			// AUTH0
 
-	    Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-	    String auth0Jwt = JWT.create().withIssuer("Issuer1").sign(algorithm);
+			Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+			String auth0Jwt = JWT.create().withIssuer("Issuer1").sign(algorithm);
 
-	    // signer
-	    JwtSigner signer = HsJwtSigner.HS256().setJsonProcessor(JoseGson.newJsonProcessor()).setSecret("secret".getBytes()).setIss("Issuer1").build();
+			// signer
+			JwtSigner signer = HsJwtSigner.HS256().setJsonProcessor(JoseGson.newJsonProcessor()).setSecret("secret".getBytes()).setIss("Issuer1").build();
 
-	    JwtToken token = signer.parse(auth0Jwt);
-	    signer.verify(token);
+			JwtToken token = signer.parse(auth0Jwt);
+			signer.verify(token);
 
-	    Assertions.assertNotNull(token);
-	    Assertions.assertNotNull(token.getHeader());
-	    Assertions.assertNotNull(token.getPayload());
+			Assertions.assertNotNull(token);
+			Assertions.assertNotNull(token.getHeader());
+			Assertions.assertNotNull(token.getPayload());
 
-	    Assertions.assertEquals("JWT", token.getHeader().getTyp());
-	    Assertions.assertEquals("HS256", token.getHeader().getAlg());
-	    Assertions.assertEquals("Issuer1", token.getPayload().get("iss"));
+			Assertions.assertEquals("JWT", token.getHeader().getTyp());
+			Assertions.assertEquals("HS256", token.getHeader().getAlg());
+			Assertions.assertEquals("Issuer1", token.getPayload().get("iss"));
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 }

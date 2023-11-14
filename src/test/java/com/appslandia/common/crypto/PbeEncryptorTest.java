@@ -34,111 +34,108 @@ import com.appslandia.common.base.ThreadSafeTester;
  */
 public class PbeEncryptorTest {
 
-    @Test
-    public void test() {
-	PbeEncryptor impl = new PbeEncryptor();
-	impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
-	impl.setPassword("password".toCharArray());
-	impl.setAlgParamSpec(PbeEncryptor::toIvParameterSpec);
+	@Test
+	public void test() {
+		PbeEncryptor impl = new PbeEncryptor();
+		impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
+		impl.setPassword("password".toCharArray());
 
-	try {
-	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-	    byte[] encrypted = impl.encrypt(data);
+		try {
+			byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+			byte[] encrypted = impl.encrypt(data);
 
-	    byte[] decrypted = impl.decrypt(encrypted);
-	    Assertions.assertArrayEquals(data, decrypted);
+			byte[] decrypted = impl.decrypt(encrypted);
+			Assertions.assertArrayEquals(data, decrypted);
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_CBC() {
-	PbeEncryptor impl = new PbeEncryptor();
-	impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
-	impl.setPassword("password".toCharArray());
-	impl.setAlgParamSpec(PbeEncryptor::toIvParameterSpec);
+	@Test
+	public void test_CBC() {
+		PbeEncryptor impl = new PbeEncryptor();
+		impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
+		impl.setPassword("password".toCharArray());
 
-	try {
-	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-	    byte[] encrypted = impl.encrypt(data);
+		try {
+			byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+			byte[] encrypted = impl.encrypt(data);
 
-	    byte[] decrypted = impl.decrypt(encrypted);
-	    Assertions.assertArrayEquals(data, decrypted);
+			byte[] decrypted = impl.decrypt(encrypted);
+			Assertions.assertArrayEquals(data, decrypted);
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_ECB() {
-	PbeEncryptor impl = new PbeEncryptor();
-	impl.setTransformation("AES/ECB/PKCS5Padding").setKeySize(16);
-	impl.setPassword("password".toCharArray());
+	@Test
+	public void test_ECB() {
+		PbeEncryptor impl = new PbeEncryptor();
+		impl.setTransformation("AES/ECB/PKCS5Padding").setKeySize(16);
+		impl.setPassword("password".toCharArray());
+		impl.setIvSize(-1);
 
-	try {
-	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-	    byte[] encrypted = impl.encrypt(data);
+		try {
+			byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+			byte[] encrypted = impl.encrypt(data);
 
-	    byte[] decrypted = impl.decrypt(encrypted);
-	    Assertions.assertArrayEquals(data, decrypted);
+			byte[] decrypted = impl.decrypt(encrypted);
+			Assertions.assertArrayEquals(data, decrypted);
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_GCM() {
-	PbeEncryptor impl = new PbeEncryptor();
-	impl.setTransformation("AES/GCM/NoPadding").setKeySize(16);
-	impl.setPassword("password".toCharArray());
-	impl.setAlgParamSpec(PbeEncryptor::toGCMParameterSpec);
+	@Test
+	public void test_GCM() {
+		PbeEncryptor impl = new PbeEncryptor();
+		impl.setTransformation("AES/GCM/NoPadding").setKeySize(16);
+		impl.setPassword("password".toCharArray());
 
-	try {
-	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-	    byte[] encrypted = impl.encrypt(data);
+		try {
+			byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+			byte[] encrypted = impl.encrypt(data);
 
-	    byte[] decrypted = impl.decrypt(encrypted);
-	    Assertions.assertArrayEquals(data, decrypted);
+			byte[] decrypted = impl.decrypt(encrypted);
+			Assertions.assertArrayEquals(data, decrypted);
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_threadSafe() {
-	final PbeEncryptor impl = new PbeEncryptor();
-	impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
-	impl.setPassword("password".toCharArray());
-	impl.setAlgParamSpec(PbeEncryptor::toIvParameterSpec);
+	@Test
+	public void test_threadSafe() {
+		final PbeEncryptor impl = new PbeEncryptor();
+		impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
+		impl.setPassword("password".toCharArray());
 
-	new ThreadSafeTester() {
+		new ThreadSafeTester() {
 
-	    @Override
-	    protected Runnable newTask() {
-		return new Runnable() {
+			@Override
+			protected Runnable newTask() {
+				return new Runnable() {
 
-		    @Override
-		    public void run() {
-			try {
-			    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-			    byte[] encrypted = impl.encrypt(data);
+					@Override
+					public void run() {
+						try {
+							byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+							byte[] encrypted = impl.encrypt(data);
 
-			    byte[] decrypted = impl.decrypt(encrypted);
-			    Assertions.assertArrayEquals(data, decrypted);
+							byte[] decrypted = impl.decrypt(encrypted);
+							Assertions.assertArrayEquals(data, decrypted);
 
-			} catch (Exception ex) {
-			    Assertions.fail(ex.getMessage());
-			} finally {
-			    doneTask();
+						} catch (Exception ex) {
+							Assertions.fail(ex.getMessage());
+						} finally {
+							doneTask();
+						}
+					}
+				};
 			}
-		    }
-		};
-	    }
-	}.execute();
-    }
+		}.execute();
+	}
 }

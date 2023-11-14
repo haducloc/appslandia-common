@@ -33,16 +33,16 @@ import java.io.ObjectOutputStream;
  */
 public class JavaSerUtils {
 
-    public static byte[] serialize(Object obj) throws IOException {
-	ByteArrayOutputStream out = new ByteArrayOutputStream(4096);
-	ObjectOutputStream oos = new ObjectOutputStream(out);
-	oos.writeObject(obj);
-	oos.flush();
-	return out.toByteArray();
-    }
+	public static byte[] serialize(Object obj) throws IOException {
+		ByteArrayOutputStream out = new ByteArrayOutputStream(4096);
+		ObjectOutputStream oos = new ObjectOutputStream(out);
+		oos.writeObject(obj);
+		oos.flush();
+		return out.toByteArray();
+	}
 
-    public static <T> T deserialize(byte[] ser) throws IOException, ClassCastException, ClassNotFoundException {
-	ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(ser));
-	return ObjectUtils.cast(ois.readObject());
-    }
+	public static <T> T deserialize(byte[] ser) throws IOException, ClassCastException, ClassNotFoundException {
+		ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(ser));
+		return ObjectUtils.cast(ois.readObject());
+	}
 }

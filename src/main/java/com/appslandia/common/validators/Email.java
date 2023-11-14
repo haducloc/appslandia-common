@@ -44,24 +44,24 @@ import jakarta.validation.Payload;
 @Documented
 public @interface Email {
 
-    String message() default "{com.appslandia.common.validators.Email.message}";
+	String message() default "{com.appslandia.common.validators.Email.message}";
 
-    Class<?>[] groups() default {};
+	Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default {};
+	Class<? extends Payload>[] payload() default {};
 
-    public static class ConstraintValidatorImpl implements ConstraintValidator<Email, CharSequence> {
+	public static class ConstraintValidatorImpl implements ConstraintValidator<Email, CharSequence> {
 
-	@Override
-	public void initialize(Email annotation) {
+		@Override
+		public void initialize(Email annotation) {
+		}
+
+		@Override
+		public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
+			if (value == null) {
+				return true;
+			}
+			return EmailUtils.isValid(value);
+		}
 	}
-
-	@Override
-	public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
-	    if (value == null) {
-		return true;
-	    }
-	    return EmailUtils.isValid(value);
-	}
-    }
 }

@@ -28,17 +28,17 @@ import java.beans.IntrospectionException;
  *
  */
 public class ReflectionException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public ReflectionException(String message) {
-	super(message);
-    }
+	public ReflectionException(String message) {
+		super(message);
+	}
 
-    public ReflectionException(ReflectiveOperationException cause) {
-	super(cause);
-    }
+	public ReflectionException(ReflectiveOperationException cause) {
+		super(cause);
+	}
 
-    public ReflectionException(IntrospectionException cause) {
-	super(cause);
-    }
+	public ReflectionException(IntrospectionException cause) {
+		super(cause);
+	}
 }

@@ -42,176 +42,177 @@ import com.appslandia.common.utils.STR;
  *
  */
 public abstract class JsonMapObject extends MapWrapper<String, Object> {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public JsonMapObject() {
-	super(new LinkedHashMap<>());
-    }
-
-    public JsonMapObject(Map<String, Object> map) {
-	super(map);
-    }
-
-    @Override
-    public Object put(String key, Object value) {
-	Asserts.notNull(key);
-	Asserts.isTrue(isValueSupported(value), "The value is unsuppored.");
-
-	return super.put(key, value);
-    }
-
-    public JsonMapObject set(String key, Object value) {
-	Asserts.notNull(key);
-	Asserts.isTrue(isValueSupported(value), "The value is unsuppored.");
-
-	super.put(key, value);
-	return this;
-    }
-
-    public Object getRequired(String key) {
-	Object value = this.get(key);
-	return Asserts.notNull(value, "The value is required.");
-    }
-
-    public Date getDate(String key) {
-	Object d = this.get(key);
-	if (d == null) {
-	    return null;
-	}
-	if (d instanceof Date) {
-	    return (Date) d;
-	}
-	if (d.getClass() == Long.class) {
-	    return new Date((Long) d);
-	}
-	throw new IllegalArgumentException(STR.fmt("Failed to getDate('{}')", key));
-    }
-
-    public Integer getInteger(String key) {
-	Object d = this.get(key);
-	if (d == null) {
-	    return null;
-	}
-	if (d instanceof Integer) {
-	    return (Integer) d;
-	}
-	if (d instanceof Number) {
-	    return ((Number) d).intValue();
-	}
-	throw new IllegalArgumentException(STR.fmt("Failed to getInteger('{}')", key));
-    }
-
-    public Long getLong(String key) {
-	Object d = this.get(key);
-	if (d == null) {
-	    return null;
-	}
-	if (d instanceof Long) {
-	    return (Long) d;
-	}
-	if (d instanceof Number) {
-	    return ((Number) d).longValue();
-	}
-	throw new IllegalArgumentException(STR.fmt("Failed to getLong('{}')", key));
-    }
-
-    public Double getDouble(String key) {
-	Object d = this.get(key);
-	if (d == null) {
-	    return null;
-	}
-	if (d instanceof Double) {
-	    return (Double) d;
-	}
-	if (d instanceof Number) {
-	    return ((Number) d).doubleValue();
-	}
-	throw new IllegalArgumentException(STR.fmt("Failed to getDouble('{}')", key));
-    }
-
-    public Boolean getBoolean(String key) {
-	Object d = this.get(key);
-	if (d == null) {
-	    return null;
-	}
-	if (d instanceof Boolean) {
-	    return (Boolean) d;
-	}
-	throw new IllegalArgumentException(STR.fmt("Failed to getBoolean('{}')", key));
-    }
-
-    public <E> List<E> getList(String key) {
-	Object value = this.get(key);
-	if (value == null) {
-	    return null;
+	public JsonMapObject() {
+		super(new LinkedHashMap<>());
 	}
 
-	// List
-	if (value instanceof List) {
-	    return ObjectUtils.cast(value);
+	public JsonMapObject(Map<String, Object> map) {
+		super(map);
 	}
 
-	// Collection
-	if (value instanceof Collection) {
-	    Collection<E> col = ObjectUtils.cast(value);
-	    return new ArrayList<>(col);
+	@Override
+	public Object put(String key, Object value) {
+		Asserts.notNull(key);
+		Asserts.isTrue(isValueSupported(value), "The value is unsuppored.");
+
+		return super.put(key, value);
 	}
 
-	// Array
-	if (value.getClass().isArray()) {
-	    List<Object> list = ArrayUtils.toList(value);
-	    return ObjectUtils.cast(list);
-	}
-	throw new IllegalArgumentException(STR.fmt("Failed to getList('{}')", key));
-    }
+	public JsonMapObject set(String key, Object value) {
+		Asserts.notNull(key);
+		Asserts.isTrue(isValueSupported(value), "The value is unsuppored.");
 
-    protected boolean isValueSupported(Object value) {
-	if (value == null) {
-	    return true;
+		super.put(key, value);
+		return this;
 	}
 
-	// Basic Types
-	if (isBasicType(value.getClass())) {
-	    return true;
+	public Object getRequired(String key) {
+		Object value = this.get(key);
+		return Asserts.notNull(value, "The value is required.");
 	}
 
-	// Collection
-	if (value instanceof Collection) {
-	    return validateCollection((Collection<?>) value);
+	public Date getDate(String key) {
+		Object d = this.get(key);
+		if (d == null) {
+			return null;
+		}
+		if (d instanceof Date) {
+			return (Date) d;
+		}
+		if (d.getClass() == Long.class) {
+			return new Date((Long) d);
+		}
+		throw new IllegalArgumentException(STR.fmt("Failed to getDate('{}')", key));
 	}
 
-	// Map
-	if (value instanceof Map) {
-	    return validateMap((Map<?, ?>) value);
+	public Integer getInteger(String key) {
+		Object d = this.get(key);
+		if (d == null) {
+			return null;
+		}
+		if (d instanceof Integer) {
+			return (Integer) d;
+		}
+		if (d instanceof Number) {
+			return ((Number) d).intValue();
+		}
+		throw new IllegalArgumentException(STR.fmt("Failed to getInteger('{}')", key));
 	}
 
-	// Array
-	if (value.getClass().isArray()) {
-	    return validateArray(value);
+	public Long getLong(String key) {
+		Object d = this.get(key);
+		if (d == null) {
+			return null;
+		}
+		if (d instanceof Long) {
+			return (Long) d;
+		}
+		if (d instanceof Number) {
+			return ((Number) d).longValue();
+		}
+		throw new IllegalArgumentException(STR.fmt("Failed to getLong('{}')", key));
 	}
-	return false;
-    }
 
-    protected boolean isBasicType(Class<?> c) {
-	return (c == String.class) || Number.class.isAssignableFrom(c) || (c == Boolean.class) || Date.class.isAssignableFrom(c) || Temporal.class.isAssignableFrom(c);
-    }
+	public Double getDouble(String key) {
+		Object d = this.get(key);
+		if (d == null) {
+			return null;
+		}
+		if (d instanceof Double) {
+			return (Double) d;
+		}
+		if (d instanceof Number) {
+			return ((Number) d).doubleValue();
+		}
+		throw new IllegalArgumentException(STR.fmt("Failed to getDouble('{}')", key));
+	}
 
-    private boolean validateMap(Map<?, ?> map) {
-	return map.entrySet().stream().allMatch(entry -> {
-	    return (entry.getKey() instanceof String) && ((entry.getValue() == null) || isValueSupported(entry.getValue()));
-	});
-    }
+	public Boolean getBoolean(String key) {
+		Object d = this.get(key);
+		if (d == null) {
+			return null;
+		}
+		if (d instanceof Boolean) {
+			return (Boolean) d;
+		}
+		throw new IllegalArgumentException(STR.fmt("Failed to getBoolean('{}')", key));
+	}
 
-    private boolean validateCollection(Collection<?> col) {
-	return col.stream().allMatch(value -> (value == null) || isValueSupported(value));
-    }
+	public <E> List<E> getList(String key) {
+		Object value = this.get(key);
+		if (value == null) {
+			return null;
+		}
 
-    private boolean validateArray(Object array) {
-	int len = Array.getLength(array);
+		// List
+		if (value instanceof List) {
+			return ObjectUtils.cast(value);
+		}
 
-	return IntStream.range(0, len).allMatch(i -> {
-	    Object value = Array.get(array, i);
-	    return (value == null) || isValueSupported(value);
-	});
-    }
+		// Collection
+		if (value instanceof Collection) {
+			Collection<E> col = ObjectUtils.cast(value);
+			return new ArrayList<>(col);
+		}
+
+		// Array
+		if (value.getClass().isArray()) {
+			List<Object> list = ArrayUtils.toList(value);
+			return ObjectUtils.cast(list);
+		}
+		throw new IllegalArgumentException(STR.fmt("Failed to getList('{}')", key));
+	}
+
+	protected boolean isValueSupported(Object value) {
+		if (value == null) {
+			return true;
+		}
+
+		// Basic Types
+		if (isBasicType(value.getClass())) {
+			return true;
+		}
+
+		// Collection
+		if (value instanceof Collection) {
+			return validateCollection((Collection<?>) value);
+		}
+
+		// Map
+		if (value instanceof Map) {
+			return validateMap((Map<?, ?>) value);
+		}
+
+		// Array
+		if (value.getClass().isArray()) {
+			return validateArray(value);
+		}
+		return false;
+	}
+
+	protected boolean isBasicType(Class<?> c) {
+		return (c == String.class) || Number.class.isAssignableFrom(c) || (c == Boolean.class) || Date.class.isAssignableFrom(c)
+				|| Temporal.class.isAssignableFrom(c);
+	}
+
+	private boolean validateMap(Map<?, ?> map) {
+		return map.entrySet().stream().allMatch(entry -> {
+			return (entry.getKey() instanceof String) && ((entry.getValue() == null) || isValueSupported(entry.getValue()));
+		});
+	}
+
+	private boolean validateCollection(Collection<?> col) {
+		return col.stream().allMatch(value -> (value == null) || isValueSupported(value));
+	}
+
+	private boolean validateArray(Object array) {
+		int len = Array.getLength(array);
+
+		return IntStream.range(0, len).allMatch(i -> {
+			Object value = Array.get(array, i);
+			return (value == null) || isValueSupported(value);
+		});
+	}
 }

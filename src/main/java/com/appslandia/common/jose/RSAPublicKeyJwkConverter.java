@@ -37,61 +37,61 @@ import com.appslandia.common.utils.Asserts;
  */
 public class RSAPublicKeyJwkConverter extends JwkConverter<RSAPublicKey> implements Cloneable {
 
-    private String rsaKeyFactoryProvider;
-    private KeyFactoryUtil keyFactoryUtil;
+	private String rsaKeyFactoryProvider;
+	private KeyFactoryUtil keyFactoryUtil;
 
-    public RSAPublicKeyJwkConverter() {
-	super("RSA");
-    }
+	public RSAPublicKeyJwkConverter() {
+		super("RSA");
+	}
 
-    @Override
-    protected void init() throws Exception {
-	this.keyFactoryUtil = new KeyFactoryUtil("RSA", this.rsaKeyFactoryProvider);
-    }
+	@Override
+	protected void init() throws Exception {
+		this.keyFactoryUtil = new KeyFactoryUtil("RSA", this.rsaKeyFactoryProvider);
+	}
 
-    @Override
-    public JsonWebKey toJsonWebKey(RSAPublicKey key) {
-	this.initialize();
-	Asserts.isTrue("RSA".equals(key.getAlgorithm()));
+	@Override
+	public JsonWebKey toJsonWebKey(RSAPublicKey key) {
+		this.initialize();
+		Asserts.isTrue("RSA".equals(key.getAlgorithm()));
 
-	// jwk
-	JsonWebKey jwk = new JsonWebKey();
-	jwk.setKty(this.kty);
+		// jwk
+		JsonWebKey jwk = new JsonWebKey();
+		jwk.setKty(this.kty);
 
-	byte[] nBytes = CryptoUtils.stripLeadingZeros(key.getModulus().toByteArray());
-	byte[] eBytes = CryptoUtils.stripLeadingZeros(key.getPublicExponent().toByteArray());
+		byte[] nBytes = CryptoUtils.stripLeadingZeros(key.getModulus().toByteArray());
+		byte[] eBytes = CryptoUtils.stripLeadingZeros(key.getPublicExponent().toByteArray());
 
-	jwk.put("n", JoseUtils.getJoseBase64().encode(nBytes));
-	jwk.put("e", JoseUtils.getJoseBase64().encode(eBytes));
+		jwk.put("n", JoseUtils.getJoseBase64().encode(nBytes));
+		jwk.put("e", JoseUtils.getJoseBase64().encode(eBytes));
 
-	return jwk;
-    }
+		return jwk;
+	}
 
-    @Override
-    public RSAPublicKey fromJsonWebKey(JsonWebKey jwk) throws CryptoException {
-	this.initialize();
-	Asserts.isTrue(this.kty.equals(kty), "kty doesn't match.");
+	@Override
+	public RSAPublicKey fromJsonWebKey(JsonWebKey jwk) throws CryptoException {
+		this.initialize();
+		Asserts.isTrue(this.kty.equals(kty), "kty doesn't match.");
 
-	String n = Asserts.notNull((String) jwk.get("n"), "n is required.");
-	String e = Asserts.notNull((String) jwk.get("e"), "e is required.");
+		String n = Asserts.notNull((String) jwk.get("n"), "n is required.");
+		String e = Asserts.notNull((String) jwk.get("e"), "e is required.");
 
-	byte[] nBytes = JoseUtils.getJoseBase64().decode(n);
-	byte[] eBytes = JoseUtils.getJoseBase64().decode(e);
+		byte[] nBytes = JoseUtils.getJoseBase64().decode(n);
+		byte[] eBytes = JoseUtils.getJoseBase64().decode(e);
 
-	RSAPublicKeySpec keySpec = new RSAPublicKeySpec(new BigInteger(nBytes), new BigInteger(eBytes));
-	PublicKey publicKey = this.keyFactoryUtil.toPublicKey(keySpec);
+		RSAPublicKeySpec keySpec = new RSAPublicKeySpec(new BigInteger(nBytes), new BigInteger(eBytes));
+		PublicKey publicKey = this.keyFactoryUtil.toPublicKey(keySpec);
 
-	return (RSAPublicKey) publicKey;
-    }
+		return (RSAPublicKey) publicKey;
+	}
 
-    public RSAPublicKeyJwkConverter setRsaKeyFactoryProvider(String rsaKeyFactoryProvider) {
-	assertNotInitialized();
-	this.rsaKeyFactoryProvider = rsaKeyFactoryProvider;
-	return this;
-    }
+	public RSAPublicKeyJwkConverter setRsaKeyFactoryProvider(String rsaKeyFactoryProvider) {
+		assertNotInitialized();
+		this.rsaKeyFactoryProvider = rsaKeyFactoryProvider;
+		return this;
+	}
 
-    @Override
-    public RSAPublicKeyJwkConverter clone() {
-	return new RSAPublicKeyJwkConverter().setRsaKeyFactoryProvider(this.rsaKeyFactoryProvider);
-    }
+	@Override
+	public RSAPublicKeyJwkConverter clone() {
+		return new RSAPublicKeyJwkConverter().setRsaKeyFactoryProvider(this.rsaKeyFactoryProvider);
+	}
 }

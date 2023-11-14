@@ -33,26 +33,26 @@ import com.appslandia.common.utils.Asserts;
  */
 public class MutexService<K> extends InitializeObject {
 
-    private final Map<K, Object> mutexMap = new HashMap<>();
-    private final Object mutex = new Object();
+	private final Map<K, Object> mutexMap = new HashMap<>();
+	private final Object mutex = new Object();
 
-    @Override
-    protected void init() throws Exception {
-    }
-
-    public Object getMutex(K key) {
-	Asserts.notNull(key);
-
-	Object mutex = this.mutexMap.get(key);
-	if (mutex == null) {
-	    synchronized (this.mutex) {
-		if ((mutex = this.mutexMap.get(key)) == null) {
-
-		    mutex = new Object();
-		    this.mutexMap.put(key, mutex);
-		}
-	    }
+	@Override
+	protected void init() throws Exception {
 	}
-	return mutex;
-    }
+
+	public Object getMutex(K key) {
+		Asserts.notNull(key);
+
+		Object mutex = this.mutexMap.get(key);
+		if (mutex == null) {
+			synchronized (this.mutex) {
+				if ((mutex = this.mutexMap.get(key)) == null) {
+
+					mutex = new Object();
+					this.mutexMap.put(key, mutex);
+				}
+			}
+		}
+		return mutex;
+	}
 }

@@ -29,47 +29,47 @@ import com.appslandia.common.utils.STR;
  */
 public class ResultSetColumn {
 
-    final int index;
-    final String name;
-    final int sqlType;
+	final int index;
+	final String name;
+	final int sqlType;
 
-    public ResultSetColumn(int index, String name, int sqlType) {
-	this.index = index;
-	this.name = name;
-	this.sqlType = sqlType;
-    }
-
-    public int getIndex() {
-	return this.index;
-    }
-
-    public String getName() {
-	return this.name;
-    }
-
-    public int getSqlType() {
-	return this.sqlType;
-    }
-
-    @Override
-    public String toString() {
-	return STR.fmt("index={}, name={}, sqlType={}", this.name, this.index, this.sqlType);
-    }
-
-    @Override
-    public int hashCode() {
-	return Integer.hashCode(this.index);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj) {
-	    return true;
+	public ResultSetColumn(int index, String name, int sqlType) {
+		this.index = index;
+		this.name = name;
+		this.sqlType = sqlType;
 	}
-	if (!(obj instanceof ResultSetColumn)) {
-	    return false;
+
+	public int getIndex() {
+		return this.index;
 	}
-	ResultSetColumn other = (ResultSetColumn) obj;
-	return this.index == other.index;
-    }
+
+	public String getName() {
+		return this.name;
+	}
+
+	public int getSqlType() {
+		return this.sqlType;
+	}
+
+	@Override
+	public String toString() {
+		return STR.fmt("index={}, name={}, sqlType={}", this.name, this.index, this.sqlType);
+	}
+
+	@Override
+	public int hashCode() {
+		return Integer.hashCode(this.index);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof ResultSetColumn)) {
+			return false;
+		}
+		ResultSetColumn other = (ResultSetColumn) obj;
+		return this.index == other.index;
+	}
 }

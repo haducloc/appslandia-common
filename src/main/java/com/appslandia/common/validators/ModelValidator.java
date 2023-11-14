@@ -32,18 +32,18 @@ import com.appslandia.common.utils.Asserts;
  */
 public abstract class ModelValidator<T> {
 
-    public abstract boolean validate(T model);
+	public abstract boolean validate(T model);
 
-    private static final Map<String, ModelValidator<?>> VALIDATORS = new HashMap<String, ModelValidator<?>>();
+	private static final Map<String, ModelValidator<?>> VALIDATORS = new HashMap<String, ModelValidator<?>>();
 
-    public static void addValidator(String key, ModelValidator<?> modelValidator) {
-	Asserts.isTrue(!VALIDATORS.containsKey(key));
-	VALIDATORS.put(key, modelValidator);
-    }
+	public static void addValidator(String key, ModelValidator<?> modelValidator) {
+		Asserts.isTrue(!VALIDATORS.containsKey(key));
+		VALIDATORS.put(key, modelValidator);
+	}
 
-    @SuppressWarnings("unchecked")
-    public static <T> ModelValidator<T> getValidator(String key) {
-	ModelValidator<T> validator = (ModelValidator<T>) VALIDATORS.get(key);
-	return Asserts.notNull(validator);
-    }
+	@SuppressWarnings("unchecked")
+	public static <T> ModelValidator<T> getValidator(String key) {
+		ModelValidator<T> validator = (ModelValidator<T>) VALIDATORS.get(key);
+		return Asserts.notNull(validator);
+	}
 }

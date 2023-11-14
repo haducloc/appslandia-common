@@ -33,93 +33,93 @@ import java.util.Iterator;
  */
 public class BitUtils {
 
-    public static Iterator<Integer> bitIterator(int value) {
-	return bitIterator(MathUtils.toByteArray(value));
-    }
+	public static Iterator<Integer> bitIterator(int value) {
+		return bitIterator(MathUtils.toByteArray(value));
+	}
 
-    public static Iterator<Integer> bitIterator(long value) {
-	return bitIterator(MathUtils.toByteArray(value));
-    }
+	public static Iterator<Integer> bitIterator(long value) {
+		return bitIterator(MathUtils.toByteArray(value));
+	}
 
-    public static Iterator<Integer> bitIterator(byte... bytes) {
-	return new Iterator<Integer>() {
+	public static Iterator<Integer> bitIterator(byte... bytes) {
+		return new Iterator<Integer>() {
 
-	    private int curIdx = -1;
-	    private Iterator<Integer> curIterator;
+			private int curIdx = -1;
+			private Iterator<Integer> curIterator;
 
-	    private Iterator<Integer> getCurIterator() {
-		if ((this.curIterator == null) || !this.curIterator.hasNext()) {
-		    this.curIdx++;
+			private Iterator<Integer> getCurIterator() {
+				if ((this.curIterator == null) || !this.curIterator.hasNext()) {
+					this.curIdx++;
 
-		    if (this.curIdx < bytes.length) {
-			this.curIterator = bitIterator(bytes[this.curIdx]);
-		    } else {
-			this.curIterator = Collections.emptyIterator();
-		    }
-		}
-		return this.curIterator;
-	    }
-
-	    @Override
-	    public Integer next() {
-		return getCurIterator().next();
-	    }
-
-	    @Override
-	    public boolean hasNext() {
-		return getCurIterator().hasNext();
-	    }
-	};
-    }
-
-    public static Iterator<Integer> bitIterator(InputStream value) {
-	return new Iterator<Integer>() {
-
-	    private Iterator<Integer> curIterator;
-
-	    private Iterator<Integer> getCurIterator() {
-		if ((this.curIterator == null) || !this.curIterator.hasNext()) {
-		    try {
-			int v = value.read();
-			if (v != -1) {
-			    this.curIterator = bitIterator((byte) v);
-			} else {
-			    this.curIterator = Collections.emptyIterator();
+					if (this.curIdx < bytes.length) {
+						this.curIterator = bitIterator(bytes[this.curIdx]);
+					} else {
+						this.curIterator = Collections.emptyIterator();
+					}
+				}
+				return this.curIterator;
 			}
-		    } catch (IOException ex) {
-			throw new UncheckedIOException(ex);
-		    }
-		}
-		return this.curIterator;
-	    }
 
-	    @Override
-	    public Integer next() {
-		return getCurIterator().next();
-	    }
+			@Override
+			public Integer next() {
+				return getCurIterator().next();
+			}
 
-	    @Override
-	    public boolean hasNext() {
-		return getCurIterator().hasNext();
-	    }
-	};
-    }
+			@Override
+			public boolean hasNext() {
+				return getCurIterator().hasNext();
+			}
+		};
+	}
 
-    public static Iterator<Integer> bitIterator(byte value) {
+	public static Iterator<Integer> bitIterator(InputStream value) {
+		return new Iterator<Integer>() {
 
-	return new Iterator<Integer>() {
+			private Iterator<Integer> curIterator;
 
-	    int index = 7;
+			private Iterator<Integer> getCurIterator() {
+				if ((this.curIterator == null) || !this.curIterator.hasNext()) {
+					try {
+						int v = value.read();
+						if (v != -1) {
+							this.curIterator = bitIterator((byte) v);
+						} else {
+							this.curIterator = Collections.emptyIterator();
+						}
+					} catch (IOException ex) {
+						throw new UncheckedIOException(ex);
+					}
+				}
+				return this.curIterator;
+			}
 
-	    @Override
-	    public Integer next() {
-		return (value & (1 << (this.index--))) > 0 ? 1 : 0;
-	    }
+			@Override
+			public Integer next() {
+				return getCurIterator().next();
+			}
 
-	    @Override
-	    public boolean hasNext() {
-		return this.index >= 0;
-	    }
-	};
-    }
+			@Override
+			public boolean hasNext() {
+				return getCurIterator().hasNext();
+			}
+		};
+	}
+
+	public static Iterator<Integer> bitIterator(byte value) {
+
+		return new Iterator<Integer>() {
+
+			int index = 7;
+
+			@Override
+			public Integer next() {
+				return (value & (1 << (this.index--))) > 0 ? 1 : 0;
+			}
+
+			@Override
+			public boolean hasNext() {
+				return this.index >= 0;
+			}
+		};
+	}
 }

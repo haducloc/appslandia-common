@@ -28,5 +28,5 @@ package com.appslandia.common.base;
 @FunctionalInterface
 public interface ExceptionBlock {
 
-    void run() throws Exception;
+	void run() throws Exception;
 }

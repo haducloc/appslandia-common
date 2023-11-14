@@ -33,35 +33,35 @@ import com.appslandia.common.utils.StringUtils;
  */
 public class KeywordsConverter implements Converter<String> {
 
-    public static final String ERROR_MSG_KEY = KeywordsConverter.class.getName() + ".message";
+	public static final String ERROR_MSG_KEY = KeywordsConverter.class.getName() + ".message";
 
-    @Override
-    public String getErrorMsgKey() {
-	return ERROR_MSG_KEY;
-    }
-
-    @Override
-    public Class<String> getTargetType() {
-	return String.class;
-    }
-
-    @Override
-    public String format(String obj, FormatProvider formatProvider, boolean localize) {
-	return obj;
-    }
-
-    @Override
-    public String parse(String str, FormatProvider formatProvider) throws ConverterException {
-	str = StringUtils.trimToNull(str);
-	if (str == null) {
-	    return null;
+	@Override
+	public String getErrorMsgKey() {
+		return ERROR_MSG_KEY;
 	}
-	Out<Boolean> isValid = new Out<Boolean>();
-	String keywords = KeywordUtils.toKeywords(str, isValid);
 
-	if (!isValid.val()) {
-	    throw new ConverterException(STR.fmt("keywords '{}' is invalid.", str), getErrorMsgKey());
+	@Override
+	public Class<String> getTargetType() {
+		return String.class;
 	}
-	return keywords;
-    }
+
+	@Override
+	public String format(String obj, FormatProvider formatProvider, boolean localize) {
+		return obj;
+	}
+
+	@Override
+	public String parse(String str, FormatProvider formatProvider) throws ConverterException {
+		str = StringUtils.trimToNull(str);
+		if (str == null) {
+			return null;
+		}
+		Out<Boolean> isValid = new Out<Boolean>();
+		String keywords = KeywordUtils.toKeywords(str, isValid);
+
+		if (!isValid.val()) {
+			throw new ConverterException(STR.fmt("keywords '{}' is invalid.", str), getErrorMsgKey());
+		}
+		return keywords;
+	}
 }

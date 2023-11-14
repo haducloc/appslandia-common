@@ -27,19 +27,19 @@ package com.appslandia.common.threading;
  */
 public interface TaskAttributes {
 
-    String getTaskId();
+	String getTaskId();
 
-    long getSubmittedTime();
+	long getSubmittedTime();
 
-    default String getTaskName() {
-	return getTaskId();
-    }
+	default String getTaskName() {
+		return getTaskId();
+	}
 
-    default String getDescription() {
-	return null;
-    }
+	default String getDescription() {
+		return null;
+	}
 
-    default boolean isInterruptThreadOnCancel() {
-	return true;
-    }
+	default boolean isInterruptThreadOnCancel() {
+		return true;
+	}
 }

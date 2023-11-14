@@ -31,22 +31,22 @@ import jakarta.validation.ValidatorFactory;
  */
 public class ValidatorUtils {
 
-    private static class ValidatorFactoryHolder {
-	static final ValidatorFactory impl;
-	static {
-	    ValidatorFactory obj = Validation.buildDefaultValidatorFactory();
+	private static class ValidatorFactoryHolder {
+		static final ValidatorFactory impl;
+		static {
+			ValidatorFactory obj = Validation.buildDefaultValidatorFactory();
 
-	    Runtime.getRuntime().addShutdownHook(new Thread() {
-		@Override
-		public void run() {
-		    obj.close();
+			Runtime.getRuntime().addShutdownHook(new Thread() {
+				@Override
+				public void run() {
+					obj.close();
+				}
+			});
+			impl = obj;
 		}
-	    });
-	    impl = obj;
 	}
-    }
 
-    public static Validator getValidator() {
-	return ValidatorFactoryHolder.impl.getValidator();
-    }
+	public static Validator getValidator() {
+		return ValidatorFactoryHolder.impl.getValidator();
+	}
 }

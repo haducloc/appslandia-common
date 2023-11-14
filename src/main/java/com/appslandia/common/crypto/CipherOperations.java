@@ -20,32 +20,50 @@
 
 package com.appslandia.common.crypto;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import java.util.Locale;
+
+import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.STR;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class TextEncryptorTest {
+public class CipherOperations {
 
-	@Test
-	public void test() {
-		PbeEncryptor encryptor = new PbeEncryptor();
-		encryptor.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
-		encryptor.setPassword("password".toCharArray());
+	final String algorithm;
+	final String mode;
+	final String padding;
 
-		TextEncryptor impl = new TextEncryptor().setEncryptor(encryptor);
+	public CipherOperations(String transformation) {
+		Asserts.notNull(transformation);
 
-		try {
-			String message = "data";
-			String encrypted = impl.encrypt(message);
-			String decrypted = impl.decrypt(encrypted);
+		String[] operations = transformation.split("/");
+		Asserts.isTrue(operations.length == 3, "transformation is invalid.");
 
-			Assertions.assertEquals(message, decrypted);
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
+		operations[0] = operations[0].toUpperCase(Locale.ENGLISH);
+		operations[1] = operations[1].toUpperCase(Locale.ENGLISH);
+
+		this.algorithm = operations[0];
+		this.mode = operations[1];
+		this.padding = operations[2];
+	}
+
+	public String getAlgorithm() {
+		return this.algorithm;
+	}
+
+	public String getMode() {
+		return this.mode;
+	}
+
+	public String getPadding() {
+		return this.padding;
+	}
+
+	@Override
+	public String toString() {
+		return STR.fmt("{}/{}/{}", this.algorithm, this.mode, this.padding);
 	}
 }

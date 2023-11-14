@@ -32,71 +32,71 @@ import java.util.stream.Collectors;
  */
 public class ObjectUtils {
 
-    public static final String NULL_STR = "null";
+	public static final String NULL_STR = "null";
 
-    public static String toStringOrEmpty(Object obj) {
-	return obj != null ? obj.toString() : StringUtils.EMPTY_STRING;
-    }
-
-    public static String toStringOrNull(Object obj) {
-	return (obj != null) ? obj.toString() : null;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <F, T> T cast(F obj) throws ClassCastException {
-	return (T) obj;
-    }
-
-    public static String toIdHash(Object obj) {
-	if (obj == null) {
-	    return NULL_STR;
+	public static String toStringOrEmpty(Object obj) {
+		return obj != null ? obj.toString() : StringUtils.EMPTY_STRING;
 	}
-	return obj.getClass().getName() + "@" + Integer.toHexString(System.identityHashCode(obj));
-    }
 
-    public static void closeQuietly(AutoCloseable obj) {
-	if (obj != null) {
-	    try {
-		obj.close();
-	    } catch (Exception ignore) {
-	    }
+	public static String toStringOrNull(Object obj) {
+		return (obj != null) ? obj.toString() : null;
 	}
-    }
 
-    public static <T> String asString(T[] array) {
-	if (array == null) {
-	    return NULL_STR;
+	@SuppressWarnings("unchecked")
+	public static <F, T> T cast(F obj) throws ClassCastException {
+		return (T) obj;
 	}
-	return Arrays.stream(array).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
-    }
 
-    public static String asString(Object array) {
-	Asserts.isTrue((array == null) || array.getClass().isArray());
-
-	if (array == null) {
-	    return NULL_STR;
+	public static String toIdHash(Object obj) {
+		if (obj == null) {
+			return NULL_STR;
+		}
+		return obj.getClass().getName() + "@" + Integer.toHexString(System.identityHashCode(obj));
 	}
-	return StreamUtils.stream(new ArrayUtils.ArrayObjIterator(array)).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
-    }
 
-    public static String asString(Iterable<?> iterable) {
-	if (iterable == null) {
-	    return NULL_STR;
+	public static void closeQuietly(AutoCloseable obj) {
+		if (obj != null) {
+			try {
+				obj.close();
+			} catch (Exception ignore) {
+			}
+		}
 	}
-	return StreamUtils.stream(iterable).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
-    }
 
-    public static String asString(Iterator<?> iterator) {
-	if (iterator == null) {
-	    return NULL_STR;
+	public static <T> String asString(T[] array) {
+		if (array == null) {
+			return NULL_STR;
+		}
+		return Arrays.stream(array).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
 	}
-	return StreamUtils.stream(iterator).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
-    }
 
-    public static String asString(Enumeration<?> enumer) {
-	if (enumer == null) {
-	    return NULL_STR;
+	public static String asString(Object array) {
+		Asserts.isTrue((array == null) || array.getClass().isArray());
+
+		if (array == null) {
+			return NULL_STR;
+		}
+		return StreamUtils.stream(new ArrayUtils.ArrayObjIterator(array)).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
 	}
-	return StreamUtils.stream(enumer).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
-    }
+
+	public static String asString(Iterable<?> iterable) {
+		if (iterable == null) {
+			return NULL_STR;
+		}
+		return StreamUtils.stream(iterable).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
+	}
+
+	public static String asString(Iterator<?> iterator) {
+		if (iterator == null) {
+			return NULL_STR;
+		}
+		return StreamUtils.stream(iterator).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
+	}
+
+	public static String asString(Enumeration<?> enumer) {
+		if (enumer == null) {
+			return NULL_STR;
+		}
+		return StreamUtils.stream(enumer).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
+	}
 }

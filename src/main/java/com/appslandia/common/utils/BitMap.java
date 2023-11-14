@@ -28,81 +28,81 @@ import java.util.BitSet;
  *
  */
 public class BitMap extends BitSet {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public BitMap() {
-    }
-
-    public BitMap(int bits) {
-	super(bits);
-    }
-
-    public BitMap(BitSet bitSet) {
-	super(bitSet.size());
-	or(bitSet);
-    }
-
-    public BitMap on(int fromIdx, int toIdxExclusive) {
-	set(fromIdx, toIdxExclusive);
-	return this;
-    }
-
-    public BitMap on(int... indexes) {
-	for (int index : indexes) {
-	    set(index);
+	public BitMap() {
 	}
-	return this;
-    }
 
-    public BitMap on(String charRangles) {
-	for (char chr : CharUtils.toCharRanges(charRangles)) {
-	    set(chr);
+	public BitMap(int bits) {
+		super(bits);
 	}
-	return this;
-    }
 
-    public BitMap off(int fromIdx, int toIdxExclusive) {
-	clear(fromIdx, toIdxExclusive);
-	return this;
-    }
-
-    public BitMap off(int... indexes) {
-	for (int index : indexes) {
-	    clear(index);
+	public BitMap(BitSet bitSet) {
+		super(bitSet.size());
+		or(bitSet);
 	}
-	return this;
-    }
 
-    public BitMap off(String charRangles) {
-	for (char chr : CharUtils.toCharRanges(charRangles)) {
-	    clear(chr);
+	public BitMap on(int fromIdx, int toIdxExclusive) {
+		set(fromIdx, toIdxExclusive);
+		return this;
 	}
-	return this;
-    }
 
-    public BitMap toggle(int fromIdx, int toIdxExclusive) {
-	flip(fromIdx, toIdxExclusive);
-	return this;
-    }
-
-    public BitMap toggle(int... indexes) {
-	for (int index : indexes) {
-	    flip(index);
+	public BitMap on(int... indexes) {
+		for (int index : indexes) {
+			set(index);
+		}
+		return this;
 	}
-	return this;
-    }
 
-    public BitMap toggle(String charRangles) {
-	for (char chr : CharUtils.toCharRanges(charRangles)) {
-	    flip(chr);
+	public BitMap on(String charRangles) {
+		for (char chr : CharUtils.toCharRanges(charRangles)) {
+			set(chr);
+		}
+		return this;
 	}
-	return this;
-    }
 
-    @Override
-    public BitMap clone() {
-	BitMap impl = new BitMap(this.size());
-	impl.or(this);
-	return impl;
-    }
+	public BitMap off(int fromIdx, int toIdxExclusive) {
+		clear(fromIdx, toIdxExclusive);
+		return this;
+	}
+
+	public BitMap off(int... indexes) {
+		for (int index : indexes) {
+			clear(index);
+		}
+		return this;
+	}
+
+	public BitMap off(String charRangles) {
+		for (char chr : CharUtils.toCharRanges(charRangles)) {
+			clear(chr);
+		}
+		return this;
+	}
+
+	public BitMap toggle(int fromIdx, int toIdxExclusive) {
+		flip(fromIdx, toIdxExclusive);
+		return this;
+	}
+
+	public BitMap toggle(int... indexes) {
+		for (int index : indexes) {
+			flip(index);
+		}
+		return this;
+	}
+
+	public BitMap toggle(String charRangles) {
+		for (char chr : CharUtils.toCharRanges(charRangles)) {
+			flip(chr);
+		}
+		return this;
+	}
+
+	@Override
+	public BitMap clone() {
+		BitMap impl = new BitMap(this.size());
+		impl.or(this);
+		return impl;
+	}
 }

@@ -44,24 +44,24 @@ import jakarta.validation.Payload;
 @Documented
 public @interface Password {
 
-    String message() default "{com.appslandia.common.validators.Password.message}";
+	String message() default "{com.appslandia.common.validators.Password.message}";
 
-    Class<?>[] groups() default {};
+	Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default {};
+	Class<? extends Payload>[] payload() default {};
 
-    public static class ConstraintValidatorImpl implements ConstraintValidator<Password, CharSequence> {
+	public static class ConstraintValidatorImpl implements ConstraintValidator<Password, CharSequence> {
 
-	@Override
-	public void initialize(Password annotation) {
+		@Override
+		public void initialize(Password annotation) {
+		}
+
+		@Override
+		public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
+			if (value == null) {
+				return true;
+			}
+			return PasswordUtil.isValid(value.toString());
+		}
 	}
-
-	@Override
-	public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
-	    if (value == null) {
-		return true;
-	    }
-	    return PasswordUtil.isValid(value.toString());
-	}
-    }
 }

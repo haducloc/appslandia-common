@@ -34,44 +34,44 @@ import com.appslandia.common.utils.STR;
  *
  */
 public class RateLimit implements Serializable {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    final double accesses;
-    final long windowsMs;
+	final double accesses;
+	final long windowsMs;
 
-    public RateLimit(double accesses, long windowsMs) {
-	this.accesses = accesses;
-	this.windowsMs = windowsMs;
-    }
+	public RateLimit(double accesses, long windowsMs) {
+		this.accesses = accesses;
+		this.windowsMs = windowsMs;
+	}
 
-    public double getAccesses() {
-	return this.accesses;
-    }
+	public double getAccesses() {
+		return this.accesses;
+	}
 
-    public long getWindowMs() {
-	return this.windowsMs;
-    }
+	public long getWindowMs() {
+		return this.windowsMs;
+	}
 
-    public double getRatePerMs() {
-	return this.accesses / this.windowsMs;
-    }
+	public double getRatePerMs() {
+		return this.accesses / this.windowsMs;
+	}
 
-    @Override
-    public String toString() {
-	return STR.fmt("RateLimit: accesses={}, windowsMs={}", this.accesses, this.windowsMs);
-    }
+	@Override
+	public String toString() {
+		return STR.fmt("RateLimit: accesses={}, windowsMs={}", this.accesses, this.windowsMs);
+	}
 
-    static final Pattern RATE_LIMIT_PATTERN = Pattern.compile("(\\d+.\\d+|\\d+)\\s*/\\s*\\d+(w|d|h|m|s|ms)", Pattern.CASE_INSENSITIVE);
+	static final Pattern RATE_LIMIT_PATTERN = Pattern.compile("(\\d+.\\d+|\\d+)\\s*/\\s*\\d+(w|d|h|m|s|ms)", Pattern.CASE_INSENSITIVE);
 
-    public static RateLimit parse(String rateLimit) {
-	Asserts.notNull(rateLimit);
-	Asserts.isTrue(RATE_LIMIT_PATTERN.matcher(rateLimit).matches(), () -> STR.fmt("rateLimit '{}' is invalid.", rateLimit));
+	public static RateLimit parse(String rateLimit) {
+		Asserts.notNull(rateLimit);
+		Asserts.isTrue(RATE_LIMIT_PATTERN.matcher(rateLimit).matches(), () -> STR.fmt("rateLimit '{}' is invalid.", rateLimit));
 
-	int idx = rateLimit.indexOf('/');
+		int idx = rateLimit.indexOf('/');
 
-	double accesses = Double.parseDouble(rateLimit.substring(0, idx).trim());
-	long windowsMs = DateUtils.translateToMs(rateLimit.substring(idx + 1).trim());
+		double accesses = Double.parseDouble(rateLimit.substring(0, idx).trim());
+		long windowsMs = DateUtils.translateToMs(rateLimit.substring(idx + 1).trim());
 
-	return new RateLimit(accesses, windowsMs);
-    }
+		return new RateLimit(accesses, windowsMs);
+	}
 }

@@ -33,37 +33,37 @@ import com.appslandia.common.base.Language;
  */
 public class StringConverterTest {
 
-    @Test
-    public void test_targetType() {
-	StringConverter converter = new StringConverter();
-	Assertions.assertEquals(String.class, converter.getTargetType());
-    }
-
-    @Test
-    public void test() {
-	StringConverter converter = new StringConverter();
-	try {
-	    String value = " test ";
-	    String str = converter.parse(value, new FormatProviderImpl(Language.EN_US));
-
-	    Assertions.assertEquals("test", str);
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+	@Test
+	public void test_targetType() {
+		StringConverter converter = new StringConverter();
+		Assertions.assertEquals(String.class, converter.getTargetType());
 	}
-    }
 
-    @Test
-    public void test_null() {
-	StringConverter converter = new StringConverter();
-	try {
-	    String value = null;
-	    String str = converter.parse(value, new FormatProviderImpl(Language.EN_US));
+	@Test
+	public void test() {
+		StringConverter converter = new StringConverter();
+		try {
+			String value = " test ";
+			String str = converter.parse(value, new FormatProviderImpl(Language.EN_US));
 
-	    Assertions.assertNull(str);
+			Assertions.assertEquals("test", str);
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
+
+	@Test
+	public void test_null() {
+		StringConverter converter = new StringConverter();
+		try {
+			String value = null;
+			String str = converter.parse(value, new FormatProviderImpl(Language.EN_US));
+
+			Assertions.assertNull(str);
+
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
+	}
 }

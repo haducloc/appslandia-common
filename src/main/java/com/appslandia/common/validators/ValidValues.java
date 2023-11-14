@@ -46,43 +46,43 @@ import jakarta.validation.Payload;
 @Documented
 public @interface ValidValues {
 
-    String message() default "{com.appslandia.common.validators.ValidValues.message}";
+	String message() default "{com.appslandia.common.validators.ValidValues.message}";
 
-    Class<?>[] groups() default {};
+	Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default {};
+	Class<? extends Payload>[] payload() default {};
 
-    String[] value() default {};
+	String[] value() default {};
 
-    int[] ints() default {};
+	int[] ints() default {};
 
-    public static class ConstraintValidatorImpl implements ConstraintValidator<ValidValues, Object> {
+	public static class ConstraintValidatorImpl implements ConstraintValidator<ValidValues, Object> {
 
-	private String[] validValues;
+		private String[] validValues;
 
-	@Override
-	public void initialize(ValidValues annotation) {
-	    String[] values = annotation.value();
-	    if (values.length == 0) {
-		values = Arrays.stream(annotation.ints()).mapToObj(v -> Integer.toString(v)).toArray(String[]::new);
-	    }
-	    if (values.length == 0) {
-		throw new AssertException(STR.fmt("The given {} is invalid. value or ints is required.", annotation));
-	    }
-	    this.validValues = values;
-	}
-
-	@Override
-	public boolean isValid(Object value, ConstraintValidatorContext context) {
-	    if (value == null) {
-		return true;
-	    }
-	    for (String validValue : this.validValues) {
-		if (validValue.equalsIgnoreCase(value.toString())) {
-		    return true;
+		@Override
+		public void initialize(ValidValues annotation) {
+			String[] values = annotation.value();
+			if (values.length == 0) {
+				values = Arrays.stream(annotation.ints()).mapToObj(v -> Integer.toString(v)).toArray(String[]::new);
+			}
+			if (values.length == 0) {
+				throw new AssertException(STR.fmt("The given {} is invalid. value or ints is required.", annotation));
+			}
+			this.validValues = values;
 		}
-	    }
-	    return false;
+
+		@Override
+		public boolean isValid(Object value, ConstraintValidatorContext context) {
+			if (value == null) {
+				return true;
+			}
+			for (String validValue : this.validValues) {
+				if (validValue.equalsIgnoreCase(value.toString())) {
+					return true;
+				}
+			}
+			return false;
+		}
 	}
-    }
 }

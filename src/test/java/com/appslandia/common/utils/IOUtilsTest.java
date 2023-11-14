@@ -34,37 +34,37 @@ import org.junit.jupiter.api.Test;
  */
 public class IOUtilsTest {
 
-    @Test
-    public void test_copyFromIsToOs() {
-	byte[] src = RandomUtils.nextBytes(100);
-	ByteArrayInputStream is = new ByteArrayInputStream(src);
-	ByteArrayOutputStream os = new ByteArrayOutputStream();
-	try {
-	    IOUtils.copy(is, os);
-	    Assertions.assertArrayEquals(src, os.toByteArray());
-	} catch (IOException ex) {
+	@Test
+	public void test_copyFromIsToOs() {
+		byte[] src = RandomUtils.nextBytes(100);
+		ByteArrayInputStream is = new ByteArrayInputStream(src);
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		try {
+			IOUtils.copy(is, os);
+			Assertions.assertArrayEquals(src, os.toByteArray());
+		} catch (IOException ex) {
+		}
 	}
-    }
 
-    @Test
-    public void test_toByteArray() {
-	byte[] src = RandomUtils.nextBytes(100);
-	ByteArrayInputStream is = new ByteArrayInputStream(src);
-	try {
-	    byte[] ba = IOUtils.toByteArray(is);
-	    Assertions.assertArrayEquals(src, ba);
-	} catch (IOException ex) {
+	@Test
+	public void test_toByteArray() {
+		byte[] src = RandomUtils.nextBytes(100);
+		ByteArrayInputStream is = new ByteArrayInputStream(src);
+		try {
+			byte[] ba = IOUtils.toByteArray(is);
+			Assertions.assertArrayEquals(src, ba);
+		} catch (IOException ex) {
+		}
 	}
-    }
 
-    @Test
-    public void test_copyWithLength() {
-	byte[] src = MathUtils.toByteArray(1, 100);
-	ByteArrayOutputStream os = new ByteArrayOutputStream();
-	try {
-	    IOUtils.copy(src, 50, os);
-	    Assertions.assertArrayEquals(MathUtils.toByteArray(1, 50), os.toByteArray());
-	} catch (IOException ex) {
+	@Test
+	public void test_copyWithLength() {
+		byte[] src = MathUtils.toByteArray(1, 100);
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		try {
+			IOUtils.copy(src, 50, os);
+			Assertions.assertArrayEquals(MathUtils.toByteArray(1, 50), os.toByteArray());
+		} catch (IOException ex) {
+		}
 	}
-    }
 }

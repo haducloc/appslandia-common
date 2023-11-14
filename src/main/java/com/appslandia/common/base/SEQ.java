@@ -30,9 +30,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class SEQ {
 
-    private static final AtomicInteger seq = new AtomicInteger(0);
+	private static final AtomicInteger seq = new AtomicInteger(0);
 
-    public static int next() {
-	return seq.incrementAndGet();
-    }
+	public static int next() {
+		return seq.incrementAndGet();
+	}
 }

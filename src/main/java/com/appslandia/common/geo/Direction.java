@@ -33,74 +33,74 @@ import com.appslandia.common.utils.STR;
  */
 public enum Direction {
 
-    NORTH("N"), EAST("E"), SOUTH("S"), WEST("W");
+	NORTH("N"), EAST("E"), SOUTH("S"), WEST("W");
 
-    final String symbol;
+	final String symbol;
 
-    static final Direction[] DIRECTIONS = Direction.values();
+	static final Direction[] DIRECTIONS = Direction.values();
 
-    private Direction(String symbol) {
-	this.symbol = symbol;
-    }
-
-    public String symbol() {
-	return this.symbol;
-    }
-
-    public boolean isX() {
-	return this == EAST || this == WEST;
-    }
-
-    public boolean isY() {
-	return this == NORTH || this == SOUTH;
-    }
-
-    public Direction reverse() {
-	return turn(2);
-    }
-
-    public Direction right() {
-	return turn(1);
-    }
-
-    public Direction left() {
-	return turn(-1);
-    }
-
-    public Direction turn(int n) {
-	if (n == 0) {
-	    return this;
+	private Direction(String symbol) {
+		this.symbol = symbol;
 	}
 
-	// 0:N, 1:E, 2:S, 3:W
-	int next = (this.ordinal() + n) % 4;
-
-	if (next < 0) {
-	    next = (next + 4) % 4;
+	public String symbol() {
+		return this.symbol;
 	}
-	return DIRECTIONS[next];
-    }
 
-    public static Direction parseValue(String symbol) {
-	Asserts.notNull(symbol);
-	symbol = symbol.toUpperCase(Locale.ENGLISH);
-
-	switch (symbol) {
-	case "N":
-	    return NORTH;
-	case "E":
-	    return EAST;
-	case "S":
-	    return SOUTH;
-	case "W":
-	    return WEST;
-	default:
-	    throw new IllegalArgumentException(STR.fmt("symbol '{}' is invalid.", symbol));
+	public boolean isX() {
+		return this == EAST || this == WEST;
 	}
-    }
 
-    public static Direction random() {
-	int ordinial = ThreadLocalRandom.current().nextInt(4);
-	return DIRECTIONS[ordinial];
-    }
+	public boolean isY() {
+		return this == NORTH || this == SOUTH;
+	}
+
+	public Direction reverse() {
+		return turn(2);
+	}
+
+	public Direction right() {
+		return turn(1);
+	}
+
+	public Direction left() {
+		return turn(-1);
+	}
+
+	public Direction turn(int n) {
+		if (n == 0) {
+			return this;
+		}
+
+		// 0:N, 1:E, 2:S, 3:W
+		int next = (this.ordinal() + n) % 4;
+
+		if (next < 0) {
+			next = (next + 4) % 4;
+		}
+		return DIRECTIONS[next];
+	}
+
+	public static Direction parseValue(String symbol) {
+		Asserts.notNull(symbol);
+		symbol = symbol.toUpperCase(Locale.ENGLISH);
+
+		switch (symbol) {
+		case "N":
+			return NORTH;
+		case "E":
+			return EAST;
+		case "S":
+			return SOUTH;
+		case "W":
+			return WEST;
+		default:
+			throw new IllegalArgumentException(STR.fmt("symbol '{}' is invalid.", symbol));
+		}
+	}
+
+	public static Direction random() {
+		int ordinial = ThreadLocalRandom.current().nextInt(4);
+		return DIRECTIONS[ordinial];
+	}
 }

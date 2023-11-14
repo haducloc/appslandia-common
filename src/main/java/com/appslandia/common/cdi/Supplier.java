@@ -36,5 +36,5 @@ import java.lang.annotation.Target;
 @Documented
 public @interface Supplier {
 
-    Class<?> value();
+	Class<?> value();
 }

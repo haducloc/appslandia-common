@@ -37,97 +37,97 @@ import com.appslandia.common.utils.Asserts;
  */
 public class PKIUtils {
 
-    static final String BEGIN_MARKER = "-----BEGIN ";
-    static final String END_MARKER = "-----END ";
+	static final String BEGIN_MARKER = "-----BEGIN ";
+	static final String END_MARKER = "-----END ";
 
-    public static byte[] toDerEncoded(String pem) {
-	pem = removeBeginEnd(pem);
-	return BaseEncoder.BASE64_MIME.decode(pem);
-    }
-
-    public static String extracData(String pem, String entityName) {
-	String beginMarker = "-----BEGIN " + entityName + "-----";
-	String endMarker = "-----END " + entityName + "-----";
-
-	int idx1 = pem.indexOf(beginMarker);
-	if (idx1 < 0) {
-	    return null;
-	}
-	int idx2 = pem.indexOf(endMarker, idx1 + beginMarker.length());
-	if (idx2 < 0) {
-	    return null;
-	}
-	return pem.substring(idx1 + beginMarker.length(), idx2).trim();
-    }
-
-    public static String removeBeginEnd(String pem) {
-	// Remove -----BEGIN .+ -----
-	int idx = pem.indexOf("-----BEGIN ");
-	boolean valid = true;
-
-	if (idx < 0) {
-	    valid = false;
-	}
-	if (valid) {
-	    idx = pem.indexOf("-----", idx + 11);
-	    if (idx < 0) {
-		valid = false;
-	    } else {
-		pem = pem.substring(idx + 5);
-	    }
+	public static byte[] toDerEncoded(String pem) {
+		pem = removeBeginEnd(pem);
+		return BaseEncoder.BASE64_MIME.decode(pem);
 	}
 
-	// Remove -----END .+ -----
-	if (valid) {
-	    idx = pem.lastIndexOf("-----");
-	    if (idx < 0) {
-		valid = false;
-	    }
+	public static String extracData(String pem, String entityName) {
+		String beginMarker = "-----BEGIN " + entityName + "-----";
+		String endMarker = "-----END " + entityName + "-----";
+
+		int idx1 = pem.indexOf(beginMarker);
+		if (idx1 < 0) {
+			return null;
+		}
+		int idx2 = pem.indexOf(endMarker, idx1 + beginMarker.length());
+		if (idx2 < 0) {
+			return null;
+		}
+		return pem.substring(idx1 + beginMarker.length(), idx2).trim();
 	}
-	if (valid) {
-	    idx = pem.lastIndexOf("-----END ", idx - 9);
-	    if (idx < 0) {
-		valid = false;
-	    }
+
+	public static String removeBeginEnd(String pem) {
+		// Remove -----BEGIN .+ -----
+		int idx = pem.indexOf("-----BEGIN ");
+		boolean valid = true;
+
+		if (idx < 0) {
+			valid = false;
+		}
+		if (valid) {
+			idx = pem.indexOf("-----", idx + 11);
+			if (idx < 0) {
+				valid = false;
+			} else {
+				pem = pem.substring(idx + 5);
+			}
+		}
+
+		// Remove -----END .+ -----
+		if (valid) {
+			idx = pem.lastIndexOf("-----");
+			if (idx < 0) {
+				valid = false;
+			}
+		}
+		if (valid) {
+			idx = pem.lastIndexOf("-----END ", idx - 9);
+			if (idx < 0) {
+				valid = false;
+			}
+		}
+		Asserts.isTrue(valid, "The pem is invalid.");
+
+		return pem.substring(0, idx).trim();
 	}
-	Asserts.isTrue(valid, "The pem is invalid.");
 
-	return pem.substring(0, idx).trim();
-    }
+	// PEM: Privacy-enhanced Electronic Mail
+	public static String toPemEncoded(byte[] der, String label) {
+		StringWriter pem = new StringWriter(der.length * 4 / 3 + 128);
+		PrintWriter pw = new PrintWriter(pem);
+		pw.append("-----BEGIN ").append(label).println("-----");
+		pw.write(BaseEncoder.BASE64_MIME.encode(der));
+		pw.println();
+		pw.append("-----END ").append(label).print("-----");
+		pw.close();
+		return pem.toString();
+	}
 
-    // PEM: Privacy-enhanced Electronic Mail
-    public static String toPemEncoded(byte[] der, String label) {
-	StringWriter pem = new StringWriter(der.length * 4 / 3 + 128);
-	PrintWriter pw = new PrintWriter(pem);
-	pw.append("-----BEGIN ").append(label).println("-----");
-	pw.write(BaseEncoder.BASE64_MIME.encode(der));
-	pw.println();
-	pw.append("-----END ").append(label).print("-----");
-	pw.close();
-	return pem.toString();
-    }
+	public static String toPemLabel(PublicKey key) {
+		return key.getAlgorithm() + " PUBLIC KEY";
+	}
 
-    public static String toPemLabel(PublicKey key) {
-	return key.getAlgorithm() + " PUBLIC KEY";
-    }
+	public static String toPemLabel(PrivateKey key) {
+		return key.getAlgorithm() + " PRIVATE KEY";
+	}
 
-    public static String toPemLabel(PrivateKey key) {
-	return key.getAlgorithm() + " PRIVATE KEY";
-    }
+	public static String toPemEncoded(PublicKey key) {
+		return toPemEncoded(key.getEncoded(), toPemLabel(key));
+	}
 
-    public static String toPemEncoded(PublicKey key) {
-	return toPemEncoded(key.getEncoded(), toPemLabel(key));
-    }
+	public static String toPemEncoded(PrivateKey key) {
+		return toPemEncoded(key.getEncoded(), toPemLabel(key));
+	}
 
-    public static String toPemEncoded(PrivateKey key) {
-	return toPemEncoded(key.getEncoded(), toPemLabel(key));
-    }
+	public static String toPemLabel(Certificate cert) {
+		return cert.getType() + " CERTIFICATE";
+	}
 
-    public static String toPemLabel(Certificate cert) {
-	return cert.getType() + " CERTIFICATE";
-    }
-
-    public static String toPemEncoded(Certificate cert) throws CertificateEncodingException {
-	return toPemEncoded(cert.getEncoded(), toPemLabel(cert));
-    }
+	public static String toPemEncoded(Certificate cert) throws CertificateEncodingException {
+		return toPemEncoded(cert.getEncoded(), toPemLabel(cert));
+	}
 }

@@ -31,48 +31,49 @@ import com.appslandia.common.utils.Asserts;
 
 public abstract class TaskScheduler {
 
-    protected final Map<String, ScheduledTask> scheduledTasks = new ConcurrentHashMap<>();
+	protected final Map<String, ScheduledTask> scheduledTasks = new ConcurrentHashMap<>();
 
-    protected abstract ScheduledExecutorService getExecutor();
+	protected abstract ScheduledExecutorService getExecutor();
 
-    public String scheduleAtFixedRate(Task<?> task, long initialDelay, long period, TimeUnit unit) {
-	ScheduledFuture<?> scheduledFuture = this.getExecutor().scheduleAtFixedRate(task, initialDelay, period, unit);
+	public String scheduleAtFixedRate(Task<?> task, long initialDelay, long period, TimeUnit unit) {
+		ScheduledFuture<?> scheduledFuture = this.getExecutor().scheduleAtFixedRate(task, initialDelay, period, unit);
 
-	this.scheduledTasks.put(task.attributes.getTaskId(), new ScheduledTask(scheduledFuture, task.attributes));
-	return task.attributes.getTaskId();
-    }
-
-    public String scheduleWithFixedDelay(Task<?> task, long initialDelay, long delay, TimeUnit unit) {
-	ScheduledFuture<?> scheduledFuture = this.getExecutor().scheduleWithFixedDelay(task, initialDelay, delay, unit);
-
-	this.scheduledTasks.put(task.attributes.getTaskId(), new ScheduledTask(scheduledFuture, task.attributes));
-	return task.attributes.getTaskId();
-    }
-
-    public boolean cancel(String taskId) {
-	ScheduledTask scheduledTask = this.scheduledTasks.remove(taskId);
-	Asserts.notNull(scheduledTask);
-
-	return scheduledTask.future.cancel(scheduledTask.attributes.isInterruptThreadOnCancel());
-    }
-
-    public List<TaskAttributes> getScheduledTasks() {
-	return this.scheduledTasks.values().stream().map(t -> t.attributes).sorted((t1, t2) -> Long.compare(t2.getSubmittedTime(), t1.getSubmittedTime())).toList();
-    }
-
-    public void shutdown() {
-	this.getExecutor().shutdown();
-    }
-
-    static class ScheduledTask {
-
-	final ScheduledFuture<?> future;
-	final TaskAttributes attributes;
-
-	public ScheduledTask(ScheduledFuture<?> future, TaskAttributes attributes) {
-
-	    this.future = future;
-	    this.attributes = attributes;
+		this.scheduledTasks.put(task.attributes.getTaskId(), new ScheduledTask(scheduledFuture, task.attributes));
+		return task.attributes.getTaskId();
 	}
-    }
+
+	public String scheduleWithFixedDelay(Task<?> task, long initialDelay, long delay, TimeUnit unit) {
+		ScheduledFuture<?> scheduledFuture = this.getExecutor().scheduleWithFixedDelay(task, initialDelay, delay, unit);
+
+		this.scheduledTasks.put(task.attributes.getTaskId(), new ScheduledTask(scheduledFuture, task.attributes));
+		return task.attributes.getTaskId();
+	}
+
+	public boolean cancel(String taskId) {
+		ScheduledTask scheduledTask = this.scheduledTasks.remove(taskId);
+		Asserts.notNull(scheduledTask);
+
+		return scheduledTask.future.cancel(scheduledTask.attributes.isInterruptThreadOnCancel());
+	}
+
+	public List<TaskAttributes> getScheduledTasks() {
+		return this.scheduledTasks.values().stream().map(t -> t.attributes).sorted((t1, t2) -> Long.compare(t2.getSubmittedTime(), t1.getSubmittedTime()))
+				.toList();
+	}
+
+	public void shutdown() {
+		this.getExecutor().shutdown();
+	}
+
+	static class ScheduledTask {
+
+		final ScheduledFuture<?> future;
+		final TaskAttributes attributes;
+
+		public ScheduledTask(ScheduledFuture<?> future, TaskAttributes attributes) {
+
+			this.future = future;
+			this.attributes = attributes;
+		}
+	}
 }

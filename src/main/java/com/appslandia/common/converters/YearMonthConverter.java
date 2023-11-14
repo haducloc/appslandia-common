@@ -33,24 +33,24 @@ import com.appslandia.common.utils.DateUtils;
  */
 public class YearMonthConverter extends TemporalConverter<YearMonth> {
 
-    public static final String ERROR_MSG_KEY = YearMonthConverter.class.getName() + ".message";
+	public static final String ERROR_MSG_KEY = YearMonthConverter.class.getName() + ".message";
 
-    public YearMonthConverter() {
-	super(DateUtils.ISO8601_YEAR_MONTH);
-    }
+	public YearMonthConverter() {
+		super(DateUtils.ISO8601_YEAR_MONTH);
+	}
 
-    @Override
-    public String getErrorMsgKey() {
-	return ERROR_MSG_KEY;
-    }
+	@Override
+	public String getErrorMsgKey() {
+		return ERROR_MSG_KEY;
+	}
 
-    @Override
-    public Class<YearMonth> getTargetType() {
-	return YearMonth.class;
-    }
+	@Override
+	public Class<YearMonth> getTargetType() {
+		return YearMonth.class;
+	}
 
-    @Override
-    protected YearMonth parse(String str, DateTimeFormatter converter) throws DateTimeParseException {
-	return YearMonth.parse(str, converter);
-    }
+	@Override
+	protected YearMonth parse(String str, DateTimeFormatter converter) throws DateTimeParseException {
+		return YearMonth.parse(str, converter);
+	}
 }

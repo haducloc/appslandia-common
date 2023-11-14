@@ -36,52 +36,52 @@ import com.appslandia.common.base.Language;
  */
 public class LocalTimeConverterTest {
 
-    @Test
-    public void test_targetType() {
-	LocalTimeConverter converter = new LocalTimeConverter();
-	Assertions.assertEquals(LocalTime.class, converter.getTargetType());
-    }
-
-    @Test
-    public void test() {
-	LocalTimeConverter converter = new LocalTimeConverter();
-	FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-	try {
-	    LocalTime v = converter.parse("09:30:00.999", formatProvider);
-	    Assertions.assertNotNull(v);
-
-	    Assertions.assertEquals("09:30:00.999", converter.format(v, formatProvider, true));
-	    Assertions.assertEquals("09:30:00.999", converter.format(v, formatProvider, false));
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+	@Test
+	public void test_targetType() {
+		LocalTimeConverter converter = new LocalTimeConverter();
+		Assertions.assertEquals(LocalTime.class, converter.getTargetType());
 	}
-    }
 
-    @Test
-    public void test_null() {
-	LocalTimeConverter converter = new LocalTimeConverter();
-	FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-	try {
-	    LocalTime v = converter.parse(null, formatProvider);
-	    Assertions.assertNull(v);
+	@Test
+	public void test() {
+		LocalTimeConverter converter = new LocalTimeConverter();
+		FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+		try {
+			LocalTime v = converter.parse("09:30:00.999", formatProvider);
+			Assertions.assertNotNull(v);
 
-	    v = converter.parse("", formatProvider);
-	    Assertions.assertNull(v);
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+			Assertions.assertEquals("09:30:00.999", converter.format(v, formatProvider, true));
+			Assertions.assertEquals("09:30:00.999", converter.format(v, formatProvider, false));
+
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_invalid() {
-	LocalTimeConverter converter = new LocalTimeConverter();
-	FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-	try {
-	    converter.parse("09:30:00", formatProvider);
-	    Assertions.fail();
-	} catch (Exception ex) {
-	    Assertions.assertTrue(ex instanceof ConverterException);
+	@Test
+	public void test_null() {
+		LocalTimeConverter converter = new LocalTimeConverter();
+		FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+		try {
+			LocalTime v = converter.parse(null, formatProvider);
+			Assertions.assertNull(v);
+
+			v = converter.parse("", formatProvider);
+			Assertions.assertNull(v);
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
+
+	@Test
+	public void test_invalid() {
+		LocalTimeConverter converter = new LocalTimeConverter();
+		FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+		try {
+			converter.parse("09:30:00", formatProvider);
+			Assertions.fail();
+		} catch (Exception ex) {
+			Assertions.assertTrue(ex instanceof ConverterException);
+		}
+	}
 }

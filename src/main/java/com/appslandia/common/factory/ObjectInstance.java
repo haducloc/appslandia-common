@@ -31,67 +31,67 @@ import com.appslandia.common.utils.Asserts;
  */
 public class ObjectInstance {
 
-    final ObjectFactory factory;
-    final ObjectDefinition definition;
-    final Function<ObjectDefinition, Object> producer;
+	final ObjectFactory factory;
+	final ObjectDefinition definition;
+	final Function<ObjectDefinition, Object> producer;
 
-    volatile Object singleton;
-    final Object mutex = new Object();
+	volatile Object singleton;
+	final Object mutex = new Object();
 
-    public ObjectInstance(ObjectFactory factory, ObjectDefinition definition, Function<ObjectDefinition, Object> producer) {
-	this.factory = factory;
-	this.definition = definition;
-	this.producer = producer;
-    }
-
-    public ObjectDefinition getDefinition() {
-	return this.definition;
-    }
-
-    public Object getInstance() {
-	// PROTOTYPE
-	if (this.definition.getScope() == ObjectScope.PROTOTYPE) {
-	    return producer.apply(this.definition);
+	public ObjectInstance(ObjectFactory factory, ObjectDefinition definition, Function<ObjectDefinition, Object> producer) {
+		this.factory = factory;
+		this.definition = definition;
+		this.producer = producer;
 	}
 
-	// SINGLETON
-	Object obj = this.singleton;
-	if (obj == null) {
-	    synchronized (this.mutex) {
-		if ((obj = this.singleton) == null) {
-		    this.singleton = obj = this.producer.apply(this.definition);
+	public ObjectDefinition getDefinition() {
+		return this.definition;
+	}
+
+	public Object getInstance() {
+		// PROTOTYPE
+		if (this.definition.getScope() == ObjectScope.PROTOTYPE) {
+			return producer.apply(this.definition);
 		}
-	    }
-	}
-	return obj;
-    }
 
-    public boolean destroy(Object impl) {
-	Asserts.notNull(impl);
-
-	if (impl == this.singleton) {
-	    Asserts.isTrue(this.definition.getScope() == ObjectScope.SINGLETON);
-
-	    if (this.definition.getProducer() != null) {
-		this.definition.getProducer().destroy(impl);
-	    } else {
-		ObjectFactoryUtils.preDestroy(impl);
-	    }
-
-	    this.singleton = null;
-	    return true;
-
-	} else {
-	    Asserts.isTrue(this.definition.getScope() == ObjectScope.PROTOTYPE);
-
-	    for (Class<?> type : this.definition.getTypes()) {
-		if (type.isInstance(impl)) {
-
-		    ObjectFactoryUtils.preDestroy(impl);
-		    return true;
+		// SINGLETON
+		Object obj = this.singleton;
+		if (obj == null) {
+			synchronized (this.mutex) {
+				if ((obj = this.singleton) == null) {
+					this.singleton = obj = this.producer.apply(this.definition);
+				}
+			}
 		}
-	    }
-	    return false;
+		return obj;
 	}
-    }
+
+	public boolean destroy(Object impl) {
+		Asserts.notNull(impl);
+
+		if (impl == this.singleton) {
+			Asserts.isTrue(this.definition.getScope() == ObjectScope.SINGLETON);
+
+			if (this.definition.getProducer() != null) {
+				this.definition.getProducer().destroy(impl);
+			} else {
+				ObjectFactoryUtils.preDestroy(impl);
+			}
+
+			this.singleton = null;
+			return true;
+
+		} else {
+			Asserts.isTrue(this.definition.getScope() == ObjectScope.PROTOTYPE);
+
+			for (Class<?> type : this.definition.getTypes()) {
+				if (type.isInstance(impl)) {
+
+					ObjectFactoryUtils.preDestroy(impl);
+					return true;
+				}
+			}
+			return false;
+		}
+	}
 }

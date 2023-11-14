@@ -38,81 +38,81 @@ import com.appslandia.common.base.ThreadSafeTester;
  */
 public class SignatureSignerTest {
 
-    private KeyPair keyPair;
+	private KeyPair keyPair;
 
-    @BeforeEach
-    public void initialize() {
-	try {
-	    KeyPairGenerator generator = KeyPairGenerator.getInstance("DSA");
-	    generator.initialize(2048, new SecureRandom());
-	    keyPair = generator.generateKeyPair();
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+	@BeforeEach
+	public void initialize() {
+		try {
+			KeyPairGenerator generator = KeyPairGenerator.getInstance("DSA");
+			generator.initialize(2048, new SecureRandom());
+			keyPair = generator.generateKeyPair();
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test() {
-	SignatureSigner impl = new SignatureSigner();
-	impl.setAlgorithm("SHA256withDSA");
-	impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
-	try {
-	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-	    byte[] sign = impl.digest(data);
+	@Test
+	public void test() {
+		SignatureSigner impl = new SignatureSigner();
+		impl.setAlgorithm("SHA256withDSA");
+		impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
+		try {
+			byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+			byte[] sign = impl.digest(data);
 
-	    Assertions.assertTrue(impl.verify(data, sign));
+			Assertions.assertTrue(impl.verify(data, sign));
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_invalid() {
-	SignatureSigner impl = new SignatureSigner();
-	impl.setAlgorithm("SHA256withDSA");
-	impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
-	try {
-	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-	    byte[] sign = impl.digest(data);
+	@Test
+	public void test_invalid() {
+		SignatureSigner impl = new SignatureSigner();
+		impl.setAlgorithm("SHA256withDSA");
+		impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
+		try {
+			byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+			byte[] sign = impl.digest(data);
 
-	    byte[] modifiedData = "invalid".getBytes(StandardCharsets.UTF_8);
-	    Assertions.assertFalse(impl.verify(modifiedData, sign));
+			byte[] modifiedData = "invalid".getBytes(StandardCharsets.UTF_8);
+			Assertions.assertFalse(impl.verify(modifiedData, sign));
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_threadSafe() {
-	final SignatureSigner impl = new SignatureSigner();
-	impl.setAlgorithm("SHA256withDSA");
-	impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
+	@Test
+	public void test_threadSafe() {
+		final SignatureSigner impl = new SignatureSigner();
+		impl.setAlgorithm("SHA256withDSA");
+		impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
 
-	new ThreadSafeTester() {
+		new ThreadSafeTester() {
 
-	    @Override
-	    protected Runnable newTask() {
-		return new Runnable() {
+			@Override
+			protected Runnable newTask() {
+				return new Runnable() {
 
-		    @Override
-		    public void run() {
-			try {
-			    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-			    byte[] sign = impl.digest(data);
+					@Override
+					public void run() {
+						try {
+							byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+							byte[] sign = impl.digest(data);
 
-			    Assertions.assertTrue(impl.verify(data, sign));
+							Assertions.assertTrue(impl.verify(data, sign));
 
-			} catch (Exception ex) {
-			    Assertions.fail(ex.getMessage());
+						} catch (Exception ex) {
+							Assertions.fail(ex.getMessage());
 
-			} finally {
-			    doneTask();
+						} finally {
+							doneTask();
+						}
+					}
+				};
 			}
-		    }
-		};
-	    }
-	}.execute();
-    }
+		}.execute();
+	}
 }

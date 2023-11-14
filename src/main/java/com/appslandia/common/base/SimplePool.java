@@ -29,41 +29,41 @@ import com.appslandia.common.utils.ObjectUtils;
  */
 public class SimplePool<T> {
 
-    final int size;
-    final T pool[];
-    final Object mutex = new Object();
+	final int size;
+	final T pool[];
+	final Object mutex = new Object();
 
-    private volatile int current = -1;
+	private volatile int current = -1;
 
-    public SimplePool() {
-	this(16);
-    }
-
-    public SimplePool(int size) {
-	this.size = size;
-	this.pool = ObjectUtils.cast(new Object[size]);
-    }
-
-    public void put(T service) {
-	synchronized (this.mutex) {
-	    int idx = this.current;
-	    if (idx >= this.size - 1) {
-		return;
-	    }
-	    this.pool[++idx] = service;
-	    this.current = idx;
+	public SimplePool() {
+		this(16);
 	}
-    }
 
-    public T get() {
-	synchronized (this.mutex) {
-	    int idx = this.current;
-	    if (idx < 0) {
-		return null;
-	    }
-	    T t = this.pool[idx];
-	    this.current = idx - 1;
-	    return t;
+	public SimplePool(int size) {
+		this.size = size;
+		this.pool = ObjectUtils.cast(new Object[size]);
 	}
-    }
+
+	public void put(T service) {
+		synchronized (this.mutex) {
+			int idx = this.current;
+			if (idx >= this.size - 1) {
+				return;
+			}
+			this.pool[++idx] = service;
+			this.current = idx;
+		}
+	}
+
+	public T get() {
+		synchronized (this.mutex) {
+			int idx = this.current;
+			if (idx < 0) {
+				return null;
+			}
+			T t = this.pool[idx];
+			this.current = idx - 1;
+			return t;
+		}
+	}
 }

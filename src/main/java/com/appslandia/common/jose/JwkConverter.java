@@ -32,14 +32,15 @@ import com.appslandia.common.crypto.CryptoException;
  */
 public abstract class JwkConverter<K extends Key> extends InitializeObject {
 
-    // type of cryptographic key, such as "RSA", "EC", or "oct" (for symmetric keys).
-    protected final String kty;
+	// type of cryptographic key, such as "RSA", "EC", or "oct" (for symmetric
+	// keys).
+	protected final String kty;
 
-    public JwkConverter(String kty) {
-	this.kty = kty;
-    }
+	public JwkConverter(String kty) {
+		this.kty = kty;
+	}
 
-    public abstract JsonWebKey toJsonWebKey(K key);
+	public abstract JsonWebKey toJsonWebKey(K key);
 
-    public abstract K fromJsonWebKey(JsonWebKey jwk) throws CryptoException;
+	public abstract K fromJsonWebKey(JsonWebKey jwk) throws CryptoException;
 }

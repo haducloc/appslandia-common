@@ -36,66 +36,66 @@ import com.appslandia.common.base.Language;
  */
 public class YearMonthConverterTest {
 
-    @Test
-    public void test_targetType() {
-	YearMonthConverter converter = new YearMonthConverter();
-	Assertions.assertEquals(YearMonth.class, converter.getTargetType());
-    }
-
-    @Test
-    public void test() {
-	YearMonthConverter converter = new YearMonthConverter();
-	FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-	try {
-	    YearMonth v = converter.parse("10/2010", formatProvider);
-	    Assertions.assertNotNull(v);
-	    Assertions.assertEquals("10/2010", converter.format(v, formatProvider, true));
-	    Assertions.assertEquals("2010-10", converter.format(v, formatProvider, false));
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+	@Test
+	public void test_targetType() {
+		YearMonthConverter converter = new YearMonthConverter();
+		Assertions.assertEquals(YearMonth.class, converter.getTargetType());
 	}
-    }
 
-    @Test
-    public void test_iso() {
-	YearMonthConverter converter = new YearMonthConverter();
-	FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-	try {
-	    YearMonth v = converter.parse("2010-10", formatProvider);
-	    Assertions.assertNotNull(v);
-	    Assertions.assertEquals("10/2010", converter.format(v, formatProvider, true));
-	    Assertions.assertEquals("2010-10", converter.format(v, formatProvider, false));
+	@Test
+	public void test() {
+		YearMonthConverter converter = new YearMonthConverter();
+		FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+		try {
+			YearMonth v = converter.parse("10/2010", formatProvider);
+			Assertions.assertNotNull(v);
+			Assertions.assertEquals("10/2010", converter.format(v, formatProvider, true));
+			Assertions.assertEquals("2010-10", converter.format(v, formatProvider, false));
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_null() {
-	YearMonthConverter converter = new YearMonthConverter();
-	FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-	try {
-	    YearMonth v = converter.parse(null, formatProvider);
-	    Assertions.assertNull(v);
+	@Test
+	public void test_iso() {
+		YearMonthConverter converter = new YearMonthConverter();
+		FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+		try {
+			YearMonth v = converter.parse("2010-10", formatProvider);
+			Assertions.assertNotNull(v);
+			Assertions.assertEquals("10/2010", converter.format(v, formatProvider, true));
+			Assertions.assertEquals("2010-10", converter.format(v, formatProvider, false));
 
-	    v = converter.parse("", formatProvider);
-	    Assertions.assertNull(v);
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_invalid() {
-	YearMonthConverter converter = new YearMonthConverter();
-	FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-	try {
-	    converter.parse("2010-13", formatProvider);
-	    Assertions.fail();
-	} catch (Exception ex) {
-	    Assertions.assertTrue(ex instanceof ConverterException);
+	@Test
+	public void test_null() {
+		YearMonthConverter converter = new YearMonthConverter();
+		FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+		try {
+			YearMonth v = converter.parse(null, formatProvider);
+			Assertions.assertNull(v);
+
+			v = converter.parse("", formatProvider);
+			Assertions.assertNull(v);
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
+
+	@Test
+	public void test_invalid() {
+		YearMonthConverter converter = new YearMonthConverter();
+		FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+		try {
+			converter.parse("2010-13", formatProvider);
+			Assertions.fail();
+		} catch (Exception ex) {
+			Assertions.assertTrue(ex instanceof ConverterException);
+		}
+	}
 }

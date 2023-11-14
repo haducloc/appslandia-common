@@ -30,112 +30,112 @@ import org.junit.jupiter.api.Test;
  */
 public class SYSTest {
 
-    @Test
-    public void test_resolve_prop() {
-	try {
-	    System.setProperty("__sys__test__password__", "12345");
-	    String resolvedValue = SYS.resolve("${__sys__test__password__}");
+	@Test
+	public void test_resolve_prop() {
+		try {
+			System.setProperty("__sys__test__password__", "12345");
+			String resolvedValue = SYS.resolve("${__sys__test__password__}");
 
-	    Assertions.assertNotNull(resolvedValue);
-	    Assertions.assertEquals("12345", resolvedValue);
+			Assertions.assertNotNull(resolvedValue);
+			Assertions.assertEquals("12345", resolvedValue);
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
 
-	} finally {
-	    System.getProperties().remove("__sys__test__password__");
+		} finally {
+			System.getProperties().remove("__sys__test__password__");
+		}
 	}
-    }
 
-    @Test
-    public void test_resolve_prop_novalue() {
-	try {
-	    String resolvedValue = SYS.resolve("${__sys__test__password__}");
-	    Assertions.assertNull(resolvedValue);
+	@Test
+	public void test_resolve_prop_novalue() {
+		try {
+			String resolvedValue = SYS.resolve("${__sys__test__password__}");
+			Assertions.assertNull(resolvedValue);
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @SuppressWarnings("el-syntax")
-    @Test
-    public void test_resolve_prop_default() {
-	try {
-	    String resolvedValue = SYS.resolve("${__sys__test__password__:12345}");
+	@SuppressWarnings("el-syntax")
+	@Test
+	public void test_resolve_prop_default() {
+		try {
+			String resolvedValue = SYS.resolve("${__sys__test__password__:12345}");
 
-	    Assertions.assertNotNull(resolvedValue);
-	    Assertions.assertEquals("12345", resolvedValue);
+			Assertions.assertNotNull(resolvedValue);
+			Assertions.assertEquals("12345", resolvedValue);
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_resolve_env() {
-	if (System.getenv("TMP") == null) {
-	    return;
+	@Test
+	public void test_resolve_env() {
+		if (System.getenv("TMP") == null) {
+			return;
+		}
+		try {
+			String resolvedValue = SYS.resolve("${env.TMP}");
+			Assertions.assertNotNull(resolvedValue);
+
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-	try {
-	    String resolvedValue = SYS.resolve("${env.TMP}");
-	    Assertions.assertNotNull(resolvedValue);
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+	@Test
+	public void test_resolve_env_novalue() {
+		try {
+			String resolvedValue = SYS.resolve("${env.__SYS__TEST__TMP__}");
+			Assertions.assertNull(resolvedValue);
+
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_resolve_env_novalue() {
-	try {
-	    String resolvedValue = SYS.resolve("${env.__SYS__TEST__TMP__}");
-	    Assertions.assertNull(resolvedValue);
+	@SuppressWarnings("el-syntax")
+	@Test
+	public void test_resolve_env_default() {
+		try {
+			String resolvedValue = SYS.resolve("${env.__SYS__TEST__TMP__:/upload}");
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+			Assertions.assertNotNull(resolvedValue);
+			Assertions.assertEquals("/upload", resolvedValue);
+
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @SuppressWarnings("el-syntax")
-    @Test
-    public void test_resolve_env_default() {
-	try {
-	    String resolvedValue = SYS.resolve("${env.__SYS__TEST__TMP__:/upload}");
+	@SuppressWarnings("el-syntax")
+	@Test
+	public void test_resolve_prop_env() {
+		if (System.getenv("TMP") == null) {
+			return;
+		}
+		try {
+			String resolvedValue = SYS.resolve("${__sys__test__tmp__,env.TMP}");
+			Assertions.assertNotNull(resolvedValue);
 
-	    Assertions.assertNotNull(resolvedValue);
-	    Assertions.assertEquals("/upload", resolvedValue);
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @SuppressWarnings("el-syntax")
-    @Test
-    public void test_resolve_prop_env() {
-	if (System.getenv("TMP") == null) {
-	    return;
+	@SuppressWarnings("el-syntax")
+	@Test
+	public void test_resolve_prop_env_default() {
+		try {
+			String resolvedValue = SYS.resolve("${__sys__test__tmp__,env.__SYS__TEST__TMP__:/upload}");
+			Assertions.assertNotNull(resolvedValue);
+			Assertions.assertEquals("/upload", resolvedValue);
+
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-	try {
-	    String resolvedValue = SYS.resolve("${__sys__test__tmp__,env.TMP}");
-	    Assertions.assertNotNull(resolvedValue);
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
-	}
-    }
-
-    @SuppressWarnings("el-syntax")
-    @Test
-    public void test_resolve_prop_env_default() {
-	try {
-	    String resolvedValue = SYS.resolve("${__sys__test__tmp__,env.__SYS__TEST__TMP__:/upload}");
-	    Assertions.assertNotNull(resolvedValue);
-	    Assertions.assertEquals("/upload", resolvedValue);
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
-	}
-    }
 }

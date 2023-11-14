@@ -32,16 +32,16 @@ import com.appslandia.common.utils.RandomUtils;
  */
 public class CryptoUtilsTest {
 
-    @Test
-    public void test_toCharArray() {
-	byte[] randomBytes = RandomUtils.nextBytes(32);
+	@Test
+	public void test_toCharArray() {
+		byte[] randomBytes = RandomUtils.nextBytes(32);
 
-	char[] toChars = CryptoUtils.toCharArray(randomBytes);
-	Assertions.assertNotNull(toChars);
+		char[] toChars = CryptoUtils.toCharArray(randomBytes);
+		Assertions.assertNotNull(toChars);
 
-	byte[] toBytes = CryptoUtils.toByteArray(toChars);
-	Assertions.assertNotNull(toBytes);
+		byte[] toBytes = CryptoUtils.toByteArray(toChars);
+		Assertions.assertNotNull(toBytes);
 
-	Assertions.assertArrayEquals(randomBytes, toBytes);
-    }
+		Assertions.assertArrayEquals(randomBytes, toBytes);
+	}
 }

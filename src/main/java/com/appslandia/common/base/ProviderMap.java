@@ -30,34 +30,34 @@ import java.util.function.Function;
  *
  */
 public class ProviderMap<K, V> extends HashMap<K, V> {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    final Function<K, V> factory;
+	final Function<K, V> factory;
 
-    public ProviderMap(Function<K, V> factory) {
-	super();
-	this.factory = factory;
-    }
-
-    public ProviderMap(Function<K, V> factory, int initialCapacity) {
-	super(initialCapacity);
-	this.factory = factory;
-    }
-
-    public ProviderMap(Function<K, V> factory, int initialCapacity, float loadFactor) {
-	super(initialCapacity, loadFactor);
-	this.factory = factory;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public V get(Object key) {
-	V v = super.get(key);
-	if (v != null) {
-	    return v;
+	public ProviderMap(Function<K, V> factory) {
+		super();
+		this.factory = factory;
 	}
-	v = this.factory.apply((K) key);
-	super.put((K) key, v);
-	return v;
-    }
+
+	public ProviderMap(Function<K, V> factory, int initialCapacity) {
+		super(initialCapacity);
+		this.factory = factory;
+	}
+
+	public ProviderMap(Function<K, V> factory, int initialCapacity, float loadFactor) {
+		super(initialCapacity, loadFactor);
+		this.factory = factory;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public V get(Object key) {
+		V v = super.get(key);
+		if (v != null) {
+			return v;
+		}
+		v = this.factory.apply((K) key);
+		super.put((K) key, v);
+		return v;
+	}
 }

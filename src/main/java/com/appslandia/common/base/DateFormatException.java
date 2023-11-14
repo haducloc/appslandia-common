@@ -28,13 +28,13 @@ import java.text.ParseException;
  *
  */
 public class DateFormatException extends IllegalArgumentException {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public DateFormatException(String message) {
-	super(message);
-    }
+	public DateFormatException(String message) {
+		super(message);
+	}
 
-    public DateFormatException(ParseException cause) {
-	super(cause.getMessage(), cause);
-    }
+	public DateFormatException(ParseException cause) {
+		super(cause.getMessage(), cause);
+	}
 }

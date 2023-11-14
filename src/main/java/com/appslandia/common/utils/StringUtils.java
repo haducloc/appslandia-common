@@ -33,152 +33,152 @@ import java.util.regex.Pattern;
  */
 public class StringUtils {
 
-    public static final String EMPTY_STRING = "";
-    public static final String[] EMPTY_ARRAY = {};
+	public static final String EMPTY_STRING = "";
+	public static final String[] EMPTY_ARRAY = {};
 
-    public static String toLowerCase(String str, Locale locale) {
-	if (str == null || str.isEmpty()) {
-	    return null;
+	public static String toLowerCase(String str, Locale locale) {
+		if (str == null || str.isEmpty()) {
+			return null;
+		}
+		return str.toLowerCase(locale);
 	}
-	return str.toLowerCase(locale);
-    }
 
-    public static String toUpperCase(String str, Locale locale) {
-	if (str == null || str.isEmpty()) {
-	    return null;
+	public static String toUpperCase(String str, Locale locale) {
+		if (str == null || str.isEmpty()) {
+			return null;
+		}
+		return str.toUpperCase(locale);
 	}
-	return str.toUpperCase(locale);
-    }
 
-    public static String firstLowerCase(String str, Locale locale) {
-	if (str == null || str.isEmpty()) {
-	    return null;
+	public static String firstLowerCase(String str, Locale locale) {
+		if (str == null || str.isEmpty()) {
+			return null;
+		}
+		StringBuilder sb = new StringBuilder(str.length());
+		return sb.append(str.substring(0, 1).toLowerCase(locale)).append(str.substring(1)).toString();
 	}
-	StringBuilder sb = new StringBuilder(str.length());
-	return sb.append(str.substring(0, 1).toLowerCase(locale)).append(str.substring(1)).toString();
-    }
 
-    public static String firstUpperCase(String str, Locale locale) {
-	if (str == null || str.isEmpty()) {
-	    return null;
+	public static String firstUpperCase(String str, Locale locale) {
+		if (str == null || str.isEmpty()) {
+			return null;
+		}
+		StringBuilder sb = new StringBuilder(str.length());
+		return sb.append(str.substring(0, 1).toUpperCase(locale)).append(str.substring(1)).toString();
 	}
-	StringBuilder sb = new StringBuilder(str.length());
-	return sb.append(str.substring(0, 1).toUpperCase(locale)).append(str.substring(1)).toString();
-    }
 
-    public static String trimToNull(String str) {
-	return trimToDefault(str, null);
-    }
-
-    public static String trimToEmpty(String str) {
-	return (str != null) ? str.trim() : EMPTY_STRING;
-    }
-
-    public static String trimToDefault(String str, String defaultValue) {
-	if (str == null || str.isEmpty()) {
-	    return defaultValue;
+	public static String trimToNull(String str) {
+		return trimToDefault(str, null);
 	}
-	str = str.trim();
-	return !str.isEmpty() ? str : defaultValue;
-    }
 
-    public static String trimToNull(String str, char charToTrim) {
-	if (str == null) {
-	    return null;
+	public static String trimToEmpty(String str) {
+		return (str != null) ? str.trim() : EMPTY_STRING;
 	}
-	int start = -1;
-	while ((++start < str.length()) && (str.charAt(start) == charToTrim)) {
+
+	public static String trimToDefault(String str, String defaultValue) {
+		if (str == null || str.isEmpty()) {
+			return defaultValue;
+		}
+		str = str.trim();
+		return !str.isEmpty() ? str : defaultValue;
 	}
-	int end = str.length();
-	while ((--end >= 0) && (str.charAt(end) == charToTrim)) {
+
+	public static String trimToNull(String str, char charToTrim) {
+		if (str == null) {
+			return null;
+		}
+		int start = -1;
+		while ((++start < str.length()) && (str.charAt(start) == charToTrim)) {
+		}
+		int end = str.length();
+		while ((--end >= 0) && (str.charAt(end) == charToTrim)) {
+		}
+		if (start > end) {
+			return null;
+		}
+		return str.substring(start, end + 1);
 	}
-	if (start > end) {
-	    return null;
+
+	public static boolean isNullOrEmpty(String str) {
+		return (str == null) || str.isEmpty();
 	}
-	return str.substring(start, end + 1);
-    }
 
-    public static boolean isNullOrEmpty(String str) {
-	return (str == null) || str.isEmpty();
-    }
-
-    public static boolean iequals(String str1, String str2) {
-	return (str1 == null) ? (str2 == null) : str1.equalsIgnoreCase(str2);
-    }
-
-    private static final Pattern WTSP_PATTERN = Pattern.compile("\\s+");
-
-    public static boolean isNullOrBlank(String str) {
-	return (str == null) || str.isEmpty() || WTSP_PATTERN.matcher(str).matches();
-    }
-
-    public static boolean startsWith(String str, String substrIgnoreCase) {
-	Asserts.notNull(str);
-	Asserts.notNull(substrIgnoreCase);
-
-	if (substrIgnoreCase.isEmpty()) {
-	    return true;
+	public static boolean iequals(String str1, String str2) {
+		return (str1 == null) ? (str2 == null) : str1.equalsIgnoreCase(str2);
 	}
-	if (str.regionMatches(true, 0, substrIgnoreCase, 0, substrIgnoreCase.length())) {
-	    return true;
+
+	private static final Pattern WTSP_PATTERN = Pattern.compile("\\s+");
+
+	public static boolean isNullOrBlank(String str) {
+		return (str == null) || str.isEmpty() || WTSP_PATTERN.matcher(str).matches();
 	}
-	return false;
-    }
 
-    public static boolean endsWith(String str, String substrIgnoreCase) {
-	Asserts.notNull(str);
-	Asserts.notNull(substrIgnoreCase);
+	public static boolean startsWith(String str, String substrIgnoreCase) {
+		Asserts.notNull(str);
+		Asserts.notNull(substrIgnoreCase);
 
-	if (substrIgnoreCase.isEmpty()) {
-	    return true;
+		if (substrIgnoreCase.isEmpty()) {
+			return true;
+		}
+		if (str.regionMatches(true, 0, substrIgnoreCase, 0, substrIgnoreCase.length())) {
+			return true;
+		}
+		return false;
 	}
-	if (str.regionMatches(true, str.length() - substrIgnoreCase.length(), substrIgnoreCase, 0, substrIgnoreCase.length())) {
-	    return true;
+
+	public static boolean endsWith(String str, String substrIgnoreCase) {
+		Asserts.notNull(str);
+		Asserts.notNull(substrIgnoreCase);
+
+		if (substrIgnoreCase.isEmpty()) {
+			return true;
+		}
+		if (str.regionMatches(true, str.length() - substrIgnoreCase.length(), substrIgnoreCase, 0, substrIgnoreCase.length())) {
+			return true;
+		}
+		return false;
 	}
-	return false;
-    }
 
-    public static boolean contains(String str, String substrIgnoreCase) {
-	Asserts.notNull(str);
-	Asserts.notNull(substrIgnoreCase);
+	public static boolean contains(String str, String substrIgnoreCase) {
+		Asserts.notNull(str);
+		Asserts.notNull(substrIgnoreCase);
 
-	if (substrIgnoreCase.isEmpty()) {
-	    return true;
+		if (substrIgnoreCase.isEmpty()) {
+			return true;
+		}
+		int maxOffset = str.length() - substrIgnoreCase.length();
+		for (int offset = 0; offset <= maxOffset; offset++) {
+
+			if (str.regionMatches(true, offset, substrIgnoreCase, 0, substrIgnoreCase.length())) {
+				return true;
+			}
+		}
+		return false;
 	}
-	int maxOffset = str.length() - substrIgnoreCase.length();
-	for (int offset = 0; offset <= maxOffset; offset++) {
 
-	    if (str.regionMatches(true, offset, substrIgnoreCase, 0, substrIgnoreCase.length())) {
-		return true;
-	    }
+	public static String join(char delimiter, boolean willWrap, Iterable<? extends CharSequence> elements) {
+		Objects.requireNonNull(elements);
+
+		if (elements instanceof Collection) {
+			Collection<? extends CharSequence> col = ObjectUtils.cast(elements);
+			if (col.isEmpty()) {
+				return null;
+			}
+		}
+		String sep = new String(new char[] { delimiter });
+		StringJoiner joiner = willWrap ? new StringJoiner(sep, sep, sep) : new StringJoiner(sep);
+
+		for (CharSequence cs : elements) {
+			joiner.add(cs);
+		}
+		return joiner.toString();
 	}
-	return false;
-    }
 
-    public static String join(char delimiter, boolean willWrap, Iterable<? extends CharSequence> elements) {
-	Objects.requireNonNull(elements);
+	public static String join(char delimiter, boolean willWrap, CharSequence... elements) {
+		Objects.requireNonNull(elements);
 
-	if (elements instanceof Collection) {
-	    Collection<? extends CharSequence> col = ObjectUtils.cast(elements);
-	    if (col.isEmpty()) {
-		return null;
-	    }
+		if (elements.length == 0) {
+			return null;
+		}
+		return join(delimiter, willWrap, new ArrayUtils.ArrayIterable<>(elements));
 	}
-	String sep = new String(new char[] { delimiter });
-	StringJoiner joiner = willWrap ? new StringJoiner(sep, sep, sep) : new StringJoiner(sep);
-
-	for (CharSequence cs : elements) {
-	    joiner.add(cs);
-	}
-	return joiner.toString();
-    }
-
-    public static String join(char delimiter, boolean willWrap, CharSequence... elements) {
-	Objects.requireNonNull(elements);
-
-	if (elements.length == 0) {
-	    return null;
-	}
-	return join(delimiter, willWrap, new ArrayUtils.ArrayIterable<>(elements));
-    }
 }

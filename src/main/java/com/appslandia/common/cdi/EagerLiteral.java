@@ -29,10 +29,10 @@ import jakarta.enterprise.util.AnnotationLiteral;
  */
 @SuppressWarnings("all")
 public class EagerLiteral extends AnnotationLiteral<Eager> implements Eager {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public static final Eager IMPL = new EagerLiteral();
+	public static final Eager IMPL = new EagerLiteral();
 
-    private EagerLiteral() {
-    }
+	private EagerLiteral() {
+	}
 }

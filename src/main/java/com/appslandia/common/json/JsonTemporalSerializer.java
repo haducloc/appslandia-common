@@ -36,111 +36,91 @@ import com.appslandia.common.utils.STR;
  */
 public abstract class JsonTemporalSerializer {
 
-    protected final String serializeIsoPattern;
+	protected final String serializeIsoPattern;
 
-    public JsonTemporalSerializer(String serializeIsoPattern) {
-	this.serializeIsoPattern = serializeIsoPattern;
-    }
+	public JsonTemporalSerializer(String serializeIsoPattern) {
+		this.serializeIsoPattern = serializeIsoPattern;
+	}
 
-    // @formatter:off
-    private static final String[] TIME_PATTERNS = new String[] {
-	    DateUtils.ISO8601_TIME_M,
-	    DateUtils.ISO8601_TIME_S,
-	    DateUtils.ISO8601_TIME_N1,
-	    DateUtils.ISO8601_TIME_N2,
-	    DateUtils.ISO8601_TIME_N3,
-	    DateUtils.ISO8601_TIME_N4,
-	    DateUtils.ISO8601_TIME_N5,
-	    DateUtils.ISO8601_TIME_N6,
-	    DateUtils.ISO8601_TIME_N7
-	};
-    // @formatter:on
+	// @formatter:off
+	private static final String[] TIME_PATTERNS = new String[]{
+			DateUtils.ISO8601_TIME_M, DateUtils.ISO8601_TIME_S,
+			DateUtils.ISO8601_TIME_N1, DateUtils.ISO8601_TIME_N2,
+			DateUtils.ISO8601_TIME_N3, DateUtils.ISO8601_TIME_N4,
+			DateUtils.ISO8601_TIME_N5, DateUtils.ISO8601_TIME_N6,
+			DateUtils.ISO8601_TIME_N7};
+	// @formatter:on
 
-    // @formatter:off
-    private static final String[] TIMEZ_PATTERNS = new String[] {
-            DateUtils.ISO8601_TIMEZ_M,
-            DateUtils.ISO8601_TIMEZ_S,
-            DateUtils.ISO8601_TIMEZ_N1,
-            DateUtils.ISO8601_TIMEZ_N2,
-            DateUtils.ISO8601_TIMEZ_N3,
-            DateUtils.ISO8601_TIMEZ_N4,
-            DateUtils.ISO8601_TIMEZ_N5,
-            DateUtils.ISO8601_TIMEZ_N6,
-            DateUtils.ISO8601_TIMEZ_N7
-    };
-    // @formatter:on
+	// @formatter:off
+	private static final String[] TIMEZ_PATTERNS = new String[]{
+			DateUtils.ISO8601_TIMEZ_M, DateUtils.ISO8601_TIMEZ_S,
+			DateUtils.ISO8601_TIMEZ_N1, DateUtils.ISO8601_TIMEZ_N2,
+			DateUtils.ISO8601_TIMEZ_N3, DateUtils.ISO8601_TIMEZ_N4,
+			DateUtils.ISO8601_TIMEZ_N5, DateUtils.ISO8601_TIMEZ_N6,
+			DateUtils.ISO8601_TIMEZ_N7};
+	// @formatter:on
 
-    // @formatter:off
-    private static final String[] DATETIME_PATTERNS = new String[] {
-            DateUtils.ISO8601_DATETIME_M,
-            DateUtils.ISO8601_DATETIME_S,
-            DateUtils.ISO8601_DATETIME_N1,
-            DateUtils.ISO8601_DATETIME_N2,
-            DateUtils.ISO8601_DATETIME_N3,
-            DateUtils.ISO8601_DATETIME_N4,
-            DateUtils.ISO8601_DATETIME_N5,
-            DateUtils.ISO8601_DATETIME_N6,
-            DateUtils.ISO8601_DATETIME_N7
-    };
-    // @formatter:on
+	// @formatter:off
+	private static final String[] DATETIME_PATTERNS = new String[]{
+			DateUtils.ISO8601_DATETIME_M, DateUtils.ISO8601_DATETIME_S,
+			DateUtils.ISO8601_DATETIME_N1, DateUtils.ISO8601_DATETIME_N2,
+			DateUtils.ISO8601_DATETIME_N3, DateUtils.ISO8601_DATETIME_N4,
+			DateUtils.ISO8601_DATETIME_N5, DateUtils.ISO8601_DATETIME_N6,
+			DateUtils.ISO8601_DATETIME_N7};
+	// @formatter:on
 
-    // @formatter:off
-    private static final String[] DATETIMEZ_PATTERNS = new String[] {
-            DateUtils.ISO8601_DATETIMEZ_M,
-            DateUtils.ISO8601_DATETIMEZ_S,
-            DateUtils.ISO8601_DATETIMEZ_N1,
-            DateUtils.ISO8601_DATETIMEZ_N2,
-            DateUtils.ISO8601_DATETIMEZ_N3,
-            DateUtils.ISO8601_DATETIMEZ_N4,
-            DateUtils.ISO8601_DATETIMEZ_N5,
-            DateUtils.ISO8601_DATETIMEZ_N6,
-            DateUtils.ISO8601_DATETIMEZ_N7
-    };
-    // @formatter:on
+	// @formatter:off
+	private static final String[] DATETIMEZ_PATTERNS = new String[]{
+			DateUtils.ISO8601_DATETIMEZ_M, DateUtils.ISO8601_DATETIMEZ_S,
+			DateUtils.ISO8601_DATETIMEZ_N1, DateUtils.ISO8601_DATETIMEZ_N2,
+			DateUtils.ISO8601_DATETIMEZ_N3, DateUtils.ISO8601_DATETIMEZ_N4,
+			DateUtils.ISO8601_DATETIMEZ_N5, DateUtils.ISO8601_DATETIMEZ_N6,
+			DateUtils.ISO8601_DATETIMEZ_N7};
+	// @formatter:on
 
-    protected LocalTime parseLocalTime(String value) {
-	for (String pattern : TIME_PATTERNS) {
-	    if (pattern.length() == value.length()) {
-		try {
-		    return LocalTime.parse(value, DateUtils.getFormatter(pattern));
-		} catch (DateTimeParseException ex) {
+	protected LocalTime parseLocalTime(String value) {
+		for (String pattern : TIME_PATTERNS) {
+			if (pattern.length() == value.length()) {
+				try {
+					return LocalTime.parse(value, DateUtils.getFormatter(pattern));
+				} catch (DateTimeParseException ex) {
+				}
+				break;
+			}
 		}
-		break;
-	    }
+		throw new IllegalArgumentException(STR.fmt("Couldn't parse '{}' to LocalTime.", value));
 	}
-	throw new IllegalArgumentException(STR.fmt("Couldn't parse '{}' to LocalTime.", value));
-    }
 
-    protected OffsetTime parseOffsetTime(String value) {
-	for (String pattern : TIMEZ_PATTERNS) {
-	    try {
-		return OffsetTime.parse(value, DateUtils.getFormatter(pattern));
-	    } catch (DateTimeParseException ex) {
-	    }
-	}
-	throw new IllegalArgumentException(STR.fmt("Couldn't parse '{}' to OffsetTime.", value));
-    }
-
-    protected LocalDateTime parseLocalDateTime(String value) {
-	for (String pattern : DATETIME_PATTERNS) {
-	    if (pattern.length() == value.length() + 2) {
-		try {
-		    return LocalDateTime.parse(value, DateUtils.getFormatter(pattern));
-		} catch (DateTimeParseException ex) {
+	protected OffsetTime parseOffsetTime(String value) {
+		for (String pattern : TIMEZ_PATTERNS) {
+			try {
+				return OffsetTime.parse(value, DateUtils.getFormatter(pattern));
+			} catch (DateTimeParseException ex) {
+			}
 		}
-		break;
-	    }
+		throw new IllegalArgumentException(STR.fmt("Couldn't parse '{}' to OffsetTime.", value));
 	}
-	throw new IllegalArgumentException(STR.fmt("Couldn't parse '{}' to LocalDateTime.", value));
-    }
 
-    protected OffsetDateTime parseOffsetDateTime(String value) {
-	for (String pattern : DATETIMEZ_PATTERNS) {
-	    try {
-		return OffsetDateTime.parse(value, DateUtils.getFormatter(pattern));
-	    } catch (DateTimeParseException ex) {
-	    }
+	protected LocalDateTime parseLocalDateTime(String value) {
+		for (String pattern : DATETIME_PATTERNS) {
+			if (pattern.length() == value.length() + 2) {
+				try {
+					return LocalDateTime.parse(value, DateUtils.getFormatter(pattern));
+				} catch (DateTimeParseException ex) {
+				}
+				break;
+			}
+		}
+		throw new IllegalArgumentException(STR.fmt("Couldn't parse '{}' to LocalDateTime.", value));
 	}
-	throw new IllegalArgumentException(STR.fmt("Couldn't parse '{}' to OffsetDateTime.", value));
-    }
+
+	protected OffsetDateTime parseOffsetDateTime(String value) {
+		for (String pattern : DATETIMEZ_PATTERNS) {
+			try {
+				return OffsetDateTime.parse(value, DateUtils.getFormatter(pattern));
+			} catch (DateTimeParseException ex) {
+			}
+		}
+		throw new IllegalArgumentException(STR.fmt("Couldn't parse '{}' to OffsetDateTime.", value));
+	}
 }

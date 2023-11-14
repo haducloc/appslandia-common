@@ -28,5 +28,5 @@ package com.appslandia.common.csv;
 @FunctionalInterface
 public interface CsvConsumer {
 
-    void apply(int index, CsvRecord csvRecord) throws Exception;
+	void apply(int index, CsvRecord csvRecord) throws Exception;
 }

@@ -30,60 +30,60 @@ import org.junit.jupiter.api.Test;
  */
 public class ArrayUtilsTest {
 
-    @Test
-    public void test_appendArrays2() {
-	byte[] arr1 = new byte[] { 1, 2 };
-	byte[] arr2 = new byte[] { 3, 4, 5 };
-	byte[] result = ArrayUtils.append(arr1, arr2);
+	@Test
+	public void test_appendArrays2() {
+		byte[] arr1 = new byte[] { 1, 2 };
+		byte[] arr2 = new byte[] { 3, 4, 5 };
+		byte[] result = ArrayUtils.append(arr1, arr2);
 
-	Assertions.assertEquals(5, result.length);
-	Assertions.assertEquals(1, result[0]);
-	Assertions.assertEquals(3, result[2]);
-    }
+		Assertions.assertEquals(5, result.length);
+		Assertions.assertEquals(1, result[0]);
+		Assertions.assertEquals(3, result[2]);
+	}
 
-    @Test
-    public void test_appendArrays3() {
-	byte[] arr1 = new byte[] { 1, 2 };
-	byte[] arr2 = new byte[] { 3, 4, 5 };
-	byte[] arr3 = new byte[] { 6, 7, 8, 9 };
-	byte[] result = ArrayUtils.append(arr1, arr2, arr3);
+	@Test
+	public void test_appendArrays3() {
+		byte[] arr1 = new byte[] { 1, 2 };
+		byte[] arr2 = new byte[] { 3, 4, 5 };
+		byte[] arr3 = new byte[] { 6, 7, 8, 9 };
+		byte[] result = ArrayUtils.append(arr1, arr2, arr3);
 
-	Assertions.assertEquals(9, result.length);
-	Assertions.assertEquals(1, result[0]);
-	Assertions.assertEquals(3, result[2]);
-	Assertions.assertEquals(6, result[5]);
-    }
+		Assertions.assertEquals(9, result.length);
+		Assertions.assertEquals(1, result[0]);
+		Assertions.assertEquals(3, result[2]);
+		Assertions.assertEquals(6, result[5]);
+	}
 
-    @Test
-    public void test_copyArrays2() {
-	byte[] arr = new byte[] { 1, 2, 3, 4, 5 };
-	byte[] arr1 = new byte[2];
-	byte[] arr2 = new byte[3];
-	ArrayUtils.copy(arr, arr1, arr2);
+	@Test
+	public void test_copyArrays2() {
+		byte[] arr = new byte[] { 1, 2, 3, 4, 5 };
+		byte[] arr1 = new byte[2];
+		byte[] arr2 = new byte[3];
+		ArrayUtils.copy(arr, arr1, arr2);
 
-	Assertions.assertEquals(1, arr1[0]);
-	Assertions.assertEquals(2, arr1[1]);
+		Assertions.assertEquals(1, arr1[0]);
+		Assertions.assertEquals(2, arr1[1]);
 
-	Assertions.assertEquals(3, arr2[0]);
-	Assertions.assertEquals(4, arr2[1]);
-	Assertions.assertEquals(5, arr2[2]);
-    }
+		Assertions.assertEquals(3, arr2[0]);
+		Assertions.assertEquals(4, arr2[1]);
+		Assertions.assertEquals(5, arr2[2]);
+	}
 
-    @Test
-    public void test_copyArrays3() {
-	byte[] arr = new byte[] { 1, 2, 3, 4, 5, 6 };
-	byte[] arr1 = new byte[1];
-	byte[] arr2 = new byte[2];
-	byte[] arr3 = new byte[3];
-	ArrayUtils.copy(arr, arr1, arr2, arr3);
+	@Test
+	public void test_copyArrays3() {
+		byte[] arr = new byte[] { 1, 2, 3, 4, 5, 6 };
+		byte[] arr1 = new byte[1];
+		byte[] arr2 = new byte[2];
+		byte[] arr3 = new byte[3];
+		ArrayUtils.copy(arr, arr1, arr2, arr3);
 
-	Assertions.assertEquals(1, arr1[0]);
+		Assertions.assertEquals(1, arr1[0]);
 
-	Assertions.assertEquals(2, arr2[0]);
-	Assertions.assertEquals(3, arr2[1]);
+		Assertions.assertEquals(2, arr2[0]);
+		Assertions.assertEquals(3, arr2[1]);
 
-	Assertions.assertEquals(4, arr3[0]);
-	Assertions.assertEquals(5, arr3[1]);
-	Assertions.assertEquals(6, arr3[2]);
-    }
+		Assertions.assertEquals(4, arr3[0]);
+		Assertions.assertEquals(5, arr3[1]);
+		Assertions.assertEquals(6, arr3[2]);
+	}
 }

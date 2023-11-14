@@ -35,79 +35,79 @@ import com.appslandia.common.utils.ValueUtils;
  */
 public class ObjectDefinition extends InitializeObject {
 
-    private Class<?>[] types;
-    private Annotation[] qualifiers;
-    private ObjectScope scope;
+	private Class<?>[] types;
+	private Annotation[] qualifiers;
+	private ObjectScope scope;
 
-    private Class<?> implClass;
-    private ObjectProducer<?> producer;
+	private Class<?> implClass;
+	private ObjectProducer<?> producer;
 
-    @Override
-    protected void init() throws Exception {
-	Asserts.notNull(this.types);
-	Asserts.notNull(this.scope);
-	Asserts.isTrue((this.implClass != null) || (this.producer != null));
+	@Override
+	protected void init() throws Exception {
+		Asserts.notNull(this.types);
+		Asserts.notNull(this.scope);
+		Asserts.isTrue((this.implClass != null) || (this.producer != null));
 
-	this.qualifiers = ValueUtils.valueOrAlt(this.qualifiers, ReflectionUtils.EMPTY_ANNOTATIONS);
-    }
+		this.qualifiers = ValueUtils.valueOrAlt(this.qualifiers, ReflectionUtils.EMPTY_ANNOTATIONS);
+	}
 
-    public boolean hasType(Class<?> type) {
-	initialize();
-	return Arrays.stream(this.types).anyMatch(t -> t == type);
-    }
+	public boolean hasType(Class<?> type) {
+		initialize();
+		return Arrays.stream(this.types).anyMatch(t -> t == type);
+	}
 
-    public Class<?>[] getTypes() {
-	initialize();
-	return this.types.clone();
-    }
+	public Class<?>[] getTypes() {
+		initialize();
+		return this.types.clone();
+	}
 
-    public ObjectDefinition setTypes(Class<?>[] types) {
-	assertNotInitialized();
-	this.types = types;
-	return this;
-    }
+	public ObjectDefinition setTypes(Class<?>[] types) {
+		assertNotInitialized();
+		this.types = types;
+		return this;
+	}
 
-    public Annotation[] getQualifiers() {
-	initialize();
-	return this.qualifiers;
-    }
+	public Annotation[] getQualifiers() {
+		initialize();
+		return this.qualifiers;
+	}
 
-    public ObjectDefinition setQualifiers(Annotation... qualifiers) {
-	assertNotInitialized();
-	this.qualifiers = qualifiers;
-	return this;
-    }
+	public ObjectDefinition setQualifiers(Annotation... qualifiers) {
+		assertNotInitialized();
+		this.qualifiers = qualifiers;
+		return this;
+	}
 
-    public ObjectScope getScope() {
-	initialize();
-	return this.scope;
-    }
+	public ObjectScope getScope() {
+		initialize();
+		return this.scope;
+	}
 
-    public ObjectDefinition setScope(ObjectScope scope) {
-	assertNotInitialized();
-	this.scope = scope;
-	return this;
-    }
+	public ObjectDefinition setScope(ObjectScope scope) {
+		assertNotInitialized();
+		this.scope = scope;
+		return this;
+	}
 
-    public Class<?> getImplClass() {
-	initialize();
-	return this.implClass;
-    }
+	public Class<?> getImplClass() {
+		initialize();
+		return this.implClass;
+	}
 
-    public ObjectDefinition setImplClass(Class<?> implClass) {
-	assertNotInitialized();
-	this.implClass = implClass;
-	return this;
-    }
+	public ObjectDefinition setImplClass(Class<?> implClass) {
+		assertNotInitialized();
+		this.implClass = implClass;
+		return this;
+	}
 
-    public ObjectProducer<?> getProducer() {
-	initialize();
-	return this.producer;
-    }
+	public ObjectProducer<?> getProducer() {
+		initialize();
+		return this.producer;
+	}
 
-    public ObjectDefinition setProducer(ObjectProducer<?> producer) {
-	assertNotInitialized();
-	this.producer = producer;
-	return this;
-    }
+	public ObjectDefinition setProducer(ObjectProducer<?> producer) {
+		assertNotInitialized();
+		this.producer = producer;
+		return this;
+	}
 }

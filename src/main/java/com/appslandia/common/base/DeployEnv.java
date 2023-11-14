@@ -35,125 +35,125 @@ import com.appslandia.common.utils.SYS;
  */
 public class DeployEnv {
 
-    public static final DeployEnv DEVELOPMENT = new DeployEnv("Development");
-    public static final DeployEnv TESTING = new DeployEnv("Testing");
-    public static final DeployEnv STAGING = new DeployEnv("Staging");
-    public static final DeployEnv PRODUCTION = new DeployEnv("Production");
+	public static final DeployEnv DEVELOPMENT = new DeployEnv("Development");
+	public static final DeployEnv TESTING = new DeployEnv("Testing");
+	public static final DeployEnv STAGING = new DeployEnv("Staging");
+	public static final DeployEnv PRODUCTION = new DeployEnv("Production");
 
-    final String name;
+	final String name;
 
-    private DeployEnv(String name) {
-	this.name = Asserts.notNull(name);
-    }
-
-    public boolean isStagingOrProduction() {
-	return this.equals(STAGING) || this.equals(PRODUCTION);
-    }
-
-    public boolean isDevelopment() {
-	return this.equals(DEVELOPMENT) || this.name.toLowerCase(Locale.ENGLISH).startsWith("development");
-    }
-
-    public boolean isTesting() {
-	return this.equals(TESTING);
-    }
-
-    public boolean isStaging() {
-	return this.equals(STAGING);
-    }
-
-    public boolean isProduction() {
-	return this.equals(PRODUCTION);
-    }
-
-    public boolean isAny(String... environments) {
-	return Arrays.stream(environments).anyMatch(env -> this.name.equalsIgnoreCase(env));
-    }
-
-    public String getName() {
-	return this.name;
-    }
-
-    @Override
-    public String toString() {
-	return "DeployEnv: " + this.name;
-    }
-
-    @Override
-    public int hashCode() {
-	return this.name.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj) {
-	    return true;
+	private DeployEnv(String name) {
+		this.name = Asserts.notNull(name);
 	}
-	if (!(obj instanceof DeployEnv)) {
-	    return false;
+
+	public boolean isStagingOrProduction() {
+		return this.equals(STAGING) || this.equals(PRODUCTION);
 	}
-	DeployEnv other = (DeployEnv) obj;
-	return this.name.equalsIgnoreCase(other.name);
-    }
 
-    private static volatile DeployEnv __current;
-    private static final Object MUTEX = new Object();
+	public boolean isDevelopment() {
+		return this.equals(DEVELOPMENT) || this.name.toLowerCase(Locale.ENGLISH).startsWith("development");
+	}
 
-    public static DeployEnv getCurrent() {
-	DeployEnv obj = __current;
-	if (obj == null) {
-	    synchronized (MUTEX) {
-		if ((obj = __current) == null) {
-		    __current = obj = initDeployEnv();
+	public boolean isTesting() {
+		return this.equals(TESTING);
+	}
+
+	public boolean isStaging() {
+		return this.equals(STAGING);
+	}
+
+	public boolean isProduction() {
+		return this.equals(PRODUCTION);
+	}
+
+	public boolean isAny(String... environments) {
+		return Arrays.stream(environments).anyMatch(env -> this.name.equalsIgnoreCase(env));
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	@Override
+	public String toString() {
+		return "DeployEnv: " + this.name;
+	}
+
+	@Override
+	public int hashCode() {
+		return this.name.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
 		}
-	    }
+		if (!(obj instanceof DeployEnv)) {
+			return false;
+		}
+		DeployEnv other = (DeployEnv) obj;
+		return this.name.equalsIgnoreCase(other.name);
 	}
-	return obj;
-    }
 
-    public static void setCurrent(DeployEnv env) {
-	Asserts.isNull(env, "DeployEnv.__current must be null.");
+	private static volatile DeployEnv __current;
+	private static final Object MUTEX = new Object();
 
-	if (__current == null) {
-	    synchronized (MUTEX) {
+	public static DeployEnv getCurrent() {
+		DeployEnv obj = __current;
+		if (obj == null) {
+			synchronized (MUTEX) {
+				if ((obj = __current) == null) {
+					__current = obj = initDeployEnv();
+				}
+			}
+		}
+		return obj;
+	}
+
+	public static void setCurrent(DeployEnv env) {
+		Asserts.isNull(env, "DeployEnv.__current must be null.");
+
 		if (__current == null) {
-		    __current = env;
-		    return;
+			synchronized (MUTEX) {
+				if (__current == null) {
+					__current = env;
+					return;
+				}
+			}
 		}
-	    }
-	}
-    }
-
-    public static void setCurrent(String env) {
-	Asserts.notNull(env);
-	setCurrent(toDeployEnv(env));
-    }
-
-    @SuppressWarnings("el-syntax")
-    private static DeployEnv initDeployEnv() {
-	String env = SYS.resolve("${deploy_env,env.DEPLOY_ENV:Development}");
-	return toDeployEnv(env);
-    }
-
-    private static final Pattern ENV_NAME_PATTERN = Pattern.compile("^[a-z][a-z\\d_]*", Pattern.CASE_INSENSITIVE);
-
-    private static DeployEnv toDeployEnv(String env) {
-	if (DEVELOPMENT.name.equalsIgnoreCase(env)) {
-	    return DEVELOPMENT;
-	}
-	if (TESTING.name.equalsIgnoreCase(env)) {
-	    return TESTING;
-	}
-	if (STAGING.name.equalsIgnoreCase(env)) {
-	    return STAGING;
-	}
-	if (PRODUCTION.name.equalsIgnoreCase(env)) {
-	    return PRODUCTION;
 	}
 
-	if (!ENV_NAME_PATTERN.matcher(env).matches()) {
-	    throw new IllegalArgumentException(STR.fmt("The env '{}' is invalid.", env));
+	public static void setCurrent(String env) {
+		Asserts.notNull(env);
+		setCurrent(toDeployEnv(env));
 	}
-	return new DeployEnv(env);
-    }
+
+	@SuppressWarnings("el-syntax")
+	private static DeployEnv initDeployEnv() {
+		String env = SYS.resolve("${deploy_env,env.DEPLOY_ENV:Development}");
+		return toDeployEnv(env);
+	}
+
+	private static final Pattern ENV_NAME_PATTERN = Pattern.compile("^[a-z][a-z\\d_]*", Pattern.CASE_INSENSITIVE);
+
+	private static DeployEnv toDeployEnv(String env) {
+		if (DEVELOPMENT.name.equalsIgnoreCase(env)) {
+			return DEVELOPMENT;
+		}
+		if (TESTING.name.equalsIgnoreCase(env)) {
+			return TESTING;
+		}
+		if (STAGING.name.equalsIgnoreCase(env)) {
+			return STAGING;
+		}
+		if (PRODUCTION.name.equalsIgnoreCase(env)) {
+			return PRODUCTION;
+		}
+
+		if (!ENV_NAME_PATTERN.matcher(env).matches()) {
+			throw new IllegalArgumentException(STR.fmt("The env '{}' is invalid.", env));
+		}
+		return new DeployEnv(env);
+	}
 }

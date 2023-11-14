@@ -30,37 +30,37 @@ import com.appslandia.common.utils.StringUtils;
  */
 public class IntegerConverter extends NumberConverter<Integer> {
 
-    public static final String ERROR_MSG_KEY = IntegerConverter.class.getName() + ".message";
+	public static final String ERROR_MSG_KEY = IntegerConverter.class.getName() + ".message";
 
-    @Override
-    public String getErrorMsgKey() {
-	return ERROR_MSG_KEY;
-    }
-
-    @Override
-    public Class<Integer> getTargetType() {
-	return Integer.class;
-    }
-
-    @Override
-    public String format(Integer obj, FormatProvider formatProvider, boolean localize) {
-	if (obj == null) {
-	    return null;
+	@Override
+	public String getErrorMsgKey() {
+		return ERROR_MSG_KEY;
 	}
-	return obj.toString();
-    }
 
-    @Override
-    public Integer parse(String str, FormatProvider formatProvider) throws ConverterException {
-	str = StringUtils.trimToNull(str);
-	if (str == null) {
-	    return null;
+	@Override
+	public Class<Integer> getTargetType() {
+		return Integer.class;
 	}
-	try {
-	    return Integer.parseInt(str);
 
-	} catch (NumberFormatException ex) {
+	@Override
+	public String format(Integer obj, FormatProvider formatProvider, boolean localize) {
+		if (obj == null) {
+			return null;
+		}
+		return obj.toString();
 	}
-	throw toParsingError(str, getTargetType().getName());
-    }
+
+	@Override
+	public Integer parse(String str, FormatProvider formatProvider) throws ConverterException {
+		str = StringUtils.trimToNull(str);
+		if (str == null) {
+			return null;
+		}
+		try {
+			return Integer.parseInt(str);
+
+		} catch (NumberFormatException ex) {
+		}
+		throw toParsingError(str, getTargetType().getName());
+	}
 }

@@ -32,29 +32,29 @@ import org.junit.jupiter.api.Test;
  */
 public class DigitOnlyTest {
 
-    @Test
-    public void test() {
-	TestModel m = new TestModel();
-	Set<?> errors = ValidatorUtils.getValidator().validate(m);
-	Assertions.assertTrue(errors.isEmpty());
+	@Test
+	public void test() {
+		TestModel m = new TestModel();
+		Set<?> errors = ValidatorUtils.getValidator().validate(m);
+		Assertions.assertTrue(errors.isEmpty());
 
-	m.prop = "1234";
-	errors = ValidatorUtils.getValidator().validate(m);
-	Assertions.assertTrue(errors.isEmpty());
-    }
+		m.prop = "1234";
+		errors = ValidatorUtils.getValidator().validate(m);
+		Assertions.assertTrue(errors.isEmpty());
+	}
 
-    @Test
-    public void test_invalid() {
-	TestModel m = new TestModel();
+	@Test
+	public void test_invalid() {
+		TestModel m = new TestModel();
 
-	m.prop = "1234abc";
-	Set<?> errors = ValidatorUtils.getValidator().validate(m);
-	Assertions.assertTrue(!errors.isEmpty());
-    }
+		m.prop = "1234abc";
+		Set<?> errors = ValidatorUtils.getValidator().validate(m);
+		Assertions.assertTrue(!errors.isEmpty());
+	}
 
-    private static class TestModel {
+	private static class TestModel {
 
-	@DigitOnly
-	public String prop;
-    }
+		@DigitOnly
+		public String prop;
+	}
 }

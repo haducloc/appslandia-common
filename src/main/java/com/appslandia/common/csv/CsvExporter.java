@@ -40,118 +40,118 @@ import com.appslandia.common.utils.Asserts;
  */
 public class CsvExporter extends InitializeObject {
 
-    private BufferedWriter csvOutput;
-    private ConnectionImpl connection;
-    private String pQuery;
-    private Map<String, Object> pQueryParams;
+	private BufferedWriter csvOutput;
+	private ConnectionImpl connection;
+	private String pQuery;
+	private Map<String, Object> pQueryParams;
 
-    private CsvProcessor csvProcessor;
+	private CsvProcessor csvProcessor;
 
-    final Map<String, DbToCsvConverter> converters = new HashMap<>();
+	final Map<String, DbToCsvConverter> converters = new HashMap<>();
 
-    @Override
-    protected void init() throws Exception {
-	Asserts.notNull(this.pQuery);
-	Asserts.notNull(this.csvOutput);
+	@Override
+	protected void init() throws Exception {
+		Asserts.notNull(this.pQuery);
+		Asserts.notNull(this.csvOutput);
 
-	if (this.connection == null) {
-	    this.connection = ConnectionImpl.getCurrent();
-	}
-	if (this.csvProcessor == null) {
-	    this.csvProcessor = CsvProcessor.INSTANCE;
-	}
-    }
-
-    public int execute() throws Exception {
-	initialize();
-
-	AtomicInteger counter = new AtomicInteger(0);
-	try (RecordContext ctx = new RecordContext(this.connection)) {
-
-	    Out<Boolean> writeHeader = new Out<>();
-	    ctx.executeQuery(this.pQuery, this.pQueryParams, rs -> {
-
-		// CSV Header
-		if (writeHeader.value == null) {
-
-		    for (ResultSetColumn column : rs.getColumns()) {
-			if (column.getIndex() > 1) {
-			    this.csvOutput.write(csvProcessor.getSeparator());
-			}
-			this.csvOutput.write(this.csvProcessor.escape(column.getName()));
-		    }
-		    this.csvOutput.newLine();
-
-		    writeHeader.value = true;
+		if (this.connection == null) {
+			this.connection = ConnectionImpl.getCurrent();
 		}
-
-		// CSV Record
-		for (ResultSetColumn column : rs.getColumns()) {
-		    Object value = rs.getObject(column.getIndex());
-
-		    DbToCsvConverter converter = this.converters.get(column.getName());
-		    if (converter != null) {
-			value = converter.apply(value);
-		    }
-		    if (column.getIndex() > 1) {
-			this.csvOutput.write(csvProcessor.getSeparator());
-		    }
-
-		    if (value == null) {
-			this.csvOutput.write(this.csvProcessor.escape(null));
-
-		    } else if (Number.class.isAssignableFrom(value.getClass()) || Temporal.class.isAssignableFrom(value.getClass()) || value.getClass() == Boolean.class
-			    || java.util.Date.class.isAssignableFrom(value.getClass())) {
-
-			this.csvOutput.write(value.toString());
-		    } else {
-			this.csvOutput.write(this.csvProcessor.escape((value != null) ? value.toString() : null));
-		    }
-
+		if (this.csvProcessor == null) {
+			this.csvProcessor = CsvProcessor.INSTANCE;
 		}
-		this.csvOutput.newLine();
-	    });
-
-	    this.csvOutput.flush();
 	}
-	return counter.get();
-    }
 
-    public CsvExporter setCsvOutput(BufferedWriter csvOutput) {
-	assertNotInitialized();
-	this.csvOutput = csvOutput;
-	return this;
-    }
+	public int execute() throws Exception {
+		initialize();
 
-    public CsvExporter setConnection(ConnectionImpl connection) {
-	assertNotInitialized();
-	this.connection = connection;
-	return this;
-    }
+		AtomicInteger counter = new AtomicInteger(0);
+		try (RecordContext ctx = new RecordContext(this.connection)) {
 
-    public CsvExporter setPQuery(String pQuery) {
-	assertNotInitialized();
-	this.pQuery = pQuery;
-	return this;
-    }
+			Out<Boolean> writeHeader = new Out<>();
+			ctx.executeQuery(this.pQuery, this.pQueryParams, rs -> {
 
-    public CsvExporter setPQueryParams(Map<String, Object> pQueryParams) {
-	assertNotInitialized();
-	this.pQueryParams = pQueryParams;
-	return this;
-    }
+				// CSV Header
+				if (writeHeader.value == null) {
 
-    public CsvExporter setCsvProcessor(CsvProcessor csvProcessor) {
-	assertNotInitialized();
-	this.csvProcessor = csvProcessor;
-	return this;
-    }
+					for (ResultSetColumn column : rs.getColumns()) {
+						if (column.getIndex() > 1) {
+							this.csvOutput.write(csvProcessor.getSeparator());
+						}
+						this.csvOutput.write(this.csvProcessor.escape(column.getName()));
+					}
+					this.csvOutput.newLine();
 
-    public CsvExporter setDbToCsvConverter(String columnLabel, DbToCsvConverter converter) {
-	assertNotInitialized();
-	Asserts.notNull(converter);
+					writeHeader.value = true;
+				}
 
-	this.converters.put(columnLabel, converter);
-	return this;
-    }
+				// CSV Record
+				for (ResultSetColumn column : rs.getColumns()) {
+					Object value = rs.getObject(column.getIndex());
+
+					DbToCsvConverter converter = this.converters.get(column.getName());
+					if (converter != null) {
+						value = converter.apply(value);
+					}
+					if (column.getIndex() > 1) {
+						this.csvOutput.write(csvProcessor.getSeparator());
+					}
+
+					if (value == null) {
+						this.csvOutput.write(this.csvProcessor.escape(null));
+
+					} else if (Number.class.isAssignableFrom(value.getClass()) || Temporal.class.isAssignableFrom(value.getClass())
+							|| value.getClass() == Boolean.class || java.util.Date.class.isAssignableFrom(value.getClass())) {
+
+						this.csvOutput.write(value.toString());
+					} else {
+						this.csvOutput.write(this.csvProcessor.escape((value != null) ? value.toString() : null));
+					}
+
+				}
+				this.csvOutput.newLine();
+			});
+
+			this.csvOutput.flush();
+		}
+		return counter.get();
+	}
+
+	public CsvExporter setCsvOutput(BufferedWriter csvOutput) {
+		assertNotInitialized();
+		this.csvOutput = csvOutput;
+		return this;
+	}
+
+	public CsvExporter setConnection(ConnectionImpl connection) {
+		assertNotInitialized();
+		this.connection = connection;
+		return this;
+	}
+
+	public CsvExporter setPQuery(String pQuery) {
+		assertNotInitialized();
+		this.pQuery = pQuery;
+		return this;
+	}
+
+	public CsvExporter setPQueryParams(Map<String, Object> pQueryParams) {
+		assertNotInitialized();
+		this.pQueryParams = pQueryParams;
+		return this;
+	}
+
+	public CsvExporter setCsvProcessor(CsvProcessor csvProcessor) {
+		assertNotInitialized();
+		this.csvProcessor = csvProcessor;
+		return this;
+	}
+
+	public CsvExporter setDbToCsvConverter(String columnLabel, DbToCsvConverter converter) {
+		assertNotInitialized();
+		Asserts.notNull(converter);
+
+		this.converters.put(columnLabel, converter);
+		return this;
+	}
 }

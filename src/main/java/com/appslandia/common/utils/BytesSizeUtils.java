@@ -30,47 +30,47 @@ import java.util.regex.Pattern;
  */
 public class BytesSizeUtils {
 
-    private static final Pattern BYTES_SIZE_PATTERN = Pattern.compile("((\\d+.\\d+|\\d+)(TB|GB|MB|KB|B)\\s*)+", Pattern.CASE_INSENSITIVE);
+	private static final Pattern BYTES_SIZE_PATTERN = Pattern.compile("((\\d+.\\d+|\\d+)(TB|GB|MB|KB|B)\\s*)+", Pattern.CASE_INSENSITIVE);
 
-    public static long translateToBytes(String sizeAmt) {
-	return translateToBytes(sizeAmt, false);
-    }
-
-    public static long translateToBytes(String sizeAmt, boolean base10) {
-	Asserts.notNull(sizeAmt, "sizeAmt is required.");
-	Asserts.isTrue(BYTES_SIZE_PATTERN.matcher(sizeAmt).matches(), () -> STR.fmt("sizeAmt '{}' is invalid.", sizeAmt));
-
-	double result = 0L;
-	int i = 0;
-	while (i < sizeAmt.length()) {
-	    int j = i;
-	    while (Character.isDigit(sizeAmt.charAt(j)) || (sizeAmt.charAt(j) == '.')) {
-		j++;
-	    }
-	    int k = j;
-	    while ((k <= sizeAmt.length() - 1) && (Character.isLetter(sizeAmt.charAt(k)) || sizeAmt.charAt(k) == (' '))) {
-		k++;
-	    }
-
-	    double amt = Double.parseDouble(sizeAmt.substring(i, j));
-	    String unit = sizeAmt.substring(j, k).trim().toUpperCase(Locale.ENGLISH);
-
-	    switch (unit) {
-	    case "GB":
-		result += amt * (base10 ? 1000_000_000 : 1_073_741_824);
-		break;
-	    case "MB":
-		result += amt * (base10 ? 1000_000 : 1_048_576);
-		break;
-	    case "KB":
-		result += amt * (base10 ? 1000 : 1024);
-		break;
-	    default:
-		result += amt;
-		break;
-	    }
-	    i = k;
+	public static long translateToBytes(String sizeAmt) {
+		return translateToBytes(sizeAmt, false);
 	}
-	return (long) Math.ceil(result);
-    }
+
+	public static long translateToBytes(String sizeAmt, boolean base10) {
+		Asserts.notNull(sizeAmt, "sizeAmt is required.");
+		Asserts.isTrue(BYTES_SIZE_PATTERN.matcher(sizeAmt).matches(), () -> STR.fmt("sizeAmt '{}' is invalid.", sizeAmt));
+
+		double result = 0L;
+		int i = 0;
+		while (i < sizeAmt.length()) {
+			int j = i;
+			while (Character.isDigit(sizeAmt.charAt(j)) || (sizeAmt.charAt(j) == '.')) {
+				j++;
+			}
+			int k = j;
+			while ((k <= sizeAmt.length() - 1) && (Character.isLetter(sizeAmt.charAt(k)) || sizeAmt.charAt(k) == (' '))) {
+				k++;
+			}
+
+			double amt = Double.parseDouble(sizeAmt.substring(i, j));
+			String unit = sizeAmt.substring(j, k).trim().toUpperCase(Locale.ENGLISH);
+
+			switch (unit) {
+			case "GB":
+				result += amt * (base10 ? 1000_000_000 : 1_073_741_824);
+				break;
+			case "MB":
+				result += amt * (base10 ? 1000_000 : 1_048_576);
+				break;
+			case "KB":
+				result += amt * (base10 ? 1000 : 1024);
+				break;
+			default:
+				result += amt;
+				break;
+			}
+			i = k;
+		}
+		return (long) Math.ceil(result);
+	}
 }

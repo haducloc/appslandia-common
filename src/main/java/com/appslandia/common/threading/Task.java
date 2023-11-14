@@ -29,21 +29,21 @@ import com.appslandia.common.utils.Asserts;
  */
 public abstract class Task<T extends TaskAttributes> implements Runnable {
 
-    protected final T attributes;
+	protected final T attributes;
 
-    public Task(T attributes) {
-	this.attributes = Asserts.notNull(attributes);
-    }
-
-    @Override
-    public void run() {
-	try {
-	    doRun();
-
-	} catch (Exception ex) {
-	    throw new TaskException(ex.getMessage(), ex);
+	public Task(T attributes) {
+		this.attributes = Asserts.notNull(attributes);
 	}
-    }
 
-    protected abstract void doRun() throws Exception;
+	@Override
+	public void run() {
+		try {
+			doRun();
+
+		} catch (Exception ex) {
+			throw new TaskException(ex.getMessage(), ex);
+		}
+	}
+
+	protected abstract void doRun() throws Exception;
 }

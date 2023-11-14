@@ -26,13 +26,13 @@ package com.appslandia.common.jose;
  *
  */
 public class JwtToken extends JwsToken<JwtPayload> {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public JwtToken(JoseHeader header, JwtPayload payload) {
-	super(header, payload);
-    }
+	public JwtToken(JoseHeader header, JwtPayload payload) {
+		super(header, payload);
+	}
 
-    public JwtToken(JoseHeader header, JwtPayload payload, String headerPart, String payloadPart, String signaturePart) {
-	super(header, payload, headerPart, payloadPart, signaturePart);
-    }
+	public JwtToken(JoseHeader header, JwtPayload payload, String headerPart, String payloadPart, String signaturePart) {
+		super(header, payload, headerPart, payloadPart, signaturePart);
+	}
 }

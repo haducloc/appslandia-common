@@ -35,45 +35,45 @@ import com.appslandia.common.utils.RandomUtils;
  */
 public class TokenGenerator extends InitializeObject implements TextGenerator {
 
-    private static final Pattern BASE64_URL_NP_PATTERN = Pattern.compile("[a-zA-Z\\d-_]+");
+	private static final Pattern BASE64_URL_NP_PATTERN = Pattern.compile("[a-zA-Z\\d-_]+");
 
-    private int length = 32;
-    final Random random = new SecureRandom();
+	private int length = 32;
+	final Random random = new SecureRandom();
 
-    public TokenGenerator() {
-    }
-
-    public TokenGenerator(int length) {
-	this.length = length;
-    }
-
-    @Override
-    protected void init() throws Exception {
-	Asserts.isTrue(this.length > 0, "length is required.");
-    }
-
-    @Override
-    public String generate() {
-	initialize();
-	int len = MathUtils.toNearestMultipleOf(4, this.length);
-	byte[] bytes = RandomUtils.nextBytes((len * 3) / 4, this.random);
-
-	String base64 = BaseEncoder.BASE64_URL_NP.encode(bytes);
-	return (base64.length() == this.length) ? base64 : base64.substring(0, this.length);
-    }
-
-    @Override
-    public boolean verify(String value) {
-	Asserts.notNull(value);
-	if (value.length() != this.length) {
-	    return false;
+	public TokenGenerator() {
 	}
-	return BASE64_URL_NP_PATTERN.matcher(value).matches();
-    }
 
-    public TokenGenerator setLength(int length) {
-	assertNotInitialized();
-	this.length = length;
-	return this;
-    }
+	public TokenGenerator(int length) {
+		this.length = length;
+	}
+
+	@Override
+	protected void init() throws Exception {
+		Asserts.isTrue(this.length > 0, "length is required.");
+	}
+
+	@Override
+	public String generate() {
+		initialize();
+		int len = MathUtils.toNearestMultipleOf(4, this.length);
+		byte[] bytes = RandomUtils.nextBytes((len * 3) / 4, this.random);
+
+		String base64 = BaseEncoder.BASE64_URL_NP.encode(bytes);
+		return (base64.length() == this.length) ? base64 : base64.substring(0, this.length);
+	}
+
+	@Override
+	public boolean verify(String value) {
+		Asserts.notNull(value);
+		if (value.length() != this.length) {
+			return false;
+		}
+		return BASE64_URL_NP_PATTERN.matcher(value).matches();
+	}
+
+	public TokenGenerator setLength(int length) {
+		assertNotInitialized();
+		this.length = length;
+		return this;
+	}
 }

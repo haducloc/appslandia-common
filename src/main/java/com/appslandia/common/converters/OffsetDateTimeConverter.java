@@ -33,28 +33,28 @@ import com.appslandia.common.utils.DateUtils;
  */
 public class OffsetDateTimeConverter extends TemporalConverter<OffsetDateTime> {
 
-    public static final String ERROR_MSG_KEY = OffsetDateTimeConverter.class.getName() + ".message";
+	public static final String ERROR_MSG_KEY = OffsetDateTimeConverter.class.getName() + ".message";
 
-    public OffsetDateTimeConverter() {
-	super(DateUtils.ISO8601_DATETIMEZ_N3);
-    }
+	public OffsetDateTimeConverter() {
+		super(DateUtils.ISO8601_DATETIMEZ_N3);
+	}
 
-    public OffsetDateTimeConverter(String isoPattern) {
-	super(isoPattern);
-    }
+	public OffsetDateTimeConverter(String isoPattern) {
+		super(isoPattern);
+	}
 
-    @Override
-    public String getErrorMsgKey() {
-	return ERROR_MSG_KEY;
-    }
+	@Override
+	public String getErrorMsgKey() {
+		return ERROR_MSG_KEY;
+	}
 
-    @Override
-    public Class<OffsetDateTime> getTargetType() {
-	return OffsetDateTime.class;
-    }
+	@Override
+	public Class<OffsetDateTime> getTargetType() {
+		return OffsetDateTime.class;
+	}
 
-    @Override
-    protected OffsetDateTime parse(String str, DateTimeFormatter converter) throws DateTimeParseException {
-	return OffsetDateTime.parse(str, converter);
-    }
+	@Override
+	protected OffsetDateTime parse(String str, DateTimeFormatter converter) throws DateTimeParseException {
+		return OffsetDateTime.parse(str, converter);
+	}
 }

@@ -37,26 +37,26 @@ import com.google.gson.JsonParseException;
  */
 public class GsonMapAdapter<T extends Map<String, Object>> implements JsonDeserializer<T> {
 
-    final boolean unmodifiable;
-    final JsonObjectParser jsonObjectParser = new JsonObjectParser().setJsonValueConverter(GsonJsonValueConverter.INSTANCE);
+	final boolean unmodifiable;
+	final JsonObjectParser jsonObjectParser = new JsonObjectParser().setJsonValueConverter(GsonJsonValueConverter.INSTANCE);
 
-    public GsonMapAdapter(boolean unmodifiable, Function<Map<String, Object>, T> rootConverter) {
-	this.unmodifiable = unmodifiable;
-	this.jsonObjectParser.setRootConverter(ObjectUtils.cast(rootConverter));
-    }
+	public GsonMapAdapter(boolean unmodifiable, Function<Map<String, Object>, T> rootConverter) {
+		this.unmodifiable = unmodifiable;
+		this.jsonObjectParser.setRootConverter(ObjectUtils.cast(rootConverter));
+	}
 
-    public <F, V> GsonMapAdapter<T> setValueConverter(String[] pathOrPatterns, Function<F, V> converter) {
-	this.jsonObjectParser.setValueConverter(pathOrPatterns, converter);
-	return this;
-    }
+	public <F, V> GsonMapAdapter<T> setValueConverter(String[] pathOrPatterns, Function<F, V> converter) {
+		this.jsonObjectParser.setValueConverter(pathOrPatterns, converter);
+		return this;
+	}
 
-    @Override
-    public T deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-	Object value = this.jsonObjectParser.parse(json, this.unmodifiable);
-	return ObjectUtils.cast(value);
-    }
+	@Override
+	public T deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+		Object value = this.jsonObjectParser.parse(json, this.unmodifiable);
+		return ObjectUtils.cast(value);
+	}
 
-    public boolean isUnmodifiable() {
-	return this.unmodifiable;
-    }
+	public boolean isUnmodifiable() {
+		return this.unmodifiable;
+	}
 }

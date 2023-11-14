@@ -32,31 +32,31 @@ import com.appslandia.common.utils.Asserts;
  *
  */
 public abstract class BaseGenPk implements Serializable {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj) {
-	    return true;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null || this.getClass() != obj.getClass()) {
+			return false;
+		}
+		TableMtdt tableMtdt = this.getClass().getDeclaredAnnotation(TableMtdt.class);
+		Asserts.notNull(tableMtdt);
+
+		return Arrays.stream(tableMtdt.keys()).allMatch(key -> Objects.equals(RecordUtils.getFieldValue(this, key), RecordUtils.getFieldValue(obj, key)));
 	}
-	if (obj == null || this.getClass() != obj.getClass()) {
-	    return false;
+
+	@Override
+	public int hashCode() {
+		TableMtdt tableMtdt = this.getClass().getDeclaredAnnotation(TableMtdt.class);
+		Asserts.notNull(tableMtdt);
+
+		int hash = 1, p = 31;
+		for (String key : tableMtdt.keys()) {
+			hash = p * hash + Objects.hashCode(RecordUtils.getFieldValue(this, key));
+		}
+		return hash;
 	}
-	TableMtdt tableMtdt = this.getClass().getDeclaredAnnotation(TableMtdt.class);
-	Asserts.notNull(tableMtdt);
-
-	return Arrays.stream(tableMtdt.keys()).allMatch(key -> Objects.equals(RecordUtils.getFieldValue(this, key), RecordUtils.getFieldValue(obj, key)));
-    }
-
-    @Override
-    public int hashCode() {
-	TableMtdt tableMtdt = this.getClass().getDeclaredAnnotation(TableMtdt.class);
-	Asserts.notNull(tableMtdt);
-
-	int hash = 1, p = 31;
-	for (String key : tableMtdt.keys()) {
-	    hash = p * hash + Objects.hashCode(RecordUtils.getFieldValue(this, key));
-	}
-	return hash;
-    }
 }

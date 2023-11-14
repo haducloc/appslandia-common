@@ -27,28 +27,28 @@ package com.appslandia.common.geo;
  */
 public enum DistanceUnit {
 
-    METER("m", 1.0), KILOMETER("km", 1000.0), MILE("mi", 1609.344), NAUTICAL_MILE("nm", 1851.85185185);
+	METER("m", 1.0), KILOMETER("km", 1000.0), MILE("mi", 1609.344), NAUTICAL_MILE("nm", 1851.85185185);
 
-    final String symbol;
-    final double unitInMeter;
+	final String symbol;
+	final double unitInMeter;
 
-    private DistanceUnit(String symbol, double unitInMeter) {
-	this.symbol = symbol;
-	this.unitInMeter = unitInMeter;
-    }
-
-    public double convert(double distance, DistanceUnit distUnit) {
-	if (this == distUnit) {
-	    return distance;
+	private DistanceUnit(String symbol, double unitInMeter) {
+		this.symbol = symbol;
+		this.unitInMeter = unitInMeter;
 	}
-	return distance * distUnit.unitInMeter / this.unitInMeter;
-    }
 
-    public String symbol() {
-	return this.symbol;
-    }
+	public double convert(double distance, DistanceUnit distUnit) {
+		if (this == distUnit) {
+			return distance;
+		}
+		return distance * distUnit.unitInMeter / this.unitInMeter;
+	}
 
-    public double unitInMeter() {
-	return this.unitInMeter;
-    }
+	public String symbol() {
+		return this.symbol;
+	}
+
+	public double unitInMeter() {
+		return this.unitInMeter;
+	}
 }

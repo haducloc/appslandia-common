@@ -34,31 +34,31 @@ import com.appslandia.common.base.InitializeObject;
  */
 public class PatternValidator extends InitializeObject {
 
-    private List<Pattern> allowPatterns = new ArrayList<>();
+	private List<Pattern> allowPatterns = new ArrayList<>();
 
-    @Override
-    protected void init() throws Exception {
-	Asserts.hasElements(this.allowPatterns, "allowPatterns is required.");
+	@Override
+	protected void init() throws Exception {
+		Asserts.hasElements(this.allowPatterns, "allowPatterns is required.");
 
-	this.allowPatterns = Collections.unmodifiableList(this.allowPatterns);
-    }
+		this.allowPatterns = Collections.unmodifiableList(this.allowPatterns);
+	}
 
-    public PatternValidator allowPatterns(String... patterns) {
-	assertNotInitialized();
-	CollectionUtils.toList(this.allowPatterns, PatternUtils.compile(patterns));
-	return this;
-    }
+	public PatternValidator allowPatterns(String... patterns) {
+		assertNotInitialized();
+		CollectionUtils.toList(this.allowPatterns, PatternUtils.compile(patterns));
+		return this;
+	}
 
-    public PatternValidator allowPatterns(Pattern... patterns) {
-	assertNotInitialized();
-	CollectionUtils.toList(this.allowPatterns, patterns);
-	return this;
-    }
+	public PatternValidator allowPatterns(Pattern... patterns) {
+		assertNotInitialized();
+		CollectionUtils.toList(this.allowPatterns, patterns);
+		return this;
+	}
 
-    public boolean validate(String value) {
-	this.initialize();
-	Asserts.notNull(value);
+	public boolean validate(String value) {
+		this.initialize();
+		Asserts.notNull(value);
 
-	return PatternUtils.matches(this.allowPatterns, value);
-    }
+		return PatternUtils.matches(this.allowPatterns, value);
+	}
 }

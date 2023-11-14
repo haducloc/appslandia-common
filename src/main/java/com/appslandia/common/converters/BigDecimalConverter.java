@@ -34,62 +34,62 @@ import com.appslandia.common.utils.StringUtils;
  */
 public class BigDecimalConverter extends NumberConverter<BigDecimal> {
 
-    public static final String ERROR_MSG_KEY = BigDecimalConverter.class.getName() + ".message";
+	public static final String ERROR_MSG_KEY = BigDecimalConverter.class.getName() + ".message";
 
-    final int fractionDigits;
-    final RoundingMode roundingMode;
+	final int fractionDigits;
+	final RoundingMode roundingMode;
 
-    public BigDecimalConverter() {
-	this(3);
-    }
-
-    public BigDecimalConverter(int fractionDigits) {
-	this(fractionDigits, RoundingMode.HALF_EVEN);
-    }
-
-    public BigDecimalConverter(int fractionDigits, RoundingMode roundingMode) {
-	this.fractionDigits = fractionDigits;
-	this.roundingMode = roundingMode;
-    }
-
-    @Override
-    public String getErrorMsgKey() {
-	return ERROR_MSG_KEY;
-    }
-
-    @Override
-    public Class<BigDecimal> getTargetType() {
-	return BigDecimal.class;
-    }
-
-    @Override
-    public String format(BigDecimal obj, FormatProvider formatProvider, boolean localize) {
-	if (obj == null) {
-	    return null;
-	}
-	if (localize) {
-	    NumberFormat nf = formatProvider.getNumberFormat(this.fractionDigits, this.roundingMode, false);
-	    return nf.format(obj);
-	}
-	return formatProvider.getDecimalFormat(this.fractionDigits, this.roundingMode).format(obj);
-    }
-
-    @Override
-    public BigDecimal parse(String str, FormatProvider formatProvider) throws ConverterException {
-	str = StringUtils.trimToNull(str);
-	if (str == null) {
-	    return null;
-	}
-	try {
-	    return new BigDecimal(str);
-
-	} catch (NumberFormatException ex) {
+	public BigDecimalConverter() {
+		this(3);
 	}
 
-	Number number = parseNumber(str, formatProvider.getNumberParser());
-	if (number != null) {
-	    return (number instanceof BigDecimal) ? (BigDecimal) number : new BigDecimal(number.toString());
+	public BigDecimalConverter(int fractionDigits) {
+		this(fractionDigits, RoundingMode.HALF_EVEN);
 	}
-	throw toParsingError(str, getTargetType().getName());
-    }
+
+	public BigDecimalConverter(int fractionDigits, RoundingMode roundingMode) {
+		this.fractionDigits = fractionDigits;
+		this.roundingMode = roundingMode;
+	}
+
+	@Override
+	public String getErrorMsgKey() {
+		return ERROR_MSG_KEY;
+	}
+
+	@Override
+	public Class<BigDecimal> getTargetType() {
+		return BigDecimal.class;
+	}
+
+	@Override
+	public String format(BigDecimal obj, FormatProvider formatProvider, boolean localize) {
+		if (obj == null) {
+			return null;
+		}
+		if (localize) {
+			NumberFormat nf = formatProvider.getNumberFormat(this.fractionDigits, this.roundingMode, false);
+			return nf.format(obj);
+		}
+		return formatProvider.getDecimalFormat(this.fractionDigits, this.roundingMode).format(obj);
+	}
+
+	@Override
+	public BigDecimal parse(String str, FormatProvider formatProvider) throws ConverterException {
+		str = StringUtils.trimToNull(str);
+		if (str == null) {
+			return null;
+		}
+		try {
+			return new BigDecimal(str);
+
+		} catch (NumberFormatException ex) {
+		}
+
+		Number number = parseNumber(str, formatProvider.getNumberParser());
+		if (number != null) {
+			return (number instanceof BigDecimal) ? (BigDecimal) number : new BigDecimal(number.toString());
+		}
+		throw toParsingError(str, getTargetType().getName());
+	}
 }

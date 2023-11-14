@@ -46,96 +46,96 @@ import com.google.gson.ToNumberPolicy;
  */
 public class GsonProcessor extends JsonProcessor {
 
-    private Gson gson;
-    private GsonBuilder builder;
+	private Gson gson;
+	private GsonBuilder builder;
 
-    @Override
-    protected void init() throws Exception {
-	if (this.builder == null) {
-	    this.builder = newBuilder(true, false);
-	}
-	this.gson = this.builder.create();
-    }
-
-    @Override
-    public void destroy() throws DestroyException {
-    }
-
-    @Override
-    public void write(Writer out, Object obj) throws JsonException {
-	this.initialize();
-	try {
-	    this.gson.toJson(obj, out);
-	} catch (JsonIOException ex) {
-	    throw new JsonException(ex);
-	}
-    }
-
-    @Override
-    public <T> T read(Reader reader, Class<T> resultClass) throws JsonException {
-	this.initialize();
-	try {
-	    return this.gson.fromJson(reader, resultClass);
-	} catch (JsonSyntaxException ex) {
-	    throw new JsonException(ex);
-	} catch (JsonIOException ex) {
-	    throw new JsonException(ex);
-	}
-    }
-
-    @Override
-    public <T> T read(Reader reader, Type type) throws JsonException {
-	this.initialize();
-	try {
-	    return this.gson.fromJson(reader, type);
-	} catch (JsonSyntaxException ex) {
-	    throw new JsonException(ex);
-	} catch (JsonIOException ex) {
-	    throw new JsonException(ex);
-	}
-    }
-
-    public GsonProcessor setBuilder(GsonBuilder builder) {
-	this.assertNotInitialized();
-	this.builder = builder;
-	return this;
-    }
-
-    public static GsonBuilder newBuilder(boolean serializeNulls, boolean formatting) {
-	GsonBuilder builder = new GsonBuilder();
-
-	if (serializeNulls) {
-	    builder.serializeNulls();
+	@Override
+	protected void init() throws Exception {
+		if (this.builder == null) {
+			this.builder = newBuilder(true, false);
+		}
+		this.gson = this.builder.create();
 	}
 
-	if (formatting) {
-	    builder.setPrettyPrinting();
+	@Override
+	public void destroy() throws DestroyException {
 	}
 
-	builder.setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE);
-	builder.setFieldNamingStrategy(FieldNamingPolicy.IDENTITY);
+	@Override
+	public void write(Writer out, Object obj) throws JsonException {
+		this.initialize();
+		try {
+			this.gson.toJson(obj, out);
+		} catch (JsonIOException ex) {
+			throw new JsonException(ex);
+		}
+	}
 
-	builder.setExclusionStrategies(new ExclusionStrategy() {
+	@Override
+	public <T> T read(Reader reader, Class<T> resultClass) throws JsonException {
+		this.initialize();
+		try {
+			return this.gson.fromJson(reader, resultClass);
+		} catch (JsonSyntaxException ex) {
+			throw new JsonException(ex);
+		} catch (JsonIOException ex) {
+			throw new JsonException(ex);
+		}
+	}
 
-	    @Override
-	    public boolean shouldSkipField(FieldAttributes attrs) {
-		return attrs.getAnnotation(JsonIgnore.class) != null;
-	    }
+	@Override
+	public <T> T read(Reader reader, Type type) throws JsonException {
+		this.initialize();
+		try {
+			return this.gson.fromJson(reader, type);
+		} catch (JsonSyntaxException ex) {
+			throw new JsonException(ex);
+		} catch (JsonIOException ex) {
+			throw new JsonException(ex);
+		}
+	}
 
-	    @Override
-	    public boolean shouldSkipClass(Class<?> clazz) {
-		return clazz.getDeclaredAnnotation(JsonIgnore.class) != null;
-	    }
-	});
+	public GsonProcessor setBuilder(GsonBuilder builder) {
+		this.assertNotInitialized();
+		this.builder = builder;
+		return this;
+	}
 
-	// Java8 Date/Time
-	builder.registerTypeAdapter(LocalDate.class, new GsonLocalDateSerializer());
-	builder.registerTypeAdapter(LocalTime.class, new GsonLocalTimeSerializer());
-	builder.registerTypeAdapter(LocalDateTime.class, new GsonLocalDateTimeSerializer());
+	public static GsonBuilder newBuilder(boolean serializeNulls, boolean formatting) {
+		GsonBuilder builder = new GsonBuilder();
 
-	builder.registerTypeAdapter(OffsetDateTime.class, new GsonOffsetDateTimeSerializer());
-	builder.registerTypeAdapter(OffsetTime.class, new GsonOffsetTimeSerializer());
+		if (serializeNulls) {
+			builder.serializeNulls();
+		}
 
-	return builder;
-    }
+		if (formatting) {
+			builder.setPrettyPrinting();
+		}
+
+		builder.setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE);
+		builder.setFieldNamingStrategy(FieldNamingPolicy.IDENTITY);
+
+		builder.setExclusionStrategies(new ExclusionStrategy() {
+
+			@Override
+			public boolean shouldSkipField(FieldAttributes attrs) {
+				return attrs.getAnnotation(JsonIgnore.class) != null;
+			}
+
+			@Override
+			public boolean shouldSkipClass(Class<?> clazz) {
+				return clazz.getDeclaredAnnotation(JsonIgnore.class) != null;
+			}
+		});
+
+		// Java8 Date/Time
+		builder.registerTypeAdapter(LocalDate.class, new GsonLocalDateSerializer());
+		builder.registerTypeAdapter(LocalTime.class, new GsonLocalTimeSerializer());
+		builder.registerTypeAdapter(LocalDateTime.class, new GsonLocalDateTimeSerializer());
+
+		builder.registerTypeAdapter(OffsetDateTime.class, new GsonOffsetDateTimeSerializer());
+		builder.registerTypeAdapter(OffsetTime.class, new GsonOffsetTimeSerializer());
+
+		return builder;
+	}
 }

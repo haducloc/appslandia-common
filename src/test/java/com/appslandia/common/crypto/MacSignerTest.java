@@ -34,65 +34,65 @@ import com.appslandia.common.base.ThreadSafeTester;
  */
 public class MacSignerTest {
 
-    @Test
-    public void test() {
-	MacSigner impl = new MacSigner().setAlgorithm("HmacMD5");
-	impl.setSecret("secret".getBytes(StandardCharsets.UTF_8));
+	@Test
+	public void test() {
+		MacSigner impl = new MacSigner().setAlgorithm("HmacMD5");
+		impl.setSecret("secret".getBytes(StandardCharsets.UTF_8));
 
-	try {
-	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-	    byte[] digest = impl.digest(data);
+		try {
+			byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+			byte[] digest = impl.digest(data);
 
-	    Assertions.assertTrue(impl.verify(data, digest));
+			Assertions.assertTrue(impl.verify(data, digest));
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_invalid() {
-	MacSigner impl = new MacSigner().setAlgorithm("HmacMD5");
-	impl.setSecret("secret".getBytes(StandardCharsets.UTF_8));
+	@Test
+	public void test_invalid() {
+		MacSigner impl = new MacSigner().setAlgorithm("HmacMD5");
+		impl.setSecret("secret".getBytes(StandardCharsets.UTF_8));
 
-	try {
-	    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-	    byte[] digest = impl.digest(data);
+		try {
+			byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+			byte[] digest = impl.digest(data);
 
-	    Assertions.assertFalse(impl.verify("invalid".getBytes(StandardCharsets.UTF_8), digest));
+			Assertions.assertFalse(impl.verify("invalid".getBytes(StandardCharsets.UTF_8), digest));
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_threadSafe() {
-	final MacSigner impl = new MacSigner().setAlgorithm("HmacMD5");
-	impl.setSecret("secret".getBytes(StandardCharsets.UTF_8));
+	@Test
+	public void test_threadSafe() {
+		final MacSigner impl = new MacSigner().setAlgorithm("HmacMD5");
+		impl.setSecret("secret".getBytes(StandardCharsets.UTF_8));
 
-	new ThreadSafeTester() {
+		new ThreadSafeTester() {
 
-	    @Override
-	    protected Runnable newTask() {
-		return new Runnable() {
+			@Override
+			protected Runnable newTask() {
+				return new Runnable() {
 
-		    @Override
-		    public void run() {
-			try {
-			    byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-			    byte[] digest = impl.digest(data);
+					@Override
+					public void run() {
+						try {
+							byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+							byte[] digest = impl.digest(data);
 
-			    Assertions.assertTrue(impl.verify(data, digest));
+							Assertions.assertTrue(impl.verify(data, digest));
 
-			} catch (Exception ex) {
-			    Assertions.fail(ex.getMessage());
-			} finally {
-			    doneTask();
+						} catch (Exception ex) {
+							Assertions.fail(ex.getMessage());
+						} finally {
+							doneTask();
+						}
+					}
+				};
 			}
-		    }
-		};
-	    }
-	}.execute();
-    }
+		}.execute();
+	}
 }

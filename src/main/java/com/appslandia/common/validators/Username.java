@@ -45,29 +45,29 @@ import jakarta.validation.Payload;
 @Documented
 public @interface Username {
 
-    String message() default "{com.appslandia.common.validators.Username.message}";
+	String message() default "{com.appslandia.common.validators.Username.message}";
 
-    Class<?>[] groups() default {};
+	Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default {};
+	Class<? extends Payload>[] payload() default {};
 
-    // allow characters: a-zA-Z0-9.
-    // no two consecutive dot
-    // must start a-zA-Z
-    // length 6-128
+	// allow characters: a-zA-Z0-9.
+	// no two consecutive dot
+	// must start a-zA-Z
+	// length 6-128
 
-    static final Pattern USERNAME_PATTERN = Pattern.compile("^(?=.{6,128}$)(?!.*\\.\\.)(?!.*\\.$)[a-z][a-z\\d.]+$", Pattern.CASE_INSENSITIVE);
+	static final Pattern USERNAME_PATTERN = Pattern.compile("^(?=.{6,128}$)(?!.*\\.\\.)(?!.*\\.$)[a-z][a-z\\d.]+$", Pattern.CASE_INSENSITIVE);
 
-    public static class ConstraintValidatorImpl implements ConstraintValidator<Username, CharSequence> {
+	public static class ConstraintValidatorImpl implements ConstraintValidator<Username, CharSequence> {
 
-	public void initialize(Username annotation) {
+		public void initialize(Username annotation) {
+		}
+
+		public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
+			if (value == null) {
+				return true;
+			}
+			return USERNAME_PATTERN.matcher(value).matches();
+		}
 	}
-
-	public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
-	    if (value == null) {
-		return true;
-	    }
-	    return USERNAME_PATTERN.matcher(value).matches();
-	}
-    }
 }

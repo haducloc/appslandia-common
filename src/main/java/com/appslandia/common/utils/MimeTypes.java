@@ -31,58 +31,58 @@ import java.nio.file.Paths;
  */
 public class MimeTypes {
 
-    public static final String TEXT_PLAIN = "text/plain";
-    public static final String TEXT_PLAIN_UTF8 = "text/plain;charset=utf-8";
+	public static final String TEXT_PLAIN = "text/plain";
+	public static final String TEXT_PLAIN_UTF8 = "text/plain;charset=utf-8";
 
-    public static final String TEXT_HTML = "text/html";
-    public static final String TEXT_HTML_UTF8 = "text/html;charset=utf-8";
+	public static final String TEXT_HTML = "text/html";
+	public static final String TEXT_HTML_UTF8 = "text/html;charset=utf-8";
 
-    public static final String APP_JSON = "application/json";
-    public static final String APP_JSON_UTF8 = "application/json;charset=utf-8";
-    public static final String APP_JSON_PROBLEM = "application/problem+json";
+	public static final String APP_JSON = "application/json";
+	public static final String APP_JSON_UTF8 = "application/json;charset=utf-8";
+	public static final String APP_JSON_PROBLEM = "application/problem+json";
 
-    public static final String APP_XML = "application/xml";
-    public static final String APP_XML_UTF8 = "application/xml;charset=utf-8";
-    public static final String APP_XML_PROBLEM = "application/problem+xml";
+	public static final String APP_XML = "application/xml";
+	public static final String APP_XML_UTF8 = "application/xml;charset=utf-8";
+	public static final String APP_XML_PROBLEM = "application/problem+xml";
 
-    public static final String APP_CSV = "application/csv";
-    public static final String APP_CSV_UTF8 = "application/csv;charset=utf-8";
+	public static final String APP_CSV = "application/csv";
+	public static final String APP_CSV_UTF8 = "application/csv;charset=utf-8";
 
-    public static final String APP_PDF = "application/pdf";
+	public static final String APP_PDF = "application/pdf";
 
-    public static final String APP_XLS = "application/vnd.ms-excel";
-    public static final String APP_XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+	public static final String APP_XLS = "application/vnd.ms-excel";
+	public static final String APP_XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
-    public static final String APP_DOC = "application/msword";
-    public static final String APP_DOCX = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+	public static final String APP_DOC = "application/msword";
+	public static final String APP_DOCX = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
-    public static final String APP_PPT = "application/vnd.ms-powerpoint";
-    public static final String APP_PPTX = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+	public static final String APP_PPT = "application/vnd.ms-powerpoint";
+	public static final String APP_PPTX = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
 
-    public static final String IMAGE_PNG = "image/png";
-    public static final String IMAGE_JPEG = "image/jpeg";
-    public static final String IMAGE_GIF = "image/gif";
-    public static final String IMAGE_BMP = "image/bmp";
+	public static final String IMAGE_PNG = "image/png";
+	public static final String IMAGE_JPEG = "image/jpeg";
+	public static final String IMAGE_GIF = "image/gif";
+	public static final String IMAGE_BMP = "image/bmp";
 
-    public static final String APP_OCTET_STREAM = "application/octet-stream";
-    public static final String MULTIPART_FORM_DATA = "multipart/form-data";
-    public static final String APP_FORM_URLENCODED = "application/x-www-form-urlencoded";
+	public static final String APP_OCTET_STREAM = "application/octet-stream";
+	public static final String MULTIPART_FORM_DATA = "multipart/form-data";
+	public static final String APP_FORM_URLENCODED = "application/x-www-form-urlencoded";
 
-    public static String probeContentType(String fileName) {
-	Asserts.notNull(fileName);
+	public static String probeContentType(String fileName) {
+		Asserts.notNull(fileName);
 
-	return probeContentType(Paths.get(fileName));
-    }
-
-    public static String probeContentType(Path filePath) {
-	Asserts.notNull(filePath);
-
-	try {
-	    String ct = Files.probeContentType(filePath);
-	    return (ct != null) ? ct : APP_OCTET_STREAM;
-
-	} catch (IOException ex) {
-	    return APP_OCTET_STREAM;
+		return probeContentType(Paths.get(fileName));
 	}
-    }
+
+	public static String probeContentType(Path filePath) {
+		Asserts.notNull(filePath);
+
+		try {
+			String ct = Files.probeContentType(filePath);
+			return (ct != null) ? ct : APP_OCTET_STREAM;
+
+		} catch (IOException ex) {
+			return APP_OCTET_STREAM;
+		}
+	}
 }

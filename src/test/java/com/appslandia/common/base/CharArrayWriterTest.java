@@ -30,50 +30,50 @@ import org.junit.jupiter.api.Test;
  */
 public class CharArrayWriterTest {
 
-    @Test
-    public void test_append() {
-	try (CharArrayWriter caw = new CharArrayWriter()) {
-	    caw.append('a');
-	    caw.append("bcd");
-	    caw.append("e_fgh", 1, 4);
+	@Test
+	public void test_append() {
+		try (CharArrayWriter caw = new CharArrayWriter()) {
+			caw.append('a');
+			caw.append("bcd");
+			caw.append("e_fgh", 1, 4);
 
-	    caw.flush();
+			caw.flush();
 
-	    Assertions.assertEquals("abcd_fg", caw.toString());
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+			Assertions.assertEquals("abcd_fg", caw.toString());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_write() {
-	try (CharArrayWriter caw = new CharArrayWriter()) {
-	    caw.write('a');
-	    caw.write("bcd");
-	    caw.write("ef".toCharArray());
-	    caw.write("g_hk", 1, 3);
-	    caw.write("x_yzt".toCharArray(), 1, 3);
+	@Test
+	public void test_write() {
+		try (CharArrayWriter caw = new CharArrayWriter()) {
+			caw.write('a');
+			caw.write("bcd");
+			caw.write("ef".toCharArray());
+			caw.write("g_hk", 1, 3);
+			caw.write("x_yzt".toCharArray(), 1, 3);
 
-	    caw.flush();
+			caw.flush();
 
-	    Assertions.assertEquals("abcdef_hk_yz", caw.toString());
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+			Assertions.assertEquals("abcdef_hk_yz", caw.toString());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_writeNull() {
-	try (CharArrayWriter caw = new CharArrayWriter()) {
-	    caw.append("a");
-	    caw.append("_");
-	    caw.append(null);
+	@Test
+	public void test_writeNull() {
+		try (CharArrayWriter caw = new CharArrayWriter()) {
+			caw.append("a");
+			caw.append("_");
+			caw.append(null);
 
-	    caw.flush();
+			caw.flush();
 
-	    Assertions.assertEquals("a_null", caw.toString());
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+			Assertions.assertEquals("a_null", caw.toString());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 }

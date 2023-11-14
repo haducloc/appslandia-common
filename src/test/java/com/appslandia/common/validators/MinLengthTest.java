@@ -32,29 +32,29 @@ import org.junit.jupiter.api.Test;
  */
 public class MinLengthTest {
 
-    @Test
-    public void test() {
-	TestModel m = new TestModel();
-	Set<?> errors = ValidatorUtils.getValidator().validate(m);
-	Assertions.assertTrue(errors.isEmpty());
+	@Test
+	public void test() {
+		TestModel m = new TestModel();
+		Set<?> errors = ValidatorUtils.getValidator().validate(m);
+		Assertions.assertTrue(errors.isEmpty());
 
-	m.prop = "123456";
-	errors = ValidatorUtils.getValidator().validate(m);
-	Assertions.assertTrue(errors.isEmpty());
-    }
+		m.prop = "123456";
+		errors = ValidatorUtils.getValidator().validate(m);
+		Assertions.assertTrue(errors.isEmpty());
+	}
 
-    @Test
-    public void test_invalid() {
-	TestModel m = new TestModel();
+	@Test
+	public void test_invalid() {
+		TestModel m = new TestModel();
 
-	m.prop = "1234";
-	Set<?> errors = ValidatorUtils.getValidator().validate(m);
-	Assertions.assertTrue(!errors.isEmpty());
-    }
+		m.prop = "1234";
+		Set<?> errors = ValidatorUtils.getValidator().validate(m);
+		Assertions.assertTrue(!errors.isEmpty());
+	}
 
-    private static class TestModel {
+	private static class TestModel {
 
-	@MinLength(5)
-	public String prop;
-    }
+		@MinLength(5)
+		public String prop;
+	}
 }

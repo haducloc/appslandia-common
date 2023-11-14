@@ -34,59 +34,59 @@ import com.appslandia.common.crypto.MacSigner;
  */
 public class JwtSignerTest {
 
-    @Test
-    public void test() {
-	JwtSigner signer = new JwtSigner().setJsonProcessor(JoseGson.newJsonProcessor());
-	signer.setAlg("HS256").setSigner(new MacSigner().setAlgorithm("HmacSHA256").setSecret("secret".getBytes()));
-	signer.setIss("Issuer1");
+	@Test
+	public void test() {
+		JwtSigner signer = new JwtSigner().setJsonProcessor(JoseGson.newJsonProcessor());
+		signer.setAlg("HS256").setSigner(new MacSigner().setAlgorithm("HmacSHA256").setSecret("secret".getBytes()));
+		signer.setIss("Issuer1");
 
-	JoseHeader header = signer.newHeader();
-	JwtPayload payload = signer.newPayload().setExp(1, TimeUnit.DAYS).setIatNow();
+		JoseHeader header = signer.newHeader();
+		JwtPayload payload = signer.newPayload().setExp(1, TimeUnit.DAYS).setIatNow();
 
-	try {
-	    String jwt = signer.sign(new JwtToken(header, payload));
-	    Assertions.assertNotNull(jwt);
+		try {
+			String jwt = signer.sign(new JwtToken(header, payload));
+			Assertions.assertNotNull(jwt);
 
-	    JwtToken token = signer.parse(jwt);
-	    signer.verify(token);
+			JwtToken token = signer.parse(jwt);
+			signer.verify(token);
 
-	    Assertions.assertNotNull(token);
-	    Assertions.assertNotNull(token.getHeader());
-	    Assertions.assertNotNull(token.getPayload());
+			Assertions.assertNotNull(token);
+			Assertions.assertNotNull(token.getHeader());
+			Assertions.assertNotNull(token.getPayload());
 
-	    Assertions.assertEquals("JWT", token.getHeader().getTyp());
-	    Assertions.assertEquals("HS256", token.getHeader().getAlg());
-	    Assertions.assertEquals("Issuer1", token.getPayload().get("iss"));
+			Assertions.assertEquals("JWT", token.getHeader().getTyp());
+			Assertions.assertEquals("HS256", token.getHeader().getAlg());
+			Assertions.assertEquals("Issuer1", token.getPayload().get("iss"));
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_none() {
-	JwtSigner signer = new JwtSigner().setJsonProcessor(JoseGson.newJsonProcessor());
-	signer.setIss("Issuer1");
+	@Test
+	public void test_none() {
+		JwtSigner signer = new JwtSigner().setJsonProcessor(JoseGson.newJsonProcessor());
+		signer.setIss("Issuer1");
 
-	JoseHeader header = signer.newHeader();
-	JwtPayload payload = signer.newPayload().setExp(1, TimeUnit.DAYS).setIatNow();
+		JoseHeader header = signer.newHeader();
+		JwtPayload payload = signer.newPayload().setExp(1, TimeUnit.DAYS).setIatNow();
 
-	try {
-	    String jwt = signer.sign(new JwtToken(header, payload));
-	    Assertions.assertNotNull(jwt);
+		try {
+			String jwt = signer.sign(new JwtToken(header, payload));
+			Assertions.assertNotNull(jwt);
 
-	    JwtToken token = signer.parse(jwt);
-	    signer.verify(token);
+			JwtToken token = signer.parse(jwt);
+			signer.verify(token);
 
-	    Assertions.assertNotNull(token);
-	    Assertions.assertNotNull(token.getHeader());
-	    Assertions.assertNotNull(token.getPayload());
+			Assertions.assertNotNull(token);
+			Assertions.assertNotNull(token.getHeader());
+			Assertions.assertNotNull(token.getPayload());
 
-	    Assertions.assertEquals("JWT", token.getHeader().getTyp());
-	    Assertions.assertEquals("Issuer1", token.getPayload().get("iss"));
+			Assertions.assertEquals("JWT", token.getHeader().getTyp());
+			Assertions.assertEquals("Issuer1", token.getPayload().get("iss"));
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 }

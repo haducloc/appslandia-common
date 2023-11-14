@@ -33,36 +33,36 @@ import com.appslandia.common.utils.StringUtils;
  */
 public class EnumConverter<T extends Enum<T>> implements Converter<T> {
 
-    final Class<T> type;
+	final Class<T> type;
 
-    public EnumConverter(Class<T> type) {
-	this.type = Asserts.notNull(type);
-    }
-
-    @Override
-    public Class<T> getTargetType() {
-	return this.type;
-    }
-
-    @Override
-    public String format(T obj, FormatProvider formatProvider, boolean localize) {
-	if (obj == null) {
-	    return null;
+	public EnumConverter(Class<T> type) {
+		this.type = Asserts.notNull(type);
 	}
-	return obj.toString();
-    }
 
-    @Override
-    public T parse(String str, FormatProvider formatProvider) throws ConverterException {
-	str = StringUtils.trimToNull(str);
-	if (str == null) {
-	    return null;
+	@Override
+	public Class<T> getTargetType() {
+		return this.type;
 	}
-	try {
-	    return Enum.valueOf(this.type, str.toUpperCase(Locale.ENGLISH));
 
-	} catch (IllegalArgumentException ex) {
-	    throw toParsingError(str, getTargetType().getName());
+	@Override
+	public String format(T obj, FormatProvider formatProvider, boolean localize) {
+		if (obj == null) {
+			return null;
+		}
+		return obj.toString();
 	}
-    }
+
+	@Override
+	public T parse(String str, FormatProvider formatProvider) throws ConverterException {
+		str = StringUtils.trimToNull(str);
+		if (str == null) {
+			return null;
+		}
+		try {
+			return Enum.valueOf(this.type, str.toUpperCase(Locale.ENGLISH));
+
+		} catch (IllegalArgumentException ex) {
+			throw toParsingError(str, getTargetType().getName());
+		}
+	}
 }

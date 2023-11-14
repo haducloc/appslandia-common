@@ -33,25 +33,30 @@ import jakarta.json.bind.JsonbConfig;
  */
 public class JoseJsonb {
 
-    public static JsonbConfig newJsonbConfig(boolean serializeNulls, boolean formatting) {
-	// @formatter:off
-	return JsonbProcessor.newConfig(serializeNulls, formatting).withAdapters(
+	public static JsonbConfig newJsonbConfig(boolean serializeNulls, boolean formatting) {
+		// @formatter:off
+		return JsonbProcessor.newConfig(serializeNulls, formatting)
+				.withAdapters(
 
-		// JsonWebKey
-		new JsonbMapAdapter<>(true, m -> new JsonWebKey(m)) {},
+						// JsonWebKey
+						new JsonbMapAdapter<>(true, m -> new JsonWebKey(m)) {
+						},
 
-		// JoseHeader
-		new JsonbMapAdapter<JoseHeader>(true, m -> new JoseHeader(m)) {}
-			.setValueConverter(new String[] {"jwk"}, m -> new JsonWebKey(ObjectUtils.cast(m))),
+						// JoseHeader
+						new JsonbMapAdapter<JoseHeader>(true,
+								m -> new JoseHeader(m)) {
+						}.setValueConverter(new String[]{"jwk"},
+								m -> new JsonWebKey(ObjectUtils.cast(m))),
 
-		// JwtPayload
-		new JsonbMapAdapter<JwtPayload>(true, m -> new JwtPayload(m)) {}
-			.setValueConverter(new String[] {"jwks\\[\\d+]"}, m -> new JsonWebKey(ObjectUtils.cast(m)))
-		);
-	// @formatter:on
-    }
+						// JwtPayload
+						new JsonbMapAdapter<JwtPayload>(true,
+								m -> new JwtPayload(m)) {
+						}.setValueConverter(new String[]{"jwks\\[\\d+]"},
+								m -> new JsonWebKey(ObjectUtils.cast(m))));
+		// @formatter:on
+	}
 
-    public static JsonbProcessor newJsonProcessor() {
-	return new JsonbProcessor().setConfig(newJsonbConfig(true, false));
-    }
+	public static JsonbProcessor newJsonProcessor() {
+		return new JsonbProcessor().setConfig(newJsonbConfig(true, false));
+	}
 }

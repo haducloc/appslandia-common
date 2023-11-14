@@ -33,21 +33,21 @@ import com.appslandia.common.base.InitializeObject;
  */
 public class HintMapper extends InitializeObject {
 
-    private Map<String, String> map = new HashMap<>();
+	private Map<String, String> map = new HashMap<>();
 
-    @Override
-    protected void init() throws Exception {
-	this.map = Collections.unmodifiableMap(this.map);
-    }
+	@Override
+	protected void init() throws Exception {
+		this.map = Collections.unmodifiableMap(this.map);
+	}
 
-    public String getHint(String logicalName) {
-	this.initialize();
-	return map.getOrDefault(logicalName, logicalName);
-    }
+	public String getHint(String logicalName) {
+		this.initialize();
+		return map.getOrDefault(logicalName, logicalName);
+	}
 
-    public void addHint(String logicalName, String implName) {
-	this.assertNotInitialized();
+	public void addHint(String logicalName, String implName) {
+		this.assertNotInitialized();
 
-	this.map.put(logicalName, implName);
-    }
+		this.map.put(logicalName, implName);
+	}
 }

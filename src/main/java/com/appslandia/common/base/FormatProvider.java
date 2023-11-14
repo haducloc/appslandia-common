@@ -31,22 +31,22 @@ import java.text.NumberFormat;
  */
 public interface FormatProvider {
 
-    Language getLanguage();
+	Language getLanguage();
 
-    NumberFormat getNumberParser();
+	NumberFormat getNumberParser();
 
-    NumberFormat getNumberFormat(int fractionDigits, RoundingMode roundingMode, boolean grouping);
+	NumberFormat getNumberFormat(int fractionDigits, RoundingMode roundingMode, boolean grouping);
 
-    NumberFormat getPercentFormat(int fractionDigits, RoundingMode roundingMode, boolean grouping);
+	NumberFormat getPercentFormat(int fractionDigits, RoundingMode roundingMode, boolean grouping);
 
-    NumberFormat getCurrencyFormat(int fractionDigits, RoundingMode roundingMode, boolean grouping);
+	NumberFormat getCurrencyFormat(int fractionDigits, RoundingMode roundingMode, boolean grouping);
 
-    /**
-     * Return a locale-independent decimal notation format based on the given number of fraction digits and rounding mode.
-     * 
-     * @param fractionDigits
-     * @param roundingMode
-     * @return
-     */
-    DecimalFormat getDecimalFormat(int fractionDigits, RoundingMode roundingMode);
+	/**
+	 * Return a locale-independent decimal notation format based on the given number of fraction digits and rounding mode.
+	 * 
+	 * @param fractionDigits
+	 * @param roundingMode
+	 * @return
+	 */
+	DecimalFormat getDecimalFormat(int fractionDigits, RoundingMode roundingMode);
 }

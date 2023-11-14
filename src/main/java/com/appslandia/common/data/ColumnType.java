@@ -27,5 +27,5 @@ package com.appslandia.common.data;
  */
 public enum ColumnType {
 
-    KEY_INCR, KEY, NON_KEY, NON_KEY_GEN
+	KEY_INCR, KEY, NON_KEY, NON_KEY_GEN
 }

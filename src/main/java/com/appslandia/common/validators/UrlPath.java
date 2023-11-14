@@ -43,26 +43,26 @@ import jakarta.validation.Payload;
 @Documented
 public @interface UrlPath {
 
-    String message() default "{com.appslandia.common.validators.UrlPath.message}";
+	String message() default "{com.appslandia.common.validators.UrlPath.message}";
 
-    Class<?>[] groups() default {};
+	Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default {};
+	Class<? extends Payload>[] payload() default {};
 
-    static final Pattern URL_PATH_PATTERN = Pattern.compile("^[a-z\\d-]+$", Pattern.CASE_INSENSITIVE);
+	static final Pattern URL_PATH_PATTERN = Pattern.compile("^[a-z\\d-]+$", Pattern.CASE_INSENSITIVE);
 
-    public static class ConstraintValidatorImpl implements ConstraintValidator<UrlPath, String> {
+	public static class ConstraintValidatorImpl implements ConstraintValidator<UrlPath, String> {
 
-	@Override
-	public void initialize(UrlPath annotation) {
+		@Override
+		public void initialize(UrlPath annotation) {
+		}
+
+		@Override
+		public boolean isValid(String value, ConstraintValidatorContext context) {
+			if (value == null) {
+				return true;
+			}
+			return URL_PATH_PATTERN.matcher(value).matches();
+		}
 	}
-
-	@Override
-	public boolean isValid(String value, ConstraintValidatorContext context) {
-	    if (value == null) {
-		return true;
-	    }
-	    return URL_PATH_PATTERN.matcher(value).matches();
-	}
-    }
 }

@@ -31,51 +31,51 @@ import com.appslandia.common.utils.StringUtils;
  */
 public class SelectItemImpl implements SelectItem {
 
-    public static final SelectItemImpl EMPTY = new SelectItemImpl(null, StringUtils.EMPTY_STRING);
+	public static final SelectItemImpl EMPTY = new SelectItemImpl(null, StringUtils.EMPTY_STRING);
 
-    final Object value;
-    final String displayName;
-    final String name;
+	final Object value;
+	final String displayName;
+	final String name;
 
-    public SelectItemImpl(Object value, String displayName) {
-	this(value, displayName, null);
-    }
-
-    public SelectItemImpl(Object value, String displayName, String name) {
-	this.value = value;
-	this.displayName = displayName;
-	this.name = name;
-    }
-
-    @Override
-    public Object getValue() {
-	return this.value;
-    }
-
-    @Override
-    public String getDisplayName() {
-	return this.displayName;
-    }
-
-    @Override
-    public String getName() {
-	return (this.name != null) ? this.name : this.displayName;
-    }
-
-    @Override
-    public int hashCode() {
-	return Objects.hashCode(this.value);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj) {
-	    return true;
+	public SelectItemImpl(Object value, String displayName) {
+		this(value, displayName, null);
 	}
-	if (!(obj instanceof SelectItemImpl)) {
-	    return false;
+
+	public SelectItemImpl(Object value, String displayName, String name) {
+		this.value = value;
+		this.displayName = displayName;
+		this.name = name;
 	}
-	SelectItemImpl other = (SelectItemImpl) obj;
-	return Objects.equals(this.value, other.value);
-    }
+
+	@Override
+	public Object getValue() {
+		return this.value;
+	}
+
+	@Override
+	public String getDisplayName() {
+		return this.displayName;
+	}
+
+	@Override
+	public String getName() {
+		return (this.name != null) ? this.name : this.displayName;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(this.value);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof SelectItemImpl)) {
+			return false;
+		}
+		SelectItemImpl other = (SelectItemImpl) obj;
+		return Objects.equals(this.value, other.value);
+	}
 }

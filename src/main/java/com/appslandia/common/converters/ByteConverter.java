@@ -30,37 +30,37 @@ import com.appslandia.common.utils.StringUtils;
  */
 public class ByteConverter extends NumberConverter<Byte> {
 
-    public static final String ERROR_MSG_KEY = ByteConverter.class.getName() + ".message";
+	public static final String ERROR_MSG_KEY = ByteConverter.class.getName() + ".message";
 
-    @Override
-    public String getErrorMsgKey() {
-	return ERROR_MSG_KEY;
-    }
-
-    @Override
-    public Class<Byte> getTargetType() {
-	return Byte.class;
-    }
-
-    @Override
-    public String format(Byte obj, FormatProvider formatProvider, boolean localize) {
-	if (obj == null) {
-	    return null;
+	@Override
+	public String getErrorMsgKey() {
+		return ERROR_MSG_KEY;
 	}
-	return obj.toString();
-    }
 
-    @Override
-    public Byte parse(String str, FormatProvider formatProvider) throws ConverterException {
-	str = StringUtils.trimToNull(str);
-	if (str == null) {
-	    return null;
+	@Override
+	public Class<Byte> getTargetType() {
+		return Byte.class;
 	}
-	try {
-	    return Byte.parseByte(str);
 
-	} catch (NumberFormatException ex) {
+	@Override
+	public String format(Byte obj, FormatProvider formatProvider, boolean localize) {
+		if (obj == null) {
+			return null;
+		}
+		return obj.toString();
 	}
-	throw toParsingError(str, getTargetType().getName());
-    }
+
+	@Override
+	public Byte parse(String str, FormatProvider formatProvider) throws ConverterException {
+		str = StringUtils.trimToNull(str);
+		if (str == null) {
+			return null;
+		}
+		try {
+			return Byte.parseByte(str);
+
+		} catch (NumberFormatException ex) {
+		}
+		throw toParsingError(str, getTargetType().getName());
+	}
 }

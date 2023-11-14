@@ -27,79 +27,79 @@ package com.appslandia.common.utils;
  */
 public class JsonEscaper {
 
-    private static final int HIGHEST_SPECIAL = '\\';
+	private static final int HIGHEST_SPECIAL = '\\';
 
-    private static char[][] ESCAPE_JSON = new char[HIGHEST_SPECIAL + 1][];
-    static {
-	StringBuilder sb = new StringBuilder(6);
+	private static char[][] ESCAPE_JSON = new char[HIGHEST_SPECIAL + 1][];
+	static {
+		StringBuilder sb = new StringBuilder(6);
 
-	// the control characters (U+0000 through U+001F).
-	for (char ch = 0; ch <= 31; ch++) {
-	    escapeControlChar(ch, sb);
+		// the control characters (U+0000 through U+001F).
+		for (char ch = 0; ch <= 31; ch++) {
+			escapeControlChar(ch, sb);
 
-	    ESCAPE_JSON[ch] = sb.toString().toCharArray();
-	}
-	ESCAPE_JSON['"'] = "\\\"".toCharArray();
-	ESCAPE_JSON['\\'] = "\\".toCharArray();
-	ESCAPE_JSON['/'] = "\\/".toCharArray();
-
-	ESCAPE_JSON['\b'] = "\\b".toCharArray();
-	ESCAPE_JSON['\f'] = "\\f".toCharArray();
-	ESCAPE_JSON['\n'] = "\\n".toCharArray();
-	ESCAPE_JSON['\r'] = "\\r".toCharArray();
-	ESCAPE_JSON['\t'] = "\\t".toCharArray();
-    }
-
-    static void escapeControlChar(char c, StringBuilder out) {
-	out.setLength(0);
-
-	String hs = Integer.toHexString(c);
-	out.append("\\u");
-
-	for (int i = 0; i < 4 - hs.length(); i++) {
-	    out.append('0');
-	}
-	out.append(hs);
-    }
-
-    public static String escape(String value) {
-	if (value == null) {
-	    return "null";
-	}
-	if (value.isEmpty()) {
-	    return "\"\"";
-	}
-	StringBuilder out = new StringBuilder((int) (value.length() * 1.25f));
-	out.append('"');
-
-	int start = 0;
-	char[] srcChars = value.toCharArray();
-	int length = value.length();
-
-	for (int i = 0; i < length; i++) {
-	    char c = srcChars[i];
-
-	    if (c <= HIGHEST_SPECIAL) {
-		char[] escaped = ESCAPE_JSON[c];
-		if (escaped != null) {
-
-		    // add un_escaped portion
-		    if (start < i) {
-			out.append(srcChars, start, i - start);
-		    }
-
-		    // add escaped
-		    out.append(escaped);
-		    start = i + 1;
+			ESCAPE_JSON[ch] = sb.toString().toCharArray();
 		}
-	    }
+		ESCAPE_JSON['"'] = "\\\"".toCharArray();
+		ESCAPE_JSON['\\'] = "\\".toCharArray();
+		ESCAPE_JSON['/'] = "\\/".toCharArray();
+
+		ESCAPE_JSON['\b'] = "\\b".toCharArray();
+		ESCAPE_JSON['\f'] = "\\f".toCharArray();
+		ESCAPE_JSON['\n'] = "\\n".toCharArray();
+		ESCAPE_JSON['\r'] = "\\r".toCharArray();
+		ESCAPE_JSON['\t'] = "\\t".toCharArray();
 	}
 
-	// add rest of un_escaped portion
-	if (start < length) {
-	    out.append(srcChars, start, length - start);
+	static void escapeControlChar(char c, StringBuilder out) {
+		out.setLength(0);
+
+		String hs = Integer.toHexString(c);
+		out.append("\\u");
+
+		for (int i = 0; i < 4 - hs.length(); i++) {
+			out.append('0');
+		}
+		out.append(hs);
 	}
-	out.append('"');
-	return out.toString();
-    }
+
+	public static String escape(String value) {
+		if (value == null) {
+			return "null";
+		}
+		if (value.isEmpty()) {
+			return "\"\"";
+		}
+		StringBuilder out = new StringBuilder((int) (value.length() * 1.25f));
+		out.append('"');
+
+		int start = 0;
+		char[] srcChars = value.toCharArray();
+		int length = value.length();
+
+		for (int i = 0; i < length; i++) {
+			char c = srcChars[i];
+
+			if (c <= HIGHEST_SPECIAL) {
+				char[] escaped = ESCAPE_JSON[c];
+				if (escaped != null) {
+
+					// add un_escaped portion
+					if (start < i) {
+						out.append(srcChars, start, i - start);
+					}
+
+					// add escaped
+					out.append(escaped);
+					start = i + 1;
+				}
+			}
+		}
+
+		// add rest of un_escaped portion
+		if (start < length) {
+			out.append(srcChars, start, length - start);
+		}
+		out.append('"');
+		return out.toString();
+	}
 }

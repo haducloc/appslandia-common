@@ -32,15 +32,15 @@ import com.appslandia.common.base.Out;
  */
 public interface JsonValueConverter {
 
-    boolean isJsonNull(Object element);
+	boolean isJsonNull(Object element);
 
-    String asNumber(Object element, Out<Boolean> asResult);
+	String asNumber(Object element, Out<Boolean> asResult);
 
-    String asString(Object element, Out<Boolean> asResult);
+	String asString(Object element, Out<Boolean> asResult);
 
-    boolean asBoolean(Object element, Out<Boolean> asResult);
+	boolean asBoolean(Object element, Out<Boolean> asResult);
 
-    Iterator<Object> asJsonArray(Object element, Out<Boolean> asResult);
+	Iterator<Object> asJsonArray(Object element, Out<Boolean> asResult);
 
-    Iterator<Map.Entry<String, Object>> asJsonObject(Object element, Out<Boolean> asResult);
+	Iterator<Map.Entry<String, Object>> asJsonObject(Object element, Out<Boolean> asResult);
 }

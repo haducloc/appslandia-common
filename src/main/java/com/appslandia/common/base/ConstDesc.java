@@ -38,5 +38,5 @@ import com.appslandia.common.utils.StringUtils;
 @Documented
 public @interface ConstDesc {
 
-    String value() default StringUtils.EMPTY_STRING;
+	String value() default StringUtils.EMPTY_STRING;
 }

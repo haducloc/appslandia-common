@@ -33,52 +33,52 @@ import com.appslandia.common.utils.Asserts;
  */
 public enum BaseEncoder {
 
-    BASE64, BASE64_NP, BASE64_URL, BASE64_URL_NP, BASE64_MIME, BASE64_MIME_NP;
+	BASE64, BASE64_NP, BASE64_URL, BASE64_URL_NP, BASE64_MIME, BASE64_MIME_NP;
 
-    public String encode(byte[] message) {
-	Asserts.notNull(message);
-	switch (this) {
+	public String encode(byte[] message) {
+		Asserts.notNull(message);
+		switch (this) {
 
-	case BASE64:
-	    return new String(Base64.getEncoder().encode(message), StandardCharsets.ISO_8859_1);
-	case BASE64_NP:
-	    return new String(Base64.getEncoder().withoutPadding().encode(message), StandardCharsets.ISO_8859_1);
+		case BASE64:
+			return new String(Base64.getEncoder().encode(message), StandardCharsets.ISO_8859_1);
+		case BASE64_NP:
+			return new String(Base64.getEncoder().withoutPadding().encode(message), StandardCharsets.ISO_8859_1);
 
-	case BASE64_URL:
-	    return new String(Base64.getUrlEncoder().encode(message), StandardCharsets.ISO_8859_1);
-	case BASE64_URL_NP:
-	    return new String(Base64.getUrlEncoder().withoutPadding().encode(message), StandardCharsets.ISO_8859_1);
+		case BASE64_URL:
+			return new String(Base64.getUrlEncoder().encode(message), StandardCharsets.ISO_8859_1);
+		case BASE64_URL_NP:
+			return new String(Base64.getUrlEncoder().withoutPadding().encode(message), StandardCharsets.ISO_8859_1);
 
-	case BASE64_MIME:
-	    return new String(Base64.getMimeEncoder().encode(message), StandardCharsets.ISO_8859_1);
-	case BASE64_MIME_NP:
-	    return new String(Base64.getMimeEncoder().withoutPadding().encode(message), StandardCharsets.ISO_8859_1);
-	default:
-	    throw new Error();
+		case BASE64_MIME:
+			return new String(Base64.getMimeEncoder().encode(message), StandardCharsets.ISO_8859_1);
+		case BASE64_MIME_NP:
+			return new String(Base64.getMimeEncoder().withoutPadding().encode(message), StandardCharsets.ISO_8859_1);
+		default:
+			throw new Error();
+		}
 	}
-    }
 
-    public byte[] decode(String encoded) {
-	Asserts.notNull(encoded);
-	switch (this) {
+	public byte[] decode(String encoded) {
+		Asserts.notNull(encoded);
+		switch (this) {
 
-	case BASE64:
-	    return Base64.getDecoder().decode(encoded.getBytes(StandardCharsets.ISO_8859_1));
-	case BASE64_NP:
-	    return Base64.getDecoder().decode(encoded.getBytes(StandardCharsets.ISO_8859_1));
+		case BASE64:
+			return Base64.getDecoder().decode(encoded.getBytes(StandardCharsets.ISO_8859_1));
+		case BASE64_NP:
+			return Base64.getDecoder().decode(encoded.getBytes(StandardCharsets.ISO_8859_1));
 
-	case BASE64_URL:
-	    return Base64.getUrlDecoder().decode(encoded.getBytes(StandardCharsets.ISO_8859_1));
-	case BASE64_URL_NP:
-	    return Base64.getUrlDecoder().decode(encoded.getBytes(StandardCharsets.ISO_8859_1));
+		case BASE64_URL:
+			return Base64.getUrlDecoder().decode(encoded.getBytes(StandardCharsets.ISO_8859_1));
+		case BASE64_URL_NP:
+			return Base64.getUrlDecoder().decode(encoded.getBytes(StandardCharsets.ISO_8859_1));
 
-	case BASE64_MIME:
-	    return Base64.getMimeDecoder().decode(encoded.getBytes(StandardCharsets.ISO_8859_1));
-	case BASE64_MIME_NP:
-	    return Base64.getMimeDecoder().decode(encoded.getBytes(StandardCharsets.ISO_8859_1));
+		case BASE64_MIME:
+			return Base64.getMimeDecoder().decode(encoded.getBytes(StandardCharsets.ISO_8859_1));
+		case BASE64_MIME_NP:
+			return Base64.getMimeDecoder().decode(encoded.getBytes(StandardCharsets.ISO_8859_1));
 
-	default:
-	    throw new Error();
+		default:
+			throw new Error();
+		}
 	}
-    }
 }

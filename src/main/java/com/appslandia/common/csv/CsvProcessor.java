@@ -35,235 +35,235 @@ import com.appslandia.common.utils.StringUtils;
  */
 public class CsvProcessor extends InitializeObject {
 
-    public static final CsvProcessor INSTANCE = new CsvProcessor().initialize();
+	public static final CsvProcessor INSTANCE = new CsvProcessor().initialize();
 
-    private boolean writeNull;
-    private char separator = ',';
-    private boolean escCrLf;
+	private boolean writeNull;
+	private char separator = ',';
+	private boolean escCrLf;
 
-    @Override
-    protected void init() throws Exception {
-	// Validate separator?
-    }
-
-    @Override
-    public CsvProcessor initialize() throws InitializeException {
-	super.initialize();
-	return this;
-    }
-
-    public boolean isWriteNull() {
-	this.initialize();
-	return this.writeNull;
-    }
-
-    public CsvProcessor setWriteNull(boolean writeNull) {
-	assertNotInitialized();
-
-	this.writeNull = writeNull;
-	return this;
-    }
-
-    public char getSeparator() {
-	this.initialize();
-	return this.separator;
-    }
-
-    public CsvProcessor setSeparator(char separator) {
-	assertNotInitialized();
-
-	this.separator = separator;
-	return this;
-    }
-
-    public boolean isEscCrLf() {
-	this.initialize();
-	return this.escCrLf;
-    }
-
-    public CsvProcessor setEscCrLf(boolean escCrLf) {
-	assertNotInitialized();
-
-	this.escCrLf = escCrLf;
-	return this;
-    }
-
-    public String escape(String value) {
-	return escape(value, (value != null) ? new StringBuilder((int) (value.length() * 1.25f)) : new StringBuilder());
-    }
-
-    public String escape(String value, StringBuilder buf) {
-	this.initialize();
-	buf.setLength(0);
-
-	if (value == null) {
-	    if (this.writeNull) {
-		return "null";
-	    }
-	    return "";
+	@Override
+	protected void init() throws Exception {
+		// Validate separator?
 	}
-	if (value.isEmpty()) {
-	    return "";
+
+	@Override
+	public CsvProcessor initialize() throws InitializeException {
+		super.initialize();
+		return this;
 	}
-	buf.append('"');
 
-	int start = 0;
-	char[] srcChars = value.toCharArray();
-	int length = value.length();
+	public boolean isWriteNull() {
+		this.initialize();
+		return this.writeNull;
+	}
 
-	boolean useWrap = false;
+	public CsvProcessor setWriteNull(boolean writeNull) {
+		assertNotInitialized();
 
-	for (int i = 0; i < length; i++) {
-	    char c = srcChars[i];
+		this.writeNull = writeNull;
+		return this;
+	}
 
-	    if (!useWrap) {
-		useWrap = c == '"' || c == '\r' || c == '\n' || c == this.separator;
-	    }
-	    if (c == '"') {
-		// add un_escaped portion
-		if (start < i) {
-		    buf.append(srcChars, start, i - start);
+	public char getSeparator() {
+		this.initialize();
+		return this.separator;
+	}
+
+	public CsvProcessor setSeparator(char separator) {
+		assertNotInitialized();
+
+		this.separator = separator;
+		return this;
+	}
+
+	public boolean isEscCrLf() {
+		this.initialize();
+		return this.escCrLf;
+	}
+
+	public CsvProcessor setEscCrLf(boolean escCrLf) {
+		assertNotInitialized();
+
+		this.escCrLf = escCrLf;
+		return this;
+	}
+
+	public String escape(String value) {
+		return escape(value, (value != null) ? new StringBuilder((int) (value.length() * 1.25f)) : new StringBuilder());
+	}
+
+	public String escape(String value, StringBuilder buf) {
+		this.initialize();
+		buf.setLength(0);
+
+		if (value == null) {
+			if (this.writeNull) {
+				return "null";
+			}
+			return "";
+		}
+		if (value.isEmpty()) {
+			return "";
+		}
+		buf.append('"');
+
+		int start = 0;
+		char[] srcChars = value.toCharArray();
+		int length = value.length();
+
+		boolean useWrap = false;
+
+		for (int i = 0; i < length; i++) {
+			char c = srcChars[i];
+
+			if (!useWrap) {
+				useWrap = c == '"' || c == '\r' || c == '\n' || c == this.separator;
+			}
+			if (c == '"') {
+				// add un_escaped portion
+				if (start < i) {
+					buf.append(srcChars, start, i - start);
+				}
+
+				// add escaped
+				buf.append("\"\"");
+				start = i + 1;
+
+			} else if (this.escCrLf && (c == '\r' || c == '\n')) {
+
+				// add un_escaped portion
+				if (start < i) {
+					buf.append(srcChars, start, i - start);
+				}
+
+				// add escaped
+				buf.append("\\").append(c == '\r' ? 'r' : 'n');
+				start = i + 1;
+			}
 		}
 
-		// add escaped
-		buf.append("\"\"");
-		start = i + 1;
-
-	    } else if (this.escCrLf && (c == '\r' || c == '\n')) {
-
-		// add un_escaped portion
-		if (start < i) {
-		    buf.append(srcChars, start, i - start);
+		// add rest of un_escaped portion
+		if (start < length) {
+			buf.append(srcChars, start, length - start);
 		}
-
-		// add escaped
-		buf.append("\\").append(c == '\r' ? 'r' : 'n');
-		start = i + 1;
-	    }
+		buf.append('"');
+		return useWrap ? buf.toString() : value;
 	}
 
-	// add rest of un_escaped portion
-	if (start < length) {
-	    buf.append(srcChars, start, length - start);
+	public List<CsvRecord> parseRecords(BufferedReader reader) throws Exception {
+		this.initialize();
+		List<CsvRecord> records = new ArrayList<>(128);
+
+		parse(reader, (idx, csvRecord) -> records.add(csvRecord));
+		return records;
 	}
-	buf.append('"');
-	return useWrap ? buf.toString() : value;
-    }
 
-    public List<CsvRecord> parseRecords(BufferedReader reader) throws Exception {
-	this.initialize();
-	List<CsvRecord> records = new ArrayList<>(128);
+	public void parse(BufferedReader reader, CsvConsumer consumer) throws Exception {
+		this.initialize();
 
-	parse(reader, (idx, csvRecord) -> records.add(csvRecord));
-	return records;
-    }
+		String line;
+		StringBuilder currentRecord = new StringBuilder();
+		Integer recordLen = null;
+		int recordIdx = 0;
 
-    public void parse(BufferedReader reader, CsvConsumer consumer) throws Exception {
-	this.initialize();
+		while ((line = reader.readLine()) != null) {
 
-	String line;
-	StringBuilder currentRecord = new StringBuilder();
-	Integer recordLen = null;
-	int recordIdx = 0;
+			currentRecord.append(line);
+			currentRecord.append('\n');
 
-	while ((line = reader.readLine()) != null) {
+			int numQuotes = (int) currentRecord.chars().filter(ch -> ch == '"').count();
 
-	    currentRecord.append(line);
-	    currentRecord.append('\n');
+			// Found record?
+			if (numQuotes % 2 == 0) {
 
-	    int numQuotes = (int) currentRecord.chars().filter(ch -> ch == '"').count();
+				// Delete the last add \n
+				currentRecord.deleteCharAt(currentRecord.length() - 1);
 
-	    // Found record?
-	    if (numQuotes % 2 == 0) {
+				String[] values = splitRecord(currentRecord.toString(), recordLen);
+				if (recordLen == null) {
+					recordLen = (values.length > 0) ? values.length : 1;
+				}
 
-		// Delete the last add \n
-		currentRecord.deleteCharAt(currentRecord.length() - 1);
-
-		String[] values = splitRecord(currentRecord.toString(), recordLen);
-		if (recordLen == null) {
-		    recordLen = (values.length > 0) ? values.length : 1;
+				consumer.apply(recordIdx++, new CsvRecord(values));
+				currentRecord.setLength(0);
+			}
 		}
-
-		consumer.apply(recordIdx++, new CsvRecord(values));
-		currentRecord.setLength(0);
-	    }
 	}
-    }
 
-    private String[] splitRecord(String record, Integer recordLen) {
-	if (record.isEmpty()) {
-	    return new String[] { null };
-	}
-	List<String> values = (recordLen == null) ? new ArrayList<>() : new ArrayList<>(recordLen);
-	StringBuilder currentField = new StringBuilder();
-	boolean inQuotes = false;
-
-	for (int i = 0; i < record.length(); i++) {
-	    char c = record.charAt(i);
-
-	    if (c == '"') {
-		// Handle quotes within CSV values
-
-		if (i < record.length() - 1 && record.charAt(i + 1) == '"') {
-
-		    // Add the first quote to the current field
-		    currentField.append(c);
-
-		    // Skip the second quote
-		    i++;
-
-		} else {
-		    inQuotes = !inQuotes;
+	private String[] splitRecord(String record, Integer recordLen) {
+		if (record.isEmpty()) {
+			return new String[] { null };
 		}
+		List<String> values = (recordLen == null) ? new ArrayList<>() : new ArrayList<>(recordLen);
+		StringBuilder currentField = new StringBuilder();
+		boolean inQuotes = false;
 
-	    } else if (c == this.separator && !inQuotes) {
-		// Handle commas within CSV values
+		for (int i = 0; i < record.length(); i++) {
+			char c = record.charAt(i);
+
+			if (c == '"') {
+				// Handle quotes within CSV values
+
+				if (i < record.length() - 1 && record.charAt(i + 1) == '"') {
+
+					// Add the first quote to the current field
+					currentField.append(c);
+
+					// Skip the second quote
+					i++;
+
+				} else {
+					inQuotes = !inQuotes;
+				}
+
+			} else if (c == this.separator && !inQuotes) {
+				// Handle commas within CSV values
+
+				values.add(unescape(currentField));
+				currentField.setLength(0);
+			} else {
+				currentField.append(c);
+			}
+		}
 
 		values.add(unescape(currentField));
-		currentField.setLength(0);
-	    } else {
-		currentField.append(c);
-	    }
+		return values.toArray(new String[values.size()]);
 	}
 
-	values.add(unescape(currentField));
-	return values.toArray(new String[values.size()]);
-    }
-
-    protected String unescape(StringBuilder value) {
-	// ,,
-	if (value.length() == 0) {
-	    return null;
-	}
-
-	// ,null,
-	if (value.length() == 4 && "null".equals(value.toString())) {
-	    return this.writeNull ? null : "null";
-	}
-
-	// ,value,
-	if (!this.escCrLf) {
-	    return StringUtils.trimToNull(value.toString());
-	}
-
-	// \\r \\n
-	for (int i = 0; i < value.length(); i++) {
-	    char c = value.charAt(i);
-
-	    if (c != '\\') {
-		continue;
-	    }
-
-	    // c = '\\'
-	    if (i + 1 < value.length()) {
-		char nc = value.charAt(i + 1);
-
-		if (nc == 'r' || nc == 'n') {
-		    value.replace(i, i + 2, nc == 'r' ? "\r" : "\n");
-		    i -= 1;
+	protected String unescape(StringBuilder value) {
+		// ,,
+		if (value.length() == 0) {
+			return null;
 		}
-	    }
+
+		// ,null,
+		if (value.length() == 4 && "null".equals(value.toString())) {
+			return this.writeNull ? null : "null";
+		}
+
+		// ,value,
+		if (!this.escCrLf) {
+			return StringUtils.trimToNull(value.toString());
+		}
+
+		// \\r \\n
+		for (int i = 0; i < value.length(); i++) {
+			char c = value.charAt(i);
+
+			if (c != '\\') {
+				continue;
+			}
+
+			// c = '\\'
+			if (i + 1 < value.length()) {
+				char nc = value.charAt(i + 1);
+
+				if (nc == 'r' || nc == 'n') {
+					value.replace(i, i + 2, nc == 'r' ? "\r" : "\n");
+					i -= 1;
+				}
+			}
+		}
+		return StringUtils.trimToNull(value.toString());
 	}
-	return StringUtils.trimToNull(value.toString());
-    }
 }

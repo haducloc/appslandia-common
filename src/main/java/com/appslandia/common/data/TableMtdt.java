@@ -36,13 +36,13 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface TableMtdt {
 
-    String catalog();
+	String catalog();
 
-    String schema();
+	String schema();
 
-    String table();
+	String table();
 
-    Class<?> keyClass();
+	Class<?> keyClass();
 
-    String[] keys();
+	String[] keys();
 }

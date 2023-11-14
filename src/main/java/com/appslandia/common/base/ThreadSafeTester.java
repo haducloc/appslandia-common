@@ -34,61 +34,61 @@ import com.appslandia.common.utils.ValueUtils;
  */
 public abstract class ThreadSafeTester extends InitializeObject {
 
-    private int tasks;
-    private int threads;
+	private int tasks;
+	private int threads;
 
-    private CountDownLatch taskMonitor;
-    private ExecutorService executorService;
+	private CountDownLatch taskMonitor;
+	private ExecutorService executorService;
 
-    @Override
-    protected void init() throws Exception {
-	this.tasks = ValueUtils.valueOrMin(this.tasks, 100);
+	@Override
+	protected void init() throws Exception {
+		this.tasks = ValueUtils.valueOrMin(this.tasks, 100);
 
-	int minPoolSize = ValueUtils.valueOrMin(Runtime.getRuntime().availableProcessors() / 4, 1);
-	this.threads = ValueUtils.valueOrMin(this.threads, minPoolSize);
+		int minPoolSize = ValueUtils.valueOrMin(Runtime.getRuntime().availableProcessors() / 4, 1);
+		this.threads = ValueUtils.valueOrMin(this.threads, minPoolSize);
 
-	this.executorService = Executors.newFixedThreadPool(this.threads);
-	this.taskMonitor = new CountDownLatch(this.tasks);
-    }
-
-    public ThreadSafeTester setTasks(int tasks) {
-	assertNotInitialized();
-	this.tasks = tasks;
-	return this;
-    }
-
-    public ThreadSafeTester setThreads(int threads) {
-	assertNotInitialized();
-	this.threads = threads;
-	return this;
-    }
-
-    protected abstract Runnable newTask();
-
-    public ThreadSafeTester execute() {
-	return execute(0, TimeUnit.MILLISECONDS);
-    }
-
-    public ThreadSafeTester execute(long timeout, TimeUnit unit) {
-	initialize();
-	for (int i = 0; i < this.tasks; i++) {
-	    this.executorService.execute(newTask());
+		this.executorService = Executors.newFixedThreadPool(this.threads);
+		this.taskMonitor = new CountDownLatch(this.tasks);
 	}
-	try {
-	    if (timeout == 0) {
-		this.taskMonitor.await();
-	    } else {
-		this.taskMonitor.await(timeout, unit);
-	    }
 
-	} catch (InterruptedException ex) {
-	    throw new UncheckedException(ex);
+	public ThreadSafeTester setTasks(int tasks) {
+		assertNotInitialized();
+		this.tasks = tasks;
+		return this;
 	}
-	this.executorService.shutdown();
-	return this;
-    }
 
-    protected void doneTask() {
-	this.taskMonitor.countDown();
-    }
+	public ThreadSafeTester setThreads(int threads) {
+		assertNotInitialized();
+		this.threads = threads;
+		return this;
+	}
+
+	protected abstract Runnable newTask();
+
+	public ThreadSafeTester execute() {
+		return execute(0, TimeUnit.MILLISECONDS);
+	}
+
+	public ThreadSafeTester execute(long timeout, TimeUnit unit) {
+		initialize();
+		for (int i = 0; i < this.tasks; i++) {
+			this.executorService.execute(newTask());
+		}
+		try {
+			if (timeout == 0) {
+				this.taskMonitor.await();
+			} else {
+				this.taskMonitor.await(timeout, unit);
+			}
+
+		} catch (InterruptedException ex) {
+			throw new UncheckedException(ex);
+		}
+		this.executorService.shutdown();
+		return this;
+	}
+
+	protected void doneTask() {
+		this.taskMonitor.countDown();
+	}
 }

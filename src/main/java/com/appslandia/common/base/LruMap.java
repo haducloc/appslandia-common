@@ -29,16 +29,16 @@ import java.util.Map;
  *
  */
 public class LruMap<K, V> extends LinkedHashMap<K, V> {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    final int size;
+	final int size;
 
-    public LruMap(int size) {
-	this.size = size;
-    }
+	public LruMap(int size) {
+		this.size = size;
+	}
 
-    @Override
-    protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
-	return this.size() > this.size;
-    }
+	@Override
+	protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
+		return this.size() > this.size;
+	}
 }

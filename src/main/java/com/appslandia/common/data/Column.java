@@ -38,229 +38,229 @@ import com.appslandia.common.utils.TypeUtils;
  *
  */
 public class Column extends InitializeObject implements Serializable {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private String tableCat;
-    private String tableSchema;
-    private String tableName;
+	private String tableCat;
+	private String tableSchema;
+	private String tableName;
 
-    private String name;
-    private String typeName;
-    private Integer sqlType;
-    private Integer columnSize;
-    private Integer fractionDigits;
+	private String name;
+	private String typeName;
+	private Integer sqlType;
+	private Integer columnSize;
+	private Integer fractionDigits;
 
-    private boolean nullable = true;
-    private boolean updatable = true;
-    private int position;
+	private boolean nullable = true;
+	private boolean updatable = true;
+	private int position;
 
-    private Class<?> javaType;
+	private Class<?> javaType;
 
-    private ColumnType columnType;
-    private List<AnnotationModel> annotations;
+	private ColumnType columnType;
+	private List<AnnotationModel> annotations;
 
-    @Override
-    protected void init() throws Exception {
-	Asserts.notNull(this.name, "name is required.");
-	Asserts.notNull(this.sqlType, "sqlType is required.");
-	Asserts.notNull(this.javaType, "javaType is required.");
+	@Override
+	protected void init() throws Exception {
+		Asserts.notNull(this.name, "name is required.");
+		Asserts.notNull(this.sqlType, "sqlType is required.");
+		Asserts.notNull(this.javaType, "javaType is required.");
 
-	if (this.columnType == null) {
-	    this.columnType = ColumnType.NON_KEY;
+		if (this.columnType == null) {
+			this.columnType = ColumnType.NON_KEY;
+		}
+
+		if (this.nullable || this.columnType == ColumnType.KEY_INCR || this.columnType == ColumnType.KEY) {
+			this.javaType = TypeUtils.wrap(this.javaType);
+		}
+
+		if (this.columnType == ColumnType.KEY_INCR || this.columnType == ColumnType.KEY) {
+			this.nullable = false;
+			this.updatable = false;
+		}
+		this.annotations = CollectionUtils.unmodifiable(this.annotations);
 	}
 
-	if (this.nullable || this.columnType == ColumnType.KEY_INCR || this.columnType == ColumnType.KEY) {
-	    this.javaType = TypeUtils.wrap(this.javaType);
+	public String getParamName() {
+		return JdbcSql.getParamPrefix() + getName();
 	}
 
-	if (this.columnType == ColumnType.KEY_INCR || this.columnType == ColumnType.KEY) {
-	    this.nullable = false;
-	    this.updatable = false;
+	public Integer getScaleOrLength() {
+		this.initialize();
+		return (this.sqlType == Types.DECIMAL || this.sqlType == Types.NUMERIC) ? this.fractionDigits : this.columnSize;
 	}
-	this.annotations = CollectionUtils.unmodifiable(this.annotations);
-    }
 
-    public String getParamName() {
-	return JdbcSql.getParamPrefix() + getName();
-    }
-
-    public Integer getScaleOrLength() {
-	this.initialize();
-	return (this.sqlType == Types.DECIMAL || this.sqlType == Types.NUMERIC) ? this.fractionDigits : this.columnSize;
-    }
-
-    public boolean isKeyIncr() {
-	this.initialize();
-	return this.columnType == ColumnType.KEY_INCR;
-    }
-
-    public boolean isKey() {
-	this.initialize();
-	return this.columnType == ColumnType.KEY_INCR || this.columnType == ColumnType.KEY;
-    }
-
-    public String getTableCat() {
-	this.initialize();
-	return this.tableCat;
-    }
-
-    public Column setTableCat(String tableCat) {
-	this.assertNotInitialized();
-	this.tableCat = tableCat;
-	return this;
-    }
-
-    public String getTableSchema() {
-	this.initialize();
-	return this.tableSchema;
-    }
-
-    public Column setTableSchema(String tableSchema) {
-	this.assertNotInitialized();
-	this.tableSchema = tableSchema;
-	return this;
-    }
-
-    public String getTableName() {
-	this.initialize();
-	return this.tableName;
-    }
-
-    public Column setTableName(String tableName) {
-	this.assertNotInitialized();
-	this.tableName = tableName;
-	return this;
-    }
-
-    public String getName() {
-	this.initialize();
-	return this.name;
-    }
-
-    public Column setName(String name) {
-	this.assertNotInitialized();
-	if (name != null) {
-	    this.name = JdbcUtils.toColumnName(name);
+	public boolean isKeyIncr() {
+		this.initialize();
+		return this.columnType == ColumnType.KEY_INCR;
 	}
-	return this;
-    }
 
-    public String getTypeName() {
-	this.initialize();
-	return this.typeName;
-    }
+	public boolean isKey() {
+		this.initialize();
+		return this.columnType == ColumnType.KEY_INCR || this.columnType == ColumnType.KEY;
+	}
 
-    public Column setTypeName(String typeName) {
-	this.assertNotInitialized();
-	this.typeName = typeName;
-	return this;
-    }
+	public String getTableCat() {
+		this.initialize();
+		return this.tableCat;
+	}
 
-    public Integer getSqlType() {
-	this.initialize();
-	return this.sqlType;
-    }
+	public Column setTableCat(String tableCat) {
+		this.assertNotInitialized();
+		this.tableCat = tableCat;
+		return this;
+	}
 
-    public Column setSqlType(Integer sqlType) {
-	this.assertNotInitialized();
-	this.sqlType = sqlType;
-	return this;
-    }
+	public String getTableSchema() {
+		this.initialize();
+		return this.tableSchema;
+	}
 
-    public Integer getColumnSize() {
-	this.initialize();
-	return this.columnSize;
-    }
+	public Column setTableSchema(String tableSchema) {
+		this.assertNotInitialized();
+		this.tableSchema = tableSchema;
+		return this;
+	}
 
-    public Column setColumnSize(Integer columnSize) {
-	this.assertNotInitialized();
-	this.columnSize = columnSize;
-	return this;
-    }
+	public String getTableName() {
+		this.initialize();
+		return this.tableName;
+	}
 
-    public Integer getFractionDigits() {
-	this.initialize();
-	return this.fractionDigits;
-    }
+	public Column setTableName(String tableName) {
+		this.assertNotInitialized();
+		this.tableName = tableName;
+		return this;
+	}
 
-    public Column setFractionDigits(Integer fractionDigits) {
-	this.assertNotInitialized();
-	this.fractionDigits = fractionDigits;
-	return this;
-    }
+	public String getName() {
+		this.initialize();
+		return this.name;
+	}
 
-    public boolean isNullable() {
-	this.initialize();
-	return this.nullable;
-    }
+	public Column setName(String name) {
+		this.assertNotInitialized();
+		if (name != null) {
+			this.name = JdbcUtils.toColumnName(name);
+		}
+		return this;
+	}
 
-    public Column setNullable(boolean nullable) {
-	this.assertNotInitialized();
-	this.nullable = nullable;
-	return this;
-    }
+	public String getTypeName() {
+		this.initialize();
+		return this.typeName;
+	}
 
-    public boolean isUpdatable() {
-	this.initialize();
-	return this.updatable;
-    }
+	public Column setTypeName(String typeName) {
+		this.assertNotInitialized();
+		this.typeName = typeName;
+		return this;
+	}
 
-    public Column setUpdatable(boolean updatable) {
-	this.assertNotInitialized();
-	this.updatable = updatable;
-	return this;
-    }
+	public Integer getSqlType() {
+		this.initialize();
+		return this.sqlType;
+	}
 
-    public int getPosition() {
-	this.initialize();
-	return this.position;
-    }
+	public Column setSqlType(Integer sqlType) {
+		this.assertNotInitialized();
+		this.sqlType = sqlType;
+		return this;
+	}
 
-    public Column setPosition(int position) {
-	this.assertNotInitialized();
-	this.position = position;
-	return this;
-    }
+	public Integer getColumnSize() {
+		this.initialize();
+		return this.columnSize;
+	}
 
-    public ColumnType getColumnType() {
-	this.initialize();
-	return this.columnType;
-    }
+	public Column setColumnSize(Integer columnSize) {
+		this.assertNotInitialized();
+		this.columnSize = columnSize;
+		return this;
+	}
 
-    public Column setColumnType(ColumnType columnType) {
-	this.assertNotInitialized();
-	this.columnType = columnType;
-	return this;
-    }
+	public Integer getFractionDigits() {
+		this.initialize();
+		return this.fractionDigits;
+	}
 
-    public Class<?> getJavaType() {
-	this.initialize();
-	return this.javaType;
-    }
+	public Column setFractionDigits(Integer fractionDigits) {
+		this.assertNotInitialized();
+		this.fractionDigits = fractionDigits;
+		return this;
+	}
 
-    public Column setJavaType(Class<?> javaType) {
-	this.assertNotInitialized();
-	this.javaType = javaType;
-	return this;
-    }
+	public boolean isNullable() {
+		this.initialize();
+		return this.nullable;
+	}
 
-    public List<AnnotationModel> getAnnotations() {
-	initialize();
-	return this.annotations;
-    }
+	public Column setNullable(boolean nullable) {
+		this.assertNotInitialized();
+		this.nullable = nullable;
+		return this;
+	}
 
-    public Column setAnnotations(List<AnnotationModel> annotations) {
-	assertNotInitialized();
-	this.annotations = annotations;
-	return this;
-    }
+	public boolean isUpdatable() {
+		this.initialize();
+		return this.updatable;
+	}
 
-    @Override
-    public String toString() {
-	this.initialize();
-	return STR.fmt(
-		"name={}, typeName={}, sqlType={}, columnSize={?}, fractionDigits={?}, nullable={}, updatable={}, position={}, columnType={}, javaType={}, tableCat={?}, tableSchema={?}, tableName={?}",
-		this.name, this.typeName, this.sqlType, this.columnSize, this.fractionDigits, this.nullable, this.updatable, this.position, this.columnType,
-		this.javaType.getName(), this.tableCat, this.tableSchema, this.tableName);
-    }
+	public Column setUpdatable(boolean updatable) {
+		this.assertNotInitialized();
+		this.updatable = updatable;
+		return this;
+	}
+
+	public int getPosition() {
+		this.initialize();
+		return this.position;
+	}
+
+	public Column setPosition(int position) {
+		this.assertNotInitialized();
+		this.position = position;
+		return this;
+	}
+
+	public ColumnType getColumnType() {
+		this.initialize();
+		return this.columnType;
+	}
+
+	public Column setColumnType(ColumnType columnType) {
+		this.assertNotInitialized();
+		this.columnType = columnType;
+		return this;
+	}
+
+	public Class<?> getJavaType() {
+		this.initialize();
+		return this.javaType;
+	}
+
+	public Column setJavaType(Class<?> javaType) {
+		this.assertNotInitialized();
+		this.javaType = javaType;
+		return this;
+	}
+
+	public List<AnnotationModel> getAnnotations() {
+		initialize();
+		return this.annotations;
+	}
+
+	public Column setAnnotations(List<AnnotationModel> annotations) {
+		assertNotInitialized();
+		this.annotations = annotations;
+		return this;
+	}
+
+	@Override
+	public String toString() {
+		this.initialize();
+		return STR.fmt(
+				"name={}, typeName={}, sqlType={}, columnSize={?}, fractionDigits={?}, nullable={}, updatable={}, position={}, columnType={}, javaType={}, tableCat={?}, tableSchema={?}, tableName={?}",
+				this.name, this.typeName, this.sqlType, this.columnSize, this.fractionDigits, this.nullable, this.updatable, this.position, this.columnType,
+				this.javaType.getName(), this.tableCat, this.tableSchema, this.tableName);
+	}
 }

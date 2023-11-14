@@ -34,207 +34,207 @@ import org.junit.jupiter.api.Test;
  */
 public class CsvProcessorTest {
 
-    @Test
-    public void test_null() {
-	CsvProcessor csv = new CsvProcessor();
+	@Test
+	public void test_null() {
+		CsvProcessor csv = new CsvProcessor();
 
-	String csvContent = null;
-	String escaped = csv.escape(csvContent);
-	Assertions.assertEquals("", escaped);
-    }
-
-    @Test
-    public void test_writeNull() {
-	CsvProcessor csv = new CsvProcessor().setWriteNull(true);
-
-	String csvContent = null;
-	String escaped = csv.escape(csvContent);
-	Assertions.assertEquals("null", escaped);
-    }
-
-    @Test
-    public void test_empty() {
-	CsvProcessor csv = new CsvProcessor();
-
-	String csvContent = "";
-	String escaped = csv.escape(csvContent);
-	Assertions.assertEquals("", escaped);
-    }
-
-    @Test
-    public void test_blank() {
-	CsvProcessor csv = new CsvProcessor();
-
-	String csvContent = " ";
-	String escaped = csv.escape(csvContent);
-	Assertions.assertEquals(" ", escaped);
-    }
-
-    @Test
-    public void test_wrapped() {
-	CsvProcessor csv = new CsvProcessor();
-
-	String csvContent = "abc";
-	String escaped = csv.escape(csvContent);
-
-	Assertions.assertEquals("abc", escaped);
-    }
-
-    @Test
-    public void test_comma() {
-	CsvProcessor csv = new CsvProcessor();
-
-	String csvContent = "abc,def";
-	String escaped = csv.escape(csvContent);
-
-	Assertions.assertEquals("\"abc,def\"", escaped);
-    }
-
-    @Test
-    public void test_quotes() {
-	CsvProcessor csv = new CsvProcessor();
-
-	String csvContent = "abc\"def";
-	String escaped = csv.escape(csvContent);
-
-	Assertions.assertEquals("\"abc\"\"def\"", escaped);
-    }
-
-    @Test
-    public void test_crLf() {
-	CsvProcessor csv = new CsvProcessor();
-
-	String csvContent = "abc\r\ndef";
-	String escaped = csv.escape(csvContent);
-
-	Assertions.assertEquals("\"abc\r\ndef\"", escaped);
-    }
-
-    @Test
-    public void test_escCrLf() {
-	CsvProcessor csv = new CsvProcessor().setEscCrLf(true);
-
-	String csvContent = "abc\r\ndef";
-	String escaped = csv.escape(csvContent);
-
-	Assertions.assertEquals("\"abc\\r\\ndef\"", escaped);
-    }
-
-    @Test
-    public void test_separator() {
-	CsvProcessor csv = new CsvProcessor().setSeparator(';');
-
-	String csvContent = "abc;def";
-	String escaped = csv.escape(csvContent);
-
-	Assertions.assertEquals("\"abc;def\"", escaped);
-    }
-
-    @Test
-    public void test_parse() {
-	CsvProcessor csv = new CsvProcessor();
-	String csvContent = "abc\r\n";
-
-	try {
-	    List<CsvRecord> records = csv.parseRecords(new BufferedReader(new StringReader(csvContent)));
-	    Assertions.assertTrue(records.size() == 1);
-
-	    CsvRecord rec = records.get(0);
-	    Assertions.assertTrue(rec.length() == 1);
-	    Assertions.assertEquals("abc", rec.getString(0));
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex);
+		String csvContent = null;
+		String escaped = csv.escape(csvContent);
+		Assertions.assertEquals("", escaped);
 	}
-    }
 
-    @Test
-    public void test_parse_empty() {
-	CsvProcessor csv = new CsvProcessor();
-	String csvContent = "\r\n";
+	@Test
+	public void test_writeNull() {
+		CsvProcessor csv = new CsvProcessor().setWriteNull(true);
 
-	try {
-	    List<CsvRecord> records = csv.parseRecords(new BufferedReader(new StringReader(csvContent)));
-	    Assertions.assertTrue(records.size() == 1);
-
-	    CsvRecord rec = records.get(0);
-	    Assertions.assertTrue(rec.length() == 1);
-	    Assertions.assertNull(rec.getString(0));
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex);
+		String csvContent = null;
+		String escaped = csv.escape(csvContent);
+		Assertions.assertEquals("null", escaped);
 	}
-    }
 
-    @Test
-    public void test_parse_blank() {
-	CsvProcessor csv = new CsvProcessor();
-	String csvContent = " \r\n";
+	@Test
+	public void test_empty() {
+		CsvProcessor csv = new CsvProcessor();
 
-	try {
-	    List<CsvRecord> records = csv.parseRecords(new BufferedReader(new StringReader(csvContent)));
-	    Assertions.assertTrue(records.size() == 1);
-
-	    CsvRecord rec = records.get(0);
-	    Assertions.assertTrue(rec.length() == 1);
-	    Assertions.assertNull(rec.getString(0));
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex);
+		String csvContent = "";
+		String escaped = csv.escape(csvContent);
+		Assertions.assertEquals("", escaped);
 	}
-    }
 
-    @Test
-    public void test_parse_null() {
-	CsvProcessor csv = new CsvProcessor();
-	String csvContent = "null\r\n";
+	@Test
+	public void test_blank() {
+		CsvProcessor csv = new CsvProcessor();
 
-	try {
-	    List<CsvRecord> records = csv.parseRecords(new BufferedReader(new StringReader(csvContent)));
-	    Assertions.assertTrue(records.size() == 1);
-
-	    CsvRecord rec = records.get(0);
-	    Assertions.assertTrue(rec.length() == 1);
-	    Assertions.assertEquals("null", rec.getString(0));
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex);
+		String csvContent = " ";
+		String escaped = csv.escape(csvContent);
+		Assertions.assertEquals(" ", escaped);
 	}
-    }
 
-    @Test
-    public void test_parse_writeNull() {
-	CsvProcessor csv = new CsvProcessor().setWriteNull(true);
-	String csvContent = "null\r\n";
+	@Test
+	public void test_wrapped() {
+		CsvProcessor csv = new CsvProcessor();
 
-	try {
-	    List<CsvRecord> records = csv.parseRecords(new BufferedReader(new StringReader(csvContent)));
-	    Assertions.assertTrue(records.size() == 1);
+		String csvContent = "abc";
+		String escaped = csv.escape(csvContent);
 
-	    CsvRecord rec = records.get(0);
-	    Assertions.assertTrue(rec.length() == 1);
-	    Assertions.assertNull(rec.getString(0));
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex);
+		Assertions.assertEquals("abc", escaped);
 	}
-    }
 
-    @Test
-    public void test_parse_crLf() {
-	CsvProcessor csv = new CsvProcessor().setEscCrLf(true);
+	@Test
+	public void test_comma() {
+		CsvProcessor csv = new CsvProcessor();
 
-	String csvContent = "abc\\r\\ndef\r\n";
-	try {
-	    List<CsvRecord> records = csv.parseRecords(new BufferedReader(new StringReader(csvContent)));
-	    Assertions.assertTrue(records.size() == 1);
+		String csvContent = "abc,def";
+		String escaped = csv.escape(csvContent);
 
-	    CsvRecord rec = records.get(0);
-	    Assertions.assertTrue(rec.length() == 1);
-	    Assertions.assertEquals("abc\r\ndef", rec.getString(0));
-
-	} catch (Exception ex) {
-	    Assertions.fail(ex);
+		Assertions.assertEquals("\"abc,def\"", escaped);
 	}
-    }
+
+	@Test
+	public void test_quotes() {
+		CsvProcessor csv = new CsvProcessor();
+
+		String csvContent = "abc\"def";
+		String escaped = csv.escape(csvContent);
+
+		Assertions.assertEquals("\"abc\"\"def\"", escaped);
+	}
+
+	@Test
+	public void test_crLf() {
+		CsvProcessor csv = new CsvProcessor();
+
+		String csvContent = "abc\r\ndef";
+		String escaped = csv.escape(csvContent);
+
+		Assertions.assertEquals("\"abc\r\ndef\"", escaped);
+	}
+
+	@Test
+	public void test_escCrLf() {
+		CsvProcessor csv = new CsvProcessor().setEscCrLf(true);
+
+		String csvContent = "abc\r\ndef";
+		String escaped = csv.escape(csvContent);
+
+		Assertions.assertEquals("\"abc\\r\\ndef\"", escaped);
+	}
+
+	@Test
+	public void test_separator() {
+		CsvProcessor csv = new CsvProcessor().setSeparator(';');
+
+		String csvContent = "abc;def";
+		String escaped = csv.escape(csvContent);
+
+		Assertions.assertEquals("\"abc;def\"", escaped);
+	}
+
+	@Test
+	public void test_parse() {
+		CsvProcessor csv = new CsvProcessor();
+		String csvContent = "abc\r\n";
+
+		try {
+			List<CsvRecord> records = csv.parseRecords(new BufferedReader(new StringReader(csvContent)));
+			Assertions.assertTrue(records.size() == 1);
+
+			CsvRecord rec = records.get(0);
+			Assertions.assertTrue(rec.length() == 1);
+			Assertions.assertEquals("abc", rec.getString(0));
+
+		} catch (Exception ex) {
+			Assertions.fail(ex);
+		}
+	}
+
+	@Test
+	public void test_parse_empty() {
+		CsvProcessor csv = new CsvProcessor();
+		String csvContent = "\r\n";
+
+		try {
+			List<CsvRecord> records = csv.parseRecords(new BufferedReader(new StringReader(csvContent)));
+			Assertions.assertTrue(records.size() == 1);
+
+			CsvRecord rec = records.get(0);
+			Assertions.assertTrue(rec.length() == 1);
+			Assertions.assertNull(rec.getString(0));
+
+		} catch (Exception ex) {
+			Assertions.fail(ex);
+		}
+	}
+
+	@Test
+	public void test_parse_blank() {
+		CsvProcessor csv = new CsvProcessor();
+		String csvContent = " \r\n";
+
+		try {
+			List<CsvRecord> records = csv.parseRecords(new BufferedReader(new StringReader(csvContent)));
+			Assertions.assertTrue(records.size() == 1);
+
+			CsvRecord rec = records.get(0);
+			Assertions.assertTrue(rec.length() == 1);
+			Assertions.assertNull(rec.getString(0));
+
+		} catch (Exception ex) {
+			Assertions.fail(ex);
+		}
+	}
+
+	@Test
+	public void test_parse_null() {
+		CsvProcessor csv = new CsvProcessor();
+		String csvContent = "null\r\n";
+
+		try {
+			List<CsvRecord> records = csv.parseRecords(new BufferedReader(new StringReader(csvContent)));
+			Assertions.assertTrue(records.size() == 1);
+
+			CsvRecord rec = records.get(0);
+			Assertions.assertTrue(rec.length() == 1);
+			Assertions.assertEquals("null", rec.getString(0));
+
+		} catch (Exception ex) {
+			Assertions.fail(ex);
+		}
+	}
+
+	@Test
+	public void test_parse_writeNull() {
+		CsvProcessor csv = new CsvProcessor().setWriteNull(true);
+		String csvContent = "null\r\n";
+
+		try {
+			List<CsvRecord> records = csv.parseRecords(new BufferedReader(new StringReader(csvContent)));
+			Assertions.assertTrue(records.size() == 1);
+
+			CsvRecord rec = records.get(0);
+			Assertions.assertTrue(rec.length() == 1);
+			Assertions.assertNull(rec.getString(0));
+
+		} catch (Exception ex) {
+			Assertions.fail(ex);
+		}
+	}
+
+	@Test
+	public void test_parse_crLf() {
+		CsvProcessor csv = new CsvProcessor().setEscCrLf(true);
+
+		String csvContent = "abc\\r\\ndef\r\n";
+		try {
+			List<CsvRecord> records = csv.parseRecords(new BufferedReader(new StringReader(csvContent)));
+			Assertions.assertTrue(records.size() == 1);
+
+			CsvRecord rec = records.get(0);
+			Assertions.assertTrue(rec.length() == 1);
+			Assertions.assertEquals("abc\r\ndef", rec.getString(0));
+
+		} catch (Exception ex) {
+			Assertions.fail(ex);
+		}
+	}
 }

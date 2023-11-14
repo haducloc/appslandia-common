@@ -36,44 +36,44 @@ import org.junit.jupiter.api.Test;
  */
 public class KeyFactoryUtilTest {
 
-    final KeyFactoryUtil keyFactoryUtil = new KeyFactoryUtil("DSA");
+	final KeyFactoryUtil keyFactoryUtil = new KeyFactoryUtil("DSA");
 
-    @Test
-    public void test() {
-	try {
-	    KeyPairGenerator generator = KeyPairGenerator.getInstance("DSA");
-	    generator.initialize(1024, new SecureRandom());
-	    KeyPair keyPair = generator.generateKeyPair();
+	@Test
+	public void test() {
+		try {
+			KeyPairGenerator generator = KeyPairGenerator.getInstance("DSA");
+			generator.initialize(1024, new SecureRandom());
+			KeyPair keyPair = generator.generateKeyPair();
 
-	    String privateKeyPem = PKIUtils.toPemEncoded(keyPair.getPrivate());
-	    String publicKeyPem = PKIUtils.toPemEncoded(keyPair.getPublic());
+			String privateKeyPem = PKIUtils.toPemEncoded(keyPair.getPrivate());
+			String publicKeyPem = PKIUtils.toPemEncoded(keyPair.getPublic());
 
-	    PrivateKey privateKey = keyFactoryUtil.toPrivateKey(privateKeyPem);
-	    PublicKey publicKey = keyFactoryUtil.toPublicKey(publicKeyPem);
+			PrivateKey privateKey = keyFactoryUtil.toPrivateKey(privateKeyPem);
+			PublicKey publicKey = keyFactoryUtil.toPublicKey(publicKeyPem);
 
-	    Assertions.assertTrue(keyPair.getPrivate().equals(privateKey));
-	    Assertions.assertTrue(keyPair.getPublic().equals(publicKey));
+			Assertions.assertTrue(keyPair.getPrivate().equals(privateKey));
+			Assertions.assertTrue(keyPair.getPublic().equals(publicKey));
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_clone() {
-	try {
-	    KeyPairGenerator generator = KeyPairGenerator.getInstance("DSA");
-	    generator.initialize(1024, new SecureRandom());
-	    KeyPair keyPair = generator.generateKeyPair();
+	@Test
+	public void test_clone() {
+		try {
+			KeyPairGenerator generator = KeyPairGenerator.getInstance("DSA");
+			generator.initialize(1024, new SecureRandom());
+			KeyPair keyPair = generator.generateKeyPair();
 
-	    PrivateKey privateKey = keyFactoryUtil.copy(keyPair.getPrivate());
-	    PublicKey publicKey = keyFactoryUtil.copy(keyPair.getPublic());
+			PrivateKey privateKey = keyFactoryUtil.copy(keyPair.getPrivate());
+			PublicKey publicKey = keyFactoryUtil.copy(keyPair.getPublic());
 
-	    Assertions.assertTrue(keyPair.getPrivate().equals(privateKey));
-	    Assertions.assertTrue(keyPair.getPublic().equals(publicKey));
+			Assertions.assertTrue(keyPair.getPrivate().equals(privateKey));
+			Assertions.assertTrue(keyPair.getPublic().equals(publicKey));
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 }

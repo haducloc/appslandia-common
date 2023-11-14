@@ -27,5 +27,5 @@ package com.appslandia.common.factory;
  */
 public enum ObjectScope {
 
-    PROTOTYPE, SINGLETON
+	PROTOTYPE, SINGLETON
 }

@@ -34,65 +34,65 @@ import com.appslandia.common.base.LruMap;
  */
 public class TagList implements Iterable<String> {
 
-    final Collection<String> preTags;
-    final Set<String> tags;
+	final Collection<String> preTags;
+	final Set<String> tags;
 
-    public TagList() {
-	this(Collections.emptySet());
-    }
-
-    public TagList(Collection<String> preTags) {
-	this(preTags, 32);
-    }
-
-    public TagList(Collection<String> preTags, int maxSize) {
-	this.preTags = preTags;
-	this.tags = Collections.newSetFromMap(new LruMap<>(maxSize));
-    }
-
-    public boolean add(String tag) {
-	if (tag == null) {
-	    return false;
+	public TagList() {
+		this(Collections.emptySet());
 	}
-	if (this.preTags.contains(tag)) {
-	    return false;
+
+	public TagList(Collection<String> preTags) {
+		this(preTags, 32);
 	}
-	return this.tags.add(tag);
-    }
 
-    public boolean remove(String tag) {
-	if (tag == null) {
-	    return false;
+	public TagList(Collection<String> preTags, int maxSize) {
+		this.preTags = preTags;
+		this.tags = Collections.newSetFromMap(new LruMap<>(maxSize));
 	}
-	if (this.preTags.contains(tag)) {
-	    return false;
-	}
-	return this.tags.remove(tag);
-    }
 
-    public boolean isPreTag(String tag) {
-	return this.preTags.contains(tag);
-    }
-
-    @Override
-    public Iterator<String> iterator() {
-	return new Iterator<String>() {
-
-	    final Iterator<String> it1 = preTags.iterator();
-	    final Iterator<String> it2 = tags.iterator();
-
-	    @Override
-	    public boolean hasNext() {
-		return it1.hasNext() || it2.hasNext();
-	    }
-
-	    @Override
-	    public String next() {
-		if (it1.hasNext()) {
-		    return it1.next();
+	public boolean add(String tag) {
+		if (tag == null) {
+			return false;
 		}
-		return it2.next();
-	    }
-	};
-    }
+		if (this.preTags.contains(tag)) {
+			return false;
+		}
+		return this.tags.add(tag);
+	}
+
+	public boolean remove(String tag) {
+		if (tag == null) {
+			return false;
+		}
+		if (this.preTags.contains(tag)) {
+			return false;
+		}
+		return this.tags.remove(tag);
+	}
+
+	public boolean isPreTag(String tag) {
+		return this.preTags.contains(tag);
+	}
+
+	@Override
+	public Iterator<String> iterator() {
+		return new Iterator<String>() {
+
+			final Iterator<String> it1 = preTags.iterator();
+			final Iterator<String> it2 = tags.iterator();
+
+			@Override
+			public boolean hasNext() {
+				return it1.hasNext() || it2.hasNext();
+			}
+
+			@Override
+			public String next() {
+				if (it1.hasNext()) {
+					return it1.next();
+				}
+				return it2.next();
+			}
+		};
+	}
 }

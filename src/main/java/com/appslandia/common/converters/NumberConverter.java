@@ -30,13 +30,13 @@ import java.text.ParsePosition;
  */
 public abstract class NumberConverter<T extends Number> implements Converter<T> {
 
-    protected Number parseNumber(String str, NumberFormat numberFormat) {
-	ParsePosition pos = new ParsePosition(0);
-	Number parsedValue = numberFormat.parse(str, pos);
+	protected Number parseNumber(String str, NumberFormat numberFormat) {
+		ParsePosition pos = new ParsePosition(0);
+		Number parsedValue = numberFormat.parse(str, pos);
 
-	if ((pos.getErrorIndex() < 0) && (pos.getIndex() == str.length()) && (parsedValue != null)) {
-	    return parsedValue;
+		if ((pos.getErrorIndex() < 0) && (pos.getIndex() == str.length()) && (parsedValue != null)) {
+			return parsedValue;
+		}
+		return null;
 	}
-	return null;
-    }
 }

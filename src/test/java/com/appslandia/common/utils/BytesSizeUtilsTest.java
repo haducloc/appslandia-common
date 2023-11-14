@@ -30,34 +30,34 @@ import org.junit.jupiter.api.Test;
  */
 public class BytesSizeUtilsTest {
 
-    @Test
-    public void test_translateToBytes() {
-	long size = BytesSizeUtils.translateToBytes("1GB 2MB 3KB 4B", false);
-	Assertions.assertEquals(1073741824 + 2 * 1_048_576 + 3 * 1024 + 4, size);
+	@Test
+	public void test_translateToBytes() {
+		long size = BytesSizeUtils.translateToBytes("1GB 2MB 3KB 4B", false);
+		Assertions.assertEquals(1073741824 + 2 * 1_048_576 + 3 * 1024 + 4, size);
 
-	size = BytesSizeUtils.translateToBytes("1.5GB 4B", false);
-	Assertions.assertEquals((long) (1.5 * 1073741824) + 4, size);
+		size = BytesSizeUtils.translateToBytes("1.5GB 4B", false);
+		Assertions.assertEquals((long) (1.5 * 1073741824) + 4, size);
 
-	size = BytesSizeUtils.translateToBytes("1gb 2mb", false);
-	Assertions.assertEquals(1073741824 + 2 * 1_048_576, size);
-    }
+		size = BytesSizeUtils.translateToBytes("1gb 2mb", false);
+		Assertions.assertEquals(1073741824 + 2 * 1_048_576, size);
+	}
 
-    @Test
-    public void test_translateToBytes_invalid() {
-	try {
-	    BytesSizeUtils.translateToBytes("1GB 2M", false);
-	    Assertions.fail();
-	} catch (Exception ex) {
+	@Test
+	public void test_translateToBytes_invalid() {
+		try {
+			BytesSizeUtils.translateToBytes("1GB 2M", false);
+			Assertions.fail();
+		} catch (Exception ex) {
+		}
+		try {
+			BytesSizeUtils.translateToBytes("1GB+2M", false);
+			Assertions.fail();
+		} catch (Exception ex) {
+		}
+		try {
+			BytesSizeUtils.translateToBytes("1 GB 2M", false);
+			Assertions.fail();
+		} catch (Exception ex) {
+		}
 	}
-	try {
-	    BytesSizeUtils.translateToBytes("1GB+2M", false);
-	    Assertions.fail();
-	} catch (Exception ex) {
-	}
-	try {
-	    BytesSizeUtils.translateToBytes("1 GB 2M", false);
-	    Assertions.fail();
-	} catch (Exception ex) {
-	}
-    }
 }

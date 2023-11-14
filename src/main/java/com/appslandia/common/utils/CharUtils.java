@@ -31,70 +31,70 @@ import java.util.regex.Pattern;
  */
 public class CharUtils {
 
-    // a-z | A-Z, etc.
-    private static final Pattern CHAR_RANGE_PATTERN = Pattern.compile(".\\-.");
+	// a-z | A-Z, etc.
+	private static final Pattern CHAR_RANGE_PATTERN = Pattern.compile(".\\-.");
 
-    public static char[] toCharRanges(String charRanges) {
-	Matcher matcher = CHAR_RANGE_PATTERN.matcher(charRanges);
-	char[] chars = null;
-	int lastEnd = 0;
+	public static char[] toCharRanges(String charRanges) {
+		Matcher matcher = CHAR_RANGE_PATTERN.matcher(charRanges);
+		char[] chars = null;
+		int lastEnd = 0;
 
-	while (matcher.find()) {
-	    String range = matcher.group();
+		while (matcher.find()) {
+			String range = matcher.group();
 
-	    if (matcher.start() != lastEnd) {
-		char[] notRange = charRanges.substring(lastEnd, matcher.start()).toCharArray();
-		chars = (chars == null) ? notRange : ArrayUtils.append(chars, notRange);
-	    }
-	    lastEnd = matcher.end();
+			if (matcher.start() != lastEnd) {
+				char[] notRange = charRanges.substring(lastEnd, matcher.start()).toCharArray();
+				chars = (chars == null) ? notRange : ArrayUtils.append(chars, notRange);
+			}
+			lastEnd = matcher.end();
 
-	    char from = range.charAt(0);
-	    char to = range.charAt(2);
-	    Asserts.isTrue(from <= to, () -> STR.fmt("invalid charRanges expression '{}'.", charRanges));
+			char from = range.charAt(0);
+			char to = range.charAt(2);
+			Asserts.isTrue(from <= to, () -> STR.fmt("invalid charRanges expression '{}'.", charRanges));
 
-	    char[] newChars = new char[to - from + 1];
-	    for (int i = 0; i < newChars.length; i++) {
-		newChars[i] = (char) (from + i);
-	    }
-	    chars = (chars == null) ? newChars : ArrayUtils.append(chars, newChars);
-	}
-	if (lastEnd < charRanges.length()) {
-	    char[] notRange = charRanges.substring(lastEnd).toCharArray();
-	    chars = (chars == null) ? notRange : ArrayUtils.append(chars, notRange);
-	}
-	return chars;
-    }
-
-    public static char[] randomChars(int len, char[][] sources, Random random) {
-	char[] rdChars = new char[len];
-	int avgLen = ValueUtils.valueOrMin(len / sources.length, 1);
-
-	int rdLen = 0;
-
-	// STEP1: Fill rdChars for rdCount [1, avgLen] positions
-	for (int srcIndex = 0; srcIndex < sources.length; srcIndex++) {
-	    if (rdLen >= len) {
-		break;
-	    }
-	    int rdCount = RandomUtils.nextInt(1, avgLen, random);
-
-	    for (int i = 0; i < rdCount; i++) {
-		rdChars[rdLen + i] = sources[srcIndex][random.nextInt(sources[srcIndex].length)];
-	    }
-	    rdLen += rdCount;
-	}
-
-	// STEP2: Fill unfilled positions
-	if (rdLen < len) {
-	    for (int i = 0; i < len; i++) {
-		if (rdChars[i] != 0) {
-		    continue;
+			char[] newChars = new char[to - from + 1];
+			for (int i = 0; i < newChars.length; i++) {
+				newChars[i] = (char) (from + i);
+			}
+			chars = (chars == null) ? newChars : ArrayUtils.append(chars, newChars);
 		}
-		int srcIndex = random.nextInt(sources.length);
-		rdChars[i] = sources[srcIndex][random.nextInt(sources[srcIndex].length)];
-	    }
+		if (lastEnd < charRanges.length()) {
+			char[] notRange = charRanges.substring(lastEnd).toCharArray();
+			chars = (chars == null) ? notRange : ArrayUtils.append(chars, notRange);
+		}
+		return chars;
 	}
-	ArrayUtils.shuffle(rdChars, random);
-	return rdChars;
-    }
+
+	public static char[] randomChars(int len, char[][] sources, Random random) {
+		char[] rdChars = new char[len];
+		int avgLen = ValueUtils.valueOrMin(len / sources.length, 1);
+
+		int rdLen = 0;
+
+		// STEP1: Fill rdChars for rdCount [1, avgLen] positions
+		for (int srcIndex = 0; srcIndex < sources.length; srcIndex++) {
+			if (rdLen >= len) {
+				break;
+			}
+			int rdCount = RandomUtils.nextInt(1, avgLen, random);
+
+			for (int i = 0; i < rdCount; i++) {
+				rdChars[rdLen + i] = sources[srcIndex][random.nextInt(sources[srcIndex].length)];
+			}
+			rdLen += rdCount;
+		}
+
+		// STEP2: Fill unfilled positions
+		if (rdLen < len) {
+			for (int i = 0; i < len; i++) {
+				if (rdChars[i] != 0) {
+					continue;
+				}
+				int srcIndex = random.nextInt(sources.length);
+				rdChars[i] = sources[srcIndex][random.nextInt(sources[srcIndex].length)];
+			}
+		}
+		ArrayUtils.shuffle(rdChars, random);
+		return rdChars;
+	}
 }

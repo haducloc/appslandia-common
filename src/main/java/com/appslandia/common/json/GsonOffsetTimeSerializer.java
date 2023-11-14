@@ -35,16 +35,16 @@ import com.google.gson.JsonParseException;
  */
 public class GsonOffsetTimeSerializer extends GsonTemporalSerializer<OffsetTime> {
 
-    public GsonOffsetTimeSerializer() {
-	this(DateUtils.ISO8601_TIMEZ_N3);
-    }
+	public GsonOffsetTimeSerializer() {
+		this(DateUtils.ISO8601_TIMEZ_N3);
+	}
 
-    public GsonOffsetTimeSerializer(String serializeIsoPattern) {
-	super(serializeIsoPattern);
-    }
+	public GsonOffsetTimeSerializer(String serializeIsoPattern) {
+		super(serializeIsoPattern);
+	}
 
-    @Override
-    public OffsetTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-	return parseOffsetTime(json.getAsString());
-    }
+	@Override
+	public OffsetTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+		return parseOffsetTime(json.getAsString());
+	}
 }

@@ -34,28 +34,28 @@ import com.appslandia.common.json.GsonProcessor;
  */
 public class JsonEscaperTest {
 
-    @Test
-    public void test_null() {
-	String value = null;
-	String escaped = JsonEscaper.escape(value);
-	Assertions.assertEquals("null", escaped);
-    }
+	@Test
+	public void test_null() {
+		String value = null;
+		String escaped = JsonEscaper.escape(value);
+		Assertions.assertEquals("null", escaped);
+	}
 
-    @Test
-    public void test_empty() {
-	String value = "";
-	String escaped = JsonEscaper.escape(value);
-	Assertions.assertEquals("\"\"", escaped);
-    }
+	@Test
+	public void test_empty() {
+		String value = "";
+		String escaped = JsonEscaper.escape(value);
+		Assertions.assertEquals("\"\"", escaped);
+	}
 
-    @Test
-    public void test_escape_controlChars() {
-	String value = "\"\\/\b\f\n\r\t";
-	String escaped = JsonEscaper.escape(value);
+	@Test
+	public void test_escape_controlChars() {
+		String value = "\"\\/\b\f\n\r\t";
+		String escaped = JsonEscaper.escape(value);
 
-	Assertions.assertEquals("\"\\\"\\\\/\\b\\f\\n\\r\\t\"", escaped);
+		Assertions.assertEquals("\"\\\"\\\\/\\b\\f\\n\\r\\t\"", escaped);
 
-	String decoded = GsonProcessor.getDefault().read(new StringReader(escaped), String.class);
-	Assertions.assertEquals(value, decoded);
-    }
+		String decoded = GsonProcessor.getDefault().read(new StringReader(escaped), String.class);
+		Assertions.assertEquals(value, decoded);
+	}
 }

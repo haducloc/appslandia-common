@@ -36,27 +36,27 @@ import jakarta.annotation.PreDestroy;
  */
 public class ObjectFactoryUtils {
 
-    public static void preDestroy(Object obj) throws DestroyException {
-	Asserts.notNull(obj);
+	public static void preDestroy(Object obj) throws DestroyException {
+		Asserts.notNull(obj);
 
-	ReflectionUtils.traverse(obj.getClass(), new ReflectionUtils.MethodHandler() {
+		ReflectionUtils.traverse(obj.getClass(), new ReflectionUtils.MethodHandler() {
 
-	    @Override
-	    public boolean matches(Method m) {
-		return m.getDeclaredAnnotation(PreDestroy.class) != null;
-	    }
+			@Override
+			public boolean matches(Method m) {
+				return m.getDeclaredAnnotation(PreDestroy.class) != null;
+			}
 
-	    @Override
-	    public boolean handle(Method m) throws ReflectionException {
-		try {
-		    m.setAccessible(true);
-		    m.invoke(obj);
+			@Override
+			public boolean handle(Method m) throws ReflectionException {
+				try {
+					m.setAccessible(true);
+					m.invoke(obj);
 
-		} catch (Exception ex) {
-		    throw new DestroyException(ex);
-		}
-		return false;
-	    }
-	});
-    }
+				} catch (Exception ex) {
+					throw new DestroyException(ex);
+				}
+				return false;
+			}
+		});
+	}
 }

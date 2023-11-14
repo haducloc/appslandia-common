@@ -40,89 +40,89 @@ import jakarta.persistence.metamodel.Metamodel;
  */
 public class EntityManagerFactoryImpl implements EntityManagerFactory {
 
-    private EntityManagerFactory emf;
+	private EntityManagerFactory emf;
 
-    public EntityManagerFactoryImpl() {
-    }
+	public EntityManagerFactoryImpl() {
+	}
 
-    public EntityManagerFactoryImpl(EntityManagerFactory emf) {
-	Asserts.isTrue(!(emf instanceof EntityManagerFactoryImpl));
-	this.emf = emf;
-    }
+	public EntityManagerFactoryImpl(EntityManagerFactory emf) {
+		Asserts.isTrue(!(emf instanceof EntityManagerFactoryImpl));
+		this.emf = emf;
+	}
 
-    protected EntityManagerFactory emf() {
-	return this.emf;
-    }
+	protected EntityManagerFactory emf() {
+		return this.emf;
+	}
 
-    @Override
-    public EntityManagerImpl createEntityManager() {
-	return new EntityManagerImpl(emf().createEntityManager());
-    }
+	@Override
+	public EntityManagerImpl createEntityManager() {
+		return new EntityManagerImpl(emf().createEntityManager());
+	}
 
-    @SuppressWarnings("rawtypes")
-    @Override
-    public EntityManagerImpl createEntityManager(Map map) {
-	return new EntityManagerImpl(emf().createEntityManager(map));
-    }
+	@SuppressWarnings("rawtypes")
+	@Override
+	public EntityManagerImpl createEntityManager(Map map) {
+		return new EntityManagerImpl(emf().createEntityManager(map));
+	}
 
-    @Override
-    public EntityManagerImpl createEntityManager(SynchronizationType synchronizationType) {
-	return new EntityManagerImpl(emf().createEntityManager(synchronizationType));
-    }
+	@Override
+	public EntityManagerImpl createEntityManager(SynchronizationType synchronizationType) {
+		return new EntityManagerImpl(emf().createEntityManager(synchronizationType));
+	}
 
-    @SuppressWarnings("rawtypes")
-    @Override
-    public EntityManagerImpl createEntityManager(SynchronizationType synchronizationType, Map map) {
-	return new EntityManagerImpl(emf().createEntityManager(synchronizationType, map));
-    }
+	@SuppressWarnings("rawtypes")
+	@Override
+	public EntityManagerImpl createEntityManager(SynchronizationType synchronizationType, Map map) {
+		return new EntityManagerImpl(emf().createEntityManager(synchronizationType, map));
+	}
 
-    @Override
-    public CriteriaBuilder getCriteriaBuilder() {
-	return emf().getCriteriaBuilder();
-    }
+	@Override
+	public CriteriaBuilder getCriteriaBuilder() {
+		return emf().getCriteriaBuilder();
+	}
 
-    @Override
-    public Metamodel getMetamodel() {
-	return emf().getMetamodel();
-    }
+	@Override
+	public Metamodel getMetamodel() {
+		return emf().getMetamodel();
+	}
 
-    @Override
-    public boolean isOpen() {
-	return emf().isOpen();
-    }
+	@Override
+	public boolean isOpen() {
+		return emf().isOpen();
+	}
 
-    @Override
-    public void close() {
-	emf().close();
-    }
+	@Override
+	public void close() {
+		emf().close();
+	}
 
-    @Override
-    public Map<String, Object> getProperties() {
-	return emf().getProperties();
-    }
+	@Override
+	public Map<String, Object> getProperties() {
+		return emf().getProperties();
+	}
 
-    @Override
-    public Cache getCache() {
-	return emf().getCache();
-    }
+	@Override
+	public Cache getCache() {
+		return emf().getCache();
+	}
 
-    @Override
-    public PersistenceUnitUtil getPersistenceUnitUtil() {
-	return emf().getPersistenceUnitUtil();
-    }
+	@Override
+	public PersistenceUnitUtil getPersistenceUnitUtil() {
+		return emf().getPersistenceUnitUtil();
+	}
 
-    @Override
-    public void addNamedQuery(String name, Query query) {
-	emf().addNamedQuery(name, query);
-    }
+	@Override
+	public void addNamedQuery(String name, Query query) {
+		emf().addNamedQuery(name, query);
+	}
 
-    @Override
-    public <T> void addNamedEntityGraph(String graphName, EntityGraph<T> entityGraph) {
-	emf().addNamedEntityGraph(graphName, entityGraph);
-    }
+	@Override
+	public <T> void addNamedEntityGraph(String graphName, EntityGraph<T> entityGraph) {
+		emf().addNamedEntityGraph(graphName, entityGraph);
+	}
 
-    @Override
-    public <T> T unwrap(Class<T> cls) {
-	return emf().unwrap(cls);
-    }
+	@Override
+	public <T> T unwrap(Class<T> cls) {
+		return emf().unwrap(cls);
+	}
 }

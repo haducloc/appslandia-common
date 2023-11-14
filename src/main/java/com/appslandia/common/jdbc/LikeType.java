@@ -27,5 +27,5 @@ package com.appslandia.common.jdbc;
  */
 public enum LikeType {
 
-    CONTAINS, STARTS_WITH, ENDS_WITH;
+	CONTAINS, STARTS_WITH, ENDS_WITH;
 }

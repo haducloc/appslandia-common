@@ -38,72 +38,72 @@ import java.util.Set;
  */
 public class CollectionUtils {
 
-    @SafeVarargs
-    public static <V> Set<V> unmodifiableSet(V... elements) {
-	return (elements.length > 0) ? unmodifiableSet(new LinkedHashSet<V>(), elements) : Collections.emptySet();
-    }
-
-    @SafeVarargs
-    public static <V> Set<V> unmodifiableSet(Set<V> s, V... elements) {
-	return Collections.unmodifiableSet(toSet(s, elements));
-    }
-
-    @SafeVarargs
-    public static <V> Set<V> toSet(V... elements) {
-	return toSet(new HashSet<V>(), elements);
-    }
-
-    @SafeVarargs
-    public static <V> Set<V> toSet(Set<V> s, V... elements) {
-	Arrays.stream(elements).forEach(e -> s.add(e));
-	return s;
-    }
-
-    @SafeVarargs
-    public static <V> List<V> unmodifiableList(V... elements) {
-	return (elements.length > 0) ? unmodifiableList(new ArrayList<V>(), elements) : Collections.emptyList();
-    }
-
-    @SafeVarargs
-    public static <V> List<V> unmodifiableList(List<V> l, V... elements) {
-	return Collections.unmodifiableList(toList(l, elements));
-    }
-
-    @SafeVarargs
-    public static <V> List<V> toList(V... elements) {
-	return toList(new ArrayList<V>(), elements);
-    }
-
-    @SafeVarargs
-    public static <V> List<V> toList(List<V> l, V... elements) {
-	Arrays.stream(elements).forEach(e -> l.add(e));
-	return l;
-    }
-
-    public static <V> Set<V> unmodifiable(Set<V> set) {
-	return ((set != null) && !set.isEmpty()) ? Collections.unmodifiableSet(set) : Collections.emptySet();
-    }
-
-    public static <V> List<V> unmodifiable(List<V> list) {
-	return ((list != null) && !list.isEmpty()) ? Collections.unmodifiableList(list) : Collections.emptyList();
-    }
-
-    public static <K, V> Map<K, V> unmodifiable(Map<K, V> map) {
-	return ((map != null) && !map.isEmpty()) ? Collections.unmodifiableMap(map) : Collections.emptyMap();
-    }
-
-    public static <K, V> Map<V, K> inverse(Map<K, V> m, Map<V, K> newMap) {
-	for (Entry<K, V> entry : m.entrySet()) {
-	    newMap.put(entry.getValue(), entry.getKey());
+	@SafeVarargs
+	public static <V> Set<V> unmodifiableSet(V... elements) {
+		return (elements.length > 0) ? unmodifiableSet(new LinkedHashSet<V>(), elements) : Collections.emptySet();
 	}
-	return newMap;
-    }
 
-    public static <T> boolean hasElements(Collection<T> c) {
-	return (c != null) && (c.size() > 0);
-    }
+	@SafeVarargs
+	public static <V> Set<V> unmodifiableSet(Set<V> s, V... elements) {
+		return Collections.unmodifiableSet(toSet(s, elements));
+	}
 
-    public static <K, V> boolean hasEntries(Map<K, V> m) {
-	return (m != null) && (m.size() > 0);
-    }
+	@SafeVarargs
+	public static <V> Set<V> toSet(V... elements) {
+		return toSet(new HashSet<V>(), elements);
+	}
+
+	@SafeVarargs
+	public static <V> Set<V> toSet(Set<V> s, V... elements) {
+		Arrays.stream(elements).forEach(e -> s.add(e));
+		return s;
+	}
+
+	@SafeVarargs
+	public static <V> List<V> unmodifiableList(V... elements) {
+		return (elements.length > 0) ? unmodifiableList(new ArrayList<V>(), elements) : Collections.emptyList();
+	}
+
+	@SafeVarargs
+	public static <V> List<V> unmodifiableList(List<V> l, V... elements) {
+		return Collections.unmodifiableList(toList(l, elements));
+	}
+
+	@SafeVarargs
+	public static <V> List<V> toList(V... elements) {
+		return toList(new ArrayList<V>(), elements);
+	}
+
+	@SafeVarargs
+	public static <V> List<V> toList(List<V> l, V... elements) {
+		Arrays.stream(elements).forEach(e -> l.add(e));
+		return l;
+	}
+
+	public static <V> Set<V> unmodifiable(Set<V> set) {
+		return ((set != null) && !set.isEmpty()) ? Collections.unmodifiableSet(set) : Collections.emptySet();
+	}
+
+	public static <V> List<V> unmodifiable(List<V> list) {
+		return ((list != null) && !list.isEmpty()) ? Collections.unmodifiableList(list) : Collections.emptyList();
+	}
+
+	public static <K, V> Map<K, V> unmodifiable(Map<K, V> map) {
+		return ((map != null) && !map.isEmpty()) ? Collections.unmodifiableMap(map) : Collections.emptyMap();
+	}
+
+	public static <K, V> Map<V, K> inverse(Map<K, V> m, Map<V, K> newMap) {
+		for (Entry<K, V> entry : m.entrySet()) {
+			newMap.put(entry.getValue(), entry.getKey());
+		}
+		return newMap;
+	}
+
+	public static <T> boolean hasElements(Collection<T> c) {
+		return (c != null) && (c.size() > 0);
+	}
+
+	public static <K, V> boolean hasEntries(Map<K, V> m) {
+		return (m != null) && (m.size() > 0);
+	}
 }

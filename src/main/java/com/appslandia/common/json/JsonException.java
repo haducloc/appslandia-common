@@ -26,20 +26,20 @@ package com.appslandia.common.json;
  *
  */
 public class JsonException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public JsonException() {
-    }
+	public JsonException() {
+	}
 
-    public JsonException(String message) {
-	super(message);
-    }
+	public JsonException(String message) {
+		super(message);
+	}
 
-    public JsonException(String message, Throwable cause) {
-	super(message, cause);
-    }
+	public JsonException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-    public JsonException(Throwable cause) {
-	super(cause);
-    }
+	public JsonException(Throwable cause) {
+		super(cause);
+	}
 }

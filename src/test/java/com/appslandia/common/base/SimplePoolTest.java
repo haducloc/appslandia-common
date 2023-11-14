@@ -32,52 +32,52 @@ import com.appslandia.common.utils.RandomUtils;
  */
 public class SimplePoolTest {
 
-    @Test
-    public void test() {
-	Object obj1 = new Object();
-	Object obj2 = new Object();
-	Object obj3 = new Object();
+	@Test
+	public void test() {
+		Object obj1 = new Object();
+		Object obj2 = new Object();
+		Object obj3 = new Object();
 
-	SimplePool<Object> pool = new SimplePool<>();
+		SimplePool<Object> pool = new SimplePool<>();
 
-	pool.put(obj1);
-	pool.put(obj2);
-	pool.put(obj3);
+		pool.put(obj1);
+		pool.put(obj2);
+		pool.put(obj3);
 
-	Assertions.assertTrue(obj3 == pool.get());
-	Assertions.assertTrue(obj2 == pool.get());
-	Assertions.assertTrue(obj1 == pool.get());
+		Assertions.assertTrue(obj3 == pool.get());
+		Assertions.assertTrue(obj2 == pool.get());
+		Assertions.assertTrue(obj1 == pool.get());
 
-	Assertions.assertNull(pool.get());
-    }
+		Assertions.assertNull(pool.get());
+	}
 
-    @Test
-    public void test_threadSafe() {
-	final SimplePool<Object> pool = new SimplePool<>();
-	new ThreadSafeTester() {
+	@Test
+	public void test_threadSafe() {
+		final SimplePool<Object> pool = new SimplePool<>();
+		new ThreadSafeTester() {
 
-	    @Override
-	    protected Runnable newTask() {
-		return new Runnable() {
+			@Override
+			protected Runnable newTask() {
+				return new Runnable() {
 
-		    @Override
-		    public void run() {
-			try {
+					@Override
+					public void run() {
+						try {
 
-			    int n = RandomUtils.nextInt(1, 2);
-			    if (n == 1) {
-				pool.put(new Object());
-			    } else {
-				pool.get();
-			    }
-			} catch (Exception ex) {
-			    Assertions.fail(ex.getMessage());
-			} finally {
-			    doneTask();
+							int n = RandomUtils.nextInt(1, 2);
+							if (n == 1) {
+								pool.put(new Object());
+							} else {
+								pool.get();
+							}
+						} catch (Exception ex) {
+							Assertions.fail(ex.getMessage());
+						} finally {
+							doneTask();
+						}
+					}
+				};
 			}
-		    }
-		};
-	    }
-	}.execute();
-    }
+		}.execute();
+	}
 }

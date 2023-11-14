@@ -30,35 +30,35 @@ import org.junit.jupiter.api.Test;
  */
 public class TextDigesterTest {
 
-    @Test
-    public void test() {
-	TextDigester impl = new TextDigester();
-	impl.setDigester(new DigesterImpl("MD5"));
-	try {
+	@Test
+	public void test() {
+		TextDigester impl = new TextDigester();
+		impl.setDigester(new DigesterImpl("MD5"));
+		try {
 
-	    String message = "data";
-	    String hash = impl.digest(message);
+			String message = "data";
+			String hash = impl.digest(message);
 
-	    Assertions.assertTrue(impl.verify(message, hash));
+			Assertions.assertTrue(impl.verify(message, hash));
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_invalid() {
-	TextDigester impl = new TextDigester();
-	impl.setDigester(new DigesterImpl("MD5"));
-	try {
+	@Test
+	public void test_invalid() {
+		TextDigester impl = new TextDigester();
+		impl.setDigester(new DigesterImpl("MD5"));
+		try {
 
-	    String message = "data";
-	    String hash = impl.digest(message);
+			String message = "data";
+			String hash = impl.digest(message);
 
-	    Assertions.assertFalse(impl.verify("invalid", hash));
+			Assertions.assertFalse(impl.verify("invalid", hash));
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 }

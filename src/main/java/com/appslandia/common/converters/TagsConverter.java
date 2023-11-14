@@ -34,35 +34,35 @@ import com.appslandia.common.utils.TagUtils;
  */
 public class TagsConverter implements Converter<String> {
 
-    public static final String ERROR_MSG_KEY = TagsConverter.class.getName() + ".message";
+	public static final String ERROR_MSG_KEY = TagsConverter.class.getName() + ".message";
 
-    @Override
-    public String getErrorMsgKey() {
-	return ERROR_MSG_KEY;
-    }
-
-    @Override
-    public Class<String> getTargetType() {
-	return String.class;
-    }
-
-    @Override
-    public String format(String obj, FormatProvider formatProvider, boolean localize) {
-	return obj;
-    }
-
-    @Override
-    public String parse(String str, FormatProvider formatProvider) throws ConverterException {
-	str = StringUtils.trimToNull(str);
-	if (str == null) {
-	    return null;
+	@Override
+	public String getErrorMsgKey() {
+		return ERROR_MSG_KEY;
 	}
-	Out<Boolean> isValid = new Out<Boolean>();
-	List<String> tags = TagUtils.toTags(str, isValid);
 
-	if (!isValid.val()) {
-	    throw toParsingError(str, "Tags");
+	@Override
+	public Class<String> getTargetType() {
+		return String.class;
 	}
-	return !tags.isEmpty() ? String.join(", ", tags) : null;
-    }
+
+	@Override
+	public String format(String obj, FormatProvider formatProvider, boolean localize) {
+		return obj;
+	}
+
+	@Override
+	public String parse(String str, FormatProvider formatProvider) throws ConverterException {
+		str = StringUtils.trimToNull(str);
+		if (str == null) {
+			return null;
+		}
+		Out<Boolean> isValid = new Out<Boolean>();
+		List<String> tags = TagUtils.toTags(str, isValid);
+
+		if (!isValid.val()) {
+			throw toParsingError(str, "Tags");
+		}
+		return !tags.isEmpty() ? String.join(", ", tags) : null;
+	}
 }

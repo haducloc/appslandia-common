@@ -38,80 +38,80 @@ import com.appslandia.common.utils.ValueUtils;
  */
 public abstract class PbeObject extends InitializeObject {
 
-    protected int saltSize;
-    protected int iterationCount;
-    protected int keySize;
+	protected int saltSize;
+	protected int iterationCount;
+	protected int keySize;
 
-    protected char[] password;
-    protected SecretKeyGenerator secretKeyGenerator;
+	protected char[] password;
+	protected SecretKeyGenerator secretKeyGenerator;
 
-    @Override
-    protected void init() throws Exception {
-	Asserts.isTrue(this.keySize > 0, "keySize is required.");
+	@Override
+	protected void init() throws Exception {
+		Asserts.isTrue(this.keySize > 0, "keySize is required.");
 
-	this.saltSize = ValueUtils.valueOrMin(this.saltSize, this.keySize);
-	this.iterationCount = ValueUtils.valueOrMin(this.iterationCount, 10_000);
+		this.saltSize = ValueUtils.valueOrMin(this.saltSize, this.keySize);
+		this.iterationCount = ValueUtils.valueOrMin(this.iterationCount, 10_000);
 
-	Asserts.notNull(this.password, "password is required.");
+		Asserts.notNull(this.password, "password is required.");
 
-	if (this.secretKeyGenerator == null) {
-	    this.secretKeyGenerator = new SecretKeyGenerator();
+		if (this.secretKeyGenerator == null) {
+			this.secretKeyGenerator = new SecretKeyGenerator();
+		}
 	}
-    }
 
-    @Override
-    public void destroy() throws DestroyException {
-	if (this.password != null) {
-	    CryptoUtils.clear(this.password);
+	@Override
+	public void destroy() throws DestroyException {
+		if (this.password != null) {
+			CryptoUtils.clear(this.password);
+		}
 	}
-    }
 
-    protected SecretKey buildSecretKey(final byte[] salt, final String algorithm) throws CryptoException {
-	byte[] key = this.secretKeyGenerator.generate(this.password, salt, this.iterationCount, this.keySize);
-	SecretKey secretKey = new SecretKeySpec(key, algorithm);
-	CryptoUtils.clear(key);
-	return secretKey;
-    }
-
-    public PbeObject setSaltSize(int saltSize) {
-	this.assertNotInitialized();
-	this.saltSize = saltSize;
-	return this;
-    }
-
-    public PbeObject setIterationCount(int iterationCount) {
-	this.assertNotInitialized();
-	this.iterationCount = iterationCount;
-	return this;
-    }
-
-    public PbeObject setKeySize(int keySize) {
-	this.assertNotInitialized();
-	this.keySize = keySize;
-	return this;
-    }
-
-    public PbeObject setPassword(char[] password) {
-	this.assertNotInitialized();
-	if (password != null) {
-	    this.password = Arrays.copyOf(password, password.length);
+	protected SecretKey buildSecretKey(final byte[] salt, final String algorithm) throws CryptoException {
+		byte[] key = this.secretKeyGenerator.generate(this.password, salt, this.iterationCount, this.keySize);
+		SecretKey secretKey = new SecretKeySpec(key, algorithm);
+		CryptoUtils.clear(key);
+		return secretKey;
 	}
-	return this;
-    }
 
-    public PbeObject setPassword(String passwordOrEnv) {
-	this.assertNotInitialized();
-
-	if (passwordOrEnv != null) {
-	    String resolvedValue = SYS.resolve(passwordOrEnv);
-	    this.password = resolvedValue.toCharArray();
+	public PbeObject setSaltSize(int saltSize) {
+		this.assertNotInitialized();
+		this.saltSize = saltSize;
+		return this;
 	}
-	return this;
-    }
 
-    public PbeObject setSecretKeyGenerator(SecretKeyGenerator secretKeyGenerator) {
-	this.assertNotInitialized();
-	this.secretKeyGenerator = secretKeyGenerator;
-	return this;
-    }
+	public PbeObject setIterationCount(int iterationCount) {
+		this.assertNotInitialized();
+		this.iterationCount = iterationCount;
+		return this;
+	}
+
+	public PbeObject setKeySize(int keySize) {
+		this.assertNotInitialized();
+		this.keySize = keySize;
+		return this;
+	}
+
+	public PbeObject setPassword(char[] password) {
+		this.assertNotInitialized();
+		if (password != null) {
+			this.password = Arrays.copyOf(password, password.length);
+		}
+		return this;
+	}
+
+	public PbeObject setPassword(String passwordOrEnv) {
+		this.assertNotInitialized();
+
+		if (passwordOrEnv != null) {
+			String resolvedValue = SYS.resolve(passwordOrEnv);
+			this.password = resolvedValue.toCharArray();
+		}
+		return this;
+	}
+
+	public PbeObject setSecretKeyGenerator(SecretKeyGenerator secretKeyGenerator) {
+		this.assertNotInitialized();
+		this.secretKeyGenerator = secretKeyGenerator;
+		return this;
+	}
 }

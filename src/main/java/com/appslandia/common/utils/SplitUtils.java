@@ -31,108 +31,108 @@ import java.util.regex.Pattern;
  */
 public class SplitUtils {
 
-    private static final Pattern NEWLINE_SEP_PATTERN = Pattern.compile("(\r?\n)+");
+	private static final Pattern NEWLINE_SEP_PATTERN = Pattern.compile("(\r?\n)+");
 
-    public static String[] splitByLine(String str) {
-	return splitByLine(str, SplitOptions.EXCLUDE_NULL);
-    }
-
-    public static String[] splitByLine(String str, SplitOptions splitOptions) {
-	return split(str, NEWLINE_SEP_PATTERN, splitOptions);
-    }
-
-    public static String[] split(String str, Pattern separator) {
-	return split(str, separator, SplitOptions.EXCLUDE_NULL);
-    }
-
-    public static String[] split(String str, Pattern separator, SplitOptions splitOptions) {
-	if (str == null) {
-	    return StringUtils.EMPTY_ARRAY;
+	public static String[] splitByLine(String str) {
+		return splitByLine(str, SplitOptions.EXCLUDE_NULL);
 	}
-	String[] items = separator.split(str);
-	List<String> list = new ArrayList<>(items.length);
 
-	for (String item : items) {
-	    item = convertItem(item, splitOptions);
+	public static String[] splitByLine(String str, SplitOptions splitOptions) {
+		return split(str, NEWLINE_SEP_PATTERN, splitOptions);
+	}
 
-	    if (item != null) {
-		list.add(item);
-	    } else {
-		if (splitOptions != SplitOptions.EXCLUDE_NULL) {
-		    list.add(null);
+	public static String[] split(String str, Pattern separator) {
+		return split(str, separator, SplitOptions.EXCLUDE_NULL);
+	}
+
+	public static String[] split(String str, Pattern separator, SplitOptions splitOptions) {
+		if (str == null) {
+			return StringUtils.EMPTY_ARRAY;
 		}
-	    }
-	}
-	return list.toArray(new String[list.size()]);
-    }
+		String[] items = separator.split(str);
+		List<String> list = new ArrayList<>(items.length);
 
-    public static String[] splitByComma(String str) {
-	return splitByComma(str, SplitOptions.EXCLUDE_NULL);
-    }
+		for (String item : items) {
+			item = convertItem(item, splitOptions);
 
-    public static String[] splitByComma(String str, SplitOptions splitOptions) {
-	return split(str, ',', splitOptions);
-    }
-
-    public static String[] split(String str, char separator) {
-	return split(str, separator, SplitOptions.EXCLUDE_NULL);
-    }
-
-    public static String[] split(String str, char separator, SplitOptions splitOptions) {
-	if (str == null) {
-	    return StringUtils.EMPTY_ARRAY;
+			if (item != null) {
+				list.add(item);
+			} else {
+				if (splitOptions != SplitOptions.EXCLUDE_NULL) {
+					list.add(null);
+				}
+			}
+		}
+		return list.toArray(new String[list.size()]);
 	}
 
-	List<String> list = new ArrayList<>();
-	StringBuilder currentItem = new StringBuilder();
-	boolean escapeNextChar = false;
+	public static String[] splitByComma(String str) {
+		return splitByComma(str, SplitOptions.EXCLUDE_NULL);
+	}
 
-	for (int i = 0; i < str.length(); i++) {
-	    char c = str.charAt(i);
+	public static String[] splitByComma(String str, SplitOptions splitOptions) {
+		return split(str, ',', splitOptions);
+	}
 
-	    if (escapeNextChar) {
-		currentItem.append(c);
-		escapeNextChar = false;
+	public static String[] split(String str, char separator) {
+		return split(str, separator, SplitOptions.EXCLUDE_NULL);
+	}
 
-	    } else if (c == '\\') {
-		escapeNextChar = true;
+	public static String[] split(String str, char separator, SplitOptions splitOptions) {
+		if (str == null) {
+			return StringUtils.EMPTY_ARRAY;
+		}
 
-	    } else if (c == separator) {
+		List<String> list = new ArrayList<>();
+		StringBuilder currentItem = new StringBuilder();
+		boolean escapeNextChar = false;
+
+		for (int i = 0; i < str.length(); i++) {
+			char c = str.charAt(i);
+
+			if (escapeNextChar) {
+				currentItem.append(c);
+				escapeNextChar = false;
+
+			} else if (c == '\\') {
+				escapeNextChar = true;
+
+			} else if (c == separator) {
+				String item = convertItem(currentItem.toString(), splitOptions);
+
+				if (item != null) {
+					list.add(item);
+				} else {
+					if (splitOptions != SplitOptions.EXCLUDE_NULL) {
+						list.add(null);
+					}
+				}
+
+				currentItem.setLength(0);
+			} else {
+				currentItem.append(c);
+			}
+		}
+
+		// Last item
 		String item = convertItem(currentItem.toString(), splitOptions);
 
 		if (item != null) {
-		    list.add(item);
+			list.add(item);
 		} else {
-		    if (splitOptions != SplitOptions.EXCLUDE_NULL) {
-			list.add(null);
-		    }
+			if (splitOptions != SplitOptions.EXCLUDE_NULL) {
+				list.add(null);
+			}
 		}
-
-		currentItem.setLength(0);
-	    } else {
-		currentItem.append(c);
-	    }
+		return list.toArray(new String[list.size()]);
 	}
 
-	// Last item
-	String item = convertItem(currentItem.toString(), splitOptions);
-
-	if (item != null) {
-	    list.add(item);
-	} else {
-	    if (splitOptions != SplitOptions.EXCLUDE_NULL) {
-		list.add(null);
-	    }
+	private static String convertItem(String item, SplitOptions splitOptions) {
+		if (splitOptions == null || splitOptions == SplitOptions.NONE) {
+			return item;
+		} else {
+			item = item.trim();
+			return !item.isEmpty() ? item : null;
+		}
 	}
-	return list.toArray(new String[list.size()]);
-    }
-
-    private static String convertItem(String item, SplitOptions splitOptions) {
-	if (splitOptions == null || splitOptions == SplitOptions.NONE) {
-	    return item;
-	} else {
-	    item = item.trim();
-	    return !item.isEmpty() ? item : null;
-	}
-    }
 }

@@ -32,60 +32,60 @@ import com.appslandia.common.base.ThreadSafeTester;
  */
 public class SecretKeyGeneratorTest {
 
-    @Test
-    public void test() {
-	SecretKeyGenerator impl = new SecretKeyGenerator();
-	try {
-	    byte[] key = impl.generate("password".toCharArray(), "salt".getBytes(), 1000, 16);
+	@Test
+	public void test() {
+		SecretKeyGenerator impl = new SecretKeyGenerator();
+		try {
+			byte[] key = impl.generate("password".toCharArray(), "salt".getBytes(), 1000, 16);
 
-	    Assertions.assertNotNull(key);
-	    Assertions.assertTrue(key.length == 16);
+			Assertions.assertNotNull(key);
+			Assertions.assertTrue(key.length == 16);
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_anySize() {
-	SecretKeyGenerator impl = new SecretKeyGenerator();
-	try {
-	    byte[] key = impl.generate("password".toCharArray(), "salt".getBytes(), 1000, 123);
+	@Test
+	public void test_anySize() {
+		SecretKeyGenerator impl = new SecretKeyGenerator();
+		try {
+			byte[] key = impl.generate("password".toCharArray(), "salt".getBytes(), 1000, 123);
 
-	    Assertions.assertNotNull(key);
-	    Assertions.assertTrue(key.length == 123);
+			Assertions.assertNotNull(key);
+			Assertions.assertTrue(key.length == 123);
 
-	} catch (Exception ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (Exception ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_threadSafe() {
-	final SecretKeyGenerator impl = new SecretKeyGenerator();
+	@Test
+	public void test_threadSafe() {
+		final SecretKeyGenerator impl = new SecretKeyGenerator();
 
-	new ThreadSafeTester() {
+		new ThreadSafeTester() {
 
-	    @Override
-	    protected Runnable newTask() {
-		return new Runnable() {
+			@Override
+			protected Runnable newTask() {
+				return new Runnable() {
 
-		    @Override
-		    public void run() {
-			try {
-			    byte[] key = impl.generate("password".toCharArray(), "salt".getBytes(), 1000, 64);
+					@Override
+					public void run() {
+						try {
+							byte[] key = impl.generate("password".toCharArray(), "salt".getBytes(), 1000, 64);
 
-			    Assertions.assertNotNull(key);
-			    Assertions.assertTrue(key.length == 64);
+							Assertions.assertNotNull(key);
+							Assertions.assertTrue(key.length == 64);
 
-			} catch (Exception ex) {
-			    Assertions.fail(ex.getMessage());
-			} finally {
-			    doneTask();
+						} catch (Exception ex) {
+							Assertions.fail(ex.getMessage());
+						} finally {
+							doneTask();
+						}
+					}
+				};
 			}
-		    }
-		};
-	    }
-	}.execute();
-    }
+		}.execute();
+	}
 }

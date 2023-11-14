@@ -37,32 +37,32 @@ import com.appslandia.common.utils.IOUtils;
  */
 public class BOMInputStreamTest {
 
-    @Test
-    public void test() {
-	byte[] d = "data".getBytes(StandardCharsets.ISO_8859_1);
+	@Test
+	public void test() {
+		byte[] d = "data".getBytes(StandardCharsets.ISO_8859_1);
 
-	try (BOMInputStream bis = new BOMInputStream(new ByteArrayInputStream(d))) {
-	    byte[] dr = IOUtils.toByteArray(bis);
+		try (BOMInputStream bis = new BOMInputStream(new ByteArrayInputStream(d))) {
+			byte[] dr = IOUtils.toByteArray(bis);
 
-	    Assertions.assertArrayEquals(d, dr);
+			Assertions.assertArrayEquals(d, dr);
 
-	} catch (IOException ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (IOException ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 
-    @Test
-    public void test_utf8() {
-	byte[] d = "data".getBytes(StandardCharsets.UTF_8);
-	byte[] bd = ArrayUtils.append(BOM.UTF_8.getBytes(), d);
+	@Test
+	public void test_utf8() {
+		byte[] d = "data".getBytes(StandardCharsets.UTF_8);
+		byte[] bd = ArrayUtils.append(BOM.UTF_8.getBytes(), d);
 
-	try (BOMInputStream bis = new BOMInputStream(new ByteArrayInputStream(bd))) {
-	    byte[] dr = IOUtils.toByteArray(bis);
+		try (BOMInputStream bis = new BOMInputStream(new ByteArrayInputStream(bd))) {
+			byte[] dr = IOUtils.toByteArray(bis);
 
-	    Assertions.assertArrayEquals(d, dr);
+			Assertions.assertArrayEquals(d, dr);
 
-	} catch (IOException ex) {
-	    Assertions.fail(ex.getMessage());
+		} catch (IOException ex) {
+			Assertions.fail(ex.getMessage());
+		}
 	}
-    }
 }

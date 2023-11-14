@@ -29,23 +29,23 @@ import java.util.Set;
  */
 public interface AppCache<K, V> {
 
-    V get(K key);
+	V get(K key);
 
-    void put(K key, V value);
+	void put(K key, V value);
 
-    boolean putIfAbsent(K key, V value);
+	boolean putIfAbsent(K key, V value);
 
-    boolean containsKey(K key);
+	boolean containsKey(K key);
 
-    boolean remove(K key);
+	boolean remove(K key);
 
-    boolean remove(K key, V oldValue);
+	boolean remove(K key, V oldValue);
 
-    void removeAll(Set<? extends K> keys);
+	void removeAll(Set<? extends K> keys);
 
-    boolean replace(K key, V value);
+	boolean replace(K key, V value);
 
-    boolean replace(K key, V oldValue, V newValue);
+	boolean replace(K key, V oldValue, V newValue);
 
-    void clear();
+	void clear();
 }

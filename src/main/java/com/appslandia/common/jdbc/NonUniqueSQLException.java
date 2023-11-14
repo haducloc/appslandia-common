@@ -28,5 +28,5 @@ import java.sql.SQLException;
  *
  */
 public class NonUniqueSQLException extends SQLException {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 }

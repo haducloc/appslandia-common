@@ -37,131 +37,131 @@ import com.appslandia.common.utils.RandomUtils;
  *
  */
 public class PbeDigester extends PbeObject implements Digester {
-    private String algorithm, provider;
-    private Mac mac;
+	private String algorithm, provider;
+	private Mac mac;
 
-    final Object mutex = new Object();
-    final Random random = new SecureRandom();
+	final Object mutex = new Object();
+	final Random random = new SecureRandom();
 
-    @Override
-    protected void init() throws Exception {
-	super.init();
+	@Override
+	protected void init() throws Exception {
+		super.init();
 
-	Asserts.notNull(this.algorithm, "algorithm is required.");
+		Asserts.notNull(this.algorithm, "algorithm is required.");
 
-	// MAC
-	if (this.provider == null) {
-	    this.mac = Mac.getInstance(this.algorithm);
-	} else {
-	    this.mac = Mac.getInstance(this.algorithm, this.provider);
+		// MAC
+		if (this.provider == null) {
+			this.mac = Mac.getInstance(this.algorithm);
+		} else {
+			this.mac = Mac.getInstance(this.algorithm, this.provider);
+		}
 	}
-    }
 
-    @Override
-    public byte[] digest(byte[] message) throws CryptoException {
-	this.initialize();
-	Asserts.notNull(message, "message is required.");
+	@Override
+	public byte[] digest(byte[] message) throws CryptoException {
+		this.initialize();
+		Asserts.notNull(message, "message is required.");
 
-	byte[] salt = RandomUtils.nextBytes(this.saltSize, this.random);
-	SecretKey secretKey = buildSecretKey(salt, this.algorithm);
+		byte[] salt = RandomUtils.nextBytes(this.saltSize, this.random);
+		SecretKey secretKey = buildSecretKey(salt, this.algorithm);
 
-	try {
-	    byte[] msgMac = null;
-	    synchronized (this.mutex) {
-		this.mac.init(secretKey);
-		msgMac = this.mac.doFinal(message);
-	    }
-	    return ArrayUtils.append(salt, msgMac);
+		try {
+			byte[] msgMac = null;
+			synchronized (this.mutex) {
+				this.mac.init(secretKey);
+				msgMac = this.mac.doFinal(message);
+			}
+			return ArrayUtils.append(salt, msgMac);
 
-	} catch (GeneralSecurityException ex) {
-	    throw new CryptoException(ex);
-	} finally {
-	    CryptoUtils.destroyQuietly(secretKey);
+		} catch (GeneralSecurityException ex) {
+			throw new CryptoException(ex);
+		} finally {
+			CryptoUtils.destroyQuietly(secretKey);
+		}
 	}
-    }
 
-    @Override
-    public boolean verify(byte[] message, byte[] saltMac) throws CryptoException {
-	this.initialize();
+	@Override
+	public boolean verify(byte[] message, byte[] saltMac) throws CryptoException {
+		this.initialize();
 
-	Asserts.notNull(message, "message is required.");
-	Asserts.notNull(saltMac, "saltMac is required.");
-	Asserts.isTrue(saltMac.length >= this.saltSize, "saltMac is invalid.");
+		Asserts.notNull(message, "message is required.");
+		Asserts.notNull(saltMac, "saltMac is required.");
+		Asserts.isTrue(saltMac.length >= this.saltSize, "saltMac is invalid.");
 
-	byte[] salt = new byte[this.saltSize];
-	ArrayUtils.copy(saltMac, salt);
+		byte[] salt = new byte[this.saltSize];
+		ArrayUtils.copy(saltMac, salt);
 
-	SecretKey secretKey = buildSecretKey(salt, this.algorithm);
-	try {
-	    byte[] msgMac = null;
-	    synchronized (this.mutex) {
-		this.mac.init(secretKey);
-		msgMac = this.mac.doFinal(message);
-	    }
-	    return ArrayUtils.endsWith(saltMac, msgMac, this.saltSize);
+		SecretKey secretKey = buildSecretKey(salt, this.algorithm);
+		try {
+			byte[] msgMac = null;
+			synchronized (this.mutex) {
+				this.mac.init(secretKey);
+				msgMac = this.mac.doFinal(message);
+			}
+			return ArrayUtils.endsWith(saltMac, msgMac, this.saltSize);
 
-	} catch (GeneralSecurityException ex) {
-	    throw new CryptoException(ex);
-	} finally {
-	    CryptoUtils.destroyQuietly(secretKey);
+		} catch (GeneralSecurityException ex) {
+			throw new CryptoException(ex);
+		} finally {
+			CryptoUtils.destroyQuietly(secretKey);
+		}
 	}
-    }
 
-    public String getAlgorithm() {
-	this.initialize();
-	return this.algorithm;
-    }
+	public String getAlgorithm() {
+		this.initialize();
+		return this.algorithm;
+	}
 
-    public PbeDigester setAlgorithm(String algorithm) {
-	this.assertNotInitialized();
-	this.algorithm = algorithm;
-	return this;
-    }
+	public PbeDigester setAlgorithm(String algorithm) {
+		this.assertNotInitialized();
+		this.algorithm = algorithm;
+		return this;
+	}
 
-    public String getProvider() {
-	this.initialize();
-	return this.provider;
-    }
+	public String getProvider() {
+		this.initialize();
+		return this.provider;
+	}
 
-    public PbeDigester setProvider(String provider) {
-	this.assertNotInitialized();
-	this.provider = provider;
-	return this;
-    }
+	public PbeDigester setProvider(String provider) {
+		this.assertNotInitialized();
+		this.provider = provider;
+		return this;
+	}
 
-    @Override
-    public PbeDigester setSaltSize(int saltSize) {
-	super.setSaltSize(saltSize);
-	return this;
-    }
+	@Override
+	public PbeDigester setSaltSize(int saltSize) {
+		super.setSaltSize(saltSize);
+		return this;
+	}
 
-    @Override
-    public PbeDigester setIterationCount(int iterationCount) {
-	super.setIterationCount(iterationCount);
-	return this;
-    }
+	@Override
+	public PbeDigester setIterationCount(int iterationCount) {
+		super.setIterationCount(iterationCount);
+		return this;
+	}
 
-    @Override
-    public PbeDigester setKeySize(int keySize) {
-	super.setKeySize(keySize);
-	return this;
-    }
+	@Override
+	public PbeDigester setKeySize(int keySize) {
+		super.setKeySize(keySize);
+		return this;
+	}
 
-    @Override
-    public PbeDigester setPassword(char[] password) {
-	super.setPassword(password);
-	return this;
-    }
+	@Override
+	public PbeDigester setPassword(char[] password) {
+		super.setPassword(password);
+		return this;
+	}
 
-    @Override
-    public PbeDigester setPassword(String passwordOrEnv) {
-	super.setPassword(passwordOrEnv);
-	return this;
-    }
+	@Override
+	public PbeDigester setPassword(String passwordOrEnv) {
+		super.setPassword(passwordOrEnv);
+		return this;
+	}
 
-    @Override
-    public PbeDigester setSecretKeyGenerator(SecretKeyGenerator secretKeyGenerator) {
-	super.setSecretKeyGenerator(secretKeyGenerator);
-	return this;
-    }
+	@Override
+	public PbeDigester setSecretKeyGenerator(SecretKeyGenerator secretKeyGenerator) {
+		super.setSecretKeyGenerator(secretKeyGenerator);
+		return this;
+	}
 }

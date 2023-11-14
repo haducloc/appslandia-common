@@ -38,154 +38,154 @@ import com.appslandia.common.utils.Asserts;
  *
  */
 public class SignatureSigner extends InitializeObject implements Digester {
-    private String algorithm, provider;
+	private String algorithm, provider;
 
-    private Signature sign;
-    private Signature ver;
+	private Signature sign;
+	private Signature ver;
 
-    private PrivateKey privateKey;
-    private PublicKey publicKey;
+	private PrivateKey privateKey;
+	private PublicKey publicKey;
 
-    final Object sigMutex = new Object();
-    final Object verMutex = new Object();
+	final Object sigMutex = new Object();
+	final Object verMutex = new Object();
 
-    private Function<String, AlgorithmParameterSpec> algParamSpec;
+	private Function<String, AlgorithmParameterSpec> algParamSpec;
 
-    @Override
-    protected void init() throws Exception {
-	Asserts.notNull(this.algorithm, "algorithm is required.");
-	Asserts.isTrue((this.privateKey != null) || (this.publicKey != null), "No key is provided.");
+	@Override
+	protected void init() throws Exception {
+		Asserts.notNull(this.algorithm, "algorithm is required.");
+		Asserts.isTrue((this.privateKey != null) || (this.publicKey != null), "No key is provided.");
 
-	// algParamSpec
-	if (this.algParamSpec == null) {
-	    this.algParamSpec = (alg) -> null;
+		// algParamSpec
+		if (this.algParamSpec == null) {
+			this.algParamSpec = (alg) -> null;
+		}
+
+		// Sign
+		if (this.privateKey != null) {
+			if (this.provider == null) {
+				this.sign = Signature.getInstance(this.algorithm);
+			} else {
+				this.sign = Signature.getInstance(this.algorithm, this.provider);
+			}
+
+			AlgorithmParameterSpec algorithmParameterSpec = this.algParamSpec.apply(this.algorithm);
+
+			if (algorithmParameterSpec != null) {
+				this.sign.setParameter(algorithmParameterSpec);
+			}
+			this.sign.initSign(this.privateKey);
+		}
+
+		// Verify
+		if (this.publicKey != null) {
+			if (this.provider == null) {
+				this.ver = Signature.getInstance(this.algorithm);
+			} else {
+				this.ver = Signature.getInstance(this.algorithm, this.provider);
+			}
+
+			AlgorithmParameterSpec algorithmParameterSpec = this.algParamSpec.apply(this.algorithm);
+
+			if (algorithmParameterSpec != null) {
+				this.ver.setParameter(algorithmParameterSpec);
+			}
+			this.ver.initVerify(this.publicKey);
+		}
 	}
 
-	// Sign
-	if (this.privateKey != null) {
-	    if (this.provider == null) {
-		this.sign = Signature.getInstance(this.algorithm);
-	    } else {
-		this.sign = Signature.getInstance(this.algorithm, this.provider);
-	    }
-
-	    AlgorithmParameterSpec algorithmParameterSpec = this.algParamSpec.apply(this.algorithm);
-
-	    if (algorithmParameterSpec != null) {
-		this.sign.setParameter(algorithmParameterSpec);
-	    }
-	    this.sign.initSign(this.privateKey);
+	@Override
+	public void destroy() throws DestroyException {
+		if (this.privateKey != null) {
+			CryptoUtils.destroyQuietly(this.privateKey);
+		}
 	}
 
-	// Verify
-	if (this.publicKey != null) {
-	    if (this.provider == null) {
-		this.ver = Signature.getInstance(this.algorithm);
-	    } else {
-		this.ver = Signature.getInstance(this.algorithm, this.provider);
-	    }
+	@Override
+	public byte[] digest(byte[] message) throws CryptoException {
+		this.initialize();
+		Asserts.notNull(message, "message is required.");
+		Asserts.notNull(this.sign, "privateKey is required.");
 
-	    AlgorithmParameterSpec algorithmParameterSpec = this.algParamSpec.apply(this.algorithm);
-
-	    if (algorithmParameterSpec != null) {
-		this.ver.setParameter(algorithmParameterSpec);
-	    }
-	    this.ver.initVerify(this.publicKey);
+		try {
+			synchronized (this.sigMutex) {
+				this.sign.update(message);
+				return this.sign.sign();
+			}
+		} catch (GeneralSecurityException ex) {
+			throw new CryptoException(ex);
+		}
 	}
-    }
 
-    @Override
-    public void destroy() throws DestroyException {
-	if (this.privateKey != null) {
-	    CryptoUtils.destroyQuietly(this.privateKey);
+	@Override
+	public boolean verify(byte[] message, byte[] signature) throws CryptoException {
+		this.initialize();
+		Asserts.notNull(message, "message is required.");
+		Asserts.notNull(signature, "signature is required.");
+		Asserts.notNull(this.ver, "publicKey is required.");
+
+		try {
+			synchronized (this.verMutex) {
+				this.ver.update(message);
+				return this.ver.verify(signature);
+			}
+		} catch (GeneralSecurityException ex) {
+			throw new CryptoException(ex);
+		}
 	}
-    }
 
-    @Override
-    public byte[] digest(byte[] message) throws CryptoException {
-	this.initialize();
-	Asserts.notNull(message, "message is required.");
-	Asserts.notNull(this.sign, "privateKey is required.");
-
-	try {
-	    synchronized (this.sigMutex) {
-		this.sign.update(message);
-		return this.sign.sign();
-	    }
-	} catch (GeneralSecurityException ex) {
-	    throw new CryptoException(ex);
+	public String getAlgorithm() {
+		this.initialize();
+		return this.algorithm;
 	}
-    }
 
-    @Override
-    public boolean verify(byte[] message, byte[] signature) throws CryptoException {
-	this.initialize();
-	Asserts.notNull(message, "message is required.");
-	Asserts.notNull(signature, "signature is required.");
-	Asserts.notNull(this.ver, "publicKey is required.");
-
-	try {
-	    synchronized (this.verMutex) {
-		this.ver.update(message);
-		return this.ver.verify(signature);
-	    }
-	} catch (GeneralSecurityException ex) {
-	    throw new CryptoException(ex);
+	public SignatureSigner setAlgorithm(String algorithm) {
+		assertNotInitialized();
+		this.algorithm = algorithm;
+		return this;
 	}
-    }
 
-    public String getAlgorithm() {
-	this.initialize();
-	return this.algorithm;
-    }
-
-    public SignatureSigner setAlgorithm(String algorithm) {
-	assertNotInitialized();
-	this.algorithm = algorithm;
-	return this;
-    }
-
-    public String getProvider() {
-	this.initialize();
-	return this.provider;
-    }
-
-    public SignatureSigner setProvider(String provider) {
-	assertNotInitialized();
-	this.provider = provider;
-	return this;
-    }
-
-    public SignatureSigner setPrivateKey(PrivateKey privateKey) {
-	assertNotInitialized();
-	if (privateKey != null) {
-	    this.privateKey = new KeyFactoryUtil(privateKey.getAlgorithm()).copy(privateKey);
+	public String getProvider() {
+		this.initialize();
+		return this.provider;
 	}
-	return this;
-    }
 
-    public SignatureSigner setPublicKey(PublicKey publicKey) {
-	assertNotInitialized();
-	if (publicKey != null) {
-	    this.publicKey = new KeyFactoryUtil(publicKey.getAlgorithm()).copy(publicKey);
+	public SignatureSigner setProvider(String provider) {
+		assertNotInitialized();
+		this.provider = provider;
+		return this;
 	}
-	return this;
-    }
 
-    public SignatureSigner setKeyPair(KeyPair keyPair) {
-	assertNotInitialized();
-	if (keyPair != null) {
-	    KeyFactoryUtil keyFactoryUtil = new KeyFactoryUtil(keyPair.getPrivate().getAlgorithm());
-
-	    this.privateKey = keyFactoryUtil.copy(keyPair.getPrivate());
-	    this.publicKey = keyFactoryUtil.copy(keyPair.getPublic());
+	public SignatureSigner setPrivateKey(PrivateKey privateKey) {
+		assertNotInitialized();
+		if (privateKey != null) {
+			this.privateKey = new KeyFactoryUtil(privateKey.getAlgorithm()).copy(privateKey);
+		}
+		return this;
 	}
-	return this;
-    }
 
-    public SignatureSigner setAlgParamSpec(Function<String, AlgorithmParameterSpec> algParamSpec) {
-	assertNotInitialized();
-	this.algParamSpec = algParamSpec;
-	return this;
-    }
+	public SignatureSigner setPublicKey(PublicKey publicKey) {
+		assertNotInitialized();
+		if (publicKey != null) {
+			this.publicKey = new KeyFactoryUtil(publicKey.getAlgorithm()).copy(publicKey);
+		}
+		return this;
+	}
+
+	public SignatureSigner setKeyPair(KeyPair keyPair) {
+		assertNotInitialized();
+		if (keyPair != null) {
+			KeyFactoryUtil keyFactoryUtil = new KeyFactoryUtil(keyPair.getPrivate().getAlgorithm());
+
+			this.privateKey = keyFactoryUtil.copy(keyPair.getPrivate());
+			this.publicKey = keyFactoryUtil.copy(keyPair.getPublic());
+		}
+		return this;
+	}
+
+	public SignatureSigner setAlgParamSpec(Function<String, AlgorithmParameterSpec> algParamSpec) {
+		assertNotInitialized();
+		this.algParamSpec = algParamSpec;
+		return this;
+	}
 }

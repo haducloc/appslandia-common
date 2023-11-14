@@ -20,6 +20,7 @@
 
 package com.appslandia.common.base;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -27,20 +28,19 @@ import java.util.Map;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class Params extends FluentMap<String, Object> {
-    private static final long serialVersionUID = 1L;
+public class Params extends MapWrapper<String, Object> {
+	private static final long serialVersionUID = 1L;
 
-    public Params() {
-	super();
-    }
+	public Params() {
+		super(new LinkedHashMap<>());
+	}
 
-    public Params(Map<String, Object> map) {
-	super(map);
-    }
+	public Params(Map<String, Object> map) {
+		super(map);
+	}
 
-    @Override
-    public Params set(String key, Object value) {
-	this.map.put(key, value);
-	return this;
-    }
+	public Params set(String key, Object value) {
+		this.map.put(key, value);
+		return this;
+	}
 }

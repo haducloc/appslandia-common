@@ -34,62 +34,62 @@ import com.appslandia.common.utils.StringUtils;
  */
 public class FloatConverter extends NumberConverter<Float> {
 
-    public static final String ERROR_MSG_KEY = FloatConverter.class.getName() + ".message";
+	public static final String ERROR_MSG_KEY = FloatConverter.class.getName() + ".message";
 
-    final int fractionDigits;
-    final RoundingMode roundingMode;
+	final int fractionDigits;
+	final RoundingMode roundingMode;
 
-    public FloatConverter() {
-	this(3);
-    }
-
-    public FloatConverter(int fractionDigits) {
-	this(fractionDigits, RoundingMode.HALF_EVEN);
-    }
-
-    public FloatConverter(int fractionDigits, RoundingMode roundingMode) {
-	this.fractionDigits = fractionDigits;
-	this.roundingMode = roundingMode;
-    }
-
-    @Override
-    public String getErrorMsgKey() {
-	return ERROR_MSG_KEY;
-    }
-
-    @Override
-    public Class<Float> getTargetType() {
-	return Float.class;
-    }
-
-    @Override
-    public String format(Float obj, FormatProvider formatProvider, boolean localize) {
-	if (obj == null) {
-	    return null;
-	}
-	if (localize) {
-	    NumberFormat nf = formatProvider.getNumberFormat(this.fractionDigits, this.roundingMode, false);
-	    return nf.format(obj);
-	}
-	return formatProvider.getDecimalFormat(this.fractionDigits, this.roundingMode).format(obj);
-    }
-
-    @Override
-    public Float parse(String str, FormatProvider formatProvider) throws ConverterException {
-	str = StringUtils.trimToNull(str);
-	if (str == null) {
-	    return null;
-	}
-	try {
-	    return ParseUtils.parseFloat(str);
-
-	} catch (NumberFormatException ex) {
+	public FloatConverter() {
+		this(3);
 	}
 
-	Number number = this.parseNumber(str, formatProvider.getNumberParser());
-	if (number != null) {
-	    return number.floatValue();
+	public FloatConverter(int fractionDigits) {
+		this(fractionDigits, RoundingMode.HALF_EVEN);
 	}
-	throw toParsingError(str, getTargetType().getName());
-    }
+
+	public FloatConverter(int fractionDigits, RoundingMode roundingMode) {
+		this.fractionDigits = fractionDigits;
+		this.roundingMode = roundingMode;
+	}
+
+	@Override
+	public String getErrorMsgKey() {
+		return ERROR_MSG_KEY;
+	}
+
+	@Override
+	public Class<Float> getTargetType() {
+		return Float.class;
+	}
+
+	@Override
+	public String format(Float obj, FormatProvider formatProvider, boolean localize) {
+		if (obj == null) {
+			return null;
+		}
+		if (localize) {
+			NumberFormat nf = formatProvider.getNumberFormat(this.fractionDigits, this.roundingMode, false);
+			return nf.format(obj);
+		}
+		return formatProvider.getDecimalFormat(this.fractionDigits, this.roundingMode).format(obj);
+	}
+
+	@Override
+	public Float parse(String str, FormatProvider formatProvider) throws ConverterException {
+		str = StringUtils.trimToNull(str);
+		if (str == null) {
+			return null;
+		}
+		try {
+			return ParseUtils.parseFloat(str);
+
+		} catch (NumberFormatException ex) {
+		}
+
+		Number number = this.parseNumber(str, formatProvider.getNumberParser());
+		if (number != null) {
+			return number.floatValue();
+		}
+		throw toParsingError(str, getTargetType().getName());
+	}
 }

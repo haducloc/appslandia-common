@@ -30,27 +30,27 @@ import java.util.Locale;
  */
 public class CharsetUtils {
 
-    public static String parseCharset(String contentType) {
-	if (contentType == null) {
-	    return StandardCharsets.UTF_8.name();
-	}
-	return parseCharset(contentType, StandardCharsets.UTF_8.name());
-    }
-
-    public static String parseCharset(String contentType, String defaultValue) {
-	if (contentType == null) {
-	    return defaultValue;
+	public static String parseCharset(String contentType) {
+		if (contentType == null) {
+			return StandardCharsets.UTF_8.name();
+		}
+		return parseCharset(contentType, StandardCharsets.UTF_8.name());
 	}
 
-	int idx = contentType.indexOf(';');
-	if (idx < 0) {
-	    return defaultValue;
-	}
-	String charset = contentType.substring(idx + 1).trim();
+	public static String parseCharset(String contentType, String defaultValue) {
+		if (contentType == null) {
+			return defaultValue;
+		}
 
-	if (charset.toLowerCase(Locale.ENGLISH).startsWith("charset=")) {
-	    return charset.substring(8);
+		int idx = contentType.indexOf(';');
+		if (idx < 0) {
+			return defaultValue;
+		}
+		String charset = contentType.substring(idx + 1).trim();
+
+		if (charset.toLowerCase(Locale.ENGLISH).startsWith("charset=")) {
+			return charset.substring(8);
+		}
+		return defaultValue;
 	}
-	return defaultValue;
-    }
 }

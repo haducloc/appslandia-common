@@ -32,58 +32,58 @@ import java.util.function.Function;
  */
 public class ModelUtils {
 
-    public static <T> void copy(T dest, T src, Function<String, Boolean> forProps) throws ReflectionException {
-	try {
-	    for (PropertyDescriptor dpd : Introspector.getBeanInfo(dest.getClass()).getPropertyDescriptors()) {
-		if (!forProps.apply(dpd.getName())) {
-		    continue;
+	public static <T> void copy(T dest, T src, Function<String, Boolean> forProps) throws ReflectionException {
+		try {
+			for (PropertyDescriptor dpd : Introspector.getBeanInfo(dest.getClass()).getPropertyDescriptors()) {
+				if (!forProps.apply(dpd.getName())) {
+					continue;
+				}
+				Asserts.notNull(dpd.getWriteMethod());
+				Asserts.notNull(dpd.getReadMethod());
+
+				dpd.getWriteMethod().invoke(dest, dpd.getReadMethod().invoke(src));
+			}
+		} catch (ReflectiveOperationException ex) {
+			throw new ReflectionException(ex);
+
+		} catch (Exception ex) {
+			throw ExceptionUtils.toUncheckedException(ex);
 		}
-		Asserts.notNull(dpd.getWriteMethod());
-		Asserts.notNull(dpd.getReadMethod());
-
-		dpd.getWriteMethod().invoke(dest, dpd.getReadMethod().invoke(src));
-	    }
-	} catch (ReflectiveOperationException ex) {
-	    throw new ReflectionException(ex);
-
-	} catch (Exception ex) {
-	    throw ExceptionUtils.toUncheckedException(ex);
 	}
-    }
 
-    public static <T> void copy(T dest, T src, String... forProps) throws ReflectionException {
-	copy(dest, src, prop -> Arrays.stream(forProps).anyMatch(p -> p.equals(prop)));
-    }
-
-    public static <D, S> void copyProps(D dest, S src, Function<String, Boolean> forProps) throws ReflectionException {
-	try {
-	    for (PropertyDescriptor dpd : Introspector.getBeanInfo(dest.getClass()).getPropertyDescriptors()) {
-		if (!forProps.apply(dpd.getName())) {
-		    continue;
-		}
-		Asserts.notNull(dpd.getWriteMethod());
-
-		PropertyDescriptor spd = null;
-		for (PropertyDescriptor dp : Introspector.getBeanInfo(src.getClass()).getPropertyDescriptors()) {
-		    if (dp.getName().equals(dpd.getName())) {
-			spd = dp;
-			break;
-		    }
-		}
-		Asserts.notNull(spd);
-		Asserts.notNull(spd.getReadMethod());
-
-		dpd.getWriteMethod().invoke(dest, spd.getReadMethod().invoke(src));
-	    }
-	} catch (ReflectiveOperationException ex) {
-	    throw new ReflectionException(ex);
-
-	} catch (Exception ex) {
-	    throw ExceptionUtils.toUncheckedException(ex);
+	public static <T> void copy(T dest, T src, String... forProps) throws ReflectionException {
+		copy(dest, src, prop -> Arrays.stream(forProps).anyMatch(p -> p.equals(prop)));
 	}
-    }
 
-    public static <D, S> void copyProps(D dest, S src, String... forProps) throws ReflectionException {
-	copyProps(dest, src, prop -> Arrays.stream(forProps).anyMatch(p -> p.equals(prop)));
-    }
+	public static <D, S> void copyProps(D dest, S src, Function<String, Boolean> forProps) throws ReflectionException {
+		try {
+			for (PropertyDescriptor dpd : Introspector.getBeanInfo(dest.getClass()).getPropertyDescriptors()) {
+				if (!forProps.apply(dpd.getName())) {
+					continue;
+				}
+				Asserts.notNull(dpd.getWriteMethod());
+
+				PropertyDescriptor spd = null;
+				for (PropertyDescriptor dp : Introspector.getBeanInfo(src.getClass()).getPropertyDescriptors()) {
+					if (dp.getName().equals(dpd.getName())) {
+						spd = dp;
+						break;
+					}
+				}
+				Asserts.notNull(spd);
+				Asserts.notNull(spd.getReadMethod());
+
+				dpd.getWriteMethod().invoke(dest, spd.getReadMethod().invoke(src));
+			}
+		} catch (ReflectiveOperationException ex) {
+			throw new ReflectionException(ex);
+
+		} catch (Exception ex) {
+			throw ExceptionUtils.toUncheckedException(ex);
+		}
+	}
+
+	public static <D, S> void copyProps(D dest, S src, String... forProps) throws ReflectionException {
+		copyProps(dest, src, prop -> Arrays.stream(forProps).anyMatch(p -> p.equals(prop)));
+	}
 }

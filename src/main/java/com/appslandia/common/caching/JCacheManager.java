@@ -30,44 +30,44 @@ import javax.cache.CacheManager;
  */
 public class JCacheManager implements AppCacheManager {
 
-    final CacheManager cacheManager;
+	final CacheManager cacheManager;
 
-    public JCacheManager(CacheManager cacheManager) {
-	this.cacheManager = cacheManager;
-    }
-
-    @Override
-    public <K, V> AppCache<K, V> getCache(String cacheName) {
-	Cache<K, V> cache = this.cacheManager.getCache(cacheName);
-	return (cache != null) ? new JCache<>(cache) : null;
-    }
-
-    @Override
-    public boolean clearCache(String cacheName) {
-	Cache<?, ?> cache = this.cacheManager.getCache(cacheName);
-	if (cache != null) {
-	    cache.clear();
-	    return true;
+	public JCacheManager(CacheManager cacheManager) {
+		this.cacheManager = cacheManager;
 	}
-	return false;
-    }
 
-    @Override
-    public boolean destroyCache(String cacheName) {
-	if (this.cacheManager.getCache(cacheName) != null) {
-	    this.cacheManager.destroyCache(cacheName);
-	    return true;
+	@Override
+	public <K, V> AppCache<K, V> getCache(String cacheName) {
+		Cache<K, V> cache = this.cacheManager.getCache(cacheName);
+		return (cache != null) ? new JCache<>(cache) : null;
 	}
-	return false;
-    }
 
-    @Override
-    public Iterable<String> getCacheNames() {
-	return this.cacheManager.getCacheNames();
-    }
+	@Override
+	public boolean clearCache(String cacheName) {
+		Cache<?, ?> cache = this.cacheManager.getCache(cacheName);
+		if (cache != null) {
+			cache.clear();
+			return true;
+		}
+		return false;
+	}
 
-    @Override
-    public void close() {
-	this.cacheManager.close();
-    }
+	@Override
+	public boolean destroyCache(String cacheName) {
+		if (this.cacheManager.getCache(cacheName) != null) {
+			this.cacheManager.destroyCache(cacheName);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public Iterable<String> getCacheNames() {
+		return this.cacheManager.getCacheNames();
+	}
+
+	@Override
+	public void close() {
+		this.cacheManager.close();
+	}
 }

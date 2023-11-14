@@ -36,13 +36,13 @@ import jakarta.json.stream.JsonGenerator;
  */
 public abstract class JsonbTemporalSerializer<T extends Temporal> extends JsonTemporalSerializer implements JsonbSerializer<T>, JsonbDeserializer<T> {
 
-    public JsonbTemporalSerializer(String serializeIsoPattern) {
-	super(serializeIsoPattern);
-    }
+	public JsonbTemporalSerializer(String serializeIsoPattern) {
+		super(serializeIsoPattern);
+	}
 
-    @Override
-    public void serialize(T obj, JsonGenerator generator, SerializationContext ctx) {
-	String formattedValue = DateUtils.getFormatter(this.serializeIsoPattern).format(obj);
-	generator.write(formattedValue);
-    }
+	@Override
+	public void serialize(T obj, JsonGenerator generator, SerializationContext ctx) {
+		String formattedValue = DateUtils.getFormatter(this.serializeIsoPattern).format(obj);
+		generator.write(formattedValue);
+	}
 }

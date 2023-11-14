@@ -33,81 +33,81 @@ import java.util.Set;
  *
  */
 public class CaseInsensitiveMap<V> implements Map<String, V>, Serializable {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    final Map<String, V> map;
+	final Map<String, V> map;
 
-    public CaseInsensitiveMap() {
-	this(new HashMap<String, V>());
-    }
-
-    public CaseInsensitiveMap(Map<String, V> innerMap) {
-	this.map = innerMap;
-    }
-
-    @Override
-    public int size() {
-	return this.map.size();
-    }
-
-    @Override
-    public boolean isEmpty() {
-	return this.map.isEmpty();
-    }
-
-    @Override
-    public boolean containsKey(Object key) {
-	return this.map.containsKey(toLowerCase((String) key));
-    }
-
-    @Override
-    public boolean containsValue(Object value) {
-	return this.map.containsValue(value);
-    }
-
-    @Override
-    public V get(Object key) {
-	return this.map.get(toLowerCase((String) key));
-    }
-
-    @Override
-    public V put(String key, V value) {
-	return this.map.put(toLowerCase(key), value);
-    }
-
-    @Override
-    public V remove(Object key) {
-	return this.map.remove(toLowerCase((String) key));
-    }
-
-    @Override
-    public void putAll(Map<? extends String, ? extends V> m) {
-	for (Entry<? extends String, ? extends V> entry : m.entrySet()) {
-	    this.map.put(toLowerCase(entry.getKey()), entry.getValue());
+	public CaseInsensitiveMap() {
+		this(new HashMap<String, V>());
 	}
-    }
 
-    @Override
-    public void clear() {
-	this.map.clear();
-    }
+	public CaseInsensitiveMap(Map<String, V> innerMap) {
+		this.map = innerMap;
+	}
 
-    @Override
-    public Set<String> keySet() {
-	return this.map.keySet();
-    }
+	@Override
+	public int size() {
+		return this.map.size();
+	}
 
-    @Override
-    public Collection<V> values() {
-	return this.map.values();
-    }
+	@Override
+	public boolean isEmpty() {
+		return this.map.isEmpty();
+	}
 
-    @Override
-    public Set<Entry<String, V>> entrySet() {
-	return this.map.entrySet();
-    }
+	@Override
+	public boolean containsKey(Object key) {
+		return this.map.containsKey(toLowerCase((String) key));
+	}
 
-    static String toLowerCase(String key) {
-	return (key != null) ? key.toLowerCase(Locale.ROOT) : null;
-    }
+	@Override
+	public boolean containsValue(Object value) {
+		return this.map.containsValue(value);
+	}
+
+	@Override
+	public V get(Object key) {
+		return this.map.get(toLowerCase((String) key));
+	}
+
+	@Override
+	public V put(String key, V value) {
+		return this.map.put(toLowerCase(key), value);
+	}
+
+	@Override
+	public V remove(Object key) {
+		return this.map.remove(toLowerCase((String) key));
+	}
+
+	@Override
+	public void putAll(Map<? extends String, ? extends V> m) {
+		for (Entry<? extends String, ? extends V> entry : m.entrySet()) {
+			this.map.put(toLowerCase(entry.getKey()), entry.getValue());
+		}
+	}
+
+	@Override
+	public void clear() {
+		this.map.clear();
+	}
+
+	@Override
+	public Set<String> keySet() {
+		return this.map.keySet();
+	}
+
+	@Override
+	public Collection<V> values() {
+		return this.map.values();
+	}
+
+	@Override
+	public Set<Entry<String, V>> entrySet() {
+		return this.map.entrySet();
+	}
+
+	static String toLowerCase(String key) {
+		return (key != null) ? key.toLowerCase(Locale.ROOT) : null;
+	}
 }

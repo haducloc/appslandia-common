@@ -31,47 +31,47 @@ import java.util.Set;
  */
 public interface MapAccessor<K, V> extends Map<K, V> {
 
-    default public int size() {
-	throw new UnsupportedOperationException();
-    }
+	default public int size() {
+		throw new UnsupportedOperationException();
+	}
 
-    default public boolean isEmpty() {
-	throw new UnsupportedOperationException();
-    }
+	default public boolean isEmpty() {
+		throw new UnsupportedOperationException();
+	}
 
-    default public boolean containsKey(Object key) {
-	throw new UnsupportedOperationException();
-    }
+	default public boolean containsKey(Object key) {
+		throw new UnsupportedOperationException();
+	}
 
-    default public boolean containsValue(Object value) {
-	throw new UnsupportedOperationException();
-    }
+	default public boolean containsValue(Object value) {
+		throw new UnsupportedOperationException();
+	}
 
-    default public V put(K key, V value) {
-	throw new UnsupportedOperationException();
-    }
+	default public V put(K key, V value) {
+		throw new UnsupportedOperationException();
+	}
 
-    default public V remove(Object key) {
-	throw new UnsupportedOperationException();
-    }
+	default public V remove(Object key) {
+		throw new UnsupportedOperationException();
+	}
 
-    default public void putAll(Map<? extends K, ? extends V> m) {
-	throw new UnsupportedOperationException();
-    }
+	default public void putAll(Map<? extends K, ? extends V> m) {
+		throw new UnsupportedOperationException();
+	}
 
-    default public void clear() {
-	throw new UnsupportedOperationException();
-    }
+	default public void clear() {
+		throw new UnsupportedOperationException();
+	}
 
-    default public Set<K> keySet() {
-	throw new UnsupportedOperationException();
-    }
+	default public Set<K> keySet() {
+		throw new UnsupportedOperationException();
+	}
 
-    default public Collection<V> values() {
-	throw new UnsupportedOperationException();
-    }
+	default public Collection<V> values() {
+		throw new UnsupportedOperationException();
+	}
 
-    default public Set<Entry<K, V>> entrySet() {
-	throw new UnsupportedOperationException();
-    }
+	default public Set<Entry<K, V>> entrySet() {
+		throw new UnsupportedOperationException();
+	}
 }

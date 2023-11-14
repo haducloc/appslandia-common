@@ -30,29 +30,29 @@ import java.util.Map;
  */
 public abstract class AppLoggerManager {
 
-    final Map<String, AppLogger> loggers = new HashMap<>();
-    final Object mutex = new Object();
+	final Map<String, AppLogger> loggers = new HashMap<>();
+	final Object mutex = new Object();
 
-    public AppLogger getAppLogger(String name) {
-	AppLogger logger = this.loggers.get(name);
-	if (logger == null) {
-	    synchronized (this.mutex) {
-		if ((logger = this.loggers.get(name)) == null) {
+	public AppLogger getAppLogger(String name) {
+		AppLogger logger = this.loggers.get(name);
+		if (logger == null) {
+			synchronized (this.mutex) {
+				if ((logger = this.loggers.get(name)) == null) {
 
-		    logger = createAppLogger(name);
-		    this.loggers.put(name, logger);
+					logger = createAppLogger(name);
+					this.loggers.put(name, logger);
+				}
+			}
 		}
-	    }
+		return logger;
 	}
-	return logger;
-    }
 
-    public AppLogger getAppLogger(Class<?> clazz) {
-	return getAppLogger(clazz.getName());
-    }
+	public AppLogger getAppLogger(Class<?> clazz) {
+		return getAppLogger(clazz.getName());
+	}
 
-    protected abstract AppLogger createAppLogger(String name);
+	protected abstract AppLogger createAppLogger(String name);
 
-    public void close() {
-    }
+	public void close() {
+	}
 }

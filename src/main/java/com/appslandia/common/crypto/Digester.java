@@ -29,7 +29,7 @@ import com.appslandia.common.base.InitializeSupport;
  */
 public interface Digester extends InitializeSupport {
 
-    byte[] digest(byte[] message) throws CryptoException;
+	byte[] digest(byte[] message) throws CryptoException;
 
-    boolean verify(byte[] message, byte[] digested) throws CryptoException;
+	boolean verify(byte[] message, byte[] digested) throws CryptoException;
 }

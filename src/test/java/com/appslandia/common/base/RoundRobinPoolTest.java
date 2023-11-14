@@ -30,21 +30,21 @@ import org.junit.jupiter.api.Test;
  */
 public class RoundRobinPoolTest {
 
-    @Test
-    public void test() {
-	Object obj1 = new Object();
-	Object obj2 = new Object();
-	Object obj3 = new Object();
+	@Test
+	public void test() {
+		Object obj1 = new Object();
+		Object obj2 = new Object();
+		Object obj3 = new Object();
 
-	Object[] services = new Object[] { obj1, obj2, obj3 };
-	RoundRobinPool<Object> pool = new RoundRobinPool<>(services);
+		Object[] services = new Object[] { obj1, obj2, obj3 };
+		RoundRobinPool<Object> pool = new RoundRobinPool<>(services);
 
-	Assertions.assertTrue(obj1 == pool.next());
-	Assertions.assertTrue(obj2 == pool.next());
-	Assertions.assertTrue(obj3 == pool.next());
+		Assertions.assertTrue(obj1 == pool.next());
+		Assertions.assertTrue(obj2 == pool.next());
+		Assertions.assertTrue(obj3 == pool.next());
 
-	Assertions.assertTrue(obj1 == pool.next());
-	Assertions.assertTrue(obj2 == pool.next());
-	Assertions.assertTrue(obj3 == pool.next());
-    }
+		Assertions.assertTrue(obj1 == pool.next());
+		Assertions.assertTrue(obj2 == pool.next());
+		Assertions.assertTrue(obj3 == pool.next());
+	}
 }

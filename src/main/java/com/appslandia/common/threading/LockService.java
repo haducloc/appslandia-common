@@ -34,30 +34,30 @@ import com.appslandia.common.utils.Asserts;
  */
 public class LockService<K> extends InitializeObject {
 
-    private final Map<K, ReentrantLock> lockMap = new HashMap<>();
-    private final Object mutex = new Object();
+	private final Map<K, ReentrantLock> lockMap = new HashMap<>();
+	private final Object mutex = new Object();
 
-    @Override
-    protected void init() throws Exception {
-    }
-
-    protected ReentrantLock produceLock() {
-	return new ReentrantLock();
-    }
-
-    public ReentrantLock getLock(K key) {
-	Asserts.notNull(key);
-
-	ReentrantLock lock = this.lockMap.get(key);
-	if (lock == null) {
-	    synchronized (this.mutex) {
-		if ((lock = this.lockMap.get(key)) == null) {
-
-		    lock = produceLock();
-		    this.lockMap.put(key, lock);
-		}
-	    }
+	@Override
+	protected void init() throws Exception {
 	}
-	return lock;
-    }
+
+	protected ReentrantLock produceLock() {
+		return new ReentrantLock();
+	}
+
+	public ReentrantLock getLock(K key) {
+		Asserts.notNull(key);
+
+		ReentrantLock lock = this.lockMap.get(key);
+		if (lock == null) {
+			synchronized (this.mutex) {
+				if ((lock = this.lockMap.get(key)) == null) {
+
+					lock = produceLock();
+					this.lockMap.put(key, lock);
+				}
+			}
+		}
+		return lock;
+	}
 }
