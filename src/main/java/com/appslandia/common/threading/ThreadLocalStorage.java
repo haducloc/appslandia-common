@@ -30,48 +30,48 @@ import com.appslandia.common.utils.Asserts;
  */
 public class ThreadLocalStorage<T> {
 
-	final ThreadLocal<T> holder;
+  final ThreadLocal<T> holder;
 
-	public ThreadLocalStorage() {
-		this(false);
-	}
+  public ThreadLocalStorage() {
+    this(false);
+  }
 
-	public ThreadLocalStorage(ThreadLocal<T> holder) {
-		this.holder = holder;
-	}
+  public ThreadLocalStorage(ThreadLocal<T> holder) {
+    this.holder = holder;
+  }
 
-	public ThreadLocalStorage(boolean inheritable) {
-		if (!inheritable) {
-			this.holder = new ThreadLocal<>();
-		} else {
-			this.holder = new InheritableThreadLocal<>();
-		}
-	}
+  public ThreadLocalStorage(boolean inheritable) {
+    if (!inheritable) {
+      this.holder = new ThreadLocal<>();
+    } else {
+      this.holder = new InheritableThreadLocal<>();
+    }
+  }
 
-	public T get() {
-		return this.holder.get();
-	}
+  public T get() {
+    return this.holder.get();
+  }
 
-	public T val() throws AssertException {
-		T val = this.holder.get();
-		return Asserts.notNull(val, "No current value found in the current thread.");
-	}
+  public T val() throws AssertException {
+    T val = this.holder.get();
+    return Asserts.notNull(val, "No current value found in the current thread.");
+  }
 
-	public void set(T value) {
-		if (value == null) {
-			this.holder.remove();
-		} else {
-			this.holder.set(value);
-		}
-	}
+  public void set(T value) {
+    if (value == null) {
+      this.holder.remove();
+    } else {
+      this.holder.set(value);
+    }
+  }
 
-	public T remove() {
-		T t = this.holder.get();
-		this.holder.remove();
-		return t;
-	}
+  public T remove() {
+    T t = this.holder.get();
+    this.holder.remove();
+    return t;
+  }
 
-	public boolean hasValue() {
-		return this.holder.get() != null;
-	}
+  public boolean hasValue() {
+    return this.holder.get() != null;
+  }
 }

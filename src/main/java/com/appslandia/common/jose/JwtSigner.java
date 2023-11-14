@@ -40,124 +40,124 @@ import com.appslandia.common.utils.CollectionUtils;
  */
 public class JwtSigner extends JwsSigner<JwtPayload> {
 
-	protected String iss;
-	protected Set<String> aud;
-	protected int leewaySec;
+  protected String iss;
+  protected Set<String> aud;
+  protected int leewaySec;
 
-	public JwtSigner() {
-		super(JwtPayload.class);
-	}
+  public JwtSigner() {
+    super(JwtPayload.class);
+  }
 
-	@Override
-	protected void init() throws Exception {
-		super.init();
+  @Override
+  protected void init() throws Exception {
+    super.init();
 
-		Asserts.isTrue(this.leewaySec >= 0);
+    Asserts.isTrue(this.leewaySec >= 0);
 
-		// iss
-		this.defaultVerifiers.add((token) -> {
-			if (!Objects.equals(this.iss, token.getPayload().getIss())) {
-				throw new JoseVerificationException("iss doesn't match.");
-			}
-		});
+    // iss
+    this.defaultVerifiers.add((token) -> {
+      if (!Objects.equals(this.iss, token.getPayload().getIss())) {
+        throw new JoseVerificationException("iss doesn't match.");
+      }
+    });
 
-		// exp
-		this.defaultVerifiers.add((token) -> {
-			Date dt = token.getPayload().getExp();
-			if (dt != null) {
-				long nt = JoseUtils.toNumericDate(dt);
+    // exp
+    this.defaultVerifiers.add((token) -> {
+      Date dt = token.getPayload().getExp();
+      if (dt != null) {
+        long nt = JoseUtils.toNumericDate(dt);
 
-				if (!JoseUtils.isFutureTime(nt, this.leewaySec)) {
-					throw new JoseVerificationException("token is expired.");
-				}
-			}
-		});
+        if (!JoseUtils.isFutureTime(nt, this.leewaySec)) {
+          throw new JoseVerificationException("token is expired.");
+        }
+      }
+    });
 
-		// iat
-		this.defaultVerifiers.add((token) -> {
-			Date dt = token.getPayload().getIat();
-			if (dt != null) {
-				long nt = JoseUtils.toNumericDate(dt);
+    // iat
+    this.defaultVerifiers.add((token) -> {
+      Date dt = token.getPayload().getIat();
+      if (dt != null) {
+        long nt = JoseUtils.toNumericDate(dt);
 
-				if (JoseUtils.isFutureTime(nt, 0)) {
-					throw new JoseVerificationException("iat must be a past date/time.");
-				}
-			}
-		});
-	}
+        if (JoseUtils.isFutureTime(nt, 0)) {
+          throw new JoseVerificationException("iat must be a past date/time.");
+        }
+      }
+    });
+  }
 
-	@Override
-	public JwtSigner initialize() throws InitializeException {
-		super.initialize();
-		return this;
-	}
+  @Override
+  public JwtSigner initialize() throws InitializeException {
+    super.initialize();
+    return this;
+  }
 
-	public JwtPayload newPayload() {
-		this.initialize();
-		JwtPayload payload = new JwtPayload();
+  public JwtPayload newPayload() {
+    this.initialize();
+    JwtPayload payload = new JwtPayload();
 
-		if (this.iss != null) {
-			payload.setIss(this.iss);
-		}
-		if (this.aud != null) {
-			payload.setAud(this.aud.toArray(new String[this.aud.size()]));
-		}
-		return payload;
-	}
+    if (this.iss != null) {
+      payload.setIss(this.iss);
+    }
+    if (this.aud != null) {
+      payload.setAud(this.aud.toArray(new String[this.aud.size()]));
+    }
+    return payload;
+  }
 
-	@Override
-	public JwtToken parse(String token) throws JsonException {
-		JwsToken<JwtPayload> jwsToken = super.parse(token);
-		return new JwtToken(jwsToken.header, jwsToken.payload, jwsToken.headerPart, jwsToken.payloadPart, jwsToken.signaturePart);
-	}
+  @Override
+  public JwtToken parse(String token) throws JsonException {
+    JwsToken<JwtPayload> jwsToken = super.parse(token);
+    return new JwtToken(jwsToken.header, jwsToken.payload, jwsToken.headerPart, jwsToken.payloadPart, jwsToken.signaturePart);
+  }
 
-	@Override
-	public JwtSigner setJsonProcessor(JsonProcessor jsonProcessor) {
-		super.setJsonProcessor(jsonProcessor);
-		return this;
-	}
+  @Override
+  public JwtSigner setJsonProcessor(JsonProcessor jsonProcessor) {
+    super.setJsonProcessor(jsonProcessor);
+    return this;
+  }
 
-	@Override
-	public JwtSigner setSigner(SignatureSigner signer) {
-		super.setSigner(signer);
-		return this;
-	}
+  @Override
+  public JwtSigner setSigner(SignatureSigner signer) {
+    super.setSigner(signer);
+    return this;
+  }
 
-	@Override
-	public JwtSigner setSigner(MacSigner signer) {
-		super.setSigner(signer);
-		return this;
-	}
+  @Override
+  public JwtSigner setSigner(MacSigner signer) {
+    super.setSigner(signer);
+    return this;
+  }
 
-	@Override
-	public JwtSigner setAlg(String alg) {
-		super.setAlg(alg);
-		return this;
-	}
+  @Override
+  public JwtSigner setAlg(String alg) {
+    super.setAlg(alg);
+    return this;
+  }
 
-	@Override
-	public JwtSigner setKid(String kid) {
-		super.setKid(kid);
-		return this;
-	}
+  @Override
+  public JwtSigner setKid(String kid) {
+    super.setKid(kid);
+    return this;
+  }
 
-	public JwtSigner setIss(String iss) {
-		assertNotInitialized();
-		this.iss = iss;
-		return this;
-	}
+  public JwtSigner setIss(String iss) {
+    assertNotInitialized();
+    this.iss = iss;
+    return this;
+  }
 
-	public JwtSigner setAud(String... aud) {
-		assertNotInitialized();
-		if ((aud != null) && (aud.length > 0)) {
-			this.aud = CollectionUtils.toSet(new LinkedHashSet<>(), aud);
-		}
-		return this;
-	}
+  public JwtSigner setAud(String... aud) {
+    assertNotInitialized();
+    if ((aud != null) && (aud.length > 0)) {
+      this.aud = CollectionUtils.toSet(new LinkedHashSet<>(), aud);
+    }
+    return this;
+  }
 
-	public JwtSigner setLeewaySec(int leewaySec) {
-		assertNotInitialized();
-		this.leewaySec = leewaySec;
-		return this;
-	}
+  public JwtSigner setLeewaySec(int leewaySec) {
+    assertNotInitialized();
+    this.leewaySec = leewaySec;
+    return this;
+  }
 }

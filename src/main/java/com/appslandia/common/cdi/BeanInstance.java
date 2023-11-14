@@ -34,40 +34,40 @@ import jakarta.enterprise.inject.Instance;
  */
 public class BeanInstance<T> {
 
-	final T obj;
-	final Instance<T> instance;
-	final CreationalContext<T> creationalContext;
-	final AtomicBoolean destroyed = new AtomicBoolean(false);
+  final T obj;
+  final Instance<T> instance;
+  final CreationalContext<T> creationalContext;
+  final AtomicBoolean destroyed = new AtomicBoolean(false);
 
-	public BeanInstance(T obj, Instance<T> instance) {
-		this(obj, instance, null);
-	}
+  public BeanInstance(T obj, Instance<T> instance) {
+    this(obj, instance, null);
+  }
 
-	public BeanInstance(T obj, CreationalContext<T> creationalContext) {
-		this(obj, null, creationalContext);
-	}
+  public BeanInstance(T obj, CreationalContext<T> creationalContext) {
+    this(obj, null, creationalContext);
+  }
 
-	protected BeanInstance(T obj, Instance<T> instance, CreationalContext<T> creationalContext) {
-		this.obj = obj;
-		this.instance = instance;
-		this.creationalContext = creationalContext;
-	}
+  protected BeanInstance(T obj, Instance<T> instance, CreationalContext<T> creationalContext) {
+    this.obj = obj;
+    this.instance = instance;
+    this.creationalContext = creationalContext;
+  }
 
-	public void destroy() {
-		if (this.destroyed.compareAndSet(false, true)) {
+  public void destroy() {
+    if (this.destroyed.compareAndSet(false, true)) {
 
-			if (this.instance != null) {
-				this.instance.destroy(this.obj);
-			} else {
-				this.creationalContext.release();
-			}
-		}
-	}
+      if (this.instance != null) {
+        this.instance.destroy(this.obj);
+      } else {
+        this.creationalContext.release();
+      }
+    }
+  }
 
-	public T get() {
-		if (this.destroyed.get()) {
-			throw new AssertException("The instance is already destroyed.");
-		}
-		return this.obj;
-	}
+  public T get() {
+    if (this.destroyed.get()) {
+      throw new AssertException("The instance is already destroyed.");
+    }
+    return this.obj;
+  }
 }

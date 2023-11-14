@@ -34,93 +34,93 @@ import com.appslandia.common.base.Language;
  */
 public class ShortConverterTest {
 
-	@Test
-	public void test_targetType() {
-		ShortConverter converter = new ShortConverter();
-		Assertions.assertEquals(Short.class, converter.getTargetType());
-	}
+  @Test
+  public void test_targetType() {
+    ShortConverter converter = new ShortConverter();
+    Assertions.assertEquals(Short.class, converter.getTargetType());
+  }
 
-	@Test
-	public void test() {
-		ShortConverter converter = new ShortConverter();
-		FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-		try {
-			Short v = converter.parse("12345", formatProvider);
-			Assertions.assertEquals(12345, v.shortValue());
+  @Test
+  public void test() {
+    ShortConverter converter = new ShortConverter();
+    FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+    try {
+      Short v = converter.parse("12345", formatProvider);
+      Assertions.assertEquals(12345, v.shortValue());
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_null() {
-		ShortConverter converter = new ShortConverter();
-		FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-		try {
-			Short val = converter.parse(null, formatProvider);
-			Assertions.assertNull(val);
+  @Test
+  public void test_null() {
+    ShortConverter converter = new ShortConverter();
+    FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+    try {
+      Short val = converter.parse(null, formatProvider);
+      Assertions.assertNull(val);
 
-			converter.parse("", formatProvider);
-			Assertions.assertNull(val);
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+      converter.parse("", formatProvider);
+      Assertions.assertNull(val);
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_invalid() {
-		ShortConverter converter = new ShortConverter();
-		FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-		try {
-			converter.parse("12,345", formatProvider);
-			Assertions.fail();
-		} catch (Exception ex) {
-			Assertions.assertTrue(ex instanceof ConverterException);
-		}
-		try {
-			converter.parse("12.345", formatProvider);
-			Assertions.fail();
-		} catch (Exception ex) {
-			Assertions.assertTrue(ex instanceof ConverterException);
-		}
-	}
+  @Test
+  public void test_invalid() {
+    ShortConverter converter = new ShortConverter();
+    FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+    try {
+      converter.parse("12,345", formatProvider);
+      Assertions.fail();
+    } catch (Exception ex) {
+      Assertions.assertTrue(ex instanceof ConverterException);
+    }
+    try {
+      converter.parse("12.345", formatProvider);
+      Assertions.fail();
+    } catch (Exception ex) {
+      Assertions.assertTrue(ex instanceof ConverterException);
+    }
+  }
 
-	@Test
-	public void test_maxMin() {
-		ShortConverter converter = new ShortConverter();
-		FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-		try {
-			Short v = converter.parse(Short.toString(Short.MAX_VALUE), formatProvider);
-			Assertions.assertEquals(Short.MAX_VALUE, v.shortValue());
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-		try {
-			Short v = converter.parse(Short.toString(Short.MIN_VALUE), formatProvider);
-			Assertions.assertEquals(Short.MIN_VALUE, v.shortValue());
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+  @Test
+  public void test_maxMin() {
+    ShortConverter converter = new ShortConverter();
+    FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+    try {
+      Short v = converter.parse(Short.toString(Short.MAX_VALUE), formatProvider);
+      Assertions.assertEquals(Short.MAX_VALUE, v.shortValue());
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+    try {
+      Short v = converter.parse(Short.toString(Short.MIN_VALUE), formatProvider);
+      Assertions.assertEquals(Short.MIN_VALUE, v.shortValue());
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_overflow() {
-		ShortConverter converter = new ShortConverter();
-		FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-		try {
-			// Max: 32767
-			converter.parse("32768", formatProvider);
-			Assertions.fail();
-		} catch (Exception ex) {
-			Assertions.assertTrue(ex instanceof ConverterException);
-		}
-		try {
-			// MIN: -32768
-			converter.parse("-32769", formatProvider);
-			Assertions.fail();
-		} catch (Exception ex) {
-			Assertions.assertTrue(ex instanceof ConverterException);
-		}
-	}
+  @Test
+  public void test_overflow() {
+    ShortConverter converter = new ShortConverter();
+    FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+    try {
+      // Max: 32767
+      converter.parse("32768", formatProvider);
+      Assertions.fail();
+    } catch (Exception ex) {
+      Assertions.assertTrue(ex instanceof ConverterException);
+    }
+    try {
+      // MIN: -32768
+      converter.parse("-32769", formatProvider);
+      Assertions.fail();
+    } catch (Exception ex) {
+      Assertions.assertTrue(ex instanceof ConverterException);
+    }
+  }
 }

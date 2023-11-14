@@ -38,354 +38,354 @@ import java.util.function.BiFunction;
  */
 public class ArrayUtils {
 
-	public static byte[] append(byte[] src1, byte[] src2) {
-		byte[] arr = new byte[src1.length + src2.length];
-		System.arraycopy(src1, 0, arr, 0, src1.length);
-		System.arraycopy(src2, 0, arr, src1.length, src2.length);
-		return arr;
-	}
+  public static byte[] append(byte[] src1, byte[] src2) {
+    byte[] arr = new byte[src1.length + src2.length];
+    System.arraycopy(src1, 0, arr, 0, src1.length);
+    System.arraycopy(src2, 0, arr, src1.length, src2.length);
+    return arr;
+  }
 
-	public static byte[] append(byte[] src1, byte[] src2, byte[] src3) {
-		byte[] arr = new byte[src1.length + src2.length + src3.length];
-		System.arraycopy(src1, 0, arr, 0, src1.length);
-		System.arraycopy(src2, 0, arr, src1.length, src2.length);
-		System.arraycopy(src3, 0, arr, src1.length + src2.length, src3.length);
-		return arr;
-	}
+  public static byte[] append(byte[] src1, byte[] src2, byte[] src3) {
+    byte[] arr = new byte[src1.length + src2.length + src3.length];
+    System.arraycopy(src1, 0, arr, 0, src1.length);
+    System.arraycopy(src2, 0, arr, src1.length, src2.length);
+    System.arraycopy(src3, 0, arr, src1.length + src2.length, src3.length);
+    return arr;
+  }
 
-	public static void copy(byte[] src, byte[] dest1) {
-		System.arraycopy(src, 0, dest1, 0, dest1.length);
-	}
+  public static void copy(byte[] src, byte[] dest1) {
+    System.arraycopy(src, 0, dest1, 0, dest1.length);
+  }
 
-	public static void copy(byte[] src, byte[] dest1, byte[] dest2) {
-		System.arraycopy(src, 0, dest1, 0, dest1.length);
-		System.arraycopy(src, dest1.length, dest2, 0, dest2.length);
-	}
+  public static void copy(byte[] src, byte[] dest1, byte[] dest2) {
+    System.arraycopy(src, 0, dest1, 0, dest1.length);
+    System.arraycopy(src, dest1.length, dest2, 0, dest2.length);
+  }
 
-	public static void copy(byte[] src, byte[] dest1, byte[] dest2, byte[] dest3) {
-		System.arraycopy(src, 0, dest1, 0, dest1.length);
-		System.arraycopy(src, dest1.length, dest2, 0, dest2.length);
-		System.arraycopy(src, dest1.length + dest2.length, dest3, 0, dest3.length);
-	}
+  public static void copy(byte[] src, byte[] dest1, byte[] dest2, byte[] dest3) {
+    System.arraycopy(src, 0, dest1, 0, dest1.length);
+    System.arraycopy(src, dest1.length, dest2, 0, dest2.length);
+    System.arraycopy(src, dest1.length + dest2.length, dest3, 0, dest3.length);
+  }
 
-	public static char[] append(char[] src1, char[] src2) {
-		char[] arr = new char[src1.length + src2.length];
-		System.arraycopy(src1, 0, arr, 0, src1.length);
-		System.arraycopy(src2, 0, arr, src1.length, src2.length);
-		return arr;
-	}
+  public static char[] append(char[] src1, char[] src2) {
+    char[] arr = new char[src1.length + src2.length];
+    System.arraycopy(src1, 0, arr, 0, src1.length);
+    System.arraycopy(src2, 0, arr, src1.length, src2.length);
+    return arr;
+  }
 
-	public static char[] append(char[] src1, char[] src2, char[] src3) {
-		char[] arr = new char[src1.length + src2.length + src3.length];
-		System.arraycopy(src1, 0, arr, 0, src1.length);
-		System.arraycopy(src2, 0, arr, src1.length, src2.length);
-		System.arraycopy(src3, 0, arr, src1.length + src2.length, src3.length);
-		return arr;
-	}
+  public static char[] append(char[] src1, char[] src2, char[] src3) {
+    char[] arr = new char[src1.length + src2.length + src3.length];
+    System.arraycopy(src1, 0, arr, 0, src1.length);
+    System.arraycopy(src2, 0, arr, src1.length, src2.length);
+    System.arraycopy(src3, 0, arr, src1.length + src2.length, src3.length);
+    return arr;
+  }
 
-	public static String[] append(String[] src1, String[] src2) {
-		String[] arr = new String[src1.length + src2.length];
-		System.arraycopy(src1, 0, arr, 0, src1.length);
-		System.arraycopy(src2, 0, arr, src1.length, src2.length);
-		return arr;
-	}
+  public static String[] append(String[] src1, String[] src2) {
+    String[] arr = new String[src1.length + src2.length];
+    System.arraycopy(src1, 0, arr, 0, src1.length);
+    System.arraycopy(src2, 0, arr, src1.length, src2.length);
+    return arr;
+  }
 
-	public static String[] append(String[] src1, String[] src2, String[] src3) {
-		String[] arr = new String[src1.length + src2.length + src3.length];
-		System.arraycopy(src1, 0, arr, 0, src1.length);
-		System.arraycopy(src2, 0, arr, src1.length, src2.length);
-		System.arraycopy(src3, 0, arr, src1.length + src2.length, src3.length);
-		return arr;
-	}
+  public static String[] append(String[] src1, String[] src2, String[] src3) {
+    String[] arr = new String[src1.length + src2.length + src3.length];
+    System.arraycopy(src1, 0, arr, 0, src1.length);
+    System.arraycopy(src2, 0, arr, src1.length, src2.length);
+    System.arraycopy(src3, 0, arr, src1.length + src2.length, src3.length);
+    return arr;
+  }
 
-	public static int[] copy(int[] src) {
-		if ((src == null) || (src.length == 0)) {
-			return src;
-		}
-		int[] arr = new int[src.length];
-		System.arraycopy(src, 0, arr, 0, src.length);
-		return arr;
-	}
+  public static int[] copy(int[] src) {
+    if ((src == null) || (src.length == 0)) {
+      return src;
+    }
+    int[] arr = new int[src.length];
+    System.arraycopy(src, 0, arr, 0, src.length);
+    return arr;
+  }
 
-	public static String[] copy(String[] src) {
-		if ((src == null) || (src.length == 0)) {
-			return src;
-		}
-		String[] arr = new String[src.length];
-		System.arraycopy(src, 0, arr, 0, src.length);
-		return arr;
-	}
+  public static String[] copy(String[] src) {
+    if ((src == null) || (src.length == 0)) {
+      return src;
+    }
+    String[] arr = new String[src.length];
+    System.arraycopy(src, 0, arr, 0, src.length);
+    return arr;
+  }
 
-	public static byte[] copy(byte[] src) {
-		if ((src == null) || (src.length == 0)) {
-			return src;
-		}
-		byte[] arr = new byte[src.length];
-		System.arraycopy(src, 0, arr, 0, src.length);
-		return arr;
-	}
+  public static byte[] copy(byte[] src) {
+    if ((src == null) || (src.length == 0)) {
+      return src;
+    }
+    byte[] arr = new byte[src.length];
+    System.arraycopy(src, 0, arr, 0, src.length);
+    return arr;
+  }
 
-	public static char[] copy(char[] src) {
-		if ((src == null) || (src.length == 0)) {
-			return src;
-		}
-		char[] arr = new char[src.length];
-		System.arraycopy(src, 0, arr, 0, src.length);
-		return arr;
-	}
+  public static char[] copy(char[] src) {
+    if ((src == null) || (src.length == 0)) {
+      return src;
+    }
+    char[] arr = new char[src.length];
+    System.arraycopy(src, 0, arr, 0, src.length);
+    return arr;
+  }
 
-	public static <T> void shuffle(T[] src, Random random) {
-		for (int i = src.length; i > 1; i--) {
-			swap(src, i - 1, random.nextInt(i));
-		}
-	}
+  public static <T> void shuffle(T[] src, Random random) {
+    for (int i = src.length; i > 1; i--) {
+      swap(src, i - 1, random.nextInt(i));
+    }
+  }
 
-	public static void shuffle(int[] src, Random random) {
-		for (int i = src.length; i > 1; i--) {
-			swap(src, i - 1, random.nextInt(i));
-		}
-	}
+  public static void shuffle(int[] src, Random random) {
+    for (int i = src.length; i > 1; i--) {
+      swap(src, i - 1, random.nextInt(i));
+    }
+  }
 
-	public static void shuffle(char[] src, Random random) {
-		for (int i = src.length; i > 1; i--) {
-			swap(src, i - 1, random.nextInt(i));
-		}
-	}
+  public static void shuffle(char[] src, Random random) {
+    for (int i = src.length; i > 1; i--) {
+      swap(src, i - 1, random.nextInt(i));
+    }
+  }
 
-	public static void swap(int[] src, int i, int j) {
-		int temp = src[i];
-		src[i] = src[j];
-		src[j] = temp;
-	}
+  public static void swap(int[] src, int i, int j) {
+    int temp = src[i];
+    src[i] = src[j];
+    src[j] = temp;
+  }
 
-	public static void swap(char[] src, int i, int j) {
-		char temp = src[i];
-		src[i] = src[j];
-		src[j] = temp;
-	}
+  public static void swap(char[] src, int i, int j) {
+    char temp = src[i];
+    src[i] = src[j];
+    src[j] = temp;
+  }
 
-	public static <T> void swap(T[] src, int i, int j) {
-		T temp = src[i];
-		src[i] = src[j];
-		src[j] = temp;
-	}
+  public static <T> void swap(T[] src, int i, int j) {
+    T temp = src[i];
+    src[i] = src[j];
+    src[j] = temp;
+  }
 
-	public static <T> boolean hasElements(T[] elements) {
-		return (elements != null) && (elements.length > 0);
-	}
+  public static <T> boolean hasElements(T[] elements) {
+    return (elements != null) && (elements.length > 0);
+  }
 
-	public static void fill(int[][] matrix, int value) {
-		for (int i = 0; i < matrix.length; i++) {
-			Arrays.fill(matrix[i], value);
-		}
-	}
+  public static void fill(int[][] matrix, int value) {
+    for (int i = 0; i < matrix.length; i++) {
+      Arrays.fill(matrix[i], value);
+    }
+  }
 
-	public static <T> T[][] toMatrix(T[] arr, int columns, BiFunction<Integer, Integer, T[][]> matrixCreator) {
-		Asserts.notNull(arr);
-		Asserts.isTrue(columns > 0);
+  public static <T> T[][] toMatrix(T[] arr, int columns, BiFunction<Integer, Integer, T[][]> matrixCreator) {
+    Asserts.notNull(arr);
+    Asserts.isTrue(columns > 0);
 
-		int len = arr.length;
-		if (len == 0) {
-			len = 1;
-		}
+    int len = arr.length;
+    if (len == 0) {
+      len = 1;
+    }
 
-		int rows = len / columns;
-		if (rows * columns < len) {
-			rows += 1;
-		}
-		T[][] matrix = matrixCreator.apply(rows, columns);
+    int rows = len / columns;
+    if (rows * columns < len) {
+      rows += 1;
+    }
+    T[][] matrix = matrixCreator.apply(rows, columns);
 
-		for (int i = 0; i < arr.length; i++) {
-			int row = i / columns;
-			int col = i % columns;
+    for (int i = 0; i < arr.length; i++) {
+      int row = i / columns;
+      int col = i % columns;
 
-			matrix[row][col] = arr[i];
-		}
-		return matrix;
-	}
+      matrix[row][col] = arr[i];
+    }
+    return matrix;
+  }
 
-	public static Object[] toArray(Object arr) {
-		if (arr == null) {
-			return null;
-		}
-		Asserts.isTrue(arr.getClass().isArray());
+  public static Object[] toArray(Object arr) {
+    if (arr == null) {
+      return null;
+    }
+    Asserts.isTrue(arr.getClass().isArray());
 
-		Class<?> elementType = arr.getClass().getComponentType();
-		if (!elementType.isPrimitive()) {
-			return (Object[]) arr;
-		}
+    Class<?> elementType = arr.getClass().getComponentType();
+    if (!elementType.isPrimitive()) {
+      return (Object[]) arr;
+    }
 
-		int len = Array.getLength(arr);
-		Object ca = Array.newInstance(TypeUtils.wrap(elementType), len);
+    int len = Array.getLength(arr);
+    Object ca = Array.newInstance(TypeUtils.wrap(elementType), len);
 
-		for (int i = 0; i < len; i++) {
-			Array.set(ca, i, Array.get(arr, i));
-		}
-		return (Object[]) ca;
-	}
+    for (int i = 0; i < len; i++) {
+      Array.set(ca, i, Array.get(arr, i));
+    }
+    return (Object[]) ca;
+  }
 
-	@SuppressWarnings("unchecked")
-	public static <T> T[] toArray(Enumeration<T> enumer, Class<T> elementType) {
-		if (enumer == null) {
-			return null;
-		}
-		List<T> values = new ArrayList<>();
-		while (enumer.hasMoreElements()) {
-			values.add(enumer.nextElement());
-		}
-		return values.toArray((T[]) Array.newInstance(elementType, values.size()));
-	}
+  @SuppressWarnings("unchecked")
+  public static <T> T[] toArray(Enumeration<T> enumer, Class<T> elementType) {
+    if (enumer == null) {
+      return null;
+    }
+    List<T> values = new ArrayList<>();
+    while (enumer.hasMoreElements()) {
+      values.add(enumer.nextElement());
+    }
+    return values.toArray((T[]) Array.newInstance(elementType, values.size()));
+  }
 
-	public static List<Object> toList(Object arr) {
-		if (arr == null) {
-			return null;
-		}
-		Asserts.isTrue(arr.getClass().isArray());
+  public static List<Object> toList(Object arr) {
+    if (arr == null) {
+      return null;
+    }
+    Asserts.isTrue(arr.getClass().isArray());
 
-		int len = Array.getLength(arr);
-		List<Object> list = new ArrayList<>(len);
+    int len = Array.getLength(arr);
+    List<Object> list = new ArrayList<>(len);
 
-		for (int i = 0; i < len; i++) {
-			list.add(Array.get(arr, i));
-		}
-		return list;
-	}
+    for (int i = 0; i < len; i++) {
+      list.add(Array.get(arr, i));
+    }
+    return list;
+  }
 
-	public static boolean endsWith(byte[] arr, byte[] suffix, int fromIndex) {
-		if (arr == suffix) {
-			return fromIndex == 0;
-		}
-		if (arr == null || suffix == null) {
-			return false;
-		}
-		if (suffix.length + fromIndex != arr.length) {
-			return false;
-		}
-		for (int i = 0; i < suffix.length - 1; i++) {
-			if (suffix[i] != arr[i + fromIndex]) {
-				return false;
-			}
-		}
-		return true;
-	}
+  public static boolean endsWith(byte[] arr, byte[] suffix, int fromIndex) {
+    if (arr == suffix) {
+      return fromIndex == 0;
+    }
+    if (arr == null || suffix == null) {
+      return false;
+    }
+    if (suffix.length + fromIndex != arr.length) {
+      return false;
+    }
+    for (int i = 0; i < suffix.length - 1; i++) {
+      if (suffix[i] != arr[i + fromIndex]) {
+        return false;
+      }
+    }
+    return true;
+  }
 
-	public static int min(int[] arr) {
-		Asserts.notNull(arr);
-		if (arr.length == 0) {
-			throw new NoSuchElementException("arr is empty.");
-		}
-		int m = arr[0];
-		for (int i = 1; i < arr.length; i++) {
-			m = Math.min(m, arr[i]);
-		}
-		return m;
-	}
+  public static int min(int[] arr) {
+    Asserts.notNull(arr);
+    if (arr.length == 0) {
+      throw new NoSuchElementException("arr is empty.");
+    }
+    int m = arr[0];
+    for (int i = 1; i < arr.length; i++) {
+      m = Math.min(m, arr[i]);
+    }
+    return m;
+  }
 
-	public static int max(int[] arr) {
-		Asserts.notNull(arr);
-		if (arr.length == 0) {
-			throw new NoSuchElementException("arr is empty.");
-		}
-		int m = arr[0];
-		for (int i = 1; i < arr.length; i++) {
-			m = Math.max(m, arr[i]);
-		}
-		return m;
-	}
+  public static int max(int[] arr) {
+    Asserts.notNull(arr);
+    if (arr.length == 0) {
+      throw new NoSuchElementException("arr is empty.");
+    }
+    int m = arr[0];
+    for (int i = 1; i < arr.length; i++) {
+      m = Math.max(m, arr[i]);
+    }
+    return m;
+  }
 
-	public static <T> T min(T[] arr, Comparator<T> comparator) {
-		Asserts.notNull(arr);
-		if (arr.length == 0) {
-			throw new NoSuchElementException("arr is empty.");
-		}
-		T m = arr[0];
-		for (int i = 1; i < arr.length; i++) {
-			m = comparator.compare(m, arr[i]) <= 0 ? m : arr[i];
-		}
-		return m;
-	}
+  public static <T> T min(T[] arr, Comparator<T> comparator) {
+    Asserts.notNull(arr);
+    if (arr.length == 0) {
+      throw new NoSuchElementException("arr is empty.");
+    }
+    T m = arr[0];
+    for (int i = 1; i < arr.length; i++) {
+      m = comparator.compare(m, arr[i]) <= 0 ? m : arr[i];
+    }
+    return m;
+  }
 
-	public static <T> T max(T[] arr, Comparator<T> comparator) {
-		Asserts.notNull(arr);
-		if (arr.length == 0) {
-			throw new NoSuchElementException("arr is empty.");
-		}
-		T m = arr[0];
-		for (int i = 1; i < arr.length; i++) {
-			m = comparator.compare(m, arr[i]) <= 0 ? arr[i] : m;
-		}
-		return m;
-	}
+  public static <T> T max(T[] arr, Comparator<T> comparator) {
+    Asserts.notNull(arr);
+    if (arr.length == 0) {
+      throw new NoSuchElementException("arr is empty.");
+    }
+    T m = arr[0];
+    for (int i = 1; i < arr.length; i++) {
+      m = comparator.compare(m, arr[i]) <= 0 ? arr[i] : m;
+    }
+    return m;
+  }
 
-	public static class ArrayObjIterator implements Iterator<Object> {
-		final Object array;
-		final int len;
-		int i = 0;
+  public static class ArrayObjIterator implements Iterator<Object> {
+    final Object array;
+    final int len;
+    int i = 0;
 
-		public ArrayObjIterator(Object array) {
-			Asserts.notNull(array);
-			Asserts.isTrue(array.getClass().isArray());
+    public ArrayObjIterator(Object array) {
+      Asserts.notNull(array);
+      Asserts.isTrue(array.getClass().isArray());
 
-			this.array = array;
-			this.len = Array.getLength(array);
-		}
+      this.array = array;
+      this.len = Array.getLength(array);
+    }
 
-		@Override
-		public boolean hasNext() {
-			return this.i < this.len;
-		}
+    @Override
+    public boolean hasNext() {
+      return this.i < this.len;
+    }
 
-		@Override
-		public Object next() {
-			return Array.get(this.array, this.i++);
-		}
-	}
+    @Override
+    public Object next() {
+      return Array.get(this.array, this.i++);
+    }
+  }
 
-	public static class ArrayObjIterable implements Iterable<Object> {
-		final Object array;
+  public static class ArrayObjIterable implements Iterable<Object> {
+    final Object array;
 
-		public ArrayObjIterable(Object array) {
-			Asserts.notNull(array);
-			Asserts.isTrue(array.getClass().isArray());
+    public ArrayObjIterable(Object array) {
+      Asserts.notNull(array);
+      Asserts.isTrue(array.getClass().isArray());
 
-			this.array = array;
-		}
+      this.array = array;
+    }
 
-		@Override
-		public Iterator<Object> iterator() {
-			return new ArrayObjIterator(this.array);
-		}
-	}
+    @Override
+    public Iterator<Object> iterator() {
+      return new ArrayObjIterator(this.array);
+    }
+  }
 
-	public static class ArrayIterator<T> implements Iterator<T> {
-		final T[] array;
-		int i = 0;
+  public static class ArrayIterator<T> implements Iterator<T> {
+    final T[] array;
+    int i = 0;
 
-		public ArrayIterator(T[] array) {
-			this.array = Asserts.notNull(array);
-		}
+    public ArrayIterator(T[] array) {
+      this.array = Asserts.notNull(array);
+    }
 
-		@Override
-		public boolean hasNext() {
-			return this.i < this.array.length;
-		}
+    @Override
+    public boolean hasNext() {
+      return this.i < this.array.length;
+    }
 
-		@Override
-		public T next() {
-			return this.array[i++];
-		}
-	}
+    @Override
+    public T next() {
+      return this.array[i++];
+    }
+  }
 
-	public static class ArrayIterable<T> implements Iterable<T> {
-		private T[] array;
+  public static class ArrayIterable<T> implements Iterable<T> {
+    private T[] array;
 
-		public ArrayIterable(T[] array) {
-			this.array = Asserts.notNull(array);
-		}
+    public ArrayIterable(T[] array) {
+      this.array = Asserts.notNull(array);
+    }
 
-		@Override
-		public Iterator<T> iterator() {
-			return new ArrayIterator<>(this.array);
-		}
-	}
+    @Override
+    public Iterator<T> iterator() {
+      return new ArrayIterator<>(this.array);
+    }
+  }
 }

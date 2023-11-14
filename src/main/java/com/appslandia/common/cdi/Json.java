@@ -39,9 +39,9 @@ import jakarta.inject.Qualifier;
 @Documented
 public @interface Json {
 
-	Profile value();
+  Profile value();
 
-	public enum Profile {
-		COMPACT, PRETTY
-	}
+  public enum Profile {
+    COMPACT, PRETTY
+  }
 }

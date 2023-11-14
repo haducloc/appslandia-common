@@ -49,136 +49,136 @@ import com.appslandia.common.utils.StringUtils;
  *
  */
 public class PropertyConfig extends ConfigMap {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public PropertyConfig() {
-		super(new LinkedHashMap<String, String>());
-	}
+  public PropertyConfig() {
+    super(new LinkedHashMap<String, String>());
+  }
 
-	public PropertyConfig(Map<String, String> newMap) {
-		super(newMap);
-	}
+  public PropertyConfig(Map<String, String> newMap) {
+    super(newMap);
+  }
 
-	public PropertyConfig load(InputStream is) throws IOException {
-		Properties props = new LinkedProperties();
-		props.load(is);
-		fromProperties(props);
-		return this;
-	}
+  public PropertyConfig load(InputStream is) throws IOException {
+    Properties props = new LinkedProperties();
+    props.load(is);
+    fromProperties(props);
+    return this;
+  }
 
-	public PropertyConfig load(Reader r) throws IOException {
-		Properties props = new LinkedProperties();
-		props.load(r);
-		fromProperties(props);
-		return this;
-	}
+  public PropertyConfig load(Reader r) throws IOException {
+    Properties props = new LinkedProperties();
+    props.load(r);
+    fromProperties(props);
+    return this;
+  }
 
-	public PropertyConfig load(String file) throws IOException {
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
-			return load(br);
-		} finally {
-			if (br != null) {
-				br.close();
-			}
-		}
-	}
+  public PropertyConfig load(String file) throws IOException {
+    BufferedReader br = null;
+    try {
+      br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
+      return load(br);
+    } finally {
+      if (br != null) {
+        br.close();
+      }
+    }
+  }
 
-	protected void fromProperties(Properties props) {
-		for (Object prop : props.keySet()) {
-			String key = (String) prop;
-			String value = (String) props.get(key);
+  protected void fromProperties(Properties props) {
+    for (Object prop : props.keySet()) {
+      String key = (String) prop;
+      String value = (String) props.get(key);
 
-			if (!key.isEmpty()) {
-				this.map.put(key, !value.isEmpty() ? value : null);
-			}
-		}
-	}
+      if (!key.isEmpty()) {
+        this.map.put(key, !value.isEmpty() ? value : null);
+      }
+    }
+  }
 
-	public void store(String file, String comments) throws IOException {
-		BufferedWriter bw = null;
-		try {
-			bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
-			store(bw, comments);
-		} finally {
-			if (bw != null) {
-				bw.close();
-			}
-		}
-	}
+  public void store(String file, String comments) throws IOException {
+    BufferedWriter bw = null;
+    try {
+      bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
+      store(bw, comments);
+    } finally {
+      if (bw != null) {
+        bw.close();
+      }
+    }
+  }
 
-	public void store(OutputStream os, String comments) throws IOException {
-		toProperties().store(os, comments);
-	}
+  public void store(OutputStream os, String comments) throws IOException {
+    toProperties().store(os, comments);
+  }
 
-	public void store(Writer w, String comments) throws IOException {
-		toProperties().store(w, comments);
-	}
+  public void store(Writer w, String comments) throws IOException {
+    toProperties().store(w, comments);
+  }
 
-	protected Properties toProperties() {
-		Properties props = new LinkedProperties();
-		for (Map.Entry<String, String> prop : this.map.entrySet()) {
-			props.put(prop.getKey(), prop.getValue() != null ? prop.getValue() : StringUtils.EMPTY_STRING);
-		}
-		return props;
-	}
+  protected Properties toProperties() {
+    Properties props = new LinkedProperties();
+    for (Map.Entry<String, String> prop : this.map.entrySet()) {
+      props.put(prop.getKey(), prop.getValue() != null ? prop.getValue() : StringUtils.EMPTY_STRING);
+    }
+    return props;
+  }
 
-	public PropertyConfig set(String key, String value) {
-		super.set(key, value);
-		return this;
-	}
+  public PropertyConfig set(String key, String value) {
+    super.set(key, value);
+    return this;
+  }
 
-	public PropertyConfig set(String key, boolean value) {
-		super.set(key, value);
-		return this;
-	}
+  public PropertyConfig set(String key, boolean value) {
+    super.set(key, value);
+    return this;
+  }
 
-	public PropertyConfig set(String key, int value) {
-		super.set(key, value);
-		return this;
-	}
+  public PropertyConfig set(String key, int value) {
+    super.set(key, value);
+    return this;
+  }
 
-	public PropertyConfig set(String key, long value) {
-		super.set(key, value);
-		return this;
-	}
+  public PropertyConfig set(String key, long value) {
+    super.set(key, value);
+    return this;
+  }
 
-	public PropertyConfig set(String key, double value) {
-		super.set(key, value);
-		return this;
-	}
+  public PropertyConfig set(String key, double value) {
+    super.set(key, value);
+    return this;
+  }
 
-	@Override
-	public String toString() {
-		try {
-			StringWriter out = new StringWriter();
-			store(out, getClass().getName());
-			return out.toString();
-		} catch (IOException ex) {
-			return ExceptionUtils.toStackTrace(ex);
-		}
-	}
+  @Override
+  public String toString() {
+    try {
+      StringWriter out = new StringWriter();
+      store(out, getClass().getName());
+      return out.toString();
+    } catch (IOException ex) {
+      return ExceptionUtils.toStackTrace(ex);
+    }
+  }
 
-	private static class LinkedProperties extends Properties {
-		private static final long serialVersionUID = 1;
+  private static class LinkedProperties extends Properties {
+    private static final long serialVersionUID = 1;
 
-		final Set<Object> keys = new LinkedHashSet<>();
+    final Set<Object> keys = new LinkedHashSet<>();
 
-		@Override
-		public Set<Object> keySet() {
-			return this.keys;
-		}
+    @Override
+    public Set<Object> keySet() {
+      return this.keys;
+    }
 
-		@Override
-		public Enumeration<Object> keys() {
-			return Collections.enumeration(this.keys);
-		}
+    @Override
+    public Enumeration<Object> keys() {
+      return Collections.enumeration(this.keys);
+    }
 
-		@Override
-		public Object put(Object key, Object value) {
-			this.keys.add(key);
-			return super.put(key, value);
-		}
-	}
+    @Override
+    public Object put(Object key, Object value) {
+      this.keys.add(key);
+      return super.put(key, value);
+    }
+  }
 }

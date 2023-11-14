@@ -30,64 +30,64 @@ import org.junit.jupiter.api.Test;
  */
 public class StringFormatTest {
 
-	@Test
-	public void test() {
-		try {
-			StringFormat format = new StringFormat("({3}) {3}-{4}");
-			String result = format.format("4024130224");
+  @Test
+  public void test() {
+    try {
+      StringFormat format = new StringFormat("({3}) {3}-{4}");
+      String result = format.format("4024130224");
 
-			Assertions.assertEquals(10, format.getInputLength());
-			Assertions.assertEquals("(402) 413-0224", result);
+      Assertions.assertEquals(10, format.getInputLength());
+      Assertions.assertEquals("(402) 413-0224", result);
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_spaces() {
-		try {
-			StringFormat format = new StringFormat("({ 3 }) {  3}-{4}");
-			String result = format.format("4024130224");
+  @Test
+  public void test_spaces() {
+    try {
+      StringFormat format = new StringFormat("({ 3 }) {  3}-{4}");
+      String result = format.format("4024130224");
 
-			Assertions.assertEquals(10, format.getInputLength());
-			Assertions.assertEquals("(402) 413-0224", result);
+      Assertions.assertEquals(10, format.getInputLength());
+      Assertions.assertEquals("(402) 413-0224", result);
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_noGroup() {
-		try {
-			new StringFormat("()");
-			Assertions.fail();
+  @Test
+  public void test_noGroup() {
+    try {
+      new StringFormat("()");
+      Assertions.fail();
 
-		} catch (Exception ex) {
-		}
-	}
+    } catch (Exception ex) {
+    }
+  }
 
-	@Test
-	public void test_skippedFormat() {
-		try {
-			StringFormat format = new StringFormat("({3}) {3}-{4}");
-			String result = format.format("402413022");
-			Assertions.assertEquals("402413022", result);
+  @Test
+  public void test_skippedFormat() {
+    try {
+      StringFormat format = new StringFormat("({3}) {3}-{4}");
+      String result = format.format("402413022");
+      Assertions.assertEquals("402413022", result);
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_validate() {
-		try {
-			StringFormat format = new StringFormat("({3}) {3}-{4}", true);
-			format.format("402413022");
-			Assertions.fail();
+  @Test
+  public void test_validate() {
+    try {
+      StringFormat format = new StringFormat("({3}) {3}-{4}", true);
+      format.format("402413022");
+      Assertions.fail();
 
-		} catch (Exception ex) {
-		}
-	}
+    } catch (Exception ex) {
+    }
+  }
 }

@@ -43,129 +43,129 @@ import jakarta.enterprise.util.TypeLiteral;
  */
 public class InstanceImpl<T> implements Instance<T> {
 
-	final Class<?> type;
-	final Annotation[] qualifiers;
-	final List<ObjectInstance> instances;
+  final Class<?> type;
+  final Annotation[] qualifiers;
+  final List<ObjectInstance> instances;
 
-	public InstanceImpl(Class<?> type, Annotation[] qualifiers, List<ObjectInstance> instances) {
-		this.type = type;
-		this.qualifiers = qualifiers;
-		this.instances = instances;
-	}
+  public InstanceImpl(Class<?> type, Annotation[] qualifiers, List<ObjectInstance> instances) {
+    this.type = type;
+    this.qualifiers = qualifiers;
+    this.instances = instances;
+  }
 
-	public int getCount() {
-		return this.instances.size();
-	}
+  public int getCount() {
+    return this.instances.size();
+  }
 
-	@Override
-	public Iterator<T> iterator() {
-		return new Iterator<T>() {
-			int index = -1;
+  @Override
+  public Iterator<T> iterator() {
+    return new Iterator<T>() {
+      int index = -1;
 
-			@Override
-			public T next() {
-				ObjectInstance objInst = instances.get(++this.index);
-				return ObjectUtils.cast(objInst.getInstance());
-			}
+      @Override
+      public T next() {
+        ObjectInstance objInst = instances.get(++this.index);
+        return ObjectUtils.cast(objInst.getInstance());
+      }
 
-			@Override
-			public boolean hasNext() {
-				return this.index < instances.size() - 1;
-			}
+      @Override
+      public boolean hasNext() {
+        return this.index < instances.size() - 1;
+      }
 
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-		};
-	}
+      @Override
+      public void remove() {
+        throw new UnsupportedOperationException();
+      }
+    };
+  }
 
-	@Override
-	public T get() {
-		if (isUnsatisfied()) {
-			throw new ObjectException(STR.fmt("Unsatisfied dependency: type={}, qualifiers={}.", this.type, Arrays.toString(this.qualifiers)));
-		}
-		if (isAmbiguous()) {
-			throw new ObjectException(STR.fmt("Ambiguous dependency: type={}, qualifiers={}.", this.type, Arrays.toString(this.qualifiers)));
-		}
-		return ObjectUtils.cast(this.instances.get(0).getInstance());
-	}
+  @Override
+  public T get() {
+    if (isUnsatisfied()) {
+      throw new ObjectException(STR.fmt("Unsatisfied dependency: type={}, qualifiers={}.", this.type, Arrays.toString(this.qualifiers)));
+    }
+    if (isAmbiguous()) {
+      throw new ObjectException(STR.fmt("Ambiguous dependency: type={}, qualifiers={}.", this.type, Arrays.toString(this.qualifiers)));
+    }
+    return ObjectUtils.cast(this.instances.get(0).getInstance());
+  }
 
-	@Override
-	public Instance<T> select(Annotation... qualifiers) {
-		if (qualifiers.length == 0) {
-			return this;
-		}
-		Annotation[] childQualifiers = getChildQualifiers(qualifiers);
-		List<ObjectInstance> sub = new LinkedList<>();
+  @Override
+  public Instance<T> select(Annotation... qualifiers) {
+    if (qualifiers.length == 0) {
+      return this;
+    }
+    Annotation[] childQualifiers = getChildQualifiers(qualifiers);
+    List<ObjectInstance> sub = new LinkedList<>();
 
-		for (ObjectInstance objInst : this.instances) {
-			if (AnnotationUtils.hasAnnotations(objInst.definition.getQualifiers(), childQualifiers)) {
-				sub.add(objInst);
-			}
-		}
-		return new InstanceImpl<>(this.type, childQualifiers, sub);
-	}
+    for (ObjectInstance objInst : this.instances) {
+      if (AnnotationUtils.hasAnnotations(objInst.definition.getQualifiers(), childQualifiers)) {
+        sub.add(objInst);
+      }
+    }
+    return new InstanceImpl<>(this.type, childQualifiers, sub);
+  }
 
-	@Override
-	public <U extends T> Instance<U> select(Class<U> subtype, Annotation... qualifiers) {
-		Asserts.notNull(subtype);
+  @Override
+  public <U extends T> Instance<U> select(Class<U> subtype, Annotation... qualifiers) {
+    Asserts.notNull(subtype);
 
-		if ((this.type == subtype) && (qualifiers.length == 0)) {
-			return ObjectUtils.cast(this);
-		}
-		Annotation[] childQualifiers = getChildQualifiers(qualifiers);
-		List<ObjectInstance> sub = new LinkedList<>();
+    if ((this.type == subtype) && (qualifiers.length == 0)) {
+      return ObjectUtils.cast(this);
+    }
+    Annotation[] childQualifiers = getChildQualifiers(qualifiers);
+    List<ObjectInstance> sub = new LinkedList<>();
 
-		for (ObjectInstance objInst : this.instances) {
-			if (AnnotationUtils.hasAnnotations(objInst.definition.getQualifiers(), childQualifiers)) {
+    for (ObjectInstance objInst : this.instances) {
+      if (AnnotationUtils.hasAnnotations(objInst.definition.getQualifiers(), childQualifiers)) {
 
-				if (subtype.isInstance(objInst.getInstance())) {
-					sub.add(objInst);
-				}
-			}
-		}
-		return new InstanceImpl<>(subtype, childQualifiers, sub);
-	}
+        if (subtype.isInstance(objInst.getInstance())) {
+          sub.add(objInst);
+        }
+      }
+    }
+    return new InstanceImpl<>(subtype, childQualifiers, sub);
+  }
 
-	@Override
-	public <U extends T> Instance<U> select(TypeLiteral<U> subtype, Annotation... qualifiers) {
-		throw new UnsupportedOperationException();
-	}
+  @Override
+  public <U extends T> Instance<U> select(TypeLiteral<U> subtype, Annotation... qualifiers) {
+    throw new UnsupportedOperationException();
+  }
 
-	@Override
-	public boolean isUnsatisfied() {
-		return this.instances.isEmpty();
-	}
+  @Override
+  public boolean isUnsatisfied() {
+    return this.instances.isEmpty();
+  }
 
-	@Override
-	public boolean isAmbiguous() {
-		return this.instances.size() > 1;
-	}
+  @Override
+  public boolean isAmbiguous() {
+    return this.instances.size() > 1;
+  }
 
-	@Override
-	public void destroy(T impl) {
-		for (ObjectInstance objInst : this.instances) {
-			if (objInst.destroy(impl)) {
-				return;
-			}
-		}
-		throw new UnsupportedOperationException("destroy(" + impl.getClass().getName() + ")");
-	}
+  @Override
+  public void destroy(T impl) {
+    for (ObjectInstance objInst : this.instances) {
+      if (objInst.destroy(impl)) {
+        return;
+      }
+    }
+    throw new UnsupportedOperationException("destroy(" + impl.getClass().getName() + ")");
+  }
 
-	private Annotation[] getChildQualifiers(Annotation[] qualifiers) {
-		Set<Annotation> s = CollectionUtils.toSet(new LinkedHashSet<>(), this.qualifiers);
-		CollectionUtils.toSet(s, qualifiers);
-		return s.toArray(new Annotation[s.size()]);
-	}
+  private Annotation[] getChildQualifiers(Annotation[] qualifiers) {
+    Set<Annotation> s = CollectionUtils.toSet(new LinkedHashSet<>(), this.qualifiers);
+    CollectionUtils.toSet(s, qualifiers);
+    return s.toArray(new Annotation[s.size()]);
+  }
 
-	@Override
-	public Handle<T> getHandle() {
-		throw new UnsupportedOperationException();
-	}
+  @Override
+  public Handle<T> getHandle() {
+    throw new UnsupportedOperationException();
+  }
 
-	@Override
-	public Iterable<? extends Handle<T>> handles() {
-		throw new UnsupportedOperationException();
-	}
+  @Override
+  public Iterable<? extends Handle<T>> handles() {
+    throw new UnsupportedOperationException();
+  }
 }

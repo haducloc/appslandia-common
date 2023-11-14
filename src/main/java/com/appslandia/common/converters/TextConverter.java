@@ -31,29 +31,29 @@ import com.appslandia.common.utils.StringUtils;
  */
 public class TextConverter implements Converter<String> {
 
-	public static final String ERROR_MSG_KEY = TextConverter.class.getName() + ".message";
+  public static final String ERROR_MSG_KEY = TextConverter.class.getName() + ".message";
 
-	@Override
-	public String getErrorMsgKey() {
-		return ERROR_MSG_KEY;
-	}
+  @Override
+  public String getErrorMsgKey() {
+    return ERROR_MSG_KEY;
+  }
 
-	@Override
-	public Class<String> getTargetType() {
-		return String.class;
-	}
+  @Override
+  public Class<String> getTargetType() {
+    return String.class;
+  }
 
-	@Override
-	public String format(String obj, FormatProvider formatProvider, boolean localize) {
-		return obj;
-	}
+  @Override
+  public String format(String obj, FormatProvider formatProvider, boolean localize) {
+    return obj;
+  }
 
-	@Override
-	public String parse(String str, FormatProvider formatProvider) throws ConverterException {
-		str = StringUtils.trimToNull(str);
-		if (str == null) {
-			return null;
-		}
-		return NormalizeUtils.normalizeText(str);
-	}
+  @Override
+  public String parse(String str, FormatProvider formatProvider) throws ConverterException {
+    str = StringUtils.trimToNull(str);
+    if (str == null) {
+      return null;
+    }
+    return NormalizeUtils.normalizeText(str);
+  }
 }

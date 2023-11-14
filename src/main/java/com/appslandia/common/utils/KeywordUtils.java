@@ -31,24 +31,24 @@ import com.appslandia.common.base.Out;
  */
 public class KeywordUtils {
 
-	static final Pattern KEYWORDS_PATTEN = Pattern.compile("[^,]+(\\s*,\\s*[^,]*)*", Pattern.CASE_INSENSITIVE);
+  static final Pattern KEYWORDS_PATTEN = Pattern.compile("[^,]+(\\s*,\\s*[^,]*)*", Pattern.CASE_INSENSITIVE);
 
-	public static String toKeywords(String keywords, Out<Boolean> isValid) {
-		isValid.value = true;
+  public static String toKeywords(String keywords, Out<Boolean> isValid) {
+    isValid.value = true;
 
-		if (keywords == null) {
-			return keywords;
-		}
-		if (!KEYWORDS_PATTEN.matcher(keywords).matches()) {
-			isValid.value = false;
-			return keywords;
-		}
-		String[] kws = SplitUtils.split(keywords, ',');
-		if (kws.length == 0) {
-			isValid.value = false;
+    if (keywords == null) {
+      return keywords;
+    }
+    if (!KEYWORDS_PATTEN.matcher(keywords).matches()) {
+      isValid.value = false;
+      return keywords;
+    }
+    String[] kws = SplitUtils.split(keywords, ',');
+    if (kws.length == 0) {
+      isValid.value = false;
 
-			return keywords;
-		}
-		return String.join(", ", kws);
-	}
+      return keywords;
+    }
+    return String.join(", ", kws);
+  }
 }

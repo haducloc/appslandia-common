@@ -36,31 +36,31 @@ import jakarta.json.bind.adapter.JsonbAdapter;
  */
 public abstract class JsonbMapAdapter<T extends Map<String, Object>> implements JsonbAdapter<T, JsonObject> {
 
-	final boolean unmodifiable;
-	final JsonObjectParser jsonObjectParser = new JsonObjectParser().setJsonValueConverter(JsonbJsonValueConverter.INSTANCE);
+  final boolean unmodifiable;
+  final JsonObjectParser jsonObjectParser = new JsonObjectParser().setJsonValueConverter(JsonbJsonValueConverter.INSTANCE);
 
-	public JsonbMapAdapter(boolean unmodifiable, Function<Map<String, Object>, T> rootConverter) {
-		this.unmodifiable = unmodifiable;
-		this.jsonObjectParser.setRootConverter(ObjectUtils.cast(rootConverter));
-	}
+  public JsonbMapAdapter(boolean unmodifiable, Function<Map<String, Object>, T> rootConverter) {
+    this.unmodifiable = unmodifiable;
+    this.jsonObjectParser.setRootConverter(ObjectUtils.cast(rootConverter));
+  }
 
-	public <F, V> JsonbMapAdapter<T> setValueConverter(String[] pathOrPatterns, Function<F, V> converter) {
-		this.jsonObjectParser.setValueConverter(pathOrPatterns, converter);
-		return this;
-	}
+  public <F, V> JsonbMapAdapter<T> setValueConverter(String[] pathOrPatterns, Function<F, V> converter) {
+    this.jsonObjectParser.setValueConverter(pathOrPatterns, converter);
+    return this;
+  }
 
-	@Override
-	public JsonObject adaptToJson(T obj) throws Exception {
-		return Json.createObjectBuilder(obj).build();
-	}
+  @Override
+  public JsonObject adaptToJson(T obj) throws Exception {
+    return Json.createObjectBuilder(obj).build();
+  }
 
-	@Override
-	public T adaptFromJson(JsonObject obj) throws Exception {
-		Object value = this.jsonObjectParser.parse(obj, this.unmodifiable);
-		return ObjectUtils.cast(value);
-	}
+  @Override
+  public T adaptFromJson(JsonObject obj) throws Exception {
+    Object value = this.jsonObjectParser.parse(obj, this.unmodifiable);
+    return ObjectUtils.cast(value);
+  }
 
-	public boolean isUnmodifiable() {
-		return this.unmodifiable;
-	}
+  public boolean isUnmodifiable() {
+    return this.unmodifiable;
+  }
 }

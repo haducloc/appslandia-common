@@ -39,68 +39,68 @@ import java.util.Arrays;
  */
 public class FileUtils {
 
-	public static Path mkdirs(String dir) {
-		Path path = Paths.get(dir);
-		path.toFile().mkdirs();
-		return path;
-	}
+  public static Path mkdirs(String dir) {
+    Path path = Paths.get(dir);
+    path.toFile().mkdirs();
+    return path;
+  }
 
-	public static void writeContent(Path path, String content) throws IOException {
-		writeContent(path, content, StandardCharsets.UTF_8);
-	}
+  public static void writeContent(Path path, String content) throws IOException {
+    writeContent(path, content, StandardCharsets.UTF_8);
+  }
 
-	public static void writeContent(Path path, String content, Charset charset) throws IOException {
-		Files.write(path, Arrays.asList(content), charset);
-	}
+  public static void writeContent(Path path, String content, Charset charset) throws IOException {
+    Files.write(path, Arrays.asList(content), charset);
+  }
 
-	public static String readContent(Path src) throws IOException {
-		return readContent(src, StandardCharsets.UTF_8);
-	}
+  public static String readContent(Path src) throws IOException {
+    return readContent(src, StandardCharsets.UTF_8);
+  }
 
-	public static String readContent(Path path, Charset charset) throws IOException {
-		return new String(Files.readAllBytes(path), charset);
-	}
+  public static String readContent(Path path, Charset charset) throws IOException {
+    return new String(Files.readAllBytes(path), charset);
+  }
 
-	public static void deleteRecursively(Path root) throws IOException {
-		Files.walkFileTree(root, new SimpleFileVisitor<Path>() {
-			@Override
-			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-				Files.delete(file);
-				return FileVisitResult.CONTINUE;
-			}
+  public static void deleteRecursively(Path root) throws IOException {
+    Files.walkFileTree(root, new SimpleFileVisitor<Path>() {
+      @Override
+      public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+        Files.delete(file);
+        return FileVisitResult.CONTINUE;
+      }
 
-			@Override
-			public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-				try {
-					Files.delete(dir);
-				} catch (DirectoryNotEmptyException ex) {
-				}
-				return FileVisitResult.CONTINUE;
-			}
-		});
-	}
+      @Override
+      public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+        try {
+          Files.delete(dir);
+        } catch (DirectoryNotEmptyException ex) {
+        }
+        return FileVisitResult.CONTINUE;
+      }
+    });
+  }
 
-	public static void copyRecursively(Path src, Path dest) throws IOException {
-		BasicFileAttributes srcAttr = Files.readAttributes(src, BasicFileAttributes.class);
+  public static void copyRecursively(Path src, Path dest) throws IOException {
+    BasicFileAttributes srcAttr = Files.readAttributes(src, BasicFileAttributes.class);
 
-		if (srcAttr.isDirectory()) {
-			Files.walkFileTree(src, new SimpleFileVisitor<Path>() {
-				@Override
-				public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-					Files.createDirectories(dest.resolve(src.relativize(dir)));
-					return FileVisitResult.CONTINUE;
-				}
+    if (srcAttr.isDirectory()) {
+      Files.walkFileTree(src, new SimpleFileVisitor<Path>() {
+        @Override
+        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+          Files.createDirectories(dest.resolve(src.relativize(dir)));
+          return FileVisitResult.CONTINUE;
+        }
 
-				@Override
-				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-					Files.copy(file, dest.resolve(src.relativize(file)));
-					return FileVisitResult.CONTINUE;
-				}
-			});
-		} else if (srcAttr.isRegularFile()) {
-			Files.copy(src, dest);
-		} else {
-			throw new IllegalArgumentException("src must denote a directory or file");
-		}
-	}
+        @Override
+        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+          Files.copy(file, dest.resolve(src.relativize(file)));
+          return FileVisitResult.CONTINUE;
+        }
+      });
+    } else if (srcAttr.isRegularFile()) {
+      Files.copy(src, dest);
+    } else {
+      throw new IllegalArgumentException("src must denote a directory or file");
+    }
+  }
 }

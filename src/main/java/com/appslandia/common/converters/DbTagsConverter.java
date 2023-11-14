@@ -34,38 +34,38 @@ import com.appslandia.common.utils.TagUtils;
  */
 public class DbTagsConverter implements Converter<String> {
 
-	public static final String ERROR_MSG_KEY = DbTagsConverter.class.getName() + ".message";
+  public static final String ERROR_MSG_KEY = DbTagsConverter.class.getName() + ".message";
 
-	@Override
-	public String getErrorMsgKey() {
-		return ERROR_MSG_KEY;
-	}
+  @Override
+  public String getErrorMsgKey() {
+    return ERROR_MSG_KEY;
+  }
 
-	@Override
-	public Class<String> getTargetType() {
-		return String.class;
-	}
+  @Override
+  public Class<String> getTargetType() {
+    return String.class;
+  }
 
-	@Override
-	public String format(String obj, FormatProvider formatProvider, boolean localize) {
-		if (obj == null) {
-			return null;
-		}
-		return TagUtils.toDispTags(obj);
-	}
+  @Override
+  public String format(String obj, FormatProvider formatProvider, boolean localize) {
+    if (obj == null) {
+      return null;
+    }
+    return TagUtils.toDispTags(obj);
+  }
 
-	@Override
-	public String parse(String str, FormatProvider formatProvider) throws ConverterException {
-		str = StringUtils.trimToNull(str);
-		if (str == null) {
-			return null;
-		}
-		Out<Boolean> isValid = new Out<Boolean>();
-		List<String> tags = TagUtils.toTags(str, isValid);
+  @Override
+  public String parse(String str, FormatProvider formatProvider) throws ConverterException {
+    str = StringUtils.trimToNull(str);
+    if (str == null) {
+      return null;
+    }
+    Out<Boolean> isValid = new Out<Boolean>();
+    List<String> tags = TagUtils.toTags(str, isValid);
 
-		if (!isValid.val()) {
-			throw toParsingError(str, "DbTags");
-		}
-		return !tags.isEmpty() ? TagUtils.toDbTags(tags) : null;
-	}
+    if (!isValid.val()) {
+      throw toParsingError(str, "DbTags");
+    }
+    return !tags.isEmpty() ? TagUtils.toDbTags(tags) : null;
+  }
 }

@@ -30,47 +30,47 @@ import org.junit.jupiter.api.Test;
  */
 public class StringWriterTest {
 
-	@Test
-	public void test_append() {
-		try (StringWriter sw = new StringWriter()) {
-			sw.append('a');
-			sw.append("bcd");
-			sw.append("e_fgh", 1, 4);
+  @Test
+  public void test_append() {
+    try (StringWriter sw = new StringWriter()) {
+      sw.append('a');
+      sw.append("bcd");
+      sw.append("e_fgh", 1, 4);
 
-			Assertions.assertEquals("abcd_fg", sw.toString());
+      Assertions.assertEquals("abcd_fg", sw.toString());
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_write() {
-		try (StringWriter sw = new StringWriter()) {
-			sw.write('a');
-			sw.write("bcd");
-			sw.write("ef".toCharArray());
-			sw.write("g_hk", 1, 3);
-			sw.write("x_yzt".toCharArray(), 1, 3);
+  @Test
+  public void test_write() {
+    try (StringWriter sw = new StringWriter()) {
+      sw.write('a');
+      sw.write("bcd");
+      sw.write("ef".toCharArray());
+      sw.write("g_hk", 1, 3);
+      sw.write("x_yzt".toCharArray(), 1, 3);
 
-			Assertions.assertEquals("abcdef_hk_yz", sw.toString());
+      Assertions.assertEquals("abcdef_hk_yz", sw.toString());
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_writeNull() {
-		try (StringWriter sw = new StringWriter()) {
-			sw.append("a");
-			sw.append("_");
-			sw.append(null);
+  @Test
+  public void test_writeNull() {
+    try (StringWriter sw = new StringWriter()) {
+      sw.append("a");
+      sw.append("_");
+      sw.append(null);
 
-			Assertions.assertEquals("a_null", sw.toString());
+      Assertions.assertEquals("a_null", sw.toString());
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 }

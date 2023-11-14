@@ -9,6 +9,13 @@
 - CSV Utilities
 - ToStringBuilder
 
+## Eclipse IDE - Code Formatting
+- Tab Policy: Space Only
+- Indentation size: 2 spaces
+- Tab size: 2 spaces
+- Maximum line width: 160
+- Maximum width for comments: 120
+
 ## Installation
 
 ### VERSIONS

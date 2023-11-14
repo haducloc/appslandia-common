@@ -31,21 +31,21 @@ import java.util.List;
  */
 public class BeanInstances implements Iterable<BeanInstance<?>> {
 
-	final List<BeanInstance<?>> instances = new ArrayList<>();
+  final List<BeanInstance<?>> instances = new ArrayList<>();
 
-	public void add(BeanInstance<?> bi) {
-		this.instances.add(bi);
-	}
+  public void add(BeanInstance<?> bi) {
+    this.instances.add(bi);
+  }
 
-	public void destroy() {
+  public void destroy() {
 
-		for (int i = this.instances.size() - 1; i >= 0; i--) {
-			this.instances.get(i).destroy();
-		}
-	}
+    for (int i = this.instances.size() - 1; i >= 0; i--) {
+      this.instances.get(i).destroy();
+    }
+  }
 
-	@Override
-	public Iterator<BeanInstance<?>> iterator() {
-		return this.instances.iterator();
-	}
+  @Override
+  public Iterator<BeanInstance<?>> iterator() {
+    return this.instances.iterator();
+  }
 }

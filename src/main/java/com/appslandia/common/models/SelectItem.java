@@ -27,11 +27,11 @@ package com.appslandia.common.models;
  */
 public interface SelectItem {
 
-	Object getValue();
+  Object getValue();
 
-	String getDisplayName();
+  String getDisplayName();
 
-	default public String getName() {
-		return getDisplayName();
-	}
+  default public String getName() {
+    return getDisplayName();
+  }
 }

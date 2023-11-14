@@ -27,7 +27,7 @@ package com.appslandia.common.cdi;
  */
 public interface CDIFactory<T> {
 
-	T produce();
+  T produce();
 
-	void dispose(T t);
+  void dispose(T t);
 }

@@ -32,35 +32,35 @@ import com.appslandia.common.utils.TagUtils;
  */
 public class TagConverter implements Converter<String> {
 
-	public static final String ERROR_MSG_KEY = TagConverter.class.getName() + ".message";
+  public static final String ERROR_MSG_KEY = TagConverter.class.getName() + ".message";
 
-	@Override
-	public String getErrorMsgKey() {
-		return ERROR_MSG_KEY;
-	}
+  @Override
+  public String getErrorMsgKey() {
+    return ERROR_MSG_KEY;
+  }
 
-	@Override
-	public Class<String> getTargetType() {
-		return String.class;
-	}
+  @Override
+  public Class<String> getTargetType() {
+    return String.class;
+  }
 
-	@Override
-	public String format(String obj, FormatProvider formatProvider, boolean localize) {
-		return obj;
-	}
+  @Override
+  public String format(String obj, FormatProvider formatProvider, boolean localize) {
+    return obj;
+  }
 
-	@Override
-	public String parse(String str, FormatProvider formatProvider) throws ConverterException {
-		str = StringUtils.trimToNull(str);
-		if (str == null) {
-			return null;
-		}
-		Out<Boolean> isValid = new Out<Boolean>();
-		String tag = TagUtils.toTag(str, isValid);
+  @Override
+  public String parse(String str, FormatProvider formatProvider) throws ConverterException {
+    str = StringUtils.trimToNull(str);
+    if (str == null) {
+      return null;
+    }
+    Out<Boolean> isValid = new Out<Boolean>();
+    String tag = TagUtils.toTag(str, isValid);
 
-		if (!isValid.val()) {
-			throw toParsingError(str, "Tag");
-		}
-		return tag;
-	}
+    if (!isValid.val()) {
+      throw toParsingError(str, "Tag");
+    }
+    return tag;
+  }
 }

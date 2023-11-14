@@ -33,60 +33,60 @@ import com.appslandia.common.base.StringWriter;
  */
 public class XmlEscaper {
 
-	private static final int HIGHEST_SPECIAL = '>';
+  private static final int HIGHEST_SPECIAL = '>';
 
-	private static char[][] ESCAPE_XML = new char[HIGHEST_SPECIAL + 1][];
-	static {
-		ESCAPE_XML['&'] = "&amp;".toCharArray();
-		ESCAPE_XML['<'] = "&lt;".toCharArray();
-		ESCAPE_XML['>'] = "&gt;".toCharArray();
-		ESCAPE_XML['"'] = "&#34;".toCharArray();
-		ESCAPE_XML['\''] = "&#39;".toCharArray();
-	}
+  private static char[][] ESCAPE_XML = new char[HIGHEST_SPECIAL + 1][];
+  static {
+    ESCAPE_XML['&'] = "&amp;".toCharArray();
+    ESCAPE_XML['<'] = "&lt;".toCharArray();
+    ESCAPE_XML['>'] = "&gt;".toCharArray();
+    ESCAPE_XML['"'] = "&#34;".toCharArray();
+    ESCAPE_XML['\''] = "&#39;".toCharArray();
+  }
 
-	public static void escapeXml(Writer out, String s) throws IOException {
-		writeEscapeXml(out, s, ESCAPE_XML);
-	}
+  public static void escapeXml(Writer out, String s) throws IOException {
+    writeEscapeXml(out, s, ESCAPE_XML);
+  }
 
-	public static String escapeXml(String s) {
-		if (s == null) {
-			return null;
-		}
-		try (StringWriter out = new StringWriter((int) (s.length() * 1.25f))) {
-			writeEscapeXml(out, s, ESCAPE_XML);
-			return out.toString();
+  public static String escapeXml(String s) {
+    if (s == null) {
+      return null;
+    }
+    try (StringWriter out = new StringWriter((int) (s.length() * 1.25f))) {
+      writeEscapeXml(out, s, ESCAPE_XML);
+      return out.toString();
 
-		} catch (IOException ex) {
-			throw new UncheckedIOException(ex);
-		}
-	}
+    } catch (IOException ex) {
+      throw new UncheckedIOException(ex);
+    }
+  }
 
-	static void writeEscapeXml(Writer out, String s, char[][] escapeXml) throws IOException {
-		int start = 0;
-		char[] srcChars = s.toCharArray();
-		int length = s.length();
+  static void writeEscapeXml(Writer out, String s, char[][] escapeXml) throws IOException {
+    int start = 0;
+    char[] srcChars = s.toCharArray();
+    int length = s.length();
 
-		for (int i = 0; i < length; i++) {
-			char c = srcChars[i];
-			if (c <= HIGHEST_SPECIAL) {
+    for (int i = 0; i < length; i++) {
+      char c = srcChars[i];
+      if (c <= HIGHEST_SPECIAL) {
 
-				char[] escaped = escapeXml[c];
-				if (escaped != null) {
+        char[] escaped = escapeXml[c];
+        if (escaped != null) {
 
-					// add un_escaped portion
-					if (start < i) {
-						out.write(srcChars, start, i - start);
-					}
+          // add un_escaped portion
+          if (start < i) {
+            out.write(srcChars, start, i - start);
+          }
 
-					// add escaped
-					out.write(escaped);
-					start = i + 1;
-				}
-			}
-		}
-		// add rest of un_escaped portion
-		if (start < length) {
-			out.write(srcChars, start, length - start);
-		}
-	}
+          // add escaped
+          out.write(escaped);
+          start = i + 1;
+        }
+      }
+    }
+    // add rest of un_escaped portion
+    if (start < length) {
+      out.write(srcChars, start, length - start);
+    }
+  }
 }

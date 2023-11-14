@@ -30,76 +30,76 @@ import org.junit.jupiter.api.Test;
  */
 public class GeoDMSTest {
 
-	@Test
-	public void test_toLatDMS() {
+  @Test
+  public void test_toLatDMS() {
 
-		GeoDMS dms = GeoDMS.toLatDMS(GeoUtils.toDecimalDegrees(10, 20, 30.05));
+    GeoDMS dms = GeoDMS.toLatDMS(GeoUtils.toDecimalDegrees(10, 20, 30.05));
 
-		Assertions.assertEquals(10, dms.getDegrees());
-		Assertions.assertEquals(20, dms.getMinutes());
-		Assertions.assertEquals(30.05, dms.getSeconds(), 0.001d);
+    Assertions.assertEquals(10, dms.getDegrees());
+    Assertions.assertEquals(20, dms.getMinutes());
+    Assertions.assertEquals(30.05, dms.getSeconds(), 0.001d);
 
-		Assertions.assertEquals(Direction.NORTH, dms.getDirection());
-	}
+    Assertions.assertEquals(Direction.NORTH, dms.getDirection());
+  }
 
-	@Test
-	public void test_toLatDMS_Zero() {
+  @Test
+  public void test_toLatDMS_Zero() {
 
-		GeoDMS dms = GeoDMS.toLatDMS(0.0);
+    GeoDMS dms = GeoDMS.toLatDMS(0.0);
 
-		Assertions.assertEquals(0, dms.getDegrees());
-		Assertions.assertEquals(0, dms.getMinutes());
-		Assertions.assertEquals(0.0, dms.getSeconds(), 0.01d);
+    Assertions.assertEquals(0, dms.getDegrees());
+    Assertions.assertEquals(0, dms.getMinutes());
+    Assertions.assertEquals(0.0, dms.getSeconds(), 0.01d);
 
-		Assertions.assertEquals(Direction.NORTH, dms.getDirection());
-	}
+    Assertions.assertEquals(Direction.NORTH, dms.getDirection());
+  }
 
-	@Test
-	public void test_toLongDMS() {
+  @Test
+  public void test_toLongDMS() {
 
-		GeoDMS dms = GeoDMS.toLongDMS(GeoUtils.toDecimalDegrees(10, 20, 30.05));
+    GeoDMS dms = GeoDMS.toLongDMS(GeoUtils.toDecimalDegrees(10, 20, 30.05));
 
-		Assertions.assertEquals(10, dms.getDegrees());
-		Assertions.assertEquals(20, dms.getMinutes());
-		Assertions.assertEquals(30.05, dms.getSeconds(), 0.001d);
+    Assertions.assertEquals(10, dms.getDegrees());
+    Assertions.assertEquals(20, dms.getMinutes());
+    Assertions.assertEquals(30.05, dms.getSeconds(), 0.001d);
 
-		Assertions.assertEquals(Direction.EAST, dms.getDirection());
-	}
+    Assertions.assertEquals(Direction.EAST, dms.getDirection());
+  }
 
-	@Test
-	public void test_toLongDMS_Zero() {
+  @Test
+  public void test_toLongDMS_Zero() {
 
-		GeoDMS dms = GeoDMS.toLongDMS(-0.0);
+    GeoDMS dms = GeoDMS.toLongDMS(-0.0);
 
-		Assertions.assertEquals(0, dms.getDegrees());
-		Assertions.assertEquals(0, dms.getMinutes());
-		Assertions.assertEquals(0.0, dms.getSeconds(), 0.01d);
+    Assertions.assertEquals(0, dms.getDegrees());
+    Assertions.assertEquals(0, dms.getMinutes());
+    Assertions.assertEquals(0.0, dms.getSeconds(), 0.01d);
 
-		// Direction.WEST because -0.0
-		Assertions.assertEquals(Direction.WEST, dms.getDirection());
-	}
+    // Direction.WEST because -0.0
+    Assertions.assertEquals(Direction.WEST, dms.getDirection());
+  }
 
-	@Test
-	public void test_toGeoDMS_lat() {
+  @Test
+  public void test_toGeoDMS_lat() {
 
-		GeoDMS dms = GeoDMS.toGeoDMS("10°20'30.05\"N");
+    GeoDMS dms = GeoDMS.toGeoDMS("10°20'30.05\"N");
 
-		Assertions.assertEquals(10, dms.getDegrees());
-		Assertions.assertEquals(20, dms.getMinutes());
-		Assertions.assertEquals(30.05, dms.getSeconds(), 0.001d);
+    Assertions.assertEquals(10, dms.getDegrees());
+    Assertions.assertEquals(20, dms.getMinutes());
+    Assertions.assertEquals(30.05, dms.getSeconds(), 0.001d);
 
-		Assertions.assertEquals(Direction.NORTH, dms.getDirection());
-	}
+    Assertions.assertEquals(Direction.NORTH, dms.getDirection());
+  }
 
-	@Test
-	public void test_toGeoDMS_long() {
+  @Test
+  public void test_toGeoDMS_long() {
 
-		GeoDMS dms = GeoDMS.toGeoDMS("10°20'30.05\"E");
+    GeoDMS dms = GeoDMS.toGeoDMS("10°20'30.05\"E");
 
-		Assertions.assertEquals(10, dms.getDegrees());
-		Assertions.assertEquals(20, dms.getMinutes());
-		Assertions.assertEquals(30.05, dms.getSeconds(), 0.001d);
+    Assertions.assertEquals(10, dms.getDegrees());
+    Assertions.assertEquals(20, dms.getMinutes());
+    Assertions.assertEquals(30.05, dms.getSeconds(), 0.001d);
 
-		Assertions.assertEquals(Direction.EAST, dms.getDirection());
-	}
+    Assertions.assertEquals(Direction.EAST, dms.getDirection());
+  }
 }

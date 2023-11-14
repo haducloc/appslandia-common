@@ -30,37 +30,37 @@ import com.appslandia.common.utils.StringUtils;
  */
 public class ShortConverter extends NumberConverter<Short> {
 
-	public static final String ERROR_MSG_KEY = ShortConverter.class.getName() + ".message";
+  public static final String ERROR_MSG_KEY = ShortConverter.class.getName() + ".message";
 
-	@Override
-	public String getErrorMsgKey() {
-		return ERROR_MSG_KEY;
-	}
+  @Override
+  public String getErrorMsgKey() {
+    return ERROR_MSG_KEY;
+  }
 
-	@Override
-	public Class<Short> getTargetType() {
-		return Short.class;
-	}
+  @Override
+  public Class<Short> getTargetType() {
+    return Short.class;
+  }
 
-	@Override
-	public String format(Short obj, FormatProvider formatProvider, boolean localize) {
-		if (obj == null) {
-			return null;
-		}
-		return obj.toString();
-	}
+  @Override
+  public String format(Short obj, FormatProvider formatProvider, boolean localize) {
+    if (obj == null) {
+      return null;
+    }
+    return obj.toString();
+  }
 
-	@Override
-	public Short parse(String str, FormatProvider formatProvider) throws ConverterException {
-		str = StringUtils.trimToNull(str);
-		if (str == null) {
-			return null;
-		}
-		try {
-			return Short.parseShort(str);
+  @Override
+  public Short parse(String str, FormatProvider formatProvider) throws ConverterException {
+    str = StringUtils.trimToNull(str);
+    if (str == null) {
+      return null;
+    }
+    try {
+      return Short.parseShort(str);
 
-		} catch (NumberFormatException ex) {
-		}
-		throw toParsingError(str, getTargetType().getName());
-	}
+    } catch (NumberFormatException ex) {
+    }
+    throw toParsingError(str, getTargetType().getName());
+  }
 }

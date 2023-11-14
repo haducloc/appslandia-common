@@ -49,126 +49,126 @@ import com.appslandia.common.base.StringWriter;
  */
 public class IOUtils {
 
-	private static final int DEFAULT_BUFFER_SIZE = 8192;
+  private static final int DEFAULT_BUFFER_SIZE = 8192;
 
-	public static int copy(InputStream is, OutputStream os) throws IOException {
-		int count = 0;
-		byte[] buf = new byte[DEFAULT_BUFFER_SIZE];
-		int c = -1;
-		while ((c = is.read(buf, 0, buf.length)) != -1) {
-			os.write(buf, 0, c);
-			count += c;
-		}
-		return count;
-	}
+  public static int copy(InputStream is, OutputStream os) throws IOException {
+    int count = 0;
+    byte[] buf = new byte[DEFAULT_BUFFER_SIZE];
+    int c = -1;
+    while ((c = is.read(buf, 0, buf.length)) != -1) {
+      os.write(buf, 0, c);
+      count += c;
+    }
+    return count;
+  }
 
-	public static void copy(byte[] src, int copyLength, OutputStream os) throws IOException {
-		int count = 0;
-		byte[] buf = new byte[DEFAULT_BUFFER_SIZE];
-		while (count < copyLength) {
-			int left = copyLength - count;
-			int c = (left >= buf.length) ? buf.length : left;
+  public static void copy(byte[] src, int copyLength, OutputStream os) throws IOException {
+    int count = 0;
+    byte[] buf = new byte[DEFAULT_BUFFER_SIZE];
+    while (count < copyLength) {
+      int left = copyLength - count;
+      int c = (left >= buf.length) ? buf.length : left;
 
-			System.arraycopy(src, count, buf, 0, c);
-			count += c;
-			os.write(buf, 0, c);
-		}
-	}
+      System.arraycopy(src, count, buf, 0, c);
+      count += c;
+      os.write(buf, 0, c);
+    }
+  }
 
-	public static int copy(Reader r, Writer w) throws IOException {
-		int count = 0;
-		char[] buf = new char[DEFAULT_BUFFER_SIZE / 2];
-		int c = -1;
-		while ((c = r.read(buf, 0, buf.length)) != -1) {
-			w.write(buf, 0, c);
-			count += c;
-		}
-		return count;
-	}
+  public static int copy(Reader r, Writer w) throws IOException {
+    int count = 0;
+    char[] buf = new char[DEFAULT_BUFFER_SIZE / 2];
+    int c = -1;
+    while ((c = r.read(buf, 0, buf.length)) != -1) {
+      w.write(buf, 0, c);
+      count += c;
+    }
+    return count;
+  }
 
-	public static byte[] toByteArray(InputStream is) throws IOException {
-		ByteArrayOutputStream os = new ByteArrayOutputStream(DEFAULT_BUFFER_SIZE);
-		copy(is, os);
-		return os.toByteArray();
-	}
+  public static byte[] toByteArray(InputStream is) throws IOException {
+    ByteArrayOutputStream os = new ByteArrayOutputStream(DEFAULT_BUFFER_SIZE);
+    copy(is, os);
+    return os.toByteArray();
+  }
 
-	public static String toString(Reader r) throws IOException {
-		StringWriter os = new StringWriter();
-		copy(r, os);
-		return os.toString();
-	}
+  public static String toString(Reader r) throws IOException {
+    StringWriter os = new StringWriter();
+    copy(r, os);
+    return os.toString();
+  }
 
-	public static String toString(InputStream is, String charsetName) throws IOException {
-		byte[] b = toByteArray(is);
-		return new String(b, charsetName);
-	}
+  public static String toString(InputStream is, String charsetName) throws IOException {
+    byte[] b = toByteArray(is);
+    return new String(b, charsetName);
+  }
 
-	public static List<String> readAllLines(BufferedReader r) throws IOException {
-		List<String> list = new ArrayList<>();
-		for (;;) {
-			String line = r.readLine();
-			if (line == null) {
-				break;
-			}
-			list.add(line);
-		}
-		return list;
-	}
+  public static List<String> readAllLines(BufferedReader r) throws IOException {
+    List<String> list = new ArrayList<>();
+    for (;;) {
+      String line = r.readLine();
+      if (line == null) {
+        break;
+      }
+      list.add(line);
+    }
+    return list;
+  }
 
-	public static BufferedReader textReaderBOM(InputStream is, String encodingIfNoBOM) throws IOException {
-		Asserts.notNull(encodingIfNoBOM);
+  public static BufferedReader textReaderBOM(InputStream is, String encodingIfNoBOM) throws IOException {
+    Asserts.notNull(encodingIfNoBOM);
 
-		var bomIS = new BOMInputStream(is);
-		return new BufferedReader(new InputStreamReader(bomIS, bomIS.getBOM() != null ? bomIS.getBOM().getEncoding() : encodingIfNoBOM));
-	}
+    var bomIS = new BOMInputStream(is);
+    return new BufferedReader(new InputStreamReader(bomIS, bomIS.getBOM() != null ? bomIS.getBOM().getEncoding() : encodingIfNoBOM));
+  }
 
-	public static BufferedWriter textWriterBOM(OutputStream os, String encoding) throws IOException {
-		Asserts.notNull(encoding);
-		return new BufferedWriter(new OutputStreamWriter(new BOMOutputStream(os, encoding), encoding));
-	}
+  public static BufferedWriter textWriterBOM(OutputStream os, String encoding) throws IOException {
+    Asserts.notNull(encoding);
+    return new BufferedWriter(new OutputStreamWriter(new BOMOutputStream(os, encoding), encoding));
+  }
 
-	public static void closeQuietly(Closeable closeable) {
-		if (closeable != null) {
-			try {
-				closeable.close();
-			} catch (IOException ignore) {
-			}
-		}
-	}
+  public static void closeQuietly(Closeable closeable) {
+    if (closeable != null) {
+      try {
+        closeable.close();
+      } catch (IOException ignore) {
+      }
+    }
+  }
 
-	public static InputStream nonClosing(InputStream in) {
-		return new FilterInputStream(in) {
+  public static InputStream nonClosing(InputStream in) {
+    return new FilterInputStream(in) {
 
-			@Override
-			public void close() throws IOException {
-			}
-		};
-	}
+      @Override
+      public void close() throws IOException {
+      }
+    };
+  }
 
-	public static OutputStream nonClosing(OutputStream out) {
-		return new FilterOutputStream(out) {
+  public static OutputStream nonClosing(OutputStream out) {
+    return new FilterOutputStream(out) {
 
-			@Override
-			public void close() throws IOException {
-			}
-		};
-	}
+      @Override
+      public void close() throws IOException {
+      }
+    };
+  }
 
-	public static Reader nonClosing(Reader r) {
-		return new FilterReader(r) {
+  public static Reader nonClosing(Reader r) {
+    return new FilterReader(r) {
 
-			@Override
-			public void close() throws IOException {
-			}
-		};
-	}
+      @Override
+      public void close() throws IOException {
+      }
+    };
+  }
 
-	public static Writer nonClosing(Writer w) {
-		return new FilterWriter(w) {
+  public static Writer nonClosing(Writer w) {
+    return new FilterWriter(w) {
 
-			@Override
-			public void close() throws IOException {
-			}
-		};
-	}
+      @Override
+      public void close() throws IOException {
+      }
+    };
+  }
 }

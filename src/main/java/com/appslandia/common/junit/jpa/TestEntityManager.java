@@ -31,18 +31,18 @@ import jakarta.persistence.EntityManager;
 
 public class TestEntityManager extends EntityManagerImpl {
 
-	final boolean isSharedEmf;
+  final boolean isSharedEmf;
 
-	public TestEntityManager(boolean isSharedEmf) {
-		this.isSharedEmf = isSharedEmf;
-	}
+  public TestEntityManager(boolean isSharedEmf) {
+    this.isSharedEmf = isSharedEmf;
+  }
 
-	@Override
-	protected EntityManager em() {
-		if (this.isSharedEmf) {
-			return SharedEmfTestEntityManagerExtension.emHolder.val();
-		} else {
-			return TestEntityManagerExtension.emHolder.val();
-		}
-	}
+  @Override
+  protected EntityManager em() {
+    if (this.isSharedEmf) {
+      return SharedEmfTestEntityManagerExtension.emHolder.val();
+    } else {
+      return TestEntityManagerExtension.emHolder.val();
+    }
+  }
 }

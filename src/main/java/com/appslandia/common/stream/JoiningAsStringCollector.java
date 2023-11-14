@@ -35,49 +35,49 @@ import java.util.stream.Collector;
  */
 public class JoiningAsStringCollector<T> implements Collector<T, StringBuilder, String> {
 
-	private int count = 0;
-	final int groupSize;
-	final String lineSeparator;
+  private int count = 0;
+  final int groupSize;
+  final String lineSeparator;
 
-	public JoiningAsStringCollector() {
-		this(5, System.lineSeparator());
-	}
+  public JoiningAsStringCollector() {
+    this(5, System.lineSeparator());
+  }
 
-	public JoiningAsStringCollector(int groupSize, String lineSeparator) {
-		this.groupSize = groupSize;
-		this.lineSeparator = lineSeparator;
-	}
+  public JoiningAsStringCollector(int groupSize, String lineSeparator) {
+    this.groupSize = groupSize;
+    this.lineSeparator = lineSeparator;
+  }
 
-	@Override
-	public Supplier<StringBuilder> supplier() {
-		return StringBuilder::new;
-	}
+  @Override
+  public Supplier<StringBuilder> supplier() {
+    return StringBuilder::new;
+  }
 
-	@Override
-	public BiConsumer<StringBuilder, T> accumulator() {
-		return (sb, t) -> {
-			this.count++;
+  @Override
+  public BiConsumer<StringBuilder, T> accumulator() {
+    return (sb, t) -> {
+      this.count++;
 
-			sb.append(t).append(this.lineSeparator);
+      sb.append(t).append(this.lineSeparator);
 
-			if (this.count > 0 && this.count % this.groupSize == 0) {
-				sb.append(this.lineSeparator);
-			}
-		};
-	}
+      if (this.count > 0 && this.count % this.groupSize == 0) {
+        sb.append(this.lineSeparator);
+      }
+    };
+  }
 
-	@Override
-	public BinaryOperator<StringBuilder> combiner() {
-		return StringBuilder::append;
-	}
+  @Override
+  public BinaryOperator<StringBuilder> combiner() {
+    return StringBuilder::append;
+  }
 
-	@Override
-	public Function<StringBuilder, String> finisher() {
-		return sb -> sb.toString().trim();
-	}
+  @Override
+  public Function<StringBuilder, String> finisher() {
+    return sb -> sb.toString().trim();
+  }
 
-	@Override
-	public Set<Characteristics> characteristics() {
-		return Collections.emptySet();
-	}
+  @Override
+  public Set<Characteristics> characteristics() {
+    return Collections.emptySet();
+  }
 }

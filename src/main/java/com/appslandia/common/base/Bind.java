@@ -38,9 +38,9 @@ import com.appslandia.common.utils.StringUtils;
 @Documented
 public @interface Bind {
 
-	String name() default StringUtils.EMPTY_STRING;
+  String name() default StringUtils.EMPTY_STRING;
 
-	String converter() default StringUtils.EMPTY_STRING;
+  String converter() default StringUtils.EMPTY_STRING;
 
-	String defaultValue() default StringUtils.EMPTY_STRING;
+  String defaultValue() default StringUtils.EMPTY_STRING;
 }

@@ -26,20 +26,20 @@ package com.appslandia.common.base;
  *
  */
 public class DestroyException extends RuntimeException {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public DestroyException() {
-	}
+  public DestroyException() {
+  }
 
-	public DestroyException(String message) {
-		super(message);
-	}
+  public DestroyException(String message) {
+    super(message);
+  }
 
-	public DestroyException(String message, Throwable cause) {
-		super(message, cause);
-	}
+  public DestroyException(String message, Throwable cause) {
+    super(message, cause);
+  }
 
-	public DestroyException(Throwable cause) {
-		super(cause);
-	}
+  public DestroyException(Throwable cause) {
+    super(cause);
+  }
 }

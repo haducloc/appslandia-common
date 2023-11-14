@@ -32,26 +32,26 @@ import com.appslandia.common.utils.ObjectUtils;
  *
  */
 public class DataRecord extends CaseInsensitiveMap<Object> {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public DataRecord() {
-		super(new LinkedHashMap<>());
-	}
+  public DataRecord() {
+    super(new LinkedHashMap<>());
+  }
 
-	public DataRecord set(String columnName, Object value) {
-		super.put(columnName, value);
-		return this;
-	}
+  public DataRecord set(String columnName, Object value) {
+    super.put(columnName, value);
+    return this;
+  }
 
-	public <T> T get(String columnName) {
-		return ObjectUtils.cast(super.get(columnName));
-	}
+  public <T> T get(String columnName) {
+    return ObjectUtils.cast(super.get(columnName));
+  }
 
-	public Object[] toValues(Table table) {
-		return toValues(table.getColumnLabels());
-	}
+  public Object[] toValues(Table table) {
+    return toValues(table.getColumnLabels());
+  }
 
-	public Object[] toValues(String[] columnNames) {
-		return Arrays.stream(columnNames).map(l -> super.get(l)).toArray();
-	}
+  public Object[] toValues(String[] columnNames) {
+    return Arrays.stream(columnNames).map(l -> super.get(l)).toArray();
+  }
 }

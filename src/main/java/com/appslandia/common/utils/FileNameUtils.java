@@ -31,51 +31,51 @@ import com.appslandia.common.base.UUIDGenerator;
  */
 public class FileNameUtils {
 
-	public static String toFileNameNow(String fileName) {
-		return toFileName(fileName, DateUtils.getFormatter("yyyyMMdd-HHmmss-SSS").format(LocalDateTime.now()));
-	}
+  public static String toFileNameNow(String fileName) {
+    return toFileName(fileName, DateUtils.getFormatter("yyyyMMdd-HHmmss-SSS").format(LocalDateTime.now()));
+  }
 
-	public static String toFileNameUUID(String fileName) {
-		return toFileName(fileName, UUIDGenerator.INSTANCE.generate());
-	}
+  public static String toFileNameUUID(String fileName) {
+    return toFileName(fileName, UUIDGenerator.INSTANCE.generate());
+  }
 
-	public static String toFileName(String fileName, Object extra) {
-		Asserts.notNull(fileName);
+  public static String toFileName(String fileName, Object extra) {
+    Asserts.notNull(fileName);
 
-		// No extension
-		var dotIdx = fileName.lastIndexOf('.');
-		if (dotIdx < 0) {
+    // No extension
+    var dotIdx = fileName.lastIndexOf('.');
+    if (dotIdx < 0) {
 
-			String fn = NormalizeUtils.normalizeLabel(fileName);
-			if (fn == null) {
-				return null;
-			}
-			return (extra != null) ? (fn + '-' + extra) : fn;
-		}
-		String namePart = NormalizeUtils.normalizeLabel(fileName.substring(0, dotIdx));
-		String extPart = NormalizeUtils.normalizeLabel(fileName.substring(dotIdx + 1));
+      String fn = NormalizeUtils.normalizeLabel(fileName);
+      if (fn == null) {
+        return null;
+      }
+      return (extra != null) ? (fn + '-' + extra) : fn;
+    }
+    String namePart = NormalizeUtils.normalizeLabel(fileName.substring(0, dotIdx));
+    String extPart = NormalizeUtils.normalizeLabel(fileName.substring(dotIdx + 1));
 
-		// No extPart
-		if (extPart == null) {
-			if (namePart == null) {
-				return null;
-			}
-			return (extra != null) ? (namePart + '-' + extra) : namePart;
-		}
+    // No extPart
+    if (extPart == null) {
+      if (namePart == null) {
+        return null;
+      }
+      return (extra != null) ? (namePart + '-' + extra) : namePart;
+    }
 
-		// No namePart
-		if (namePart == null) {
-			return (extra != null) ? (extra.toString() + '.' + extPart) : ('.' + extPart);
-		}
+    // No namePart
+    if (namePart == null) {
+      return (extra != null) ? (extra.toString() + '.' + extPart) : ('.' + extPart);
+    }
 
-		// namePart & extPart
-		return (extra != null) ? (namePart + '-' + extra + '.' + extPart) : (namePart + '.' + extPart);
-	}
+    // namePart & extPart
+    return (extra != null) ? (namePart + '-' + extra + '.' + extPart) : (namePart + '.' + extPart);
+  }
 
-	public static String toUnixPath(String path) {
-		if (path == null || path.indexOf('\\') == -1) {
-			return path;
-		}
-		return path.replace('\\', '/');
-	}
+  public static String toUnixPath(String path) {
+    if (path == null || path.indexOf('\\') == -1) {
+      return path;
+    }
+    return path.replace('\\', '/');
+  }
 }

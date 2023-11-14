@@ -35,16 +35,16 @@ import com.google.gson.JsonParseException;
  */
 public class GsonLocalTimeSerializer extends GsonTemporalSerializer<LocalTime> {
 
-	public GsonLocalTimeSerializer() {
-		this(DateUtils.ISO8601_TIME_N3);
-	}
+  public GsonLocalTimeSerializer() {
+    this(DateUtils.ISO8601_TIME_N3);
+  }
 
-	public GsonLocalTimeSerializer(String serializeIsoPattern) {
-		super(serializeIsoPattern);
-	}
+  public GsonLocalTimeSerializer(String serializeIsoPattern) {
+    super(serializeIsoPattern);
+  }
 
-	@Override
-	public LocalTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-		return parseLocalTime(json.getAsString());
-	}
+  @Override
+  public LocalTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    return parseLocalTime(json.getAsString());
+  }
 }

@@ -38,120 +38,120 @@ import com.appslandia.common.utils.STR;
  */
 public class Resources {
 
-	private static final ResourceBundle LBundle = ResourceBundle.getBundle("lresources");
+  private static final ResourceBundle LBundle = ResourceBundle.getBundle("lresources");
 
-	private static volatile ResourceBundle bundle = null;
-	private static final Object MUTEX = new Object();
+  private static volatile ResourceBundle bundle = null;
+  private static final Object MUTEX = new Object();
 
-	public static ResourceBundle getBundle() {
-		ResourceBundle obj = bundle;
-		if (obj == null) {
-			synchronized (MUTEX) {
-				if ((obj = bundle) == null) {
-					bundle = obj = LBundle;
-				}
-			}
-		}
-		return obj;
-	}
+  public static ResourceBundle getBundle() {
+    ResourceBundle obj = bundle;
+    if (obj == null) {
+      synchronized (MUTEX) {
+        if ((obj = bundle) == null) {
+          bundle = obj = LBundle;
+        }
+      }
+    }
+    return obj;
+  }
 
-	public static void initBundle(ResourceBundle bundle) {
-		Asserts.isNull(Resources.bundle);
-		Resources.bundle = new ResourceBundleImpl(bundle, LBundle);
-	}
+  public static void initBundle(ResourceBundle bundle) {
+    Asserts.isNull(Resources.bundle);
+    Resources.bundle = new ResourceBundleImpl(bundle, LBundle);
+  }
 
-	public static void initBundle(Map<String, Object> bundle) {
-		Asserts.isNull(Resources.bundle);
-		Resources.bundle = new ResourceBundleImpl(bundle, LBundle);
-	}
+  public static void initBundle(Map<String, Object> bundle) {
+    Asserts.isNull(Resources.bundle);
+    Resources.bundle = new ResourceBundleImpl(bundle, LBundle);
+  }
 
-	public static String getString(String key) {
-		return getBundle().getString(key);
-	}
+  public static String getString(String key) {
+    return getBundle().getString(key);
+  }
 
-	public static String getString(String key, Object... params) {
-		return STR.format(getBundle().getString(key), params);
-	}
+  public static String getString(String key, Object... params) {
+    return STR.format(getBundle().getString(key), params);
+  }
 
-	static class ResourceBundleImpl extends ResourceBundle {
-		final Map<String, Object> lookup;
+  static class ResourceBundleImpl extends ResourceBundle {
+    final Map<String, Object> lookup;
 
-		public ResourceBundleImpl(ResourceBundle bundle, ResourceBundle parent) {
-			this.lookup = toMap(bundle);
-			this.parent = Asserts.notNull(parent);
-		}
+    public ResourceBundleImpl(ResourceBundle bundle, ResourceBundle parent) {
+      this.lookup = toMap(bundle);
+      this.parent = Asserts.notNull(parent);
+    }
 
-		public ResourceBundleImpl(Map<String, Object> bundle, ResourceBundle parent) {
-			this.lookup = new HashMap<>(bundle);
-			this.parent = Asserts.notNull(parent);
-		}
+    public ResourceBundleImpl(Map<String, Object> bundle, ResourceBundle parent) {
+      this.lookup = new HashMap<>(bundle);
+      this.parent = Asserts.notNull(parent);
+    }
 
-		@Override
-		public Object handleGetObject(String key) {
-			Asserts.notNull(key);
-			return this.lookup.get(key);
-		}
+    @Override
+    public Object handleGetObject(String key) {
+      Asserts.notNull(key);
+      return this.lookup.get(key);
+    }
 
-		@Override
-		public Enumeration<String> getKeys() {
-			return new ResourceBundleEnumeration(this.lookup.keySet(), this.parent.getKeys());
-		}
+    @Override
+    public Enumeration<String> getKeys() {
+      return new ResourceBundleEnumeration(this.lookup.keySet(), this.parent.getKeys());
+    }
 
-		@Override
-		protected Set<String> handleKeySet() {
-			return this.lookup.keySet();
-		}
+    @Override
+    protected Set<String> handleKeySet() {
+      return this.lookup.keySet();
+    }
 
-		static Map<String, Object> toMap(ResourceBundle bundle) {
-			Map<String, Object> m = new HashMap<>();
-			Enumeration<String> keys = bundle.getKeys();
+    static Map<String, Object> toMap(ResourceBundle bundle) {
+      Map<String, Object> m = new HashMap<>();
+      Enumeration<String> keys = bundle.getKeys();
 
-			while (keys.hasMoreElements()) {
-				String key = keys.nextElement();
-				m.put(key, bundle.getObject(key));
-			}
-			return m;
-		}
-	}
+      while (keys.hasMoreElements()) {
+        String key = keys.nextElement();
+        m.put(key, bundle.getObject(key));
+      }
+      return m;
+    }
+  }
 
-	static class ResourceBundleEnumeration implements Enumeration<String> {
-		final Set<String> keySet;
-		final Iterator<String> keys;
-		final Enumeration<String> parentKeys;
-		private String next = null;
+  static class ResourceBundleEnumeration implements Enumeration<String> {
+    final Set<String> keySet;
+    final Iterator<String> keys;
+    final Enumeration<String> parentKeys;
+    private String next = null;
 
-		public ResourceBundleEnumeration(Set<String> keySet, Enumeration<String> parentKeys) {
-			this.keySet = keySet;
-			this.keys = keySet.iterator();
-			this.parentKeys = parentKeys;
-		}
+    public ResourceBundleEnumeration(Set<String> keySet, Enumeration<String> parentKeys) {
+      this.keySet = keySet;
+      this.keys = keySet.iterator();
+      this.parentKeys = parentKeys;
+    }
 
-		@Override
-		public boolean hasMoreElements() {
-			if (this.next == null) {
-				if (this.keys.hasNext()) {
-					this.next = this.keys.next();
-				} else {
-					while (this.next == null && this.parentKeys.hasMoreElements()) {
-						this.next = this.parentKeys.nextElement();
-						if (this.keySet.contains(this.next)) {
-							this.next = null;
-						}
-					}
-				}
-			}
-			return this.next != null;
-		}
+    @Override
+    public boolean hasMoreElements() {
+      if (this.next == null) {
+        if (this.keys.hasNext()) {
+          this.next = this.keys.next();
+        } else {
+          while (this.next == null && this.parentKeys.hasMoreElements()) {
+            this.next = this.parentKeys.nextElement();
+            if (this.keySet.contains(this.next)) {
+              this.next = null;
+            }
+          }
+        }
+      }
+      return this.next != null;
+    }
 
-		@Override
-		public String nextElement() {
-			if (this.hasMoreElements()) {
-				String key = this.next;
-				this.next = null;
-				return key;
-			} else {
-				throw new NoSuchElementException();
-			}
-		}
-	}
+    @Override
+    public String nextElement() {
+      if (this.hasMoreElements()) {
+        String key = this.next;
+        this.next = null;
+        return key;
+      } else {
+        throw new NoSuchElementException();
+      }
+    }
+  }
 }

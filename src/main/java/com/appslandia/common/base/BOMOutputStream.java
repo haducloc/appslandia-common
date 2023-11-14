@@ -31,59 +31,59 @@ import java.io.OutputStream;
  */
 public class BOMOutputStream extends OutputStream {
 
-	final OutputStream os;
-	final BOM bom;
+  final OutputStream os;
+  final BOM bom;
 
-	private boolean wroteBom;
+  private boolean wroteBom;
 
-	public BOMOutputStream(OutputStream os, String encoding) {
-		this(os, BOM.parse(encoding));
-	}
+  public BOMOutputStream(OutputStream os, String encoding) {
+    this(os, BOM.parse(encoding));
+  }
 
-	public BOMOutputStream(OutputStream os, BOM bom) {
-		this.os = os;
-		this.bom = bom;
-	}
+  public BOMOutputStream(OutputStream os, BOM bom) {
+    this.os = os;
+    this.bom = bom;
+  }
 
-	public BOM getBOM() {
-		return this.bom;
-	}
+  public BOM getBOM() {
+    return this.bom;
+  }
 
-	protected void writeBOM() throws IOException {
-		if (this.bom == null) {
-			return;
-		}
-		if (!this.wroteBom) {
-			this.os.write(this.bom.getBytes());
-			this.wroteBom = true;
-		}
-	}
+  protected void writeBOM() throws IOException {
+    if (this.bom == null) {
+      return;
+    }
+    if (!this.wroteBom) {
+      this.os.write(this.bom.getBytes());
+      this.wroteBom = true;
+    }
+  }
 
-	@Override
-	public void write(int b) throws IOException {
-		this.writeBOM();
-		this.os.write(b);
-	}
+  @Override
+  public void write(int b) throws IOException {
+    this.writeBOM();
+    this.os.write(b);
+  }
 
-	@Override
-	public void write(byte[] b, int off, int len) throws IOException {
-		this.writeBOM();
-		this.os.write(b, off, len);
-	}
+  @Override
+  public void write(byte[] b, int off, int len) throws IOException {
+    this.writeBOM();
+    this.os.write(b, off, len);
+  }
 
-	@Override
-	public void write(byte[] b) throws IOException {
-		this.writeBOM();
-		this.os.write(b, 0, b.length);
-	}
+  @Override
+  public void write(byte[] b) throws IOException {
+    this.writeBOM();
+    this.os.write(b, 0, b.length);
+  }
 
-	@Override
-	public void flush() throws IOException {
-		this.os.flush();
-	}
+  @Override
+  public void flush() throws IOException {
+    this.os.flush();
+  }
 
-	@Override
-	public void close() throws IOException {
-		this.os.close();
-	}
+  @Override
+  public void close() throws IOException {
+    this.os.close();
+  }
 }

@@ -30,81 +30,81 @@ import java.util.Map;
  *
  */
 public class JsonWebKey extends JoseMapObject {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public static final String KTY = "kty";
-	public static final String USE = "use";
-	public static final String KEY_OPS = "key_ops";
-	public static final String ALG = "alg";
-	public static final String KID = "kid";
+  public static final String KTY = "kty";
+  public static final String USE = "use";
+  public static final String KEY_OPS = "key_ops";
+  public static final String ALG = "alg";
+  public static final String KID = "kid";
 
-	public JsonWebKey() {
-	}
+  public JsonWebKey() {
+  }
 
-	public JsonWebKey(Map<String, Object> map) {
-		super(map);
-	}
+  public JsonWebKey(Map<String, Object> map) {
+    super(map);
+  }
 
-	@Override
-	public JsonWebKey set(String key, Object value) {
-		super.set(key, value);
-		return this;
-	}
+  @Override
+  public JsonWebKey set(String key, Object value) {
+    super.set(key, value);
+    return this;
+  }
 
-	@Override
-	public JsonWebKey setNumericDate(String key, Date value) {
-		super.setNumericDate(key, value);
-		return this;
-	}
+  @Override
+  public JsonWebKey setNumericDate(String key, Date value) {
+    super.setNumericDate(key, value);
+    return this;
+  }
 
-	@Override
-	public JsonWebKey setNumericDate(String key, long timeInMs) {
-		super.setNumericDate(key, timeInMs);
-		return this;
-	}
+  @Override
+  public JsonWebKey setNumericDate(String key, long timeInMs) {
+    super.setNumericDate(key, timeInMs);
+    return this;
+  }
 
-	public String getKty() {
-		return (String) this.get(KTY);
-	}
+  public String getKty() {
+    return (String) this.get(KTY);
+  }
 
-	public JsonWebKey setKty(String value) {
-		this.put(KTY, value);
-		return this;
-	}
+  public JsonWebKey setKty(String value) {
+    this.put(KTY, value);
+    return this;
+  }
 
-	public String getUse() {
-		return (String) this.get(USE);
-	}
+  public String getUse() {
+    return (String) this.get(USE);
+  }
 
-	public JsonWebKey setUse(String value) {
-		this.put(USE, value);
-		return this;
-	}
+  public JsonWebKey setUse(String value) {
+    this.put(USE, value);
+    return this;
+  }
 
-	public List<String> getKey_ops() {
-		return getList(KEY_OPS);
-	}
+  public List<String> getKey_ops() {
+    return getList(KEY_OPS);
+  }
 
-	public JsonWebKey setKey_ops(String... values) {
-		this.put(KEY_OPS, values);
-		return this;
-	}
+  public JsonWebKey setKey_ops(String... values) {
+    this.put(KEY_OPS, values);
+    return this;
+  }
 
-	public String getAlg() {
-		return (String) this.get(ALG);
-	}
+  public String getAlg() {
+    return (String) this.get(ALG);
+  }
 
-	public JsonWebKey setAlg(String value) {
-		this.put(ALG, value);
-		return this;
-	}
+  public JsonWebKey setAlg(String value) {
+    this.put(ALG, value);
+    return this;
+  }
 
-	public String getKid() {
-		return (String) this.get(KID);
-	}
+  public String getKid() {
+    return (String) this.get(KID);
+  }
 
-	public JsonWebKey setKid(String value) {
-		this.put(KID, value);
-		return this;
-	}
+  public JsonWebKey setKid(String value) {
+    this.put(KID, value);
+    return this;
+  }
 }

@@ -35,39 +35,39 @@ import jakarta.mail.internet.MimeUtility;
  */
 public class EmailUtils {
 
-	private static final Pattern EMAIL_PATTERN = Pattern.compile("^(?=.{6,255}$)[_a-z\\d+-]+(\\.[_a-z\\d-]+)*@[a-z\\d-]+(\\.[a-z\\d-]+)*(\\.[a-z]{2,})$",
-			Pattern.CASE_INSENSITIVE);
+  private static final Pattern EMAIL_PATTERN = Pattern.compile("^(?=.{6,255}$)[_a-z\\d+-]+(\\.[_a-z\\d-]+)*@[a-z\\d-]+(\\.[a-z\\d-]+)*(\\.[a-z]{2,})$",
+      Pattern.CASE_INSENSITIVE);
 
-	public static boolean isValid(CharSequence email) {
-		if (email == null) {
-			return true;
-		}
-		return EMAIL_PATTERN.matcher(email).matches();
-	}
+  public static boolean isValid(CharSequence email) {
+    if (email == null) {
+      return true;
+    }
+    return EMAIL_PATTERN.matcher(email).matches();
+  }
 
-	public static InternetAddress parseAddress(String email, String person) throws AddressException {
-		Asserts.notNull(email);
+  public static InternetAddress parseAddress(String email, String person) throws AddressException {
+    Asserts.notNull(email);
 
-		InternetAddress address = new InternetAddress(email);
-		if (person != null) {
-			try {
-				address.setPersonal(person, StandardCharsets.UTF_8.name());
-			} catch (UnsupportedEncodingException ex) {
-				throw new Error(ex);
-			}
-		}
-		return address;
-	}
+    InternetAddress address = new InternetAddress(email);
+    if (person != null) {
+      try {
+        address.setPersonal(person, StandardCharsets.UTF_8.name());
+      } catch (UnsupportedEncodingException ex) {
+        throw new Error(ex);
+      }
+    }
+    return address;
+  }
 
-	public static String toPersonEmail(String email, String person) {
-		Asserts.notNull(email);
-		if (person == null) {
-			return email;
-		}
-		try {
-			return String.format("%s <%s>", MimeUtility.encodeWord(person, StandardCharsets.UTF_8.name(), null), email);
-		} catch (UnsupportedEncodingException ex) {
-			throw new Error(ex);
-		}
-	}
+  public static String toPersonEmail(String email, String person) {
+    Asserts.notNull(email);
+    if (person == null) {
+      return email;
+    }
+    try {
+      return String.format("%s <%s>", MimeUtility.encodeWord(person, StandardCharsets.UTF_8.name(), null), email);
+    } catch (UnsupportedEncodingException ex) {
+      throw new Error(ex);
+    }
+  }
 }

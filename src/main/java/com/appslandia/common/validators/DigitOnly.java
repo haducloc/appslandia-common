@@ -43,36 +43,36 @@ import jakarta.validation.Payload;
 @Documented
 public @interface DigitOnly {
 
-	String message() default "{com.appslandia.common.validators.DigitOnly.message}";
+  String message() default "{com.appslandia.common.validators.DigitOnly.message}";
 
-	Class<?>[] groups() default {};
+  Class<?>[] groups() default {};
 
-	Class<? extends Payload>[] payload() default {};
+  Class<? extends Payload>[] payload() default {};
 
-	int value() default 0;
+  int value() default 0;
 
-	static final Pattern DIGITS_PATTERN = Pattern.compile("^\\d+$");
+  static final Pattern DIGITS_PATTERN = Pattern.compile("^\\d+$");
 
-	public static class ConstraintValidatorImpl implements ConstraintValidator<DigitOnly, CharSequence> {
+  public static class ConstraintValidatorImpl implements ConstraintValidator<DigitOnly, CharSequence> {
 
-		private int length;
+    private int length;
 
-		@Override
-		public void initialize(DigitOnly annotation) {
-			this.length = annotation.value();
-		}
+    @Override
+    public void initialize(DigitOnly annotation) {
+      this.length = annotation.value();
+    }
 
-		@Override
-		public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
-			if (value == null) {
-				return true;
-			}
-			if (this.length > 0) {
-				if (value.length() != this.length) {
-					return false;
-				}
-			}
-			return DIGITS_PATTERN.matcher(value).matches();
-		}
-	}
+    @Override
+    public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
+      if (value == null) {
+        return true;
+      }
+      if (this.length > 0) {
+        if (value.length() != this.length) {
+          return false;
+        }
+      }
+      return DIGITS_PATTERN.matcher(value).matches();
+    }
+  }
 }

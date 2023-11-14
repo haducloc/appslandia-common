@@ -28,5 +28,5 @@ package com.appslandia.common.jdbc;
 @FunctionalInterface
 public interface ResultSetMapper<T> {
 
-	T map(ResultSetImpl rs) throws java.sql.SQLException;
+  T map(ResultSetImpl rs) throws java.sql.SQLException;
 }

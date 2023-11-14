@@ -31,31 +31,31 @@ import java.sql.SQLException;
  *
  */
 public class UncheckedSQLException extends RuntimeException {
-	private static final long serialVersionUID = -8134305061645241065L;
+  private static final long serialVersionUID = -8134305061645241065L;
 
-	public UncheckedSQLException(String message, SQLException cause) {
-		super(message, cause);
-	}
+  public UncheckedSQLException(String message, SQLException cause) {
+    super(message, cause);
+  }
 
-	public UncheckedSQLException(SQLException cause) {
-		super(cause);
-	}
+  public UncheckedSQLException(SQLException cause) {
+    super(cause);
+  }
 
-	@Override
-	public SQLException getCause() {
-		return (SQLException) super.getCause();
-	}
+  @Override
+  public SQLException getCause() {
+    return (SQLException) super.getCause();
+  }
 
-	/**
-	 * Called to read the object from a stream.
-	 *
-	 * @throws InvalidObjectException if the object is invalid or has a cause that is not an {@code SQLException}
-	 */
-	private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
-		s.defaultReadObject();
-		Throwable cause = super.getCause();
-		if (!(cause instanceof SQLException)) {
-			throw new InvalidObjectException("Cause must be an SQLException");
-		}
-	}
+  /**
+   * Called to read the object from a stream.
+   *
+   * @throws InvalidObjectException if the object is invalid or has a cause that is not an {@code SQLException}
+   */
+  private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
+    s.defaultReadObject();
+    Throwable cause = super.getCause();
+    if (!(cause instanceof SQLException)) {
+      throw new InvalidObjectException("Cause must be an SQLException");
+    }
+  }
 }

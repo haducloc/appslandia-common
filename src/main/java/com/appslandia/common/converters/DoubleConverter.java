@@ -33,62 +33,62 @@ import com.appslandia.common.utils.StringUtils;
  */
 public class DoubleConverter extends NumberConverter<Double> {
 
-	public static final String ERROR_MSG_KEY = DoubleConverter.class.getName() + ".message";
+  public static final String ERROR_MSG_KEY = DoubleConverter.class.getName() + ".message";
 
-	final int fractionDigits;
-	final RoundingMode roundingMode;
+  final int fractionDigits;
+  final RoundingMode roundingMode;
 
-	public DoubleConverter() {
-		this(3);
-	}
+  public DoubleConverter() {
+    this(3);
+  }
 
-	public DoubleConverter(int fractionDigits) {
-		this(fractionDigits, RoundingMode.HALF_EVEN);
-	}
+  public DoubleConverter(int fractionDigits) {
+    this(fractionDigits, RoundingMode.HALF_EVEN);
+  }
 
-	public DoubleConverter(int fractionDigits, RoundingMode roundingMode) {
-		this.fractionDigits = fractionDigits;
-		this.roundingMode = roundingMode;
-	}
+  public DoubleConverter(int fractionDigits, RoundingMode roundingMode) {
+    this.fractionDigits = fractionDigits;
+    this.roundingMode = roundingMode;
+  }
 
-	@Override
-	public String getErrorMsgKey() {
-		return ERROR_MSG_KEY;
-	}
+  @Override
+  public String getErrorMsgKey() {
+    return ERROR_MSG_KEY;
+  }
 
-	@Override
-	public Class<Double> getTargetType() {
-		return Double.class;
-	}
+  @Override
+  public Class<Double> getTargetType() {
+    return Double.class;
+  }
 
-	@Override
-	public String format(Double obj, FormatProvider formatProvider, boolean localize) {
-		if (obj == null) {
-			return null;
-		}
-		if (localize) {
-			NumberFormat nf = formatProvider.getNumberFormat(this.fractionDigits, this.roundingMode, false);
-			return nf.format(obj);
-		}
-		return formatProvider.getDecimalFormat(this.fractionDigits, this.roundingMode).format(obj);
-	}
+  @Override
+  public String format(Double obj, FormatProvider formatProvider, boolean localize) {
+    if (obj == null) {
+      return null;
+    }
+    if (localize) {
+      NumberFormat nf = formatProvider.getNumberFormat(this.fractionDigits, this.roundingMode, false);
+      return nf.format(obj);
+    }
+    return formatProvider.getDecimalFormat(this.fractionDigits, this.roundingMode).format(obj);
+  }
 
-	@Override
-	public Double parse(String str, FormatProvider formatProvider) throws ConverterException {
-		str = StringUtils.trimToNull(str);
-		if (str == null) {
-			return null;
-		}
-		try {
-			return Double.parseDouble(str);
+  @Override
+  public Double parse(String str, FormatProvider formatProvider) throws ConverterException {
+    str = StringUtils.trimToNull(str);
+    if (str == null) {
+      return null;
+    }
+    try {
+      return Double.parseDouble(str);
 
-		} catch (NumberFormatException ex) {
-		}
+    } catch (NumberFormatException ex) {
+    }
 
-		Number number = this.parseNumber(str, formatProvider.getNumberParser());
-		if (number != null) {
-			return (number instanceof Double) ? (Double) number : number.doubleValue();
-		}
-		throw toParsingError(str, getTargetType().getName());
-	}
+    Number number = this.parseNumber(str, formatProvider.getNumberParser());
+    if (number != null) {
+      return (number instanceof Double) ? (Double) number : number.doubleValue();
+    }
+    throw toParsingError(str, getTargetType().getName());
+  }
 }

@@ -30,22 +30,22 @@ import org.junit.jupiter.api.Test;
  */
 public class MathUtilsTest {
 
-	@Test
-	public void test_toByteArray() {
-		byte[] bytes = MathUtils.toByteArray(100);
-		Assertions.assertEquals(100, MathUtils.toInt(bytes));
+  @Test
+  public void test_toByteArray() {
+    byte[] bytes = MathUtils.toByteArray(100);
+    Assertions.assertEquals(100, MathUtils.toInt(bytes));
 
-		bytes = MathUtils.toByteArray(1000L);
-		Assertions.assertEquals(1000L, MathUtils.toLong(bytes));
-	}
+    bytes = MathUtils.toByteArray(1000L);
+    Assertions.assertEquals(1000L, MathUtils.toLong(bytes));
+  }
 
-	@Test
-	public void test_toNearestMultipleOf() {
-		Assertions.assertEquals(0, MathUtils.toNearestMultipleOf(15, 0));
+  @Test
+  public void test_toNearestMultipleOf() {
+    Assertions.assertEquals(0, MathUtils.toNearestMultipleOf(15, 0));
 
-		for (int n = 1; n < 15; n++) {
-			Assertions.assertEquals(15, MathUtils.toNearestMultipleOf(15, n));
-		}
-		Assertions.assertEquals(30, MathUtils.toNearestMultipleOf(15, 16));
-	}
+    for (int n = 1; n < 15; n++) {
+      Assertions.assertEquals(15, MathUtils.toNearestMultipleOf(15, n));
+    }
+    Assertions.assertEquals(30, MathUtils.toNearestMultipleOf(15, 16));
+  }
 }

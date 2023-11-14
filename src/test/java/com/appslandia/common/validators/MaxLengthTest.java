@@ -32,29 +32,29 @@ import org.junit.jupiter.api.Test;
  */
 public class MaxLengthTest {
 
-	@Test
-	public void test() {
-		TestModel m = new TestModel();
-		Set<?> errors = ValidatorUtils.getValidator().validate(m);
-		Assertions.assertTrue(errors.isEmpty());
+  @Test
+  public void test() {
+    TestModel m = new TestModel();
+    Set<?> errors = ValidatorUtils.getValidator().validate(m);
+    Assertions.assertTrue(errors.isEmpty());
 
-		m.prop = "1234";
-		errors = ValidatorUtils.getValidator().validate(m);
-		Assertions.assertTrue(errors.isEmpty());
-	}
+    m.prop = "1234";
+    errors = ValidatorUtils.getValidator().validate(m);
+    Assertions.assertTrue(errors.isEmpty());
+  }
 
-	@Test
-	public void test_invalid() {
-		TestModel m = new TestModel();
+  @Test
+  public void test_invalid() {
+    TestModel m = new TestModel();
 
-		m.prop = "123456";
-		Set<?> errors = ValidatorUtils.getValidator().validate(m);
-		Assertions.assertTrue(!errors.isEmpty());
-	}
+    m.prop = "123456";
+    Set<?> errors = ValidatorUtils.getValidator().validate(m);
+    Assertions.assertTrue(!errors.isEmpty());
+  }
 
-	private static class TestModel {
+  private static class TestModel {
 
-		@MaxLength(5)
-		public String prop;
-	}
+    @MaxLength(5)
+    public String prop;
+  }
 }

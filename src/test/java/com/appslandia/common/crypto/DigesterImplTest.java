@@ -34,62 +34,62 @@ import com.appslandia.common.base.ThreadSafeTester;
  */
 public class DigesterImplTest {
 
-	@Test
-	public void test() {
-		DigesterImpl impl = new DigesterImpl("MD5");
-		try {
-			byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-			byte[] hash = impl.digest(data);
+  @Test
+  public void test() {
+    DigesterImpl impl = new DigesterImpl("MD5");
+    try {
+      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+      byte[] hash = impl.digest(data);
 
-			Assertions.assertTrue(impl.verify(data, hash));
+      Assertions.assertTrue(impl.verify(data, hash));
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_invalid() {
-		DigesterImpl impl = new DigesterImpl("MD5");
-		try {
-			byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-			byte[] hash = impl.digest(data);
+  @Test
+  public void test_invalid() {
+    DigesterImpl impl = new DigesterImpl("MD5");
+    try {
+      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+      byte[] hash = impl.digest(data);
 
-			byte[] modifiedData = "invalid".getBytes(StandardCharsets.UTF_8);
-			Assertions.assertFalse(impl.verify(modifiedData, hash));
+      byte[] modifiedData = "invalid".getBytes(StandardCharsets.UTF_8);
+      Assertions.assertFalse(impl.verify(modifiedData, hash));
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_threadSafe() {
-		final DigesterImpl impl = new DigesterImpl("MD5");
+  @Test
+  public void test_threadSafe() {
+    final DigesterImpl impl = new DigesterImpl("MD5");
 
-		new ThreadSafeTester() {
+    new ThreadSafeTester() {
 
-			@Override
-			protected Runnable newTask() {
-				return new Runnable() {
+      @Override
+      protected Runnable newTask() {
+        return new Runnable() {
 
-					@Override
-					public void run() {
-						try {
-							byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-							byte[] hash = impl.digest(data);
+          @Override
+          public void run() {
+            try {
+              byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+              byte[] hash = impl.digest(data);
 
-							Assertions.assertTrue(impl.verify(data, hash));
+              Assertions.assertTrue(impl.verify(data, hash));
 
-						} catch (Exception ex) {
-							Assertions.fail(ex.getMessage());
+            } catch (Exception ex) {
+              Assertions.fail(ex.getMessage());
 
-						} finally {
-							doneTask();
-						}
-					}
-				};
-			}
-		}.execute();
-	}
+            } finally {
+              doneTask();
+            }
+          }
+        };
+      }
+    }.execute();
+  }
 }

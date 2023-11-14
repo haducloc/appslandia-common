@@ -40,16 +40,16 @@ import jakarta.interceptor.InterceptorBinding;
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface ConnScoped {
 
-	@Nonbinding
-	ConnType value() default ConnType.REQUIRED;
+  @Nonbinding
+  ConnType value() default ConnType.REQUIRED;
 
-	@Nonbinding
-	String ds() default "";
+  @Nonbinding
+  String ds() default "";
 
-	public enum ConnType {
+  public enum ConnType {
 
-		REQUIRED,
+    REQUIRED,
 
-		REQUIRES_NEW,
-	}
+    REQUIRES_NEW,
+  }
 }

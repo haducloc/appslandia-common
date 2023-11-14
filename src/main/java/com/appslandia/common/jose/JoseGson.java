@@ -32,8 +32,8 @@ import com.google.gson.GsonBuilder;
  */
 public class JoseGson {
 
-	public static GsonBuilder newGsonBuilder(boolean serializeNulls, boolean formatting) {
-		// @formatter:off
+  public static GsonBuilder newGsonBuilder(boolean serializeNulls, boolean formatting) {
+    // @formatter:off
 		return GsonProcessor.newBuilder(serializeNulls, formatting)
 
 				// JsonWebKey
@@ -53,9 +53,9 @@ public class JoseGson {
 						.setValueConverter(new String[]{"jwks\\[\\d+]"},
 								m -> new JsonWebKey(ObjectUtils.cast(m))));
 		// @formatter:on
-	}
+  }
 
-	public static GsonProcessor newJsonProcessor() {
-		return new GsonProcessor().setBuilder(newGsonBuilder(true, false));
-	}
+  public static GsonProcessor newJsonProcessor() {
+    return new GsonProcessor().setBuilder(newGsonBuilder(true, false));
+  }
 }

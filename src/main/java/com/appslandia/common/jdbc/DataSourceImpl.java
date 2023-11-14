@@ -50,142 +50,142 @@ import com.appslandia.common.utils.StringUtils;
  */
 public class DataSourceImpl extends InitializeObject implements DataSource {
 
-	private String url;
-	private String userName;
-	private String password;
+  private String url;
+  private String userName;
+  private String password;
 
-	@Override
-	protected void init() throws Exception {
-		Asserts.notNull(this.url, "url is required.");
-	}
+  @Override
+  protected void init() throws Exception {
+    Asserts.notNull(this.url, "url is required.");
+  }
 
-	@Override
-	public Connection getConnection() throws SQLException {
-		initialize();
+  @Override
+  public Connection getConnection() throws SQLException {
+    initialize();
 
-		Connection conn = null;
-		if (this.userName != null) {
-			conn = DriverManager.getConnection(this.url, this.userName, this.password);
-		} else {
-			conn = DriverManager.getConnection(this.url);
-		}
-		return conn;
-	}
+    Connection conn = null;
+    if (this.userName != null) {
+      conn = DriverManager.getConnection(this.url, this.userName, this.password);
+    } else {
+      conn = DriverManager.getConnection(this.url);
+    }
+    return conn;
+  }
 
-	@Override
-	public Connection getConnection(String username, String password) throws SQLException {
-		throw new UnsupportedOperationException();
-	}
+  @Override
+  public Connection getConnection(String username, String password) throws SQLException {
+    throw new UnsupportedOperationException();
+  }
 
-	@Override
-	public int getLoginTimeout() throws SQLException {
-		initialize();
-		return 0;
-	}
+  @Override
+  public int getLoginTimeout() throws SQLException {
+    initialize();
+    return 0;
+  }
 
-	@Override
-	public PrintWriter getLogWriter() throws SQLException {
-		initialize();
-		return null;
-	}
+  @Override
+  public PrintWriter getLogWriter() throws SQLException {
+    initialize();
+    return null;
+  }
 
-	@Override
-	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
-		throw new SQLFeatureNotSupportedException();
-	}
+  @Override
+  public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+    throw new SQLFeatureNotSupportedException();
+  }
 
-	@Override
-	public boolean isWrapperFor(Class<?> iface) throws SQLException {
-		initialize();
-		return false;
-	}
+  @Override
+  public boolean isWrapperFor(Class<?> iface) throws SQLException {
+    initialize();
+    return false;
+  }
 
-	@Override
-	public void setLoginTimeout(int seconds) throws SQLException {
-	}
+  @Override
+  public void setLoginTimeout(int seconds) throws SQLException {
+  }
 
-	@Override
-	public void setLogWriter(PrintWriter out) throws SQLException {
-	}
+  @Override
+  public void setLogWriter(PrintWriter out) throws SQLException {
+  }
 
-	@Override
-	public <T> T unwrap(Class<T> iface) throws SQLException {
-		throw new UnsupportedOperationException();
-	}
+  @Override
+  public <T> T unwrap(Class<T> iface) throws SQLException {
+    throw new UnsupportedOperationException();
+  }
 
-	public DataSourceImpl load(InputStream is) {
-		assertNotInitialized();
-		Properties props = new Properties();
-		try {
-			props.load(is);
-		} catch (Exception ex) {
-			throw new InitializeException(ex);
-		}
-		loadProps(ObjectUtils.cast(props));
-		return this;
-	}
+  public DataSourceImpl load(InputStream is) {
+    assertNotInitialized();
+    Properties props = new Properties();
+    try {
+      props.load(is);
+    } catch (Exception ex) {
+      throw new InitializeException(ex);
+    }
+    loadProps(ObjectUtils.cast(props));
+    return this;
+  }
 
-	public DataSourceImpl load(Reader r) {
-		assertNotInitialized();
-		Properties props = new Properties();
-		try {
-			props.load(r);
-		} catch (Exception ex) {
-			throw new InitializeException(ex);
-		}
-		loadProps(ObjectUtils.cast(props));
-		return this;
-	}
+  public DataSourceImpl load(Reader r) {
+    assertNotInitialized();
+    Properties props = new Properties();
+    try {
+      props.load(r);
+    } catch (Exception ex) {
+      throw new InitializeException(ex);
+    }
+    loadProps(ObjectUtils.cast(props));
+    return this;
+  }
 
-	public DataSourceImpl load(String file) {
-		assertNotInitialized();
-		try (Reader r = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
-			return load(r);
+  public DataSourceImpl load(String file) {
+    assertNotInitialized();
+    try (Reader r = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
+      return load(r);
 
-		} catch (InitializeException ex) {
-			throw ex;
-		} catch (Exception ex) {
-			throw new InitializeException(ex);
-		}
-	}
+    } catch (InitializeException ex) {
+      throw ex;
+    } catch (Exception ex) {
+      throw new InitializeException(ex);
+    }
+  }
 
-	public DataSourceImpl loadProps(Map<String, String> props) {
-		setUrl(props.get("url"));
-		setUserName(props.get("userName"));
-		setPassword(props.get("password"));
-		return this;
-	}
+  public DataSourceImpl loadProps(Map<String, String> props) {
+    setUrl(props.get("url"));
+    setUserName(props.get("userName"));
+    setPassword(props.get("password"));
+    return this;
+  }
 
-	public String getUrl() {
-		initialize();
-		return this.url;
-	}
+  public String getUrl() {
+    initialize();
+    return this.url;
+  }
 
-	public DataSourceImpl setUrl(String url) {
-		assertNotInitialized();
-		this.url = StringUtils.trimToNull(url);
-		return this;
-	}
+  public DataSourceImpl setUrl(String url) {
+    assertNotInitialized();
+    this.url = StringUtils.trimToNull(url);
+    return this;
+  }
 
-	public String getUserName() {
-		initialize();
-		return this.userName;
-	}
+  public String getUserName() {
+    initialize();
+    return this.userName;
+  }
 
-	public DataSourceImpl setUserName(String userName) {
-		assertNotInitialized();
-		this.userName = StringUtils.trimToNull(userName);
-		return this;
-	}
+  public DataSourceImpl setUserName(String userName) {
+    assertNotInitialized();
+    this.userName = StringUtils.trimToNull(userName);
+    return this;
+  }
 
-	public String getPassword() {
-		initialize();
-		return this.password;
-	}
+  public String getPassword() {
+    initialize();
+    return this.password;
+  }
 
-	public DataSourceImpl setPassword(String password) {
-		assertNotInitialized();
-		this.password = StringUtils.trimToNull(password);
-		return this;
-	}
+  public DataSourceImpl setPassword(String password) {
+    assertNotInitialized();
+    this.password = StringUtils.trimToNull(password);
+    return this;
+  }
 }

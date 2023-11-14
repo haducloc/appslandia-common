@@ -33,24 +33,24 @@ import com.appslandia.common.utils.DateUtils;
  */
 public class LocalDateConverter extends TemporalConverter<LocalDate> {
 
-	public static final String ERROR_MSG_KEY = LocalDateConverter.class.getName() + ".message";
+  public static final String ERROR_MSG_KEY = LocalDateConverter.class.getName() + ".message";
 
-	public LocalDateConverter() {
-		super(DateUtils.ISO8601_DATE);
-	}
+  public LocalDateConverter() {
+    super(DateUtils.ISO8601_DATE);
+  }
 
-	@Override
-	public String getErrorMsgKey() {
-		return ERROR_MSG_KEY;
-	}
+  @Override
+  public String getErrorMsgKey() {
+    return ERROR_MSG_KEY;
+  }
 
-	@Override
-	public Class<LocalDate> getTargetType() {
-		return LocalDate.class;
-	}
+  @Override
+  public Class<LocalDate> getTargetType() {
+    return LocalDate.class;
+  }
 
-	@Override
-	protected LocalDate parse(String str, DateTimeFormatter converter) throws DateTimeParseException {
-		return LocalDate.parse(str, converter);
-	}
+  @Override
+  protected LocalDate parse(String str, DateTimeFormatter converter) throws DateTimeParseException {
+    return LocalDate.parse(str, converter);
+  }
 }

@@ -32,63 +32,63 @@ import com.appslandia.common.base.ThreadSafeTester;
  */
 public class PasswordDigesterTest {
 
-	@Test
-	public void test() {
-		PasswordDigester impl = new PasswordDigester();
-		try {
+  @Test
+  public void test() {
+    PasswordDigester impl = new PasswordDigester();
+    try {
 
-			String password = "password";
-			String digested = impl.digest(password);
+      String password = "password";
+      String digested = impl.digest(password);
 
-			Assertions.assertTrue(impl.verify(password, digested));
+      Assertions.assertTrue(impl.verify(password, digested));
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_invalid() {
-		PasswordDigester impl = new PasswordDigester();
-		try {
+  @Test
+  public void test_invalid() {
+    PasswordDigester impl = new PasswordDigester();
+    try {
 
-			String password = "password";
-			String digested = impl.digest(password);
+      String password = "password";
+      String digested = impl.digest(password);
 
-			Assertions.assertFalse(impl.verify("invalidPassword", digested));
+      Assertions.assertFalse(impl.verify("invalidPassword", digested));
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_threadSafe() {
-		final PasswordDigester impl = new PasswordDigester();
+  @Test
+  public void test_threadSafe() {
+    final PasswordDigester impl = new PasswordDigester();
 
-		new ThreadSafeTester() {
+    new ThreadSafeTester() {
 
-			@Override
-			protected Runnable newTask() {
-				return new Runnable() {
+      @Override
+      protected Runnable newTask() {
+        return new Runnable() {
 
-					@Override
-					public void run() {
-						try {
+          @Override
+          public void run() {
+            try {
 
-							String password = "password";
-							String digested = impl.digest(password);
+              String password = "password";
+              String digested = impl.digest(password);
 
-							Assertions.assertTrue(impl.verify(password, digested));
+              Assertions.assertTrue(impl.verify(password, digested));
 
-						} catch (Exception ex) {
-							Assertions.fail(ex.getMessage());
-						} finally {
-							doneTask();
-						}
-					}
-				};
-			}
-		}.execute();
-	}
+            } catch (Exception ex) {
+              Assertions.fail(ex.getMessage());
+            } finally {
+              doneTask();
+            }
+          }
+        };
+      }
+    }.execute();
+  }
 }

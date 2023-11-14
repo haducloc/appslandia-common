@@ -32,63 +32,63 @@ import com.appslandia.common.utils.StringUtils;
  *
  */
 public class ConfigMap extends MapWrapper<String, String> implements Config {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public ConfigMap() {
-		super(new LinkedHashMap<String, String>());
-	}
+  public ConfigMap() {
+    super(new LinkedHashMap<String, String>());
+  }
 
-	public ConfigMap(Map<String, String> newMap) {
-		super(newMap);
-	}
+  public ConfigMap(Map<String, String> newMap) {
+    super(newMap);
+  }
 
-	@Override
-	public String getString(String key) {
-		return this.map.get(key);
-	}
+  @Override
+  public String getString(String key) {
+    return this.map.get(key);
+  }
 
-	@Override
-	public String get(Object key) {
-		return getString((String) key);
-	}
+  @Override
+  public String get(Object key) {
+    return getString((String) key);
+  }
 
-	@Override
-	public Iterator<String> getKeyIterator() {
-		return new UnmodifiableIterator<String>(this.map.keySet().iterator());
-	}
+  @Override
+  public Iterator<String> getKeyIterator() {
+    return new UnmodifiableIterator<String>(this.map.keySet().iterator());
+  }
 
-	@Override
-	public void putAll(Map<? extends String, ? extends String> m) {
-		throw new UnsupportedOperationException();
-	}
+  @Override
+  public void putAll(Map<? extends String, ? extends String> m) {
+    throw new UnsupportedOperationException();
+  }
 
-	@Override
-	public String put(String key, String value) {
-		return this.map.put(key, StringUtils.trimToNull(value));
-	}
+  @Override
+  public String put(String key, String value) {
+    return this.map.put(key, StringUtils.trimToNull(value));
+  }
 
-	public ConfigMap set(String key, String value) {
-		put(key, value);
-		return this;
-	}
+  public ConfigMap set(String key, String value) {
+    put(key, value);
+    return this;
+  }
 
-	public ConfigMap set(String key, boolean value) {
-		this.map.put(key, Boolean.toString(value));
-		return this;
-	}
+  public ConfigMap set(String key, boolean value) {
+    this.map.put(key, Boolean.toString(value));
+    return this;
+  }
 
-	public ConfigMap set(String key, int value) {
-		this.map.put(key, Integer.toString(value));
-		return this;
-	}
+  public ConfigMap set(String key, int value) {
+    this.map.put(key, Integer.toString(value));
+    return this;
+  }
 
-	public ConfigMap set(String key, long value) {
-		this.map.put(key, Long.toString(value));
-		return this;
-	}
+  public ConfigMap set(String key, long value) {
+    this.map.put(key, Long.toString(value));
+    return this;
+  }
 
-	public ConfigMap set(String key, double value) {
-		this.map.put(key, Double.toString(value));
-		return this;
-	}
+  public ConfigMap set(String key, double value) {
+    this.map.put(key, Double.toString(value));
+    return this;
+  }
 }

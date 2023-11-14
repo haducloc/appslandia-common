@@ -30,78 +30,78 @@ import com.appslandia.common.utils.STR;
  */
 public class GeoLocation {
 
-	final double latitude;
-	final double longitude;
+  final double latitude;
+  final double longitude;
 
-	public GeoLocation(double latitude, double longitude) {
-		Asserts.isTrue((latitude >= -90.0) && (latitude <= 90.0), "latitude is invalid.");
-		Asserts.isTrue((longitude >= -180.0) && (longitude <= 180.0), "longitude is invalid.");
+  public GeoLocation(double latitude, double longitude) {
+    Asserts.isTrue((latitude >= -90.0) && (latitude <= 90.0), "latitude is invalid.");
+    Asserts.isTrue((longitude >= -180.0) && (longitude <= 180.0), "longitude is invalid.");
 
-		this.latitude = latitude;
-		this.longitude = longitude;
-	}
+    this.latitude = latitude;
+    this.longitude = longitude;
+  }
 
-	public double getLatitude() {
-		return this.latitude;
-	}
+  public double getLatitude() {
+    return this.latitude;
+  }
 
-	public double getLongitude() {
-		return this.longitude;
-	}
+  public double getLongitude() {
+    return this.longitude;
+  }
 
-	public DMSLocation toDMSLocation() {
-		return new DMSLocation(this.latitude, this.longitude);
-	}
+  public DMSLocation toDMSLocation() {
+    return new DMSLocation(this.latitude, this.longitude);
+  }
 
-	public GeoLocation move(Direction direction, double distance, DistanceUnit unit) {
-		Asserts.notNull(direction);
-		Asserts.notNull(unit);
+  public GeoLocation move(Direction direction, double distance, DistanceUnit unit) {
+    Asserts.notNull(direction);
+    Asserts.notNull(unit);
 
-		double perdegLong = 360.0 / GeoUtils.POLAR_CIRCUMFERENCE_MILES;
-		double perdegLat = 360.0 / (Math.cos(Math.toRadians(this.latitude)) * GeoUtils.EQUATOR_CIRCUMFERENCE_MILES);
+    double perdegLong = 360.0 / GeoUtils.POLAR_CIRCUMFERENCE_MILES;
+    double perdegLat = 360.0 / (Math.cos(Math.toRadians(this.latitude)) * GeoUtils.EQUATOR_CIRCUMFERENCE_MILES);
 
-		switch (direction) {
-		case NORTH:
-			return new GeoLocation(this.latitude + DistanceUnit.MILE.convert(distance, unit) * perdegLong, this.longitude);
+    switch (direction) {
+    case NORTH:
+      return new GeoLocation(this.latitude + DistanceUnit.MILE.convert(distance, unit) * perdegLong, this.longitude);
 
-		case SOUTH:
-			return new GeoLocation(this.latitude - DistanceUnit.MILE.convert(distance, unit) * perdegLong, this.longitude);
+    case SOUTH:
+      return new GeoLocation(this.latitude - DistanceUnit.MILE.convert(distance, unit) * perdegLong, this.longitude);
 
-		case EAST:
-			return new GeoLocation(this.latitude, this.longitude + DistanceUnit.MILE.convert(distance, unit) * perdegLat);
+    case EAST:
+      return new GeoLocation(this.latitude, this.longitude + DistanceUnit.MILE.convert(distance, unit) * perdegLat);
 
-		case WEST:
-			return new GeoLocation(this.latitude, this.longitude - DistanceUnit.MILE.convert(distance, unit) * perdegLat);
-		default:
-			throw new Error();
-		}
-	}
+    case WEST:
+      return new GeoLocation(this.latitude, this.longitude - DistanceUnit.MILE.convert(distance, unit) * perdegLat);
+    default:
+      throw new Error();
+    }
+  }
 
-	public double distanceTo(GeoLocation to, DistanceUnit unit) {
-		Asserts.notNull(to);
-		Asserts.notNull(unit);
+  public double distanceTo(GeoLocation to, DistanceUnit unit) {
+    Asserts.notNull(to);
+    Asserts.notNull(unit);
 
-		double rlt1 = Math.toRadians(this.latitude);
-		double rlt2 = Math.toRadians(to.latitude);
+    double rlt1 = Math.toRadians(this.latitude);
+    double rlt2 = Math.toRadians(to.latitude);
 
-		double rlg1 = Math.toRadians(this.longitude);
-		double rlg2 = Math.toRadians(to.longitude);
+    double rlg1 = Math.toRadians(this.longitude);
+    double rlg2 = Math.toRadians(to.longitude);
 
-		// https://en.wikipedia.org/wiki/Haversine_formula
-		double h = Math.sin((rlt2 - rlt1) / 2) * Math.sin((rlt2 - rlt1) / 2)
-				+ Math.cos(rlt1) * Math.cos(rlt2) * Math.sin((rlg2 - rlg1) / 2) * Math.sin((rlg2 - rlg1) / 2);
+    // https://en.wikipedia.org/wiki/Haversine_formula
+    double h = Math.sin((rlt2 - rlt1) / 2) * Math.sin((rlt2 - rlt1) / 2)
+        + Math.cos(rlt1) * Math.cos(rlt2) * Math.sin((rlg2 - rlg1) / 2) * Math.sin((rlg2 - rlg1) / 2);
 
-		double d = 2 * GeoUtils.EARTH_RADIUS_METER * Math.asin(Math.sqrt(h));
-		return unit.convert(d, DistanceUnit.METER);
-	}
+    double d = 2 * GeoUtils.EARTH_RADIUS_METER * Math.asin(Math.sqrt(h));
+    return unit.convert(d, DistanceUnit.METER);
+  }
 
-	public String toString(int scale) {
-		String fmt = STR.fmt("%.{}f, %.{}f", scale, scale);
-		return String.format(fmt, this.latitude, this.longitude);
-	}
+  public String toString(int scale) {
+    String fmt = STR.fmt("%.{}f, %.{}f", scale, scale);
+    return String.format(fmt, this.latitude, this.longitude);
+  }
 
-	@Override
-	public String toString() {
-		return toString(6);
-	}
+  @Override
+  public String toString() {
+    return toString(6);
+  }
 }

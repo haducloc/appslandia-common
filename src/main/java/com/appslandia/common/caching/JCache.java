@@ -31,59 +31,59 @@ import javax.cache.Cache;
  */
 public class JCache<K, V> implements AppCache<K, V> {
 
-	final Cache<K, V> cache;
+  final Cache<K, V> cache;
 
-	public JCache(Cache<K, V> cache) {
-		this.cache = cache;
-	}
+  public JCache(Cache<K, V> cache) {
+    this.cache = cache;
+  }
 
-	@Override
-	public V get(K key) {
-		return this.cache.get(key);
-	}
+  @Override
+  public V get(K key) {
+    return this.cache.get(key);
+  }
 
-	@Override
-	public void put(K key, V value) {
-		this.cache.put(key, value);
-	}
+  @Override
+  public void put(K key, V value) {
+    this.cache.put(key, value);
+  }
 
-	@Override
-	public boolean putIfAbsent(K key, V value) {
-		return this.cache.putIfAbsent(key, value);
-	}
+  @Override
+  public boolean putIfAbsent(K key, V value) {
+    return this.cache.putIfAbsent(key, value);
+  }
 
-	@Override
-	public boolean containsKey(K key) {
-		return this.cache.containsKey(key);
-	}
+  @Override
+  public boolean containsKey(K key) {
+    return this.cache.containsKey(key);
+  }
 
-	@Override
-	public boolean remove(K key) {
-		return this.cache.remove(key);
-	}
+  @Override
+  public boolean remove(K key) {
+    return this.cache.remove(key);
+  }
 
-	@Override
-	public boolean remove(K key, V oldValue) {
-		return this.cache.remove(key, oldValue);
-	}
+  @Override
+  public boolean remove(K key, V oldValue) {
+    return this.cache.remove(key, oldValue);
+  }
 
-	@Override
-	public void removeAll(Set<? extends K> keys) {
-		this.cache.removeAll(keys);
-	}
+  @Override
+  public void removeAll(Set<? extends K> keys) {
+    this.cache.removeAll(keys);
+  }
 
-	@Override
-	public boolean replace(K key, V value) {
-		return this.cache.replace(key, value);
-	}
+  @Override
+  public boolean replace(K key, V value) {
+    return this.cache.replace(key, value);
+  }
 
-	@Override
-	public boolean replace(K key, V oldValue, V newValue) {
-		return this.cache.replace(key, oldValue, newValue);
-	}
+  @Override
+  public boolean replace(K key, V oldValue, V newValue) {
+    return this.cache.replace(key, oldValue, newValue);
+  }
 
-	@Override
-	public void clear() {
-		this.cache.clear();
-	}
+  @Override
+  public void clear() {
+    this.cache.clear();
+  }
 }

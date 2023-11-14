@@ -32,148 +32,148 @@ import java.util.Objects;
  */
 public class FormatProviderImpl implements FormatProvider {
 
-	protected final Language language;
+  protected final Language language;
 
-	protected NumberFormat numberParser;
-	protected ProviderMap<NumberFormatKey, NumberFormat> numberFormats;
-	protected ProviderMap<NumberFormatKey, NumberFormat> percentFormats;
-	protected ProviderMap<NumberFormatKey, NumberFormat> currencyFormats;
+  protected NumberFormat numberParser;
+  protected ProviderMap<NumberFormatKey, NumberFormat> numberFormats;
+  protected ProviderMap<NumberFormatKey, NumberFormat> percentFormats;
+  protected ProviderMap<NumberFormatKey, NumberFormat> currencyFormats;
 
-	protected ProviderMap<NumberFormatKey, DecimalFormat> decimalFormats;
+  protected ProviderMap<NumberFormatKey, DecimalFormat> decimalFormats;
 
-	public FormatProviderImpl() {
-		this(Language.getDefault());
-	}
+  public FormatProviderImpl() {
+    this(Language.getDefault());
+  }
 
-	public FormatProviderImpl(Language language) {
-		this.language = language;
-	}
+  public FormatProviderImpl(Language language) {
+    this.language = language;
+  }
 
-	@Override
-	public Language getLanguage() {
-		return this.language;
-	}
+  @Override
+  public Language getLanguage() {
+    return this.language;
+  }
 
-	@Override
-	public NumberFormat getNumberParser() {
-		if (this.numberParser == null) {
-			this.numberParser = NumberFormat.getNumberInstance(this.language.getLocale());
+  @Override
+  public NumberFormat getNumberParser() {
+    if (this.numberParser == null) {
+      this.numberParser = NumberFormat.getNumberInstance(this.language.getLocale());
 
-			if (this.numberParser instanceof DecimalFormat) {
-				((DecimalFormat) this.numberParser).setParseBigDecimal(true);
-			}
-			this.numberParser.setGroupingUsed(false);
-		}
-		return this.numberParser;
-	}
+      if (this.numberParser instanceof DecimalFormat) {
+        ((DecimalFormat) this.numberParser).setParseBigDecimal(true);
+      }
+      this.numberParser.setGroupingUsed(false);
+    }
+    return this.numberParser;
+  }
 
-	@Override
-	public NumberFormat getNumberFormat(int fractionDigits, RoundingMode roundingMode, boolean grouping) {
-		return this.getNumberFormats().get(new NumberFormatKey(fractionDigits, roundingMode, grouping));
-	}
+  @Override
+  public NumberFormat getNumberFormat(int fractionDigits, RoundingMode roundingMode, boolean grouping) {
+    return this.getNumberFormats().get(new NumberFormatKey(fractionDigits, roundingMode, grouping));
+  }
 
-	protected ProviderMap<NumberFormatKey, NumberFormat> getNumberFormats() {
-		if (this.numberFormats != null) {
-			return this.numberFormats;
-		}
-		return this.numberFormats = new ProviderMap<NumberFormatKey, NumberFormat>((key) -> {
-			NumberFormat impl = NumberFormat.getNumberInstance(this.language.getLocale());
+  protected ProviderMap<NumberFormatKey, NumberFormat> getNumberFormats() {
+    if (this.numberFormats != null) {
+      return this.numberFormats;
+    }
+    return this.numberFormats = new ProviderMap<NumberFormatKey, NumberFormat>((key) -> {
+      NumberFormat impl = NumberFormat.getNumberInstance(this.language.getLocale());
 
-			impl.setMaximumFractionDigits(key.fractionDigits);
-			impl.setMinimumFractionDigits(key.fractionDigits);
+      impl.setMaximumFractionDigits(key.fractionDigits);
+      impl.setMinimumFractionDigits(key.fractionDigits);
 
-			impl.setRoundingMode(key.roundingMode);
-			impl.setGroupingUsed(key.grouping);
+      impl.setRoundingMode(key.roundingMode);
+      impl.setGroupingUsed(key.grouping);
 
-			return impl;
-		});
-	}
+      return impl;
+    });
+  }
 
-	@Override
-	public NumberFormat getPercentFormat(int fractionDigits, RoundingMode roundingMode, boolean grouping) {
-		return this.getPercentFormats().get(new NumberFormatKey(fractionDigits, roundingMode, grouping));
-	}
+  @Override
+  public NumberFormat getPercentFormat(int fractionDigits, RoundingMode roundingMode, boolean grouping) {
+    return this.getPercentFormats().get(new NumberFormatKey(fractionDigits, roundingMode, grouping));
+  }
 
-	protected ProviderMap<NumberFormatKey, NumberFormat> getPercentFormats() {
-		if (this.percentFormats != null) {
-			return this.percentFormats;
-		}
-		return this.percentFormats = new ProviderMap<NumberFormatKey, NumberFormat>((key) -> {
-			NumberFormat impl = NumberFormat.getPercentInstance(this.language.getLocale());
+  protected ProviderMap<NumberFormatKey, NumberFormat> getPercentFormats() {
+    if (this.percentFormats != null) {
+      return this.percentFormats;
+    }
+    return this.percentFormats = new ProviderMap<NumberFormatKey, NumberFormat>((key) -> {
+      NumberFormat impl = NumberFormat.getPercentInstance(this.language.getLocale());
 
-			impl.setMaximumFractionDigits(key.fractionDigits);
-			impl.setMinimumFractionDigits(key.fractionDigits);
+      impl.setMaximumFractionDigits(key.fractionDigits);
+      impl.setMinimumFractionDigits(key.fractionDigits);
 
-			impl.setRoundingMode(key.roundingMode);
-			impl.setGroupingUsed(key.grouping);
+      impl.setRoundingMode(key.roundingMode);
+      impl.setGroupingUsed(key.grouping);
 
-			return impl;
-		});
-	}
+      return impl;
+    });
+  }
 
-	@Override
-	public NumberFormat getCurrencyFormat(int fractionDigits, RoundingMode roundingMode, boolean grouping) {
-		return this.getCurrencyFormats().get(new NumberFormatKey(fractionDigits, roundingMode, grouping));
-	}
+  @Override
+  public NumberFormat getCurrencyFormat(int fractionDigits, RoundingMode roundingMode, boolean grouping) {
+    return this.getCurrencyFormats().get(new NumberFormatKey(fractionDigits, roundingMode, grouping));
+  }
 
-	protected ProviderMap<NumberFormatKey, NumberFormat> getCurrencyFormats() {
-		if (this.currencyFormats != null) {
-			return this.currencyFormats;
-		}
-		return this.currencyFormats = new ProviderMap<NumberFormatKey, NumberFormat>((key) -> {
-			NumberFormat impl = NumberFormat.getCurrencyInstance(this.language.getLocale());
+  protected ProviderMap<NumberFormatKey, NumberFormat> getCurrencyFormats() {
+    if (this.currencyFormats != null) {
+      return this.currencyFormats;
+    }
+    return this.currencyFormats = new ProviderMap<NumberFormatKey, NumberFormat>((key) -> {
+      NumberFormat impl = NumberFormat.getCurrencyInstance(this.language.getLocale());
 
-			impl.setMaximumFractionDigits(key.fractionDigits);
-			impl.setMinimumFractionDigits(key.fractionDigits);
+      impl.setMaximumFractionDigits(key.fractionDigits);
+      impl.setMinimumFractionDigits(key.fractionDigits);
 
-			impl.setRoundingMode(key.roundingMode);
-			impl.setGroupingUsed(key.grouping);
+      impl.setRoundingMode(key.roundingMode);
+      impl.setGroupingUsed(key.grouping);
 
-			return impl;
-		});
-	}
+      return impl;
+    });
+  }
 
-	@Override
-	public DecimalFormat getDecimalFormat(int fractionDigits, RoundingMode roundingMode) {
-		return this.getDecimalFormats().get(new NumberFormatKey(fractionDigits, roundingMode, false));
-	}
+  @Override
+  public DecimalFormat getDecimalFormat(int fractionDigits, RoundingMode roundingMode) {
+    return this.getDecimalFormats().get(new NumberFormatKey(fractionDigits, roundingMode, false));
+  }
 
-	protected ProviderMap<NumberFormatKey, DecimalFormat> getDecimalFormats() {
-		if (this.decimalFormats != null) {
-			return this.decimalFormats;
-		}
-		return this.decimalFormats = new ProviderMap<NumberFormatKey, DecimalFormat>((key) -> {
-			DecimalFormat impl = new DecimalFormat("0." + "0".repeat(key.fractionDigits));
-			impl.setGroupingUsed(false);
-			impl.setRoundingMode(key.roundingMode);
-			return impl;
-		});
-	}
+  protected ProviderMap<NumberFormatKey, DecimalFormat> getDecimalFormats() {
+    if (this.decimalFormats != null) {
+      return this.decimalFormats;
+    }
+    return this.decimalFormats = new ProviderMap<NumberFormatKey, DecimalFormat>((key) -> {
+      DecimalFormat impl = new DecimalFormat("0." + "0".repeat(key.fractionDigits));
+      impl.setGroupingUsed(false);
+      impl.setRoundingMode(key.roundingMode);
+      return impl;
+    });
+  }
 
-	static final class NumberFormatKey {
-		final int fractionDigits;
-		final RoundingMode roundingMode;
-		final boolean grouping;
+  static final class NumberFormatKey {
+    final int fractionDigits;
+    final RoundingMode roundingMode;
+    final boolean grouping;
 
-		public NumberFormatKey(int fractionDigits, RoundingMode roundingMode, boolean grouping) {
-			this.fractionDigits = fractionDigits;
-			this.roundingMode = roundingMode;
-			this.grouping = grouping;
-		}
+    public NumberFormatKey(int fractionDigits, RoundingMode roundingMode, boolean grouping) {
+      this.fractionDigits = fractionDigits;
+      this.roundingMode = roundingMode;
+      this.grouping = grouping;
+    }
 
-		@Override
-		public int hashCode() {
-			int hash = 1, p = 31;
-			hash = p * hash + Integer.hashCode(this.fractionDigits);
-			hash = p * hash + Objects.hashCode(this.roundingMode);
-			hash = p * hash + Boolean.hashCode(this.grouping);
-			return hash;
-		}
+    @Override
+    public int hashCode() {
+      int hash = 1, p = 31;
+      hash = p * hash + Integer.hashCode(this.fractionDigits);
+      hash = p * hash + Objects.hashCode(this.roundingMode);
+      hash = p * hash + Boolean.hashCode(this.grouping);
+      return hash;
+    }
 
-		@Override
-		public boolean equals(Object obj) {
-			NumberFormatKey other = (NumberFormatKey) obj;
-			return (this.fractionDigits == other.fractionDigits) && (this.roundingMode == other.roundingMode) && (this.grouping == other.grouping);
-		}
-	}
+    @Override
+    public boolean equals(Object obj) {
+      NumberFormatKey other = (NumberFormatKey) obj;
+      return (this.fractionDigits == other.fractionDigits) && (this.roundingMode == other.roundingMode) && (this.grouping == other.grouping);
+    }
+  }
 }

@@ -31,20 +31,20 @@ import java.util.regex.Pattern;
  */
 public class PatternUtils {
 
-	public static final Pattern[] EMPTY_PATTERNS = {};
+  public static final Pattern[] EMPTY_PATTERNS = {};
 
-	public static Pattern[] compile(String... regexs) {
-		if (regexs.length == 0) {
-			return EMPTY_PATTERNS;
-		}
-		return Arrays.stream(regexs).map(regex -> Pattern.compile(regex)).toArray(Pattern[]::new);
-	}
+  public static Pattern[] compile(String... regexs) {
+    if (regexs.length == 0) {
+      return EMPTY_PATTERNS;
+    }
+    return Arrays.stream(regexs).map(regex -> Pattern.compile(regex)).toArray(Pattern[]::new);
+  }
 
-	public static boolean matches(Pattern[] patterns, String value) {
-		return Arrays.stream(patterns).anyMatch(p -> p.matcher(value).matches());
-	}
+  public static boolean matches(Pattern[] patterns, String value) {
+    return Arrays.stream(patterns).anyMatch(p -> p.matcher(value).matches());
+  }
 
-	public static boolean matches(Collection<Pattern> patterns, String value) {
-		return patterns.stream().anyMatch(p -> p.matcher(value).matches());
-	}
+  public static boolean matches(Collection<Pattern> patterns, String value) {
+    return patterns.stream().anyMatch(p -> p.matcher(value).matches());
+  }
 }

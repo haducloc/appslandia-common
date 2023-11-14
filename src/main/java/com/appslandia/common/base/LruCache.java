@@ -29,36 +29,36 @@ import java.util.Map;
  *
  */
 public class LruCache<K, V> implements Serializable {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	final Mutex mutex = new Mutex();
-	final Map<K, V> cache;
+  final Mutex mutex = new Mutex();
+  final Map<K, V> cache;
 
-	public LruCache(final int cacheSize) {
-		this.cache = new LruMap<K, V>(cacheSize);
-	}
+  public LruCache(final int cacheSize) {
+    this.cache = new LruMap<K, V>(cacheSize);
+  }
 
-	public void put(K k, V v) {
-		synchronized (this.mutex) {
-			this.cache.put(k, v);
-		}
-	}
+  public void put(K k, V v) {
+    synchronized (this.mutex) {
+      this.cache.put(k, v);
+    }
+  }
 
-	public boolean contains(K k) {
-		synchronized (this.mutex) {
-			return this.cache.containsKey(k);
-		}
-	}
+  public boolean contains(K k) {
+    synchronized (this.mutex) {
+      return this.cache.containsKey(k);
+    }
+  }
 
-	public V remove(K k) {
-		synchronized (this.mutex) {
-			return this.cache.remove(k);
-		}
-	}
+  public V remove(K k) {
+    synchronized (this.mutex) {
+      return this.cache.remove(k);
+    }
+  }
 
-	public V get(K k) {
-		synchronized (this.mutex) {
-			return this.cache.get(k);
-		}
-	}
+  public V get(K k) {
+    synchronized (this.mutex) {
+      return this.cache.get(k);
+    }
+  }
 }

@@ -31,108 +31,108 @@ import java.util.regex.Pattern;
  */
 public class SplitUtils {
 
-	private static final Pattern NEWLINE_SEP_PATTERN = Pattern.compile("(\r?\n)+");
+  private static final Pattern NEWLINE_SEP_PATTERN = Pattern.compile("(\r?\n)+");
 
-	public static String[] splitByLine(String str) {
-		return splitByLine(str, SplitOptions.EXCLUDE_NULL);
-	}
+  public static String[] splitByLine(String str) {
+    return splitByLine(str, SplitOptions.EXCLUDE_NULL);
+  }
 
-	public static String[] splitByLine(String str, SplitOptions splitOptions) {
-		return split(str, NEWLINE_SEP_PATTERN, splitOptions);
-	}
+  public static String[] splitByLine(String str, SplitOptions splitOptions) {
+    return split(str, NEWLINE_SEP_PATTERN, splitOptions);
+  }
 
-	public static String[] split(String str, Pattern separator) {
-		return split(str, separator, SplitOptions.EXCLUDE_NULL);
-	}
+  public static String[] split(String str, Pattern separator) {
+    return split(str, separator, SplitOptions.EXCLUDE_NULL);
+  }
 
-	public static String[] split(String str, Pattern separator, SplitOptions splitOptions) {
-		if (str == null) {
-			return StringUtils.EMPTY_ARRAY;
-		}
-		String[] items = separator.split(str);
-		List<String> list = new ArrayList<>(items.length);
+  public static String[] split(String str, Pattern separator, SplitOptions splitOptions) {
+    if (str == null) {
+      return StringUtils.EMPTY_ARRAY;
+    }
+    String[] items = separator.split(str);
+    List<String> list = new ArrayList<>(items.length);
 
-		for (String item : items) {
-			item = convertItem(item, splitOptions);
+    for (String item : items) {
+      item = convertItem(item, splitOptions);
 
-			if (item != null) {
-				list.add(item);
-			} else {
-				if (splitOptions != SplitOptions.EXCLUDE_NULL) {
-					list.add(null);
-				}
-			}
-		}
-		return list.toArray(new String[list.size()]);
-	}
+      if (item != null) {
+        list.add(item);
+      } else {
+        if (splitOptions != SplitOptions.EXCLUDE_NULL) {
+          list.add(null);
+        }
+      }
+    }
+    return list.toArray(new String[list.size()]);
+  }
 
-	public static String[] splitByComma(String str) {
-		return splitByComma(str, SplitOptions.EXCLUDE_NULL);
-	}
+  public static String[] splitByComma(String str) {
+    return splitByComma(str, SplitOptions.EXCLUDE_NULL);
+  }
 
-	public static String[] splitByComma(String str, SplitOptions splitOptions) {
-		return split(str, ',', splitOptions);
-	}
+  public static String[] splitByComma(String str, SplitOptions splitOptions) {
+    return split(str, ',', splitOptions);
+  }
 
-	public static String[] split(String str, char separator) {
-		return split(str, separator, SplitOptions.EXCLUDE_NULL);
-	}
+  public static String[] split(String str, char separator) {
+    return split(str, separator, SplitOptions.EXCLUDE_NULL);
+  }
 
-	public static String[] split(String str, char separator, SplitOptions splitOptions) {
-		if (str == null) {
-			return StringUtils.EMPTY_ARRAY;
-		}
+  public static String[] split(String str, char separator, SplitOptions splitOptions) {
+    if (str == null) {
+      return StringUtils.EMPTY_ARRAY;
+    }
 
-		List<String> list = new ArrayList<>();
-		StringBuilder currentItem = new StringBuilder();
-		boolean escapeNextChar = false;
+    List<String> list = new ArrayList<>();
+    StringBuilder currentItem = new StringBuilder();
+    boolean escapeNextChar = false;
 
-		for (int i = 0; i < str.length(); i++) {
-			char c = str.charAt(i);
+    for (int i = 0; i < str.length(); i++) {
+      char c = str.charAt(i);
 
-			if (escapeNextChar) {
-				currentItem.append(c);
-				escapeNextChar = false;
+      if (escapeNextChar) {
+        currentItem.append(c);
+        escapeNextChar = false;
 
-			} else if (c == '\\') {
-				escapeNextChar = true;
+      } else if (c == '\\') {
+        escapeNextChar = true;
 
-			} else if (c == separator) {
-				String item = convertItem(currentItem.toString(), splitOptions);
+      } else if (c == separator) {
+        String item = convertItem(currentItem.toString(), splitOptions);
 
-				if (item != null) {
-					list.add(item);
-				} else {
-					if (splitOptions != SplitOptions.EXCLUDE_NULL) {
-						list.add(null);
-					}
-				}
+        if (item != null) {
+          list.add(item);
+        } else {
+          if (splitOptions != SplitOptions.EXCLUDE_NULL) {
+            list.add(null);
+          }
+        }
 
-				currentItem.setLength(0);
-			} else {
-				currentItem.append(c);
-			}
-		}
+        currentItem.setLength(0);
+      } else {
+        currentItem.append(c);
+      }
+    }
 
-		// Last item
-		String item = convertItem(currentItem.toString(), splitOptions);
+    // Last item
+    String item = convertItem(currentItem.toString(), splitOptions);
 
-		if (item != null) {
-			list.add(item);
-		} else {
-			if (splitOptions != SplitOptions.EXCLUDE_NULL) {
-				list.add(null);
-			}
-		}
-		return list.toArray(new String[list.size()]);
-	}
+    if (item != null) {
+      list.add(item);
+    } else {
+      if (splitOptions != SplitOptions.EXCLUDE_NULL) {
+        list.add(null);
+      }
+    }
+    return list.toArray(new String[list.size()]);
+  }
 
-	private static String convertItem(String item, SplitOptions splitOptions) {
-		if (splitOptions == null || splitOptions == SplitOptions.NONE) {
-			return item;
-		} else {
-			item = item.trim();
-			return !item.isEmpty() ? item : null;
-		}
-	}
+  private static String convertItem(String item, SplitOptions splitOptions) {
+    if (splitOptions == null || splitOptions == SplitOptions.NONE) {
+      return item;
+    } else {
+      item = item.trim();
+      return !item.isEmpty() ? item : null;
+    }
+  }
 }

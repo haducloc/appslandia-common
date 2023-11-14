@@ -28,5 +28,5 @@ package com.appslandia.common.cdi;
 @FunctionalInterface
 public interface CDISupplier {
 
-	Object get();
+  Object get();
 }

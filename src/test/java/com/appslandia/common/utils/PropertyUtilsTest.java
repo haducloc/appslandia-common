@@ -32,105 +32,105 @@ import com.appslandia.common.base.ConfigMap;
  */
 public class PropertyUtilsTest {
 
-	@Test
-	public void test_initialize_BEAN_PROPERTY_STRATEGY() {
-		ConfigMap config = new ConfigMap();
-		config.put("boolProp", "true");
-		config.put("intProp", "100");
-		config.put("stringProp", "str");
+  @Test
+  public void test_initialize_BEAN_PROPERTY_STRATEGY() {
+    ConfigMap config = new ConfigMap();
+    config.put("boolProp", "true");
+    config.put("intProp", "100");
+    config.put("stringProp", "str");
 
-		TestJavaBean obj = new TestJavaBean();
-		try {
-			PropertyUtils.initialize(obj, config, PropertyUtils.BEAN_PROPERTY_STRATEGY);
+    TestJavaBean obj = new TestJavaBean();
+    try {
+      PropertyUtils.initialize(obj, config, PropertyUtils.BEAN_PROPERTY_STRATEGY);
 
-			Assertions.assertEquals(true, obj.isBoolProp());
-			Assertions.assertEquals(100, obj.getIntProp());
-			Assertions.assertEquals("str", obj.getStringProp());
+      Assertions.assertEquals(true, obj.isBoolProp());
+      Assertions.assertEquals(100, obj.getIntProp());
+      Assertions.assertEquals("str", obj.getStringProp());
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_initialize_METHOD_PROPERTY_STRATEGY() {
-		ConfigMap config = new ConfigMap();
-		config.put("boolProp", "true");
-		config.put("intProp", "100");
-		config.put("stringProp", "str");
+  @Test
+  public void test_initialize_METHOD_PROPERTY_STRATEGY() {
+    ConfigMap config = new ConfigMap();
+    config.put("boolProp", "true");
+    config.put("intProp", "100");
+    config.put("stringProp", "str");
 
-		TestObject obj = new TestObject();
-		try {
-			PropertyUtils.initialize(obj, config, PropertyUtils.METHOD_PROPERTY_STRATEGY);
+    TestObject obj = new TestObject();
+    try {
+      PropertyUtils.initialize(obj, config, PropertyUtils.METHOD_PROPERTY_STRATEGY);
 
-			Assertions.assertEquals(true, obj.boolProp());
-			Assertions.assertEquals(100, obj.intProp());
-			Assertions.assertEquals("str", obj.stringProp());
+      Assertions.assertEquals(true, obj.boolProp());
+      Assertions.assertEquals(100, obj.intProp());
+      Assertions.assertEquals("str", obj.stringProp());
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	static class TestJavaBean {
+  static class TestJavaBean {
 
-		private boolean boolProp;
-		private int intProp;
-		private String stringProp;
+    private boolean boolProp;
+    private int intProp;
+    private String stringProp;
 
-		public boolean isBoolProp() {
-			return this.boolProp;
-		}
+    public boolean isBoolProp() {
+      return this.boolProp;
+    }
 
-		public void setBoolProp(boolean boolProp) {
-			this.boolProp = boolProp;
-		}
+    public void setBoolProp(boolean boolProp) {
+      this.boolProp = boolProp;
+    }
 
-		public int getIntProp() {
-			return this.intProp;
-		}
+    public int getIntProp() {
+      return this.intProp;
+    }
 
-		public void setIntProp(int intProp) {
-			this.intProp = intProp;
-		}
+    public void setIntProp(int intProp) {
+      this.intProp = intProp;
+    }
 
-		public String getStringProp() {
-			return this.stringProp;
-		}
+    public String getStringProp() {
+      return this.stringProp;
+    }
 
-		public void setStringProp(String stringProp) {
-			this.stringProp = stringProp;
-		}
-	}
+    public void setStringProp(String stringProp) {
+      this.stringProp = stringProp;
+    }
+  }
 
-	static class TestObject {
+  static class TestObject {
 
-		private boolean boolProp;
-		private int intProp;
-		private String stringProp;
+    private boolean boolProp;
+    private int intProp;
+    private String stringProp;
 
-		public boolean boolProp() {
-			return this.boolProp;
-		}
+    public boolean boolProp() {
+      return this.boolProp;
+    }
 
-		public void boolProp(boolean boolProp) {
-			this.boolProp = boolProp;
-		}
+    public void boolProp(boolean boolProp) {
+      this.boolProp = boolProp;
+    }
 
-		public int intProp() {
-			return this.intProp;
-		}
+    public int intProp() {
+      return this.intProp;
+    }
 
-		public void intProp(int intProp) {
-			this.intProp = intProp;
-		}
+    public void intProp(int intProp) {
+      this.intProp = intProp;
+    }
 
-		public String stringProp() {
-			return this.stringProp;
-		}
+    public String stringProp() {
+      return this.stringProp;
+    }
 
-		public void stringProp(String stringProp) {
-			this.stringProp = stringProp;
-		}
-	}
+    public void stringProp(String stringProp) {
+      this.stringProp = stringProp;
+    }
+  }
 }

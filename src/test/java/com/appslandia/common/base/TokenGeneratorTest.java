@@ -30,15 +30,15 @@ import org.junit.jupiter.api.Test;
  */
 public class TokenGeneratorTest {
 
-	@Test
-	public void test() {
-		for (int i = 1; i <= 1000; i++) {
+  @Test
+  public void test() {
+    for (int i = 1; i <= 1000; i++) {
 
-			TokenGenerator impl = new TokenGenerator().setLength(i);
-			String str = impl.generate();
-			Assertions.assertEquals(i, str.length());
+      TokenGenerator impl = new TokenGenerator().setLength(i);
+      String str = impl.generate();
+      Assertions.assertEquals(i, str.length());
 
-			Assertions.assertTrue(impl.verify(str));
-		}
-	}
+      Assertions.assertTrue(impl.verify(str));
+    }
+  }
 }

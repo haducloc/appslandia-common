@@ -34,103 +34,103 @@ import com.appslandia.common.utils.STR;
  *
  */
 public class StringFormat {
-	private static final Pattern GROUP_PATTERN = Pattern.compile("\\{\\s*\\d+\\s*}");
+  private static final Pattern GROUP_PATTERN = Pattern.compile("\\{\\s*\\d+\\s*}");
 
-	final String format;
-	final boolean validate;
+  final String format;
+  final boolean validate;
 
-	private Group[] groups;
-	private int inputLength;
-	private int outputLength;
+  private Group[] groups;
+  private int inputLength;
+  private int outputLength;
 
-	public StringFormat(String format) {
-		this(format, false);
-	}
+  public StringFormat(String format) {
+    this(format, false);
+  }
 
-	public StringFormat(String format, boolean validate) {
-		this.format = Asserts.notNull(format, "format is required.");
-		this.validate = validate;
+  public StringFormat(String format, boolean validate) {
+    this.format = Asserts.notNull(format, "format is required.");
+    this.validate = validate;
 
-		this.parseFormat(format);
-	}
+    this.parseFormat(format);
+  }
 
-	private void parseFormat(String format) {
-		Matcher matcher = GROUP_PATTERN.matcher(format);
-		List<Group> list = new ArrayList<>();
+  private void parseFormat(String format) {
+    Matcher matcher = GROUP_PATTERN.matcher(format);
+    List<Group> list = new ArrayList<>();
 
-		int inputLength = 0;
-		int outputLength = 0;
-		int lastEnd = 0;
+    int inputLength = 0;
+    int outputLength = 0;
+    int lastEnd = 0;
 
-		while (matcher.find()) {
-			int start = matcher.start();
-			if (start > 0) {
-				String text = format.substring(lastEnd, start);
-				if (!text.isEmpty()) {
-					list.add(new Group(text, 0));
-					outputLength += text.length();
-				}
-			}
-			// {d+}
-			String sizeGroup = matcher.group();
-			int size = Integer.parseInt(sizeGroup.substring(1, sizeGroup.length() - 1).trim());
+    while (matcher.find()) {
+      int start = matcher.start();
+      if (start > 0) {
+        String text = format.substring(lastEnd, start);
+        if (!text.isEmpty()) {
+          list.add(new Group(text, 0));
+          outputLength += text.length();
+        }
+      }
+      // {d+}
+      String sizeGroup = matcher.group();
+      int size = Integer.parseInt(sizeGroup.substring(1, sizeGroup.length() - 1).trim());
 
-			Asserts.isTrue(size > 0, () -> STR.fmt("The format '{}' is invalid.", format));
+      Asserts.isTrue(size > 0, () -> STR.fmt("The format '{}' is invalid.", format));
 
-			inputLength += size;
-			outputLength += size;
+      inputLength += size;
+      outputLength += size;
 
-			list.add(new Group(null, size));
-			lastEnd = matcher.end();
-		}
-		Asserts.isTrue(!list.isEmpty(), () -> STR.fmt("The format '{}' is invalid.", format));
+      list.add(new Group(null, size));
+      lastEnd = matcher.end();
+    }
+    Asserts.isTrue(!list.isEmpty(), () -> STR.fmt("The format '{}' is invalid.", format));
 
-		this.groups = list.toArray(new Group[list.size()]);
-		this.inputLength = inputLength;
-		this.outputLength = outputLength;
-	}
+    this.groups = list.toArray(new Group[list.size()]);
+    this.inputLength = inputLength;
+    this.outputLength = outputLength;
+  }
 
-	public int getInputLength() {
-		return this.inputLength;
-	}
+  public int getInputLength() {
+    return this.inputLength;
+  }
 
-	public boolean isValidate() {
-		return this.validate;
-	}
+  public boolean isValidate() {
+    return this.validate;
+  }
 
-	public String format(String str) {
-		if (str == null) {
-			return null;
-		}
-		if (str.length() != this.inputLength) {
-			if (this.validate) {
-				throw new IllegalArgumentException(STR.fmt("The given string '{}' has an invalid length for formatting.", str));
-			}
-			return str;
-		}
+  public String format(String str) {
+    if (str == null) {
+      return null;
+    }
+    if (str.length() != this.inputLength) {
+      if (this.validate) {
+        throw new IllegalArgumentException(STR.fmt("The given string '{}' has an invalid length for formatting.", str));
+      }
+      return str;
+    }
 
-		StringBuilder sb = new StringBuilder(this.outputLength);
-		int pos = 0;
-		for (Group group : this.groups) {
+    StringBuilder sb = new StringBuilder(this.outputLength);
+    int pos = 0;
+    for (Group group : this.groups) {
 
-			if (group.length > 0) {
-				sb.append(str.substring(pos, group.length + pos));
-				pos += group.length;
-			} else {
-				sb.append(group.text);
-			}
-		}
-		return sb.toString();
-	}
+      if (group.length > 0) {
+        sb.append(str.substring(pos, group.length + pos));
+        pos += group.length;
+      } else {
+        sb.append(group.text);
+      }
+    }
+    return sb.toString();
+  }
 
-	private static class Group {
+  private static class Group {
 
-		final String text;
-		final int length;
+    final String text;
+    final int length;
 
-		public Group(String text, int length) {
-			this.text = text;
-			this.length = length;
-		}
-	}
+    public Group(String text, int length) {
+      this.text = text;
+      this.length = length;
+    }
+  }
 }

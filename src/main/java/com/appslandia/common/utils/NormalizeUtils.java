@@ -34,114 +34,114 @@ import java.util.stream.Collectors;
  */
 public class NormalizeUtils {
 
-	public interface DecomposedCharacterConverter {
-		char convert(char decomposedCharacter);
-	}
+  public interface DecomposedCharacterConverter {
+    char convert(char decomposedCharacter);
+  }
 
-	private static DecomposedCharacterConverter decomposedCharacterConverter;
+  private static DecomposedCharacterConverter decomposedCharacterConverter;
 
-	public static void setDecomposedCharacterConverter(DecomposedCharacterConverter converter) {
-		Asserts.isNull(decomposedCharacterConverter);
-		decomposedCharacterConverter = converter;
-	}
+  public static void setDecomposedCharacterConverter(DecomposedCharacterConverter converter) {
+    Asserts.isNull(decomposedCharacterConverter);
+    decomposedCharacterConverter = converter;
+  }
 
-	private static final Pattern STRIP_ACCENTS_PATTERN = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+  private static final Pattern STRIP_ACCENTS_PATTERN = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
 
-	public static String unaccent(String str) {
-		if (str == null) {
-			return null;
-		}
-		StringBuilder decomposed = new StringBuilder(Normalizer.normalize(str, Normalizer.Form.NFD));
-		if (decomposedCharacterConverter != null) {
-			for (int i = 0; i < decomposed.length(); i++) {
-				char converted = decomposedCharacterConverter.convert(decomposed.charAt(i));
+  public static String unaccent(String str) {
+    if (str == null) {
+      return null;
+    }
+    StringBuilder decomposed = new StringBuilder(Normalizer.normalize(str, Normalizer.Form.NFD));
+    if (decomposedCharacterConverter != null) {
+      for (int i = 0; i < decomposed.length(); i++) {
+        char converted = decomposedCharacterConverter.convert(decomposed.charAt(i));
 
-				if (converted != decomposed.charAt(i)) {
-					decomposed.deleteCharAt(i);
-					decomposed.insert(i, converted);
-				}
-			}
-		}
-		return STRIP_ACCENTS_PATTERN.matcher(decomposed).replaceAll(StringUtils.EMPTY_STRING);
-	}
+        if (converted != decomposed.charAt(i)) {
+          decomposed.deleteCharAt(i);
+          decomposed.insert(i, converted);
+        }
+      }
+    }
+    return STRIP_ACCENTS_PATTERN.matcher(decomposed).replaceAll(StringUtils.EMPTY_STRING);
+  }
 
-	private static final Pattern[] WTSP_PUNCT_HYPHEN_PATTERNS = PatternUtils.compile("\\s+|\\p{Punct}+", "-{2,}");
+  private static final Pattern[] WTSP_PUNCT_HYPHEN_PATTERNS = PatternUtils.compile("\\s+|\\p{Punct}+", "-{2,}");
 
-	public static String normalizeLabel(String str) {
-		str = normalize(str, WTSP_PUNCT_HYPHEN_PATTERNS, "-");
-		str = StringUtils.trimToNull(str, '-');
-		return StringUtils.toLowerCase(str, Locale.ROOT);
-	}
+  public static String normalizeLabel(String str) {
+    str = normalize(str, WTSP_PUNCT_HYPHEN_PATTERNS, "-");
+    str = StringUtils.trimToNull(str, '-');
+    return StringUtils.toLowerCase(str, Locale.ROOT);
+  }
 
-	private static final Pattern[] SP2_PATTERNS = PatternUtils.compile("( ){2,}");
-	private static final Pattern[] CRLF3_PATTERNS = PatternUtils.compile("(\r?\n){3,}");
+  private static final Pattern[] SP2_PATTERNS = PatternUtils.compile("( ){2,}");
+  private static final Pattern[] CRLF3_PATTERNS = PatternUtils.compile("(\r?\n){3,}");
 
-	public static String normalizeText(String text) {
-		if (text == null) {
-			return null;
-		}
-		text = normalize(text, SP2_PATTERNS, " ");
-		return normalize(text, CRLF3_PATTERNS, "\n\n");
-	}
+  public static String normalizeText(String text) {
+    if (text == null) {
+      return null;
+    }
+    text = normalize(text, SP2_PATTERNS, " ");
+    return normalize(text, CRLF3_PATTERNS, "\n\n");
+  }
 
-	private static final Pattern[] WTSP_PATTERNS = PatternUtils.compile("\\s+");
+  private static final Pattern[] WTSP_PATTERNS = PatternUtils.compile("\\s+");
 
-	public static String toSingleLine(String str) {
-		if (str == null) {
-			return null;
-		}
-		return normalize(str, WTSP_PATTERNS, " ");
-	}
+  public static String toSingleLine(String str) {
+    if (str == null) {
+      return null;
+    }
+    return normalize(str, WTSP_PATTERNS, " ");
+  }
 
-	public static String removeSp(String str) {
-		if (str == null) {
-			return null;
-		}
-		return normalize(str, WTSP_PATTERNS, "");
-	}
+  public static String removeSp(String str) {
+    if (str == null) {
+      return null;
+    }
+    return normalize(str, WTSP_PATTERNS, "");
+  }
 
-	private static final Pattern[] WTSP_PUNCT_PATTERNS = PatternUtils.compile("\\s+|\\p{Punct}+");
+  private static final Pattern[] WTSP_PUNCT_PATTERNS = PatternUtils.compile("\\s+|\\p{Punct}+");
 
-	public static String removeSpPunct(String str) {
-		if (str == null) {
-			return null;
-		}
-		return normalize(str, WTSP_PUNCT_PATTERNS, "");
-	}
+  public static String removeSpPunct(String str) {
+    if (str == null) {
+      return null;
+    }
+    return normalize(str, WTSP_PUNCT_PATTERNS, "");
+  }
 
-	private static final Pattern[] NON_DIGITS_PATTERNS = PatternUtils.compile("[^\\d]+");
+  private static final Pattern[] NON_DIGITS_PATTERNS = PatternUtils.compile("[^\\d]+");
 
-	public static String digitOnly(String str) {
-		if (str == null) {
-			return null;
-		}
-		return normalize(str, NON_DIGITS_PATTERNS, "");
-	}
+  public static String digitOnly(String str) {
+    if (str == null) {
+      return null;
+    }
+    return normalize(str, NON_DIGITS_PATTERNS, "");
+  }
 
-	public static String normalize(String str, Pattern[] matchers, String replacement) {
-		if (str == null) {
-			return null;
-		}
-		for (Pattern p : matchers) {
-			str = p.matcher(str).replaceAll(Matcher.quoteReplacement(replacement));
-		}
-		return StringUtils.trimToNull(str);
-	}
+  public static String normalize(String str, Pattern[] matchers, String replacement) {
+    if (str == null) {
+      return null;
+    }
+    for (Pattern p : matchers) {
+      str = p.matcher(str).replaceAll(Matcher.quoteReplacement(replacement));
+    }
+    return StringUtils.trimToNull(str);
+  }
 
-	public static String stringAsID(String str) {
-		if (str == null) {
-			return "null";
-		}
-		str = removeSpPunct(str);
-		return (str != null) ? StringUtils.toLowerCase(str, Locale.ROOT) : "null";
-	}
+  public static String stringAsID(String str) {
+    if (str == null) {
+      return "null";
+    }
+    str = removeSpPunct(str);
+    return (str != null) ? StringUtils.toLowerCase(str, Locale.ROOT) : "null";
+  }
 
-	public static String valuesAsID(Object... values) {
-		Asserts.hasElements(values);
+  public static String valuesAsID(Object... values) {
+    Asserts.hasElements(values);
 
-		return Arrays.stream(values).map(v -> {
-			return stringAsID(String.valueOf(v));
+    return Arrays.stream(values).map(v -> {
+      return stringAsID(String.valueOf(v));
 
-		}).collect(Collectors.joining("-"));
-	}
+    }).collect(Collectors.joining("-"));
+  }
 }

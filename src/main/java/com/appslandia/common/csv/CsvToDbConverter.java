@@ -30,5 +30,5 @@ import com.appslandia.common.jdbc.ConnectionImpl;
 @FunctionalInterface
 public interface CsvToDbConverter {
 
-	Object apply(String value, ConnectionImpl conn) throws Exception;
+  Object apply(String value, ConnectionImpl conn) throws Exception;
 }

@@ -35,16 +35,16 @@ import jakarta.json.stream.JsonParser;
  */
 public class JsonbLocalDateSerializer extends JsonbTemporalSerializer<LocalDate> {
 
-	public JsonbLocalDateSerializer() {
-		this(DateUtils.ISO8601_DATE);
-	}
+  public JsonbLocalDateSerializer() {
+    this(DateUtils.ISO8601_DATE);
+  }
 
-	public JsonbLocalDateSerializer(String serializeIsoPattern) {
-		super(serializeIsoPattern);
-	}
+  public JsonbLocalDateSerializer(String serializeIsoPattern) {
+    super(serializeIsoPattern);
+  }
 
-	@Override
-	public LocalDate deserialize(JsonParser parser, DeserializationContext ctx, Type rtType) {
-		return LocalDate.parse(parser.getString(), DateUtils.getFormatter(DateUtils.ISO8601_DATE));
-	}
+  @Override
+  public LocalDate deserialize(JsonParser parser, DeserializationContext ctx, Type rtType) {
+    return LocalDate.parse(parser.getString(), DateUtils.getFormatter(DateUtils.ISO8601_DATE));
+  }
 }

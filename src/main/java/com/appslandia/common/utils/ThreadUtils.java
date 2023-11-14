@@ -31,20 +31,20 @@ import com.appslandia.common.base.UncheckedException;
  */
 public class ThreadUtils {
 
-	public static void sleepInMs(long milliseconds) {
-		try {
-			Thread.sleep(milliseconds);
+  public static void sleepInMs(long milliseconds) {
+    try {
+      Thread.sleep(milliseconds);
 
-		} catch (InterruptedException ex) {
-			throw new UncheckedException(ex);
-		}
-	}
+    } catch (InterruptedException ex) {
+      throw new UncheckedException(ex);
+    }
+  }
 
-	public static void sleepInMs(long duration, TimeUnit unit) {
-		sleepInMs(TimeUnit.MILLISECONDS.convert(duration, unit));
-	}
+  public static void sleepInMs(long duration, TimeUnit unit) {
+    sleepInMs(TimeUnit.MILLISECONDS.convert(duration, unit));
+  }
 
-	public static void sleepInSec(long duration) {
-		sleepInMs(duration, TimeUnit.SECONDS);
-	}
+  public static void sleepInSec(long duration) {
+    sleepInMs(duration, TimeUnit.SECONDS);
+  }
 }

@@ -32,36 +32,36 @@ import java.util.Set;
  */
 public class SecurityProviderApp {
 
-	public static void main(String[] args) {
-		try {
-			System.out.println(String.format("***** Java Runtime Version: %s *****", Runtime.version().toString()));
-			System.out.println("***** Installed Security Providers *****");
-			System.out.println();
+  public static void main(String[] args) {
+    try {
+      System.out.println(String.format("***** Java Runtime Version: %s *****", Runtime.version().toString()));
+      System.out.println("***** Installed Security Providers *****");
+      System.out.println();
 
-			int seq = 0;
-			for (Provider p : Security.getProviders()) {
+      int seq = 0;
+      for (Provider p : Security.getProviders()) {
 
-				System.out.println(String.format("[%02d] %s - Version %s", (++seq), p.getName(), p.getVersionStr()));
-				System.out.println(p.getInfo());
-				System.out.println();
+        System.out.println(String.format("[%02d] %s - Version %s", (++seq), p.getName(), p.getVersionStr()));
+        System.out.println(p.getInfo());
+        System.out.println();
 
-				Set<Service> services = p.getServices();
-				if (!services.isEmpty()) {
-					System.out.println("* Services:");
+        Set<Service> services = p.getServices();
+        if (!services.isEmpty()) {
+          System.out.println("* Services:");
 
-					int subseq = 0;
-					for (Service service : services) {
+          int subseq = 0;
+          for (Service service : services) {
 
-						System.out.println(String.format("(%02d) Service: %s, Algorithm: %s", (++subseq), service.getType(), service.getAlgorithm()));
-						System.out.println(service);
-					}
-				}
-			}
+            System.out.println(String.format("(%02d) Service: %s, Algorithm: %s", (++subseq), service.getType(), service.getAlgorithm()));
+            System.out.println(service);
+          }
+        }
+      }
 
-			System.out.println("***** Done *****");
+      System.out.println("***** Done *****");
 
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
 }

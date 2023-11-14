@@ -26,17 +26,17 @@ package com.appslandia.common.jose;
  *
  */
 public class JoseVerificationException extends RuntimeException {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public JoseVerificationException(String message) {
-		super(message);
-	}
+  public JoseVerificationException(String message) {
+    super(message);
+  }
 
-	public JoseVerificationException(Throwable cause) {
-		super(cause);
-	}
+  public JoseVerificationException(Throwable cause) {
+    super(cause);
+  }
 
-	public JoseVerificationException(String message, Throwable cause) {
-		super(message, cause);
-	}
+  public JoseVerificationException(String message, Throwable cause) {
+    super(message, cause);
+  }
 }

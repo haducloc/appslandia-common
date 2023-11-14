@@ -35,16 +35,16 @@ import jakarta.json.stream.JsonParser;
  */
 public class JsonbOffsetTimeSerializer extends JsonbTemporalSerializer<OffsetTime> {
 
-	public JsonbOffsetTimeSerializer() {
-		this(DateUtils.ISO8601_TIMEZ_N3);
-	}
+  public JsonbOffsetTimeSerializer() {
+    this(DateUtils.ISO8601_TIMEZ_N3);
+  }
 
-	public JsonbOffsetTimeSerializer(String serializeIsoPattern) {
-		super(serializeIsoPattern);
-	}
+  public JsonbOffsetTimeSerializer(String serializeIsoPattern) {
+    super(serializeIsoPattern);
+  }
 
-	@Override
-	public OffsetTime deserialize(JsonParser parser, DeserializationContext ctx, Type rtType) {
-		return parseOffsetTime(parser.getString());
-	}
+  @Override
+  public OffsetTime deserialize(JsonParser parser, DeserializationContext ctx, Type rtType) {
+    return parseOffsetTime(parser.getString());
+  }
 }

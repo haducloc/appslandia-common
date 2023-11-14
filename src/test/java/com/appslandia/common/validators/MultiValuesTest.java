@@ -32,30 +32,30 @@ import org.junit.jupiter.api.Test;
  */
 public class MultiValuesTest {
 
-	@Test
-	public void test() {
-		TestModel m = new TestModel();
-		Set<?> errors = ValidatorUtils.getValidator().validate(m);
-		Assertions.assertTrue(errors.isEmpty());
+  @Test
+  public void test() {
+    TestModel m = new TestModel();
+    Set<?> errors = ValidatorUtils.getValidator().validate(m);
+    Assertions.assertTrue(errors.isEmpty());
 
-		m.roles = "admin, user";
-		errors = ValidatorUtils.getValidator().validate(m);
-		Assertions.assertTrue(errors.isEmpty());
-	}
+    m.roles = "admin, user";
+    errors = ValidatorUtils.getValidator().validate(m);
+    Assertions.assertTrue(errors.isEmpty());
+  }
 
-	@Test
-	public void test_invalid() {
-		TestModel m = new TestModel();
+  @Test
+  public void test_invalid() {
+    TestModel m = new TestModel();
 
-		m.roles = "admin, operator";
+    m.roles = "admin, operator";
 
-		Set<?> errors = ValidatorUtils.getValidator().validate(m);
-		Assertions.assertTrue(!errors.isEmpty());
-	}
+    Set<?> errors = ValidatorUtils.getValidator().validate(m);
+    Assertions.assertTrue(!errors.isEmpty());
+  }
 
-	private static class TestModel {
+  private static class TestModel {
 
-		@MultiValues({ "admin", "manager", "user" })
-		public String roles;
-	}
+    @MultiValues({ "admin", "manager", "user" })
+    public String roles;
+  }
 }

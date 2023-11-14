@@ -34,53 +34,53 @@ import com.appslandia.common.crypto.PasswordUtil;
  */
 public class PasswordTest {
 
-	@Test
-	public void test() {
-		TestModel m = new TestModel();
+  @Test
+  public void test() {
+    TestModel m = new TestModel();
 
-		Set<?> errors = ValidatorUtils.getValidator().validate(m);
-		Assertions.assertTrue(errors.isEmpty());
+    Set<?> errors = ValidatorUtils.getValidator().validate(m);
+    Assertions.assertTrue(errors.isEmpty());
 
-		final PasswordUtil passwordGenerator = new PasswordUtil();
+    final PasswordUtil passwordGenerator = new PasswordUtil();
 
-		for (int i = 1; i < 1000; i++) {
-			m.password = new String(passwordGenerator.generatePassword(8, 32));
+    for (int i = 1; i < 1000; i++) {
+      m.password = new String(passwordGenerator.generatePassword(8, 32));
 
-			errors = ValidatorUtils.getValidator().validate(m);
-			Assertions.assertTrue(errors.isEmpty());
-		}
-	}
+      errors = ValidatorUtils.getValidator().validate(m);
+      Assertions.assertTrue(errors.isEmpty());
+    }
+  }
 
-	@Test
-	public void test_invalid() {
-		TestModel m = new TestModel();
+  @Test
+  public void test_invalid() {
+    TestModel m = new TestModel();
 
-		Set<?> errors = null;
+    Set<?> errors = null;
 
-		m.password = "password";
-		errors = ValidatorUtils.getValidator().validate(m);
-		Assertions.assertFalse(errors.isEmpty());
+    m.password = "password";
+    errors = ValidatorUtils.getValidator().validate(m);
+    Assertions.assertFalse(errors.isEmpty());
 
-		m.password = "passW!";
-		errors = ValidatorUtils.getValidator().validate(m);
-		Assertions.assertFalse(errors.isEmpty());
+    m.password = "passW!";
+    errors = ValidatorUtils.getValidator().validate(m);
+    Assertions.assertFalse(errors.isEmpty());
 
-		m.password = "passw123";
-		errors = ValidatorUtils.getValidator().validate(m);
-		Assertions.assertFalse(errors.isEmpty());
+    m.password = "passw123";
+    errors = ValidatorUtils.getValidator().validate(m);
+    Assertions.assertFalse(errors.isEmpty());
 
-		m.password = "passw12#";
-		errors = ValidatorUtils.getValidator().validate(m);
-		Assertions.assertFalse(errors.isEmpty());
+    m.password = "passw12#";
+    errors = ValidatorUtils.getValidator().validate(m);
+    Assertions.assertFalse(errors.isEmpty());
 
-		m.password = "pasSw123";
-		errors = ValidatorUtils.getValidator().validate(m);
-		Assertions.assertFalse(errors.isEmpty());
-	}
+    m.password = "pasSw123";
+    errors = ValidatorUtils.getValidator().validate(m);
+    Assertions.assertFalse(errors.isEmpty());
+  }
 
-	private static class TestModel {
+  private static class TestModel {
 
-		@Password
-		public String password;
-	}
+    @Password
+    public String password;
+  }
 }

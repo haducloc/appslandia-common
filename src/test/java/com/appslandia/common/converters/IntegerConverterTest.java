@@ -34,93 +34,93 @@ import com.appslandia.common.base.Language;
  */
 public class IntegerConverterTest {
 
-	@Test
-	public void test_targetType() {
-		IntegerConverter converter = new IntegerConverter();
-		Assertions.assertEquals(Integer.class, converter.getTargetType());
-	}
+  @Test
+  public void test_targetType() {
+    IntegerConverter converter = new IntegerConverter();
+    Assertions.assertEquals(Integer.class, converter.getTargetType());
+  }
 
-	@Test
-	public void test() {
-		IntegerConverter converter = new IntegerConverter();
-		FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-		try {
-			Integer v = converter.parse("12345", formatProvider);
-			Assertions.assertEquals(12345, v.intValue());
+  @Test
+  public void test() {
+    IntegerConverter converter = new IntegerConverter();
+    FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+    try {
+      Integer v = converter.parse("12345", formatProvider);
+      Assertions.assertEquals(12345, v.intValue());
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_null() {
-		IntegerConverter converter = new IntegerConverter();
-		FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-		try {
-			Integer val = converter.parse(null, formatProvider);
-			Assertions.assertNull(val);
+  @Test
+  public void test_null() {
+    IntegerConverter converter = new IntegerConverter();
+    FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+    try {
+      Integer val = converter.parse(null, formatProvider);
+      Assertions.assertNull(val);
 
-			val = converter.parse("", formatProvider);
-			Assertions.assertNull(val);
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+      val = converter.parse("", formatProvider);
+      Assertions.assertNull(val);
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_invalid() {
-		IntegerConverter converter = new IntegerConverter();
-		FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-		try {
-			converter.parse("12,345", formatProvider);
-			Assertions.fail();
-		} catch (Exception ex) {
-			Assertions.assertTrue(ex instanceof ConverterException);
-		}
-		try {
-			converter.parse("12345.67", formatProvider);
-			Assertions.fail();
-		} catch (Exception ex) {
-			Assertions.assertTrue(ex instanceof ConverterException);
-		}
-	}
+  @Test
+  public void test_invalid() {
+    IntegerConverter converter = new IntegerConverter();
+    FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+    try {
+      converter.parse("12,345", formatProvider);
+      Assertions.fail();
+    } catch (Exception ex) {
+      Assertions.assertTrue(ex instanceof ConverterException);
+    }
+    try {
+      converter.parse("12345.67", formatProvider);
+      Assertions.fail();
+    } catch (Exception ex) {
+      Assertions.assertTrue(ex instanceof ConverterException);
+    }
+  }
 
-	@Test
-	public void test_maxMin() {
-		IntegerConverter converter = new IntegerConverter();
-		FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-		try {
-			Integer v = converter.parse(Integer.toString(Integer.MAX_VALUE), formatProvider);
-			Assertions.assertEquals(Integer.MAX_VALUE, v.intValue());
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-		try {
-			Integer v = converter.parse(Integer.toString(Integer.MIN_VALUE), formatProvider);
-			Assertions.assertEquals(Integer.MIN_VALUE, v.intValue());
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+  @Test
+  public void test_maxMin() {
+    IntegerConverter converter = new IntegerConverter();
+    FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+    try {
+      Integer v = converter.parse(Integer.toString(Integer.MAX_VALUE), formatProvider);
+      Assertions.assertEquals(Integer.MAX_VALUE, v.intValue());
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+    try {
+      Integer v = converter.parse(Integer.toString(Integer.MIN_VALUE), formatProvider);
+      Assertions.assertEquals(Integer.MIN_VALUE, v.intValue());
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_overflow() {
-		IntegerConverter converter = new IntegerConverter();
-		FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-		try {
-			// Max: 2147483647
-			converter.parse("2147483648", formatProvider);
-			Assertions.fail();
-		} catch (Exception ex) {
-			Assertions.assertTrue(ex instanceof ConverterException);
-		}
-		try {
-			// MIN: -2147483648
-			converter.parse("-2147483649", formatProvider);
-			Assertions.fail();
-		} catch (Exception ex) {
-			Assertions.assertTrue(ex instanceof ConverterException);
-		}
-	}
+  @Test
+  public void test_overflow() {
+    IntegerConverter converter = new IntegerConverter();
+    FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+    try {
+      // Max: 2147483647
+      converter.parse("2147483648", formatProvider);
+      Assertions.fail();
+    } catch (Exception ex) {
+      Assertions.assertTrue(ex instanceof ConverterException);
+    }
+    try {
+      // MIN: -2147483648
+      converter.parse("-2147483649", formatProvider);
+      Assertions.fail();
+    } catch (Exception ex) {
+      Assertions.assertTrue(ex instanceof ConverterException);
+    }
+  }
 }

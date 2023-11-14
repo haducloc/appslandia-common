@@ -42,32 +42,32 @@ import jakarta.validation.Payload;
 @Documented
 public @interface FixedLength {
 
-	String message() default "{com.appslandia.common.validators.FixedLength.message}";
+  String message() default "{com.appslandia.common.validators.FixedLength.message}";
 
-	Class<?>[] groups() default {};
+  Class<?>[] groups() default {};
 
-	Class<? extends Payload>[] payload() default {};
+  Class<? extends Payload>[] payload() default {};
 
-	int value();
+  int value();
 
-	public static class ConstraintValidatorImpl implements ConstraintValidator<FixedLength, CharSequence> {
+  public static class ConstraintValidatorImpl implements ConstraintValidator<FixedLength, CharSequence> {
 
-		private int length;
+    private int length;
 
-		@Override
-		public void initialize(FixedLength annotation) {
-			this.length = annotation.value();
-		}
+    @Override
+    public void initialize(FixedLength annotation) {
+      this.length = annotation.value();
+    }
 
-		@Override
-		public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
-			if (value == null) {
-				return true;
-			}
-			if (value.length() != this.length) {
-				return false;
-			}
-			return true;
-		}
-	}
+    @Override
+    public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
+      if (value == null) {
+        return true;
+      }
+      if (value.length() != this.length) {
+        return false;
+      }
+      return true;
+    }
+  }
 }

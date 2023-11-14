@@ -33,97 +33,97 @@ import com.appslandia.common.utils.STR;
  */
 public interface AppLogger {
 
-	boolean isLoggable(Level level);
+  boolean isLoggable(Level level);
 
-	void log(Level level, String message);
+  void log(Level level, String message);
 
-	void log(Level level, String message, Throwable exception);
+  void log(Level level, String message, Throwable exception);
 
-	void log(Level level, Supplier<String> msgSupplier);
+  void log(Level level, Supplier<String> msgSupplier);
 
-	void log(Level level, Supplier<String> msgSupplier, Throwable exception);
+  void log(Level level, Supplier<String> msgSupplier, Throwable exception);
 
-	default void trace(String message) {
-		log(Level.TRACE, message);
-	}
+  default void trace(String message) {
+    log(Level.TRACE, message);
+  }
 
-	default void debug(String message) {
-		log(Level.DEBUG, message);
-	}
+  default void debug(String message) {
+    log(Level.DEBUG, message);
+  }
 
-	default void info(String message) {
-		log(Level.INFO, message);
-	}
+  default void info(String message) {
+    log(Level.INFO, message);
+  }
 
-	default void warn(String message) {
-		log(Level.WARN, message);
-	}
+  default void warn(String message) {
+    log(Level.WARN, message);
+  }
 
-	default void error(String message) {
-		log(Level.ERROR, message);
-	}
+  default void error(String message) {
+    log(Level.ERROR, message);
+  }
 
-	default void error(String message, Throwable exception) {
-		log(Level.ERROR, message, exception);
-	}
+  default void error(String message, Throwable exception) {
+    log(Level.ERROR, message, exception);
+  }
 
-	default void error(Throwable exception) {
-		log(Level.ERROR, ExceptionUtils.buildMessage(exception), exception);
-	}
+  default void error(Throwable exception) {
+    log(Level.ERROR, ExceptionUtils.buildMessage(exception), exception);
+  }
 
-	default void log(Level level, String format, Object... entries) {
-		log(level, STR.fmt(format, entries));
-	}
+  default void log(Level level, String format, Object... entries) {
+    log(level, STR.fmt(format, entries));
+  }
 
-	default void trace(String format, Object... entries) {
-		log(Level.TRACE, format, entries);
-	}
+  default void trace(String format, Object... entries) {
+    log(Level.TRACE, format, entries);
+  }
 
-	default void debug(String format, Object... entries) {
-		log(Level.DEBUG, format, entries);
-	}
+  default void debug(String format, Object... entries) {
+    log(Level.DEBUG, format, entries);
+  }
 
-	default void info(String format, Object... entries) {
-		log(Level.INFO, format, entries);
-	}
+  default void info(String format, Object... entries) {
+    log(Level.INFO, format, entries);
+  }
 
-	default void warn(String format, Object... entries) {
-		log(Level.WARN, format, entries);
-	}
+  default void warn(String format, Object... entries) {
+    log(Level.WARN, format, entries);
+  }
 
-	default void error(String format, Object... entries) {
-		log(Level.ERROR, format, entries);
-	}
+  default void error(String format, Object... entries) {
+    log(Level.ERROR, format, entries);
+  }
 
-	default void error(ExceptionBlock block) {
-		try {
-			block.run();
-		} catch (Exception ex) {
-			error(ex);
-		}
-	}
+  default void error(ExceptionBlock block) {
+    try {
+      block.run();
+    } catch (Exception ex) {
+      error(ex);
+    }
+  }
 
-	public enum Level {
-		ALL(Integer.MIN_VALUE), // ALL
-		TRACE(400), // FINER
-		DEBUG(500), // FINEST/FINE/CONFIG
-		INFO(800), // INFO
-		WARN(900), // WARNING
-		ERROR(1000), // SEVERE
-		OFF(Integer.MAX_VALUE); // OFF
+  public enum Level {
+    ALL(Integer.MIN_VALUE), // ALL
+    TRACE(400), // FINER
+    DEBUG(500), // FINEST/FINE/CONFIG
+    INFO(800), // INFO
+    WARN(900), // WARNING
+    ERROR(1000), // SEVERE
+    OFF(Integer.MAX_VALUE); // OFF
 
-		final int severity;
+    final int severity;
 
-		private Level(int severity) {
-			this.severity = severity;
-		}
+    private Level(int severity) {
+      this.severity = severity;
+    }
 
-		public String getName() {
-			return name();
-		}
+    public String getName() {
+      return name();
+    }
 
-		public int getSeverity() {
-			return this.severity;
-		}
-	}
+    public int getSeverity() {
+      return this.severity;
+    }
+  }
 }

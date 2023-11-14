@@ -30,93 +30,93 @@ import org.junit.jupiter.api.Test;
  */
 public class ModelUtilsTest {
 
-	@Test
-	public void test_copy() {
-		User src = new User(1, "user1");
-		User dest = new User();
+  @Test
+  public void test_copy() {
+    User src = new User(1, "user1");
+    User dest = new User();
 
-		try {
-			ModelUtils.copy(dest, src, "id", "name");
+    try {
+      ModelUtils.copy(dest, src, "id", "name");
 
-			Assertions.assertEquals(1, dest.getId());
-			Assertions.assertEquals("user1", dest.getName());
+      Assertions.assertEquals(1, dest.getId());
+      Assertions.assertEquals("user1", dest.getName());
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_copyProps() {
-		User src = new User(1, "user1");
-		Member dest = new Member();
+  @Test
+  public void test_copyProps() {
+    User src = new User(1, "user1");
+    Member dest = new Member();
 
-		try {
-			ModelUtils.copyProps(dest, src, "id", "name");
+    try {
+      ModelUtils.copyProps(dest, src, "id", "name");
 
-			Assertions.assertEquals(1, dest.getId());
-			Assertions.assertEquals("user1", dest.getName());
+      Assertions.assertEquals(1, dest.getId());
+      Assertions.assertEquals("user1", dest.getName());
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	static class User {
-		private int id;
-		private String name;
+  static class User {
+    private int id;
+    private String name;
 
-		public User() {
-		}
+    public User() {
+    }
 
-		public User(int id, String name) {
-			this.id = id;
-			this.name = name;
-		}
+    public User(int id, String name) {
+      this.id = id;
+      this.name = name;
+    }
 
-		public int getId() {
-			return id;
-		}
+    public int getId() {
+      return id;
+    }
 
-		public void setId(int id) {
-			this.id = id;
-		}
+    public void setId(int id) {
+      this.id = id;
+    }
 
-		public String getName() {
-			return name;
-		}
+    public String getName() {
+      return name;
+    }
 
-		public void setName(String name) {
-			this.name = name;
-		}
-	}
+    public void setName(String name) {
+      this.name = name;
+    }
+  }
 
-	static class Member {
-		private int id;
-		private String name;
+  static class Member {
+    private int id;
+    private String name;
 
-		public Member() {
-		}
+    public Member() {
+    }
 
-		public Member(int id, String name) {
-			this.id = id;
-			this.name = name;
-		}
+    public Member(int id, String name) {
+      this.id = id;
+      this.name = name;
+    }
 
-		public int getId() {
-			return id;
-		}
+    public int getId() {
+      return id;
+    }
 
-		public void setId(int id) {
-			this.id = id;
-		}
+    public void setId(int id) {
+      this.id = id;
+    }
 
-		public String getName() {
-			return name;
-		}
+    public String getName() {
+      return name;
+    }
 
-		public void setName(String name) {
-			this.name = name;
-		}
-	}
+    public void setName(String name) {
+      this.name = name;
+    }
+  }
 }

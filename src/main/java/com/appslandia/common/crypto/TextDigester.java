@@ -34,66 +34,66 @@ import com.appslandia.common.utils.ValueUtils;
  *
  */
 public class TextDigester extends TextBasedCrypto {
-	private Digester digester;
+  private Digester digester;
 
-	public TextDigester() {
-	}
+  public TextDigester() {
+  }
 
-	public TextDigester(Digester digester) {
-		this.digester = digester;
-	}
+  public TextDigester(Digester digester) {
+    this.digester = digester;
+  }
 
-	@Override
-	protected void init() throws Exception {
-		Asserts.notNull(this.digester, "digester is required.");
+  @Override
+  protected void init() throws Exception {
+    Asserts.notNull(this.digester, "digester is required.");
 
-		this.textCharset = ValueUtils.valueOrAlt(this.textCharset, StandardCharsets.UTF_8);
-		this.baseEncoder = ValueUtils.valueOrAlt(this.baseEncoder, BaseEncoder.BASE64);
-	}
+    this.textCharset = ValueUtils.valueOrAlt(this.textCharset, StandardCharsets.UTF_8);
+    this.baseEncoder = ValueUtils.valueOrAlt(this.baseEncoder, BaseEncoder.BASE64);
+  }
 
-	@Override
-	public void destroy() throws DestroyException {
-		if (this.digester != null) {
-			this.digester.destroy();
-		}
-	}
+  @Override
+  public void destroy() throws DestroyException {
+    if (this.digester != null) {
+      this.digester.destroy();
+    }
+  }
 
-	public String digest(String message) throws CryptoException {
-		this.initialize();
-		Asserts.notNull(message, "message is required.");
+  public String digest(String message) throws CryptoException {
+    this.initialize();
+    Asserts.notNull(message, "message is required.");
 
-		return this.baseEncoder.encode(this.digester.digest(message.getBytes(this.textCharset)));
-	}
+    return this.baseEncoder.encode(this.digester.digest(message.getBytes(this.textCharset)));
+  }
 
-	public boolean verify(String message, String digested) throws CryptoException {
-		this.initialize();
-		Asserts.notNull(message, "message is required.");
-		Asserts.notNull(digested, "digested is required.");
+  public boolean verify(String message, String digested) throws CryptoException {
+    this.initialize();
+    Asserts.notNull(message, "message is required.");
+    Asserts.notNull(digested, "digested is required.");
 
-		return this.digester.verify(message.getBytes(this.textCharset), this.baseEncoder.decode(digested));
-	}
+    return this.digester.verify(message.getBytes(this.textCharset), this.baseEncoder.decode(digested));
+  }
 
-	public TextDigester setDigester(Digester digester) {
-		this.assertNotInitialized();
-		this.digester = digester;
-		return this;
-	}
+  public TextDigester setDigester(Digester digester) {
+    this.assertNotInitialized();
+    this.digester = digester;
+    return this;
+  }
 
-	@Override
-	public TextDigester setTextCharset(Charset charset) {
-		super.setTextCharset(charset);
-		return this;
-	}
+  @Override
+  public TextDigester setTextCharset(Charset charset) {
+    super.setTextCharset(charset);
+    return this;
+  }
 
-	@Override
-	public TextDigester setTextCharset(String textCharset) {
-		super.setTextCharset(textCharset);
-		return this;
-	}
+  @Override
+  public TextDigester setTextCharset(String textCharset) {
+    super.setTextCharset(textCharset);
+    return this;
+  }
 
-	@Override
-	public TextDigester setBaseEncoder(BaseEncoder baseEncoder) {
-		super.setBaseEncoder(baseEncoder);
-		return this;
-	}
+  @Override
+  public TextDigester setBaseEncoder(BaseEncoder baseEncoder) {
+    super.setBaseEncoder(baseEncoder);
+    return this;
+  }
 }

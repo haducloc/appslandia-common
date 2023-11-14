@@ -31,24 +31,24 @@ import com.appslandia.common.utils.ObjectUtils;
  *
  */
 public class Key extends CaseInsensitiveMap<Object> {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public Key() {
-		super(new LinkedHashMap<>());
-	}
+  public Key() {
+    super(new LinkedHashMap<>());
+  }
 
-	public Key(String keyColumn, Object value) {
-		super(new LinkedHashMap<>());
+  public Key(String keyColumn, Object value) {
+    super(new LinkedHashMap<>());
 
-		super.put(keyColumn, value);
-	}
+    super.put(keyColumn, value);
+  }
 
-	public <T> T get(String keyColumn) {
-		return ObjectUtils.cast(super.get(keyColumn));
-	}
+  public <T> T get(String keyColumn) {
+    return ObjectUtils.cast(super.get(keyColumn));
+  }
 
-	public Key set(String keyColumn, Object value) {
-		super.put(keyColumn, value);
-		return this;
-	}
+  public Key set(String keyColumn, Object value) {
+    super.put(keyColumn, value);
+    return this;
+  }
 }

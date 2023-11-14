@@ -41,103 +41,103 @@ import jakarta.enterprise.inject.spi.ProcessAnnotatedType;
  */
 public class CDIExtension extends InitializeObject implements Extension {
 
-	final Set<Class<?>> excludedClasses = new HashSet<>();
-	final Set<String> excludedPackages = new HashSet<>();
-	final Set<Class<? extends Annotation>> excludedAnnotations = new HashSet<>();
+  final Set<Class<?>> excludedClasses = new HashSet<>();
+  final Set<String> excludedPackages = new HashSet<>();
+  final Set<Class<? extends Annotation>> excludedAnnotations = new HashSet<>();
 
-	@Override
-	protected void init() throws Exception {
-	}
+  @Override
+  protected void init() throws Exception {
+  }
 
-	protected CDIExtension excludeClasses(Class<?>... beanClasses) {
-		CollectionUtils.toSet(this.excludedClasses, beanClasses);
-		return this;
-	}
+  protected CDIExtension excludeClasses(Class<?>... beanClasses) {
+    CollectionUtils.toSet(this.excludedClasses, beanClasses);
+    return this;
+  }
 
-	protected CDIExtension excludePackages(String... packages) {
-		CollectionUtils.toSet(this.excludedPackages, packages);
-		return this;
-	}
+  protected CDIExtension excludePackages(String... packages) {
+    CollectionUtils.toSet(this.excludedPackages, packages);
+    return this;
+  }
 
-	protected CDIExtension excludePackages(Class<?>... beanClasses) {
-		for (Class<?> clazz : beanClasses) {
-			this.excludedPackages.add(clazz.getPackage().getName());
-		}
-		return this;
-	}
+  protected CDIExtension excludePackages(Class<?>... beanClasses) {
+    for (Class<?> clazz : beanClasses) {
+      this.excludedPackages.add(clazz.getPackage().getName());
+    }
+    return this;
+  }
 
-	protected CDIExtension excludeAnnotations(Class<?>... annotationClasses) {
-		for (Class<?> clazz : annotationClasses) {
-			this.excludedAnnotations.add(ObjectUtils.cast(clazz));
-		}
-		return this;
-	}
+  protected CDIExtension excludeAnnotations(Class<?>... annotationClasses) {
+    for (Class<?> clazz : annotationClasses) {
+      this.excludedAnnotations.add(ObjectUtils.cast(clazz));
+    }
+    return this;
+  }
 
-	protected boolean willExcludeClass(Class<?> beanClass) {
-		return false;
-	}
+  protected boolean willExcludeClass(Class<?> beanClass) {
+    return false;
+  }
 
-	protected void onExcludeClass(Class<?> beanClass) {
-	}
+  protected void onExcludeClass(Class<?> beanClass) {
+  }
 
-	protected void onRegisterClass(Class<?> beanClass) {
-	}
+  protected void onRegisterClass(Class<?> beanClass) {
+  }
 
-	public <T> void processAnnotatedType(@Observes ProcessAnnotatedType<T> event) {
-		this.initialize();
-		Class<?> beanClass = event.getAnnotatedType().getJavaClass();
+  public <T> void processAnnotatedType(@Observes ProcessAnnotatedType<T> event) {
+    this.initialize();
+    Class<?> beanClass = event.getAnnotatedType().getJavaClass();
 
-		if (willExcludeClasses(this.excludedClasses, beanClass)) {
-			event.veto();
-			onExcludeClass(beanClass);
-			return;
-		}
-		if (willExcludePackages(this.excludedPackages, beanClass)) {
-			event.veto();
-			onExcludeClass(beanClass);
-			return;
-		}
-		if (willExcludeAnnotations(this.excludedAnnotations, beanClass)) {
-			event.veto();
-			onExcludeClass(beanClass);
-			return;
-		}
+    if (willExcludeClasses(this.excludedClasses, beanClass)) {
+      event.veto();
+      onExcludeClass(beanClass);
+      return;
+    }
+    if (willExcludePackages(this.excludedPackages, beanClass)) {
+      event.veto();
+      onExcludeClass(beanClass);
+      return;
+    }
+    if (willExcludeAnnotations(this.excludedAnnotations, beanClass)) {
+      event.veto();
+      onExcludeClass(beanClass);
+      return;
+    }
 
-		// @EnableEnv
-		EnableEnv enableEnv = beanClass.getDeclaredAnnotation(EnableEnv.class);
-		if ((enableEnv != null) && !DeployEnv.getCurrent().isAny(enableEnv.value())) {
-			event.veto();
-			onExcludeClass(beanClass);
-			return;
-		}
+    // @EnableEnv
+    EnableEnv enableEnv = beanClass.getDeclaredAnnotation(EnableEnv.class);
+    if ((enableEnv != null) && !DeployEnv.getCurrent().isAny(enableEnv.value())) {
+      event.veto();
+      onExcludeClass(beanClass);
+      return;
+    }
 
-		// Another Chance
-		if (willExcludeClass(beanClass)) {
-			event.veto();
-			onExcludeClass(beanClass);
-			return;
-		}
-		onRegisterClass(beanClass);
-	}
+    // Another Chance
+    if (willExcludeClass(beanClass)) {
+      event.veto();
+      onExcludeClass(beanClass);
+      return;
+    }
+    onRegisterClass(beanClass);
+  }
 
-	public static boolean willExcludeClasses(Set<Class<?>> excludedClasses, Class<?> beanClass) {
-		if (excludedClasses.isEmpty()) {
-			return false;
-		}
-		return excludedClasses.contains(beanClass);
-	}
+  public static boolean willExcludeClasses(Set<Class<?>> excludedClasses, Class<?> beanClass) {
+    if (excludedClasses.isEmpty()) {
+      return false;
+    }
+    return excludedClasses.contains(beanClass);
+  }
 
-	public static boolean willExcludePackages(Set<String> excludedPackages, Class<?> beanClass) {
-		if (excludedPackages.isEmpty()) {
-			return false;
-		}
-		return excludedPackages.contains(beanClass.getPackage().getName());
-	}
+  public static boolean willExcludePackages(Set<String> excludedPackages, Class<?> beanClass) {
+    if (excludedPackages.isEmpty()) {
+      return false;
+    }
+    return excludedPackages.contains(beanClass.getPackage().getName());
+  }
 
-	public static boolean willExcludeAnnotations(Set<Class<? extends Annotation>> excludedAnnotations, Class<?> beanClass) {
-		if (excludedAnnotations.isEmpty()) {
-			return false;
-		}
-		return excludedAnnotations.stream().anyMatch(annotationClass -> beanClass.getDeclaredAnnotation(annotationClass) != null);
-	}
+  public static boolean willExcludeAnnotations(Set<Class<? extends Annotation>> excludedAnnotations, Class<?> beanClass) {
+    if (excludedAnnotations.isEmpty()) {
+      return false;
+    }
+    return excludedAnnotations.stream().anyMatch(annotationClass -> beanClass.getDeclaredAnnotation(annotationClass) != null);
+  }
 }

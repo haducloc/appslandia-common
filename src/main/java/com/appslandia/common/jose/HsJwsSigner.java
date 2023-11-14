@@ -31,59 +31,59 @@ import com.appslandia.common.utils.Asserts;
  */
 public class HsJwsSigner<P> {
 
-	protected Class<P> payloadClass;
-	protected JsonProcessor jsonProcessor;
+  protected Class<P> payloadClass;
+  protected JsonProcessor jsonProcessor;
 
-	protected String alg;
-	protected String kid;
+  protected String alg;
+  protected String kid;
 
-	protected MacSigner signer;
+  protected MacSigner signer;
 
-	public HsJwsSigner(String jwsAlgorithm, String macAlgorithm, Class<P> payloadClass) {
-		this.alg = Asserts.notNull(jwsAlgorithm);
-		this.signer = new MacSigner().setAlgorithm(Asserts.notNull(macAlgorithm));
-		this.payloadClass = Asserts.notNull(payloadClass);
-	}
+  public HsJwsSigner(String jwsAlgorithm, String macAlgorithm, Class<P> payloadClass) {
+    this.alg = Asserts.notNull(jwsAlgorithm);
+    this.signer = new MacSigner().setAlgorithm(Asserts.notNull(macAlgorithm));
+    this.payloadClass = Asserts.notNull(payloadClass);
+  }
 
-	public HsJwsSigner<P> setMacProvider(String macProvider) {
-		this.signer.setProvider(macProvider);
-		return this;
-	}
+  public HsJwsSigner<P> setMacProvider(String macProvider) {
+    this.signer.setProvider(macProvider);
+    return this;
+  }
 
-	public HsJwsSigner<P> setJsonProcessor(JsonProcessor jsonProcessor) {
-		this.jsonProcessor = jsonProcessor;
-		return this;
-	}
+  public HsJwsSigner<P> setJsonProcessor(JsonProcessor jsonProcessor) {
+    this.jsonProcessor = jsonProcessor;
+    return this;
+  }
 
-	public HsJwsSigner<P> setSecret(byte[] secret) {
-		this.signer.setSecret(secret);
-		return this;
-	}
+  public HsJwsSigner<P> setSecret(byte[] secret) {
+    this.signer.setSecret(secret);
+    return this;
+  }
 
-	public HsJwsSigner<P> setSecret(String secretOrEnv) {
-		this.signer.setSecret(secretOrEnv);
-		return this;
-	}
+  public HsJwsSigner<P> setSecret(String secretOrEnv) {
+    this.signer.setSecret(secretOrEnv);
+    return this;
+  }
 
-	public HsJwsSigner<P> setKid(String kid) {
-		this.kid = kid;
-		return this;
-	}
+  public HsJwsSigner<P> setKid(String kid) {
+    this.kid = kid;
+    return this;
+  }
 
-	public JwsSigner<P> build() {
-		Asserts.notNull(this.jsonProcessor);
-		return new JwsSigner<>(this.payloadClass).setJsonProcessor(this.jsonProcessor).setSigner(this.signer).setAlg(this.alg).setKid(this.kid).initialize();
-	}
+  public JwsSigner<P> build() {
+    Asserts.notNull(this.jsonProcessor);
+    return new JwsSigner<>(this.payloadClass).setJsonProcessor(this.jsonProcessor).setSigner(this.signer).setAlg(this.alg).setKid(this.kid).initialize();
+  }
 
-	public static <P> HsJwsSigner<P> HS256(Class<P> payloadClass) {
-		return new HsJwsSigner<>("HS256", "HmacSHA256", payloadClass);
-	}
+  public static <P> HsJwsSigner<P> HS256(Class<P> payloadClass) {
+    return new HsJwsSigner<>("HS256", "HmacSHA256", payloadClass);
+  }
 
-	public static <P> HsJwsSigner<P> HS384(Class<P> payloadClass) {
-		return new HsJwsSigner<>("HS384", "HmacSHA384", payloadClass);
-	}
+  public static <P> HsJwsSigner<P> HS384(Class<P> payloadClass) {
+    return new HsJwsSigner<>("HS384", "HmacSHA384", payloadClass);
+  }
 
-	public static <P> HsJwsSigner<P> HS512(Class<P> payloadClass) {
-		return new HsJwsSigner<>("HS512", "HmacSHA512", payloadClass);
-	}
+  public static <P> HsJwsSigner<P> HS512(Class<P> payloadClass) {
+    return new HsJwsSigner<>("HS512", "HmacSHA512", payloadClass);
+  }
 }

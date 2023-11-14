@@ -42,32 +42,32 @@ import jakarta.validation.Payload;
 @Documented
 public @interface MaxLength {
 
-	String message() default "{com.appslandia.common.validators.MaxLength.message}";
+  String message() default "{com.appslandia.common.validators.MaxLength.message}";
 
-	Class<?>[] groups() default {};
+  Class<?>[] groups() default {};
 
-	Class<? extends Payload>[] payload() default {};
+  Class<? extends Payload>[] payload() default {};
 
-	int value();
+  int value();
 
-	public static class ConstraintValidatorImpl implements ConstraintValidator<MaxLength, CharSequence> {
+  public static class ConstraintValidatorImpl implements ConstraintValidator<MaxLength, CharSequence> {
 
-		private int maxLength;
+    private int maxLength;
 
-		@Override
-		public void initialize(MaxLength annotation) {
-			this.maxLength = annotation.value();
-		}
+    @Override
+    public void initialize(MaxLength annotation) {
+      this.maxLength = annotation.value();
+    }
 
-		@Override
-		public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
-			if (value == null) {
-				return true;
-			}
-			if (value.length() > this.maxLength) {
-				return false;
-			}
-			return true;
-		}
-	}
+    @Override
+    public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
+      if (value == null) {
+        return true;
+      }
+      if (value.length() > this.maxLength) {
+        return false;
+      }
+      return true;
+    }
+  }
 }

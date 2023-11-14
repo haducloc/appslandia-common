@@ -29,7 +29,7 @@ import com.appslandia.common.base.InitializeSupport;
  */
 public interface Encryptor extends InitializeSupport {
 
-	byte[] encrypt(byte[] message) throws CryptoException;
+  byte[] encrypt(byte[] message) throws CryptoException;
 
-	byte[] decrypt(byte[] message) throws CryptoException;
+  byte[] decrypt(byte[] message) throws CryptoException;
 }

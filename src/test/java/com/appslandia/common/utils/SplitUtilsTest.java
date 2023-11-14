@@ -30,25 +30,25 @@ import org.junit.jupiter.api.Test;
  */
 public class SplitUtilsTest {
 
-	@Test
-	public void test_splitByLine() {
+  @Test
+  public void test_splitByLine() {
 
-		String[] items = SplitUtils.splitByLine("abc \r\n\t def \r\n\t\t ghk");
-		Assertions.assertTrue(items.length == 3);
+    String[] items = SplitUtils.splitByLine("abc \r\n\t def \r\n\t\t ghk");
+    Assertions.assertTrue(items.length == 3);
 
-		Assertions.assertEquals("abc", items[0]);
-		Assertions.assertEquals("def", items[1]);
-		Assertions.assertEquals("ghk", items[2]);
-	}
+    Assertions.assertEquals("abc", items[0]);
+    Assertions.assertEquals("def", items[1]);
+    Assertions.assertEquals("ghk", items[2]);
+  }
 
-	@Test
-	public void test_split() {
+  @Test
+  public void test_split() {
 
-		String[] items = SplitUtils.split("|abc|def | ghk||", '|');
-		Assertions.assertTrue(items.length == 3);
+    String[] items = SplitUtils.split("|abc|def | ghk||", '|');
+    Assertions.assertTrue(items.length == 3);
 
-		Assertions.assertEquals("abc", items[0]);
-		Assertions.assertEquals("def", items[1]);
-		Assertions.assertEquals("ghk", items[2]);
-	}
+    Assertions.assertEquals("abc", items[0]);
+    Assertions.assertEquals("def", items[1]);
+    Assertions.assertEquals("ghk", items[2]);
+  }
 }

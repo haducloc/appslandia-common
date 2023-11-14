@@ -30,96 +30,96 @@ import org.junit.jupiter.api.Test;
  */
 public class JpaSqlTest {
 
-	@Test
-	public void test() {
-		String sqlText = "SELECT r FROM User r";
-		JpaSql sql = new JpaSql(sqlText);
-		Assertions.assertEquals(sqlText, sql.getTranslatedSql());
-	}
+  @Test
+  public void test() {
+    String sqlText = "SELECT r FROM User r";
+    JpaSql sql = new JpaSql(sqlText);
+    Assertions.assertEquals(sqlText, sql.getTranslatedSql());
+  }
 
-	@Test
-	public void test_params() {
-		String sqlText = "SELECT r FROM User r WHERE r.userId=:id";
-		JpaSql sql = new JpaSql(sqlText);
+  @Test
+  public void test_params() {
+    String sqlText = "SELECT r FROM User r WHERE r.userId=:id";
+    JpaSql sql = new JpaSql(sqlText);
 
-		Assertions.assertEquals("SELECT r FROM User r WHERE r.userId=:id", sql.getTranslatedSql());
+    Assertions.assertEquals("SELECT r FROM User r WHERE r.userId=:id", sql.getTranslatedSql());
 
-		Assertions.assertTrue(sql.isParam("id"));
-		Assertions.assertFalse(sql.isArrayParam("id"));
-	}
+    Assertions.assertTrue(sql.isParam("id"));
+    Assertions.assertFalse(sql.isArrayParam("id"));
+  }
 
-	@Test
-	public void test_indexedParams() {
-		String sqlText = "SELECT r FROM User r WHERE r.userId=:0";
-		JpaSql sql = new JpaSql(sqlText);
+  @Test
+  public void test_indexedParams() {
+    String sqlText = "SELECT r FROM User r WHERE r.userId=:0";
+    JpaSql sql = new JpaSql(sqlText);
 
-		Assertions.assertEquals("SELECT r FROM User r WHERE r.userId=:0", sql.getTranslatedSql());
+    Assertions.assertEquals("SELECT r FROM User r WHERE r.userId=:0", sql.getTranslatedSql());
 
-		Assertions.assertTrue(sql.isParam("0"));
-		Assertions.assertFalse(sql.isArrayParam("0"));
-	}
+    Assertions.assertTrue(sql.isParam("0"));
+    Assertions.assertFalse(sql.isArrayParam("0"));
+  }
 
-	@Test
-	public void test_repeatedParams() {
-		String sqlText = "SELECT r FROM User r WHERE :userName='' OR r.userName LIKE :userName";
-		JpaSql sql = new JpaSql(sqlText);
+  @Test
+  public void test_repeatedParams() {
+    String sqlText = "SELECT r FROM User r WHERE :userName='' OR r.userName LIKE :userName";
+    JpaSql sql = new JpaSql(sqlText);
 
-		Assertions.assertEquals("SELECT r FROM User r WHERE :userName='' OR r.userName LIKE :userName", sql.getTranslatedSql());
+    Assertions.assertEquals("SELECT r FROM User r WHERE :userName='' OR r.userName LIKE :userName", sql.getTranslatedSql());
 
-		Assertions.assertTrue(sql.isParam("userName"));
-		Assertions.assertFalse(sql.isArrayParam("userName"));
-	}
+    Assertions.assertTrue(sql.isParam("userName"));
+    Assertions.assertFalse(sql.isArrayParam("userName"));
+  }
 
-	@Test
-	public void test_IN() {
-		String sqlText = "SELECT r FROM User r WHERE r.userId IN :ids";
-		JpaSql sql = new JpaSql(sqlText).arrayLen("ids", 3);
+  @Test
+  public void test_IN() {
+    String sqlText = "SELECT r FROM User r WHERE r.userId IN :ids";
+    JpaSql sql = new JpaSql(sqlText).arrayLen("ids", 3);
 
-		Assertions.assertEquals("SELECT r FROM User r WHERE r.userId IN (:ids__0, :ids__1, :ids__2)", sql.getTranslatedSql());
+    Assertions.assertEquals("SELECT r FROM User r WHERE r.userId IN (:ids__0, :ids__1, :ids__2)", sql.getTranslatedSql());
 
-		try {
-			int len = sql.getArrayLen("ids");
-			Assertions.assertEquals(3, len);
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-		Assertions.assertTrue(sql.isParam("ids"));
-		Assertions.assertTrue(sql.isArrayParam("ids"));
-	}
+    try {
+      int len = sql.getArrayLen("ids");
+      Assertions.assertEquals(3, len);
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+    Assertions.assertTrue(sql.isParam("ids"));
+    Assertions.assertTrue(sql.isArrayParam("ids"));
+  }
 
-	@Test
-	public void test_LIKE_ANY() {
-		String sqlText = "SELECT r FROM User r WHERE r.userName LIKE_ANY :names";
-		JpaSql sql = new JpaSql(sqlText).arrayLen("names", 3);
+  @Test
+  public void test_LIKE_ANY() {
+    String sqlText = "SELECT r FROM User r WHERE r.userName LIKE_ANY :names";
+    JpaSql sql = new JpaSql(sqlText).arrayLen("names", 3);
 
-		Assertions.assertEquals("SELECT r FROM User r WHERE r.userName LIKE :names__0 OR r.userName LIKE :names__1 OR r.userName LIKE :names__2",
-				sql.getTranslatedSql());
+    Assertions.assertEquals("SELECT r FROM User r WHERE r.userName LIKE :names__0 OR r.userName LIKE :names__1 OR r.userName LIKE :names__2",
+        sql.getTranslatedSql());
 
-		try {
-			int len = sql.getArrayLen("names");
-			Assertions.assertEquals(3, len);
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-		Assertions.assertTrue(sql.isParam("names"));
-		Assertions.assertTrue(sql.isArrayParam("names"));
-	}
+    try {
+      int len = sql.getArrayLen("names");
+      Assertions.assertEquals(3, len);
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+    Assertions.assertTrue(sql.isParam("names"));
+    Assertions.assertTrue(sql.isArrayParam("names"));
+  }
 
-	@Test
-	public void test_mixed() {
-		String sqlText = "SELECT r FROM User r WHERE r.userId=:id AND r.userType IN :userTypes AND (r.name LIKE_ANY :names)";
-		JpaSql sql = new JpaSql(sqlText).arrayLen("userTypes", 3).arrayLen("names", 3);
+  @Test
+  public void test_mixed() {
+    String sqlText = "SELECT r FROM User r WHERE r.userId=:id AND r.userType IN :userTypes AND (r.name LIKE_ANY :names)";
+    JpaSql sql = new JpaSql(sqlText).arrayLen("userTypes", 3).arrayLen("names", 3);
 
-		Assertions.assertTrue(sql.isParam("id"));
-		Assertions.assertTrue(sql.isParam("userTypes"));
-		Assertions.assertTrue(sql.isParam("names"));
+    Assertions.assertTrue(sql.isParam("id"));
+    Assertions.assertTrue(sql.isParam("userTypes"));
+    Assertions.assertTrue(sql.isParam("names"));
 
-		Assertions.assertFalse(sql.isArrayParam("id"));
-		Assertions.assertTrue(sql.isArrayParam("userTypes"));
-		Assertions.assertTrue(sql.isArrayParam("names"));
+    Assertions.assertFalse(sql.isArrayParam("id"));
+    Assertions.assertTrue(sql.isArrayParam("userTypes"));
+    Assertions.assertTrue(sql.isArrayParam("names"));
 
-		Assertions.assertEquals(
-				"SELECT r FROM User r WHERE r.userId=:id AND r.userType IN (:userTypes__0, :userTypes__1, :userTypes__2) AND (r.name LIKE :names__0 OR r.name LIKE :names__1 OR r.name LIKE :names__2)",
-				sql.getTranslatedSql());
-	}
+    Assertions.assertEquals(
+        "SELECT r FROM User r WHERE r.userId=:id AND r.userType IN (:userTypes__0, :userTypes__1, :userTypes__2) AND (r.name LIKE :names__0 OR r.name LIKE :names__1 OR r.name LIKE :names__2)",
+        sql.getTranslatedSql());
+  }
 }

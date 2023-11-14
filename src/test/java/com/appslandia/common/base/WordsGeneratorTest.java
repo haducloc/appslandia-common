@@ -30,62 +30,62 @@ import org.junit.jupiter.api.Test;
  */
 public class WordsGeneratorTest {
 
-	@Test
-	public void test() {
-		for (int i = 1; i <= 1000; i++) {
-			WordsGenerator impl = new WordsGenerator().setLength(i);
-			String str = impl.generate();
+  @Test
+  public void test() {
+    for (int i = 1; i <= 1000; i++) {
+      WordsGenerator impl = new WordsGenerator().setLength(i);
+      String str = impl.generate();
 
-			Assertions.assertEquals(i, str.length());
-			Assertions.assertTrue(impl.verify(str));
-		}
-	}
+      Assertions.assertEquals(i, str.length());
+      Assertions.assertTrue(impl.verify(str));
+    }
+  }
 
-	@Test
-	public void test_DIGITS() {
-		for (int i = 1; i <= 1000; i++) {
+  @Test
+  public void test_DIGITS() {
+    for (int i = 1; i <= 1000; i++) {
 
-			WordsGenerator impl = new WordsGenerator().setAlphabet(WordsGenerator.Alphabet.DIGITS).setLength(i);
-			String str = impl.generate();
+      WordsGenerator impl = new WordsGenerator().setAlphabet(WordsGenerator.Alphabet.DIGITS).setLength(i);
+      String str = impl.generate();
 
-			Assertions.assertEquals(i, str.length());
-			Assertions.assertTrue(impl.verify(str));
-		}
-	}
+      Assertions.assertEquals(i, str.length());
+      Assertions.assertTrue(impl.verify(str));
+    }
+  }
 
-	@Test
-	public void test_DIGITS_AZ() {
-		for (int i = 1; i <= 1000; i++) {
+  @Test
+  public void test_DIGITS_AZ() {
+    for (int i = 1; i <= 1000; i++) {
 
-			WordsGenerator impl = new WordsGenerator().setAlphabet(WordsGenerator.Alphabet.DIGITS_AZ).setLength(i);
-			String str = impl.generate();
+      WordsGenerator impl = new WordsGenerator().setAlphabet(WordsGenerator.Alphabet.DIGITS_AZ).setLength(i);
+      String str = impl.generate();
 
-			Assertions.assertEquals(i, str.length());
-			Assertions.assertTrue(impl.verify(str));
-		}
-	}
+      Assertions.assertEquals(i, str.length());
+      Assertions.assertTrue(impl.verify(str));
+    }
+  }
 
-	@Test
-	public void test_DIGITS_AZ_UPPER() {
-		for (int i = 1; i <= 1000; i++) {
+  @Test
+  public void test_DIGITS_AZ_UPPER() {
+    for (int i = 1; i <= 1000; i++) {
 
-			WordsGenerator impl = new WordsGenerator().setAlphabet(WordsGenerator.Alphabet.DIGITS_AZ_UPPER).setLength(i);
-			String str = impl.generate();
+      WordsGenerator impl = new WordsGenerator().setAlphabet(WordsGenerator.Alphabet.DIGITS_AZ_UPPER).setLength(i);
+      String str = impl.generate();
 
-			Assertions.assertEquals(i, str.length());
-			Assertions.assertTrue(impl.verify(str));
-		}
-	}
+      Assertions.assertEquals(i, str.length());
+      Assertions.assertTrue(impl.verify(str));
+    }
+  }
 
-	@Test
-	public void test_DIGITS_AZ_LOWER() {
-		for (int i = 1; i <= 1000; i++) {
+  @Test
+  public void test_DIGITS_AZ_LOWER() {
+    for (int i = 1; i <= 1000; i++) {
 
-			WordsGenerator impl = new WordsGenerator().setAlphabet(WordsGenerator.Alphabet.DIGITS_AZ_LOWER).setLength(i);
-			String str = impl.generate();
+      WordsGenerator impl = new WordsGenerator().setAlphabet(WordsGenerator.Alphabet.DIGITS_AZ_LOWER).setLength(i);
+      String str = impl.generate();
 
-			Assertions.assertEquals(i, str.length());
-			Assertions.assertTrue(impl.verify(str));
-		}
-	}
+      Assertions.assertEquals(i, str.length());
+      Assertions.assertTrue(impl.verify(str));
+    }
+  }
 }

@@ -32,38 +32,38 @@ import com.appslandia.common.utils.STR;
  */
 public class CipherOperations {
 
-	final String algorithm;
-	final String mode;
-	final String padding;
+  final String algorithm;
+  final String mode;
+  final String padding;
 
-	public CipherOperations(String transformation) {
-		Asserts.notNull(transformation);
+  public CipherOperations(String transformation) {
+    Asserts.notNull(transformation);
 
-		String[] operations = transformation.split("/");
-		Asserts.isTrue(operations.length == 3, "transformation is invalid.");
+    String[] operations = transformation.split("/");
+    Asserts.isTrue(operations.length == 3, "transformation is invalid.");
 
-		operations[0] = operations[0].toUpperCase(Locale.ENGLISH);
-		operations[1] = operations[1].toUpperCase(Locale.ENGLISH);
+    operations[0] = operations[0].toUpperCase(Locale.ENGLISH);
+    operations[1] = operations[1].toUpperCase(Locale.ENGLISH);
 
-		this.algorithm = operations[0];
-		this.mode = operations[1];
-		this.padding = operations[2];
-	}
+    this.algorithm = operations[0];
+    this.mode = operations[1];
+    this.padding = operations[2];
+  }
 
-	public String getAlgorithm() {
-		return this.algorithm;
-	}
+  public String getAlgorithm() {
+    return this.algorithm;
+  }
 
-	public String getMode() {
-		return this.mode;
-	}
+  public String getMode() {
+    return this.mode;
+  }
 
-	public String getPadding() {
-		return this.padding;
-	}
+  public String getPadding() {
+    return this.padding;
+  }
 
-	@Override
-	public String toString() {
-		return STR.fmt("{}/{}/{}", this.algorithm, this.mode, this.padding);
-	}
+  @Override
+  public String toString() {
+    return STR.fmt("{}/{}/{}", this.algorithm, this.mode, this.padding);
+  }
 }

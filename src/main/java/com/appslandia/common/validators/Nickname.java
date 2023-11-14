@@ -45,25 +45,25 @@ import jakarta.validation.Payload;
 @Documented
 public @interface Nickname {
 
-	String message() default "{com.appslandia.common.validators.Nickname.message}";
+  String message() default "{com.appslandia.common.validators.Nickname.message}";
 
-	Class<?>[] groups() default {};
+  Class<?>[] groups() default {};
 
-	Class<? extends Payload>[] payload() default {};
+  Class<? extends Payload>[] payload() default {};
 
-	// contains a-z and 0-9
-	// start with a-z
-	// length 3-45
+  // contains a-z and 0-9
+  // start with a-z
+  // length 3-45
 
-	static final Pattern NICKNAME_PATTERN = Pattern.compile("^(?=.{3,45}$)[a-z]{1,}[\\d]*$", Pattern.CASE_INSENSITIVE);
+  static final Pattern NICKNAME_PATTERN = Pattern.compile("^(?=.{3,45}$)[a-z]{1,}[\\d]*$", Pattern.CASE_INSENSITIVE);
 
-	public static class ConstraintValidatorImpl implements ConstraintValidator<Nickname, CharSequence> {
+  public static class ConstraintValidatorImpl implements ConstraintValidator<Nickname, CharSequence> {
 
-		public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
-			if (value == null) {
-				return true;
-			}
-			return NICKNAME_PATTERN.matcher(value).matches();
-		}
-	}
+    public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
+      if (value == null) {
+        return true;
+      }
+      return NICKNAME_PATTERN.matcher(value).matches();
+    }
+  }
 }

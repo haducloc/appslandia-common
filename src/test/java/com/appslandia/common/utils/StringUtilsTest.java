@@ -30,9 +30,9 @@ import org.junit.jupiter.api.Test;
  */
 public class StringUtilsTest {
 
-	@Test
-	public void test_constants() {
-		Assertions.assertTrue(StringUtils.EMPTY_STRING.length() == 0);
-		Assertions.assertTrue(StringUtils.EMPTY_ARRAY.length == 0);
-	}
+  @Test
+  public void test_constants() {
+    Assertions.assertTrue(StringUtils.EMPTY_STRING.length() == 0);
+    Assertions.assertTrue(StringUtils.EMPTY_ARRAY.length == 0);
+  }
 }

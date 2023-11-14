@@ -36,75 +36,75 @@ import com.appslandia.common.utils.ValueUtils;
  */
 public class SecretKeyGenerator extends InitializeObject {
 
-	public static final SecretKeyGenerator PBKDF2_HMAC_SHA512 = new SecretKeyGenerator("PBKDF2WithHmacSHA512");
+  public static final SecretKeyGenerator PBKDF2_HMAC_SHA512 = new SecretKeyGenerator("PBKDF2WithHmacSHA512");
 
-	private String algorithm, provider;
-	private SecretKeyFactory secretKeyFactory;
-	final Object mutex = new Object();
+  private String algorithm, provider;
+  private SecretKeyFactory secretKeyFactory;
+  final Object mutex = new Object();
 
-	public SecretKeyGenerator() {
-	}
+  public SecretKeyGenerator() {
+  }
 
-	public SecretKeyGenerator(String algorithm) {
-		this.algorithm = algorithm;
-	}
+  public SecretKeyGenerator(String algorithm) {
+    this.algorithm = algorithm;
+  }
 
-	public SecretKeyGenerator(String algorithm, String provider) {
-		this.algorithm = algorithm;
-		this.provider = provider;
-	}
+  public SecretKeyGenerator(String algorithm, String provider) {
+    this.algorithm = algorithm;
+    this.provider = provider;
+  }
 
-	@Override
-	protected void init() throws Exception {
-		// algorithm
-		this.algorithm = ValueUtils.valueOrAlt(this.algorithm, "PBKDF2WithHmacSHA512");
+  @Override
+  protected void init() throws Exception {
+    // algorithm
+    this.algorithm = ValueUtils.valueOrAlt(this.algorithm, "PBKDF2WithHmacSHA512");
 
-		// secretKeyFactory
-		if (this.provider == null) {
-			this.secretKeyFactory = SecretKeyFactory.getInstance(this.algorithm);
-		} else {
-			this.secretKeyFactory = SecretKeyFactory.getInstance(this.algorithm, this.provider);
-		}
-	}
+    // secretKeyFactory
+    if (this.provider == null) {
+      this.secretKeyFactory = SecretKeyFactory.getInstance(this.algorithm);
+    } else {
+      this.secretKeyFactory = SecretKeyFactory.getInstance(this.algorithm, this.provider);
+    }
+  }
 
-	public byte[] generate(char[] password, byte[] salt, int iterationCount, int keySize) throws CryptoException {
-		this.initialize();
+  public byte[] generate(char[] password, byte[] salt, int iterationCount, int keySize) throws CryptoException {
+    this.initialize();
 
-		PBEKeySpec keySpec = new PBEKeySpec(password, salt, iterationCount, keySize * 8);
-		SecretKey secretkey = null;
-		try {
-			synchronized (this.mutex) {
-				secretkey = this.secretKeyFactory.generateSecret(keySpec);
-			}
-		} catch (GeneralSecurityException ex) {
-			throw new CryptoException(ex);
-		} finally {
-			keySpec.clearPassword();
-		}
-		byte[] key = secretkey.getEncoded();
-		CryptoUtils.destroyQuietly(secretkey);
-		return key;
-	}
+    PBEKeySpec keySpec = new PBEKeySpec(password, salt, iterationCount, keySize * 8);
+    SecretKey secretkey = null;
+    try {
+      synchronized (this.mutex) {
+        secretkey = this.secretKeyFactory.generateSecret(keySpec);
+      }
+    } catch (GeneralSecurityException ex) {
+      throw new CryptoException(ex);
+    } finally {
+      keySpec.clearPassword();
+    }
+    byte[] key = secretkey.getEncoded();
+    CryptoUtils.destroyQuietly(secretkey);
+    return key;
+  }
 
-	public String getAlgorithm() {
-		this.initialize();
-		return this.algorithm;
-	}
+  public String getAlgorithm() {
+    this.initialize();
+    return this.algorithm;
+  }
 
-	public SecretKeyGenerator setAlgorithm(String algorithm) {
-		this.assertNotInitialized();
-		this.algorithm = algorithm;
-		return this;
-	}
+  public SecretKeyGenerator setAlgorithm(String algorithm) {
+    this.assertNotInitialized();
+    this.algorithm = algorithm;
+    return this;
+  }
 
-	public String getProvider() {
-		this.initialize();
-		return this.provider;
-	}
+  public String getProvider() {
+    this.initialize();
+    return this.provider;
+  }
 
-	public SecretKeyGenerator setProvider(String provider) {
-		this.assertNotInitialized();
-		this.provider = provider;
-		return this;
-	}
+  public SecretKeyGenerator setProvider(String provider) {
+    this.assertNotInitialized();
+    this.provider = provider;
+    return this;
+  }
 }

@@ -36,80 +36,80 @@ import com.appslandia.common.utils.ValueUtils;
  */
 public class CertificateFactoryUtil extends InitializeObject {
 
-	public static final CertificateFactoryUtil X509 = new CertificateFactoryUtil("X.509");
+  public static final CertificateFactoryUtil X509 = new CertificateFactoryUtil("X.509");
 
-	private String type;
-	private String provider;
-	private CertificateFactory certificateFactory;
-	final Object mutex = new Object();
+  private String type;
+  private String provider;
+  private CertificateFactory certificateFactory;
+  final Object mutex = new Object();
 
-	public CertificateFactoryUtil() {
-	}
+  public CertificateFactoryUtil() {
+  }
 
-	public CertificateFactoryUtil(String type) {
-		this.type = type;
-	}
+  public CertificateFactoryUtil(String type) {
+    this.type = type;
+  }
 
-	public CertificateFactoryUtil(String type, String provider) {
-		this.type = type;
-		this.provider = provider;
-	}
+  public CertificateFactoryUtil(String type, String provider) {
+    this.type = type;
+    this.provider = provider;
+  }
 
-	@Override
-	protected void init() throws Exception {
-		this.type = ValueUtils.valueOrAlt(this.type, "X.509");
+  @Override
+  protected void init() throws Exception {
+    this.type = ValueUtils.valueOrAlt(this.type, "X.509");
 
-		if (this.provider == null) {
-			this.certificateFactory = CertificateFactory.getInstance(this.type);
-		} else {
-			this.certificateFactory = CertificateFactory.getInstance(this.type, provider);
-		}
-	}
+    if (this.provider == null) {
+      this.certificateFactory = CertificateFactory.getInstance(this.type);
+    } else {
+      this.certificateFactory = CertificateFactory.getInstance(this.type, provider);
+    }
+  }
 
-	// X509/ASN.1 encoding is a standard format for encoding Certificate
-	public X509Certificate toCertificate(InputStream certInDer) throws CryptoException {
-		this.initialize();
-		try {
-			synchronized (this.mutex) {
-				return (X509Certificate) this.certificateFactory.generateCertificate(certInDer);
-			}
-		} catch (GeneralSecurityException ex) {
-			throw new CryptoException(ex);
-		}
-	}
+  // X509/ASN.1 encoding is a standard format for encoding Certificate
+  public X509Certificate toCertificate(InputStream certInDer) throws CryptoException {
+    this.initialize();
+    try {
+      synchronized (this.mutex) {
+        return (X509Certificate) this.certificateFactory.generateCertificate(certInDer);
+      }
+    } catch (GeneralSecurityException ex) {
+      throw new CryptoException(ex);
+    }
+  }
 
-	// X509/ASN.1 encoding is a standard format for encoding Certificate
-	public X509Certificate toCertificate(String certInPem) throws CryptoException {
-		this.initialize();
-		byte[] der = PKIUtils.toDerEncoded(certInPem);
-		try {
-			synchronized (this.mutex) {
-				return (X509Certificate) this.certificateFactory.generateCertificate(new ByteArrayInputStream(der));
-			}
-		} catch (GeneralSecurityException ex) {
-			throw new CryptoException(ex);
-		}
-	}
+  // X509/ASN.1 encoding is a standard format for encoding Certificate
+  public X509Certificate toCertificate(String certInPem) throws CryptoException {
+    this.initialize();
+    byte[] der = PKIUtils.toDerEncoded(certInPem);
+    try {
+      synchronized (this.mutex) {
+        return (X509Certificate) this.certificateFactory.generateCertificate(new ByteArrayInputStream(der));
+      }
+    } catch (GeneralSecurityException ex) {
+      throw new CryptoException(ex);
+    }
+  }
 
-	public String getType() {
-		initialize();
-		return this.type;
-	}
+  public String getType() {
+    initialize();
+    return this.type;
+  }
 
-	public CertificateFactoryUtil setType(String type) {
-		assertNotInitialized();
-		this.type = type;
-		return this;
-	}
+  public CertificateFactoryUtil setType(String type) {
+    assertNotInitialized();
+    this.type = type;
+    return this;
+  }
 
-	public String getProvider() {
-		initialize();
-		return this.provider;
-	}
+  public String getProvider() {
+    initialize();
+    return this.provider;
+  }
 
-	public CertificateFactoryUtil setProvider(String provider) {
-		assertNotInitialized();
-		this.provider = provider;
-		return this;
-	}
+  public CertificateFactoryUtil setProvider(String provider) {
+    assertNotInitialized();
+    this.provider = provider;
+    return this;
+  }
 }

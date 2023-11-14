@@ -30,10 +30,10 @@ import jakarta.enterprise.util.AnnotationLiteral;
  */
 @SuppressWarnings("all")
 public class DefaultLiteral extends AnnotationLiteral<Default> implements Default {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public static final Default IMPL = new DefaultLiteral();
+  public static final Default IMPL = new DefaultLiteral();
 
-	private DefaultLiteral() {
-	}
+  private DefaultLiteral() {
+  }
 }

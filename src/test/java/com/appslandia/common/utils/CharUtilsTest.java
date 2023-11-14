@@ -30,42 +30,42 @@ import org.junit.jupiter.api.Test;
  */
 public class CharUtilsTest {
 
-	@Test
-	public void test_toCharRanges() {
-		char[] charRanges = CharUtils.toCharRanges("a-zA-Z");
-		Assertions.assertNotNull(charRanges);
-		Assertions.assertTrue(charRanges.length == 52);
-	}
+  @Test
+  public void test_toCharRanges() {
+    char[] charRanges = CharUtils.toCharRanges("a-zA-Z");
+    Assertions.assertNotNull(charRanges);
+    Assertions.assertTrue(charRanges.length == 52);
+  }
 
-	@Test
-	public void test_toCharRanges_digits() {
-		char[] charRanges = CharUtils.toCharRanges("0-9");
-		Assertions.assertNotNull(charRanges);
-		Assertions.assertTrue(charRanges.length == 10);
+  @Test
+  public void test_toCharRanges_digits() {
+    char[] charRanges = CharUtils.toCharRanges("0-9");
+    Assertions.assertNotNull(charRanges);
+    Assertions.assertTrue(charRanges.length == 10);
 
-		charRanges = CharUtils.toCharRanges("1-37-9");
-		Assertions.assertNotNull(charRanges);
-		Assertions.assertEquals("123789", new String(charRanges));
-	}
+    charRanges = CharUtils.toCharRanges("1-37-9");
+    Assertions.assertNotNull(charRanges);
+    Assertions.assertEquals("123789", new String(charRanges));
+  }
 
-	@Test
-	public void test_toCharRanges_notRange() {
-		char[] charRanges = CharUtils.toCharRanges("0123");
-		Assertions.assertNotNull(charRanges);
-		Assertions.assertEquals("0123", new String(charRanges));
-	}
+  @Test
+  public void test_toCharRanges_notRange() {
+    char[] charRanges = CharUtils.toCharRanges("0123");
+    Assertions.assertNotNull(charRanges);
+    Assertions.assertEquals("0123", new String(charRanges));
+  }
 
-	@Test
-	public void test_toCharRanges_mixed() {
-		char[] charRanges = CharUtils.toCharRanges("1-3a-cABC");
-		Assertions.assertNotNull(charRanges);
-		Assertions.assertEquals("123abcABC", new String(charRanges));
-	}
+  @Test
+  public void test_toCharRanges_mixed() {
+    char[] charRanges = CharUtils.toCharRanges("1-3a-cABC");
+    Assertions.assertNotNull(charRanges);
+    Assertions.assertEquals("123abcABC", new String(charRanges));
+  }
 
-	@Test
-	public void test_toCharRanges_minus() {
-		char[] charRanges = CharUtils.toCharRanges("1-3a-c-");
-		Assertions.assertNotNull(charRanges);
-		Assertions.assertEquals("123abc-", new String(charRanges));
-	}
+  @Test
+  public void test_toCharRanges_minus() {
+    char[] charRanges = CharUtils.toCharRanges("1-3a-c-");
+    Assertions.assertNotNull(charRanges);
+    Assertions.assertEquals("123abc-", new String(charRanges));
+  }
 }

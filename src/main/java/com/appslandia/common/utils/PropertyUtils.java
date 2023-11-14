@@ -38,89 +38,89 @@ import com.appslandia.common.converters.ConverterProvider;
  */
 public class PropertyUtils {
 
-	private interface PropertyStrategy {
+  private interface PropertyStrategy {
 
-		Method find(Class<?> clazz, String propertyName);
-	}
+    Method find(Class<?> clazz, String propertyName);
+  }
 
-	public static final PropertyStrategy METHOD_PROPERTY_STRATEGY = new PropertyStrategy() {
+  public static final PropertyStrategy METHOD_PROPERTY_STRATEGY = new PropertyStrategy() {
 
-		@Override
-		public Method find(Class<?> clazz, final String propertyName) {
-			return ReflectionUtils.traverse(clazz, new ReflectionUtils.MethodHandler() {
+    @Override
+    public Method find(Class<?> clazz, final String propertyName) {
+      return ReflectionUtils.traverse(clazz, new ReflectionUtils.MethodHandler() {
 
-				@Override
-				public boolean matches(Method m) {
-					if (!Modifier.isPublic(m.getModifiers()) || Modifier.isStatic(m.getModifiers())) {
-						return false;
-					}
-					if (m.getParameterCount() != 1) {
-						return false;
-					}
-					return m.getName().equals(propertyName);
-				}
+        @Override
+        public boolean matches(Method m) {
+          if (!Modifier.isPublic(m.getModifiers()) || Modifier.isStatic(m.getModifiers())) {
+            return false;
+          }
+          if (m.getParameterCount() != 1) {
+            return false;
+          }
+          return m.getName().equals(propertyName);
+        }
 
-				@Override
-				public boolean handle(Method m) throws ReflectionException {
-					return false;
-				}
-			});
-		}
-	};
+        @Override
+        public boolean handle(Method m) throws ReflectionException {
+          return false;
+        }
+      });
+    }
+  };
 
-	public static final PropertyStrategy BEAN_PROPERTY_STRATEGY = new PropertyStrategy() {
+  public static final PropertyStrategy BEAN_PROPERTY_STRATEGY = new PropertyStrategy() {
 
-		@Override
-		public Method find(Class<?> clazz, final String propertyName) {
-			return ReflectionUtils.traverse(clazz, new ReflectionUtils.MethodHandler() {
+    @Override
+    public Method find(Class<?> clazz, final String propertyName) {
+      return ReflectionUtils.traverse(clazz, new ReflectionUtils.MethodHandler() {
 
-				@Override
-				public boolean matches(Method m) {
-					if (!Modifier.isPublic(m.getModifiers()) || Modifier.isStatic(m.getModifiers())) {
-						return false;
-					}
-					if (m.getParameterCount() != 1) {
-						return false;
-					}
-					if (!m.getName().startsWith("set")) {
-						return false;
-					}
-					return m.getName().substring(3).equalsIgnoreCase(propertyName);
-				}
+        @Override
+        public boolean matches(Method m) {
+          if (!Modifier.isPublic(m.getModifiers()) || Modifier.isStatic(m.getModifiers())) {
+            return false;
+          }
+          if (m.getParameterCount() != 1) {
+            return false;
+          }
+          if (!m.getName().startsWith("set")) {
+            return false;
+          }
+          return m.getName().substring(3).equalsIgnoreCase(propertyName);
+        }
 
-				@Override
-				public boolean handle(Method m) throws ReflectionException {
-					return false;
-				}
-			});
-		}
-	};
+        @Override
+        public boolean handle(Method m) throws ReflectionException {
+          return false;
+        }
+      });
+    }
+  };
 
-	public static void initialize(Object obj, Config config, PropertyStrategy propertyStrategy) throws ConverterException, ReflectionException {
-		initialize(obj, config, new FormatProviderImpl(), propertyStrategy);
-	}
+  public static void initialize(Object obj, Config config, PropertyStrategy propertyStrategy) throws ConverterException, ReflectionException {
+    initialize(obj, config, new FormatProviderImpl(), propertyStrategy);
+  }
 
-	public static void initialize(Object obj, Config config, FormatProvider formatProvider, PropertyStrategy propertyStrategy)
-			throws ConverterException, ReflectionException {
+  public static void initialize(Object obj, Config config, FormatProvider formatProvider, PropertyStrategy propertyStrategy)
+      throws ConverterException, ReflectionException {
 
-		Iterator<String> keyIter = config.getKeyIterator();
-		while (keyIter.hasNext()) {
+    Iterator<String> keyIter = config.getKeyIterator();
+    while (keyIter.hasNext()) {
 
-			String propertyName = keyIter.next();
-			Method m = propertyStrategy.find(obj.getClass(), propertyName);
-			if (m == null) {
-				continue;
-			}
+      String propertyName = keyIter.next();
+      Method m = propertyStrategy.find(obj.getClass(), propertyName);
+      if (m == null) {
+        continue;
+      }
 
-			// converter
-			Class<?> parameterType = m.getParameterTypes()[0];
-			Converter<Object> converter = ConverterProvider.getDefault().getConverter(parameterType);
-			if (converter != null) {
+      // converter
+      Class<?> parameterType = m.getParameterTypes()[0];
+      Converter<Object> converter = ConverterProvider.getDefault().getConverter(parameterType);
+      if (converter != null) {
 
-				// Invoke Set Property
-				Object value = converter.parse(config.getString(propertyName), formatProvider);
-				ReflectionUtils.invoke(m, obj, value);
-			}
-		}
-	}
+        // Invoke Set Property
+        Object value = converter.parse(config.getString(propertyName), formatProvider);
+        ReflectionUtils.invoke(m, obj, value);
+      }
+    }
+  }
 }

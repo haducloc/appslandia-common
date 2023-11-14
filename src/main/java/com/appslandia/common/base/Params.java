@@ -29,18 +29,18 @@ import java.util.Map;
  *
  */
 public class Params extends MapWrapper<String, Object> {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public Params() {
-		super(new LinkedHashMap<>());
-	}
+  public Params() {
+    super(new LinkedHashMap<>());
+  }
 
-	public Params(Map<String, Object> map) {
-		super(map);
-	}
+  public Params(Map<String, Object> map) {
+    super(map);
+  }
 
-	public Params set(String key, Object value) {
-		this.map.put(key, value);
-		return this;
-	}
+  public Params set(String key, Object value) {
+    this.map.put(key, value);
+    return this;
+  }
 }

@@ -38,184 +38,184 @@ import com.appslandia.common.base.ThreadSafeTester;
  */
 public class RsaEncryptorTest {
 
-	private KeyPair keyPair;
+  private KeyPair keyPair;
 
-	@BeforeEach
-	public void initialize() {
-		try {
-			KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-			generator.initialize(2048, new SecureRandom());
-			keyPair = generator.generateKeyPair();
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+  @BeforeEach
+  public void initialize() {
+    try {
+      KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
+      generator.initialize(2048, new SecureRandom());
+      keyPair = generator.generateKeyPair();
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test() {
-		RsaEncryptor impl = new RsaEncryptor();
-		impl.setTransformation("RSA/ECB/PKCS1Padding");
-		impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
+  @Test
+  public void test() {
+    RsaEncryptor impl = new RsaEncryptor();
+    impl.setTransformation("RSA/ECB/PKCS1Padding");
+    impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
 
-		try {
-			byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-			byte[] enc = impl.encrypt(data);
+    try {
+      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+      byte[] enc = impl.encrypt(data);
 
-			Assertions.assertArrayEquals(data, impl.decrypt(enc));
+      Assertions.assertArrayEquals(data, impl.decrypt(enc));
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_OAEPPadding() {
-		RsaEncryptor impl = new RsaEncryptor();
-		impl.setTransformation("RSA/ECB/OAEPPadding");
-		impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
+  @Test
+  public void test_OAEPPadding() {
+    RsaEncryptor impl = new RsaEncryptor();
+    impl.setTransformation("RSA/ECB/OAEPPadding");
+    impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
 
-		try {
-			byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-			byte[] enc = impl.encrypt(data);
+    try {
+      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+      byte[] enc = impl.encrypt(data);
 
-			Assertions.assertArrayEquals(data, impl.decrypt(enc));
+      Assertions.assertArrayEquals(data, impl.decrypt(enc));
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_OAEPPadding_MD5() {
-		RsaEncryptor impl = new RsaEncryptor();
-		impl.setTransformation("RSA/ECB/OAEPWithMD5AndMGF1Padding");
-		impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
+  @Test
+  public void test_OAEPPadding_MD5() {
+    RsaEncryptor impl = new RsaEncryptor();
+    impl.setTransformation("RSA/ECB/OAEPWithMD5AndMGF1Padding");
+    impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
 
-		try {
-			byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-			byte[] enc = impl.encrypt(data);
+    try {
+      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+      byte[] enc = impl.encrypt(data);
 
-			Assertions.assertArrayEquals(data, impl.decrypt(enc));
+      Assertions.assertArrayEquals(data, impl.decrypt(enc));
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_OAEPWithSHA1AndMGF1Padding() {
-		RsaEncryptor impl = new RsaEncryptor();
-		impl.setTransformation("RSA/ECB/OAEPWithSHA-1AndMGF1Padding");
-		impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
+  @Test
+  public void test_OAEPWithSHA1AndMGF1Padding() {
+    RsaEncryptor impl = new RsaEncryptor();
+    impl.setTransformation("RSA/ECB/OAEPWithSHA-1AndMGF1Padding");
+    impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
 
-		try {
-			byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-			byte[] enc = impl.encrypt(data);
+    try {
+      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+      byte[] enc = impl.encrypt(data);
 
-			Assertions.assertArrayEquals(data, impl.decrypt(enc));
+      Assertions.assertArrayEquals(data, impl.decrypt(enc));
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_OAEPWithSHA224AndMGF1Padding() {
-		RsaEncryptor impl = new RsaEncryptor();
-		impl.setTransformation("RSA/ECB/OAEPWithSHA-224AndMGF1Padding");
-		impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
+  @Test
+  public void test_OAEPWithSHA224AndMGF1Padding() {
+    RsaEncryptor impl = new RsaEncryptor();
+    impl.setTransformation("RSA/ECB/OAEPWithSHA-224AndMGF1Padding");
+    impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
 
-		try {
-			byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-			byte[] enc = impl.encrypt(data);
+    try {
+      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+      byte[] enc = impl.encrypt(data);
 
-			Assertions.assertArrayEquals(data, impl.decrypt(enc));
+      Assertions.assertArrayEquals(data, impl.decrypt(enc));
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_OAEPWithSHA256AndMGF1Padding() {
-		RsaEncryptor impl = new RsaEncryptor();
-		impl.setTransformation("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
-		impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
+  @Test
+  public void test_OAEPWithSHA256AndMGF1Padding() {
+    RsaEncryptor impl = new RsaEncryptor();
+    impl.setTransformation("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
+    impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
 
-		try {
-			byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-			byte[] enc = impl.encrypt(data);
+    try {
+      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+      byte[] enc = impl.encrypt(data);
 
-			Assertions.assertArrayEquals(data, impl.decrypt(enc));
+      Assertions.assertArrayEquals(data, impl.decrypt(enc));
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_OAEPWithSHA384AndMGF1Padding() {
-		RsaEncryptor impl = new RsaEncryptor();
-		impl.setTransformation("RSA/ECB/OAEPWithSHA-384AndMGF1Padding");
-		impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
+  @Test
+  public void test_OAEPWithSHA384AndMGF1Padding() {
+    RsaEncryptor impl = new RsaEncryptor();
+    impl.setTransformation("RSA/ECB/OAEPWithSHA-384AndMGF1Padding");
+    impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
 
-		try {
-			byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-			byte[] enc = impl.encrypt(data);
+    try {
+      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+      byte[] enc = impl.encrypt(data);
 
-			Assertions.assertArrayEquals(data, impl.decrypt(enc));
+      Assertions.assertArrayEquals(data, impl.decrypt(enc));
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_OAEPWithSHA512AndMGF1Padding() {
-		RsaEncryptor impl = new RsaEncryptor();
-		impl.setTransformation("RSA/ECB/OAEPWithSHA-512AndMGF1Padding");
-		impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
+  @Test
+  public void test_OAEPWithSHA512AndMGF1Padding() {
+    RsaEncryptor impl = new RsaEncryptor();
+    impl.setTransformation("RSA/ECB/OAEPWithSHA-512AndMGF1Padding");
+    impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
 
-		try {
-			byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-			byte[] enc = impl.encrypt(data);
+    try {
+      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+      byte[] enc = impl.encrypt(data);
 
-			Assertions.assertArrayEquals(data, impl.decrypt(enc));
+      Assertions.assertArrayEquals(data, impl.decrypt(enc));
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_threadSafe() {
-		final RsaEncryptor impl = new RsaEncryptor();
-		impl.setTransformation("RSA/ECB/PKCS1Padding");
-		impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
+  @Test
+  public void test_threadSafe() {
+    final RsaEncryptor impl = new RsaEncryptor();
+    impl.setTransformation("RSA/ECB/PKCS1Padding");
+    impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
 
-		new ThreadSafeTester() {
+    new ThreadSafeTester() {
 
-			@Override
-			protected Runnable newTask() {
-				return new Runnable() {
+      @Override
+      protected Runnable newTask() {
+        return new Runnable() {
 
-					@Override
-					public void run() {
-						try {
-							byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-							byte[] enc = impl.encrypt(data);
+          @Override
+          public void run() {
+            try {
+              byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+              byte[] enc = impl.encrypt(data);
 
-							Assertions.assertArrayEquals(data, impl.decrypt(enc));
+              Assertions.assertArrayEquals(data, impl.decrypt(enc));
 
-						} catch (Exception ex) {
-							Assertions.fail(ex.getMessage());
+            } catch (Exception ex) {
+              Assertions.fail(ex.getMessage());
 
-						} finally {
-							doneTask();
-						}
-					}
-				};
-			}
-		}.execute();
-	}
+            } finally {
+              doneTask();
+            }
+          }
+        };
+      }
+    }.execute();
+  }
 }

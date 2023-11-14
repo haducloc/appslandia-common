@@ -48,60 +48,60 @@ import jakarta.validation.Payload;
 @Documented
 public @interface MultiValues {
 
-	String message() default "{com.appslandia.common.validators.MultiValues.message}";
+  String message() default "{com.appslandia.common.validators.MultiValues.message}";
 
-	Class<?>[] groups() default {};
+  Class<?>[] groups() default {};
 
-	Class<? extends Payload>[] payload() default {};
+  Class<? extends Payload>[] payload() default {};
 
-	String[] value() default {};
+  String[] value() default {};
 
-	int[] ints() default {};
+  int[] ints() default {};
 
-	Class<?> type() default String.class;
+  Class<?> type() default String.class;
 
-	public static class MultiValuesValidator {
+  public static class MultiValuesValidator {
 
-		public static void validate(MultiValues obj) throws AssertException {
-			if ((obj.type() != String.class) && (obj.type() != int.class)) {
+    public static void validate(MultiValues obj) throws AssertException {
+      if ((obj.type() != String.class) && (obj.type() != int.class)) {
 
-				throw new AssertException(STR.fmt("The given {} is invalid. type must be String.class|int.class", obj));
-			}
-		}
-	}
+        throw new AssertException(STR.fmt("The given {} is invalid. type must be String.class|int.class", obj));
+      }
+    }
+  }
 
-	public static class ConstraintValidatorImpl implements ConstraintValidator<MultiValues, String> {
+  public static class ConstraintValidatorImpl implements ConstraintValidator<MultiValues, String> {
 
-		private String[] validValues;
+    private String[] validValues;
 
-		@Override
-		public void initialize(MultiValues annotation) {
-			String[] values = annotation.value();
-			if (values.length == 0) {
-				values = Arrays.stream(annotation.ints()).mapToObj(v -> Integer.toString(v)).toArray(String[]::new);
-			}
-			if (values.length == 0) {
-				throw new AssertException(STR.fmt("The given {} is invalid. value or ints is required.", annotation));
-			}
-			this.validValues = values;
+    @Override
+    public void initialize(MultiValues annotation) {
+      String[] values = annotation.value();
+      if (values.length == 0) {
+        values = Arrays.stream(annotation.ints()).mapToObj(v -> Integer.toString(v)).toArray(String[]::new);
+      }
+      if (values.length == 0) {
+        throw new AssertException(STR.fmt("The given {} is invalid. value or ints is required.", annotation));
+      }
+      this.validValues = values;
 
-			MultiValuesValidator.validate(annotation);
-		}
+      MultiValuesValidator.validate(annotation);
+    }
 
-		@Override
-		public boolean isValid(String values, ConstraintValidatorContext context) {
-			if (values == null) {
-				return true;
-			}
-			String[] vals = SplitUtils.splitByComma(values, SplitOptions.EXCLUDE_NULL);
-			for (String value : vals) {
+    @Override
+    public boolean isValid(String values, ConstraintValidatorContext context) {
+      if (values == null) {
+        return true;
+      }
+      String[] vals = SplitUtils.splitByComma(values, SplitOptions.EXCLUDE_NULL);
+      for (String value : vals) {
 
-				if (!Arrays.stream(this.validValues).anyMatch(v -> v.equalsIgnoreCase(value))) {
-					return false;
-				}
-			}
-			return true;
-		}
-	}
+        if (!Arrays.stream(this.validValues).anyMatch(v -> v.equalsIgnoreCase(value))) {
+          return false;
+        }
+      }
+      return true;
+    }
+  }
 
 }

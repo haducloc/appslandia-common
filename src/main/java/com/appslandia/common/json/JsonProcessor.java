@@ -46,93 +46,93 @@ import com.appslandia.common.utils.ReflectionUtils;
  */
 public abstract class JsonProcessor extends InitializeObject {
 
-	public abstract void write(Writer out, Object obj) throws JsonException;
+  public abstract void write(Writer out, Object obj) throws JsonException;
 
-	public abstract <T> T read(Reader reader, Class<T> resultClass) throws JsonException;
+  public abstract <T> T read(Reader reader, Class<T> resultClass) throws JsonException;
 
-	public abstract <T> T read(Reader reader, Type type) throws JsonException;
+  public abstract <T> T read(Reader reader, Type type) throws JsonException;
 
-	public <V> Map<String, V> readAsMap(Reader reader) throws JsonException {
-		return ObjectUtils.cast(read(reader, LinkedHashMap.class));
-	}
+  public <V> Map<String, V> readAsMap(Reader reader) throws JsonException {
+    return ObjectUtils.cast(read(reader, LinkedHashMap.class));
+  }
 
-	public <T> T read(String jsonString, Class<T> resultClass) throws JsonException {
-		return read(new StringReader(jsonString), resultClass);
-	}
+  public <T> T read(String jsonString, Class<T> resultClass) throws JsonException {
+    return read(new StringReader(jsonString), resultClass);
+  }
 
-	public <T> T read(String jsonString, Type type) throws JsonException {
-		return read(new StringReader(jsonString), type);
-	}
+  public <T> T read(String jsonString, Type type) throws JsonException {
+    return read(new StringReader(jsonString), type);
+  }
 
-	public String toString(Object obj) throws JsonException {
-		StringWriter out = new StringWriter(512);
-		write(out, obj);
-		return out.toString();
-	}
+  public String toString(Object obj) throws JsonException {
+    StringWriter out = new StringWriter(512);
+    write(out, obj);
+    return out.toString();
+  }
 
-	public byte[] toByteArray(Object obj) throws JsonException {
-		MemoryStream content = new MemoryStream(512);
-		try (OutputStreamWriter out = new OutputStreamWriter(content, StandardCharsets.UTF_8)) {
+  public byte[] toByteArray(Object obj) throws JsonException {
+    MemoryStream content = new MemoryStream(512);
+    try (OutputStreamWriter out = new OutputStreamWriter(content, StandardCharsets.UTF_8)) {
 
-			write(out, obj);
-		} catch (IOException ex) {
-			throw new JsonException(ex);
-		}
-		return content.toByteArray();
-	}
+      write(out, obj);
+    } catch (IOException ex) {
+      throw new JsonException(ex);
+    }
+    return content.toByteArray();
+  }
 
-	private static JsonProcessor __default;
-	private static final Object MUTEX = new Object();
+  private static JsonProcessor __default;
+  private static final Object MUTEX = new Object();
 
-	public static JsonProcessor getDefault() {
-		JsonProcessor obj = __default;
-		if (obj == null) {
-			synchronized (MUTEX) {
-				if ((obj = __default) == null) {
-					__default = obj = initJsonProcessor();
-				}
-			}
-		}
-		return obj;
-	}
+  public static JsonProcessor getDefault() {
+    JsonProcessor obj = __default;
+    if (obj == null) {
+      synchronized (MUTEX) {
+        if ((obj = __default) == null) {
+          __default = obj = initJsonProcessor();
+        }
+      }
+    }
+    return obj;
+  }
 
-	public static void setDefault(JsonProcessor impl) {
-		Asserts.isNull(__default, "JsonProcessor.__default must be null.");
+  public static void setDefault(JsonProcessor impl) {
+    Asserts.isNull(__default, "JsonProcessor.__default must be null.");
 
-		if (__default == null) {
-			synchronized (MUTEX) {
-				if (__default == null) {
-					__default = impl;
-					return;
-				}
-			}
-		}
-	}
+    if (__default == null) {
+      synchronized (MUTEX) {
+        if (__default == null) {
+          __default = impl;
+          return;
+        }
+      }
+    }
+  }
 
-	private static Supplier<JsonProcessor> __provider;
+  private static Supplier<JsonProcessor> __provider;
 
-	public static void setProvider(Supplier<JsonProcessor> impl) {
-		Asserts.isNull(__default, "JsonProcessor.__default must be null.");
+  public static void setProvider(Supplier<JsonProcessor> impl) {
+    Asserts.isNull(__default, "JsonProcessor.__default must be null.");
 
-		if (__default == null) {
-			synchronized (MUTEX) {
-				if (__default == null) {
-					__provider = impl;
-					return;
-				}
-			}
-		}
-	}
+    if (__default == null) {
+      synchronized (MUTEX) {
+        if (__default == null) {
+          __provider = impl;
+          return;
+        }
+      }
+    }
+  }
 
-	private static JsonProcessor initJsonProcessor() {
-		if (__provider != null) {
-			return __provider.get();
-		}
-		try {
-			Class<? extends JsonProcessor> implClass = ReflectionUtils.loadClass("com.appslandia.common.json.GsonProcessor", null);
-			return ReflectionUtils.newInstance(implClass);
-		} catch (Exception ex) {
-			throw new InitializeException(ex);
-		}
-	}
+  private static JsonProcessor initJsonProcessor() {
+    if (__provider != null) {
+      return __provider.get();
+    }
+    try {
+      Class<? extends JsonProcessor> implClass = ReflectionUtils.loadClass("com.appslandia.common.json.GsonProcessor", null);
+      return ReflectionUtils.newInstance(implClass);
+    } catch (Exception ex) {
+      throw new InitializeException(ex);
+    }
+  }
 }

@@ -26,16 +26,16 @@ package com.appslandia.common.converters;
  *
  */
 public class ConverterException extends RuntimeException {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private String msgKey;
+  private String msgKey;
 
-	public ConverterException(String message, String msgKey) {
-		super(message);
-		this.msgKey = msgKey;
-	}
+  public ConverterException(String message, String msgKey) {
+    super(message);
+    this.msgKey = msgKey;
+  }
 
-	public String getMsgKey() {
-		return this.msgKey;
-	}
+  public String getMsgKey() {
+    return this.msgKey;
+  }
 }

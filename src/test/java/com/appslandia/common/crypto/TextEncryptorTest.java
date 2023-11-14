@@ -30,22 +30,22 @@ import org.junit.jupiter.api.Test;
  */
 public class TextEncryptorTest {
 
-	@Test
-	public void test() {
-		PbeEncryptor encryptor = new PbeEncryptor();
-		encryptor.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
-		encryptor.setPassword("password".toCharArray());
+  @Test
+  public void test() {
+    PbeEncryptor encryptor = new PbeEncryptor();
+    encryptor.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
+    encryptor.setPassword("password".toCharArray());
 
-		TextEncryptor impl = new TextEncryptor().setEncryptor(encryptor);
+    TextEncryptor impl = new TextEncryptor().setEncryptor(encryptor);
 
-		try {
-			String message = "data";
-			String encrypted = impl.encrypt(message);
-			String decrypted = impl.decrypt(encrypted);
+    try {
+      String message = "data";
+      String encrypted = impl.encrypt(message);
+      String decrypted = impl.decrypt(encrypted);
 
-			Assertions.assertEquals(message, decrypted);
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+      Assertions.assertEquals(message, decrypted);
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 }

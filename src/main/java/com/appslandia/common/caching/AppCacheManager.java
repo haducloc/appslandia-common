@@ -29,19 +29,19 @@ import com.appslandia.common.utils.Asserts;
  */
 public interface AppCacheManager {
 
-	<K, V> AppCache<K, V> getCache(String cacheName);
+  <K, V> AppCache<K, V> getCache(String cacheName);
 
-	default <K, V> AppCache<K, V> getRequiredCache(String cacheName) {
-		AppCache<K, V> cache = getCache(cacheName);
+  default <K, V> AppCache<K, V> getRequiredCache(String cacheName) {
+    AppCache<K, V> cache = getCache(cacheName);
 
-		return Asserts.notNull(cache);
-	}
+    return Asserts.notNull(cache);
+  }
 
-	boolean clearCache(String cacheName);
+  boolean clearCache(String cacheName);
 
-	boolean destroyCache(String cacheName);
+  boolean destroyCache(String cacheName);
 
-	Iterable<String> getCacheNames();
+  Iterable<String> getCacheNames();
 
-	void close();
+  void close();
 }

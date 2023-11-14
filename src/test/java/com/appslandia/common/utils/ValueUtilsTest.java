@@ -30,47 +30,47 @@ import org.junit.jupiter.api.Test;
  */
 public class ValueUtilsTest {
 
-	@Test
-	public void test_valueOrMin() {
+  @Test
+  public void test_valueOrMin() {
 
-		int val = ValueUtils.valueOrMin((Integer) null, 10);
-		Assertions.assertEquals(10, val);
+    int val = ValueUtils.valueOrMin((Integer) null, 10);
+    Assertions.assertEquals(10, val);
 
-		val = ValueUtils.valueOrMin(15, 10);
-		Assertions.assertEquals(15, val);
-	}
+    val = ValueUtils.valueOrMin(15, 10);
+    Assertions.assertEquals(15, val);
+  }
 
-	@Test
-	public void test_valueOrMax() {
-		int val = ValueUtils.valueOrMax((Integer) null, 10);
-		Assertions.assertEquals(10, val);
+  @Test
+  public void test_valueOrMax() {
+    int val = ValueUtils.valueOrMax((Integer) null, 10);
+    Assertions.assertEquals(10, val);
 
-		val = ValueUtils.valueOrMax(15, 10);
-		Assertions.assertEquals(10, val);
-	}
+    val = ValueUtils.valueOrMax(15, 10);
+    Assertions.assertEquals(10, val);
+  }
 
-	@Test
-	public void test_inRange() {
-		int val = ValueUtils.inRange((Integer) null, 5, 10);
-		Assertions.assertEquals(5, val);
+  @Test
+  public void test_inRange() {
+    int val = ValueUtils.inRange((Integer) null, 5, 10);
+    Assertions.assertEquals(5, val);
 
-		val = ValueUtils.inRange(1, 5, 10);
-		Assertions.assertEquals(5, val);
+    val = ValueUtils.inRange(1, 5, 10);
+    Assertions.assertEquals(5, val);
 
-		val = ValueUtils.inRange(15, 5, 10);
-		Assertions.assertEquals(10, val);
-	}
+    val = ValueUtils.inRange(15, 5, 10);
+    Assertions.assertEquals(10, val);
+  }
 
-	@Test
-	public void test_valueOrNull() {
-		Integer val = ValueUtils.valueOrNull((Integer) null, new int[] { 1, 2, 3 });
-		Assertions.assertNull(val);
+  @Test
+  public void test_valueOrNull() {
+    Integer val = ValueUtils.valueOrNull((Integer) null, new int[] { 1, 2, 3 });
+    Assertions.assertNull(val);
 
-		val = ValueUtils.valueOrNull(4, new int[] { 1, 2, 3 });
-		Assertions.assertNull(val);
+    val = ValueUtils.valueOrNull(4, new int[] { 1, 2, 3 });
+    Assertions.assertNull(val);
 
-		val = ValueUtils.valueOrNull(3, new int[] { 1, 2, 3 });
-		Assertions.assertNotNull(val);
-		Assertions.assertEquals(3, val.intValue());
-	}
+    val = ValueUtils.valueOrNull(3, new int[] { 1, 2, 3 });
+    Assertions.assertNotNull(val);
+    Assertions.assertEquals(3, val.intValue());
+  }
 }

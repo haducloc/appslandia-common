@@ -30,25 +30,25 @@ import java.util.Iterator;
  */
 public class UnmodifiableIterator<E> implements Iterator<E> {
 
-	final Iterator<? extends E> iter;
+  final Iterator<? extends E> iter;
 
-	public UnmodifiableIterator(Iterator<? extends E> iter) {
-		super();
-		this.iter = iter;
-	}
+  public UnmodifiableIterator(Iterator<? extends E> iter) {
+    super();
+    this.iter = iter;
+  }
 
-	@Override
-	public boolean hasNext() {
-		return this.iter.hasNext();
-	}
+  @Override
+  public boolean hasNext() {
+    return this.iter.hasNext();
+  }
 
-	@Override
-	public E next() {
-		return this.iter.next();
-	}
+  @Override
+  public E next() {
+    return this.iter.next();
+  }
 
-	@Override
-	public void remove() {
-		throw new UnsupportedOperationException();
-	}
+  @Override
+  public void remove() {
+    throw new UnsupportedOperationException();
+  }
 }

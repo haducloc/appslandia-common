@@ -43,139 +43,139 @@ import jakarta.inject.Qualifier;
  */
 public class ObjectFactoryInstanceTest {
 
-	@Test
-	public void test_testService() {
-		try {
-			ObjectFactory factory = new ObjectFactory();
-			factory.register(TestDao.class, TestDao.class);
-			factory.register(TestDao.class, TestDao1.class);
-			factory.register(TestDao.class, TestDao21.class);
-			factory.register(TestDao.class, TestDao22.class);
-			factory.register(TestService.class, TestService.class);
+  @Test
+  public void test_testService() {
+    try {
+      ObjectFactory factory = new ObjectFactory();
+      factory.register(TestDao.class, TestDao.class);
+      factory.register(TestDao.class, TestDao1.class);
+      factory.register(TestDao.class, TestDao21.class);
+      factory.register(TestDao.class, TestDao22.class);
+      factory.register(TestService.class, TestService.class);
 
-			TestService service = factory.getObject(TestService.class);
-			Assertions.assertNotNull(service.testDaos);
+      TestService service = factory.getObject(TestService.class);
+      Assertions.assertNotNull(service.testDaos);
 
-			InstanceImpl<TestDao> sub = ObjectUtils.cast(service.testDaos.select());
-			Assertions.assertTrue(sub.getCount() == 1);
+      InstanceImpl<TestDao> sub = ObjectUtils.cast(service.testDaos.select());
+      Assertions.assertTrue(sub.getCount() == 1);
 
-			sub = ObjectUtils.cast(service.testDaos.select(TestQualifier1.IMPL));
-			Assertions.assertTrue(sub.getCount() == 0);
+      sub = ObjectUtils.cast(service.testDaos.select(TestQualifier1.IMPL));
+      Assertions.assertTrue(sub.getCount() == 0);
 
-		} catch (Exception ex) {
-			Assertions.fail();
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail();
+    }
+  }
 
-	@Test
-	public void test_testService1() {
-		try {
-			ObjectFactory factory = new ObjectFactory();
-			factory.register(TestDao.class, TestDao.class);
-			factory.register(TestDao.class, TestDao1.class);
-			factory.register(TestDao.class, TestDao21.class);
-			factory.register(TestDao.class, TestDao22.class);
+  @Test
+  public void test_testService1() {
+    try {
+      ObjectFactory factory = new ObjectFactory();
+      factory.register(TestDao.class, TestDao.class);
+      factory.register(TestDao.class, TestDao1.class);
+      factory.register(TestDao.class, TestDao21.class);
+      factory.register(TestDao.class, TestDao22.class);
 
-			factory.register(TestService1.class, TestService1.class);
+      factory.register(TestService1.class, TestService1.class);
 
-			TestService1 service = factory.getObject(TestService1.class);
-			Assertions.assertNotNull(service.testDaos);
+      TestService1 service = factory.getObject(TestService1.class);
+      Assertions.assertNotNull(service.testDaos);
 
-			InstanceImpl<TestDao> sub = ObjectUtils.cast(service.testDaos.select());
-			Assertions.assertTrue(sub.getCount() == 3);
+      InstanceImpl<TestDao> sub = ObjectUtils.cast(service.testDaos.select());
+      Assertions.assertTrue(sub.getCount() == 3);
 
-			sub = ObjectUtils.cast(service.testDaos.select(TestDao.class));
-			Assertions.assertTrue(sub.getCount() == 3);
+      sub = ObjectUtils.cast(service.testDaos.select(TestDao.class));
+      Assertions.assertTrue(sub.getCount() == 3);
 
-			sub = ObjectUtils.cast(service.testDaos.select(TestQualifier21.IMPL));
-			Assertions.assertTrue(sub.getCount() == 1);
+      sub = ObjectUtils.cast(service.testDaos.select(TestQualifier21.IMPL));
+      Assertions.assertTrue(sub.getCount() == 1);
 
-			sub = ObjectUtils.cast(service.testDaos.select(TestQualifier22.IMPL));
-			Assertions.assertTrue(sub.getCount() == 1);
+      sub = ObjectUtils.cast(service.testDaos.select(TestQualifier22.IMPL));
+      Assertions.assertTrue(sub.getCount() == 1);
 
-			sub = ObjectUtils.cast(service.testDaos.select(TestDao21.class));
-			Assertions.assertTrue(sub.getCount() == 1);
+      sub = ObjectUtils.cast(service.testDaos.select(TestDao21.class));
+      Assertions.assertTrue(sub.getCount() == 1);
 
-			sub = ObjectUtils.cast(service.testDaos.select(TestDao21.class, TestQualifier22.IMPL));
-			Assertions.assertTrue(sub.getCount() == 0);
+      sub = ObjectUtils.cast(service.testDaos.select(TestDao21.class, TestQualifier22.IMPL));
+      Assertions.assertTrue(sub.getCount() == 0);
 
-			sub = ObjectUtils.cast(service.testDaos.select(TestDao22.class));
-			Assertions.assertTrue(sub.getCount() == 1);
+      sub = ObjectUtils.cast(service.testDaos.select(TestDao22.class));
+      Assertions.assertTrue(sub.getCount() == 1);
 
-			sub = ObjectUtils.cast(service.testDaos.select(TestDao22.class, TestQualifier21.IMPL));
-			Assertions.assertTrue(sub.getCount() == 0);
+      sub = ObjectUtils.cast(service.testDaos.select(TestDao22.class, TestQualifier21.IMPL));
+      Assertions.assertTrue(sub.getCount() == 0);
 
-		} catch (Exception ex) {
-			Assertions.fail();
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail();
+    }
+  }
 
-	static class TestService {
+  static class TestService {
 
-		@Inject
-		Instance<TestDao> testDaos;
-	}
+    @Inject
+    Instance<TestDao> testDaos;
+  }
 
-	static class TestService1 {
+  static class TestService1 {
 
-		@Inject
-		@TestQualifier1
-		Instance<TestDao> testDaos;
-	}
+    @Inject
+    @TestQualifier1
+    Instance<TestDao> testDaos;
+  }
 
-	static class TestDao {
-	}
+  static class TestDao {
+  }
 
-	@TestQualifier1
-	static class TestDao1 extends TestDao {
-	}
+  @TestQualifier1
+  static class TestDao1 extends TestDao {
+  }
 
-	@TestQualifier1
-	@TestQualifier21
-	static class TestDao21 extends TestDao {
-	}
+  @TestQualifier1
+  @TestQualifier21
+  static class TestDao21 extends TestDao {
+  }
 
-	@TestQualifier1
-	@TestQualifier22
-	static class TestDao22 extends TestDao {
-	}
+  @TestQualifier1
+  @TestQualifier22
+  static class TestDao22 extends TestDao {
+  }
 
-	@Qualifier
-	@Retention(RetentionPolicy.RUNTIME)
-	@Target({ ElementType.TYPE, ElementType.FIELD })
-	@Documented
-	public @interface TestQualifier1 {
-		public static final TestQualifier1 IMPL = new ImplLiteral();
+  @Qualifier
+  @Retention(RetentionPolicy.RUNTIME)
+  @Target({ ElementType.TYPE, ElementType.FIELD })
+  @Documented
+  public @interface TestQualifier1 {
+    public static final TestQualifier1 IMPL = new ImplLiteral();
 
-		@SuppressWarnings("all")
-		static class ImplLiteral extends AnnotationLiteral<TestQualifier1> implements TestQualifier1 {
-			private static final long serialVersionUID = 1L;
-		}
-	}
+    @SuppressWarnings("all")
+    static class ImplLiteral extends AnnotationLiteral<TestQualifier1> implements TestQualifier1 {
+      private static final long serialVersionUID = 1L;
+    }
+  }
 
-	@Qualifier
-	@Retention(RetentionPolicy.RUNTIME)
-	@Target({ ElementType.TYPE, ElementType.FIELD })
-	@Documented
-	public @interface TestQualifier21 {
-		public static final TestQualifier21 IMPL = new ImplLiteral();
+  @Qualifier
+  @Retention(RetentionPolicy.RUNTIME)
+  @Target({ ElementType.TYPE, ElementType.FIELD })
+  @Documented
+  public @interface TestQualifier21 {
+    public static final TestQualifier21 IMPL = new ImplLiteral();
 
-		@SuppressWarnings("all")
-		static class ImplLiteral extends AnnotationLiteral<TestQualifier21> implements TestQualifier21 {
-			private static final long serialVersionUID = 1L;
-		}
-	}
+    @SuppressWarnings("all")
+    static class ImplLiteral extends AnnotationLiteral<TestQualifier21> implements TestQualifier21 {
+      private static final long serialVersionUID = 1L;
+    }
+  }
 
-	@Qualifier
-	@Retention(RetentionPolicy.RUNTIME)
-	@Target({ ElementType.TYPE, ElementType.FIELD })
-	@Documented
-	public @interface TestQualifier22 {
-		public static final TestQualifier22 IMPL = new ImplLiteral();
+  @Qualifier
+  @Retention(RetentionPolicy.RUNTIME)
+  @Target({ ElementType.TYPE, ElementType.FIELD })
+  @Documented
+  public @interface TestQualifier22 {
+    public static final TestQualifier22 IMPL = new ImplLiteral();
 
-		@SuppressWarnings("all")
-		static class ImplLiteral extends AnnotationLiteral<TestQualifier22> implements TestQualifier22 {
-			private static final long serialVersionUID = 1L;
-		}
-	}
+    @SuppressWarnings("all")
+    static class ImplLiteral extends AnnotationLiteral<TestQualifier22> implements TestQualifier22 {
+      private static final long serialVersionUID = 1L;
+    }
+  }
 }

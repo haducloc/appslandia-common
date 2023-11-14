@@ -31,39 +31,39 @@ import com.appslandia.common.utils.Asserts;
  */
 public class UUIDGenerator implements TextGenerator {
 
-	public static final UUIDGenerator INSTANCE = new UUIDGenerator();
+  public static final UUIDGenerator INSTANCE = new UUIDGenerator();
 
-	static final StringFormat UUID_FORMAT = new StringFormat("{8}-{4}-{4}-{4}-{12}");
+  static final StringFormat UUID_FORMAT = new StringFormat("{8}-{4}-{4}-{4}-{12}");
 
-	@Override
-	public String generate() {
-		UUID uuid = UUID.randomUUID();
-		// @formatter:off
+  @Override
+  public String generate() {
+    UUID uuid = UUID.randomUUID();
+    // @formatter:off
 		return (digits(uuid.getMostSignificantBits() >> 32, 8)
 				+ digits(uuid.getMostSignificantBits() >> 16, 4)
 				+ digits(uuid.getMostSignificantBits(), 4)
 				+ digits(uuid.getLeastSignificantBits() >> 48, 4)
 				+ digits(uuid.getLeastSignificantBits(), 12));
 		// @formatter:on
-	}
+  }
 
-	@Override
-	public boolean verify(String value) {
-		Asserts.notNull(value);
-		if (value.length() != 32) {
-			return false;
-		}
-		try {
-			String uuid = UUID_FORMAT.format(value);
-			UUID.fromString(uuid);
-			return true;
-		} catch (IllegalArgumentException ex) {
-			return false;
-		}
-	}
+  @Override
+  public boolean verify(String value) {
+    Asserts.notNull(value);
+    if (value.length() != 32) {
+      return false;
+    }
+    try {
+      String uuid = UUID_FORMAT.format(value);
+      UUID.fromString(uuid);
+      return true;
+    } catch (IllegalArgumentException ex) {
+      return false;
+    }
+  }
 
-	private static String digits(long val, int digits) {
-		long hi = 1L << (digits * 4);
-		return Long.toHexString(hi | (val & (hi - 1))).substring(1);
-	}
+  private static String digits(long val, int digits) {
+    long hi = 1L << (digits * 4);
+    return Long.toHexString(hi | (val & (hi - 1))).substring(1);
+  }
 }

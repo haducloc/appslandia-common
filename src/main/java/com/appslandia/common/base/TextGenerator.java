@@ -27,7 +27,7 @@ package com.appslandia.common.base;
  */
 public interface TextGenerator {
 
-	String generate();
+  String generate();
 
-	boolean verify(String value);
+  boolean verify(String value);
 }

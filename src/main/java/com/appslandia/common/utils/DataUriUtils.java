@@ -32,44 +32,44 @@ import com.appslandia.common.base.BaseEncoder;
  */
 public class DataUriUtils {
 
-	public static String toDataUriBase64(String mediaType, byte[] data) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("data:");
+  public static String toDataUriBase64(String mediaType, byte[] data) {
+    StringBuilder sb = new StringBuilder();
+    sb.append("data:");
 
-		if (!StringUtils.isNullOrEmpty(mediaType)) {
-			sb.append(mediaType);
-		}
+    if (!StringUtils.isNullOrEmpty(mediaType)) {
+      sb.append(mediaType);
+    }
 
-		sb.append(";base64,");
+    sb.append(";base64,");
 
-		if (data != null && data.length > 0) {
-			sb.append(BaseEncoder.BASE64.encode(data));
-		}
-		return sb.toString();
-	}
+    if (data != null && data.length > 0) {
+      sb.append(BaseEncoder.BASE64.encode(data));
+    }
+    return sb.toString();
+  }
 
-	public static String toDataUriBase64(String mediaType, InputStream data) throws IOException {
-		return toDataUriBase64(mediaType, IOUtils.toByteArray(data));
-	}
+  public static String toDataUriBase64(String mediaType, InputStream data) throws IOException {
+    return toDataUriBase64(mediaType, IOUtils.toByteArray(data));
+  }
 
-	public static String toDataUriBase64(String mediaType, String data) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("data:");
+  public static String toDataUriBase64(String mediaType, String data) {
+    StringBuilder sb = new StringBuilder();
+    sb.append("data:");
 
-		if (!StringUtils.isNullOrEmpty(mediaType)) {
-			sb.append(mediaType);
-		}
+    if (!StringUtils.isNullOrEmpty(mediaType)) {
+      sb.append(mediaType);
+    }
 
-		sb.append(",");
+    sb.append(",");
 
-		if (data != null && data.length() > 0) {
-			sb.append(URLEncoding.encodeParam(data, false));
-		}
-		return sb.toString();
-	}
+    if (data != null && data.length() > 0) {
+      sb.append(URLEncoding.encodeParam(data, false));
+    }
+    return sb.toString();
+  }
 
-	public static boolean isDataUri(String input) {
-		Asserts.notNull(input);
-		return input.startsWith("data:") && input.contains(",");
-	}
+  public static boolean isDataUri(String input) {
+    Asserts.notNull(input);
+    return input.startsWith("data:") && input.contains(",");
+  }
 }

@@ -27,21 +27,21 @@ package com.appslandia.common.junit.jpa;
  */
 public interface TestEmfControl {
 
-	boolean isSharedEmf();
+  boolean isSharedEmf();
 
-	public static class SharedEmf implements TestEmfControl {
+  public static class SharedEmf implements TestEmfControl {
 
-		@Override
-		public boolean isSharedEmf() {
-			return true;
-		}
-	}
+    @Override
+    public boolean isSharedEmf() {
+      return true;
+    }
+  }
 
-	public static class NotSharedEmf implements TestEmfControl {
+  public static class NotSharedEmf implements TestEmfControl {
 
-		@Override
-		public boolean isSharedEmf() {
-			return false;
-		}
-	}
+    @Override
+    public boolean isSharedEmf() {
+      return false;
+    }
+  }
 }

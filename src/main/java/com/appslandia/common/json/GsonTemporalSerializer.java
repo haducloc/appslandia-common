@@ -37,12 +37,12 @@ import com.google.gson.JsonSerializer;
  */
 public abstract class GsonTemporalSerializer<T extends Temporal> extends JsonTemporalSerializer implements JsonSerializer<T>, JsonDeserializer<T> {
 
-	public GsonTemporalSerializer(String serializeIsoPattern) {
-		super(serializeIsoPattern);
-	}
+  public GsonTemporalSerializer(String serializeIsoPattern) {
+    super(serializeIsoPattern);
+  }
 
-	@Override
-	public JsonElement serialize(T src, Type typeOfSrc, JsonSerializationContext context) {
-		return new JsonPrimitive(DateUtils.getFormatter(this.serializeIsoPattern).format(src));
-	}
+  @Override
+  public JsonElement serialize(T src, Type typeOfSrc, JsonSerializationContext context) {
+    return new JsonPrimitive(DateUtils.getFormatter(this.serializeIsoPattern).format(src));
+  }
 }

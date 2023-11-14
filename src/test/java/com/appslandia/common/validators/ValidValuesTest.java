@@ -32,33 +32,33 @@ import org.junit.jupiter.api.Test;
  */
 public class ValidValuesTest {
 
-	@Test
-	public void test() {
-		TestModel m = new TestModel();
-		Set<?> errors = ValidatorUtils.getValidator().validate(m);
-		Assertions.assertTrue(errors.isEmpty());
+  @Test
+  public void test() {
+    TestModel m = new TestModel();
+    Set<?> errors = ValidatorUtils.getValidator().validate(m);
+    Assertions.assertTrue(errors.isEmpty());
 
-		m.gender = 1;
-		errors = ValidatorUtils.getValidator().validate(m);
-		Assertions.assertTrue(errors.isEmpty());
+    m.gender = 1;
+    errors = ValidatorUtils.getValidator().validate(m);
+    Assertions.assertTrue(errors.isEmpty());
 
-		m.gender = 2;
-		errors = ValidatorUtils.getValidator().validate(m);
-		Assertions.assertTrue(errors.isEmpty());
-	}
+    m.gender = 2;
+    errors = ValidatorUtils.getValidator().validate(m);
+    Assertions.assertTrue(errors.isEmpty());
+  }
 
-	@Test
-	public void test_invalid() {
-		TestModel m = new TestModel();
+  @Test
+  public void test_invalid() {
+    TestModel m = new TestModel();
 
-		m.gender = 3;
-		Set<?> errors = ValidatorUtils.getValidator().validate(m);
-		Assertions.assertTrue(!errors.isEmpty());
-	}
+    m.gender = 3;
+    Set<?> errors = ValidatorUtils.getValidator().validate(m);
+    Assertions.assertTrue(!errors.isEmpty());
+  }
 
-	private static class TestModel {
+  private static class TestModel {
 
-		@ValidValues({ "1", "2" })
-		public Integer gender;
-	}
+    @ValidValues({ "1", "2" })
+    public Integer gender;
+  }
 }

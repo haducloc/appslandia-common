@@ -42,32 +42,32 @@ import jakarta.validation.Payload;
 @Documented
 public @interface MinLength {
 
-	String message() default "{com.appslandia.common.validators.MinLength.message}";
+  String message() default "{com.appslandia.common.validators.MinLength.message}";
 
-	Class<?>[] groups() default {};
+  Class<?>[] groups() default {};
 
-	Class<? extends Payload>[] payload() default {};
+  Class<? extends Payload>[] payload() default {};
 
-	int value();
+  int value();
 
-	public static class ConstraintValidatorImpl implements ConstraintValidator<MinLength, CharSequence> {
+  public static class ConstraintValidatorImpl implements ConstraintValidator<MinLength, CharSequence> {
 
-		private int minLength;
+    private int minLength;
 
-		@Override
-		public void initialize(MinLength annotation) {
-			this.minLength = annotation.value();
-		}
+    @Override
+    public void initialize(MinLength annotation) {
+      this.minLength = annotation.value();
+    }
 
-		@Override
-		public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
-			if (value == null) {
-				return true;
-			}
-			if (value.length() < this.minLength) {
-				return false;
-			}
-			return true;
-		}
-	}
+    @Override
+    public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
+      if (value == null) {
+        return true;
+      }
+      if (value.length() < this.minLength) {
+        return false;
+      }
+      return true;
+    }
+  }
 }

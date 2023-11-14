@@ -34,83 +34,83 @@ import com.appslandia.common.utils.Asserts;
  */
 public class AlgorithmParametersUtil<T extends AlgorithmParameterSpec> extends InitializeObject {
 
-	private String algorithm, provider;
-	private AlgorithmParameters algorithmParameters;
-	private Class<T> paramSpecClass;
-	private AlgorithmParameterSpec algParamSpec;
+  private String algorithm, provider;
+  private AlgorithmParameters algorithmParameters;
+  private Class<T> paramSpecClass;
+  private AlgorithmParameterSpec algParamSpec;
 
-	final Object mutex = new Object();
+  final Object mutex = new Object();
 
-	public AlgorithmParametersUtil() {
-	}
+  public AlgorithmParametersUtil() {
+  }
 
-	public AlgorithmParametersUtil(String algorithm) {
-		this.algorithm = algorithm;
-	}
+  public AlgorithmParametersUtil(String algorithm) {
+    this.algorithm = algorithm;
+  }
 
-	public AlgorithmParametersUtil(String algorithm, String provider) {
-		this.algorithm = algorithm;
-		this.provider = provider;
-	}
+  public AlgorithmParametersUtil(String algorithm, String provider) {
+    this.algorithm = algorithm;
+    this.provider = provider;
+  }
 
-	@Override
-	protected void init() throws Exception {
-		Asserts.notNull(this.algorithm, "algorithm is required.");
-		Asserts.notNull(this.paramSpecClass, "paramSpecClass is required.");
-		Asserts.notNull(this.algParamSpec, "algParamSpec is required.");
+  @Override
+  protected void init() throws Exception {
+    Asserts.notNull(this.algorithm, "algorithm is required.");
+    Asserts.notNull(this.paramSpecClass, "paramSpecClass is required.");
+    Asserts.notNull(this.algParamSpec, "algParamSpec is required.");
 
-		// AlgorithmParameters
-		if (this.provider == null) {
-			this.algorithmParameters = AlgorithmParameters.getInstance(this.algorithm);
-		} else {
-			this.algorithmParameters = AlgorithmParameters.getInstance(this.algorithm, this.provider);
-		}
+    // AlgorithmParameters
+    if (this.provider == null) {
+      this.algorithmParameters = AlgorithmParameters.getInstance(this.algorithm);
+    } else {
+      this.algorithmParameters = AlgorithmParameters.getInstance(this.algorithm, this.provider);
+    }
 
-		this.algorithmParameters.init(this.algParamSpec);
-	}
+    this.algorithmParameters.init(this.algParamSpec);
+  }
 
-	public T getParameterSpec() throws CryptoException {
-		this.initialize();
-		try {
-			synchronized (this.mutex) {
-				return this.algorithmParameters.getParameterSpec(this.paramSpecClass);
-			}
-		} catch (GeneralSecurityException ex) {
-			throw new CryptoException(ex);
-		}
-	}
+  public T getParameterSpec() throws CryptoException {
+    this.initialize();
+    try {
+      synchronized (this.mutex) {
+        return this.algorithmParameters.getParameterSpec(this.paramSpecClass);
+      }
+    } catch (GeneralSecurityException ex) {
+      throw new CryptoException(ex);
+    }
+  }
 
-	public String getAlgorithm() {
-		initialize();
-		return this.algorithm;
-	}
+  public String getAlgorithm() {
+    initialize();
+    return this.algorithm;
+  }
 
-	public AlgorithmParametersUtil<T> setAlgorithm(String algorithm) {
-		assertNotInitialized();
-		this.algorithm = algorithm;
-		return this;
-	}
+  public AlgorithmParametersUtil<T> setAlgorithm(String algorithm) {
+    assertNotInitialized();
+    this.algorithm = algorithm;
+    return this;
+  }
 
-	public String getProvider() {
-		initialize();
-		return this.provider;
-	}
+  public String getProvider() {
+    initialize();
+    return this.provider;
+  }
 
-	public AlgorithmParametersUtil<T> setProvider(String provider) {
-		assertNotInitialized();
-		this.provider = provider;
-		return this;
-	}
+  public AlgorithmParametersUtil<T> setProvider(String provider) {
+    assertNotInitialized();
+    this.provider = provider;
+    return this;
+  }
 
-	public AlgorithmParametersUtil<T> setParamSpecClass(Class<T> paramSpecClass) {
-		assertNotInitialized();
-		this.paramSpecClass = paramSpecClass;
-		return this;
-	}
+  public AlgorithmParametersUtil<T> setParamSpecClass(Class<T> paramSpecClass) {
+    assertNotInitialized();
+    this.paramSpecClass = paramSpecClass;
+    return this;
+  }
 
-	public AlgorithmParametersUtil<T> setAlgParamSpec(AlgorithmParameterSpec algParamSpec) {
-		assertNotInitialized();
-		this.algParamSpec = algParamSpec;
-		return this;
-	}
+  public AlgorithmParametersUtil<T> setAlgParamSpec(AlgorithmParameterSpec algParamSpec) {
+    assertNotInitialized();
+    this.algParamSpec = algParamSpec;
+    return this;
+  }
 }

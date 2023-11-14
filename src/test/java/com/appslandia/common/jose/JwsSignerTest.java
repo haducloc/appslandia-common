@@ -35,32 +35,32 @@ import com.appslandia.common.utils.MathUtils;
  */
 public class JwsSignerTest {
 
-	@Test
-	public void test_bytes() {
-		JwsSigner<byte[]> signer = new JwsSigner<>(byte[].class).setJsonProcessor(JoseGson.newJsonProcessor());
-		signer.setAlg("HS256").setSigner(new MacSigner().setAlgorithm("HmacSHA256").setSecret("secret".getBytes()));
+  @Test
+  public void test_bytes() {
+    JwsSigner<byte[]> signer = new JwsSigner<>(byte[].class).setJsonProcessor(JoseGson.newJsonProcessor());
+    signer.setAlg("HS256").setSigner(new MacSigner().setAlgorithm("HmacSHA256").setSecret("secret".getBytes()));
 
-		JoseHeader header = signer.newHeader();
-		byte[] payload = MathUtils.toByteArray(1, 100);
+    JoseHeader header = signer.newHeader();
+    byte[] payload = MathUtils.toByteArray(1, 100);
 
-		try {
-			String jwt = signer.sign(new JwsToken<>(header, payload));
-			Assertions.assertNotNull(jwt);
+    try {
+      String jwt = signer.sign(new JwsToken<>(header, payload));
+      Assertions.assertNotNull(jwt);
 
-			JwsToken<byte[]> token = signer.parse(jwt);
-			signer.verify(token);
+      JwsToken<byte[]> token = signer.parse(jwt);
+      signer.verify(token);
 
-			Assertions.assertNotNull(token);
-			Assertions.assertNotNull(token.getHeader());
-			Assertions.assertNotNull(token.getPayload());
+      Assertions.assertNotNull(token);
+      Assertions.assertNotNull(token.getHeader());
+      Assertions.assertNotNull(token.getPayload());
 
-			Assertions.assertEquals("JWT", token.getHeader().getTyp());
-			Assertions.assertEquals("HS256", token.getHeader().getAlg());
+      Assertions.assertEquals("JWT", token.getHeader().getTyp());
+      Assertions.assertEquals("HS256", token.getHeader().getAlg());
 
-			Assertions.assertTrue(Arrays.equals(MathUtils.toByteArray(1, 100), token.getPayload()));
+      Assertions.assertTrue(Arrays.equals(MathUtils.toByteArray(1, 100), token.getPayload()));
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 }

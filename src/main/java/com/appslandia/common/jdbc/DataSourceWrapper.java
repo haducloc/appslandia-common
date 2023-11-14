@@ -34,73 +34,73 @@ import javax.sql.DataSource;
  */
 public class DataSourceWrapper implements DataSource {
 
-	private DataSource ds;
-	private String name;
+  private DataSource ds;
+  private String name;
 
-	public DataSourceWrapper() {
-	}
+  public DataSourceWrapper() {
+  }
 
-	public DataSourceWrapper(DataSource ds, String name) {
-		this.ds = ds;
-		this.name = name;
-	}
+  public DataSourceWrapper(DataSource ds, String name) {
+    this.ds = ds;
+    this.name = name;
+  }
 
-	protected DataSource ds() {
-		return this.ds;
-	}
+  protected DataSource ds() {
+    return this.ds;
+  }
 
-	public String getName() {
-		return this.name;
-	}
+  public String getName() {
+    return this.name;
+  }
 
-	// javax.sql.DataSource
+  // javax.sql.DataSource
 
-	@Override
-	public Connection getConnection() throws SQLException {
-		return ds().getConnection();
-	}
+  @Override
+  public Connection getConnection() throws SQLException {
+    return ds().getConnection();
+  }
 
-	@Override
-	public Connection getConnection(String arg0, String arg1) throws SQLException {
-		return ds().getConnection(arg0, arg1);
-	}
+  @Override
+  public Connection getConnection(String arg0, String arg1) throws SQLException {
+    return ds().getConnection(arg0, arg1);
+  }
 
-	// javax.sql.CommonDataSource
+  // javax.sql.CommonDataSource
 
-	@Override
-	public PrintWriter getLogWriter() throws SQLException {
-		return ds().getLogWriter();
-	}
+  @Override
+  public PrintWriter getLogWriter() throws SQLException {
+    return ds().getLogWriter();
+  }
 
-	@Override
-	public int getLoginTimeout() throws SQLException {
-		return ds().getLoginTimeout();
-	}
+  @Override
+  public int getLoginTimeout() throws SQLException {
+    return ds().getLoginTimeout();
+  }
 
-	@Override
-	public java.util.logging.Logger getParentLogger() throws SQLFeatureNotSupportedException {
-		return ds().getParentLogger();
-	}
+  @Override
+  public java.util.logging.Logger getParentLogger() throws SQLFeatureNotSupportedException {
+    return ds().getParentLogger();
+  }
 
-	@Override
-	public void setLogWriter(PrintWriter arg0) throws SQLException {
-		ds().setLogWriter(arg0);
-	}
+  @Override
+  public void setLogWriter(PrintWriter arg0) throws SQLException {
+    ds().setLogWriter(arg0);
+  }
 
-	@Override
-	public void setLoginTimeout(int arg0) throws SQLException {
-		ds().setLoginTimeout(arg0);
-	}
+  @Override
+  public void setLoginTimeout(int arg0) throws SQLException {
+    ds().setLoginTimeout(arg0);
+  }
 
-	// Wrapper
+  // Wrapper
 
-	@Override
-	public boolean isWrapperFor(Class<?> arg0) throws SQLException {
-		return ds().isWrapperFor(arg0);
-	}
+  @Override
+  public boolean isWrapperFor(Class<?> arg0) throws SQLException {
+    return ds().isWrapperFor(arg0);
+  }
 
-	@Override
-	public <T> T unwrap(Class<T> arg0) throws SQLException {
-		return ds().unwrap(arg0);
-	}
+  @Override
+  public <T> T unwrap(Class<T> arg0) throws SQLException {
+    return ds().unwrap(arg0);
+  }
 }

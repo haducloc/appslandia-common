@@ -37,90 +37,92 @@ import org.junit.jupiter.api.Test;
  */
 public class DateUtilsTest {
 
-	@Test
-	public void test_translateToMs() {
-		long ms = DateUtils.translateToMs("1d 4h 8m");
-		Assertions.assertEquals(TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS) + TimeUnit.MILLISECONDS.convert(4, TimeUnit.HOURS)
-				+ TimeUnit.MILLISECONDS.convert(8, TimeUnit.MINUTES), ms);
+  @Test
+  public void test_translateToMs() {
+    long ms = DateUtils.translateToMs("1d 4h 8m");
+    Assertions.assertEquals(
+        TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS) + TimeUnit.MILLISECONDS.convert(4, TimeUnit.HOURS) + TimeUnit.MILLISECONDS.convert(8, TimeUnit.MINUTES),
+        ms);
 
-		ms = DateUtils.translateToMs("1D 4H 8M");
-		Assertions.assertEquals(TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS) + TimeUnit.MILLISECONDS.convert(4, TimeUnit.HOURS)
-				+ TimeUnit.MILLISECONDS.convert(8, TimeUnit.MINUTES), ms);
-	}
+    ms = DateUtils.translateToMs("1D 4H 8M");
+    Assertions.assertEquals(
+        TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS) + TimeUnit.MILLISECONDS.convert(4, TimeUnit.HOURS) + TimeUnit.MILLISECONDS.convert(8, TimeUnit.MINUTES),
+        ms);
+  }
 
-	@Test
-	public void test_translateToMs_failed() {
-		try {
-			DateUtils.translateToMs("1d 4hr 8min");
-			Assertions.fail();
-		} catch (Exception ex) {
-		}
-	}
+  @Test
+  public void test_translateToMs_failed() {
+    try {
+      DateUtils.translateToMs("1d 4hr 8min");
+      Assertions.fail();
+    } catch (Exception ex) {
+    }
+  }
 
-	// Java8 Date/Time
+  // Java8 Date/Time
 
-	@Test
-	public void test_parse_localDate() {
-		try {
-			LocalDate t = DateUtils.iso8601LocalDate("2017-11-02");
-			String s = DateUtils.iso8601LocalDate(t);
+  @Test
+  public void test_parse_localDate() {
+    try {
+      LocalDate t = DateUtils.iso8601LocalDate("2017-11-02");
+      String s = DateUtils.iso8601LocalDate(t);
 
-			Assertions.assertEquals("2017-11-02", s);
+      Assertions.assertEquals("2017-11-02", s);
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_parse_localTime() {
-		try {
-			LocalTime t = DateUtils.iso8601LocalTime("09:45:00.999");
-			String s = DateUtils.iso8601LocalTime(t);
+  @Test
+  public void test_parse_localTime() {
+    try {
+      LocalTime t = DateUtils.iso8601LocalTime("09:45:00.999");
+      String s = DateUtils.iso8601LocalTime(t);
 
-			Assertions.assertEquals("09:45:00.999", s);
+      Assertions.assertEquals("09:45:00.999", s);
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_parse_localDateTime() {
-		try {
-			LocalDateTime t = DateUtils.iso8601LocalDateTime("2017-11-02T09:45:00.999");
-			String s = DateUtils.iso8601LocalDateTime(t);
+  @Test
+  public void test_parse_localDateTime() {
+    try {
+      LocalDateTime t = DateUtils.iso8601LocalDateTime("2017-11-02T09:45:00.999");
+      String s = DateUtils.iso8601LocalDateTime(t);
 
-			Assertions.assertEquals("2017-11-02T09:45:00.999", s);
+      Assertions.assertEquals("2017-11-02T09:45:00.999", s);
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_parse_offsetTime() {
-		try {
-			OffsetTime t = DateUtils.iso8601OffsetTime("09:45:00.999-05:00");
-			String s = DateUtils.iso8601OffsetTime(t);
+  @Test
+  public void test_parse_offsetTime() {
+    try {
+      OffsetTime t = DateUtils.iso8601OffsetTime("09:45:00.999-05:00");
+      String s = DateUtils.iso8601OffsetTime(t);
 
-			Assertions.assertEquals("09:45:00.999-05:00", s);
+      Assertions.assertEquals("09:45:00.999-05:00", s);
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_parse_offsetDateTime() {
-		try {
-			OffsetDateTime t = DateUtils.iso8601OffsetDateTime("2017-11-02T09:45:00.999-05:00");
-			String s = DateUtils.iso8601OffsetDateTime(t);
+  @Test
+  public void test_parse_offsetDateTime() {
+    try {
+      OffsetDateTime t = DateUtils.iso8601OffsetDateTime("2017-11-02T09:45:00.999-05:00");
+      String s = DateUtils.iso8601OffsetDateTime(t);
 
-			Assertions.assertEquals("2017-11-02T09:45:00.999-05:00", s);
+      Assertions.assertEquals("2017-11-02T09:45:00.999-05:00", s);
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 }

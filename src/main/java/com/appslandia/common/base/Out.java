@@ -29,30 +29,30 @@ import com.appslandia.common.utils.Asserts;
  */
 public class Out<T> {
 
-	public T value;
+  public T value;
 
-	public Out() {
-	}
+  public Out() {
+  }
 
-	public Out(T value) {
-		this.value = value;
-	}
+  public Out(T value) {
+    this.value = value;
+  }
 
-	public T val() throws AssertException {
-		return Asserts.notNull(this.value, "value is required.");
-	}
+  public T val() throws AssertException {
+    return Asserts.notNull(this.value, "value is required.");
+  }
 
-	public T orElse(T defaultValue) {
-		return this.value != null ? this.value : defaultValue;
-	}
+  public T orElse(T defaultValue) {
+    return this.value != null ? this.value : defaultValue;
+  }
 
-	public Out<T> set(T value) {
-		this.value = value;
-		return this;
-	}
+  public Out<T> set(T value) {
+    this.value = value;
+    return this;
+  }
 
-	@Override
-	public String toString() {
-		return String.format("Out.%s", this.value);
-	}
+  @Override
+  public String toString() {
+    return String.format("Out.%s", this.value);
+  }
 }

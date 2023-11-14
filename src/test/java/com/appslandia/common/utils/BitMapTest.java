@@ -30,55 +30,55 @@ import org.junit.jupiter.api.Test;
  */
 public class BitMapTest {
 
-	@Test
-	public void test() {
+  @Test
+  public void test() {
 
-		BitMap bits = new BitMap();
-		bits.on(1, 3, 5);
-		bits.off(0, 2, 4);
+    BitMap bits = new BitMap();
+    bits.on(1, 3, 5);
+    bits.off(0, 2, 4);
 
-		Assertions.assertTrue(bits.length() == 6);
-		Assertions.assertTrue(bits.cardinality() == 3);
+    Assertions.assertTrue(bits.length() == 6);
+    Assertions.assertTrue(bits.cardinality() == 3);
 
-		Assertions.assertTrue(bits.get(1));
-		Assertions.assertTrue(bits.get(3));
-		Assertions.assertTrue(bits.get(5));
+    Assertions.assertTrue(bits.get(1));
+    Assertions.assertTrue(bits.get(3));
+    Assertions.assertTrue(bits.get(5));
 
-		Assertions.assertFalse(bits.get(0));
-		Assertions.assertFalse(bits.get(2));
-		Assertions.assertFalse(bits.get(4));
-	}
+    Assertions.assertFalse(bits.get(0));
+    Assertions.assertFalse(bits.get(2));
+    Assertions.assertFalse(bits.get(4));
+  }
 
-	@Test
-	public void test_toggle() {
+  @Test
+  public void test_toggle() {
 
-		BitMap bits = new BitMap();
-		bits.on(1, 3, 5);
+    BitMap bits = new BitMap();
+    bits.on(1, 3, 5);
 
-		bits.toggle(1, 3, 5);
+    bits.toggle(1, 3, 5);
 
-		Assertions.assertFalse(bits.get(1));
-		Assertions.assertFalse(bits.get(3));
-		Assertions.assertFalse(bits.get(5));
-	}
+    Assertions.assertFalse(bits.get(1));
+    Assertions.assertFalse(bits.get(3));
+    Assertions.assertFalse(bits.get(5));
+  }
 
-	@Test
-	public void test_ctor() {
+  @Test
+  public void test_ctor() {
 
-		BitMap bits = new BitMap();
-		bits.on(1, 3, 5);
+    BitMap bits = new BitMap();
+    bits.on(1, 3, 5);
 
-		BitMap copy = new BitMap(bits);
-		Assertions.assertEquals(bits, copy);
-	}
+    BitMap copy = new BitMap(bits);
+    Assertions.assertEquals(bits, copy);
+  }
 
-	@Test
-	public void test_clone() {
+  @Test
+  public void test_clone() {
 
-		BitMap bits = new BitMap();
-		bits.on(1, 3, 5);
+    BitMap bits = new BitMap();
+    bits.on(1, 3, 5);
 
-		BitMap copy = bits.clone();
-		Assertions.assertEquals(bits, copy);
-	}
+    BitMap copy = bits.clone();
+    Assertions.assertEquals(bits, copy);
+  }
 }

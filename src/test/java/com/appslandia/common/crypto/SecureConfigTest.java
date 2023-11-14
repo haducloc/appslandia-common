@@ -30,55 +30,55 @@ import org.junit.jupiter.api.Test;
  */
 public class SecureConfigTest {
 
-	@Test
-	public void test() {
-		Encryptor encryptor = new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(16).setPassword("password".toCharArray());
-		TextEncryptor textEncryptor = new TextEncryptor().setEncryptor(encryptor);
-		SecureConfig config = new SecureConfig(textEncryptor);
+  @Test
+  public void test() {
+    Encryptor encryptor = new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(16).setPassword("password".toCharArray());
+    TextEncryptor textEncryptor = new TextEncryptor().setEncryptor(encryptor);
+    SecureConfig config = new SecureConfig(textEncryptor);
 
-		try {
-			config.enc("config", "value");
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-		try {
-			Assertions.assertEquals("value", config.getString("config"));
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    try {
+      config.enc("config", "value");
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+    try {
+      Assertions.assertEquals("value", config.getString("config"));
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_password() {
-		SecureConfig config = new SecureConfig("password".toCharArray());
-		try {
-			config.enc("config", "value");
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-		try {
-			Assertions.assertEquals("value", config.getString("config"));
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+  @Test
+  public void test_password() {
+    SecureConfig config = new SecureConfig("password".toCharArray());
+    try {
+      config.enc("config", "value");
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+    try {
+      Assertions.assertEquals("value", config.getString("config"));
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_resolve() {
-		SecureConfig config = new SecureConfig("password".toCharArray());
-		try {
-			config.set("database", "db");
-			config.set("user", "user");
-			config.enc("password", "pwd");
-			config.set("url", "database=${database};user=${user};password=${password}");
+  @Test
+  public void test_resolve() {
+    SecureConfig config = new SecureConfig("password".toCharArray());
+    try {
+      config.set("database", "db");
+      config.set("user", "user");
+      config.enc("password", "pwd");
+      config.set("url", "database=${database};user=${user};password=${password}");
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-		try {
-			Assertions.assertEquals("database=db;user=user;password=pwd", config.resolve("url"));
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+    try {
+      Assertions.assertEquals("database=db;user=user;password=pwd", config.resolve("url"));
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 }

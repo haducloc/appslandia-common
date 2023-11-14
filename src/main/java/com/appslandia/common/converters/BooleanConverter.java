@@ -32,42 +32,42 @@ import com.appslandia.common.utils.StringUtils;
  */
 public class BooleanConverter implements Converter<Boolean> {
 
-	public static final String ERROR_MSG_KEY = BooleanConverter.class.getName() + ".message";
+  public static final String ERROR_MSG_KEY = BooleanConverter.class.getName() + ".message";
 
-	public static final String VALUE_TRUE = Boolean.TRUE.toString();
-	public static final String VALUE_FALSE = Boolean.FALSE.toString();
+  public static final String VALUE_TRUE = Boolean.TRUE.toString();
+  public static final String VALUE_FALSE = Boolean.FALSE.toString();
 
-	@Override
-	public String getErrorMsgKey() {
-		return ERROR_MSG_KEY;
-	}
+  @Override
+  public String getErrorMsgKey() {
+    return ERROR_MSG_KEY;
+  }
 
-	@Override
-	public Class<Boolean> getTargetType() {
-		return Boolean.class;
-	}
+  @Override
+  public Class<Boolean> getTargetType() {
+    return Boolean.class;
+  }
 
-	@Override
-	public String format(Boolean obj, FormatProvider formatProvider, boolean localize) {
-		if (obj == null) {
-			return null;
-		}
-		return Boolean.TRUE.equals(obj) ? VALUE_TRUE : VALUE_FALSE;
-	}
+  @Override
+  public String format(Boolean obj, FormatProvider formatProvider, boolean localize) {
+    if (obj == null) {
+      return null;
+    }
+    return Boolean.TRUE.equals(obj) ? VALUE_TRUE : VALUE_FALSE;
+  }
 
-	@Override
-	public Boolean parse(String str, FormatProvider formatProvider) throws ConverterException {
-		str = StringUtils.trimToNull(str);
-		if (str == null) {
-			return null;
-		}
-		String val = str.toLowerCase(Locale.ENGLISH);
-		if (VALUE_TRUE.equals(val)) {
-			return Boolean.TRUE;
-		}
-		if (VALUE_FALSE.equals(val)) {
-			return Boolean.FALSE;
-		}
-		throw toParsingError(str, getTargetType().getName());
-	}
+  @Override
+  public Boolean parse(String str, FormatProvider formatProvider) throws ConverterException {
+    str = StringUtils.trimToNull(str);
+    if (str == null) {
+      return null;
+    }
+    String val = str.toLowerCase(Locale.ENGLISH);
+    if (VALUE_TRUE.equals(val)) {
+      return Boolean.TRUE;
+    }
+    if (VALUE_FALSE.equals(val)) {
+      return Boolean.FALSE;
+    }
+    throw toParsingError(str, getTargetType().getName());
+  }
 }

@@ -34,65 +34,65 @@ import com.appslandia.common.utils.ValueUtils;
  *
  */
 public class TextEncryptor extends TextBasedCrypto {
-	private Encryptor encryptor;
+  private Encryptor encryptor;
 
-	public TextEncryptor() {
-	}
+  public TextEncryptor() {
+  }
 
-	public TextEncryptor(Encryptor encryptor) {
-		this.encryptor = encryptor;
-	}
+  public TextEncryptor(Encryptor encryptor) {
+    this.encryptor = encryptor;
+  }
 
-	@Override
-	protected void init() throws Exception {
-		Asserts.notNull(this.encryptor, "encryptor is required.");
+  @Override
+  protected void init() throws Exception {
+    Asserts.notNull(this.encryptor, "encryptor is required.");
 
-		this.textCharset = ValueUtils.valueOrAlt(this.textCharset, StandardCharsets.UTF_8);
-		this.baseEncoder = ValueUtils.valueOrAlt(this.baseEncoder, BaseEncoder.BASE64);
-	}
+    this.textCharset = ValueUtils.valueOrAlt(this.textCharset, StandardCharsets.UTF_8);
+    this.baseEncoder = ValueUtils.valueOrAlt(this.baseEncoder, BaseEncoder.BASE64);
+  }
 
-	@Override
-	public void destroy() throws DestroyException {
-		if (this.encryptor != null) {
-			this.encryptor.destroy();
-		}
-	}
+  @Override
+  public void destroy() throws DestroyException {
+    if (this.encryptor != null) {
+      this.encryptor.destroy();
+    }
+  }
 
-	public String encrypt(String message) throws CryptoException {
-		this.initialize();
-		Asserts.notNull(message, "message is required.");
+  public String encrypt(String message) throws CryptoException {
+    this.initialize();
+    Asserts.notNull(message, "message is required.");
 
-		return this.baseEncoder.encode(this.encryptor.encrypt(message.getBytes(this.textCharset)));
-	}
+    return this.baseEncoder.encode(this.encryptor.encrypt(message.getBytes(this.textCharset)));
+  }
 
-	public String decrypt(String message) throws CryptoException {
-		this.initialize();
-		Asserts.notNull(message, "message is required.");
+  public String decrypt(String message) throws CryptoException {
+    this.initialize();
+    Asserts.notNull(message, "message is required.");
 
-		return new String(this.encryptor.decrypt(this.baseEncoder.decode(message)), this.textCharset);
-	}
+    return new String(this.encryptor.decrypt(this.baseEncoder.decode(message)), this.textCharset);
+  }
 
-	public TextEncryptor setEncryptor(Encryptor encryptor) {
-		this.assertNotInitialized();
-		this.encryptor = encryptor;
-		return this;
-	}
+  public TextEncryptor setEncryptor(Encryptor encryptor) {
+    this.assertNotInitialized();
+    this.encryptor = encryptor;
+    return this;
+  }
 
-	@Override
-	public TextEncryptor setTextCharset(Charset charset) {
-		super.setTextCharset(charset);
-		return this;
-	}
+  @Override
+  public TextEncryptor setTextCharset(Charset charset) {
+    super.setTextCharset(charset);
+    return this;
+  }
 
-	@Override
-	public TextEncryptor setTextCharset(String textCharset) {
-		super.setTextCharset(textCharset);
-		return this;
-	}
+  @Override
+  public TextEncryptor setTextCharset(String textCharset) {
+    super.setTextCharset(textCharset);
+    return this;
+  }
 
-	@Override
-	public TextEncryptor setBaseEncoder(BaseEncoder baseEncoder) {
-		super.setBaseEncoder(baseEncoder);
-		return this;
-	}
+  @Override
+  public TextEncryptor setBaseEncoder(BaseEncoder baseEncoder) {
+    super.setBaseEncoder(baseEncoder);
+    return this;
+  }
 }

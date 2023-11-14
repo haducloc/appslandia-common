@@ -26,20 +26,20 @@ package com.appslandia.common.base;
  *
  */
 public class InitializeException extends RuntimeException {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public InitializeException() {
-	}
+  public InitializeException() {
+  }
 
-	public InitializeException(String message) {
-		super(message);
-	}
+  public InitializeException(String message) {
+    super(message);
+  }
 
-	public InitializeException(String message, Throwable cause) {
-		super(message, cause);
-	}
+  public InitializeException(String message, Throwable cause) {
+    super(message, cause);
+  }
 
-	public InitializeException(Throwable cause) {
-		super(cause);
-	}
+  public InitializeException(Throwable cause) {
+    super(cause);
+  }
 }

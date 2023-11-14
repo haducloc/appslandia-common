@@ -32,107 +32,107 @@ import com.appslandia.common.utils.STR;
  */
 public class GeoDMS {
 
-	final int degrees;
-	final int minutes;
-	final double seconds;
-	final Direction direction;
+  final int degrees;
+  final int minutes;
+  final double seconds;
+  final Direction direction;
 
-	final double decimalDegrees;
+  final double decimalDegrees;
 
-	GeoDMS(double decimalDegrees, Direction direction) {
-		int degrees = (int) decimalDegrees;
-		int minutes = (int) ((decimalDegrees - degrees) * 60);
-		double seconds = decimalDegrees * 3600 - degrees * 3600 - minutes * 60;
+  GeoDMS(double decimalDegrees, Direction direction) {
+    int degrees = (int) decimalDegrees;
+    int minutes = (int) ((decimalDegrees - degrees) * 60);
+    double seconds = decimalDegrees * 3600 - degrees * 3600 - minutes * 60;
 
-		this.degrees = degrees;
-		this.minutes = minutes;
-		this.seconds = seconds;
+    this.degrees = degrees;
+    this.minutes = minutes;
+    this.seconds = seconds;
 
-		this.direction = direction;
-		this.decimalDegrees = decimalDegrees;
-	}
+    this.direction = direction;
+    this.decimalDegrees = decimalDegrees;
+  }
 
-	GeoDMS(int degrees, int minutes, double seconds, Direction direction) {
-		this.degrees = degrees;
-		this.minutes = minutes;
-		this.seconds = seconds;
+  GeoDMS(int degrees, int minutes, double seconds, Direction direction) {
+    this.degrees = degrees;
+    this.minutes = minutes;
+    this.seconds = seconds;
 
-		this.direction = direction;
-		this.decimalDegrees = GeoUtils.toDecimalDegrees(degrees, minutes, seconds);
-	}
+    this.direction = direction;
+    this.decimalDegrees = GeoUtils.toDecimalDegrees(degrees, minutes, seconds);
+  }
 
-	public int getDegrees() {
-		return this.degrees;
-	}
+  public int getDegrees() {
+    return this.degrees;
+  }
 
-	public int getMinutes() {
-		return this.minutes;
-	}
+  public int getMinutes() {
+    return this.minutes;
+  }
 
-	public double getSeconds() {
-		return this.seconds;
-	}
+  public double getSeconds() {
+    return this.seconds;
+  }
 
-	public Direction getDirection() {
-		return this.direction;
-	}
+  public Direction getDirection() {
+    return this.direction;
+  }
 
-	public boolean isLatitude() {
-		return this.direction.isY();
-	}
+  public boolean isLatitude() {
+    return this.direction.isY();
+  }
 
-	public boolean isLongitude() {
-		return this.direction.isX();
-	}
+  public boolean isLongitude() {
+    return this.direction.isX();
+  }
 
-	public double toDecimalDegrees() {
-		if ((this.direction == Direction.NORTH) || (this.direction == Direction.EAST)) {
-			return this.decimalDegrees;
-		}
-		return -this.decimalDegrees;
-	}
+  public double toDecimalDegrees() {
+    if ((this.direction == Direction.NORTH) || (this.direction == Direction.EAST)) {
+      return this.decimalDegrees;
+    }
+    return -this.decimalDegrees;
+  }
 
-	public String toStringDMS(int secondsDecimals) {
-		String fmtSec = GeoUtils.format(this.seconds, secondsDecimals);
-		return String.format("%d°%02d'%s\"%s", this.degrees, this.minutes, fmtSec, this.direction.symbol());
-	}
+  public String toStringDMS(int secondsDecimals) {
+    String fmtSec = GeoUtils.format(this.seconds, secondsDecimals);
+    return String.format("%d°%02d'%s\"%s", this.degrees, this.minutes, fmtSec, this.direction.symbol());
+  }
 
-	@Override
-	public String toString() {
-		return toStringDMS(1);
-	}
+  @Override
+  public String toString() {
+    return toStringDMS(1);
+  }
 
-	public static GeoDMS toLatDMS(double latitude) {
-		Asserts.isTrue((latitude >= -90.0) && (latitude <= 90.0), "latitude is invalid.");
-		return new GeoDMS(Math.abs(latitude), Double.compare(latitude, 0.0) >= 0 ? Direction.NORTH : Direction.SOUTH);
-	}
+  public static GeoDMS toLatDMS(double latitude) {
+    Asserts.isTrue((latitude >= -90.0) && (latitude <= 90.0), "latitude is invalid.");
+    return new GeoDMS(Math.abs(latitude), Double.compare(latitude, 0.0) >= 0 ? Direction.NORTH : Direction.SOUTH);
+  }
 
-	public static GeoDMS toLongDMS(double longitude) {
-		Asserts.isTrue((longitude >= -180.0) && (longitude <= 180.0), "longitude is invalid.");
-		return new GeoDMS(Math.abs(longitude), Double.compare(longitude, 0.0) >= 0 ? Direction.EAST : Direction.WEST);
-	}
+  public static GeoDMS toLongDMS(double longitude) {
+    Asserts.isTrue((longitude >= -180.0) && (longitude <= 180.0), "longitude is invalid.");
+    return new GeoDMS(Math.abs(longitude), Double.compare(longitude, 0.0) >= 0 ? Direction.EAST : Direction.WEST);
+  }
 
-	static final Pattern DMS_PATTERN = Pattern.compile("\\d+°\\s*\\d{1,2}'\\s*\\d+(\\.\\d+)?\"\\s*(N|E|S|W)", Pattern.CASE_INSENSITIVE);
-	static final Pattern DMS_SYMBOLS = Pattern.compile("(°|'|\")");
+  static final Pattern DMS_PATTERN = Pattern.compile("\\d+°\\s*\\d{1,2}'\\s*\\d+(\\.\\d+)?\"\\s*(N|E|S|W)", Pattern.CASE_INSENSITIVE);
+  static final Pattern DMS_SYMBOLS = Pattern.compile("(°|'|\")");
 
-	public static GeoDMS toGeoDMS(String dms) {
-		Asserts.notNull(dms);
-		Asserts.isTrue(DMS_PATTERN.matcher(dms).matches(), () -> STR.fmt("dms {} is invalid.", dms));
+  public static GeoDMS toGeoDMS(String dms) {
+    Asserts.notNull(dms);
+    Asserts.isTrue(DMS_PATTERN.matcher(dms).matches(), () -> STR.fmt("dms {} is invalid.", dms));
 
-		String[] items = DMS_SYMBOLS.split(dms);
+    String[] items = DMS_SYMBOLS.split(dms);
 
-		int degrees = Integer.parseInt(items[0].trim());
-		int minutes = Integer.parseInt(items[1].trim());
-		double seconds = Double.parseDouble(items[2].trim());
+    int degrees = Integer.parseInt(items[0].trim());
+    int minutes = Integer.parseInt(items[1].trim());
+    double seconds = Double.parseDouble(items[2].trim());
 
-		double decimalDegrees = GeoUtils.toDecimalDegrees(degrees, minutes, seconds);
-		Direction direction = Direction.parseValue(items[3].trim());
+    double decimalDegrees = GeoUtils.toDecimalDegrees(degrees, minutes, seconds);
+    Direction direction = Direction.parseValue(items[3].trim());
 
-		if (direction.isY()) {
-			Asserts.isTrue(decimalDegrees <= 90.0, () -> STR.fmt("dms {} is invalid.", dms));
-		} else {
-			Asserts.isTrue(decimalDegrees <= 180.0, () -> STR.fmt("dms {} is invalid.", dms));
-		}
-		return new GeoDMS(degrees, minutes, seconds, direction);
-	}
+    if (direction.isY()) {
+      Asserts.isTrue(decimalDegrees <= 90.0, () -> STR.fmt("dms {} is invalid.", dms));
+    } else {
+      Asserts.isTrue(decimalDegrees <= 180.0, () -> STR.fmt("dms {} is invalid.", dms));
+    }
+    return new GeoDMS(degrees, minutes, seconds, direction);
+  }
 }

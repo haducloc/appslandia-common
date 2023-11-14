@@ -33,8 +33,8 @@ import jakarta.json.bind.JsonbConfig;
  */
 public class JoseJsonb {
 
-	public static JsonbConfig newJsonbConfig(boolean serializeNulls, boolean formatting) {
-		// @formatter:off
+  public static JsonbConfig newJsonbConfig(boolean serializeNulls, boolean formatting) {
+    // @formatter:off
 		return JsonbProcessor.newConfig(serializeNulls, formatting)
 				.withAdapters(
 
@@ -54,9 +54,9 @@ public class JoseJsonb {
 						}.setValueConverter(new String[]{"jwks\\[\\d+]"},
 								m -> new JsonWebKey(ObjectUtils.cast(m))));
 		// @formatter:on
-	}
+  }
 
-	public static JsonbProcessor newJsonProcessor() {
-		return new JsonbProcessor().setConfig(newJsonbConfig(true, false));
-	}
+  public static JsonbProcessor newJsonProcessor() {
+    return new JsonbProcessor().setConfig(newJsonbConfig(true, false));
+  }
 }

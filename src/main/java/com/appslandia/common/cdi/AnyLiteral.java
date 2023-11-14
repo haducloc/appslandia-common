@@ -30,10 +30,10 @@ import jakarta.enterprise.util.AnnotationLiteral;
  */
 @SuppressWarnings("all")
 public class AnyLiteral extends AnnotationLiteral<Any> implements Any {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public static final Any IMPL = new AnyLiteral();
+  public static final Any IMPL = new AnyLiteral();
 
-	private AnyLiteral() {
-	}
+  private AnyLiteral() {
+  }
 }

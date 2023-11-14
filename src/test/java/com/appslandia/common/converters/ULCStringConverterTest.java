@@ -35,107 +35,107 @@ import com.appslandia.common.base.Language;
  */
 public class ULCStringConverterTest {
 
-	@Test
-	public void test_targetType() {
-		ULCStringConverter converter = new ULCStringConverter(true);
-		Assertions.assertEquals(String.class, converter.getTargetType());
-	}
+  @Test
+  public void test_targetType() {
+    ULCStringConverter converter = new ULCStringConverter(true);
+    Assertions.assertEquals(String.class, converter.getTargetType());
+  }
 
-	@Test
-	public void test_lower() {
-		ULCStringConverter converter = new ULCStringConverter(false);
-		try {
-			String value = "JavaEE-7";
-			String str = converter.parse(value, new FormatProviderImpl(Language.EN_US));
+  @Test
+  public void test_lower() {
+    ULCStringConverter converter = new ULCStringConverter(false);
+    try {
+      String value = "JavaEE-7";
+      String str = converter.parse(value, new FormatProviderImpl(Language.EN_US));
 
-			Assertions.assertEquals("javaee-7", str);
+      Assertions.assertEquals("javaee-7", str);
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_upper() {
-		ULCStringConverter converter = new ULCStringConverter(true);
-		try {
-			String value = "JavaEE-7";
-			String str = converter.parse(value, new FormatProviderImpl(Language.EN_US));
+  @Test
+  public void test_upper() {
+    ULCStringConverter converter = new ULCStringConverter(true);
+    try {
+      String value = "JavaEE-7";
+      String str = converter.parse(value, new FormatProviderImpl(Language.EN_US));
 
-			Assertions.assertEquals("JAVAEE-7", str);
+      Assertions.assertEquals("JAVAEE-7", str);
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_en_lower() {
-		ULCStringConverter converter = new ULCStringConverter(false, Locale.ENGLISH);
-		try {
-			String value = "JavaEE-7";
-			String str = converter.parse(value, null);
+  @Test
+  public void test_en_lower() {
+    ULCStringConverter converter = new ULCStringConverter(false, Locale.ENGLISH);
+    try {
+      String value = "JavaEE-7";
+      String str = converter.parse(value, null);
 
-			Assertions.assertEquals("javaee-7", str);
+      Assertions.assertEquals("javaee-7", str);
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_en_upper() {
-		ULCStringConverter converter = new ULCStringConverter(true, Locale.ENGLISH);
-		try {
-			String value = "JavaEE-7";
-			String str = converter.parse(value, null);
+  @Test
+  public void test_en_upper() {
+    ULCStringConverter converter = new ULCStringConverter(true, Locale.ENGLISH);
+    try {
+      String value = "JavaEE-7";
+      String str = converter.parse(value, null);
 
-			Assertions.assertEquals("JAVAEE-7", str);
+      Assertions.assertEquals("JAVAEE-7", str);
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_invariant_lower() {
-		ULCStringConverter converter = new ULCStringConverter(false, Locale.ROOT);
-		try {
-			String value = "JavaEE-7";
-			String str = converter.parse(value, null);
+  @Test
+  public void test_invariant_lower() {
+    ULCStringConverter converter = new ULCStringConverter(false, Locale.ROOT);
+    try {
+      String value = "JavaEE-7";
+      String str = converter.parse(value, null);
 
-			Assertions.assertEquals("javaee-7", str);
+      Assertions.assertEquals("javaee-7", str);
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_invariant_upper() {
-		ULCStringConverter converter = new ULCStringConverter(true, Locale.ROOT);
-		try {
-			String value = "JavaEE-7";
-			String str = converter.parse(value, null);
+  @Test
+  public void test_invariant_upper() {
+    ULCStringConverter converter = new ULCStringConverter(true, Locale.ROOT);
+    try {
+      String value = "JavaEE-7";
+      String str = converter.parse(value, null);
 
-			Assertions.assertEquals("JAVAEE-7", str);
+      Assertions.assertEquals("JAVAEE-7", str);
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_null() {
-		ULCStringConverter converter = new ULCStringConverter(true);
-		try {
-			String value = null;
-			String str = converter.parse(value, new FormatProviderImpl(Language.EN_US));
+  @Test
+  public void test_null() {
+    ULCStringConverter converter = new ULCStringConverter(true);
+    try {
+      String value = null;
+      String str = converter.parse(value, new FormatProviderImpl(Language.EN_US));
 
-			Assertions.assertNull(str);
+      Assertions.assertNull(str);
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 }

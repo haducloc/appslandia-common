@@ -34,65 +34,65 @@ import com.appslandia.common.base.ThreadSafeTester;
  */
 public class PbeDigesterTest {
 
-	@Test
-	public void test() {
-		PbeDigester impl = new PbeDigester().setAlgorithm("HmacMD5");
-		impl.setKeySize(16).setPassword("password".toCharArray());
+  @Test
+  public void test() {
+    PbeDigester impl = new PbeDigester().setAlgorithm("HmacMD5");
+    impl.setKeySize(16).setPassword("password".toCharArray());
 
-		try {
-			byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-			byte[] digest = impl.digest(data);
+    try {
+      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+      byte[] digest = impl.digest(data);
 
-			Assertions.assertTrue(impl.verify(data, digest));
+      Assertions.assertTrue(impl.verify(data, digest));
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_invalid() {
-		PbeDigester impl = new PbeDigester().setAlgorithm("HmacMD5");
-		impl.setKeySize(16).setPassword("password".toCharArray());
+  @Test
+  public void test_invalid() {
+    PbeDigester impl = new PbeDigester().setAlgorithm("HmacMD5");
+    impl.setKeySize(16).setPassword("password".toCharArray());
 
-		try {
-			byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-			byte[] digest = impl.digest(data);
+    try {
+      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+      byte[] digest = impl.digest(data);
 
-			Assertions.assertFalse(impl.verify("invalid".getBytes(StandardCharsets.UTF_8), digest));
+      Assertions.assertFalse(impl.verify("invalid".getBytes(StandardCharsets.UTF_8), digest));
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_threadSafe() {
-		final PbeDigester impl = new PbeDigester().setAlgorithm("HmacMD5");
-		impl.setKeySize(16).setPassword("password".toCharArray());
+  @Test
+  public void test_threadSafe() {
+    final PbeDigester impl = new PbeDigester().setAlgorithm("HmacMD5");
+    impl.setKeySize(16).setPassword("password".toCharArray());
 
-		new ThreadSafeTester() {
+    new ThreadSafeTester() {
 
-			@Override
-			protected Runnable newTask() {
-				return new Runnable() {
+      @Override
+      protected Runnable newTask() {
+        return new Runnable() {
 
-					@Override
-					public void run() {
-						try {
-							byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-							byte[] digest = impl.digest(data);
+          @Override
+          public void run() {
+            try {
+              byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+              byte[] digest = impl.digest(data);
 
-							Assertions.assertTrue(impl.verify(data, digest));
+              Assertions.assertTrue(impl.verify(data, digest));
 
-						} catch (Exception ex) {
-							Assertions.fail(ex.getMessage());
-						} finally {
-							doneTask();
-						}
-					}
-				};
-			}
-		}.execute();
-	}
+            } catch (Exception ex) {
+              Assertions.fail(ex.getMessage());
+            } finally {
+              doneTask();
+            }
+          }
+        };
+      }
+    }.execute();
+  }
 }

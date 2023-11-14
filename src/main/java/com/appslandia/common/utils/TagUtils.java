@@ -37,104 +37,104 @@ import com.appslandia.common.jdbc.SqlLikeEscaper;
  */
 public class TagUtils {
 
-	static final Pattern TAGS_PATTEN = Pattern.compile("[^,]+(\\s*,\\s*[^,]*)*", Pattern.CASE_INSENSITIVE);
+  static final Pattern TAGS_PATTEN = Pattern.compile("[^,]+(\\s*,\\s*[^,]*)*", Pattern.CASE_INSENSITIVE);
 
-	public static final String TBD_TAG = "#tbd";
-	public static final String UNSORTED_TAG = "#unsorted";
+  public static final String TBD_TAG = "#tbd";
+  public static final String UNSORTED_TAG = "#unsorted";
 
-	// #tag1, #tag2
-	// tag1, #tag2
-	// tag1, tag2
-	public static List<String> toTags(String tags, Out<Boolean> isValid) {
-		List<String> result = new ArrayList<>();
+  // #tag1, #tag2
+  // tag1, #tag2
+  // tag1, tag2
+  public static List<String> toTags(String tags, Out<Boolean> isValid) {
+    List<String> result = new ArrayList<>();
 
-		isValid.value = true;
-		if (tags == null) {
-			return result;
-		}
-		if (TBD_TAG.equals(tags)) {
-			result.add(TBD_TAG);
-			return result;
-		}
-		if (UNSORTED_TAG.equals(tags)) {
-			result.add(UNSORTED_TAG);
-			return result;
-		}
-		if (!TAGS_PATTEN.matcher(tags).matches()) {
-			isValid.value = false;
-			return result;
-		}
+    isValid.value = true;
+    if (tags == null) {
+      return result;
+    }
+    if (TBD_TAG.equals(tags)) {
+      result.add(TBD_TAG);
+      return result;
+    }
+    if (UNSORTED_TAG.equals(tags)) {
+      result.add(UNSORTED_TAG);
+      return result;
+    }
+    if (!TAGS_PATTEN.matcher(tags).matches()) {
+      isValid.value = false;
+      return result;
+    }
 
-		// Parse tags
-		final Out<Boolean> valid = new Out<>();
-		for (String tag : SplitUtils.splitByComma(tags)) {
-			tag = toTag(tag, valid);
+    // Parse tags
+    final Out<Boolean> valid = new Out<>();
+    for (String tag : SplitUtils.splitByComma(tags)) {
+      tag = toTag(tag, valid);
 
-			if ((tag != null) && !result.contains(tag)) {
-				result.add(tag);
-			}
-		}
-		if (result.isEmpty()) {
-			isValid.value = false;
-		}
+      if ((tag != null) && !result.contains(tag)) {
+        result.add(tag);
+      }
+    }
+    if (result.isEmpty()) {
+      isValid.value = false;
+    }
 
-		// #tbd must be first
-		// #unsorted resulting in removal of others
-		boolean hasTbd = result.remove(TBD_TAG);
+    // #tbd must be first
+    // #unsorted resulting in removal of others
+    boolean hasTbd = result.remove(TBD_TAG);
 
-		if (result.contains(UNSORTED_TAG)) {
-			result.removeIf(t -> !t.equals(UNSORTED_TAG));
-		}
-		if (hasTbd) {
-			result.add(0, TBD_TAG);
-		}
-		return result;
-	}
+    if (result.contains(UNSORTED_TAG)) {
+      result.removeIf(t -> !t.equals(UNSORTED_TAG));
+    }
+    if (hasTbd) {
+      result.add(0, TBD_TAG);
+    }
+    return result;
+  }
 
-	// tag, #tag -> #tag
-	public static String toTag(String tag, Out<Boolean> isValid) {
-		isValid.value = true;
-		if (tag == null) {
-			return null;
-		}
-		if (TBD_TAG.equals(tag)) {
-			return TBD_TAG;
-		}
-		if (UNSORTED_TAG.equals(tag)) {
-			return UNSORTED_TAG;
-		}
-		tag = tag.toLowerCase(Locale.ROOT);
-		String nmlTag = NormalizeUtils.normalizeLabel(tag);
+  // tag, #tag -> #tag
+  public static String toTag(String tag, Out<Boolean> isValid) {
+    isValid.value = true;
+    if (tag == null) {
+      return null;
+    }
+    if (TBD_TAG.equals(tag)) {
+      return TBD_TAG;
+    }
+    if (UNSORTED_TAG.equals(tag)) {
+      return UNSORTED_TAG;
+    }
+    tag = tag.toLowerCase(Locale.ROOT);
+    String nmlTag = NormalizeUtils.normalizeLabel(tag);
 
-		if (nmlTag == null) {
-			isValid.value = false;
-			return null;
-		}
-		return "#" + nmlTag;
-	}
+    if (nmlTag == null) {
+      isValid.value = false;
+      return null;
+    }
+    return "#" + nmlTag;
+  }
 
-	// |tag1|#tag2|
-	public static String[] toTags(String dbTags) {
-		return SplitUtils.split(dbTags, '|');
-	}
+  // |tag1|#tag2|
+  public static String[] toTags(String dbTags) {
+    return SplitUtils.split(dbTags, '|');
+  }
 
-	// |#tag1|#tag2| -> #tag1, #tag2
-	public static String toDispTags(String dbTags) {
-		return String.join(", ", toTags(dbTags));
-	}
+  // |#tag1|#tag2| -> #tag1, #tag2
+  public static String toDispTags(String dbTags) {
+    return String.join(", ", toTags(dbTags));
+  }
 
-	// #tag1 -> |#tag1|
-	public static String wrapTag(String tag) {
-		return "|" + tag + "|";
-	}
+  // #tag1 -> |#tag1|
+  public static String wrapTag(String tag) {
+    return "|" + tag + "|";
+  }
 
-	// |#tag1|#tag2|
-	public static String toDbTags(Collection<String> tags) {
-		return StringUtils.join('|', true, tags);
-	}
+  // |#tag1|#tag2|
+  public static String toDbTags(Collection<String> tags) {
+    return StringUtils.join('|', true, tags);
+  }
 
-	// #tag -> %|#tag|%
-	public static String toTagLikeVal(String tag) {
-		return SqlLikeEscaper.toLikePattern(wrapTag(tag), LikeType.CONTAINS);
-	}
+  // #tag -> %|#tag|%
+  public static String toTagLikeVal(String tag) {
+    return SqlLikeEscaper.toLikePattern(wrapTag(tag), LikeType.CONTAINS);
+  }
 }

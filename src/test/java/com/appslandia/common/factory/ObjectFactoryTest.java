@@ -36,180 +36,180 @@ import jakarta.inject.Inject;
  */
 public class ObjectFactoryTest {
 
-	@Test
-	public void test() {
-		try {
-			ObjectFactory factory = new ObjectFactory();
-			factory.register(TestDao.class, TestDao.class);
-			factory.register(TestService.class, TestService.class);
+  @Test
+  public void test() {
+    try {
+      ObjectFactory factory = new ObjectFactory();
+      factory.register(TestDao.class, TestDao.class);
+      factory.register(TestService.class, TestService.class);
 
-			Assertions.assertNotNull(factory.getObject(TestDao.class));
-			Assertions.assertNotNull(factory.getObject(TestService.class));
+      Assertions.assertNotNull(factory.getObject(TestDao.class));
+      Assertions.assertNotNull(factory.getObject(TestService.class));
 
-			Assertions.assertSame(factory.getObject(TestDao.class), factory.getObject(TestDao.class));
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+      Assertions.assertSame(factory.getObject(TestDao.class), factory.getObject(TestDao.class));
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_objectType() {
-		try {
-			ObjectFactory factory = new ObjectFactory();
-			factory.register(TestDao.class, TestDao.class);
-			factory.register(TestService.class, TestService.class);
+  @Test
+  public void test_objectType() {
+    try {
+      ObjectFactory factory = new ObjectFactory();
+      factory.register(TestDao.class, TestDao.class);
+      factory.register(TestService.class, TestService.class);
 
-			factory.getObject(Object.class);
-			Assertions.fail();
+      factory.getObject(Object.class);
+      Assertions.fail();
 
-		} catch (Exception ex) {
-			Assertions.assertTrue(ex instanceof ObjectException);
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.assertTrue(ex instanceof ObjectException);
+    }
+  }
 
-	@Test
-	public void test_type_impl() {
-		try {
-			ObjectFactory factory = new ObjectFactory();
-			factory.register(TestDao.class, TestDaoImpl.class);
+  @Test
+  public void test_type_impl() {
+    try {
+      ObjectFactory factory = new ObjectFactory();
+      factory.register(TestDao.class, TestDaoImpl.class);
 
-			Assertions.assertNotNull(factory.getObject(TestDao.class));
-			Assertions.assertNotNull(factory.getObject(TestDaoImpl.class));
+      Assertions.assertNotNull(factory.getObject(TestDao.class));
+      Assertions.assertNotNull(factory.getObject(TestDaoImpl.class));
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_ctor() {
-		try {
-			ObjectFactory factory = new ObjectFactory();
-			factory.register(TestDao.class, TestDao.class);
-			factory.register(CtorService.class, CtorService.class);
+  @Test
+  public void test_ctor() {
+    try {
+      ObjectFactory factory = new ObjectFactory();
+      factory.register(TestDao.class, TestDao.class);
+      factory.register(CtorService.class, CtorService.class);
 
-			Assertions.assertNotNull(factory.getObject(TestDao.class));
-			Assertions.assertNotNull(factory.getObject(CtorService.class));
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+      Assertions.assertNotNull(factory.getObject(TestDao.class));
+      Assertions.assertNotNull(factory.getObject(CtorService.class));
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_prototype() {
-		try {
-			ObjectFactory factory = new ObjectFactory();
-			factory.register(TestDao.class, TestDao.class, ObjectScope.PROTOTYPE);
+  @Test
+  public void test_prototype() {
+    try {
+      ObjectFactory factory = new ObjectFactory();
+      factory.register(TestDao.class, TestDao.class, ObjectScope.PROTOTYPE);
 
-			Assertions.assertNotNull(factory.getObject(TestDao.class));
-			Assertions.assertNotSame(factory.getObject(TestDao.class), factory.getObject(TestDao.class));
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+      Assertions.assertNotNull(factory.getObject(TestDao.class));
+      Assertions.assertNotSame(factory.getObject(TestDao.class), factory.getObject(TestDao.class));
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_inject() {
-		try {
-			ObjectFactory factory = new ObjectFactory();
-			factory.register(TestDao.class, TestDao.class);
+  @Test
+  public void test_inject() {
+    try {
+      ObjectFactory factory = new ObjectFactory();
+      factory.register(TestDao.class, TestDao.class);
 
-			UnmanagedService service = new UnmanagedService();
-			factory.inject(service);
-			Assertions.assertNotNull(service.testDao);
+      UnmanagedService service = new UnmanagedService();
+      factory.inject(service);
+      Assertions.assertNotNull(service.testDao);
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_producer() {
-		try {
-			ObjectFactory factory = new ObjectFactory();
-			factory.register(TestDao.class, TestDao.class);
-			factory.register(CtorService.class, new ObjectProducer<CtorService>() {
+  @Test
+  public void test_producer() {
+    try {
+      ObjectFactory factory = new ObjectFactory();
+      factory.register(TestDao.class, TestDao.class);
+      factory.register(CtorService.class, new ObjectProducer<CtorService>() {
 
-				@Override
-				public CtorService produce(ObjectFactory factory) throws ObjectException {
-					TestDao testDao = factory.getObject(TestDao.class);
-					return new CtorService(testDao);
-				}
-			});
+        @Override
+        public CtorService produce(ObjectFactory factory) throws ObjectException {
+          TestDao testDao = factory.getObject(TestDao.class);
+          return new CtorService(testDao);
+        }
+      });
 
-			Assertions.assertNotNull(factory.getObject(CtorService.class));
-			Assertions.assertSame(factory.getObject(CtorService.class), factory.getObject(CtorService.class));
+      Assertions.assertNotNull(factory.getObject(CtorService.class));
+      Assertions.assertSame(factory.getObject(CtorService.class), factory.getObject(CtorService.class));
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_threadSafe() {
-		final ObjectFactory factory = new ObjectFactory();
-		factory.register(TestDao.class, TestDao.class);
-		factory.register(ThreadSafeService.class, ThreadSafeService.class);
+  @Test
+  public void test_threadSafe() {
+    final ObjectFactory factory = new ObjectFactory();
+    factory.register(TestDao.class, TestDao.class);
+    factory.register(ThreadSafeService.class, ThreadSafeService.class);
 
-		new ThreadSafeTester() {
+    new ThreadSafeTester() {
 
-			@Override
-			protected Runnable newTask() {
-				return new Runnable() {
+      @Override
+      protected Runnable newTask() {
+        return new Runnable() {
 
-					@Override
-					public void run() {
-						try {
-							factory.getObject(ThreadSafeService.class);
+          @Override
+          public void run() {
+            try {
+              factory.getObject(ThreadSafeService.class);
 
-						} catch (Exception ex) {
-							Assertions.fail(ex.getMessage());
-						} finally {
-							doneTask();
-						}
-					}
-				};
-			}
-		}.execute();
-		Assertions.assertEquals(1, ThreadSafeService.lastSeq.get());
-	}
+            } catch (Exception ex) {
+              Assertions.fail(ex.getMessage());
+            } finally {
+              doneTask();
+            }
+          }
+        };
+      }
+    }.execute();
+    Assertions.assertEquals(1, ThreadSafeService.lastSeq.get());
+  }
 
-	static class TestService {
+  static class TestService {
 
-		@Inject
-		protected TestDao testDao;
-	}
+    @Inject
+    protected TestDao testDao;
+  }
 
-	static class CtorService {
+  static class CtorService {
 
-		final TestDao testDao;
+    final TestDao testDao;
 
-		@Inject
-		public CtorService(TestDao testDao) {
-			this.testDao = testDao;
-		}
-	}
+    @Inject
+    public CtorService(TestDao testDao) {
+      this.testDao = testDao;
+    }
+  }
 
-	static class UnmanagedService {
+  static class UnmanagedService {
 
-		@Inject
-		protected TestDao testDao;
-	}
+    @Inject
+    protected TestDao testDao;
+  }
 
-	static class ThreadSafeService {
-		static final AtomicInteger lastSeq = new AtomicInteger(0);
+  static class ThreadSafeService {
+    static final AtomicInteger lastSeq = new AtomicInteger(0);
 
-		@Inject
-		protected TestDao testDao;
+    @Inject
+    protected TestDao testDao;
 
-		public ThreadSafeService() {
-			lastSeq.incrementAndGet();
-		}
-	}
+    public ThreadSafeService() {
+      lastSeq.incrementAndGet();
+    }
+  }
 
-	static class TestDao {
-	}
+  static class TestDao {
+  }
 
-	static class TestDaoImpl extends TestDao {
-	}
+  static class TestDaoImpl extends TestDao {
+  }
 }

@@ -28,5 +28,5 @@ import java.io.Serializable;
  *
  */
 public class Mutex implements Serializable {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 }

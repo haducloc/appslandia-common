@@ -30,84 +30,84 @@ import org.junit.jupiter.api.Test;
  */
 public class DirectionTest {
 
-	@Test
-	public void test_symbol() {
-		Assertions.assertEquals("E", Direction.EAST.symbol());
-		Assertions.assertEquals("W", Direction.WEST.symbol());
-		Assertions.assertEquals("S", Direction.SOUTH.symbol());
-		Assertions.assertEquals("N", Direction.NORTH.symbol());
-	}
+  @Test
+  public void test_symbol() {
+    Assertions.assertEquals("E", Direction.EAST.symbol());
+    Assertions.assertEquals("W", Direction.WEST.symbol());
+    Assertions.assertEquals("S", Direction.SOUTH.symbol());
+    Assertions.assertEquals("N", Direction.NORTH.symbol());
+  }
 
-	@Test
-	public void test_parseValue() {
-		Assertions.assertEquals(Direction.EAST, Direction.parseValue("E"));
-		Assertions.assertEquals(Direction.WEST, Direction.parseValue("W"));
-		Assertions.assertEquals(Direction.SOUTH, Direction.parseValue("S"));
-		Assertions.assertEquals(Direction.NORTH, Direction.parseValue("N"));
-	}
+  @Test
+  public void test_parseValue() {
+    Assertions.assertEquals(Direction.EAST, Direction.parseValue("E"));
+    Assertions.assertEquals(Direction.WEST, Direction.parseValue("W"));
+    Assertions.assertEquals(Direction.SOUTH, Direction.parseValue("S"));
+    Assertions.assertEquals(Direction.NORTH, Direction.parseValue("N"));
+  }
 
-	@Test
-	public void test_directions() {
-		Assertions.assertTrue(Direction.EAST.isX());
-		Assertions.assertTrue(Direction.WEST.isX());
+  @Test
+  public void test_directions() {
+    Assertions.assertTrue(Direction.EAST.isX());
+    Assertions.assertTrue(Direction.WEST.isX());
 
-		Assertions.assertTrue(Direction.SOUTH.isY());
-		Assertions.assertTrue(Direction.NORTH.isY());
-	}
+    Assertions.assertTrue(Direction.SOUTH.isY());
+    Assertions.assertTrue(Direction.NORTH.isY());
+  }
 
-	@Test
-	public void test_reverse() {
-		Assertions.assertEquals(Direction.WEST, Direction.EAST.reverse());
-		Assertions.assertEquals(Direction.EAST, Direction.WEST.reverse());
-		Assertions.assertEquals(Direction.NORTH, Direction.SOUTH.reverse());
-		Assertions.assertEquals(Direction.SOUTH, Direction.NORTH.reverse());
-	}
+  @Test
+  public void test_reverse() {
+    Assertions.assertEquals(Direction.WEST, Direction.EAST.reverse());
+    Assertions.assertEquals(Direction.EAST, Direction.WEST.reverse());
+    Assertions.assertEquals(Direction.NORTH, Direction.SOUTH.reverse());
+    Assertions.assertEquals(Direction.SOUTH, Direction.NORTH.reverse());
+  }
 
-	@Test
-	public void test_right() {
-		Assertions.assertEquals(Direction.SOUTH, Direction.EAST.right());
-		Assertions.assertEquals(Direction.WEST, Direction.SOUTH.right());
-		Assertions.assertEquals(Direction.NORTH, Direction.WEST.right());
-		Assertions.assertEquals(Direction.EAST, Direction.NORTH.right());
-	}
+  @Test
+  public void test_right() {
+    Assertions.assertEquals(Direction.SOUTH, Direction.EAST.right());
+    Assertions.assertEquals(Direction.WEST, Direction.SOUTH.right());
+    Assertions.assertEquals(Direction.NORTH, Direction.WEST.right());
+    Assertions.assertEquals(Direction.EAST, Direction.NORTH.right());
+  }
 
-	@Test
-	public void test_right_n() {
-		Assertions.assertEquals(Direction.EAST, Direction.EAST.turn(0));
-		Assertions.assertEquals(Direction.SOUTH, Direction.SOUTH.turn(0));
-		Assertions.assertEquals(Direction.WEST, Direction.WEST.turn(0));
-		Assertions.assertEquals(Direction.NORTH, Direction.NORTH.turn(0));
+  @Test
+  public void test_right_n() {
+    Assertions.assertEquals(Direction.EAST, Direction.EAST.turn(0));
+    Assertions.assertEquals(Direction.SOUTH, Direction.SOUTH.turn(0));
+    Assertions.assertEquals(Direction.WEST, Direction.WEST.turn(0));
+    Assertions.assertEquals(Direction.NORTH, Direction.NORTH.turn(0));
 
-		Assertions.assertEquals(Direction.SOUTH, Direction.EAST.turn(1));
-		Assertions.assertEquals(Direction.WEST, Direction.SOUTH.turn(1));
-		Assertions.assertEquals(Direction.NORTH, Direction.WEST.turn(1));
-		Assertions.assertEquals(Direction.EAST, Direction.NORTH.turn(1));
+    Assertions.assertEquals(Direction.SOUTH, Direction.EAST.turn(1));
+    Assertions.assertEquals(Direction.WEST, Direction.SOUTH.turn(1));
+    Assertions.assertEquals(Direction.NORTH, Direction.WEST.turn(1));
+    Assertions.assertEquals(Direction.EAST, Direction.NORTH.turn(1));
 
-		Assertions.assertEquals(Direction.EAST, Direction.EAST.turn(4));
-		Assertions.assertEquals(Direction.SOUTH, Direction.SOUTH.turn(4));
-		Assertions.assertEquals(Direction.WEST, Direction.WEST.turn(4));
-		Assertions.assertEquals(Direction.NORTH, Direction.NORTH.turn(4));
-	}
+    Assertions.assertEquals(Direction.EAST, Direction.EAST.turn(4));
+    Assertions.assertEquals(Direction.SOUTH, Direction.SOUTH.turn(4));
+    Assertions.assertEquals(Direction.WEST, Direction.WEST.turn(4));
+    Assertions.assertEquals(Direction.NORTH, Direction.NORTH.turn(4));
+  }
 
-	@Test
-	public void test_left() {
-		Assertions.assertEquals(Direction.NORTH, Direction.EAST.left());
-		Assertions.assertEquals(Direction.WEST, Direction.NORTH.left());
-		Assertions.assertEquals(Direction.SOUTH, Direction.WEST.left());
-		Assertions.assertEquals(Direction.EAST, Direction.SOUTH.left());
-	}
+  @Test
+  public void test_left() {
+    Assertions.assertEquals(Direction.NORTH, Direction.EAST.left());
+    Assertions.assertEquals(Direction.WEST, Direction.NORTH.left());
+    Assertions.assertEquals(Direction.SOUTH, Direction.WEST.left());
+    Assertions.assertEquals(Direction.EAST, Direction.SOUTH.left());
+  }
 
-	@Test
-	public void test_left_n() {
+  @Test
+  public void test_left_n() {
 
-		Assertions.assertEquals(Direction.NORTH, Direction.EAST.turn(-1));
-		Assertions.assertEquals(Direction.WEST, Direction.NORTH.turn(-1));
-		Assertions.assertEquals(Direction.SOUTH, Direction.WEST.turn(-1));
-		Assertions.assertEquals(Direction.EAST, Direction.SOUTH.turn(-1));
+    Assertions.assertEquals(Direction.NORTH, Direction.EAST.turn(-1));
+    Assertions.assertEquals(Direction.WEST, Direction.NORTH.turn(-1));
+    Assertions.assertEquals(Direction.SOUTH, Direction.WEST.turn(-1));
+    Assertions.assertEquals(Direction.EAST, Direction.SOUTH.turn(-1));
 
-		Assertions.assertEquals(Direction.EAST, Direction.EAST.turn(-4));
-		Assertions.assertEquals(Direction.SOUTH, Direction.SOUTH.turn(-4));
-		Assertions.assertEquals(Direction.WEST, Direction.WEST.turn(-4));
-		Assertions.assertEquals(Direction.NORTH, Direction.NORTH.turn(-4));
-	}
+    Assertions.assertEquals(Direction.EAST, Direction.EAST.turn(-4));
+    Assertions.assertEquals(Direction.SOUTH, Direction.SOUTH.turn(-4));
+    Assertions.assertEquals(Direction.WEST, Direction.WEST.turn(-4));
+    Assertions.assertEquals(Direction.NORTH, Direction.NORTH.turn(-4));
+  }
 }

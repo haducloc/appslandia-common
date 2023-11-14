@@ -32,34 +32,34 @@ import com.appslandia.common.base.InitializeObject;
  */
 public abstract class TextBasedCrypto extends InitializeObject {
 
-	protected Charset textCharset;
-	protected BaseEncoder baseEncoder;
+  protected Charset textCharset;
+  protected BaseEncoder baseEncoder;
 
-	public TextBasedCrypto setTextCharset(Charset charset) {
-		this.assertNotInitialized();
-		this.textCharset = charset;
-		return this;
-	}
+  public TextBasedCrypto setTextCharset(Charset charset) {
+    this.assertNotInitialized();
+    this.textCharset = charset;
+    return this;
+  }
 
-	public TextBasedCrypto setTextCharset(String textCharset) {
-		this.assertNotInitialized();
-		if (textCharset != null) {
-			this.textCharset = Charset.forName(textCharset);
-		}
-		return this;
-	}
+  public TextBasedCrypto setTextCharset(String textCharset) {
+    this.assertNotInitialized();
+    if (textCharset != null) {
+      this.textCharset = Charset.forName(textCharset);
+    }
+    return this;
+  }
 
-	public TextBasedCrypto setBaseEncoder(BaseEncoder baseEncoder) {
-		this.assertNotInitialized();
-		this.baseEncoder = baseEncoder;
-		return this;
-	}
+  public TextBasedCrypto setBaseEncoder(BaseEncoder baseEncoder) {
+    this.assertNotInitialized();
+    this.baseEncoder = baseEncoder;
+    return this;
+  }
 
-	public TextBasedCrypto setBaseEncoder(String baseEncoder) {
-		this.assertNotInitialized();
-		if (baseEncoder != null) {
-			this.baseEncoder = BaseEncoder.valueOf(baseEncoder);
-		}
-		return this;
-	}
+  public TextBasedCrypto setBaseEncoder(String baseEncoder) {
+    this.assertNotInitialized();
+    if (baseEncoder != null) {
+      this.baseEncoder = BaseEncoder.valueOf(baseEncoder);
+    }
+    return this;
+  }
 }

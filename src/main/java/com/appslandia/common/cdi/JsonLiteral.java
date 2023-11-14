@@ -29,20 +29,20 @@ import jakarta.enterprise.util.AnnotationLiteral;
  */
 @SuppressWarnings("all")
 public class JsonLiteral extends AnnotationLiteral<Json> implements Json {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public static final Json COMPACT = new JsonLiteral(Profile.COMPACT);
+  public static final Json COMPACT = new JsonLiteral(Profile.COMPACT);
 
-	public static final Json PRETTY = new JsonLiteral(Profile.PRETTY);
+  public static final Json PRETTY = new JsonLiteral(Profile.PRETTY);
 
-	private Profile profile;
+  private Profile profile;
 
-	private JsonLiteral(Profile profile) {
-		this.profile = profile;
-	}
+  private JsonLiteral(Profile profile) {
+    this.profile = profile;
+  }
 
-	@Override
-	public Profile value() {
-		return this.profile;
-	}
+  @Override
+  public Profile value() {
+    return this.profile;
+  }
 }

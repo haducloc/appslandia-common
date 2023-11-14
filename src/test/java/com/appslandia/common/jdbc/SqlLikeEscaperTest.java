@@ -30,19 +30,19 @@ import org.junit.jupiter.api.Test;
  */
 public class SqlLikeEscaperTest {
 
-	@Test
-	public void test() {
-		Assertions.assertEquals((char) '\\', SqlLikeEscaper.getEscapeSignChar());
-		Assertions.assertTrue(new String(SqlLikeEscaper.getCharsToEscape()).contains("%"));
-		Assertions.assertTrue(new String(SqlLikeEscaper.getCharsToEscape()).contains("_"));
-	}
+  @Test
+  public void test() {
+    Assertions.assertEquals((char) '\\', SqlLikeEscaper.getEscapeSignChar());
+    Assertions.assertTrue(new String(SqlLikeEscaper.getCharsToEscape()).contains("%"));
+    Assertions.assertTrue(new String(SqlLikeEscaper.getCharsToEscape()).contains("_"));
+  }
 
-	@Test
-	public void test_escape() {
-		String val = SqlLikeEscaper.getDefault().escape("%20");
-		Assertions.assertEquals("\\%20", val);
+  @Test
+  public void test_escape() {
+    String val = SqlLikeEscaper.getDefault().escape("%20");
+    Assertions.assertEquals("\\%20", val);
 
-		val = SqlLikeEscaper.getDefault().escape("_id");
-		Assertions.assertEquals("\\_id", val);
-	}
+    val = SqlLikeEscaper.getDefault().escape("_id");
+    Assertions.assertEquals("\\_id", val);
+  }
 }

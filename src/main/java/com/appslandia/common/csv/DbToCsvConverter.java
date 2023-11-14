@@ -28,5 +28,5 @@ package com.appslandia.common.csv;
 @FunctionalInterface
 public interface DbToCsvConverter {
 
-	String apply(Object value) throws Exception;
+  String apply(Object value) throws Exception;
 }

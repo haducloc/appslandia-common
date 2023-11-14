@@ -35,16 +35,16 @@ import com.google.gson.JsonParseException;
  */
 public class GsonLocalDateSerializer extends GsonTemporalSerializer<LocalDate> {
 
-	public GsonLocalDateSerializer() {
-		this(DateUtils.ISO8601_DATE);
-	}
+  public GsonLocalDateSerializer() {
+    this(DateUtils.ISO8601_DATE);
+  }
 
-	public GsonLocalDateSerializer(String serializeIsoPattern) {
-		super(serializeIsoPattern);
-	}
+  public GsonLocalDateSerializer(String serializeIsoPattern) {
+    super(serializeIsoPattern);
+  }
 
-	@Override
-	public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-		return LocalDate.parse(json.getAsString(), DateUtils.getFormatter(DateUtils.ISO8601_DATE));
-	}
+  @Override
+  public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    return LocalDate.parse(json.getAsString(), DateUtils.getFormatter(DateUtils.ISO8601_DATE));
+  }
 }

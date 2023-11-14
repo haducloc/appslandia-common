@@ -29,24 +29,24 @@ import java.util.Objects;
  *
  */
 public abstract class EntityBase implements Serializable {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public abstract Serializable getPk();
+  public abstract Serializable getPk();
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof EntityBase)) {
-			return false;
-		}
-		EntityBase other = (EntityBase) obj;
-		return Objects.equals(this.getPk(), other.getPk());
-	}
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (!(obj instanceof EntityBase)) {
+      return false;
+    }
+    EntityBase other = (EntityBase) obj;
+    return Objects.equals(this.getPk(), other.getPk());
+  }
 
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(this.getPk());
-	}
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(this.getPk());
+  }
 }

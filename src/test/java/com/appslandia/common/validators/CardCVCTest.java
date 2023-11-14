@@ -32,29 +32,29 @@ import org.junit.jupiter.api.Test;
  */
 public class CardCVCTest {
 
-	@Test
-	public void test() {
-		TestModel m = new TestModel();
-		Set<?> errors = ValidatorUtils.getValidator().validate(m);
-		Assertions.assertTrue(errors.isEmpty());
+  @Test
+  public void test() {
+    TestModel m = new TestModel();
+    Set<?> errors = ValidatorUtils.getValidator().validate(m);
+    Assertions.assertTrue(errors.isEmpty());
 
-		m.cardCvc = "1234";
-		errors = ValidatorUtils.getValidator().validate(m);
-		Assertions.assertTrue(errors.isEmpty());
-	}
+    m.cardCvc = "1234";
+    errors = ValidatorUtils.getValidator().validate(m);
+    Assertions.assertTrue(errors.isEmpty());
+  }
 
-	@Test
-	public void test_invalid() {
-		TestModel m = new TestModel();
+  @Test
+  public void test_invalid() {
+    TestModel m = new TestModel();
 
-		m.cardCvc = "12345";
-		Set<?> errors = ValidatorUtils.getValidator().validate(m);
-		Assertions.assertTrue(!errors.isEmpty());
-	}
+    m.cardCvc = "12345";
+    Set<?> errors = ValidatorUtils.getValidator().validate(m);
+    Assertions.assertTrue(!errors.isEmpty());
+  }
 
-	private static class TestModel {
+  private static class TestModel {
 
-		@CardCVC
-		public String cardCvc;
-	}
+    @CardCVC
+    public String cardCvc;
+  }
 }

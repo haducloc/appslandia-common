@@ -40,92 +40,92 @@ import com.appslandia.common.utils.SYS;
  *
  */
 public class MacSigner extends InitializeObject implements Digester {
-	private String algorithm, provider;
-	private Mac mac;
-	private byte[] secret;
+  private String algorithm, provider;
+  private Mac mac;
+  private byte[] secret;
 
-	final Object mutex = new Object();
-	final Random random = new SecureRandom();
+  final Object mutex = new Object();
+  final Random random = new SecureRandom();
 
-	@Override
-	protected void init() throws Exception {
-		Asserts.notNull(this.algorithm, "algorithm is required.");
-		Asserts.notNull(this.secret, "secret is required.");
+  @Override
+  protected void init() throws Exception {
+    Asserts.notNull(this.algorithm, "algorithm is required.");
+    Asserts.notNull(this.secret, "secret is required.");
 
-		// MAC
-		if (this.provider == null) {
-			this.mac = Mac.getInstance(this.algorithm);
-		} else {
-			this.mac = Mac.getInstance(this.algorithm, this.provider);
-		}
-		this.mac.init(new SecretKeySpec(this.secret, this.algorithm));
-		CryptoUtils.clear(this.secret);
-	}
+    // MAC
+    if (this.provider == null) {
+      this.mac = Mac.getInstance(this.algorithm);
+    } else {
+      this.mac = Mac.getInstance(this.algorithm, this.provider);
+    }
+    this.mac.init(new SecretKeySpec(this.secret, this.algorithm));
+    CryptoUtils.clear(this.secret);
+  }
 
-	@Override
-	public void destroy() throws DestroyException {
-	}
+  @Override
+  public void destroy() throws DestroyException {
+  }
 
-	@Override
-	public byte[] digest(byte[] message) throws CryptoException {
-		this.initialize();
-		Asserts.notNull(message, "message is required.");
+  @Override
+  public byte[] digest(byte[] message) throws CryptoException {
+    this.initialize();
+    Asserts.notNull(message, "message is required.");
 
-		synchronized (this.mutex) {
-			return this.mac.doFinal(message);
-		}
-	}
+    synchronized (this.mutex) {
+      return this.mac.doFinal(message);
+    }
+  }
 
-	@Override
-	public boolean verify(byte[] message, byte[] mac) throws CryptoException {
-		this.initialize();
-		Asserts.notNull(message, "message is required.");
-		Asserts.notNull(mac, "mac is required.");
+  @Override
+  public boolean verify(byte[] message, byte[] mac) throws CryptoException {
+    this.initialize();
+    Asserts.notNull(message, "message is required.");
+    Asserts.notNull(mac, "mac is required.");
 
-		byte[] msgMac = null;
-		synchronized (this.mutex) {
-			msgMac = this.mac.doFinal(message);
-		}
-		return Arrays.equals(mac, msgMac);
-	}
+    byte[] msgMac = null;
+    synchronized (this.mutex) {
+      msgMac = this.mac.doFinal(message);
+    }
+    return Arrays.equals(mac, msgMac);
+  }
 
-	public String getAlgorithm() {
-		this.initialize();
-		return this.algorithm;
-	}
+  public String getAlgorithm() {
+    this.initialize();
+    return this.algorithm;
+  }
 
-	public MacSigner setAlgorithm(String algorithm) {
-		this.assertNotInitialized();
-		this.algorithm = algorithm;
-		return this;
-	}
+  public MacSigner setAlgorithm(String algorithm) {
+    this.assertNotInitialized();
+    this.algorithm = algorithm;
+    return this;
+  }
 
-	public String getProvider() {
-		this.initialize();
-		return this.provider;
-	}
+  public String getProvider() {
+    this.initialize();
+    return this.provider;
+  }
 
-	public MacSigner setProvider(String provider) {
-		this.assertNotInitialized();
-		this.provider = provider;
-		return this;
-	}
+  public MacSigner setProvider(String provider) {
+    this.assertNotInitialized();
+    this.provider = provider;
+    return this;
+  }
 
-	public MacSigner setSecret(byte[] secret) {
-		this.assertNotInitialized();
-		if (secret != null) {
-			this.secret = ArrayUtils.copy(secret);
-		}
-		return this;
-	}
+  public MacSigner setSecret(byte[] secret) {
+    this.assertNotInitialized();
+    if (secret != null) {
+      this.secret = ArrayUtils.copy(secret);
+    }
+    return this;
+  }
 
-	public MacSigner setSecret(String secretOrEnv) {
-		this.assertNotInitialized();
+  public MacSigner setSecret(String secretOrEnv) {
+    this.assertNotInitialized();
 
-		if (secretOrEnv != null) {
-			String resolvedValue = SYS.resolve(secretOrEnv);
-			this.secret = resolvedValue.getBytes(StandardCharsets.UTF_8);
-		}
-		return this;
-	}
+    if (secretOrEnv != null) {
+      String resolvedValue = SYS.resolve(secretOrEnv);
+      this.secret = resolvedValue.getBytes(StandardCharsets.UTF_8);
+    }
+    return this;
+  }
 }

@@ -58,257 +58,257 @@ import jakarta.validation.constraints.PositiveOrZero;
  *
  */
 public class AnnotationModel extends InitializeObject {
-	private Class<? extends Annotation> annotationType;
-	private Map<String, Object> properties;
+  private Class<? extends Annotation> annotationType;
+  private Map<String, Object> properties;
 
-	@Override
-	protected void init() throws Exception {
-		Asserts.notNull(this.annotationType);
+  @Override
+  protected void init() throws Exception {
+    Asserts.notNull(this.annotationType);
 
-		this.properties = CollectionUtils.unmodifiable(this.properties);
-	}
+    this.properties = CollectionUtils.unmodifiable(this.properties);
+  }
 
-	public Class<? extends Annotation> getAnnotationType() {
-		initialize();
-		return this.annotationType;
-	}
+  public Class<? extends Annotation> getAnnotationType() {
+    initialize();
+    return this.annotationType;
+  }
 
-	public AnnotationModel setAnnotationType(Class<? extends Annotation> annotationType) {
-		assertNotInitialized();
-		this.annotationType = annotationType;
-		return this;
-	}
+  public AnnotationModel setAnnotationType(Class<? extends Annotation> annotationType) {
+    assertNotInitialized();
+    this.annotationType = annotationType;
+    return this;
+  }
 
-	public Map<String, Object> getProperties() {
-		initialize();
-		return this.properties;
-	}
+  public Map<String, Object> getProperties() {
+    initialize();
+    return this.properties;
+  }
 
-	protected void addProperty(String property, Object value) {
-		Asserts.notNull(property);
-		Asserts.notNull(value);
+  protected void addProperty(String property, Object value) {
+    Asserts.notNull(property);
+    Asserts.notNull(value);
 
-		if (this.properties == null) {
-			this.properties = new LinkedHashMap<>();
-		}
-		this.properties.put(property, value);
-	}
+    if (this.properties == null) {
+      this.properties = new LinkedHashMap<>();
+    }
+    this.properties.put(property, value);
+  }
 
-	public AnnotationModel define(String property, String value) {
-		assertNotInitialized();
-		addProperty(property, value);
-		return this;
-	}
+  public AnnotationModel define(String property, String value) {
+    assertNotInitialized();
+    addProperty(property, value);
+    return this;
+  }
 
-	public AnnotationModel define(String property, Enum<?> value) {
-		assertNotInitialized();
-		addProperty(property, value);
-		return this;
-	}
+  public AnnotationModel define(String property, Enum<?> value) {
+    assertNotInitialized();
+    addProperty(property, value);
+    return this;
+  }
 
-	public AnnotationModel define(String property, Class<?> value) {
-		assertNotInitialized();
-		addProperty(property, value);
-		return this;
-	}
+  public AnnotationModel define(String property, Class<?> value) {
+    assertNotInitialized();
+    addProperty(property, value);
+    return this;
+  }
 
-	public AnnotationModel define(String property, boolean value) {
-		assertNotInitialized();
-		addProperty(property, value);
-		return this;
-	}
+  public AnnotationModel define(String property, boolean value) {
+    assertNotInitialized();
+    addProperty(property, value);
+    return this;
+  }
 
-	public AnnotationModel define(String property, char value) {
-		assertNotInitialized();
-		addProperty(property, value);
-		return this;
-	}
+  public AnnotationModel define(String property, char value) {
+    assertNotInitialized();
+    addProperty(property, value);
+    return this;
+  }
 
-	public AnnotationModel define(String property, byte value) {
-		assertNotInitialized();
-		addProperty(property, value);
-		return this;
-	}
+  public AnnotationModel define(String property, byte value) {
+    assertNotInitialized();
+    addProperty(property, value);
+    return this;
+  }
 
-	public AnnotationModel define(String property, short value) {
-		assertNotInitialized();
-		addProperty(property, value);
-		return this;
-	}
+  public AnnotationModel define(String property, short value) {
+    assertNotInitialized();
+    addProperty(property, value);
+    return this;
+  }
 
-	public AnnotationModel define(String property, int value) {
-		assertNotInitialized();
-		addProperty(property, value);
-		return this;
-	}
+  public AnnotationModel define(String property, int value) {
+    assertNotInitialized();
+    addProperty(property, value);
+    return this;
+  }
 
-	public AnnotationModel define(String property, long value) {
-		assertNotInitialized();
-		addProperty(property, value);
-		return this;
-	}
+  public AnnotationModel define(String property, long value) {
+    assertNotInitialized();
+    addProperty(property, value);
+    return this;
+  }
 
-	public AnnotationModel define(String property, float value) {
-		assertNotInitialized();
-		addProperty(property, value);
-		return this;
-	}
+  public AnnotationModel define(String property, float value) {
+    assertNotInitialized();
+    addProperty(property, value);
+    return this;
+  }
 
-	public AnnotationModel define(String property, double value) {
-		assertNotInitialized();
-		addProperty(property, value);
-		return this;
-	}
+  public AnnotationModel define(String property, double value) {
+    assertNotInitialized();
+    addProperty(property, value);
+    return this;
+  }
 
-	public AnnotationModel defineArray(String property, String... value) {
-		assertNotInitialized();
-		addProperty(property, value);
-		return this;
-	}
+  public AnnotationModel defineArray(String property, String... value) {
+    assertNotInitialized();
+    addProperty(property, value);
+    return this;
+  }
 
-	public AnnotationModel defineArray(String property, boolean... value) {
-		assertNotInitialized();
-		addProperty(property, value);
-		return this;
-	}
+  public AnnotationModel defineArray(String property, boolean... value) {
+    assertNotInitialized();
+    addProperty(property, value);
+    return this;
+  }
 
-	public AnnotationModel defineArray(String property, char... value) {
-		assertNotInitialized();
-		addProperty(property, value);
-		return this;
-	}
+  public AnnotationModel defineArray(String property, char... value) {
+    assertNotInitialized();
+    addProperty(property, value);
+    return this;
+  }
 
-	public AnnotationModel defineArray(String property, byte... value) {
-		assertNotInitialized();
-		addProperty(property, value);
-		return this;
-	}
+  public AnnotationModel defineArray(String property, byte... value) {
+    assertNotInitialized();
+    addProperty(property, value);
+    return this;
+  }
 
-	public AnnotationModel defineArray(String property, short... value) {
-		assertNotInitialized();
-		addProperty(property, value);
-		return this;
-	}
+  public AnnotationModel defineArray(String property, short... value) {
+    assertNotInitialized();
+    addProperty(property, value);
+    return this;
+  }
 
-	public AnnotationModel defineArray(String property, int... value) {
-		assertNotInitialized();
-		addProperty(property, value);
-		return this;
-	}
+  public AnnotationModel defineArray(String property, int... value) {
+    assertNotInitialized();
+    addProperty(property, value);
+    return this;
+  }
 
-	public AnnotationModel defineArray(String property, long... value) {
-		assertNotInitialized();
-		addProperty(property, value);
-		return this;
-	}
+  public AnnotationModel defineArray(String property, long... value) {
+    assertNotInitialized();
+    addProperty(property, value);
+    return this;
+  }
 
-	public AnnotationModel defineArray(String property, float... value) {
-		assertNotInitialized();
-		addProperty(property, value);
-		return this;
-	}
+  public AnnotationModel defineArray(String property, float... value) {
+    assertNotInitialized();
+    addProperty(property, value);
+    return this;
+  }
 
-	public AnnotationModel defineArray(String property, double... value) {
-		assertNotInitialized();
-		addProperty(property, value);
-		return this;
-	}
+  public AnnotationModel defineArray(String property, double... value) {
+    assertNotInitialized();
+    addProperty(property, value);
+    return this;
+  }
 
-	public static AnnotationModel notNull() {
-		return new AnnotationModel().setAnnotationType(NotNull.class);
-	}
+  public static AnnotationModel notNull() {
+    return new AnnotationModel().setAnnotationType(NotNull.class);
+  }
 
-	public static AnnotationModel email() {
-		return new AnnotationModel().setAnnotationType(Email.class);
-	}
+  public static AnnotationModel email() {
+    return new AnnotationModel().setAnnotationType(Email.class);
+  }
 
-	public static AnnotationModel password() {
-		return new AnnotationModel().setAnnotationType(Password.class);
-	}
+  public static AnnotationModel password() {
+    return new AnnotationModel().setAnnotationType(Password.class);
+  }
 
-	public static AnnotationModel digitOnly(int len) {
-		return new AnnotationModel().setAnnotationType(DigitOnly.class).define("value", len);
-	}
+  public static AnnotationModel digitOnly(int len) {
+    return new AnnotationModel().setAnnotationType(DigitOnly.class).define("value", len);
+  }
 
-	public static AnnotationModel future() {
-		return new AnnotationModel().setAnnotationType(Future.class);
-	}
+  public static AnnotationModel future() {
+    return new AnnotationModel().setAnnotationType(Future.class);
+  }
 
-	public static AnnotationModel futureOrPresent() {
-		return new AnnotationModel().setAnnotationType(FutureOrPresent.class);
-	}
+  public static AnnotationModel futureOrPresent() {
+    return new AnnotationModel().setAnnotationType(FutureOrPresent.class);
+  }
 
-	public static AnnotationModel past() {
-		return new AnnotationModel().setAnnotationType(Past.class);
-	}
+  public static AnnotationModel past() {
+    return new AnnotationModel().setAnnotationType(Past.class);
+  }
 
-	public static AnnotationModel pastOrPresent() {
-		return new AnnotationModel().setAnnotationType(PastOrPresent.class);
-	}
+  public static AnnotationModel pastOrPresent() {
+    return new AnnotationModel().setAnnotationType(PastOrPresent.class);
+  }
 
-	public static AnnotationModel positive() {
-		return new AnnotationModel().setAnnotationType(Positive.class);
-	}
+  public static AnnotationModel positive() {
+    return new AnnotationModel().setAnnotationType(Positive.class);
+  }
 
-	public static AnnotationModel positiveOrZero() {
-		return new AnnotationModel().setAnnotationType(PositiveOrZero.class);
-	}
+  public static AnnotationModel positiveOrZero() {
+    return new AnnotationModel().setAnnotationType(PositiveOrZero.class);
+  }
 
-	public static AnnotationModel negative() {
-		return new AnnotationModel().setAnnotationType(Negative.class);
-	}
+  public static AnnotationModel negative() {
+    return new AnnotationModel().setAnnotationType(Negative.class);
+  }
 
-	public static AnnotationModel negativeOrZero() {
-		return new AnnotationModel().setAnnotationType(NegativeOrZero.class);
-	}
+  public static AnnotationModel negativeOrZero() {
+    return new AnnotationModel().setAnnotationType(NegativeOrZero.class);
+  }
 
-	public static AnnotationModel fixedLength(int fixedLen) {
-		return new AnnotationModel().setAnnotationType(FixedLength.class).define("value", fixedLen);
-	}
+  public static AnnotationModel fixedLength(int fixedLen) {
+    return new AnnotationModel().setAnnotationType(FixedLength.class).define("value", fixedLen);
+  }
 
-	public static AnnotationModel maxLength(int maxLen) {
-		return new AnnotationModel().setAnnotationType(MaxLength.class).define("value", maxLen);
-	}
+  public static AnnotationModel maxLength(int maxLen) {
+    return new AnnotationModel().setAnnotationType(MaxLength.class).define("value", maxLen);
+  }
 
-	public static AnnotationModel minLength(int minLen) {
-		return new AnnotationModel().setAnnotationType(MinLength.class).define("value", minLen);
-	}
+  public static AnnotationModel minLength(int minLen) {
+    return new AnnotationModel().setAnnotationType(MinLength.class).define("value", minLen);
+  }
 
-	public static AnnotationModel decimalMax(String maxVal, boolean inclusive) {
-		return new AnnotationModel().setAnnotationType(DecimalMax.class).define("value", maxVal).define("inclusive", inclusive);
-	}
+  public static AnnotationModel decimalMax(String maxVal, boolean inclusive) {
+    return new AnnotationModel().setAnnotationType(DecimalMax.class).define("value", maxVal).define("inclusive", inclusive);
+  }
 
-	public static AnnotationModel decimalMin(String minVal, boolean inclusive) {
-		return new AnnotationModel().setAnnotationType(DecimalMin.class).define("value", minVal).define("inclusive", inclusive);
-	}
+  public static AnnotationModel decimalMin(String minVal, boolean inclusive) {
+    return new AnnotationModel().setAnnotationType(DecimalMin.class).define("value", minVal).define("inclusive", inclusive);
+  }
 
-	public static AnnotationModel max(long maxVal) {
-		return new AnnotationModel().setAnnotationType(Max.class).define("value", maxVal);
-	}
+  public static AnnotationModel max(long maxVal) {
+    return new AnnotationModel().setAnnotationType(Max.class).define("value", maxVal);
+  }
 
-	public static AnnotationModel min(long minVal) {
-		return new AnnotationModel().setAnnotationType(Min.class).define("value", minVal);
-	}
+  public static AnnotationModel min(long minVal) {
+    return new AnnotationModel().setAnnotationType(Min.class).define("value", minVal);
+  }
 
-	public static AnnotationModel digits(int integer, int fraction) {
-		return new AnnotationModel().setAnnotationType(Digits.class).define("integer", integer).define("fraction", fraction);
-	}
+  public static AnnotationModel digits(int integer, int fraction) {
+    return new AnnotationModel().setAnnotationType(Digits.class).define("integer", integer).define("fraction", fraction);
+  }
 
-	public static AnnotationModel validValues(int... values) {
-		String[] vals = Arrays.stream(values).mapToObj(v -> Integer.toString(v)).toArray(String[]::new);
-		return validValues(vals);
-	}
+  public static AnnotationModel validValues(int... values) {
+    String[] vals = Arrays.stream(values).mapToObj(v -> Integer.toString(v)).toArray(String[]::new);
+    return validValues(vals);
+  }
 
-	public static AnnotationModel validValues(String... values) {
-		return new AnnotationModel().setAnnotationType(ValidValues.class).defineArray("value", values);
-	}
+  public static AnnotationModel validValues(String... values) {
+    return new AnnotationModel().setAnnotationType(ValidValues.class).defineArray("value", values);
+  }
 
-	public static AnnotationModel multiValues(int... values) {
-		String[] vals = Arrays.stream(values).mapToObj(v -> Integer.toString(v)).toArray(String[]::new);
-		return multiValues(vals);
-	}
+  public static AnnotationModel multiValues(int... values) {
+    String[] vals = Arrays.stream(values).mapToObj(v -> Integer.toString(v)).toArray(String[]::new);
+    return multiValues(vals);
+  }
 
-	public static AnnotationModel multiValues(String... values) {
-		return new AnnotationModel().setAnnotationType(MultiValues.class).defineArray("value", values);
-	}
+  public static AnnotationModel multiValues(String... values) {
+    return new AnnotationModel().setAnnotationType(MultiValues.class).defineArray("value", values);
+  }
 }

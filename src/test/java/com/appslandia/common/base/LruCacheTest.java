@@ -30,25 +30,25 @@ import org.junit.jupiter.api.Test;
  */
 public class LruCacheTest {
 
-	@Test
-	public void test() {
-		LruCache<String, Integer> cache = new LruCache<>(5);
+  @Test
+  public void test() {
+    LruCache<String, Integer> cache = new LruCache<>(5);
 
-		cache.put("k1", 1);
-		cache.put("k2", 2);
-		cache.put("k3", 3);
-		cache.put("k4", 4);
-		cache.put("k5", 5);
+    cache.put("k1", 1);
+    cache.put("k2", 2);
+    cache.put("k3", 3);
+    cache.put("k4", 4);
+    cache.put("k5", 5);
 
-		Assertions.assertEquals(Integer.valueOf(1), cache.get("k1"));
-		Assertions.assertEquals(Integer.valueOf(2), cache.get("k2"));
-		Assertions.assertEquals(Integer.valueOf(3), cache.get("k3"));
-		Assertions.assertEquals(Integer.valueOf(4), cache.get("k4"));
-		Assertions.assertEquals(Integer.valueOf(5), cache.get("k5"));
+    Assertions.assertEquals(Integer.valueOf(1), cache.get("k1"));
+    Assertions.assertEquals(Integer.valueOf(2), cache.get("k2"));
+    Assertions.assertEquals(Integer.valueOf(3), cache.get("k3"));
+    Assertions.assertEquals(Integer.valueOf(4), cache.get("k4"));
+    Assertions.assertEquals(Integer.valueOf(5), cache.get("k5"));
 
-		cache.put("k6", 6);
-		Assertions.assertEquals(Integer.valueOf(6), cache.get("k6"));
-		Assertions.assertNull(cache.get("k1"));
-		Assertions.assertNotNull(cache.get("k2"));
-	}
+    cache.put("k6", 6);
+    Assertions.assertEquals(Integer.valueOf(6), cache.get("k6"));
+    Assertions.assertNull(cache.get("k1"));
+    Assertions.assertNotNull(cache.get("k2"));
+  }
 }

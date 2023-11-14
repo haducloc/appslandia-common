@@ -29,73 +29,73 @@ import java.util.Map;
  *
  */
 public class JoseHeader extends JoseMapObject {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public static final String TYP = "typ";
-	public static final String ALG = "alg";
-	public static final String KID = "kid";
+  public static final String TYP = "typ";
+  public static final String ALG = "alg";
+  public static final String KID = "kid";
 
-	public static final String JKU = "jku";
-	public static final String JWK = "jwk";
+  public static final String JKU = "jku";
+  public static final String JWK = "jwk";
 
-	public JoseHeader() {
-	}
+  public JoseHeader() {
+  }
 
-	public JoseHeader(Map<String, Object> map) {
-		super(map);
-	}
+  public JoseHeader(Map<String, Object> map) {
+    super(map);
+  }
 
-	@Override
-	public JoseHeader set(String key, Object value) {
-		super.set(key, value);
-		return this;
-	}
+  @Override
+  public JoseHeader set(String key, Object value) {
+    super.set(key, value);
+    return this;
+  }
 
-	@Override
-	public JoseHeader setNumericDate(String key, Date value) {
-		super.setNumericDate(key, value);
-		return this;
-	}
+  @Override
+  public JoseHeader setNumericDate(String key, Date value) {
+    super.setNumericDate(key, value);
+    return this;
+  }
 
-	@Override
-	public JoseHeader setNumericDate(String key, long timeInMs) {
-		super.setNumericDate(key, timeInMs);
-		return this;
-	}
+  @Override
+  public JoseHeader setNumericDate(String key, long timeInMs) {
+    super.setNumericDate(key, timeInMs);
+    return this;
+  }
 
-	public String getTyp() {
-		return (String) this.get(TYP);
-	}
+  public String getTyp() {
+    return (String) this.get(TYP);
+  }
 
-	public JoseHeader setTyp(String value) {
-		this.put(TYP, value);
-		return this;
-	}
+  public JoseHeader setTyp(String value) {
+    this.put(TYP, value);
+    return this;
+  }
 
-	public String getAlg() {
-		return (String) this.get(ALG);
-	}
+  public String getAlg() {
+    return (String) this.get(ALG);
+  }
 
-	public JoseHeader setAlg(String value) {
-		this.put(ALG, value);
-		return this;
-	}
+  public JoseHeader setAlg(String value) {
+    this.put(ALG, value);
+    return this;
+  }
 
-	public String getKid() {
-		return (String) this.get(KID);
-	}
+  public String getKid() {
+    return (String) this.get(KID);
+  }
 
-	public JoseHeader setKid(String value) {
-		this.put(KID, value);
-		return this;
-	}
+  public JoseHeader setKid(String value) {
+    this.put(KID, value);
+    return this;
+  }
 
-	public String getJku() {
-		return (String) this.get(JKU);
-	}
+  public String getJku() {
+    return (String) this.get(JKU);
+  }
 
-	public JoseHeader setJku(String value) {
-		this.put(JKU, value);
-		return this;
-	}
+  public JoseHeader setJku(String value) {
+    this.put(JKU, value);
+    return this;
+  }
 }

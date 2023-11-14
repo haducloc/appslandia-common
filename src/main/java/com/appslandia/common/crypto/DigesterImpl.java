@@ -33,79 +33,79 @@ import com.appslandia.common.utils.Asserts;
  */
 public class DigesterImpl extends InitializeObject implements Digester {
 
-	public static final DigesterImpl MD5 = new DigesterImpl("MD5");
+  public static final DigesterImpl MD5 = new DigesterImpl("MD5");
 
-	private String algorithm, provider;
+  private String algorithm, provider;
 
-	private MessageDigest digest;
-	final Object mutex = new Object();
+  private MessageDigest digest;
+  final Object mutex = new Object();
 
-	public DigesterImpl() {
-	}
+  public DigesterImpl() {
+  }
 
-	public DigesterImpl(String algorithm) {
-		this.algorithm = algorithm;
-	}
+  public DigesterImpl(String algorithm) {
+    this.algorithm = algorithm;
+  }
 
-	public DigesterImpl(String algorithm, String provider) {
-		this.algorithm = algorithm;
-		this.provider = provider;
-	}
+  public DigesterImpl(String algorithm, String provider) {
+    this.algorithm = algorithm;
+    this.provider = provider;
+  }
 
-	@Override
-	protected void init() throws Exception {
-		Asserts.notNull(this.algorithm, "algorithm is required.");
+  @Override
+  protected void init() throws Exception {
+    Asserts.notNull(this.algorithm, "algorithm is required.");
 
-		// MessageDigest
-		if (this.provider == null) {
-			this.digest = MessageDigest.getInstance(this.algorithm);
-		} else {
-			this.digest = MessageDigest.getInstance(this.algorithm, this.provider);
-		}
-	}
+    // MessageDigest
+    if (this.provider == null) {
+      this.digest = MessageDigest.getInstance(this.algorithm);
+    } else {
+      this.digest = MessageDigest.getInstance(this.algorithm, this.provider);
+    }
+  }
 
-	@Override
-	public byte[] digest(byte[] message) throws CryptoException {
-		this.initialize();
-		Asserts.notNull(message, "message is required.");
+  @Override
+  public byte[] digest(byte[] message) throws CryptoException {
+    this.initialize();
+    Asserts.notNull(message, "message is required.");
 
-		synchronized (this.mutex) {
-			return this.digest.digest(message);
-		}
-	}
+    synchronized (this.mutex) {
+      return this.digest.digest(message);
+    }
+  }
 
-	@Override
-	public boolean verify(byte[] message, byte[] hash) throws CryptoException {
-		this.initialize();
-		Asserts.notNull(message, "message is required.");
-		Asserts.notNull(hash, "hash is required.");
+  @Override
+  public boolean verify(byte[] message, byte[] hash) throws CryptoException {
+    this.initialize();
+    Asserts.notNull(message, "message is required.");
+    Asserts.notNull(hash, "hash is required.");
 
-		byte[] digest = null;
-		synchronized (this.mutex) {
-			digest = this.digest.digest(message);
-		}
-		return Arrays.equals(hash, digest);
-	}
+    byte[] digest = null;
+    synchronized (this.mutex) {
+      digest = this.digest.digest(message);
+    }
+    return Arrays.equals(hash, digest);
+  }
 
-	public String getAlgorithm() {
-		this.initialize();
-		return this.algorithm;
-	}
+  public String getAlgorithm() {
+    this.initialize();
+    return this.algorithm;
+  }
 
-	public DigesterImpl setAlgorithm(String algorithm) {
-		this.assertNotInitialized();
-		this.algorithm = algorithm;
-		return this;
-	}
+  public DigesterImpl setAlgorithm(String algorithm) {
+    this.assertNotInitialized();
+    this.algorithm = algorithm;
+    return this;
+  }
 
-	public String getProvider() {
-		this.initialize();
-		return this.provider;
-	}
+  public String getProvider() {
+    this.initialize();
+    return this.provider;
+  }
 
-	public DigesterImpl setProvider(String provider) {
-		this.assertNotInitialized();
-		this.provider = provider;
-		return this;
-	}
+  public DigesterImpl setProvider(String provider) {
+    this.assertNotInitialized();
+    this.provider = provider;
+    return this;
+  }
 }

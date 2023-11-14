@@ -29,35 +29,35 @@ import com.appslandia.common.json.JsonIgnore;
  */
 public abstract class InitializeObject implements InitializeSupport {
 
-	private volatile boolean initialized = false;
+  private volatile boolean initialized = false;
 
-	@JsonIgnore
-	private final Object initMutex = new Object();
+  @JsonIgnore
+  private final Object initMutex = new Object();
 
-	@Override
-	public InitializeObject initialize() throws InitializeException {
-		if (this.initialized) {
-			return this;
-		}
-		synchronized (this.initMutex) {
-			if (this.initialized) {
-				return this;
-			}
-			try {
-				this.init();
-				this.initialized = true;
-			} catch (Exception ex) {
-				throw new InitializeException(ex);
-			}
-		}
-		return this;
-	}
+  @Override
+  public InitializeObject initialize() throws InitializeException {
+    if (this.initialized) {
+      return this;
+    }
+    synchronized (this.initMutex) {
+      if (this.initialized) {
+        return this;
+      }
+      try {
+        this.init();
+        this.initialized = true;
+      } catch (Exception ex) {
+        throw new InitializeException(ex);
+      }
+    }
+    return this;
+  }
 
-	protected abstract void init() throws Exception;
+  protected abstract void init() throws Exception;
 
-	protected void assertNotInitialized() {
-		if (this.initialized) {
-			throw new AssertException("initialized.");
-		}
-	}
+  protected void assertNotInitialized() {
+    if (this.initialized) {
+      throw new AssertException("initialized.");
+    }
+  }
 }

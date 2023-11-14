@@ -36,84 +36,84 @@ import com.appslandia.common.base.Language;
  */
 public class FloatConverterTest {
 
-	@Test
-	public void test_targetType() {
-		FloatConverter converter = new FloatConverter(2, RoundingMode.HALF_EVEN);
-		Assertions.assertEquals(Float.class, converter.getTargetType());
-	}
+  @Test
+  public void test_targetType() {
+    FloatConverter converter = new FloatConverter(2, RoundingMode.HALF_EVEN);
+    Assertions.assertEquals(Float.class, converter.getTargetType());
+  }
 
-	@Test
-	public void test() {
-		FloatConverter converter = new FloatConverter(2, RoundingMode.HALF_EVEN);
-		FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
-		try {
-			Float v = converter.parse("1234,126", formatProvider);
-			Assertions.assertEquals(1234.126, v.doubleValue(), 0.0001);
+  @Test
+  public void test() {
+    FloatConverter converter = new FloatConverter(2, RoundingMode.HALF_EVEN);
+    FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
+    try {
+      Float v = converter.parse("1234,126", formatProvider);
+      Assertions.assertEquals(1234.126, v.doubleValue(), 0.0001);
 
-			Assertions.assertEquals("1234,13", converter.format(v, formatProvider, true));
-			Assertions.assertEquals("1234.13", converter.format(v, formatProvider, false));
+      Assertions.assertEquals("1234,13", converter.format(v, formatProvider, true));
+      Assertions.assertEquals("1234.13", converter.format(v, formatProvider, false));
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_decimal_format() {
-		FloatConverter converter = new FloatConverter(2, RoundingMode.HALF_EVEN);
-		FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
-		try {
-			Float v = converter.parse("1234.126", formatProvider);
-			Assertions.assertEquals(1234.126, v.doubleValue(), 0.0001);
+  @Test
+  public void test_decimal_format() {
+    FloatConverter converter = new FloatConverter(2, RoundingMode.HALF_EVEN);
+    FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
+    try {
+      Float v = converter.parse("1234.126", formatProvider);
+      Assertions.assertEquals(1234.126, v.doubleValue(), 0.0001);
 
-			Assertions.assertEquals("1234,13", converter.format(v, formatProvider, true));
-			Assertions.assertEquals("1234.13", converter.format(v, formatProvider, false));
+      Assertions.assertEquals("1234,13", converter.format(v, formatProvider, true));
+      Assertions.assertEquals("1234.13", converter.format(v, formatProvider, false));
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_null() {
-		FloatConverter converter = new FloatConverter(2, RoundingMode.HALF_EVEN);
-		FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
-		try {
-			Float val = converter.parse(null, formatProvider);
-			Assertions.assertNull(val);
+  @Test
+  public void test_null() {
+    FloatConverter converter = new FloatConverter(2, RoundingMode.HALF_EVEN);
+    FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
+    try {
+      Float val = converter.parse(null, formatProvider);
+      Assertions.assertNull(val);
 
-			val = converter.parse("", formatProvider);
-			Assertions.assertNull(val);
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+      val = converter.parse("", formatProvider);
+      Assertions.assertNull(val);
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_negative_zero() {
-		FloatConverter converter = new FloatConverter(3, RoundingMode.HALF_EVEN);
-		FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
-		try {
-			String val = converter.format(-0.0001f, formatProvider, true);
-			Assertions.assertEquals("-0,000", val);
+  @Test
+  public void test_negative_zero() {
+    FloatConverter converter = new FloatConverter(3, RoundingMode.HALF_EVEN);
+    FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
+    try {
+      String val = converter.format(-0.0001f, formatProvider, true);
+      Assertions.assertEquals("-0,000", val);
 
-			val = converter.format(-0.0001f, formatProvider, false);
-			Assertions.assertEquals("-0.000", val);
+      val = converter.format(-0.0001f, formatProvider, false);
+      Assertions.assertEquals("-0.000", val);
 
-		} catch (Exception ex) {
-			Assertions.fail(ex.getMessage());
-		}
-	}
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
 
-	@Test
-	public void test_invalid() {
-		FloatConverter converter = new FloatConverter(2, RoundingMode.HALF_EVEN);
-		FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
-		try {
-			converter.parse("1.234,56", formatProvider);
-			Assertions.fail();
-		} catch (Exception ex) {
-			Assertions.assertTrue(ex instanceof ConverterException);
-		}
-	}
+  @Test
+  public void test_invalid() {
+    FloatConverter converter = new FloatConverter(2, RoundingMode.HALF_EVEN);
+    FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
+    try {
+      converter.parse("1.234,56", formatProvider);
+      Assertions.fail();
+    } catch (Exception ex) {
+      Assertions.assertTrue(ex instanceof ConverterException);
+    }
+  }
 }

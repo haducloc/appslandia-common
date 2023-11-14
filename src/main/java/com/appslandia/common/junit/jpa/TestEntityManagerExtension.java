@@ -40,52 +40,52 @@ import jakarta.persistence.Persistence;
  */
 public abstract class TestEntityManagerExtension implements BeforeEachCallback, AfterEachCallback, BeforeAllCallback, AfterAllCallback {
 
-	static final ThreadLocalStorage<EntityManagerFactory> emfHolder = new ThreadLocalStorage<>();
-	static final ThreadLocalStorage<EntityManager> emHolder = new ThreadLocalStorage<>();
+  static final ThreadLocalStorage<EntityManagerFactory> emfHolder = new ThreadLocalStorage<>();
+  static final ThreadLocalStorage<EntityManager> emHolder = new ThreadLocalStorage<>();
 
-	protected abstract String getPUName();
+  protected abstract String getPUName();
 
-	protected EntityManagerFactory createEntityManagerFactory() {
-		return Persistence.createEntityManagerFactory(getPUName());
-	}
+  protected EntityManagerFactory createEntityManagerFactory() {
+    return Persistence.createEntityManagerFactory(getPUName());
+  }
 
-	@Override
-	public void beforeEach(ExtensionContext context) throws Exception {
-		EntityManagerFactory emf = emfHolder.get();
-		if (emf == null) {
+  @Override
+  public void beforeEach(ExtensionContext context) throws Exception {
+    EntityManagerFactory emf = emfHolder.get();
+    if (emf == null) {
 
-			emf = createEntityManagerFactory();
-			emfHolder.set(emf);
-		}
-		EntityManager em = emHolder.get();
-		if (em != null) {
-			return;
-		}
-		emHolder.set(emf.createEntityManager());
-	}
+      emf = createEntityManagerFactory();
+      emfHolder.set(emf);
+    }
+    EntityManager em = emHolder.get();
+    if (em != null) {
+      return;
+    }
+    emHolder.set(emf.createEntityManager());
+  }
 
-	@Override
-	public void afterEach(ExtensionContext context) throws Exception {
-		EntityManager em = emHolder.remove();
-		Asserts.notNull(em);
-		em.close();
+  @Override
+  public void afterEach(ExtensionContext context) throws Exception {
+    EntityManager em = emHolder.remove();
+    Asserts.notNull(em);
+    em.close();
 
-		EntityManagerFactory emf = emfHolder.remove();
-		Asserts.notNull(emf);
-		emf.close();
-	}
+    EntityManagerFactory emf = emfHolder.remove();
+    Asserts.notNull(emf);
+    emf.close();
+  }
 
-	@Override
-	public void beforeAll(ExtensionContext context) throws Exception {
-	}
+  @Override
+  public void beforeAll(ExtensionContext context) throws Exception {
+  }
 
-	@Override
-	public void afterAll(ExtensionContext context) throws Exception {
-	}
+  @Override
+  public void afterAll(ExtensionContext context) throws Exception {
+  }
 
-	public static EntityManager newEntityManager() {
-		EntityManager em = emfHolder.val().createEntityManager();
-		emHolder.set(em);
-		return em;
-	}
+  public static EntityManager newEntityManager() {
+    EntityManager em = emfHolder.val().createEntityManager();
+    emHolder.set(em);
+    return em;
+  }
 }

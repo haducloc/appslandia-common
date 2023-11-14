@@ -32,34 +32,34 @@ import com.appslandia.common.json.JsonMapObject;
  *
  */
 public abstract class JoseMapObject extends JsonMapObject {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public JoseMapObject() {
-		super(new LinkedHashMap<>());
-	}
+  public JoseMapObject() {
+    super(new LinkedHashMap<>());
+  }
 
-	public JoseMapObject(Map<String, Object> map) {
-		super(map);
-	}
+  public JoseMapObject(Map<String, Object> map) {
+    super(map);
+  }
 
-	@Override
-	public JoseMapObject set(String key, Object value) {
-		super.set(key, value);
-		return this;
-	}
+  @Override
+  public JoseMapObject set(String key, Object value) {
+    super.set(key, value);
+    return this;
+  }
 
-	public Date getNumericDate(String key) {
-		Number nd = (Number) this.get(key);
-		return (nd != null) ? JoseUtils.toDate(nd.longValue()) : null;
-	}
+  public Date getNumericDate(String key) {
+    Number nd = (Number) this.get(key);
+    return (nd != null) ? JoseUtils.toDate(nd.longValue()) : null;
+  }
 
-	public JoseMapObject setNumericDate(String key, Date value) {
-		set(key, JoseUtils.toNumericDate(value));
-		return this;
-	}
+  public JoseMapObject setNumericDate(String key, Date value) {
+    set(key, JoseUtils.toNumericDate(value));
+    return this;
+  }
 
-	public JoseMapObject setNumericDate(String key, long timeInMs) {
-		set(key, JoseUtils.toNumericDate(timeInMs));
-		return this;
-	}
+  public JoseMapObject setNumericDate(String key, long timeInMs) {
+    set(key, JoseUtils.toNumericDate(timeInMs));
+    return this;
+  }
 }

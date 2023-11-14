@@ -32,44 +32,44 @@ import com.appslandia.common.utils.StringUtils;
  */
 public class ULCStringConverter implements Converter<String> {
 
-	public static final String ERROR_MSG_KEY = ULCStringConverter.class.getName() + ".message";
+  public static final String ERROR_MSG_KEY = ULCStringConverter.class.getName() + ".message";
 
-	final Locale locale;
-	final boolean uppercase;
+  final Locale locale;
+  final boolean uppercase;
 
-	public ULCStringConverter(boolean uppercase) {
-		this(uppercase, null);
-	}
+  public ULCStringConverter(boolean uppercase) {
+    this(uppercase, null);
+  }
 
-	public ULCStringConverter(boolean uppercase, Locale locale) {
-		this.uppercase = uppercase;
-		this.locale = locale;
-	}
+  public ULCStringConverter(boolean uppercase, Locale locale) {
+    this.uppercase = uppercase;
+    this.locale = locale;
+  }
 
-	@Override
-	public String getErrorMsgKey() {
-		return ERROR_MSG_KEY;
-	}
+  @Override
+  public String getErrorMsgKey() {
+    return ERROR_MSG_KEY;
+  }
 
-	@Override
-	public Class<String> getTargetType() {
-		return String.class;
-	}
+  @Override
+  public Class<String> getTargetType() {
+    return String.class;
+  }
 
-	@Override
-	public String format(String obj, FormatProvider formatProvider, boolean localize) {
-		return obj;
-	}
+  @Override
+  public String format(String obj, FormatProvider formatProvider, boolean localize) {
+    return obj;
+  }
 
-	@Override
-	public String parse(String str, FormatProvider formatProvider) throws ConverterException {
-		str = StringUtils.trimToNull(str);
-		if (str == null) {
-			return str;
-		}
-		if (this.locale != null) {
-			return this.uppercase ? str.toUpperCase(this.locale) : str.toLowerCase(this.locale);
-		}
-		return this.uppercase ? str.toUpperCase(formatProvider.getLanguage().getLocale()) : str.toLowerCase(formatProvider.getLanguage().getLocale());
-	}
+  @Override
+  public String parse(String str, FormatProvider formatProvider) throws ConverterException {
+    str = StringUtils.trimToNull(str);
+    if (str == null) {
+      return str;
+    }
+    if (this.locale != null) {
+      return this.uppercase ? str.toUpperCase(this.locale) : str.toLowerCase(this.locale);
+    }
+    return this.uppercase ? str.toUpperCase(formatProvider.getLanguage().getLocale()) : str.toLowerCase(formatProvider.getLanguage().getLocale());
+  }
 }
