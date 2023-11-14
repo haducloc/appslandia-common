@@ -35,4 +35,8 @@ public class SEQ {
   public static int next() {
     return seq.incrementAndGet();
   }
+
+  public static int current() {
+    return seq.get();
+  }
 }
