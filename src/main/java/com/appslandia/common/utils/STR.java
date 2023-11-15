@@ -39,7 +39,8 @@ public class STR {
   };
 
   // ${paramName}
-  private static final Pattern PARAM_HOLDER_PATTERN = Pattern.compile("\\$\\{\s*([a-z0-9_]+)(\\?)?(\s*\\|[^}]*)?\s*}", Pattern.CASE_INSENSITIVE);
+  private static final Pattern PARAM_HOLDER_PATTERN = Pattern.compile("\\$\\{\s*([a-z0-9_]+)(\\?)?(\s*\\|[^}]*)?\s*}",
+      Pattern.CASE_INSENSITIVE);
 
   public static String format(String str, Map<String, Object> parameters) {
     if (str == null) {
@@ -93,7 +94,8 @@ public class STR {
 
       // ${paramName}
       String parameterGroup = matcher.group();
-      String parameterName = parameterGroup.substring(parameterGroup.indexOf('{') + 1, parameterGroup.length() - 1).trim();
+      String parameterName = parameterGroup.substring(parameterGroup.indexOf('{') + 1, parameterGroup.length() - 1)
+          .trim();
 
       int idxVB = parameterName.indexOf('|');
 

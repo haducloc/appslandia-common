@@ -57,7 +57,8 @@ public abstract class TaskScheduler {
   }
 
   public List<TaskAttributes> getScheduledTasks() {
-    return this.scheduledTasks.values().stream().map(t -> t.attributes).sorted((t1, t2) -> Long.compare(t2.getSubmittedTime(), t1.getSubmittedTime())).toList();
+    return this.scheduledTasks.values().stream().map(t -> t.attributes)
+        .sorted((t1, t2) -> Long.compare(t2.getSubmittedTime(), t1.getSubmittedTime())).toList();
   }
 
   public void shutdown() {

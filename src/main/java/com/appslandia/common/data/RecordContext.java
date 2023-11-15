@@ -374,8 +374,8 @@ public class RecordContext extends DbContext {
     setters.appendln();
 
     for (Column col : table.getColumns()) {
-      setters.append("dataRecord.set(\"").append(col.getName()).append("\", NULL); // ").append(col.getJavaType().getSimpleName())
-          .append(col.isNullable() ? "?" : "").appendln();
+      setters.append("dataRecord.set(\"").append(col.getName()).append("\", NULL); // ")
+          .append(col.getJavaType().getSimpleName()).append(col.isNullable() ? "?" : "").appendln();
 
       if ((col.getPosition() + 1) % 5 == 0) {
         setters.appendln();

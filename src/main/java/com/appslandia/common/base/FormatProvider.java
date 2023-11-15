@@ -42,7 +42,8 @@ public interface FormatProvider {
   NumberFormat getCurrencyFormat(int fractionDigits, RoundingMode roundingMode, boolean grouping);
 
   /**
-   * Return a locale-independent decimal notation format based on the given number of fraction digits and rounding mode.
+   * Return a locale-independent decimal notation format based on the given number
+   * of fraction digits and rounding mode.
    * 
    * @param fractionDigits
    * @param roundingMode

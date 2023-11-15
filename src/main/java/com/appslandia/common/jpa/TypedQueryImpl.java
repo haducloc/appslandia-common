@@ -122,7 +122,8 @@ public class TypedQueryImpl<X> implements TypedQuery<X> {
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
-      setParameter(JdbcSql.toParamName(parameterName, i), (i < values.length) ? SqlLikeEscaper.toLikePattern(values[i], likeType) : falsePattern);
+      setParameter(JdbcSql.toParamName(parameterName, i),
+          (i < values.length) ? SqlLikeEscaper.toLikePattern(values[i], likeType) : falsePattern);
     }
     return this;
   }
@@ -305,13 +306,15 @@ public class TypedQueryImpl<X> implements TypedQuery<X> {
   }
 
   @Override
-  public TypedQueryImpl<X> setParameter(Parameter<java.util.Calendar> param, java.util.Calendar value, TemporalType temporalType) {
+  public TypedQueryImpl<X> setParameter(Parameter<java.util.Calendar> param, java.util.Calendar value,
+      TemporalType temporalType) {
     this.query.setParameter(param, value, temporalType);
     return this;
   }
 
   @Override
-  public TypedQueryImpl<X> setParameter(Parameter<java.util.Date> param, java.util.Date value, TemporalType temporalType) {
+  public TypedQueryImpl<X> setParameter(Parameter<java.util.Date> param, java.util.Date value,
+      TemporalType temporalType) {
     this.query.setParameter(param, value, temporalType);
     return this;
   }

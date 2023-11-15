@@ -73,12 +73,13 @@ public class DMSLocation {
     return toStringDMS(1);
   }
 
-  static final Pattern DMS_LOCATION_PATTERN = Pattern.compile(STR.fmt("{}\\s*,\\s*{}", GeoDMS.DMS_PATTERN.pattern(), GeoDMS.DMS_PATTERN.pattern()),
-      Pattern.CASE_INSENSITIVE);
+  static final Pattern DMS_LOCATION_PATTERN = Pattern.compile(
+      STR.fmt("{}\\s*,\\s*{}", GeoDMS.DMS_PATTERN.pattern(), GeoDMS.DMS_PATTERN.pattern()), Pattern.CASE_INSENSITIVE);
 
   public static DMSLocation toDMSLocation(String dmsLocation) {
     Asserts.notNull(dmsLocation);
-    Asserts.isTrue(DMS_LOCATION_PATTERN.matcher(dmsLocation).matches(), () -> STR.fmt("dmsLocation {} is invalid.", dmsLocation));
+    Asserts.isTrue(DMS_LOCATION_PATTERN.matcher(dmsLocation).matches(),
+        () -> STR.fmt("dmsLocation {} is invalid.", dmsLocation));
 
     String[] items = SplitUtils.splitByComma(dmsLocation);
 

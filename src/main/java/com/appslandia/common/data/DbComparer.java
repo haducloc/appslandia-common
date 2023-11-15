@@ -87,7 +87,8 @@ public class DbComparer {
 
         // Columns
         for (Column col1 : table1.getColumns()) {
-          Column col2 = table2.getColumns().stream().filter(c -> c.getName().equalsIgnoreCase(col1.getName())).findFirst().orElse(null);
+          Column col2 = table2.getColumns().stream().filter(c -> c.getName().equalsIgnoreCase(col1.getName()))
+              .findFirst().orElse(null);
 
           if (col2 == null) {
             colIndex++;
@@ -100,7 +101,8 @@ public class DbComparer {
         }
 
         for (Column col2 : table2.getColumns()) {
-          Column col1 = table1.getColumns().stream().filter(c -> c.getName().equalsIgnoreCase(col2.getName())).findFirst().orElse(null);
+          Column col1 = table1.getColumns().stream().filter(c -> c.getName().equalsIgnoreCase(col2.getName()))
+              .findFirst().orElse(null);
 
           if (col1 == null) {
             colIndex++;
@@ -113,7 +115,8 @@ public class DbComparer {
         }
 
         for (Column col1 : table1.getColumns()) {
-          Column col2 = table2.getColumns().stream().filter(c -> c.getName().equalsIgnoreCase(col1.getName())).findFirst().orElse(null);
+          Column col2 = table2.getColumns().stream().filter(c -> c.getName().equalsIgnoreCase(col1.getName()))
+              .findFirst().orElse(null);
 
           if (col2 != null) {
             colIndex++;
@@ -140,13 +143,15 @@ public class DbComparer {
   static Set<String> getTableNames(ConnectionImpl conn1, ConnectionImpl conn2) throws SQLException {
     Set<String> tables = new TreeSet<>();
 
-    try (ResultSet rs = conn1.getMetaData().getTables(conn1.getCatalog(), conn1.getSchema(), null, new String[] { "TABLE" })) {
+    try (ResultSet rs = conn1.getMetaData().getTables(conn1.getCatalog(), conn1.getSchema(), null,
+        new String[] { "TABLE" })) {
       while (rs.next()) {
         tables.add(rs.getString("TABLE_NAME"));
       }
     }
 
-    try (ResultSet rs = conn2.getMetaData().getTables(conn2.getCatalog(), conn2.getSchema(), null, new String[] { "TABLE" })) {
+    try (ResultSet rs = conn2.getMetaData().getTables(conn2.getCatalog(), conn2.getSchema(), null,
+        new String[] { "TABLE" })) {
       while (rs.next()) {
         tables.add(rs.getString("TABLE_NAME"));
       }
@@ -155,7 +160,8 @@ public class DbComparer {
   }
 
   static String toString(Column col) {
-    return STR.fmt("name={}, typeName={}, sqlType={}, columnSize={?}, fractionDigits={?}, nullable={}, columnType={}", col.getName(), col.getTypeName(),
-        col.getSqlType(), col.getColumnSize(), col.getFractionDigits(), col.isNullable(), col.getColumnType());
+    return STR.fmt("name={}, typeName={}, sqlType={}, columnSize={?}, fractionDigits={?}, nullable={}, columnType={}",
+        col.getName(), col.getTypeName(), col.getSqlType(), col.getColumnSize(), col.getFractionDigits(),
+        col.isNullable(), col.getColumnType());
   }
 }

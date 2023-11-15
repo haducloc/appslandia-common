@@ -280,11 +280,13 @@ public class ParseUtils {
   }
 
   public static boolean isTrueValue(String value) {
-    return "true".equalsIgnoreCase(value) || "t".equalsIgnoreCase(value) || "yes".equalsIgnoreCase(value) || "y".equalsIgnoreCase(value);
+    return "true".equalsIgnoreCase(value) || "t".equalsIgnoreCase(value) || "yes".equalsIgnoreCase(value)
+        || "y".equalsIgnoreCase(value);
   }
 
   public static boolean isFalseValue(String value) {
-    return "false".equalsIgnoreCase(value) || "f".equalsIgnoreCase(value) || "no".equalsIgnoreCase(value) || "n".equalsIgnoreCase(value);
+    return "false".equalsIgnoreCase(value) || "f".equalsIgnoreCase(value) || "no".equalsIgnoreCase(value)
+        || "n".equalsIgnoreCase(value);
   }
 
   public static LocalDate parseLocalDate(String value, String... patterns) throws DateFormatException {
@@ -299,7 +301,8 @@ public class ParseUtils {
 
   public static LocalDateTime parseLocalDateTime(String value, String... patterns) throws DateFormatException {
     Asserts.hasElements(patterns);
-    return doParseDate(value, LocalDateTime.class, patterns, (v, p) -> LocalDateTime.parse(v, DateUtils.getFormatter(p)));
+    return doParseDate(value, LocalDateTime.class, patterns,
+        (v, p) -> LocalDateTime.parse(v, DateUtils.getFormatter(p)));
   }
 
   public static OffsetTime parseOffsetTime(String value, String... patterns) throws DateFormatException {
@@ -309,10 +312,12 @@ public class ParseUtils {
 
   public static OffsetDateTime parseOffsetDateTime(String value, String... patterns) throws DateFormatException {
     Asserts.hasElements(patterns);
-    return doParseDate(value, OffsetDateTime.class, patterns, (v, p) -> OffsetDateTime.parse(v, DateUtils.getFormatter(p)));
+    return doParseDate(value, OffsetDateTime.class, patterns,
+        (v, p) -> OffsetDateTime.parse(v, DateUtils.getFormatter(p)));
   }
 
-  private static <T> T doParseDate(String value, Class<T> targetClass, String[] patterns, BiFunction<String, String, T> converter) throws DateFormatException {
+  private static <T> T doParseDate(String value, Class<T> targetClass, String[] patterns,
+      BiFunction<String, String, T> converter) throws DateFormatException {
     if (value == null) {
       return null;
     }

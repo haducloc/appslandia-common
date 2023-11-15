@@ -48,7 +48,8 @@ public class CDIUtils {
     return getReference(beanManager, type, ReflectionUtils.EMPTY_ANNOTATIONS);
   }
 
-  public static <T> BeanInstance<T> getReference(BeanManager beanManager, Class<? extends T> type, Annotation... qualifiers) {
+  public static <T> BeanInstance<T> getReference(BeanManager beanManager, Class<? extends T> type,
+      Annotation... qualifiers) {
     Set<Bean<?>> matchedBeans = beanManager.getBeans(type, qualifiers);
     if (matchedBeans.isEmpty()) {
       return null;
@@ -78,8 +79,8 @@ public class CDIUtils {
     return new BeanInstance<>(t, ctx);
   }
 
-  public static <T, A extends Annotation> void scanReferences(BeanManager beanManager, Class<T> type, Annotation[] qualifiers, Class<A> annotationClass,
-      BiConsumer<A, BeanInstance<T>> consumer) {
+  public static <T, A extends Annotation> void scanReferences(BeanManager beanManager, Class<T> type,
+      Annotation[] qualifiers, Class<A> annotationClass, BiConsumer<A, BeanInstance<T>> consumer) {
     Set<Bean<T>> beans = ObjectUtils.cast(beanManager.getBeans(type, qualifiers));
     for (Bean<T> bean : beans) {
 
@@ -101,7 +102,8 @@ public class CDIUtils {
     }
   }
 
-  public static void scanSuppliers(BeanManager beanManager, Annotation[] qualifiers, Class<?> constraintType, Consumer<BeanInstance<CDISupplier>> consumer) {
+  public static void scanSuppliers(BeanManager beanManager, Annotation[] qualifiers, Class<?> constraintType,
+      Consumer<BeanInstance<CDISupplier>> consumer) {
     Set<Bean<CDISupplier>> beans = ObjectUtils.cast(beanManager.getBeans(CDISupplier.class, qualifiers));
     for (Bean<CDISupplier> bean : beans) {
 
@@ -116,8 +118,8 @@ public class CDIUtils {
     }
   }
 
-  public static <T, A extends Annotation> void scanBeanClasses(BeanManager beanManager, Class<T> type, Annotation[] qualifiers, Class<A> annotationClass,
-      BiConsumer<A, Class<?>> consumer) {
+  public static <T, A extends Annotation> void scanBeanClasses(BeanManager beanManager, Class<T> type,
+      Annotation[] qualifiers, Class<A> annotationClass, BiConsumer<A, Class<?>> consumer) {
     Set<Bean<T>> beans = ObjectUtils.cast(beanManager.getBeans(type, qualifiers));
     for (Bean<T> bean : beans) {
 
@@ -128,7 +130,8 @@ public class CDIUtils {
     }
   }
 
-  public static <A extends Annotation> A getAnnotation(BeanManager beanManager, Annotated annotated, Class<A> annotationType) {
+  public static <A extends Annotation> A getAnnotation(BeanManager beanManager, Annotated annotated,
+      Class<A> annotationType) {
     if (annotated.getAnnotations().isEmpty()) {
       return null;
     }
@@ -139,7 +142,8 @@ public class CDIUtils {
     return getAnnotation(beanManager, annotationType, annotations);
   }
 
-  public static <A extends Annotation> A getAnnotation(BeanManager beanManager, Class<?> annotatedClass, Class<A> annotationType) {
+  public static <A extends Annotation> A getAnnotation(BeanManager beanManager, Class<?> annotatedClass,
+      Class<A> annotationType) {
     if (annotatedClass.isAnnotationPresent(annotationType)) {
       return annotatedClass.getAnnotation(annotationType);
     }
@@ -149,7 +153,8 @@ public class CDIUtils {
     return getAnnotation(beanManager, annotationType, annotations);
   }
 
-  static <A extends Annotation> A getAnnotation(BeanManager beanManager, Class<A> annotationType, Queue<Annotation> annotations) {
+  static <A extends Annotation> A getAnnotation(BeanManager beanManager, Class<A> annotationType,
+      Queue<Annotation> annotations) {
     while (!annotations.isEmpty()) {
       Annotation annotation = annotations.remove();
 

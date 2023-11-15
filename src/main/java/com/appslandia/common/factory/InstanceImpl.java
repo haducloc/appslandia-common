@@ -83,10 +83,12 @@ public class InstanceImpl<T> implements Instance<T> {
   @Override
   public T get() {
     if (isUnsatisfied()) {
-      throw new ObjectException(STR.fmt("Unsatisfied dependency: type={}, qualifiers={}.", this.type, Arrays.toString(this.qualifiers)));
+      throw new ObjectException(
+          STR.fmt("Unsatisfied dependency: type={}, qualifiers={}.", this.type, Arrays.toString(this.qualifiers)));
     }
     if (isAmbiguous()) {
-      throw new ObjectException(STR.fmt("Ambiguous dependency: type={}, qualifiers={}.", this.type, Arrays.toString(this.qualifiers)));
+      throw new ObjectException(
+          STR.fmt("Ambiguous dependency: type={}, qualifiers={}.", this.type, Arrays.toString(this.qualifiers)));
     }
     return ObjectUtils.cast(this.instances.get(0).getInstance());
   }

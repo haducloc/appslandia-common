@@ -96,12 +96,13 @@ public class PropertyUtils {
     }
   };
 
-  public static void initialize(Object obj, Config config, PropertyStrategy propertyStrategy) throws ConverterException, ReflectionException {
+  public static void initialize(Object obj, Config config, PropertyStrategy propertyStrategy)
+      throws ConverterException, ReflectionException {
     initialize(obj, config, new FormatProviderImpl(), propertyStrategy);
   }
 
-  public static void initialize(Object obj, Config config, FormatProvider formatProvider, PropertyStrategy propertyStrategy)
-      throws ConverterException, ReflectionException {
+  public static void initialize(Object obj, Config config, FormatProvider formatProvider,
+      PropertyStrategy propertyStrategy) throws ConverterException, ReflectionException {
 
     Iterator<String> keyIter = config.getKeyIterator();
     while (keyIter.hasNext()) {

@@ -74,7 +74,8 @@ public class ThreadFactoryBuilder {
     Boolean daemon = builder.daemon;
     Integer priority = builder.priority;
     UncaughtExceptionHandler uncaughtExceptionHandler = builder.uncaughtExceptionHandler;
-    ThreadFactory backingThreadFactory = (builder.backingThreadFactory != null) ? builder.backingThreadFactory : Executors.defaultThreadFactory();
+    ThreadFactory backingThreadFactory = (builder.backingThreadFactory != null) ? builder.backingThreadFactory
+        : Executors.defaultThreadFactory();
 
     AtomicLong count = (nameFormat != null) ? new AtomicLong(0) : null;
 

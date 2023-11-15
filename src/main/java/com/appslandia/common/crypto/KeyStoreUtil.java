@@ -157,11 +157,13 @@ public class KeyStoreUtil extends InitializeObject {
     }
   }
 
-  public KeyStoreUtil setEntry(String alias, SecretKey key, Set<Attribute> attributes, char[] entryPassword) throws CryptoException {
+  public KeyStoreUtil setEntry(String alias, SecretKey key, Set<Attribute> attributes, char[] entryPassword)
+      throws CryptoException {
     return setEntry(alias, key, attributes, new KeyStore.PasswordProtection(entryPassword));
   }
 
-  public KeyStoreUtil setEntry(String alias, SecretKey key, Set<Attribute> attributes, ProtectionParameter protectionParameter) throws CryptoException {
+  public KeyStoreUtil setEntry(String alias, SecretKey key, Set<Attribute> attributes,
+      ProtectionParameter protectionParameter) throws CryptoException {
     initialize();
     try {
       if (attributes == null) {
@@ -174,31 +176,33 @@ public class KeyStoreUtil extends InitializeObject {
     }
   }
 
-  public KeyStoreUtil setEntry(String alias, PrivateKey privateKey, Certificate[] certificateChain, Set<Attribute> attributes, char[] entryPassword)
-      throws CryptoException {
+  public KeyStoreUtil setEntry(String alias, PrivateKey privateKey, Certificate[] certificateChain,
+      Set<Attribute> attributes, char[] entryPassword) throws CryptoException {
     return setEntry(alias, privateKey, certificateChain, attributes, new KeyStore.PasswordProtection(entryPassword));
   }
 
-  public KeyStoreUtil setEntry(String alias, PrivateKey privateKey, Certificate[] certificateChain, Set<Attribute> attributes,
-      ProtectionParameter protectionParameter) throws CryptoException {
+  public KeyStoreUtil setEntry(String alias, PrivateKey privateKey, Certificate[] certificateChain,
+      Set<Attribute> attributes, ProtectionParameter protectionParameter) throws CryptoException {
     initialize();
     try {
       if (attributes == null) {
         attributes = Collections.emptySet();
       }
-      this.keyStore.setEntry(alias, new KeyStore.PrivateKeyEntry(privateKey, certificateChain, attributes), protectionParameter);
+      this.keyStore.setEntry(alias, new KeyStore.PrivateKeyEntry(privateKey, certificateChain, attributes),
+          protectionParameter);
       return this;
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     }
   }
 
-  public KeyStoreUtil setEntry(String alias, Certificate trustedCert, Set<Attribute> attributes, char[] entryPassword) throws CryptoException {
+  public KeyStoreUtil setEntry(String alias, Certificate trustedCert, Set<Attribute> attributes, char[] entryPassword)
+      throws CryptoException {
     return setEntry(alias, trustedCert, attributes, new KeyStore.PasswordProtection(entryPassword));
   }
 
-  public KeyStoreUtil setEntry(String alias, Certificate trustedCert, Set<Attribute> attributes, ProtectionParameter protectionParameter)
-      throws CryptoException {
+  public KeyStoreUtil setEntry(String alias, Certificate trustedCert, Set<Attribute> attributes,
+      ProtectionParameter protectionParameter) throws CryptoException {
     initialize();
     try {
       if (attributes == null) {

@@ -46,7 +46,8 @@ public class JpaHints {
   public static final String HINT_PESSIMISTIC_LOCK_SCOPE = "jakarta.persistence.lock.scope";
   public static final String HINT_PESSIMISTIC_LOCK_TIMEOUT = "jakarta.persistence.lock.timeout";
 
-  public static final Map<String, Object> HINT_PROP_CACHE_STORE_USE = Collections.unmodifiableMap(new Params().set(HINT_CACHE_STORE_MODE, CacheStoreMode.USE));
+  public static final Map<String, Object> HINT_PROP_CACHE_STORE_USE = Collections
+      .unmodifiableMap(new Params().set(HINT_CACHE_STORE_MODE, CacheStoreMode.USE));
   public static final Map<String, Object> HINT_PROP_CACHE_STORE_REFRESH = Collections
       .unmodifiableMap(new Params().set(HINT_CACHE_STORE_MODE, CacheStoreMode.REFRESH));
   public static final Map<String, Object> HINT_PROP_CACHE_STORE_BYPASS = Collections

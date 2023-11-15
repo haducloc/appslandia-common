@@ -44,7 +44,8 @@ public class GsonOffsetTimeSerializer extends GsonTemporalSerializer<OffsetTime>
   }
 
   @Override
-  public OffsetTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+  public OffsetTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+      throws JsonParseException {
     return parseOffsetTime(json.getAsString());
   }
 }

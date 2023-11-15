@@ -93,7 +93,8 @@ public class JsonObjectParser extends InitializeObject {
     }
     for (Map.Entry<String, Function<Object, Object>> converterEntry : this.valueConverters.entrySet()) {
 
-      Pattern pattern = this.pathPatterns.computeIfAbsent(converterEntry.getKey(), (p) -> Pattern.compile(p, Pattern.CASE_INSENSITIVE));
+      Pattern pattern = this.pathPatterns.computeIfAbsent(converterEntry.getKey(),
+          (p) -> Pattern.compile(p, Pattern.CASE_INSENSITIVE));
       if (pattern.matcher(path).matches()) {
 
         return converterEntry.getValue().apply(value);
@@ -154,7 +155,8 @@ public class JsonObjectParser extends InitializeObject {
     }
 
     // MAP
-    Iterator<Map.Entry<String, Object>> childElementEntries = this.jsonValueConverter.asJsonObject(element, asResult.set(false));
+    Iterator<Map.Entry<String, Object>> childElementEntries = this.jsonValueConverter.asJsonObject(element,
+        asResult.set(false));
     if (Boolean.TRUE.equals(asResult.value)) {
 
       Map<String, Object> map = new LinkedHashMap<>();

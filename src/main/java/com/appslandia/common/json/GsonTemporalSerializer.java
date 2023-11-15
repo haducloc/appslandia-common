@@ -35,7 +35,8 @@ import com.google.gson.JsonSerializer;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public abstract class GsonTemporalSerializer<T extends Temporal> extends JsonTemporalSerializer implements JsonSerializer<T>, JsonDeserializer<T> {
+public abstract class GsonTemporalSerializer<T extends Temporal> extends JsonTemporalSerializer
+    implements JsonSerializer<T>, JsonDeserializer<T> {
 
   public GsonTemporalSerializer(String serializeIsoPattern) {
     super(serializeIsoPattern);

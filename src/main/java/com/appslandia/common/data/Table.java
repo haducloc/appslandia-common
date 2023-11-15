@@ -65,7 +65,8 @@ public class Table extends InitializeObject implements Serializable {
     this.entityClassName = RecordUtils.toEntityClassName(this.tableName);
 
     int keyIncr = (int) this.columns.stream().filter(column -> column.getColumnType() == ColumnType.KEY_INCR).count();
-    int keyCount = (int) this.columns.stream().filter(column -> column.getColumnType() == ColumnType.KEY_INCR || column.getColumnType() == ColumnType.KEY)
+    int keyCount = (int) this.columns.stream()
+        .filter(column -> column.getColumnType() == ColumnType.KEY_INCR || column.getColumnType() == ColumnType.KEY)
         .count();
 
     if (keyCount == 0) {
@@ -75,7 +76,8 @@ public class Table extends InitializeObject implements Serializable {
       throw new IllegalArgumentException("More than one auto-increment keys.");
     }
     if (keyCount == 1) {
-      this.singleKey = this.columns.stream().filter(column -> column.getColumnType() == ColumnType.KEY_INCR || column.getColumnType() == ColumnType.KEY)
+      this.singleKey = this.columns.stream()
+          .filter(column -> column.getColumnType() == ColumnType.KEY_INCR || column.getColumnType() == ColumnType.KEY)
           .findFirst().get();
     }
 

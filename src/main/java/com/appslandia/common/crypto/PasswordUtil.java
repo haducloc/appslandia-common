@@ -40,14 +40,16 @@ public class PasswordUtil {
   // must contain one upper case characters
   // must contain one special symbols in the list $@&#!?*%:+-
   // minimum length is 8 characters, maximum is 128
-  private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$@&#!?*%:+-]).{8,128}$");
+  private static final Pattern PASSWORD_PATTERN = Pattern
+      .compile("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$@&#!?*%:+-]).{8,128}$");
 
   private static final char[] ALPHABET_DIGITS = CharUtils.toCharRanges("0-9");
   private static final char[] ALPHABET_LOWER = CharUtils.toCharRanges("a-z");
   private static final char[] ALPHABET_UPPER = CharUtils.toCharRanges("A-Z");
   private static final char[] ALPHABET_SYMBOLS = "$@&#!?*%:+-".toCharArray();
 
-  private static final char[][] ALPHABET = new char[][] { ALPHABET_DIGITS, ALPHABET_LOWER, ALPHABET_UPPER, ALPHABET_SYMBOLS };
+  private static final char[][] ALPHABET = new char[][] { ALPHABET_DIGITS, ALPHABET_LOWER, ALPHABET_UPPER,
+      ALPHABET_SYMBOLS };
 
   final Random random = new SecureRandom();
 

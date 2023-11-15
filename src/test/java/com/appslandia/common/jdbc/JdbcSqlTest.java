@@ -91,7 +91,8 @@ public class JdbcSqlTest {
     String sqlText = "SELECT * FROM User WHERE userName LIKE_ANY :names";
     JdbcSql sql = new JdbcSql(sqlText).arrayLen("names", 3);
 
-    Assertions.assertEquals("SELECT * FROM User WHERE userName LIKE ? OR userName LIKE ? OR userName LIKE ?", sql.getTranslatedSql());
+    Assertions.assertEquals("SELECT * FROM User WHERE userName LIKE ? OR userName LIKE ? OR userName LIKE ?",
+        sql.getTranslatedSql());
 
     try {
       int len = sql.getArrayLen("names");
@@ -109,7 +110,9 @@ public class JdbcSqlTest {
     String sqlText = "SELECT * FROM User WHERE userType=:userType AND userId IN :userIds AND (userName LIKE_ANY :names)";
     JdbcSql sql = new JdbcSql(sqlText).arrayLen("names", 2).arrayLen("userIds", 2);
 
-    Assertions.assertEquals("SELECT * FROM User WHERE userType=? AND userId IN (?, ?) AND (userName LIKE ? OR userName LIKE ?)", sql.getTranslatedSql());
+    Assertions.assertEquals(
+        "SELECT * FROM User WHERE userType=? AND userId IN (?, ?) AND (userName LIKE ? OR userName LIKE ?)",
+        sql.getTranslatedSql());
 
     try {
       int len = sql.getArrayLen("names");

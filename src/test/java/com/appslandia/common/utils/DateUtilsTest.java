@@ -40,14 +40,12 @@ public class DateUtilsTest {
   @Test
   public void test_translateToMs() {
     long ms = DateUtils.translateToMs("1d 4h 8m");
-    Assertions.assertEquals(
-        TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS) + TimeUnit.MILLISECONDS.convert(4, TimeUnit.HOURS) + TimeUnit.MILLISECONDS.convert(8, TimeUnit.MINUTES),
-        ms);
+    Assertions.assertEquals(TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS)
+        + TimeUnit.MILLISECONDS.convert(4, TimeUnit.HOURS) + TimeUnit.MILLISECONDS.convert(8, TimeUnit.MINUTES), ms);
 
     ms = DateUtils.translateToMs("1D 4H 8M");
-    Assertions.assertEquals(
-        TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS) + TimeUnit.MILLISECONDS.convert(4, TimeUnit.HOURS) + TimeUnit.MILLISECONDS.convert(8, TimeUnit.MINUTES),
-        ms);
+    Assertions.assertEquals(TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS)
+        + TimeUnit.MILLISECONDS.convert(4, TimeUnit.HOURS) + TimeUnit.MILLISECONDS.convert(8, TimeUnit.MINUTES), ms);
   }
 
   @Test

@@ -49,12 +49,13 @@ public class JoseUtils {
   }
 
   public static String toJwsData(String header, String payload) {
-    return new StringBuilder(header.length() + 1 + payload.length()).append(header).append('.').append(payload).toString();
+    return new StringBuilder(header.length() + 1 + payload.length()).append(header).append('.').append(payload)
+        .toString();
   }
 
   public static String toJwsToken(String header, String payload, String signature) {
-    return new StringBuilder(header.length() + 1 + payload.length() + 1 + signature.length()).append(header).append('.').append(payload).append('.')
-        .append(signature).toString();
+    return new StringBuilder(header.length() + 1 + payload.length() + 1 + signature.length()).append(header).append('.')
+        .append(payload).append('.').append(signature).toString();
   }
 
   // number of seconds from 1970-01-01T00:00:00Z UTC until the specified UTC

@@ -80,7 +80,8 @@ public class JdbcUtils {
     if (params == null) {
       return null;
     }
-    return IntStream.range(0, params.length).boxed().collect(Collectors.toMap(idx -> Integer.toString(idx), idx -> params[idx]));
+    return IntStream.range(0, params.length).boxed()
+        .collect(Collectors.toMap(idx -> Integer.toString(idx), idx -> params[idx]));
   }
 
   public static void setParameters(StatementImpl stat, JdbcSql sql, Map<String, Object> params) throws SQLException {
@@ -99,7 +100,8 @@ public class JdbcUtils {
         boolean isArray = pv.getClass().isArray();
         boolean isCollection = !isArray && Collection.class.isAssignableFrom(pv.getClass());
 
-        Asserts.isTrue(isArray || isCollection, () -> STR.fmt("Array parameter '{}' must be array/collection.", np.getKey()));
+        Asserts.isTrue(isArray || isCollection,
+            () -> STR.fmt("Array parameter '{}' must be array/collection.", np.getKey()));
 
         Object[] values = isArray ? ArrayUtils.toArray(pv) : ((Collection<?>) pv).toArray();
         stat.setObjectArray(np.getKey(), values);
@@ -109,7 +111,8 @@ public class JdbcUtils {
 
   // Execute ResultSets
 
-  public static <K, V> Map<K, V> executeMap(ResultSetImpl rs, ResultSetMapper<K> keyMapper, ResultSetMapper<V> valueMapper, Map<K, V> map) throws SQLException {
+  public static <K, V> Map<K, V> executeMap(ResultSetImpl rs, ResultSetMapper<K> keyMapper,
+      ResultSetMapper<V> valueMapper, Map<K, V> map) throws SQLException {
     while (rs.next()) {
 
       K k = keyMapper.map(rs);
@@ -149,7 +152,8 @@ public class JdbcUtils {
     return null;
   }
 
-  public static void executeStream(ResultSetImpl rs, String streamLabel, OutputStream out, ResultSetHandler handler) throws Exception {
+  public static void executeStream(ResultSetImpl rs, String streamLabel, OutputStream out, ResultSetHandler handler)
+      throws Exception {
     boolean rsRead = false;
     while (rs.next()) {
 
@@ -167,7 +171,8 @@ public class JdbcUtils {
     }
   }
 
-  public static void executeStream(ResultSetImpl rs, String streamLabel, Writer out, ResultSetHandler handler) throws Exception {
+  public static void executeStream(ResultSetImpl rs, String streamLabel, Writer out, ResultSetHandler handler)
+      throws Exception {
     boolean rsRead = false;
     while (rs.next()) {
 
@@ -185,7 +190,8 @@ public class JdbcUtils {
     }
   }
 
-  public static void executeNStream(ResultSetImpl rs, String streamLabel, Writer out, ResultSetHandler handler) throws Exception {
+  public static void executeNStream(ResultSetImpl rs, String streamLabel, Writer out, ResultSetHandler handler)
+      throws Exception {
     boolean rsRead = false;
     while (rs.next()) {
 

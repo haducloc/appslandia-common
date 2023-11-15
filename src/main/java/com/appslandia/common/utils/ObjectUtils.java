@@ -76,7 +76,8 @@ public class ObjectUtils {
     if (array == null) {
       return NULL_STR;
     }
-    return StreamUtils.stream(new ArrayUtils.ArrayObjIterator(array)).map(e -> toStringOrNull(e)).collect(Collectors.joining(", "));
+    return StreamUtils.stream(new ArrayUtils.ArrayObjIterator(array)).map(e -> toStringOrNull(e))
+        .collect(Collectors.joining(", "));
   }
 
   public static String asString(Iterable<?> iterable) {

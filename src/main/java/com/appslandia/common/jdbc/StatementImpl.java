@@ -104,19 +104,20 @@ public class StatementImpl implements PreparedStatement {
 
   // Execute utilities
 
-  public <K, V> Map<K, V> executeMap(ResultSetMapper<K> keyMapper, ResultSetMapper<V> valueMapper, Map<K, V> map) throws java.sql.SQLException {
+  public <K, V> Map<K, V> executeMap(ResultSetMapper<K> keyMapper, ResultSetMapper<V> valueMapper, Map<K, V> map)
+      throws java.sql.SQLException {
     try (ResultSetImpl rs = executeQuery()) {
       return JdbcUtils.executeMap(rs, keyMapper, valueMapper, map);
     }
   }
 
-  public <K, V> Map<K, V> executeMap(Object[] params, ResultSetMapper<K> keyMapper, ResultSetMapper<V> valueMapper, Map<K, V> map)
-      throws java.sql.SQLException {
+  public <K, V> Map<K, V> executeMap(Object[] params, ResultSetMapper<K> keyMapper, ResultSetMapper<V> valueMapper,
+      Map<K, V> map) throws java.sql.SQLException {
     return executeMap(JdbcUtils.toParameters(params), keyMapper, valueMapper, map);
   }
 
-  public <K, V> Map<K, V> executeMap(Map<String, Object> params, ResultSetMapper<K> keyMapper, ResultSetMapper<V> valueMapper, Map<K, V> map)
-      throws java.sql.SQLException {
+  public <K, V> Map<K, V> executeMap(Map<String, Object> params, ResultSetMapper<K> keyMapper,
+      ResultSetMapper<V> valueMapper, Map<K, V> map) throws java.sql.SQLException {
     if (params != null) {
       JdbcUtils.setParameters(this, getSql(), params);
     }
@@ -131,11 +132,13 @@ public class StatementImpl implements PreparedStatement {
     }
   }
 
-  public <T> List<T> executeList(Object[] params, ResultSetMapper<T> mapper, List<T> list) throws java.sql.SQLException {
+  public <T> List<T> executeList(Object[] params, ResultSetMapper<T> mapper, List<T> list)
+      throws java.sql.SQLException {
     return executeList(JdbcUtils.toParameters(params), mapper, list);
   }
 
-  public <T> List<T> executeList(Map<String, Object> params, ResultSetMapper<T> mapper, List<T> list) throws java.sql.SQLException {
+  public <T> List<T> executeList(Map<String, Object> params, ResultSetMapper<T> mapper, List<T> list)
+      throws java.sql.SQLException {
     if (params != null) {
       JdbcUtils.setParameters(this, getSql(), params);
     }
@@ -211,11 +214,13 @@ public class StatementImpl implements PreparedStatement {
     }
   }
 
-  public void executeStream(Object[] params, String streamLabel, OutputStream out, ResultSetHandler handler) throws Exception {
+  public void executeStream(Object[] params, String streamLabel, OutputStream out, ResultSetHandler handler)
+      throws Exception {
     executeStream(JdbcUtils.toParameters(params), streamLabel, out, handler);
   }
 
-  public void executeStream(Map<String, Object> params, String streamLabel, OutputStream out, ResultSetHandler handler) throws Exception {
+  public void executeStream(Map<String, Object> params, String streamLabel, OutputStream out, ResultSetHandler handler)
+      throws Exception {
     if (params != null) {
       JdbcUtils.setParameters(this, getSql(), params);
     }
@@ -230,11 +235,13 @@ public class StatementImpl implements PreparedStatement {
     }
   }
 
-  public void executeStream(Object[] params, String streamLabel, Writer out, ResultSetHandler handler) throws Exception {
+  public void executeStream(Object[] params, String streamLabel, Writer out, ResultSetHandler handler)
+      throws Exception {
     executeStream(JdbcUtils.toParameters(params), streamLabel, out, handler);
   }
 
-  public void executeStream(Map<String, Object> params, String streamLabel, Writer out, ResultSetHandler handler) throws Exception {
+  public void executeStream(Map<String, Object> params, String streamLabel, Writer out, ResultSetHandler handler)
+      throws Exception {
     if (params != null) {
       JdbcUtils.setParameters(this, getSql(), params);
     }
@@ -249,11 +256,13 @@ public class StatementImpl implements PreparedStatement {
     }
   }
 
-  public void executeNStream(Object[] params, String streamLabel, Writer out, ResultSetHandler handler) throws Exception {
+  public void executeNStream(Object[] params, String streamLabel, Writer out, ResultSetHandler handler)
+      throws Exception {
     executeNStream(JdbcUtils.toParameters(params), streamLabel, out, handler);
   }
 
-  public void executeNStream(Map<String, Object> params, String streamLabel, Writer out, ResultSetHandler handler) throws Exception {
+  public void executeNStream(Map<String, Object> params, String streamLabel, Writer out, ResultSetHandler handler)
+      throws Exception {
     if (params != null) {
       JdbcUtils.setParameters(this, getSql(), params);
     }
@@ -305,12 +314,14 @@ public class StatementImpl implements PreparedStatement {
     setLikeAny(parameterName, values, LikeType.ENDS_WITH, null);
   }
 
-  public void setLikeAny(String parameterName, String[] values, LikeType likeType, String falsePattern) throws java.sql.SQLException {
+  public void setLikeAny(String parameterName, String[] values, LikeType likeType, String falsePattern)
+      throws java.sql.SQLException {
     int arrayLen = this.getSql().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
-      setString(JdbcSql.toParamName(parameterName, i), (i < values.length) ? toLikeParamValue(values[i], likeType) : falsePattern);
+      setString(JdbcSql.toParamName(parameterName, i),
+          (i < values.length) ? toLikeParamValue(values[i], likeType) : falsePattern);
     }
   }
 
@@ -326,12 +337,14 @@ public class StatementImpl implements PreparedStatement {
     setNLikeAny(parameterName, values, LikeType.ENDS_WITH, null);
   }
 
-  public void setNLikeAny(String parameterName, String[] values, LikeType likeType, String falsePattern) throws java.sql.SQLException {
+  public void setNLikeAny(String parameterName, String[] values, LikeType likeType, String falsePattern)
+      throws java.sql.SQLException {
     int arrayLen = this.getSql().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
-      setNString(JdbcSql.toParamName(parameterName, i), (i < values.length) ? toLikeParamValue(values[i], likeType) : falsePattern);
+      setNString(JdbcSql.toParamName(parameterName, i),
+          (i < values.length) ? toLikeParamValue(values[i], likeType) : falsePattern);
     }
   }
 
@@ -721,7 +734,8 @@ public class StatementImpl implements PreparedStatement {
     }
   }
 
-  public void setTimestamp(String parameterName, java.sql.Timestamp x, java.util.Calendar cal) throws java.sql.SQLException {
+  public void setTimestamp(String parameterName, java.sql.Timestamp x, java.util.Calendar cal)
+      throws java.sql.SQLException {
     for (int index : this.getSql().getIndexes(parameterName)) {
       setTimestamp(index, x, cal);
     }
@@ -757,7 +771,8 @@ public class StatementImpl implements PreparedStatement {
     }
   }
 
-  public void setObject(String parameterName, Object x, int targetSqlType, int scaleOrLength) throws java.sql.SQLException {
+  public void setObject(String parameterName, Object x, int targetSqlType, int scaleOrLength)
+      throws java.sql.SQLException {
     for (int index : this.getSql().getIndexes(parameterName)) {
       setObject(index, x, targetSqlType, scaleOrLength);
     }
@@ -775,7 +790,8 @@ public class StatementImpl implements PreparedStatement {
     }
   }
 
-  public void setObject(String parameterName, Object x, java.sql.SQLType targetSqlType, int scaleOrLength) throws java.sql.SQLException {
+  public void setObject(String parameterName, Object x, java.sql.SQLType targetSqlType, int scaleOrLength)
+      throws java.sql.SQLException {
     for (int index : this.getSql().getIndexes(parameterName)) {
       setObject(index, x, targetSqlType, scaleOrLength);
     }
@@ -865,7 +881,8 @@ public class StatementImpl implements PreparedStatement {
     }
   }
 
-  public void setCharacterStream(String parameterName, java.io.Reader reader, long length) throws java.sql.SQLException {
+  public void setCharacterStream(String parameterName, java.io.Reader reader, long length)
+      throws java.sql.SQLException {
     for (int index : this.getSql().getIndexes(parameterName)) {
       setCharacterStream(index, reader, length);
     }
@@ -883,7 +900,8 @@ public class StatementImpl implements PreparedStatement {
     }
   }
 
-  public void setNCharacterStream(String parameterName, java.io.Reader value, long length) throws java.sql.SQLException {
+  public void setNCharacterStream(String parameterName, java.io.Reader value, long length)
+      throws java.sql.SQLException {
     for (int index : this.getSql().getIndexes(parameterName)) {
       setNCharacterStream(index, value, length);
     }
@@ -1031,7 +1049,8 @@ public class StatementImpl implements PreparedStatement {
   }
 
   @Override
-  public void setTimestamp(int parameterIndex, java.sql.Timestamp x, java.util.Calendar cal) throws java.sql.SQLException {
+  public void setTimestamp(int parameterIndex, java.sql.Timestamp x, java.util.Calendar cal)
+      throws java.sql.SQLException {
     this.stat.setTimestamp(parameterIndex, x, cal);
   }
 
@@ -1083,7 +1102,8 @@ public class StatementImpl implements PreparedStatement {
   }
 
   @Override
-  public void setObject(int parameterIndex, Object x, int targetSqlType, int scaleOrLength) throws java.sql.SQLException {
+  public void setObject(int parameterIndex, Object x, int targetSqlType, int scaleOrLength)
+      throws java.sql.SQLException {
     this.stat.setObject(parameterIndex, x, targetSqlType, scaleOrLength);
   }
 
@@ -1098,7 +1118,8 @@ public class StatementImpl implements PreparedStatement {
   }
 
   @Override
-  public void setObject(int parameterIndex, Object x, java.sql.SQLType targetSqlType, int scaleOrLength) throws java.sql.SQLException {
+  public void setObject(int parameterIndex, Object x, java.sql.SQLType targetSqlType, int scaleOrLength)
+      throws java.sql.SQLException {
     this.stat.setObject(parameterIndex, x, targetSqlType, scaleOrLength);
   }
 

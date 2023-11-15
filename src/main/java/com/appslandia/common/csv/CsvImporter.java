@@ -86,7 +86,9 @@ public class CsvImporter extends InitializeObject {
   private static final Language DEFAULT_LANGUAGE;
   static {
     String defDatePattern = DateUtils.toDatePattern(Locale.getDefault());
-    DEFAULT_LANGUAGE = (defDatePattern != null) ? new Language().setLocale(Locale.getDefault()).setDatePattern(defDatePattern) : null;
+    DEFAULT_LANGUAGE = (defDatePattern != null)
+        ? new Language().setLocale(Locale.getDefault()).setDatePattern(defDatePattern)
+        : null;
   }
 
   @Override

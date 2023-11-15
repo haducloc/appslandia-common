@@ -110,13 +110,14 @@ public class ModelGenerator extends InitializeObject {
 
     // @Embeddable
     pkAnnotations.add(AnnotationDescription.Builder.ofType(Embeddable.class).build());
-    String[] keys = table.getColumns().stream().filter(f -> f.isKey()).map(f -> f.getName()).toArray(len -> new String[len]);
+    String[] keys = table.getColumns().stream().filter(f -> f.isKey()).map(f -> f.getName())
+        .toArray(len -> new String[len]);
 
     // @TableMtdt
-    pkAnnotations
-        .add(AnnotationDescription.Builder.ofType(TableMtdt.class).define("catalog", ValueUtils.valueOrAlt(table.getTableCat(), StringUtils.EMPTY_STRING))
-            .define("schema", ValueUtils.valueOrAlt(table.getTableSchema(), StringUtils.EMPTY_STRING)).define("table", table.getTableName())
-            .define("keyClass", BaseGenPk.class).defineArray("keys", keys).build());
+    pkAnnotations.add(AnnotationDescription.Builder.ofType(TableMtdt.class)
+        .define("catalog", ValueUtils.valueOrAlt(table.getTableCat(), StringUtils.EMPTY_STRING))
+        .define("schema", ValueUtils.valueOrAlt(table.getTableSchema(), StringUtils.EMPTY_STRING))
+        .define("table", table.getTableName()).define("keyClass", BaseGenPk.class).defineArray("keys", keys).build());
 
     // BaseGenPk base
     var builder = new ByteBuddy().subclass(BaseGenPk.class).name(fullClass).annotateType(pkAnnotations);
@@ -133,7 +134,8 @@ public class ModelGenerator extends InitializeObject {
 
         // @MaxLength
         if (column.getJavaType() == String.class && column.getColumnSize() != null) {
-          fieldAnnotations.add(AnnotationDescription.Builder.ofType(MaxLength.class).define("value", column.getColumnSize()).build());
+          fieldAnnotations.add(
+              AnnotationDescription.Builder.ofType(MaxLength.class).define("value", column.getColumnSize()).build());
         }
 
         builder = addField(builder, column.getName(), column.getJavaType(), fieldAnnotations);
@@ -150,7 +152,8 @@ public class ModelGenerator extends InitializeObject {
       }
     }
 
-    List<Class<?>> argsTypes = table.getColumns().stream().filter(f -> f.isKey()).map(f -> f.getJavaType()).collect(Collectors.toList());
+    List<Class<?>> argsTypes = table.getColumns().stream().filter(f -> f.isKey()).map(f -> f.getJavaType())
+        .collect(Collectors.toList());
     builder = builder.defineConstructor(Visibility.PUBLIC).withParameters(argsTypes).intercept(ctor);
 
     return make(builder);
@@ -166,18 +169,22 @@ public class ModelGenerator extends InitializeObject {
       embeddedIdClass = generateEntityPk(table);
     }
 
-    String fullClass = this.classPackage != null ? this.classPackage + "." + table.getEntityClassName() : table.getEntityClassName();
-    String[] keys = table.getColumns().stream().filter(f -> f.isKey()).map(f -> f.getName()).toArray(len -> new String[len]);
+    String fullClass = this.classPackage != null ? this.classPackage + "." + table.getEntityClassName()
+        : table.getEntityClassName();
+    String[] keys = table.getColumns().stream().filter(f -> f.isKey()).map(f -> f.getName())
+        .toArray(len -> new String[len]);
 
     // Class annotations
     List<AnnotationDescription> classAnnotations = new ArrayList<>();
     table.getAnnotations().forEach(fa -> classAnnotations.add(toAnnotationDescription(fa)));
 
     // @TableMtdt
-    classAnnotations
-        .add(AnnotationDescription.Builder.ofType(TableMtdt.class).define("catalog", ValueUtils.valueOrAlt(table.getTableCat(), StringUtils.EMPTY_STRING))
-            .define("schema", ValueUtils.valueOrAlt(table.getTableSchema(), StringUtils.EMPTY_STRING)).define("table", table.getTableName())
-            .define("keyClass", (embeddedIdClass != null) ? embeddedIdClass : table.getSingleKey().getJavaType()).defineArray("keys", keys).build());
+    classAnnotations.add(AnnotationDescription.Builder.ofType(TableMtdt.class)
+        .define("catalog", ValueUtils.valueOrAlt(table.getTableCat(), StringUtils.EMPTY_STRING))
+        .define("schema", ValueUtils.valueOrAlt(table.getTableSchema(), StringUtils.EMPTY_STRING))
+        .define("table", table.getTableName())
+        .define("keyClass", (embeddedIdClass != null) ? embeddedIdClass : table.getSingleKey().getJavaType())
+        .defineArray("keys", keys).build());
 
     // @Entity
     classAnnotations.add(AnnotationDescription.Builder.ofType(Entity.class).build());
@@ -218,7 +225,8 @@ public class ModelGenerator extends InitializeObject {
             if (this.idGenType == null) {
               fieldAnnotations.add(AnnotationDescription.Builder.ofType(GeneratedValue.class).build());
             } else {
-              fieldAnnotations.add(AnnotationDescription.Builder.ofType(GeneratedValue.class).define("strategy", this.idGenType).build());
+              fieldAnnotations.add(AnnotationDescription.Builder.ofType(GeneratedValue.class)
+                  .define("strategy", this.idGenType).build());
             }
           }
         }
@@ -231,7 +239,8 @@ public class ModelGenerator extends InitializeObject {
         }
         // @MaxLength
         if (column.getJavaType() == String.class && column.getColumnSize() != null) {
-          fieldAnnotations.add(AnnotationDescription.Builder.ofType(MaxLength.class).define("value", column.getColumnSize()).build());
+          fieldAnnotations.add(
+              AnnotationDescription.Builder.ofType(MaxLength.class).define("value", column.getColumnSize()).build());
         }
       }
 
@@ -302,16 +311,18 @@ public class ModelGenerator extends InitializeObject {
     return make(builder);
   }
 
-  protected <T> Builder<T> addField(Builder<T> builder, String fieldName, Class<?> fieldType, List<AnnotationDescription> fieldAnnotations) {
+  protected <T> Builder<T> addField(Builder<T> builder, String fieldName, Class<?> fieldType,
+      List<AnnotationDescription> fieldAnnotations) {
     // Field
     builder = builder.defineField(fieldName, fieldType, Modifier.PUBLIC).annotateField(fieldAnnotations);
 
     // Getter
-    builder = builder.defineMethod(getGetterName(fieldName, fieldType), fieldType, Visibility.PUBLIC).intercept(FieldAccessor.ofField(fieldName));
+    builder = builder.defineMethod(getGetterName(fieldName, fieldType), fieldType, Visibility.PUBLIC)
+        .intercept(FieldAccessor.ofField(fieldName));
 
     // Setter
-    builder = builder.defineMethod(getSetterName(fieldName, fieldType), void.class, Visibility.PUBLIC).withParameter(fieldType)
-        .intercept(FieldAccessor.ofField(fieldName));
+    builder = builder.defineMethod(getSetterName(fieldName, fieldType), void.class, Visibility.PUBLIC)
+        .withParameter(fieldType).intercept(FieldAccessor.ofField(fieldName));
     return builder;
   }
 

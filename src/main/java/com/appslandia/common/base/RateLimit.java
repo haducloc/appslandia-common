@@ -61,11 +61,13 @@ public class RateLimit implements Serializable {
     return STR.fmt("RateLimit: accesses={}, windowsMs={}", this.accesses, this.windowsMs);
   }
 
-  static final Pattern RATE_LIMIT_PATTERN = Pattern.compile("(\\d+.\\d+|\\d+)\\s*/\\s*\\d+(w|d|h|m|s|ms)", Pattern.CASE_INSENSITIVE);
+  static final Pattern RATE_LIMIT_PATTERN = Pattern.compile("(\\d+.\\d+|\\d+)\\s*/\\s*\\d+(w|d|h|m|s|ms)",
+      Pattern.CASE_INSENSITIVE);
 
   public static RateLimit parse(String rateLimit) {
     Asserts.notNull(rateLimit);
-    Asserts.isTrue(RATE_LIMIT_PATTERN.matcher(rateLimit).matches(), () -> STR.fmt("rateLimit '{}' is invalid.", rateLimit));
+    Asserts.isTrue(RATE_LIMIT_PATTERN.matcher(rateLimit).matches(),
+        () -> STR.fmt("rateLimit '{}' is invalid.", rateLimit));
 
     int idx = rateLimit.indexOf('/');
 

@@ -134,10 +134,12 @@ public class CDIExtension extends InitializeObject implements Extension {
     return excludedPackages.contains(beanClass.getPackage().getName());
   }
 
-  public static boolean willExcludeAnnotations(Set<Class<? extends Annotation>> excludedAnnotations, Class<?> beanClass) {
+  public static boolean willExcludeAnnotations(Set<Class<? extends Annotation>> excludedAnnotations,
+      Class<?> beanClass) {
     if (excludedAnnotations.isEmpty()) {
       return false;
     }
-    return excludedAnnotations.stream().anyMatch(annotationClass -> beanClass.getDeclaredAnnotation(annotationClass) != null);
+    return excludedAnnotations.stream()
+        .anyMatch(annotationClass -> beanClass.getDeclaredAnnotation(annotationClass) != null);
   }
 }

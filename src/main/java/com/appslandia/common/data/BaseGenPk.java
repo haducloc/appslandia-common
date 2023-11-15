@@ -45,7 +45,8 @@ public abstract class BaseGenPk implements Serializable {
     TableMtdt tableMtdt = this.getClass().getDeclaredAnnotation(TableMtdt.class);
     Asserts.notNull(tableMtdt);
 
-    return Arrays.stream(tableMtdt.keys()).allMatch(key -> Objects.equals(RecordUtils.getFieldValue(this, key), RecordUtils.getFieldValue(obj, key)));
+    return Arrays.stream(tableMtdt.keys())
+        .allMatch(key -> Objects.equals(RecordUtils.getFieldValue(this, key), RecordUtils.getFieldValue(obj, key)));
   }
 
   @Override

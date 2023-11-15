@@ -119,7 +119,8 @@ public class IOUtils {
     Asserts.notNull(encodingIfNoBOM);
 
     var bomIS = new BOMInputStream(is);
-    return new BufferedReader(new InputStreamReader(bomIS, bomIS.getBOM() != null ? bomIS.getBOM().getEncoding() : encodingIfNoBOM));
+    return new BufferedReader(
+        new InputStreamReader(bomIS, bomIS.getBOM() != null ? bomIS.getBOM().getEncoding() : encodingIfNoBOM));
   }
 
   public static BufferedWriter textWriterBOM(OutputStream os, String encoding) throws IOException {

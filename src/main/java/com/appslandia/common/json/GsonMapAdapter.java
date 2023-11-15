@@ -38,7 +38,8 @@ import com.google.gson.JsonParseException;
 public class GsonMapAdapter<T extends Map<String, Object>> implements JsonDeserializer<T> {
 
   final boolean unmodifiable;
-  final JsonObjectParser jsonObjectParser = new JsonObjectParser().setJsonValueConverter(GsonJsonValueConverter.INSTANCE);
+  final JsonObjectParser jsonObjectParser = new JsonObjectParser()
+      .setJsonValueConverter(GsonJsonValueConverter.INSTANCE);
 
   public GsonMapAdapter(boolean unmodifiable, Function<Map<String, Object>, T> rootConverter) {
     this.unmodifiable = unmodifiable;

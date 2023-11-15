@@ -230,7 +230,8 @@ public class JdbcSql extends InitializeObject implements Serializable {
     return Asserts.notNull(len, () -> STR.fmt("Array parameter '{}' is not found.", parameterName));
   }
 
-  public static boolean isContext(StringBuilder sb, int paramIdx, String context, Out<Integer> fieldIdx, Out<String> fieldName) {
+  public static boolean isContext(StringBuilder sb, int paramIdx, String context, Out<Integer> fieldIdx,
+      Out<String> fieldName) {
     int i = paramIdx - 1;
     while (i >= 0 && Character.isWhitespace(sb.charAt(i))) {
       i--;

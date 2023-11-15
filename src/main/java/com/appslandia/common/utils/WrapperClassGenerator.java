@@ -48,11 +48,13 @@ public class WrapperClassGenerator {
     return generateWrapper(clazz, wrappedField, comparator, null, DEFAULT_SKIPPED);
   }
 
-  public static String generateWrapper(Class<?> clazz, String wrappedField, MethodComparator comparator, Unsupported unsupported) {
+  public static String generateWrapper(Class<?> clazz, String wrappedField, MethodComparator comparator,
+      Unsupported unsupported) {
     return generateWrapper(clazz, wrappedField, comparator, unsupported, DEFAULT_SKIPPED);
   }
 
-  public static String generateWrapper(Class<?> clazz, String wrappedField, MethodComparator comparator, Unsupported unsupported, Skipped skip) {
+  public static String generateWrapper(Class<?> clazz, String wrappedField, MethodComparator comparator,
+      Unsupported unsupported, Skipped skip) {
     TextBuilder sb = new TextBuilder();
     try {
       generateWrapper(clazz, wrappedField, sb, comparator, unsupported, skip);
@@ -62,8 +64,8 @@ public class WrapperClassGenerator {
     return sb.toString();
   }
 
-  private static void generateWrapper(Class<?> clazz, String wrappedField, TextBuilder sb, MethodComparator comparator, Unsupported unsupported,
-      Skipped skipped) throws Exception {
+  private static void generateWrapper(Class<?> clazz, String wrappedField, TextBuilder sb, MethodComparator comparator,
+      Unsupported unsupported, Skipped skipped) throws Exception {
     sb.appendln(2);
     sb.append("// " + clazz.getName());
 

@@ -193,8 +193,8 @@ public abstract class JsonMapObject extends MapWrapper<String, Object> {
   }
 
   protected boolean isBasicType(Class<?> c) {
-    return (c == String.class) || Number.class.isAssignableFrom(c) || (c == Boolean.class) || Date.class.isAssignableFrom(c)
-        || Temporal.class.isAssignableFrom(c);
+    return (c == String.class) || Number.class.isAssignableFrom(c) || (c == Boolean.class)
+        || Date.class.isAssignableFrom(c) || Temporal.class.isAssignableFrom(c);
   }
 
   private boolean validateMap(Map<?, ?> map) {

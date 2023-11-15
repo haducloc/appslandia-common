@@ -136,7 +136,8 @@ public interface Converter<T> {
   T parse(String str, FormatProvider formatProvider) throws ConverterException;
 
   default ConverterException toParsingError(String str, String targetName) {
-    return new ConverterException(STR.fmt("An error occurred while parsing '{}' to {}.", str, targetName), getErrorMsgKey());
+    return new ConverterException(STR.fmt("An error occurred while parsing '{}' to {}.", str, targetName),
+        getErrorMsgKey());
   }
 
   public static String toConverterId(Class<?> targetType) {

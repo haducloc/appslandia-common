@@ -37,7 +37,8 @@ import jakarta.json.bind.adapter.JsonbAdapter;
 public abstract class JsonbMapAdapter<T extends Map<String, Object>> implements JsonbAdapter<T, JsonObject> {
 
   final boolean unmodifiable;
-  final JsonObjectParser jsonObjectParser = new JsonObjectParser().setJsonValueConverter(JsonbJsonValueConverter.INSTANCE);
+  final JsonObjectParser jsonObjectParser = new JsonObjectParser()
+      .setJsonValueConverter(JsonbJsonValueConverter.INSTANCE);
 
   public JsonbMapAdapter(boolean unmodifiable, Function<Map<String, Object>, T> rootConverter) {
     this.unmodifiable = unmodifiable;

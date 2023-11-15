@@ -72,7 +72,8 @@ public class HsJwsSigner<P> {
 
   public JwsSigner<P> build() {
     Asserts.notNull(this.jsonProcessor);
-    return new JwsSigner<>(this.payloadClass).setJsonProcessor(this.jsonProcessor).setSigner(this.signer).setAlg(this.alg).setKid(this.kid).initialize();
+    return new JwsSigner<>(this.payloadClass).setJsonProcessor(this.jsonProcessor).setSigner(this.signer)
+        .setAlg(this.alg).setKid(this.kid).initialize();
   }
 
   public static <P> HsJwsSigner<P> HS256(Class<P> payloadClass) {

@@ -80,7 +80,8 @@ public final class RecordUtils {
     return Collections.unmodifiableList(cols);
   }
 
-  public static Table loadTable(ConnectionImpl conn, String catalog, String schema, String tableName, Consumer<Column> columnInit) throws SQLException {
+  public static Table loadTable(ConnectionImpl conn, String catalog, String schema, String tableName,
+      Consumer<Column> columnInit) throws SQLException {
     Asserts.notNull(conn);
     Asserts.notNull(tableName);
 
@@ -204,8 +205,9 @@ public final class RecordUtils {
     return new Key().set(keyColumn.getName(), pk);
   }
 
-  private static final Set<Class<?>> PK_JAVA_TYPES = CollectionUtils.unmodifiableSet(Short.class, Integer.class, Long.class, Float.class, Double.class,
-      BigDecimal.class, String.class, UUID.class, java.sql.Date.class, java.sql.Timestamp.class, LocalDate.class, LocalDateTime.class, OffsetDateTime.class);
+  private static final Set<Class<?>> PK_JAVA_TYPES = CollectionUtils.unmodifiableSet(Short.class, Integer.class,
+      Long.class, Float.class, Double.class, BigDecimal.class, String.class, UUID.class, java.sql.Date.class,
+      java.sql.Timestamp.class, LocalDate.class, LocalDateTime.class, OffsetDateTime.class);
 
   public static String toEntityClassName(String tableName) {
     Asserts.notNull(tableName);

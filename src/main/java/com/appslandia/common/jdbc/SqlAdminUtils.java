@@ -36,8 +36,8 @@ import com.appslandia.common.utils.STR;
  */
 public class SqlAdminUtils {
 
-  public static long fixIdSeq(Connection conn, String tableName, String idPkCol, boolean idPkInt, String idPkAlter1, String idPkAlter2, String idPkAlter3)
-      throws SQLException {
+  public static long fixIdSeq(Connection conn, String tableName, String idPkCol, boolean idPkInt, String idPkAlter1,
+      String idPkAlter2, String idPkAlter3) throws SQLException {
 
     Asserts.notNull(tableName);
     Asserts.notNull(idPkCol);
@@ -50,7 +50,8 @@ public class SqlAdminUtils {
       stat.executeUpdate(STR.fmt("ALTER TABLE {} ADD {} {}", tableName, tempIdPkCol, (idPkInt ? "INT" : "BIGINT")));
 
       // Update tempIdPkCol
-      try (PreparedStatement updStat = conn.prepareStatement(STR.fmt("UPDATE {} SET {}=? WHERE {}=?", tableName, tempIdPkCol, idPkCol))) {
+      try (PreparedStatement updStat = conn
+          .prepareStatement(STR.fmt("UPDATE {} SET {}=? WHERE {}=?", tableName, tempIdPkCol, idPkCol))) {
         try (ResultSet rs = stat.executeQuery(STR.fmt("SELECT {} FROM {} ORDER BY {}", idPkCol, tableName, idPkCol))) {
 
           while (rs.next()) {

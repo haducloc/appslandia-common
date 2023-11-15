@@ -173,7 +173,8 @@ public class FormatProviderImpl implements FormatProvider {
     @Override
     public boolean equals(Object obj) {
       NumberFormatKey other = (NumberFormatKey) obj;
-      return (this.fractionDigits == other.fractionDigits) && (this.roundingMode == other.roundingMode) && (this.grouping == other.grouping);
+      return (this.fractionDigits == other.fractionDigits) && (this.roundingMode == other.roundingMode)
+          && (this.grouping == other.grouping);
     }
   }
 }

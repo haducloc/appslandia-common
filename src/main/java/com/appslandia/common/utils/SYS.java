@@ -284,8 +284,8 @@ public class SYS {
   // ${prop_name,ENV.env_name}
   // ${prop_name,ENV.env_name:defaultValue}
 
-  private static final Pattern ENV_VAL_EXPR_PATTERN = Pattern.compile("[^\\s,:]+(\\s*,\\s*env.[^\\s,:]+\\s*)?(\\s*:\\s*[^\\s]+){0,1}",
-      Pattern.CASE_INSENSITIVE);
+  private static final Pattern ENV_VAL_EXPR_PATTERN = Pattern
+      .compile("[^\\s,:]+(\\s*,\\s*env.[^\\s,:]+\\s*)?(\\s*:\\s*[^\\s]+){0,1}", Pattern.CASE_INSENSITIVE);
   private static final Pattern ENV_VAL_HOLDER_PATTERN = Pattern.compile("\\$\\{[^}]*}");
 
   public static String resolve(String valueOrExpr) {
@@ -313,10 +313,12 @@ public class SYS {
       }
       if (StringUtils.startsWith(expr, "env.")) {
         // ENV
-        return (colonIdx >= 0) ? getEnv(expr.substring(4, colonIdx).trim(), defaultValue) : getEnv(expr.substring(4), defaultValue);
+        return (colonIdx >= 0) ? getEnv(expr.substring(4, colonIdx).trim(), defaultValue)
+            : getEnv(expr.substring(4), defaultValue);
       } else {
         // PROP
-        return (colonIdx >= 0) ? getProp(expr.substring(0, colonIdx).trim(), defaultValue) : getProp(expr, defaultValue);
+        return (colonIdx >= 0) ? getProp(expr.substring(0, colonIdx).trim(), defaultValue)
+            : getProp(expr, defaultValue);
       }
     } else {
       // PROP
@@ -334,7 +336,8 @@ public class SYS {
       if (colonIdx >= 0) {
         defaultValue = StringUtils.trimToNull(expr2.substring(colonIdx + 1));
       }
-      return (colonIdx >= 0) ? getEnv(expr2.substring(4, colonIdx).trim(), defaultValue) : getEnv(expr2.substring(4), defaultValue);
+      return (colonIdx >= 0) ? getEnv(expr2.substring(4, colonIdx).trim(), defaultValue)
+          : getEnv(expr2.substring(4), defaultValue);
     }
   }
 }

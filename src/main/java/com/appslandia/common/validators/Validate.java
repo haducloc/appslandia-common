@@ -74,7 +74,8 @@ public @interface Validate {
       if (!isValid) {
 
         context.disableDefaultConstraintViolation();
-        context.buildConstraintViolationWithTemplate(this.message).addPropertyNode(this.reportProperty).addConstraintViolation();
+        context.buildConstraintViolationWithTemplate(this.message).addPropertyNode(this.reportProperty)
+            .addConstraintViolation();
       }
       return isValid;
     }

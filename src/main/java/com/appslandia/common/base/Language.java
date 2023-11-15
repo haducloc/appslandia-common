@@ -103,13 +103,20 @@ public class Language extends InitializeObject {
 
     this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_M, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_M));
     this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_S, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_S));
-    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N1, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N1));
-    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N2, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N2));
-    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N3, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N3));
-    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N4, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N4));
-    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N5, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N5));
-    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N6, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N6));
-    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N7, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N7));
+    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N1,
+        STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N1));
+    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N2,
+        STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N2));
+    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N3,
+        STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N3));
+    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N4,
+        STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N4));
+    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N5,
+        STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N5));
+    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N6,
+        STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N6));
+    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N7,
+        STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N7));
 
     this.temporalPatterns = Collections.unmodifiableMap(this.temporalPatterns);
 

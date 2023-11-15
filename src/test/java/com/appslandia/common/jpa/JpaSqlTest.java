@@ -64,7 +64,8 @@ public class JpaSqlTest {
     String sqlText = "SELECT r FROM User r WHERE :userName='' OR r.userName LIKE :userName";
     JpaSql sql = new JpaSql(sqlText);
 
-    Assertions.assertEquals("SELECT r FROM User r WHERE :userName='' OR r.userName LIKE :userName", sql.getTranslatedSql());
+    Assertions.assertEquals("SELECT r FROM User r WHERE :userName='' OR r.userName LIKE :userName",
+        sql.getTranslatedSql());
 
     Assertions.assertTrue(sql.isParam("userName"));
     Assertions.assertFalse(sql.isArrayParam("userName"));
@@ -75,7 +76,8 @@ public class JpaSqlTest {
     String sqlText = "SELECT r FROM User r WHERE r.userId IN :ids";
     JpaSql sql = new JpaSql(sqlText).arrayLen("ids", 3);
 
-    Assertions.assertEquals("SELECT r FROM User r WHERE r.userId IN (:ids__0, :ids__1, :ids__2)", sql.getTranslatedSql());
+    Assertions.assertEquals("SELECT r FROM User r WHERE r.userId IN (:ids__0, :ids__1, :ids__2)",
+        sql.getTranslatedSql());
 
     try {
       int len = sql.getArrayLen("ids");
@@ -92,7 +94,8 @@ public class JpaSqlTest {
     String sqlText = "SELECT r FROM User r WHERE r.userName LIKE_ANY :names";
     JpaSql sql = new JpaSql(sqlText).arrayLen("names", 3);
 
-    Assertions.assertEquals("SELECT r FROM User r WHERE r.userName LIKE :names__0 OR r.userName LIKE :names__1 OR r.userName LIKE :names__2",
+    Assertions.assertEquals(
+        "SELECT r FROM User r WHERE r.userName LIKE :names__0 OR r.userName LIKE :names__1 OR r.userName LIKE :names__2",
         sql.getTranslatedSql());
 
     try {

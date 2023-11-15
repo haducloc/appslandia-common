@@ -41,8 +41,9 @@ public class TableUtils {
   private static final String COLUMN_NAME_PAT = "[a-z_]+[a-z\\d_]*";
   private static final String COLUMN_TYPE_PAT = "[a-z]+[a-z\\d\\s_]*\\s*(\\(\\s*\\d+\\s*(,\\s*\\d+\\s*)?\\))?\\s*(\\s+[^\\s]+.*)?";
 
-  private static final Pattern TABLE_SPEC_PATTERN = Pattern.compile("^\\s*(" + TABLE_NAME_PAT + ")\\s*\\(\\s*(" + COLUMN_NAME_PAT + "\\s+" + COLUMN_TYPE_PAT
-      + "\\s*(,\\s*" + COLUMN_NAME_PAT + "\\s+" + COLUMN_TYPE_PAT + "\\s*)*)\\)\\s*$", Pattern.CASE_INSENSITIVE);
+  private static final Pattern TABLE_SPEC_PATTERN = Pattern
+      .compile("^\\s*(" + TABLE_NAME_PAT + ")\\s*\\(\\s*(" + COLUMN_NAME_PAT + "\\s+" + COLUMN_TYPE_PAT + "\\s*(,\\s*"
+          + COLUMN_NAME_PAT + "\\s+" + COLUMN_TYPE_PAT + "\\s*)*)\\)\\s*$", Pattern.CASE_INSENSITIVE);
 
   public static String toTableScript(String tableSpec, Out<String> tableName) {
     tableSpec = NormalizeUtils.toSingleLine(tableSpec);
@@ -88,6 +89,7 @@ public class TableUtils {
 
   private static String[] parseColumnParts(String columnDef) {
     int idx = columnDef.indexOf(' ');
-    return new String[] { columnDef.substring(0, idx).trim(), columnDef.substring(idx).trim().toUpperCase(Locale.ROOT) };
+    return new String[] { columnDef.substring(0, idx).trim(),
+        columnDef.substring(idx).trim().toUpperCase(Locale.ROOT) };
   }
 }

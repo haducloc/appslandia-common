@@ -132,7 +132,8 @@ public class StringUtils {
     if (substrIgnoreCase.isEmpty()) {
       return true;
     }
-    if (str.regionMatches(true, str.length() - substrIgnoreCase.length(), substrIgnoreCase, 0, substrIgnoreCase.length())) {
+    if (str.regionMatches(true, str.length() - substrIgnoreCase.length(), substrIgnoreCase, 0,
+        substrIgnoreCase.length())) {
       return true;
     }
     return false;

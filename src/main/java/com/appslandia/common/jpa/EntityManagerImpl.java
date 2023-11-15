@@ -99,27 +99,33 @@ public class EntityManagerImpl implements EntityManager {
   }
 
   public <T> T findFetch(Class<T> entityClass, Object primaryKey, String graphName) {
-    return em().find(entityClass, primaryKey, new Params().set(JpaHints.HINT_JPA_FETCH_GRAPH, em().createEntityGraph(graphName)));
+    return em().find(entityClass, primaryKey,
+        new Params().set(JpaHints.HINT_JPA_FETCH_GRAPH, em().createEntityGraph(graphName)));
   }
 
   public <T> T findLoad(Class<T> entityClass, Object primaryKey, String graphName) {
-    return em().find(entityClass, primaryKey, new Params().set(JpaHints.HINT_JPA_LOAD_GRAPH, em().createEntityGraph(graphName)));
+    return em().find(entityClass, primaryKey,
+        new Params().set(JpaHints.HINT_JPA_LOAD_GRAPH, em().createEntityGraph(graphName)));
   }
 
   public <T> TypedQueryImpl<T> createQueryFetch(String qlString, Class<T> resultClass, String graphName) {
-    return new TypedQueryImpl<T>(em().createQuery(qlString, resultClass).setHint(JpaHints.HINT_JPA_FETCH_GRAPH, em().createEntityGraph(graphName)));
+    return new TypedQueryImpl<T>(em().createQuery(qlString, resultClass).setHint(JpaHints.HINT_JPA_FETCH_GRAPH,
+        em().createEntityGraph(graphName)));
   }
 
   public <T> TypedQueryImpl<T> createQueryLoad(String qlString, Class<T> resultClass, String graphName) {
-    return new TypedQueryImpl<T>(em().createQuery(qlString, resultClass).setHint(JpaHints.HINT_JPA_LOAD_GRAPH, em().createEntityGraph(graphName)));
+    return new TypedQueryImpl<T>(em().createQuery(qlString, resultClass).setHint(JpaHints.HINT_JPA_LOAD_GRAPH,
+        em().createEntityGraph(graphName)));
   }
 
   public <T> TypedQueryImpl<T> createNamedQueryFetch(String name, Class<T> resultClass, String graphName) {
-    return new TypedQueryImpl<T>(em().createNamedQuery(name, resultClass).setHint(JpaHints.HINT_JPA_FETCH_GRAPH, em().createEntityGraph(graphName)));
+    return new TypedQueryImpl<T>(em().createNamedQuery(name, resultClass).setHint(JpaHints.HINT_JPA_FETCH_GRAPH,
+        em().createEntityGraph(graphName)));
   }
 
   public <T> TypedQueryImpl<T> createNamedQueryLoad(String name, Class<T> resultClass, String graphName) {
-    return new TypedQueryImpl<T>(em().createNamedQuery(name, resultClass).setHint(JpaHints.HINT_JPA_LOAD_GRAPH, em().createEntityGraph(graphName)));
+    return new TypedQueryImpl<T>(em().createNamedQuery(name, resultClass).setHint(JpaHints.HINT_JPA_LOAD_GRAPH,
+        em().createEntityGraph(graphName)));
   }
 
   @Override

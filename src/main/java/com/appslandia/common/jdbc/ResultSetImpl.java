@@ -961,7 +961,8 @@ public class ResultSetImpl implements ResultSet {
   }
 
   @Override
-  public void updateCharacterStream(String columnLabel, java.io.Reader reader, long length) throws java.sql.SQLException {
+  public void updateCharacterStream(String columnLabel, java.io.Reader reader, long length)
+      throws java.sql.SQLException {
     this.rs.updateCharacterStream(columnLabel, reader, length);
   }
 
@@ -976,7 +977,8 @@ public class ResultSetImpl implements ResultSet {
   }
 
   @Override
-  public void updateCharacterStream(String columnLabel, java.io.Reader reader, int length) throws java.sql.SQLException {
+  public void updateCharacterStream(String columnLabel, java.io.Reader reader, int length)
+      throws java.sql.SQLException {
     this.rs.updateCharacterStream(columnLabel, reader, length);
   }
 
@@ -1026,7 +1028,8 @@ public class ResultSetImpl implements ResultSet {
   }
 
   @Override
-  public void updateObject(int columnIndex, Object x, java.sql.SQLType targetSqlType, int scaleOrLength) throws java.sql.SQLException {
+  public void updateObject(int columnIndex, Object x, java.sql.SQLType targetSqlType, int scaleOrLength)
+      throws java.sql.SQLException {
     this.rs.updateObject(columnIndex, x, targetSqlType, scaleOrLength);
   }
 
@@ -1036,7 +1039,8 @@ public class ResultSetImpl implements ResultSet {
   }
 
   @Override
-  public void updateObject(String columnLabel, Object x, java.sql.SQLType targetSqlType, int scaleOrLength) throws java.sql.SQLException {
+  public void updateObject(String columnLabel, Object x, java.sql.SQLType targetSqlType, int scaleOrLength)
+      throws java.sql.SQLException {
     this.rs.updateObject(columnLabel, x, targetSqlType, scaleOrLength);
   }
 
@@ -1081,7 +1085,8 @@ public class ResultSetImpl implements ResultSet {
   }
 
   @Override
-  public void updateBlob(String columnLabel, java.io.InputStream inputStream, long length) throws java.sql.SQLException {
+  public void updateBlob(String columnLabel, java.io.InputStream inputStream, long length)
+      throws java.sql.SQLException {
     this.rs.updateBlob(columnLabel, inputStream, length);
   }
 
@@ -1211,7 +1216,8 @@ public class ResultSetImpl implements ResultSet {
   }
 
   @Override
-  public void updateNCharacterStream(String columnLabel, java.io.Reader reader, long length) throws java.sql.SQLException {
+  public void updateNCharacterStream(String columnLabel, java.io.Reader reader, long length)
+      throws java.sql.SQLException {
     this.rs.updateNCharacterStream(columnLabel, reader, length);
   }
 

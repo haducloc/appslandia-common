@@ -129,7 +129,8 @@ public class QueryImpl implements Query {
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
-      setParameter(JdbcSql.toParamName(parameterName, i), (i < values.length) ? SqlLikeEscaper.toLikePattern(values[i], likeType) : falsePattern);
+      setParameter(JdbcSql.toParamName(parameterName, i),
+          (i < values.length) ? SqlLikeEscaper.toLikePattern(values[i], likeType) : falsePattern);
     }
     return this;
   }
@@ -314,7 +315,8 @@ public class QueryImpl implements Query {
   }
 
   @Override
-  public QueryImpl setParameter(Parameter<java.util.Calendar> param, java.util.Calendar value, TemporalType temporalType) {
+  public QueryImpl setParameter(Parameter<java.util.Calendar> param, java.util.Calendar value,
+      TemporalType temporalType) {
     this.query.setParameter(param, value, temporalType);
     return this;
   }

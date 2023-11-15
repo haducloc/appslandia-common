@@ -275,11 +275,13 @@ public class AnnotationModel extends InitializeObject {
   }
 
   public static AnnotationModel decimalMax(String maxVal, boolean inclusive) {
-    return new AnnotationModel().setAnnotationType(DecimalMax.class).define("value", maxVal).define("inclusive", inclusive);
+    return new AnnotationModel().setAnnotationType(DecimalMax.class).define("value", maxVal).define("inclusive",
+        inclusive);
   }
 
   public static AnnotationModel decimalMin(String minVal, boolean inclusive) {
-    return new AnnotationModel().setAnnotationType(DecimalMin.class).define("value", minVal).define("inclusive", inclusive);
+    return new AnnotationModel().setAnnotationType(DecimalMin.class).define("value", minVal).define("inclusive",
+        inclusive);
   }
 
   public static AnnotationModel max(long maxVal) {
@@ -291,7 +293,8 @@ public class AnnotationModel extends InitializeObject {
   }
 
   public static AnnotationModel digits(int integer, int fraction) {
-    return new AnnotationModel().setAnnotationType(Digits.class).define("integer", integer).define("fraction", fraction);
+    return new AnnotationModel().setAnnotationType(Digits.class).define("integer", integer).define("fraction",
+        fraction);
   }
 
   public static AnnotationModel validValues(int... values) {

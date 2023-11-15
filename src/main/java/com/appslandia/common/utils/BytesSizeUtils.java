@@ -30,7 +30,8 @@ import java.util.regex.Pattern;
  */
 public class BytesSizeUtils {
 
-  private static final Pattern BYTES_SIZE_PATTERN = Pattern.compile("((\\d+.\\d+|\\d+)(TB|GB|MB|KB|B)\\s*)+", Pattern.CASE_INSENSITIVE);
+  private static final Pattern BYTES_SIZE_PATTERN = Pattern.compile("((\\d+.\\d+|\\d+)(TB|GB|MB|KB|B)\\s*)+",
+      Pattern.CASE_INSENSITIVE);
 
   public static long translateToBytes(String sizeAmt) {
     return translateToBytes(sizeAmt, false);

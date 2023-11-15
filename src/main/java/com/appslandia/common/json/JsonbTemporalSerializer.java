@@ -34,7 +34,8 @@ import jakarta.json.stream.JsonGenerator;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public abstract class JsonbTemporalSerializer<T extends Temporal> extends JsonTemporalSerializer implements JsonbSerializer<T>, JsonbDeserializer<T> {
+public abstract class JsonbTemporalSerializer<T extends Temporal> extends JsonTemporalSerializer
+    implements JsonbSerializer<T>, JsonbDeserializer<T> {
 
   public JsonbTemporalSerializer(String serializeIsoPattern) {
     super(serializeIsoPattern);

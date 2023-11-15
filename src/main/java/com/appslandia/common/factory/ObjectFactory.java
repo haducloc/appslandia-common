@@ -94,7 +94,8 @@ public class ObjectFactory extends InitializeObject {
           return member.toString();
         }
 
-        private void validateInject(Class<?> type, Annotation[] qualifiers, AnnotatedElement member) throws ObjectException {
+        private void validateInject(Class<?> type, Annotation[] qualifiers, AnnotatedElement member)
+            throws ObjectException {
           if (ObjectFactory.class.isAssignableFrom(type)) {
             return;
           }
@@ -103,12 +104,12 @@ public class ObjectFactory extends InitializeObject {
           }
           int count = countMatchesForInject(type, qualifiers);
           if (count == 0) {
-            throw new ObjectException(
-                STR.fmt("Unsatisfied dependency: type={}, qualifiers={}, member={}.", type, Arrays.toString(qualifiers), toMemberInfo(member)));
+            throw new ObjectException(STR.fmt("Unsatisfied dependency: type={}, qualifiers={}, member={}.", type,
+                Arrays.toString(qualifiers), toMemberInfo(member)));
           }
           if (count > 1) {
-            throw new ObjectException(
-                STR.fmt("Ambiguous dependency: type={}, qualifiers={}, member={}.", type, Arrays.toString(qualifiers), toMemberInfo(member)));
+            throw new ObjectException(STR.fmt("Ambiguous dependency: type={}, qualifiers={}, member={}.", type,
+                Arrays.toString(qualifiers), toMemberInfo(member)));
           }
         }
       }.traverse(inst.definition.getImplClass());
@@ -118,7 +119,8 @@ public class ObjectFactory extends InitializeObject {
   private int countMatchesForInject(Class<?> type, Annotation[] qualifiers) {
     int count = 0;
     for (ObjectInstance inst : this.instances) {
-      if ((inst.definition.hasType(type) || (type == Object.class)) && AnnotationUtils.equals(inst.definition.getQualifiers(), qualifiers)) {
+      if ((inst.definition.hasType(type) || (type == Object.class))
+          && AnnotationUtils.equals(inst.definition.getQualifiers(), qualifiers)) {
         count++;
       }
     }
@@ -145,7 +147,8 @@ public class ObjectFactory extends InitializeObject {
     return register(types, producer, scope, null);
   }
 
-  protected ObjectFactory register(Class<?>[] types, ObjectProducer<?> producer, ObjectScope scope, Annotation[] qualifiers) {
+  protected ObjectFactory register(Class<?>[] types, ObjectProducer<?> producer, ObjectScope scope,
+      Annotation[] qualifiers) {
     assertNotInitialized();
 
     Asserts.notNull(types);
@@ -157,7 +160,8 @@ public class ObjectFactory extends InitializeObject {
     if (qualifiers == null) {
       qualifiers = AnnotationUtils.parseQualifiers(producer);
     }
-    ObjectInstance inst = new ObjectInstance(this, new ObjectDefinition().setTypes(types).setQualifiers(qualifiers).setScope(scope).setProducer(producer),
+    ObjectInstance inst = new ObjectInstance(this,
+        new ObjectDefinition().setTypes(types).setQualifiers(qualifiers).setScope(scope).setProducer(producer),
         (d) -> produceObject(d));
     this.instances.add(inst);
     return this;
@@ -199,7 +203,8 @@ public class ObjectFactory extends InitializeObject {
     }
 
     ObjectInstance inst = new ObjectInstance(this,
-        new ObjectDefinition().setTypes(expTypes.toArray(new Class<?>[expTypes.size()])).setQualifiers(qualifiers).setScope(scope).setImplClass(implClass),
+        new ObjectDefinition().setTypes(expTypes.toArray(new Class<?>[expTypes.size()])).setQualifiers(qualifiers)
+            .setScope(scope).setImplClass(implClass),
         (d) -> produceObject(d));
     this.instances.add(inst);
     return this;
@@ -218,7 +223,8 @@ public class ObjectFactory extends InitializeObject {
     while (iter.hasNext()) {
       ObjectInstance inst = iter.next();
 
-      if ((inst.definition.hasType(type) || (type == Object.class)) && AnnotationUtils.equals(inst.definition.getQualifiers(), qualifiers)) {
+      if ((inst.definition.hasType(type) || (type == Object.class))
+          && AnnotationUtils.equals(inst.definition.getQualifiers(), qualifiers)) {
         iter.remove();
       }
     }
@@ -352,7 +358,8 @@ public class ObjectFactory extends InitializeObject {
     List<ObjectInstance> insts = new LinkedList<>();
     for (ObjectInstance inst : this.instances) {
 
-      if ((inst.definition.hasType(type) || (type == Object.class)) && AnnotationUtils.hasAnnotations(inst.definition.getQualifiers(), qualifiers)) {
+      if ((inst.definition.hasType(type) || (type == Object.class))
+          && AnnotationUtils.hasAnnotations(inst.definition.getQualifiers(), qualifiers)) {
         insts.add(inst);
       }
     }
@@ -363,9 +370,11 @@ public class ObjectFactory extends InitializeObject {
     ObjectInstance obj = null;
     for (ObjectInstance inst : this.instances) {
 
-      if ((inst.definition.hasType(type) || (type == Object.class)) && AnnotationUtils.equals(inst.definition.getQualifiers(), qualifiers)) {
+      if ((inst.definition.hasType(type) || (type == Object.class))
+          && AnnotationUtils.equals(inst.definition.getQualifiers(), qualifiers)) {
         if (obj != null) {
-          throw new ObjectException(STR.fmt("Ambiguous dependency: type={}, qualifiers={}.", type, Arrays.toString(qualifiers)));
+          throw new ObjectException(
+              STR.fmt("Ambiguous dependency: type={}, qualifiers={}.", type, Arrays.toString(qualifiers)));
         }
         obj = inst;
       }
@@ -384,7 +393,8 @@ public class ObjectFactory extends InitializeObject {
 
     ObjectInstance inst = getObjectInst(type, qualifiers);
     if (inst == null) {
-      throw new ObjectException(STR.fmt("Unsatisfied dependency: type={}, qualifiers={}.", type, Arrays.toString(qualifiers)));
+      throw new ObjectException(
+          STR.fmt("Unsatisfied dependency: type={}, qualifiers={}.", type, Arrays.toString(qualifiers)));
     }
     return ObjectUtils.cast(inst.getInstance());
   }

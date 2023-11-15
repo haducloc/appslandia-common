@@ -38,7 +38,8 @@ public class ObjectInstance {
   volatile Object singleton;
   final Object mutex = new Object();
 
-  public ObjectInstance(ObjectFactory factory, ObjectDefinition definition, Function<ObjectDefinition, Object> producer) {
+  public ObjectInstance(ObjectFactory factory, ObjectDefinition definition,
+      Function<ObjectDefinition, Object> producer) {
     this.factory = factory;
     this.definition = definition;
     this.producer = producer;

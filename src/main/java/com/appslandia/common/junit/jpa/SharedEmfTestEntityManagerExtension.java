@@ -39,7 +39,8 @@ import jakarta.persistence.Persistence;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public abstract class SharedEmfTestEntityManagerExtension implements BeforeEachCallback, AfterEachCallback, BeforeAllCallback, AfterAllCallback {
+public abstract class SharedEmfTestEntityManagerExtension
+    implements BeforeEachCallback, AfterEachCallback, BeforeAllCallback, AfterAllCallback {
 
   static final ThreadLocalStorage<EntityManager> emHolder = new ThreadLocalStorage<>();
 

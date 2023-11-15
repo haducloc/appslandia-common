@@ -85,7 +85,8 @@ public class DsaJwsSigner<P> {
 
   public JwsSigner<P> build() {
     Asserts.notNull(this.jsonProcessor);
-    return new JwsSigner<>(this.payloadClass).setJsonProcessor(this.jsonProcessor).setSigner(this.signer).setAlg(this.alg).setKid(this.kid).initialize();
+    return new JwsSigner<>(this.payloadClass).setJsonProcessor(this.jsonProcessor).setSigner(this.signer)
+        .setAlg(this.alg).setKid(this.kid).initialize();
   }
 
   public static <P> DsaJwsSigner<P> ES256(Class<P> payloadClass) {
@@ -113,15 +114,18 @@ public class DsaJwsSigner<P> {
   }
 
   public static <P> DsaJwsSigner<P> PS256(Class<P> payloadClass) {
-    return new DsaJwsSigner<P>("PS256", "SHA256withRSA/PSS", payloadClass).setAlgParamSpec(DsaJwsSigner::toPSSParameterSpec);
+    return new DsaJwsSigner<P>("PS256", "SHA256withRSA/PSS", payloadClass)
+        .setAlgParamSpec(DsaJwsSigner::toPSSParameterSpec);
   }
 
   public static <P> DsaJwsSigner<P> PS384(Class<P> payloadClass) {
-    return new DsaJwsSigner<P>("PS384", "SHA384withRSA/PSS", payloadClass).setAlgParamSpec(DsaJwsSigner::toPSSParameterSpec);
+    return new DsaJwsSigner<P>("PS384", "SHA384withRSA/PSS", payloadClass)
+        .setAlgParamSpec(DsaJwsSigner::toPSSParameterSpec);
   }
 
   public static <P> DsaJwsSigner<P> PS512(Class<P> payloadClass) {
-    return new DsaJwsSigner<P>("PS512", "SHA512withRSA/PSS", payloadClass).setAlgParamSpec(DsaJwsSigner::toPSSParameterSpec);
+    return new DsaJwsSigner<P>("PS512", "SHA512withRSA/PSS", payloadClass)
+        .setAlgParamSpec(DsaJwsSigner::toPSSParameterSpec);
   }
 
   protected static PSSParameterSpec toPSSParameterSpec(String signatureAlgorithm) {

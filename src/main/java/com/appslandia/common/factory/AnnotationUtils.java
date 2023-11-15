@@ -66,7 +66,8 @@ public class AnnotationUtils {
         qualifiers.add(ann);
       }
     }
-    return !qualifiers.isEmpty() ? qualifiers.toArray(new Annotation[qualifiers.size()]) : ReflectionUtils.EMPTY_ANNOTATIONS;
+    return !qualifiers.isEmpty() ? qualifiers.toArray(new Annotation[qualifiers.size()])
+        : ReflectionUtils.EMPTY_ANNOTATIONS;
   }
 
   public static Annotation[] parseQualifiers(AnnotatedElement element) {
@@ -90,7 +91,8 @@ public class AnnotationUtils {
     if (element.getDeclaredAnnotation(Dependent.class) != null) {
       return ObjectScope.PROTOTYPE;
     }
-    if (element.getDeclaredAnnotation(SessionScoped.class) != null || element.getDeclaredAnnotation(RequestScoped.class) != null) {
+    if (element.getDeclaredAnnotation(SessionScoped.class) != null
+        || element.getDeclaredAnnotation(RequestScoped.class) != null) {
       throw new IllegalArgumentException("SessionScoped/RequestScoped is unsupported.");
     }
     return ObjectScope.SINGLETON;

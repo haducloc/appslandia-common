@@ -97,7 +97,8 @@ public class ReflectionUtils {
     });
   }
 
-  public static List<Method> findMethods(Class<?> clazz, final String methodName, final Class<?>... parameterTypes) throws ReflectionException {
+  public static List<Method> findMethods(Class<?> clazz, final String methodName, final Class<?>... parameterTypes)
+      throws ReflectionException {
     final List<Method> mths = new ArrayList<>();
 
     traverse(clazz, new MethodHandler() {
@@ -277,7 +278,8 @@ public class ReflectionUtils {
   }
 
   public static boolean isImplementOf(Method implMth, Method interfaceMth) {
-    return interfaceMth.getDeclaringClass().isAssignableFrom(implMth.getDeclaringClass()) && interfaceMth.getName().equals(implMth.getName())
+    return interfaceMth.getDeclaringClass().isAssignableFrom(implMth.getDeclaringClass())
+        && interfaceMth.getName().equals(implMth.getName())
         && Arrays.equals(interfaceMth.getParameterTypes(), implMth.getParameterTypes());
   }
 

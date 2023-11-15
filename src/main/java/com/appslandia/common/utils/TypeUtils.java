@@ -53,7 +53,8 @@ public class TypeUtils {
     WRAPPER_PRIMITIVE_MAP = Collections.unmodifiableMap(wrapToPrim);
   }
 
-  private static void put(Map<Class<?>, Class<?>> primToWrap, Map<Class<?>, Class<?>> wrapToPrim, Class<?> key, Class<?> value) {
+  private static void put(Map<Class<?>, Class<?>> primToWrap, Map<Class<?>, Class<?>> wrapToPrim, Class<?> key,
+      Class<?> value) {
     primToWrap.put(key, value);
     wrapToPrim.put(value, key);
   }

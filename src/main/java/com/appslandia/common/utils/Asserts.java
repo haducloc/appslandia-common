@@ -169,7 +169,8 @@ public class Asserts {
     long minDiff = Duration.between(argLT, curLT).toMinutes();
 
     if (minDiff < 0 || minDiff > 3) {
-      throw new AssertException("The given callerDateTimeID is unauthorized. It must be within 3 minutes of the current time.");
+      throw new AssertException(
+          "The given callerDateTimeID is unauthorized. It must be within 3 minutes of the current time.");
     }
   }
 }

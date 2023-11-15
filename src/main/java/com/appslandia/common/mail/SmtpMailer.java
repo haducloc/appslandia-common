@@ -81,7 +81,8 @@ public class SmtpMailer extends InitializeObject {
 
       String debugToEmails = null;
       if (ParseUtils.isTrueValue(this.props.get("mail.smtp.debug.enabled"))) {
-        debugToEmails = Asserts.notNull(this.props.get("mail.smtp.debug.to_emails"), "mail.smtp.debug.to_emails is required.");
+        debugToEmails = Asserts.notNull(this.props.get("mail.smtp.debug.to_emails"),
+            "mail.smtp.debug.to_emails is required.");
       }
       for (MailerMessage mailerMessage : messages) {
         MimeMessage message = mailerMessage.toMimeMessage(this, debugToEmails);

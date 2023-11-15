@@ -179,8 +179,8 @@ public class DateUtils {
     if (dateTime == null) {
       return null;
     }
-    return dateTime.getYear() * 1_00_00_00_00L + dateTime.getMonthValue() * 1_00_00_00L + dateTime.getDayOfMonth() * 1_00_00L + dateTime.getHour() * 1_00L
-        + dateTime.getMinute();
+    return dateTime.getYear() * 1_00_00_00_00L + dateTime.getMonthValue() * 1_00_00_00L
+        + dateTime.getDayOfMonth() * 1_00_00L + dateTime.getHour() * 1_00L + dateTime.getMinute();
   }
 
   public static LocalDateTime fromDateTimeID(Long dateTimeID) throws DateTimeException {
@@ -368,11 +368,13 @@ public class DateUtils {
   }
 
   // 1w 2d 3h 4m 50s 500ms
-  private static final Pattern TEMPORAL_AMT_PATTERN = Pattern.compile("((\\d+.\\d+|\\d+)(w|d|h|m|s|ms)\\s*)+", Pattern.CASE_INSENSITIVE);
+  private static final Pattern TEMPORAL_AMT_PATTERN = Pattern.compile("((\\d+.\\d+|\\d+)(w|d|h|m|s|ms)\\s*)+",
+      Pattern.CASE_INSENSITIVE);
 
   public static long translateToMs(String temporalAmt) {
     Asserts.notNull(temporalAmt, "temporalAmt is required.");
-    Asserts.isTrue(TEMPORAL_AMT_PATTERN.matcher(temporalAmt).matches(), () -> STR.fmt("temporalAmt '{}' is invalid.", temporalAmt));
+    Asserts.isTrue(TEMPORAL_AMT_PATTERN.matcher(temporalAmt).matches(),
+        () -> STR.fmt("temporalAmt '{}' is invalid.", temporalAmt));
 
     double result = 0l;
     int i = 0;
@@ -383,7 +385,8 @@ public class DateUtils {
         j++;
       }
       int k = j;
-      while ((k <= temporalAmt.length() - 1) && (Character.isLetter(temporalAmt.charAt(k)) || (temporalAmt.charAt(k) == (' ')))) {
+      while ((k <= temporalAmt.length() - 1)
+          && (Character.isLetter(temporalAmt.charAt(k)) || (temporalAmt.charAt(k) == (' ')))) {
         k++;
       }
 

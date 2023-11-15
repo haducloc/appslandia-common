@@ -33,6 +33,7 @@ public class UncheckedException extends RuntimeException {
   public UncheckedException(Throwable throwable) {
     super(throwable);
 
-    Asserts.isTrue(!(throwable instanceof RuntimeException), "The throwable must be java.lang.Error or check exception.");
+    Asserts.isTrue(!(throwable instanceof RuntimeException),
+        "The throwable must be java.lang.Error or check exception.");
   }
 }

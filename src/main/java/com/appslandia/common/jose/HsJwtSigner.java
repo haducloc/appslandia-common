@@ -92,8 +92,8 @@ public class HsJwtSigner extends HsJwsSigner<JwtPayload> {
   @Override
   public JwtSigner build() {
     Asserts.notNull(this.jsonProcessor);
-    JwtSigner impl = new JwtSigner().setJsonProcessor(this.jsonProcessor).setSigner(this.signer).setAlg(this.alg).setKid(this.kid).setLeewaySec(this.leewaySec)
-        .setIss(this.iss);
+    JwtSigner impl = new JwtSigner().setJsonProcessor(this.jsonProcessor).setSigner(this.signer).setAlg(this.alg)
+        .setKid(this.kid).setLeewaySec(this.leewaySec).setIss(this.iss);
 
     impl.aud = this.aud;
     return impl.initialize();

@@ -103,8 +103,8 @@ public class ToStringBuilder {
       if (Enum.class.isAssignableFrom(type) || (type == BigDecimal.class)) {
         return true;
       }
-      if (Date.class.isAssignableFrom(type) || Calendar.class.isAssignableFrom(type) || TimeZone.class.isAssignableFrom(type) || (type == Locale.class)
-          || Charset.class.isAssignableFrom(type)) {
+      if (Date.class.isAssignableFrom(type) || Calendar.class.isAssignableFrom(type)
+          || TimeZone.class.isAssignableFrom(type) || (type == Locale.class) || Charset.class.isAssignableFrom(type)) {
         return true;
       }
       if (Temporal.class.isAssignableFrom(type)) {
@@ -333,7 +333,8 @@ public class ToStringBuilder {
       builder.append(" no elements ]");
     } else {
       appendln(builder, iterator.isCompact());
-      appendtab(builder, level - 1 + this.identTabs, iterator.isCompact()).append("] (").append(iterator.getComputedLen()).append(")");
+      appendtab(builder, level - 1 + this.identTabs, iterator.isCompact()).append("] (")
+          .append(iterator.getComputedLen()).append(")");
     }
   }
 
@@ -375,7 +376,8 @@ public class ToStringBuilder {
     }
   }
 
-  private void toStringAttributes(Object obj, Method getAttributeMethod, Set<String> attributes, int level, TextBuilder builder) {
+  private void toStringAttributes(Object obj, Method getAttributeMethod, Set<String> attributes, int level,
+      TextBuilder builder) {
     builder.append("[");
     boolean isFirst = true;
 
@@ -394,7 +396,8 @@ public class ToStringBuilder {
         if (element == null) {
           builder.append("null");
         } else {
-          if ("jakarta.servlet.error.exception".equals(attribute) || "javax.servlet.error.exception".equals(attribute)) {
+          if ("jakarta.servlet.error.exception".equals(attribute)
+              || "javax.servlet.error.exception".equals(attribute)) {
             builder.append(ExceptionUtils.buildMessage((Throwable) element));
 
           } else if (this.tsDecision.tsIdHash(element, null)) {

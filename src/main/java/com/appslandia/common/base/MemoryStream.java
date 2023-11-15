@@ -173,7 +173,8 @@ public class MemoryStream extends OutputStream implements Serializable {
 
   @Override
   public String toString() {
-    return STR.fmt("{}: blockSize={}, nodeCount={}, size={}", ObjectUtils.toIdHash(this), this.blockSize, this.getNodeCount(), this.count);
+    return STR.fmt("{}: blockSize={}, nodeCount={}, size={}", ObjectUtils.toIdHash(this), this.blockSize,
+        this.getNodeCount(), this.count);
   }
 
   public int getBlockSize() {

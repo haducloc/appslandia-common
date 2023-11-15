@@ -108,7 +108,8 @@ public class JwtSigner extends JwsSigner<JwtPayload> {
   @Override
   public JwtToken parse(String token) throws JsonException {
     JwsToken<JwtPayload> jwsToken = super.parse(token);
-    return new JwtToken(jwsToken.header, jwsToken.payload, jwsToken.headerPart, jwsToken.payloadPart, jwsToken.signaturePart);
+    return new JwtToken(jwsToken.header, jwsToken.payload, jwsToken.headerPart, jwsToken.payloadPart,
+        jwsToken.signaturePart);
   }
 
   @Override

@@ -77,7 +77,8 @@ public class JwsSigner<P> extends InitializeObject {
       }
       String dataToSign = JoseUtils.toJwsData(token.getHeaderPart(), token.getPayloadPart());
 
-      if (!this.signer.verify(dataToSign.getBytes(StandardCharsets.UTF_8), JoseUtils.getJoseBase64().decode(token.getSignaturePart()))) {
+      if (!this.signer.verify(dataToSign.getBytes(StandardCharsets.UTF_8),
+          JoseUtils.getJoseBase64().decode(token.getSignaturePart()))) {
         throw new JwsSignatureException("JWT signature verification failed.");
       }
     }

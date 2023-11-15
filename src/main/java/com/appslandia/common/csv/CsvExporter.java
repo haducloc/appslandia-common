@@ -100,7 +100,8 @@ public class CsvExporter extends InitializeObject {
           if (value == null) {
             this.csvOutput.write(this.csvProcessor.escape(null));
 
-          } else if (Number.class.isAssignableFrom(value.getClass()) || Temporal.class.isAssignableFrom(value.getClass()) || value.getClass() == Boolean.class
+          } else if (Number.class.isAssignableFrom(value.getClass())
+              || Temporal.class.isAssignableFrom(value.getClass()) || value.getClass() == Boolean.class
               || java.util.Date.class.isAssignableFrom(value.getClass())) {
 
             this.csvOutput.write(value.toString());
