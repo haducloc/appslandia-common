@@ -101,10 +101,10 @@ public class JsonbProcessor extends JsonProcessor {
     return this;
   }
 
-  public static JsonbConfig newConfig(boolean serializeNulls, boolean formatting) {
+  public static JsonbConfig newConfig(boolean serializeNulls, boolean prettyPrinting) {
     JsonbConfig config = new JsonbConfig();
     config.withNullValues(serializeNulls);
-    config.withFormatting(formatting);
+    config.withFormatting(prettyPrinting);
     config.withPropertyNamingStrategy(PropertyNamingStrategy.IDENTITY);
 
     config.withPropertyVisibilityStrategy(new PropertyVisibilityStrategy() {

@@ -101,14 +101,14 @@ public class GsonProcessor extends JsonProcessor {
     return this;
   }
 
-  public static GsonBuilder newBuilder(boolean serializeNulls, boolean formatting) {
+  public static GsonBuilder newBuilder(boolean serializeNulls, boolean prettyPrinting) {
     GsonBuilder builder = new GsonBuilder();
 
     if (serializeNulls) {
       builder.serializeNulls();
     }
 
-    if (formatting) {
+    if (prettyPrinting) {
       builder.setPrettyPrinting();
     }
 

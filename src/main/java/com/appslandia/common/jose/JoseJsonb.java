@@ -33,9 +33,9 @@ import jakarta.json.bind.JsonbConfig;
  */
 public class JoseJsonb {
 
-  public static JsonbConfig newJsonbConfig(boolean serializeNulls, boolean formatting) {
+  public static JsonbConfig newJsonbConfig(boolean serializeNulls, boolean prettyPrinting) {
     // @formatter:off
-		return JsonbProcessor.newConfig(serializeNulls, formatting)
+		return JsonbProcessor.newConfig(serializeNulls, prettyPrinting)
 				.withAdapters(
 
 						// JsonWebKey

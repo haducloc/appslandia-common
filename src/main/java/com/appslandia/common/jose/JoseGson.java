@@ -32,9 +32,9 @@ import com.google.gson.GsonBuilder;
  */
 public class JoseGson {
 
-  public static GsonBuilder newGsonBuilder(boolean serializeNulls, boolean formatting) {
+  public static GsonBuilder newGsonBuilder(boolean serializeNulls, boolean prettyPrinting) {
     // @formatter:off
-		return GsonProcessor.newBuilder(serializeNulls, formatting)
+		return GsonProcessor.newBuilder(serializeNulls, prettyPrinting)
 
 				// JsonWebKey
 				.registerTypeAdapter(JsonWebKey.class,
