@@ -131,13 +131,13 @@ public class DsaJwsSigner<P> {
   protected static PSSParameterSpec toPSSParameterSpec(String signatureAlgorithm) {
     switch (signatureAlgorithm) {
     case "SHA256withRSA/PSS":
-      return new PSSParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA256, 32, 1);
+      return new PSSParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA256, 256 / 8, 1);
 
     case "SHA384withRSA/PSS":
-      return new PSSParameterSpec("SHA-384", "MGF1", MGF1ParameterSpec.SHA384, 48, 1);
+      return new PSSParameterSpec("SHA-384", "MGF1", MGF1ParameterSpec.SHA384, 384 / 8, 1);
 
     case "SHA512withRSA/PSS":
-      return new PSSParameterSpec("SHA-512", "MGF1", MGF1ParameterSpec.SHA512, 64, 1);
+      return new PSSParameterSpec("SHA-512", "MGF1", MGF1ParameterSpec.SHA512, 512 / 8, 1);
     default:
       break;
     }
