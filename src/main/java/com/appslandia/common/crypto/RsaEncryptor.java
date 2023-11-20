@@ -27,6 +27,7 @@ import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.MGF1ParameterSpec;
+import java.util.Locale;
 import java.util.Random;
 import java.util.function.Function;
 
@@ -37,6 +38,7 @@ import javax.crypto.spec.PSource;
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.StringUtils;
 
 /**
  *
@@ -217,25 +219,20 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
   }
 
   static AlgorithmParameterSpec toAlgParamSpec(CipherOperations operations) {
+    String padding = operations.getPadding();
 
-    if (operations.getPadding().equalsIgnoreCase("OAEPWithMD5AndMGF1Padding")) {
-      return new OAEPParameterSpec("MD5", "MGF1", new MGF1ParameterSpec("MD5"), PSource.PSpecified.DEFAULT);
+    // OAEPWith{HashAlg}AndMGF1Padding
+    if (StringUtils.startsWith(padding, "OAEPWith") && StringUtils.endsWith(padding, "AndMGF1Padding")) {
+
+      int start = "OAEPWith".length();
+      int end = padding.lastIndexOf("AndMGF1Padding");
+
+      String hashAlg = padding.substring(start, end).toUpperCase(Locale.ENGLISH);
+      MGF1ParameterSpec mgf1Spec = MGF1ParameterSpecUtil.getMGF1ParameterSpec(hashAlg);
+
+      return new OAEPParameterSpec(hashAlg, "MGF1", mgf1Spec, PSource.PSpecified.DEFAULT);
     }
-    if (operations.getPadding().equalsIgnoreCase("OAEPWithSHA-1AndMGF1Padding")) {
-      return new OAEPParameterSpec("SHA-1", "MGF1", MGF1ParameterSpec.SHA1, PSource.PSpecified.DEFAULT);
-    }
-    if (operations.getPadding().equalsIgnoreCase("OAEPWithSHA-224AndMGF1Padding")) {
-      return new OAEPParameterSpec("SHA-224", "MGF1", MGF1ParameterSpec.SHA224, PSource.PSpecified.DEFAULT);
-    }
-    if (operations.getPadding().equalsIgnoreCase("OAEPWithSHA-256AndMGF1Padding")) {
-      return new OAEPParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA256, PSource.PSpecified.DEFAULT);
-    }
-    if (operations.getPadding().equalsIgnoreCase("OAEPWithSHA-384AndMGF1Padding")) {
-      return new OAEPParameterSpec("SHA-384", "MGF1", MGF1ParameterSpec.SHA384, PSource.PSpecified.DEFAULT);
-    }
-    if (operations.getPadding().equalsIgnoreCase("OAEPWithSHA-512AndMGF1Padding")) {
-      return new OAEPParameterSpec("SHA-512", "MGF1", MGF1ParameterSpec.SHA512, PSource.PSpecified.DEFAULT);
-    }
+
     return null;
   }
 }
