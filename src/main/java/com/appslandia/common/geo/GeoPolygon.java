@@ -104,10 +104,10 @@ public class GeoPolygon {
     Matcher matcher = COORDINATE_PATTERN.matcher(polygonString);
 
     while (matcher.find()) {
-      String[] coordinates = matcher.group().split("\\s+");
+      String[] point = matcher.group().split("\\s+");
 
-      double longitude = Double.parseDouble(coordinates[0]);
-      double latitude = Double.parseDouble(coordinates[1]);
+      double longitude = Double.parseDouble(point[0]);
+      double latitude = Double.parseDouble(point[1]);
 
       points.add(new GeoLocation(latitude, longitude));
     }
