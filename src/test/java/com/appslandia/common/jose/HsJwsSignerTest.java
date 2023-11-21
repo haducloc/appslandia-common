@@ -68,7 +68,6 @@ public class HsJwsSignerTest {
       Assertions.assertNotNull(token);
 
       // AUTH0
-
       Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
       JWTVerifier verifier = JWT.require(algorithm).withIssuer("Issuer1").build();
 
@@ -87,7 +86,6 @@ public class HsJwsSignerTest {
   public void test_hs_verify() {
     try {
       // AUTH0
-
       Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
       String auth0Jwt = JWT.create().withIssuer("Issuer1")
           .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS)))

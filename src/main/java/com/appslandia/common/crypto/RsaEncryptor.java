@@ -221,14 +221,16 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
   static AlgorithmParameterSpec toAlgParamSpec(CipherOperations operations) {
     String padding = operations.getPadding();
 
+    // OAEP (Optimal Asymmetric Encryption Padding): Encryption scheme
     // OAEPWith{HashAlg}AndMGF1Padding
+
     if (StringUtils.startsWith(padding, "OAEPWith") && StringUtils.endsWith(padding, "AndMGF1Padding")) {
 
       int start = "OAEPWith".length();
       int end = padding.lastIndexOf("AndMGF1Padding");
 
       String hashAlg = padding.substring(start, end).toUpperCase(Locale.ENGLISH);
-      MGF1ParameterSpec mgf1Spec = MGF1ParameterSpecUtil.getMGF1ParameterSpec(hashAlg);
+      MGF1ParameterSpec mgf1Spec = MGF1ParameterSpecUtil.getInstance(hashAlg);
 
       return new OAEPParameterSpec(hashAlg, "MGF1", mgf1Spec, PSource.PSpecified.DEFAULT);
     }

@@ -51,7 +51,6 @@ public class HsJwtSignerTest {
       Assertions.assertNotNull(token);
 
       // AUTH0
-
       Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
       JWTVerifier verifier = JWT.require(algorithm).withIssuer("Issuer1").build();
 
@@ -70,7 +69,6 @@ public class HsJwtSignerTest {
   public void test_hs_verify() {
     try {
       // AUTH0
-
       Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
       String auth0Jwt = JWT.create().withIssuer("Issuer1").sign(algorithm);
 

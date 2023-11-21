@@ -76,7 +76,6 @@ public class DsaJwtSignerTest {
       Assertions.assertNotNull(token);
 
       // AUTH0
-
       Algorithm algorithm = Algorithm.ECDSA256((ECPublicKey) keyPair.getPublic(), (ECPrivateKey) keyPair.getPrivate());
       JWTVerifier verifier = JWT.require(algorithm).withIssuer("Issuer1").build();
 
@@ -97,7 +96,6 @@ public class DsaJwtSignerTest {
       KeyPair keyPair = generateECKeyPair();
 
       // AUTH0
-
       Algorithm algorithm = Algorithm.ECDSA256((ECPublicKey) keyPair.getPublic(), (ECPrivateKey) keyPair.getPrivate());
       String auth0Jwt = JWT.create().withIssuer("Issuer1").sign(algorithm);
 
@@ -143,7 +141,6 @@ public class DsaJwtSignerTest {
       Assertions.assertNotNull(token);
 
       // AUTH0
-
       Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) keyPair.getPublic(), (RSAPrivateKey) keyPair.getPrivate());
       JWTVerifier verifier = JWT.require(algorithm).withIssuer("Issuer1").build();
 
@@ -164,7 +161,6 @@ public class DsaJwtSignerTest {
       KeyPair keyPair = generateRSKeyPair();
 
       // AUTH0
-
       Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) keyPair.getPublic(), (RSAPrivateKey) keyPair.getPrivate());
       String auth0Jwt = JWT.create().withIssuer("Issuer1").sign(algorithm);
 
@@ -203,7 +199,7 @@ public class DsaJwtSignerTest {
       String token = signer.sign(new JwtToken(header, payload));
       Assertions.assertNotNull(token);
 
-      // fusionauth
+      // FusionAuth
       RSAPSSVerifier verifier = RSAPSSVerifier.newVerifier(keyPair.getPublic());
       io.fusionauth.jwt.domain.JWT jwt = io.fusionauth.jwt.domain.JWT.getDecoder().decode(token, verifier);
 
@@ -225,7 +221,7 @@ public class DsaJwtSignerTest {
     try {
       KeyPair keyPair = generateRSKeyPair();
 
-      // fusionauth
+      // FusionAuth
       RSAPSSSigner rsapssSigner = RSAPSSSigner.newSHA256Signer((RSAPrivateKey) keyPair.getPrivate());
       io.fusionauth.jwt.domain.JWT jwt = new io.fusionauth.jwt.domain.JWT().setIssuer("Issuer1");
       String fusionauthJwt = io.fusionauth.jwt.domain.JWT.getEncoder().encode(jwt, rsapssSigner);

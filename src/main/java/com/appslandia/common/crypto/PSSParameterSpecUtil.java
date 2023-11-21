@@ -21,6 +21,7 @@
 package com.appslandia.common.crypto;
 
 import java.security.spec.MGF1ParameterSpec;
+import java.security.spec.PSSParameterSpec;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,38 +34,34 @@ import com.appslandia.common.utils.STR;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class MGF1ParameterSpecUtil {
+public class PSSParameterSpecUtil {
 
-  static final Map<String, MGF1ParameterSpec> SPECS;
+  // PSS (Probabilistic Padding Scheme): For RSA digital signatures
+  static final Map<String, PSSParameterSpec> SPECS;
 
   static {
-    Map<String, MGF1ParameterSpec> map = new HashMap<>();
+    Map<String, PSSParameterSpec> map = new HashMap<>();
 
-    map.put("MD5", new MGF1ParameterSpec("MD5"));
-    map.put("SHA-1", MGF1ParameterSpec.SHA1);
+    map.put("SHA224withRSA/PSS", new PSSParameterSpec("SHA-224", "MGF1", MGF1ParameterSpec.SHA224, 224 / 8, 1));
+    map.put("SHA256withRSA/PSS", new PSSParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA256, 256 / 8, 1));
+    map.put("SHA384withRSA/PSS", new PSSParameterSpec("SHA-384", "MGF1", MGF1ParameterSpec.SHA384, 384 / 8, 1));
+    map.put("SHA512withRSA/PSS", new PSSParameterSpec("SHA-512", "MGF1", MGF1ParameterSpec.SHA512, 512 / 8, 1));
 
-    map.put("SHA-224", MGF1ParameterSpec.SHA224);
-    map.put("SHA-256", MGF1ParameterSpec.SHA256);
-    map.put("SHA-384", MGF1ParameterSpec.SHA384);
-    map.put("SHA-512", MGF1ParameterSpec.SHA512);
-
-    map.put("SHA-512/224", MGF1ParameterSpec.SHA512_224);
-    map.put("SHA-512/256", MGF1ParameterSpec.SHA512_256);
-
-    map.put("SHA3-224", MGF1ParameterSpec.SHA3_224);
-    map.put("SHA3-256", MGF1ParameterSpec.SHA3_256);
-    map.put("SHA3-384", MGF1ParameterSpec.SHA3_384);
-    map.put("SHA3-512", MGF1ParameterSpec.SHA3_512);
+    map.put("SHA3-224withRSA/PSS", new PSSParameterSpec("SHA3-224", "MGF1", MGF1ParameterSpec.SHA3_224, 224 / 8, 1));
+    map.put("SHA3-256withRSA/PSS", new PSSParameterSpec("SHA3-256", "MGF1", MGF1ParameterSpec.SHA3_256, 256 / 8, 1));
+    map.put("SHA3-384withRSA/PSS", new PSSParameterSpec("SHA3-384", "MGF1", MGF1ParameterSpec.SHA3_384, 384 / 8, 1));
+    map.put("SHA3-512withRSA/PSS", new PSSParameterSpec("SHA3-512", "MGF1", MGF1ParameterSpec.SHA3_512, 512 / 8, 1));
 
     SPECS = Collections.unmodifiableMap(map);
   }
 
-  public static MGF1ParameterSpec getInstance(String hashAlg) {
-    Asserts.notNull(hashAlg);
+  public static PSSParameterSpec getInstance(String signatureAlg) {
+    Asserts.notNull(signatureAlg);
 
-    MGF1ParameterSpec spec = SPECS.get(hashAlg);
+    PSSParameterSpec spec = SPECS.get(signatureAlg);
     if (spec == null) {
-      throw new IllegalArgumentException(STR.fmt("The given hash algorithm name '{}' is unregistered.", hashAlg));
+      throw new IllegalArgumentException(
+          STR.fmt("The given signature algorithm name '{}' is unregistered.", signatureAlg));
     }
     return spec;
   }

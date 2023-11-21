@@ -23,14 +23,12 @@ package com.appslandia.common.jose;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.AlgorithmParameterSpec;
-import java.security.spec.MGF1ParameterSpec;
-import java.security.spec.PSSParameterSpec;
 import java.util.function.Function;
 
+import com.appslandia.common.crypto.PSSParameterSpecUtil;
 import com.appslandia.common.crypto.SignatureSigner;
 import com.appslandia.common.json.JsonProcessor;
 import com.appslandia.common.utils.Asserts;
-import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -115,32 +113,16 @@ public class DsaJwsSigner<P> {
 
   public static <P> DsaJwsSigner<P> PS256(Class<P> payloadClass) {
     return new DsaJwsSigner<P>("PS256", "SHA256withRSA/PSS", payloadClass)
-        .setAlgParamSpec(DsaJwsSigner::toPSSParameterSpec);
+        .setAlgParamSpec(PSSParameterSpecUtil::getInstance);
   }
 
   public static <P> DsaJwsSigner<P> PS384(Class<P> payloadClass) {
     return new DsaJwsSigner<P>("PS384", "SHA384withRSA/PSS", payloadClass)
-        .setAlgParamSpec(DsaJwsSigner::toPSSParameterSpec);
+        .setAlgParamSpec(PSSParameterSpecUtil::getInstance);
   }
 
   public static <P> DsaJwsSigner<P> PS512(Class<P> payloadClass) {
     return new DsaJwsSigner<P>("PS512", "SHA512withRSA/PSS", payloadClass)
-        .setAlgParamSpec(DsaJwsSigner::toPSSParameterSpec);
-  }
-
-  protected static PSSParameterSpec toPSSParameterSpec(String signatureAlgorithm) {
-    switch (signatureAlgorithm) {
-    case "SHA256withRSA/PSS":
-      return new PSSParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA256, 256 / 8, 1);
-
-    case "SHA384withRSA/PSS":
-      return new PSSParameterSpec("SHA-384", "MGF1", MGF1ParameterSpec.SHA384, 384 / 8, 1);
-
-    case "SHA512withRSA/PSS":
-      return new PSSParameterSpec("SHA-512", "MGF1", MGF1ParameterSpec.SHA512, 512 / 8, 1);
-    default:
-      break;
-    }
-    throw new IllegalArgumentException(STR.fmt("Unsupported signatureAlgorithm: {}", signatureAlgorithm));
+        .setAlgParamSpec(PSSParameterSpecUtil::getInstance);
   }
 }

@@ -83,7 +83,6 @@ public class DsaJwsSignerTest {
       Assertions.assertNotNull(token);
 
       // AUTH0
-
       Algorithm algorithm = Algorithm.ECDSA256((ECPublicKey) keyPair.getPublic(), (ECPrivateKey) keyPair.getPrivate());
       JWTVerifier verifier = JWT.require(algorithm).withIssuer("Issuer1").build();
 
@@ -104,7 +103,6 @@ public class DsaJwsSignerTest {
       KeyPair keyPair = generateECKeyPair();
 
       // AUTH0
-
       Algorithm algorithm = Algorithm.ECDSA256((ECPublicKey) keyPair.getPublic(), (ECPrivateKey) keyPair.getPrivate());
       String auth0Jwt = JWT.create().withIssuer("Issuer1").sign(algorithm);
 
@@ -150,7 +148,6 @@ public class DsaJwsSignerTest {
       Assertions.assertNotNull(token);
 
       // AUTH0
-
       Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) keyPair.getPublic(), (RSAPrivateKey) keyPair.getPrivate());
       JWTVerifier verifier = JWT.require(algorithm).withIssuer("Issuer1").build();
 
@@ -171,7 +168,6 @@ public class DsaJwsSignerTest {
       KeyPair keyPair = generateRSKeyPair();
 
       // AUTH0
-
       Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) keyPair.getPublic(), (RSAPrivateKey) keyPair.getPrivate());
       String auth0Jwt = JWT.create().withIssuer("Issuer1").sign(algorithm);
 

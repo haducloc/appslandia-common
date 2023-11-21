@@ -27,6 +27,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.function.Function;
 
+import com.appslandia.common.crypto.PSSParameterSpecUtil;
 import com.appslandia.common.json.JsonProcessor;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
@@ -133,14 +134,14 @@ public class DsaJwtSigner extends DsaJwsSigner<JwtPayload> {
   }
 
   public static DsaJwtSigner PS256() {
-    return new DsaJwtSigner("PS256", "SHA256withRSA/PSS").setAlgParamSpec(DsaJwsSigner::toPSSParameterSpec);
+    return new DsaJwtSigner("PS256", "SHA256withRSA/PSS").setAlgParamSpec(PSSParameterSpecUtil::getInstance);
   }
 
   public static DsaJwtSigner PS384() {
-    return new DsaJwtSigner("PS384", "SHA384withRSA/PSS").setAlgParamSpec(DsaJwsSigner::toPSSParameterSpec);
+    return new DsaJwtSigner("PS384", "SHA384withRSA/PSS").setAlgParamSpec(PSSParameterSpecUtil::getInstance);
   }
 
   public static DsaJwtSigner PS512() {
-    return new DsaJwtSigner("PS512", "SHA512withRSA/PSS").setAlgParamSpec(DsaJwsSigner::toPSSParameterSpec);
+    return new DsaJwtSigner("PS512", "SHA512withRSA/PSS").setAlgParamSpec(PSSParameterSpecUtil::getInstance);
   }
 }
