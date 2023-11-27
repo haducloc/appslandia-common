@@ -36,11 +36,19 @@ public class StringUtils {
   public static final String EMPTY_STRING = "";
   public static final String[] EMPTY_ARRAY = {};
 
+  public static String toLowerCase(String str) {
+    return toLowerCase(str, Locale.ROOT);
+  }
+
   public static String toLowerCase(String str, Locale locale) {
     if (str == null || str.isEmpty()) {
       return null;
     }
     return str.toLowerCase(locale);
+  }
+
+  public static String toUpperCase(String str) {
+    return toUpperCase(str, Locale.ROOT);
   }
 
   public static String toUpperCase(String str, Locale locale) {
@@ -50,12 +58,20 @@ public class StringUtils {
     return str.toUpperCase(locale);
   }
 
+  public static String firstLowerCase(String str) {
+    return firstLowerCase(str, Locale.ROOT);
+  }
+
   public static String firstLowerCase(String str, Locale locale) {
     if (str == null || str.isEmpty()) {
       return null;
     }
     StringBuilder sb = new StringBuilder(str.length());
     return sb.append(str.substring(0, 1).toLowerCase(locale)).append(str.substring(1)).toString();
+  }
+
+  public static String firstUpperCase(String str) {
+    return firstUpperCase(str, Locale.ROOT);
   }
 
   public static String firstUpperCase(String str, Locale locale) {
