@@ -21,7 +21,6 @@
 package com.appslandia.common.geo;
 
 import java.text.DecimalFormat;
-import java.util.stream.IntStream;
 
 import com.appslandia.common.utils.Asserts;
 
@@ -43,11 +42,12 @@ public class GeoUtils {
     return degrees + minutes / 60.0 + seconds / 3600;
   }
 
-  public static String format(double minOrSec, int decimals) {
-    StringBuilder fmt = new StringBuilder(3 + decimals);
-    fmt.append("00.");
-    IntStream.range(0, decimals).forEach(p -> fmt.append('0'));
+  public static String formatMinOrSec(double minOrSec, int fractionDigits) {
+    if (fractionDigits < 0) {
+      return Double.toString(minOrSec);
+    }
 
-    return new DecimalFormat(fmt.toString()).format(minOrSec);
+    String format = (fractionDigits > 0) ? "00." + "0".repeat(fractionDigits) : "00";
+    return new DecimalFormat(format).format(minOrSec);
   }
 }

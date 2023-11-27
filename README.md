@@ -90,7 +90,7 @@ try (ConnectionImpl connScoped = new ConnectionImpl(javax.sql.DataSource)) {
 ```
 ### Geography
 ```java
- GeoLocation loc = new GeoLocation(lat, long);
+ GeoLocation loc = new GeoLocation(longitudeX, latitudeY);
  GeoLocation loc_east = loc.move(Direction.EAST, 10, DistanceUnit.MILE);
  //
  double distanceInMiles = loc.distanceTo(loc_east, DistanceUnit.MILE); // ~10 miles

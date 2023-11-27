@@ -20,6 +20,8 @@
 
 package com.appslandia.common.geo;
 
+import java.io.Serializable;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import com.appslandia.common.utils.Asserts;
@@ -31,46 +33,56 @@ import com.appslandia.common.utils.SplitUtils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class DMSLocation {
+public class DMSLocation implements Serializable {
+  private static final long serialVersionUID = 1L;
 
-  // Y: -90 and +90 degrees
-  final GeoDMS latitude;
+  public final GeoDMS x;
+  public final GeoDMS y;
 
-  // X: -180 and +180 degrees
-  final GeoDMS longitude;
+  public DMSLocation(double longitudeX, double latitudeY) {
+    Asserts.isTrue(!((longitudeX < -180.0) || (longitudeX > 180.0)), "longitudeX is invalid.");
+    Asserts.isTrue(!((latitudeY < -90.0) || (latitudeY > 90.0)), "latitudeY is invalid.");
 
-  public DMSLocation(double latitude, double longitude) {
-    Asserts.isTrue((latitude >= -90.0) && (latitude <= 90.0), "latitude is invalid.");
-    Asserts.isTrue((longitude >= -180.0) && (longitude <= 180.0), "longitude is invalid.");
-
-    this.latitude = GeoDMS.toLatDMS(latitude);
-    this.longitude = GeoDMS.toLongDMS(longitude);
+    this.x = GeoDMS.toLongDMS(longitudeX);
+    this.y = GeoDMS.toLatDMS(latitudeY);
   }
 
-  DMSLocation(GeoDMS latitude, GeoDMS longitude) {
-    this.latitude = latitude;
-    this.longitude = longitude;
-  }
-
-  public GeoDMS getLatitude() {
-    return this.latitude;
+  DMSLocation(GeoDMS longitudeX, GeoDMS latitudeY) {
+    this.x = longitudeX;
+    this.y = latitudeY;
   }
 
   public GeoDMS getLongitude() {
-    return this.longitude;
+    return this.x;
+  }
+
+  public GeoDMS getLatitude() {
+    return this.y;
   }
 
   public GeoLocation toGeoLocation() {
-    return new GeoLocation(this.latitude.toDecimalDegrees(), this.longitude.toDecimalDegrees());
+    return new GeoLocation(this.x.toDecimalDegrees(), this.y.toDecimalDegrees());
   }
 
-  public String toStringDMS(int secondsDecimals) {
-    return STR.fmt("{}, {}", this.latitude.toStringDMS(secondsDecimals), this.longitude.toStringDMS(secondsDecimals));
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.x, this.y);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+
+    DMSLocation that = (DMSLocation) o;
+    return Objects.equals(this.x, that.x) && Objects.equals(this.y, that.y);
   }
 
   @Override
   public String toString() {
-    return toStringDMS(1);
+    return this.y.toString() + ", " + this.x.toString();
   }
 
   static final Pattern DMS_LOCATION_PATTERN = Pattern.compile(
@@ -81,14 +93,14 @@ public class DMSLocation {
     Asserts.isTrue(DMS_LOCATION_PATTERN.matcher(dmsLocation).matches(),
         () -> STR.fmt("dmsLocation {} is invalid.", dmsLocation));
 
-    String[] items = SplitUtils.splitByComma(dmsLocation);
+    String[] geoDmss = SplitUtils.splitByComma(dmsLocation);
 
-    GeoDMS dms1 = GeoDMS.toGeoDMS(items[0]);
-    GeoDMS dms2 = GeoDMS.toGeoDMS(items[1]);
+    GeoDMS dms1 = GeoDMS.toGeoDMS(geoDmss[0]);
+    GeoDMS dms2 = GeoDMS.toGeoDMS(geoDmss[1]);
 
     Asserts.isTrue(!(dms1.isLatitude() && dms2.isLatitude()) && !(dms1.isLongitude() && dms2.isLongitude()),
         () -> STR.fmt("dmsLocation {} is invalid.", dmsLocation));
 
-    return dms1.isLatitude() ? new DMSLocation(dms1, dms2) : new DMSLocation(dms2, dms1);
+    return dms1.isLatitude() ? new DMSLocation(dms2, dms1) : new DMSLocation(dms1, dms2);
   }
 }

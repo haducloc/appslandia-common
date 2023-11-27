@@ -20,37 +20,42 @@
 
 package com.appslandia.common.geo;
 
+import java.io.Serializable;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.appslandia.common.utils.Asserts;
-import com.appslandia.common.utils.STR;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class GeoLocation {
+public class GeoLocation implements Serializable {
+  private static final long serialVersionUID = 1L;
 
-  final double latitude;
-  final double longitude;
+  public final double x;
+  public final double y;
 
-  public GeoLocation(double latitude, double longitude) {
-    Asserts.isTrue((latitude >= -90.0) && (latitude <= 90.0), "latitude is invalid.");
-    Asserts.isTrue((longitude >= -180.0) && (longitude <= 180.0), "longitude is invalid.");
+  public GeoLocation(double longitudeX, double latitudeY) {
+    Asserts.isTrue(!((longitudeX < -180.0) || (longitudeX > 180.0)), "longitudeX is invalid.");
+    Asserts.isTrue(!((latitudeY < -90.0) || (latitudeY > 90.0)), "latitudeY is invalid.");
 
-    this.latitude = latitude;
-    this.longitude = longitude;
-  }
-
-  public double getLatitude() {
-    return this.latitude;
+    this.x = longitudeX;
+    this.y = latitudeY;
   }
 
   public double getLongitude() {
-    return this.longitude;
+    return this.x;
+  }
+
+  public double getLatitude() {
+    return this.y;
   }
 
   public DMSLocation toDMSLocation() {
-    return new DMSLocation(this.latitude, this.longitude);
+    return new DMSLocation(this.x, this.y);
   }
 
   public GeoLocation move(Direction direction, double distance, DistanceUnit unit) {
@@ -58,50 +63,93 @@ public class GeoLocation {
     Asserts.notNull(unit);
 
     double perdegLong = 360.0 / GeoUtils.POLAR_CIRCUMFERENCE_MILES;
-    double perdegLat = 360.0 / (Math.cos(Math.toRadians(this.latitude)) * GeoUtils.EQUATOR_CIRCUMFERENCE_MILES);
+    double perdegLat = 360.0 / (Math.cos(Math.toRadians(this.y)) * GeoUtils.EQUATOR_CIRCUMFERENCE_MILES);
 
     switch (direction) {
     case NORTH:
-      return new GeoLocation(this.latitude + DistanceUnit.MILE.convert(distance, unit) * perdegLong, this.longitude);
+      return new GeoLocation(this.x, this.y + DistanceUnit.MILE.convert(distance, unit) * perdegLong);
 
     case SOUTH:
-      return new GeoLocation(this.latitude - DistanceUnit.MILE.convert(distance, unit) * perdegLong, this.longitude);
+      return new GeoLocation(this.x, this.y - DistanceUnit.MILE.convert(distance, unit) * perdegLong);
 
     case EAST:
-      return new GeoLocation(this.latitude, this.longitude + DistanceUnit.MILE.convert(distance, unit) * perdegLat);
+      return new GeoLocation(this.x + DistanceUnit.MILE.convert(distance, unit) * perdegLat, this.y);
 
     case WEST:
-      return new GeoLocation(this.latitude, this.longitude - DistanceUnit.MILE.convert(distance, unit) * perdegLat);
+      return new GeoLocation(this.x - DistanceUnit.MILE.convert(distance, unit) * perdegLat, this.y);
     default:
       throw new Error();
     }
   }
 
   public double distanceTo(GeoLocation to, DistanceUnit unit) {
+    // Ensure 'to' and 'unit' are not null
     Asserts.notNull(to);
     Asserts.notNull(unit);
 
-    double rlt1 = Math.toRadians(this.latitude);
-    double rlt2 = Math.toRadians(to.latitude);
+    // Convert latitude and longitude to radians
+    double radLat1 = Math.toRadians(this.y);
+    double radLat2 = Math.toRadians(to.y);
+    double radLon1 = Math.toRadians(this.x);
+    double radLon2 = Math.toRadians(to.x);
 
-    double rlg1 = Math.toRadians(this.longitude);
-    double rlg2 = Math.toRadians(to.longitude);
+    // HaversineFormula: https://en.wikipedia.org/wiki/Haversine_formula
+    double h = Math.sin((radLat2 - radLat1) / 2) * Math.sin((radLat2 - radLat1) / 2)
+        + Math.cos(radLat1) * Math.cos(radLat2) * Math.sin((radLon2 - radLon1) / 2) * Math.sin((radLon2 - radLon1) / 2);
 
-    // https://en.wikipedia.org/wiki/Haversine_formula
-    double h = Math.sin((rlt2 - rlt1) / 2) * Math.sin((rlt2 - rlt1) / 2)
-        + Math.cos(rlt1) * Math.cos(rlt2) * Math.sin((rlg2 - rlg1) / 2) * Math.sin((rlg2 - rlg1) / 2);
+    // Calculate the great-circle distance in meters
+    double distanceInMeters = 2 * GeoUtils.EARTH_RADIUS_METER * Math.asin(Math.sqrt(h));
 
-    double d = 2 * GeoUtils.EARTH_RADIUS_METER * Math.asin(Math.sqrt(h));
-    return unit.convert(d, DistanceUnit.METER);
+    // Convert distance to the desired unit
+    return unit.convert(distanceInMeters, DistanceUnit.METER);
   }
 
-  public String toString(int scale) {
-    String fmt = STR.fmt("%.{}f, %.{}f", scale, scale);
-    return String.format(fmt, this.latitude, this.longitude);
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.x, this.y);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+
+    GeoLocation that = (GeoLocation) o;
+    return Double.compare(that.x, this.x) == 0 && Double.compare(that.y, this.y) == 0;
+  }
+
+  public String toStringWKT() {
+    return "POINT(" + this.x + " " + this.y + ")";
   }
 
   @Override
   public String toString() {
-    return toString(6);
+    return this.y + ", " + this.x;
+  }
+
+  static final Pattern POINT_PATTERN = Pattern.compile("(-|\\+)?\\d+(\\.\\d+)?\\s+(-|\\+)?\\d+(\\.\\d+)?");
+
+  static final Pattern POINT_PATTERN_WKT = Pattern
+      .compile("^\\s*POINT\\s*\\(\\s*" + POINT_PATTERN.pattern() + "\\s*\\)\\s*$", Pattern.CASE_INSENSITIVE);
+
+  public static GeoLocation parseWKT(String pointAsWKT) {
+    if (!POINT_PATTERN_WKT.matcher(pointAsWKT).matches()) {
+      throw new IllegalArgumentException("The given pointAsWKT is invalid.");
+    }
+
+    Matcher matcher = POINT_PATTERN.matcher(pointAsWKT);
+    GeoLocation loc = null;
+
+    while (matcher.find()) {
+      String[] point = matcher.group().split("\\s+");
+
+      double longitude = Double.parseDouble(point[0]);
+      double latitude = Double.parseDouble(point[1]);
+
+      loc = new GeoLocation(longitude, latitude);
+    }
+    return loc;
   }
 }
