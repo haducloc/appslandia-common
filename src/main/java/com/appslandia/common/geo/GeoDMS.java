@@ -55,7 +55,7 @@ public class GeoDMS implements Serializable {
     this.seconds = DecimalUtils.round(seconds, this.secondFractionDigits, RoundingMode.HALF_EVEN);
 
     this.direction = direction;
-    this.decimalDegrees = decimalDegrees;
+    this.decimalDegrees = GeoUtils.toDecimalDegrees(degrees, minutes, seconds);
   }
 
   GeoDMS(int degrees, int minutes, double seconds, Direction direction) {
