@@ -41,6 +41,9 @@ public enum DistanceUnit {
     if (this == distUnit) {
       return distance;
     }
+    if (Double.compare(this.unitInMeter, 0.0d) == 0) {
+      return 0.0d;
+    }
     return distance * distUnit.unitInMeter / this.unitInMeter;
   }
 
