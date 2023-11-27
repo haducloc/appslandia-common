@@ -145,8 +145,8 @@ public class GeoDMS implements Serializable {
     double seconds = Double.parseDouble(items[2].trim());
     Direction direction = Direction.parseValue(items[3].trim());
 
-    boolean invalidDms1 = (direction.isY() & (degrees > 90 || minutes >= 60 || seconds >= 60))
-        || (direction.isX() & (degrees > 180 || minutes >= 60 || seconds >= 60));
+    boolean invalidDms1 = (direction.isY() & (degrees > 90 || minutes >= 60 || Double.compare(seconds, 60.0) >= 0))
+        || (direction.isX() & (degrees > 180 || minutes >= 60 || Double.compare(seconds, 60.0) >= 0));
 
     boolean invalidDms2 = (direction.isY() & (degrees == 90 && (minutes != 0 || Double.compare(seconds, 0.0) != 0)))
         || (direction.isX() & (degrees == 180 && (minutes != 0 || Double.compare(seconds, 0.0) != 0)));
