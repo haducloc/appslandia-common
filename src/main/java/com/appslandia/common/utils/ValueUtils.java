@@ -122,4 +122,9 @@ public class ValueUtils {
   public static long valueOrAlt(Long checkValue, long altValue) {
     return (checkValue != null) ? checkValue : altValue;
   }
+
+  public static boolean areAllPresentOrNone(Object... values) {
+    long nullCount = Arrays.stream(values).filter(v -> v == null).count();
+    return nullCount == 0 || nullCount == values.length;
+  }
 }
