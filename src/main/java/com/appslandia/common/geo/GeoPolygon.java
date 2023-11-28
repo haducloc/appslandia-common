@@ -42,7 +42,7 @@ public class GeoPolygon implements Serializable {
     Asserts.hasElements(polygons);
 
     for (List<GeoLocation> polygon : polygons) {
-      Asserts.isTrue(polygon.size() >= 3, "Each polygon must consist of at least three points.");
+      Asserts.isTrue(polygon.size() >= 3, "A polygon must consist of at least three points.");
     }
     this.polygons = polygons;
   }
