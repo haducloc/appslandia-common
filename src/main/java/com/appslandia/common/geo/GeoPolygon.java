@@ -51,7 +51,7 @@ public class GeoPolygon implements Serializable {
     return contains(point, 0.00001);
   }
 
-  public boolean contains(GeoLocation point, double tolerance) {
+  public boolean contains(GeoLocation p, double tolerance) {
     int intersects = 0;
 
     // Iterate through all polygons, including the most outer polygon and inner
@@ -71,26 +71,25 @@ public class GeoPolygon implements Serializable {
         }
 
         // If the point has the same y as either A or B, adjust the point's y
-        if (Double.compare(point.y, A.y) == 0 || Double.compare(point.y, B.y) == 0) {
-          point = new GeoLocation(point.x, point.y + tolerance);
+        if (p.y == A.y || p.y == B.y) {
+          p = new GeoLocation(p.x, p.y + tolerance);
         }
 
         // Check if the point is outside the vertical bounds of the current edge
         // or to the right of the rightmost point of the edge
-        if (point.y < A.y || point.y > B.y || point.x > Math.max(A.x, B.x)) {
+        if (p.y < A.y || p.y > B.y || p.x > Math.max(A.x, B.x)) {
           continue;
         }
 
         // Check if the point is to the left of the leftmost point of the edge
-        if (point.x < Math.min(A.x, B.x)) {
+        if (p.x < Math.min(A.x, B.x)) {
           intersects++;
           continue;
         }
 
-        // Calculate slopes
-        double abSlope = (Double.compare(B.x, A.x) != 0) ? (B.y - A.y) / (B.x - A.x) : Double.POSITIVE_INFINITY;
-        double apSlope = (Double.compare(point.x, A.x) != 0) ? (point.y - A.y) / (point.x - A.x)
-            : Double.POSITIVE_INFINITY;
+        // Compute slopes
+        double abSlope = (B.y - A.y) / (B.x - A.x);
+        double apSlope = (p.y - A.y) / (p.x - A.x);
 
         if (Double.compare(apSlope, abSlope) >= 0) {
           intersects++;

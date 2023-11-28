@@ -39,8 +39,8 @@ public class GeoLocation implements Serializable {
   public final double y;
 
   public GeoLocation(double longitudeX, double latitudeY) {
-    Asserts.isTrue(!((longitudeX < -180.0) || (longitudeX > 180.0)), "longitudeX is invalid.");
-    Asserts.isTrue(!((latitudeY < -90.0) || (latitudeY > 90.0)), "latitudeY is invalid.");
+    Asserts.isTrue(longitudeX >= -180.0 && longitudeX <= 180.0, "longitudeX is invalid.");
+    Asserts.isTrue(latitudeY >= -90.0 && latitudeY <= 90.0, "latitudeY is invalid.");
 
     this.x = longitudeX;
     this.y = latitudeY;
@@ -117,7 +117,7 @@ public class GeoLocation implements Serializable {
       return false;
 
     GeoLocation that = (GeoLocation) o;
-    return Double.compare(that.x, this.x) == 0 && Double.compare(that.y, this.y) == 0;
+    return that.x == this.x && that.y == this.y;
   }
 
   public String toStringWKT() {

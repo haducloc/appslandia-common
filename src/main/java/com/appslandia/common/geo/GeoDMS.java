@@ -111,7 +111,7 @@ public class GeoDMS implements Serializable {
       return false;
 
     GeoDMS that = (GeoDMS) o;
-    return Double.compare(this.decimalDegrees, that.decimalDegrees) == 0 && this.direction == that.direction;
+    return this.decimalDegrees == that.decimalDegrees && this.direction == that.direction;
   }
 
   @Override
@@ -121,12 +121,12 @@ public class GeoDMS implements Serializable {
   }
 
   public static GeoDMS toLatDMS(double latitude) {
-    Asserts.isTrue(!((latitude < -90.0) || (latitude > 90.0)), "latitude is invalid.");
+    Asserts.isTrue(latitude >= -90.0 && latitude <= 90.0, "latitude is invalid.");
     return new GeoDMS(Math.abs(latitude), Double.compare(latitude, 0.0) >= 0 ? Direction.NORTH : Direction.SOUTH);
   }
 
   public static GeoDMS toLongDMS(double longitude) {
-    Asserts.isTrue(!((longitude < -180.0) || (longitude > 180.0)), "longitude is invalid.");
+    Asserts.isTrue(longitude >= -180.0 && longitude <= 180.0, "longitude is invalid.");
     return new GeoDMS(Math.abs(longitude), Double.compare(longitude, 0.0) >= 0 ? Direction.EAST : Direction.WEST);
   }
 
@@ -145,11 +145,11 @@ public class GeoDMS implements Serializable {
     double seconds = Double.parseDouble(items[2].trim());
     Direction direction = Direction.parseValue(items[3].trim());
 
-    boolean invalidDms1 = (direction.isY() & (degrees > 90 || minutes >= 60 || Double.compare(seconds, 60.0) >= 0))
-        || (direction.isX() & (degrees > 180 || minutes >= 60 || Double.compare(seconds, 60.0) >= 0));
+    boolean invalidDms1 = (direction.isY() & (degrees > 90 || minutes >= 60 || seconds >= 60.0))
+        || (direction.isX() & (degrees > 180 || minutes >= 60 || seconds >= 60.0));
 
-    boolean invalidDms2 = (direction.isY() & (degrees == 90 && (minutes != 0 || Double.compare(seconds, 0.0) != 0)))
-        || (direction.isX() & (degrees == 180 && (minutes != 0 || Double.compare(seconds, 0.0) != 0)));
+    boolean invalidDms2 = (direction.isY() & (degrees == 90 && (minutes != 0 || seconds != 0.0)))
+        || (direction.isX() & (degrees == 180 && (minutes != 0 || seconds != 0.0)));
 
     Asserts.isTrue(!invalidDms1 && !invalidDms2, () -> STR.fmt("dms {} is invalid.", dms));
 
