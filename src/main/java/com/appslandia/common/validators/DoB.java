@@ -75,9 +75,7 @@ public @interface DoB {
       if (this.canbeFuture) {
         return true;
       }
-
       LocalDate today = !this.zoneId.isEmpty() ? DateUtils.todayAt(this.zoneId) : DateUtils.todayAt((String) null);
-
       return !value.isAfter(today);
     }
   }
