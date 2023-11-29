@@ -46,7 +46,7 @@ import jakarta.validation.Payload;
 @Documented
 public @interface DoB {
 
-  String message() default "{com.appslandia.common.validators.FixedLength.message}";
+  String message() default "{com.appslandia.common.validators.DoB.message}";
 
   Class<?>[] groups() default {};
 
