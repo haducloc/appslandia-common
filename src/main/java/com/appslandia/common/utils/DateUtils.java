@@ -37,7 +37,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
-import java.util.Date;
 import java.util.EnumMap;
 import java.util.LinkedHashSet;
 import java.util.Locale;
@@ -203,18 +202,6 @@ public class DateUtils {
     return LocalDateTime.of(year, month, day, hour, minute);
   }
 
-  public static LocalDate toLocalDate(Date date, ZoneOffset offset) {
-    return (date != null) ? Instant.ofEpochMilli(date.getTime()).atOffset(offset).toLocalDate() : null;
-  }
-
-  public static LocalTime toLocalTime(Date time, ZoneOffset offset) {
-    return (time != null) ? Instant.ofEpochMilli(time.getTime()).atOffset(offset).toLocalTime() : null;
-  }
-
-  public static LocalDateTime toLocalDateTime(Date dt, ZoneOffset offset) {
-    return (dt != null) ? Instant.ofEpochMilli(dt.getTime()).atOffset(offset).toLocalDateTime() : null;
-  }
-
   public static LocalDateTime toLocalDateTime(Long timeMillis, ZoneOffset offset) {
     return (timeMillis != null) ? Instant.ofEpochMilli(timeMillis).atOffset(offset).toLocalDateTime() : null;
   }
@@ -273,12 +260,20 @@ public class DateUtils {
     return nowAt(ZoneOffset.UTC);
   }
 
-  public static OffsetDateTime nowAt(String offsetId) {
-    return nowAt(ZoneOffset.of(offsetId));
+  public static OffsetDateTime nowAt(String zoneId) {
+    return (zoneId != null) ? nowAt(ZoneId.of(zoneId)) : nowAt((ZoneId) null);
   }
 
-  public static OffsetDateTime nowAt(ZoneOffset offset) {
-    return OffsetDateTime.now().withOffsetSameInstant(offset);
+  public static OffsetDateTime nowAt(ZoneId zoneId) {
+    return (zoneId != null) ? OffsetDateTime.now(zoneId) : OffsetDateTime.now();
+  }
+
+  public static LocalDate todayAt(String zoneId) {
+    return (zoneId != null) ? todayAt(ZoneId.of(zoneId)) : todayAt((ZoneId) null);
+  }
+
+  public static LocalDate todayAt(ZoneId zoneId) {
+    return (zoneId != null) ? LocalDate.now(zoneId) : LocalDate.now();
   }
 
   public static OffsetDateTime toSameInstantUTC(OffsetDateTime odt) {
