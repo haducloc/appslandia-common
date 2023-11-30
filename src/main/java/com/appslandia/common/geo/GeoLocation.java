@@ -129,12 +129,24 @@ public class GeoLocation implements Serializable {
     return this.y + ", " + this.x;
   }
 
+  public static String toStringWKT(GeoLocation location) {
+    if (location == null) {
+      return "POINT EMPTY";
+    }
+    return location.toStringWKT();
+  }
+
   static final Pattern POINT_PATTERN = Pattern.compile("(-|\\+)?\\d+(\\.\\d+)?\\s+(-|\\+)?\\d+(\\.\\d+)?");
 
-  static final Pattern POINT_PATTERN_WKT = Pattern
-      .compile("^\\s*POINT\\s*\\(\\s*" + POINT_PATTERN.pattern() + "\\s*\\)\\s*$", Pattern.CASE_INSENSITIVE);
+  static final Pattern POINT_PATTERN_WKT = Pattern.compile("^POINT\\s*\\(\\s*" + POINT_PATTERN.pattern() + "\\s*\\)$",
+      Pattern.CASE_INSENSITIVE);
+
+  static final Pattern POINT_PATTERN_EMPTY = Pattern.compile("^POINT\\s+EMPTY$", Pattern.CASE_INSENSITIVE);
 
   public static GeoLocation parseWKT(String pointAsWKT) {
+    if (POINT_PATTERN_EMPTY.matcher(pointAsWKT).matches()) {
+      return null;
+    }
     if (!POINT_PATTERN_WKT.matcher(pointAsWKT).matches()) {
       throw new IllegalArgumentException("The given pointAsWKT is invalid.");
     }
