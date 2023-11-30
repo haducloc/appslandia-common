@@ -27,8 +27,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.time.LocalDate;
 
-import com.appslandia.common.utils.DateUtils;
-
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -54,17 +52,13 @@ public @interface DoB {
 
   boolean canbeFuture() default false;
 
-  String zoneId() default "";
-
   public static class ConstraintValidatorImpl implements ConstraintValidator<DoB, LocalDate> {
 
-    private String zoneId;
     private boolean canbeFuture;
 
     @Override
     public void initialize(DoB annotation) {
       this.canbeFuture = annotation.canbeFuture();
-      this.zoneId = annotation.zoneId();
     }
 
     @Override
@@ -75,7 +69,7 @@ public @interface DoB {
       if (this.canbeFuture) {
         return true;
       }
-      LocalDate today = !this.zoneId.isEmpty() ? DateUtils.todayAt(this.zoneId) : DateUtils.todayAt((String) null);
+      LocalDate today = LocalDate.now();
       return !value.isAfter(today);
     }
   }
