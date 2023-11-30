@@ -297,11 +297,11 @@ public class RecordContext extends DbContext {
     }
   }
 
-  public <T> List<DataRecord> executeList(String pSql, Object... params) throws java.sql.SQLException {
+  public List<DataRecord> executeList(String pSql, Object... params) throws java.sql.SQLException {
     return executeList(pSql, JdbcUtils.toParameters(params));
   }
 
-  public <T> List<DataRecord> executeList(String pSql, Map<String, Object> params) throws java.sql.SQLException {
+  public List<DataRecord> executeList(String pSql, Map<String, Object> params) throws java.sql.SQLException {
     StatementImpl stat = getStatement(pSql, params);
 
     try (ResultSetImpl rs = stat.executeQuery()) {
@@ -326,6 +326,11 @@ public class RecordContext extends DbContext {
 
       return RecordUtils.toRecord(rs);
     });
+  }
+
+  public List<DataRecord> executeList(String fromTable, String[] joinExpressions, String filterExpression,
+      String orderExpression) throws java.sql.SQLException {
+    throw new UnsupportedOperationException();
   }
 
   protected String getDataSourceID() throws UncheckedSQLException {
