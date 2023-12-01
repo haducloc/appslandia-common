@@ -34,8 +34,9 @@ dependencies {
 ## Sample Usage
 ### ToString Builder
 ```java
-// Print all fields
-System.out.println( new ToStringBuilder().toString(any_object));
+new ToStringBuilder().toString(anyObject);
+new ToStringBuilder().setLevel(3).toString(anyObject);
+new ToStringBuilder().setToOneLine(true).toString(anyObject);
 ```
 ### JDBC Named Parameters
 ```java
@@ -123,6 +124,17 @@ try (ConnectionImpl connScoped = new ConnectionImpl(javax.sql.DataSource)) {
   token.getHeader();
   token.getPayload();
 ```
-
+### CSV Reader
+```java
+  // Can be reused
+  CsvProcessor csvReader = new CsvProcessor();
+  
+  // This is also handing UTF BOM in the csv,if present
+  BufferedReader br = IOUtils.textReaderBOM(new FileInputStream("a_csv_file"), null);
+  
+  List<CsvRecord> records = csvReader.parseRecords(br);
+  records.get(0).getString(0);
+  // getInt(), getBool(), ...
+```
 ## License
 This code is distributed under the terms and conditions of the [MIT license](LICENSE).
