@@ -29,9 +29,12 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.math.BigDecimal;
 import java.nio.Buffer;
-import java.nio.charset.Charset;
+import java.time.Clock;
+import java.time.Period;
+import java.time.ZoneId;
 import java.time.temporal.Temporal;
 import java.util.Calendar;
 import java.util.Collection;
@@ -43,6 +46,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
+import java.util.UUID;
 
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ExceptionUtils;
@@ -97,17 +101,26 @@ public class ToStringBuilder {
       if (TypeUtils.isPrimitiveOrWrapper(type)) {
         return true;
       }
-      if (CharSequence.class.isAssignableFrom(type)) {
+      if (CharSequence.class.isAssignableFrom(type) || Enum.class.isAssignableFrom(type)) {
         return true;
       }
-      if (Enum.class.isAssignableFrom(type) || (type == BigDecimal.class)) {
+      if ((type == BigDecimal.class) || (type == UUID.class)) {
         return true;
       }
-      if (Date.class.isAssignableFrom(type) || Calendar.class.isAssignableFrom(type)
-          || TimeZone.class.isAssignableFrom(type) || (type == Locale.class) || Charset.class.isAssignableFrom(type)) {
+
+      if (Date.class.isAssignableFrom(type) || Calendar.class.isAssignableFrom(type)) {
         return true;
       }
-      if (Temporal.class.isAssignableFrom(type)) {
+      if (Temporal.class.isAssignableFrom(type) || Period.class.isAssignableFrom(type)) {
+        return true;
+      }
+
+      if (TimeZone.class.isAssignableFrom(type) || ZoneId.class.isAssignableFrom(type)
+          || Clock.class.isAssignableFrom(type)) {
+        return true;
+      }
+
+      if (Locale.class.isAssignableFrom(type)) {
         return true;
       }
       return false;
@@ -135,6 +148,8 @@ public class ToStringBuilder {
   private ToStringDecision tsDecision = TS_DECISION;
 
   private int identTabs;
+  private boolean toOneLine;
+  private int iterLength;
 
   public ToStringBuilder() {
     this(2);
@@ -144,24 +159,44 @@ public class ToStringBuilder {
     setLevel(level);
   }
 
-  public ToStringBuilder toStringDecision(ToStringDecision tsDecision) {
+  public ToStringBuilder setLevel(int level) {
+    this.level = ValueUtils.valueOrMin(level, 1);
+    return this;
+  }
+
+  public ToStringBuilder setToStringDecision(ToStringDecision tsDecision) {
     this.tsDecision = tsDecision;
+    return this;
+  }
+
+  public ToStringBuilder setIdentTabs(int identTabs) {
+    this.identTabs = ValueUtils.valueOrMin(identTabs, 0);
+    return this;
+  }
+
+  public ToStringBuilder setToOneLine(boolean toOneLine) {
+    this.toOneLine = toOneLine;
+    return this;
+  }
+
+  public ToStringBuilder setIterLength(int iterLength) {
+    this.iterLength = iterLength;
     return this;
   }
 
   public String toString(Object obj) {
     TextBuilder builder = new TextBuilder();
-    appendtab(builder, this.identTabs, false);
+    appendtab(builder, this.identTabs);
     if (obj == null) {
       return builder.append("null").toString();
     }
-    this.toStringObject(obj, 1, builder);
+    this.toStringObject(obj, 1, builder, null, null);
     return builder.toString();
   }
 
   public String toStringFields(Object obj) {
     TextBuilder builder = new TextBuilder();
-    appendtab(builder, this.identTabs, false);
+    appendtab(builder, this.identTabs);
     if (obj == null) {
       return builder.append("null").toString();
     }
@@ -169,7 +204,7 @@ public class ToStringBuilder {
     return builder.toString();
   }
 
-  private void toStringObject(Object obj, int level, TextBuilder builder) {
+  private void toStringObject(Object obj, int level, TextBuilder builder, Class<?> iterElementType, Integer iterLen) {
     if (obj == null) {
       builder.append("null");
       return;
@@ -178,39 +213,84 @@ public class ToStringBuilder {
     // Basic Types
     if (this.tsDecision.isBasicType(obj.getClass())) {
 
+      // Character
       if (obj.getClass() == Character.class) {
         builder.append("'").append(obj).append("'");
         return;
       }
+
+      // String
       if (obj.getClass() == String.class) {
         builder.append("\"").append(obj).append("\"");
         return;
       }
-      if (obj.getClass() == Long.class) {
-        builder.append(obj).append(" (L)");
+
+      // *
+      if (CharSequence.class.isAssignableFrom(obj.getClass()) || Date.class.isAssignableFrom(obj.getClass())
+          || Temporal.class.isAssignableFrom(obj.getClass()) || Clock.class.isAssignableFrom(obj.getClass())
+          || obj.getClass() == Period.class) {
+
+        builder.append("\"").append(obj).append("\"?");
         return;
       }
-      if (obj.getClass() == Float.class) {
-        builder.append(obj).append(" (F)");
+
+      // TimeZone
+      if (TimeZone.class.isAssignableFrom(obj.getClass())) {
+        TimeZone tz = (TimeZone) obj;
+        builder.append("\"").append(tz.getID()).append("\"?");
         return;
       }
+
+      // ZoneId
+      if (ZoneId.class.isAssignableFrom(obj.getClass())) {
+        ZoneId z = (ZoneId) obj;
+        builder.append("\"").append(z.getId()).append("\"?");
+        return;
+      }
+
+      // Calendar
+      if (Calendar.class.isAssignableFrom(obj.getClass())) {
+        Calendar c = (Calendar) obj;
+        builder.append("Calendar(\"").append(c.getTime()).append("\", \"").append(c.getTimeZone().getID())
+            .append("\")");
+        return;
+      }
+
+      // Locale
+      if (obj.getClass() == Locale.class) {
+        Locale l = (Locale) obj;
+        builder.append("Locale(\"").append(l.getLanguage()).append("\", \"").append(l.getCountry()).append("\", \"")
+            .append(l.getVariant()).append("\")");
+        return;
+      }
+
       if (obj.getClass() == BigDecimal.class) {
-        builder.append(obj).append(" (BD)");
+        builder.append(((BigDecimal) obj).toPlainString());
         return;
       }
+
       builder.append(obj);
       return;
     }
+
+    // Try to determine iterLen and iterElementType
+    iterLen = (obj instanceof Collection) ? ((Collection<?>) obj).size() : iterLen;
+    iterElementType = (obj instanceof Collection) ? getIterElementType((Collection<?>) obj) : iterElementType;
+
     if (obj instanceof Iterable) {
-      toStringIterator(obj, new IteratorIterator(((Iterable<?>) obj).iterator()), level, builder);
+      toStringIterator(obj,
+          new IteratorIterator(((Iterable<?>) obj).iterator(), iterLen, iterElementType, this.tsDecision), level,
+          builder);
       return;
     }
     if (obj instanceof Iterator) {
-      toStringIterator(obj, new IteratorIterator((Iterator<?>) obj), level, builder);
+      toStringIterator(obj, new IteratorIterator((Iterator<?>) obj, iterLen, iterElementType, this.tsDecision), level,
+          builder);
       return;
     }
     if (obj instanceof Enumeration) {
-      toStringIterator(obj, new EnumerationIterator((Enumeration<?>) obj), level, builder);
+      toStringIterator(obj, new EnumerationIterator((Enumeration<?>) obj, iterLen, iterElementType, this.tsDecision),
+          level, builder);
       return;
     }
     if (obj.getClass().isArray()) {
@@ -259,12 +339,11 @@ public class ToStringBuilder {
           continue;
         }
         if (!isFirst) {
-          builder.append(",");
+          builder.append(this.toOneLine ? ", " : ",");
         } else {
           isFirst = false;
         }
-        appendln(builder, false);
-        appendtab(builder, level + this.identTabs, false);
+        appendln(builder, level + this.identTabs, false);
         builder.append(field.getName()).append(": ");
 
         try {
@@ -278,7 +357,9 @@ public class ToStringBuilder {
               builder.append(ObjectUtils.toIdHash(fieldVal));
 
             } else {
-              this.toStringObject(fieldVal, level + 1, builder);
+
+              Class<?> iterElementType = getIterElementType(field);
+              this.toStringObject(fieldVal, level + 1, builder, iterElementType, null);
             }
           }
         } catch (Exception ex) {
@@ -290,8 +371,8 @@ public class ToStringBuilder {
     if (isFirst) {
       builder.append(" no fields ]");
     } else {
-      appendln(builder, false);
-      appendtab(builder, level - 1 + this.identTabs, false).append("]");
+      appendln(builder, level - 1 + this.identTabs, false);
+      builder.append("]");
     }
   }
 
@@ -306,17 +387,20 @@ public class ToStringBuilder {
     while (iterator.hasNext()) {
       Object element = iterator.next();
 
-      if (element == MORE_ELEMENTS) {
-        builder.append(", AND MORE ...");
-        break;
+      // Sub-levels ONLY
+      if ((level > 1)) {
+        if ((this.iterLength > 0) && (iterator.getIndex() > this.iterLength)) {
+          builder.append(", ...");
+          break;
+        }
       }
+
       if (!isFirst) {
-        builder.append(",");
+        builder.append(this.toOneLine || iterator.isCompact() ? ", " : ",");
       } else {
         isFirst = false;
       }
-      appendln(builder, iterator.isCompact());
-      appendtab(builder, level + this.identTabs, iterator.isCompact());
+      appendln(builder, level + this.identTabs, iterator.isCompact());
 
       if (element == null) {
         builder.append("null");
@@ -325,16 +409,15 @@ public class ToStringBuilder {
           builder.append(ObjectUtils.toIdHash(element));
 
         } else {
-          this.toStringObject(element, level + 1, builder);
+          this.toStringObject(element, level + 1, builder, null, null);
         }
       }
     }
     if (isFirst) {
       builder.append(" no elements ]");
     } else {
-      appendln(builder, iterator.isCompact());
-      appendtab(builder, level - 1 + this.identTabs, iterator.isCompact()).append("] (")
-          .append(iterator.getComputedLen()).append(")");
+      appendln(builder, level - 1 + this.identTabs, iterator.isCompact());
+      builder.append("] (").append(iterator.getIterLen() != null ? iterator.getIterLen() : "?").append(")");
     }
   }
 
@@ -348,12 +431,11 @@ public class ToStringBuilder {
 
     for (Object key : map.keySet()) {
       if (!isFirst) {
-        builder.append(",");
+        builder.append(this.toOneLine ? ", " : ",");
       } else {
         isFirst = false;
       }
-      appendln(builder, false);
-      appendtab(builder, level + this.identTabs, false);
+      appendln(builder, level + this.identTabs, false);
 
       builder.append(key).append(": ");
       Object entryVal = map.get(key);
@@ -364,15 +446,15 @@ public class ToStringBuilder {
           builder.append(ObjectUtils.toIdHash(entryVal));
 
         } else {
-          this.toStringObject(entryVal, level + 1, builder);
+          this.toStringObject(entryVal, level + 1, builder, null, null);
         }
       }
     }
     if (isFirst) {
       builder.append(" no entries ]");
     } else {
-      appendln(builder, false);
-      appendtab(builder, level - 1 + this.identTabs, false).append("] (").append(map.size()).append(")");
+      appendln(builder, level - 1 + this.identTabs, false);
+      builder.append("] (").append(map.size()).append(")");
     }
   }
 
@@ -383,12 +465,11 @@ public class ToStringBuilder {
 
     for (String attribute : attributes) {
       if (!isFirst) {
-        builder.append(",");
+        builder.append(this.toOneLine ? ", " : ",");
       } else {
         isFirst = false;
       }
-      appendln(builder, false);
-      appendtab(builder, level + this.identTabs, false);
+      appendln(builder, level + this.identTabs, false);
       builder.append(attribute).append(": ");
 
       try {
@@ -404,7 +485,7 @@ public class ToStringBuilder {
             builder.append(ObjectUtils.toIdHash(element));
 
           } else {
-            this.toStringObject(element, level + 1, builder);
+            this.toStringObject(element, level + 1, builder, null, null);
           }
         }
       } catch (Exception ex) {
@@ -414,14 +495,14 @@ public class ToStringBuilder {
     if (isFirst) {
       builder.append(" no elements ]");
     } else {
-      appendln(builder, false);
-      appendtab(builder, level - 1 + this.identTabs, false).append("]");
+      appendln(builder, level - 1 + this.identTabs, false);
+      builder.append("]");
     }
   }
 
   public String toStringAttributes(Object obj) {
     TextBuilder builder = new TextBuilder();
-    appendtab(builder, this.identTabs, false);
+    appendtab(builder, this.identTabs);
     if (obj == null) {
       builder.append("null");
       return builder.toString();
@@ -441,7 +522,7 @@ public class ToStringBuilder {
 
   public String toStringHeaders(Object obj) {
     TextBuilder builder = new TextBuilder();
-    appendtab(builder, this.identTabs, false);
+    appendtab(builder, this.identTabs);
     if (obj == null) {
       builder.append("null");
       return builder.toString();
@@ -478,28 +559,49 @@ public class ToStringBuilder {
     return names;
   }
 
-  public ToStringBuilder setLevel(int level) {
-    this.level = ValueUtils.valueOrMin(level, 1);
-    return this;
-  }
-
-  public ToStringBuilder setIdentTabs(int identTabs) {
-    this.identTabs = ValueUtils.valueOrMin(identTabs, 0);
-    return this;
-  }
-
-  private TextBuilder appendln(TextBuilder builder, boolean isCompact) {
-    if (!isCompact) {
+  private TextBuilder appendln(TextBuilder builder, int n, boolean iteratorCompact) {
+    if (!this.toOneLine && !iteratorCompact) {
       builder.appendln();
+      builder.appendsp(2 * n);
     }
     return builder;
   }
 
-  private TextBuilder appendtab(TextBuilder builder, int n, boolean isCompact) {
-    if (isCompact) {
-      return builder.appendsp();
+  private TextBuilder appendtab(TextBuilder builder, int n) {
+    if (!this.toOneLine) {
+      builder.appendsp(2 * n);
     }
-    return builder.appendsp(2 * n);
+    return builder;
+  }
+
+  static Class<?> getIterElementType(Field field) {
+    if (Iterable.class.isAssignableFrom(field.getType()) || Iterator.class.isAssignableFrom(field.getType())
+        || Enumeration.class.isAssignableFrom(field.getType())) {
+
+      if (field.getGenericType() instanceof ParameterizedType) {
+        return ReflectionUtils.getArgTypes1(field.getGenericType());
+      }
+    }
+    return null;
+  }
+
+  static Class<?> getIterElementType(Collection<?> collection) {
+    Class<?> firstType = null;
+
+    for (Object ele : collection) {
+      if (ele == null) {
+        continue;
+      }
+
+      if (firstType == null) {
+        firstType = ele.getClass();
+      } else {
+        if (firstType != ele.getClass()) {
+          return null;
+        }
+      }
+    }
+    return firstType;
   }
 
   interface ElementIterator {
@@ -510,29 +612,28 @@ public class ToStringBuilder {
 
     int getIndex();
 
-    int getComputedLen();
+    Integer getIterLen();
+
+    Class<?> elementType();
 
     boolean isCompact();
   }
-
-  static final Object MORE_ELEMENTS = new Object() {
-  };
 
   static class ArrayIterator implements ElementIterator {
 
     final Object obj;
     final int len;
     final Class<?> elementType;
-    int index = 0;
+    final boolean isCompact;
 
-    final ToStringDecision tsDecision;
+    int index = 0;
 
     public ArrayIterator(Object obj, ToStringDecision tsDecision) {
       this.obj = obj;
       this.len = Array.getLength(obj);
-      this.elementType = obj.getClass().getComponentType();
 
-      this.tsDecision = tsDecision;
+      this.elementType = obj.getClass().getComponentType();
+      this.isCompact = tsDecision.isBasicType(this.elementType);
     }
 
     @Override
@@ -542,12 +643,6 @@ public class ToStringBuilder {
 
     @Override
     public Object next() {
-      // byte[]
-      if (this.elementType == byte.class) {
-        if (this.index > 128) {
-          return MORE_ELEMENTS;
-        }
-      }
       return Array.get(this.obj, this.index++);
     }
 
@@ -557,22 +652,35 @@ public class ToStringBuilder {
     }
 
     @Override
-    public int getComputedLen() {
+    public Integer getIterLen() {
       return this.len;
     }
 
     @Override
+    public Class<?> elementType() {
+      return this.elementType;
+    }
+
+    @Override
     public boolean isCompact() {
-      return this.tsDecision.isBasicType(this.elementType);
+      return this.isCompact;
     }
   }
 
   static class IteratorIterator implements ElementIterator {
+
     final Iterator<?> obj;
+    final Integer len;
+    final Class<?> elementType;
+    final boolean isCompact;
+
     int index = 0;
 
-    public IteratorIterator(Iterator<?> obj) {
+    public IteratorIterator(Iterator<?> obj, Integer iterLen, Class<?> elementType, ToStringDecision tsDecision) {
       this.obj = obj;
+      this.len = iterLen;
+      this.elementType = elementType;
+      this.isCompact = (elementType != null) && tsDecision.isBasicType(elementType);
     }
 
     @Override
@@ -592,22 +700,35 @@ public class ToStringBuilder {
     }
 
     @Override
-    public int getComputedLen() {
-      return this.index;
+    public Integer getIterLen() {
+      return this.len;
+    }
+
+    @Override
+    public Class<?> elementType() {
+      return this.elementType;
     }
 
     @Override
     public boolean isCompact() {
-      return false;
+      return this.isCompact;
     }
   }
 
   static class EnumerationIterator implements ElementIterator {
+
     final Enumeration<?> obj;
+    final Integer len;
+    final Class<?> elementType;
+    final boolean isCompact;
+
     int index = 0;
 
-    public EnumerationIterator(Enumeration<?> obj) {
+    public EnumerationIterator(Enumeration<?> obj, Integer iterLen, Class<?> elementType, ToStringDecision tsDecision) {
       this.obj = obj;
+      this.len = iterLen;
+      this.elementType = elementType;
+      this.isCompact = (elementType != null) && tsDecision.isBasicType(elementType);
     }
 
     @Override
@@ -627,13 +748,18 @@ public class ToStringBuilder {
     }
 
     @Override
-    public int getComputedLen() {
-      return this.index;
+    public Integer getIterLen() {
+      return this.len;
+    }
+
+    @Override
+    public Class<?> elementType() {
+      return this.elementType;
     }
 
     @Override
     public boolean isCompact() {
-      return false;
+      return this.isCompact;
     }
   }
 }
