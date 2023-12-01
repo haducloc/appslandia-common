@@ -174,7 +174,7 @@ public class ToStringBuilder {
 
   private int identTabs;
   private boolean toOneLine;
-  private int iterLength;
+  private int iteratorLenMax;
 
   public ToStringBuilder() {
     this(2);
@@ -204,8 +204,8 @@ public class ToStringBuilder {
     return this;
   }
 
-  public ToStringBuilder setIterLength(int iterLength) {
-    this.iterLength = iterLength;
+  public ToStringBuilder setIteratorLenMax(int iteratorLenMax) {
+    this.iteratorLenMax = iteratorLenMax;
     return this;
   }
 
@@ -378,7 +378,7 @@ public class ToStringBuilder {
 
       // Sub-levels ONLY
       if ((level > 1)) {
-        if ((this.iterLength > 0) && (iterator.getIndex() > this.iterLength)) {
+        if ((this.iteratorLenMax > 0) && (iterator.getIndex() > this.iteratorLenMax)) {
           builder.append(", ...");
           break;
         }
