@@ -93,7 +93,7 @@ public class ToStringBuilder {
       return false;
     }
 
-    public boolean isBasicType(Class<?> type) {
+    public boolean tsBasicType(Class<?> type) {
       if (TypeUtils.isPrimitiveOrWrapper(type)) {
         return true;
       }
@@ -120,50 +120,50 @@ public class ToStringBuilder {
       return false;
     }
 
-    public void writeBasicType(Object obj, TextBuilder builder) {
+    public void tsBasicValue(Object value, TextBuilder builder) {
       // Character
-      if (obj.getClass() == Character.class) {
-        builder.append("'").append(obj).append("'");
+      if (value.getClass() == Character.class) {
+        builder.append("'").append(value).append("'");
         return;
       }
 
       // String
-      if (obj.getClass() == String.class) {
-        builder.append("\"").append(obj).append("\"");
+      if (value.getClass() == String.class) {
+        builder.append("\"").append(value).append("\"");
         return;
       }
 
       // "{value}"?
-      if (CharSequence.class.isAssignableFrom(obj.getClass()) || Date.class.isAssignableFrom(obj.getClass())
-          || Temporal.class.isAssignableFrom(obj.getClass()) || Clock.class.isAssignableFrom(obj.getClass())
-          || obj.getClass() == Period.class || obj.getClass() == URL.class || obj.getClass() == URI.class) {
+      if (CharSequence.class.isAssignableFrom(value.getClass()) || Date.class.isAssignableFrom(value.getClass())
+          || Temporal.class.isAssignableFrom(value.getClass()) || Clock.class.isAssignableFrom(value.getClass())
+          || value.getClass() == Period.class || value.getClass() == URL.class || value.getClass() == URI.class) {
 
-        builder.append("\"").append(obj).append("\"?");
+        builder.append("\"").append(value).append("\"?");
         return;
       }
 
       // TimeZone
-      if (TimeZone.class.isAssignableFrom(obj.getClass())) {
-        TimeZone tz = (TimeZone) obj;
+      if (TimeZone.class.isAssignableFrom(value.getClass())) {
+        TimeZone tz = (TimeZone) value;
         builder.append("\"").append(tz.getID()).append("\"?");
         return;
       }
 
       // ZoneId
-      if (ZoneId.class.isAssignableFrom(obj.getClass())) {
-        ZoneId z = (ZoneId) obj;
+      if (ZoneId.class.isAssignableFrom(value.getClass())) {
+        ZoneId z = (ZoneId) value;
         builder.append("\"").append(z.getId()).append("\"?");
         return;
       }
 
       // BigDecimal
-      if (obj.getClass() == BigDecimal.class) {
-        builder.append(((BigDecimal) obj).toPlainString());
+      if (value.getClass() == BigDecimal.class) {
+        builder.append(((BigDecimal) value).toPlainString());
         return;
       }
 
       // Other
-      builder.append(obj);
+      builder.append(value);
     }
   }
 
@@ -242,8 +242,8 @@ public class ToStringBuilder {
     }
 
     // Basic Types
-    if (this.tsPolicy.isBasicType(obj.getClass())) {
-      this.tsPolicy.writeBasicType(obj, builder);
+    if (this.tsPolicy.tsBasicType(obj.getClass())) {
+      this.tsPolicy.tsBasicValue(obj, builder);
       return;
     }
 
@@ -622,7 +622,7 @@ public class ToStringBuilder {
       this.len = Array.getLength(obj);
 
       this.elementType = obj.getClass().getComponentType();
-      this.isCompact = tsDecision.isBasicType(this.elementType);
+      this.isCompact = tsDecision.tsBasicType(this.elementType);
     }
 
     @Override
@@ -669,7 +669,7 @@ public class ToStringBuilder {
       this.obj = obj;
       this.len = iterLen;
       this.elementType = elementType;
-      this.isCompact = (elementType != null) && tsDecision.isBasicType(elementType);
+      this.isCompact = (elementType != null) && tsDecision.tsBasicType(elementType);
     }
 
     @Override
@@ -717,7 +717,7 @@ public class ToStringBuilder {
       this.obj = obj;
       this.len = iterLen;
       this.elementType = elementType;
-      this.isCompact = (elementType != null) && tsDecision.isBasicType(elementType);
+      this.isCompact = (elementType != null) && tsDecision.tsBasicType(elementType);
     }
 
     @Override
