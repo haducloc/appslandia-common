@@ -119,6 +119,52 @@ public class ToStringBuilder {
       }
       return false;
     }
+
+    public void writeBasicType(Object obj, TextBuilder builder) {
+      // Character
+      if (obj.getClass() == Character.class) {
+        builder.append("'").append(obj).append("'");
+        return;
+      }
+
+      // String
+      if (obj.getClass() == String.class) {
+        builder.append("\"").append(obj).append("\"");
+        return;
+      }
+
+      // *
+      if (CharSequence.class.isAssignableFrom(obj.getClass()) || Date.class.isAssignableFrom(obj.getClass())
+          || Temporal.class.isAssignableFrom(obj.getClass()) || Clock.class.isAssignableFrom(obj.getClass())
+          || obj.getClass() == Period.class || obj.getClass() == URL.class || obj.getClass() == URI.class) {
+
+        builder.append("\"").append(obj).append("\"?");
+        return;
+      }
+
+      // TimeZone
+      if (TimeZone.class.isAssignableFrom(obj.getClass())) {
+        TimeZone tz = (TimeZone) obj;
+        builder.append("\"").append(tz.getID()).append("\"?");
+        return;
+      }
+
+      // ZoneId
+      if (ZoneId.class.isAssignableFrom(obj.getClass())) {
+        ZoneId z = (ZoneId) obj;
+        builder.append("\"").append(z.getId()).append("\"?");
+        return;
+      }
+
+      // BigDecimal
+      if (obj.getClass() == BigDecimal.class) {
+        builder.append(((BigDecimal) obj).toPlainString());
+        return;
+      }
+
+      // Other
+      builder.append(obj);
+    }
   }
 
   private static final TSPolicy DEFAULT_TS_POLICY = new TSPolicy();
@@ -197,48 +243,7 @@ public class ToStringBuilder {
 
     // Basic Types
     if (this.tsPolicy.isBasicType(obj.getClass())) {
-
-      // Character
-      if (obj.getClass() == Character.class) {
-        builder.append("'").append(obj).append("'");
-        return;
-      }
-
-      // String
-      if (obj.getClass() == String.class) {
-        builder.append("\"").append(obj).append("\"");
-        return;
-      }
-
-      // *
-      if (CharSequence.class.isAssignableFrom(obj.getClass()) || Date.class.isAssignableFrom(obj.getClass())
-          || Temporal.class.isAssignableFrom(obj.getClass()) || Clock.class.isAssignableFrom(obj.getClass())
-          || obj.getClass() == Period.class || obj.getClass() == URL.class || obj.getClass() == URI.class) {
-
-        builder.append("\"").append(obj).append("\"?");
-        return;
-      }
-
-      // TimeZone
-      if (TimeZone.class.isAssignableFrom(obj.getClass())) {
-        TimeZone tz = (TimeZone) obj;
-        builder.append("\"").append(tz.getID()).append("\"?");
-        return;
-      }
-
-      // ZoneId
-      if (ZoneId.class.isAssignableFrom(obj.getClass())) {
-        ZoneId z = (ZoneId) obj;
-        builder.append("\"").append(z.getId()).append("\"?");
-        return;
-      }
-
-      if (obj.getClass() == BigDecimal.class) {
-        builder.append(((BigDecimal) obj).toPlainString());
-        return;
-      }
-
-      builder.append(obj);
+      this.tsPolicy.writeBasicType(obj, builder);
       return;
     }
 
