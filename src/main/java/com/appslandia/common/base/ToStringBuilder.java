@@ -52,6 +52,7 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ExceptionUtils;
@@ -98,24 +99,27 @@ public class ToStringBuilder {
       if (TypeUtils.isPrimitiveOrWrapper(type)) {
         return true;
       }
-      if (CharSequence.class.isAssignableFrom(type) || Enum.class.isAssignableFrom(type)) {
+      if (AtomicBoolean.class.isAssignableFrom(type) || Number.class.isAssignableFrom(type)) {
         return true;
       }
-      if ((type == BigDecimal.class) || (type == UUID.class)) {
+
+      if (CharSequence.class.isAssignableFrom(type) || Enum.class.isAssignableFrom(type) || (type == UUID.class)) {
         return true;
       }
 
       if (Date.class.isAssignableFrom(type) || Temporal.class.isAssignableFrom(type)
-          || Period.class.isAssignableFrom(type)) {
+          || Period.class.isAssignableFrom(type) || Calendar.class.isAssignableFrom(type)) {
         return true;
       }
-
       if (TimeZone.class.isAssignableFrom(type) || ZoneId.class.isAssignableFrom(type)
           || Clock.class.isAssignableFrom(type)) {
         return true;
       }
 
-      if (URL.class.isAssignableFrom(type) || URI.class.isAssignableFrom(type)) {
+      if (type == URL.class || type == URI.class) {
+        return true;
+      }
+      if (type == Locale.class) {
         return true;
       }
       return false;
@@ -154,6 +158,22 @@ public class ToStringBuilder {
       if (ZoneId.class.isAssignableFrom(value.getClass())) {
         ZoneId z = (ZoneId) value;
         builder.append("\"").append(z.getId()).append("\"?");
+        return;
+      }
+
+      // Calendar
+      if (Calendar.class.isAssignableFrom(value.getClass())) {
+        Calendar c = (Calendar) value;
+        builder.append("Calendar(\"").append(c.getTime()).append("\", \"").append(c.getTimeZone().getID())
+            .append("\")");
+        return;
+      }
+
+      // Locale
+      if (value.getClass() == Locale.class) {
+        Locale l = (Locale) value;
+        builder.append("Locale(\"").append(l.getLanguage()).append("\", \"").append(l.getCountry()).append("\", \"")
+            .append(l.getVariant()).append("\")");
         return;
       }
 
@@ -255,21 +275,6 @@ public class ToStringBuilder {
     // Basic Types
     if (this.tsPolicy.tsBasicType(obj.getClass())) {
       this.tsPolicy.tsBasicValue(obj, builder);
-      return;
-    }
-
-    // Calendar
-    if (Calendar.class.isAssignableFrom(obj.getClass())) {
-      Calendar c = (Calendar) obj;
-      builder.append("Calendar(\"").append(c.getTime()).append("\", \"").append(c.getTimeZone().getID()).append("\")");
-      return;
-    }
-
-    // Locale
-    if (obj.getClass() == Locale.class) {
-      Locale l = (Locale) obj;
-      builder.append("Locale(\"").append(l.getLanguage()).append("\", \"").append(l.getCountry()).append("\", \"")
-          .append(l.getVariant()).append("\")");
       return;
     }
 
