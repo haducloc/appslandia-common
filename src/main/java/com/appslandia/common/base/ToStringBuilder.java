@@ -133,7 +133,7 @@ public class ToStringBuilder {
         return;
       }
 
-      // *
+      // "{value}"?
       if (CharSequence.class.isAssignableFrom(obj.getClass()) || Date.class.isAssignableFrom(obj.getClass())
           || Temporal.class.isAssignableFrom(obj.getClass()) || Clock.class.isAssignableFrom(obj.getClass())
           || obj.getClass() == Period.class || obj.getClass() == URL.class || obj.getClass() == URI.class) {
