@@ -298,6 +298,7 @@ public class ToStringBuilder {
       toStringIterator(obj, new ArrayIterator(((Buffer) obj).array(), this.tsPolicy), level, builder);
       return;
     }
+
     if (obj instanceof Map) {
       toStringMap((Map<?, ?>) obj, level, builder);
       return;
