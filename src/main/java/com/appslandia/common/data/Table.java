@@ -26,7 +26,7 @@ import java.util.List;
 
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.TextBuilder;
-import com.appslandia.common.base.ToStringBuilder.TSExcluded;
+import com.appslandia.common.base.ToStringBuilder.TSIdHash;
 import com.appslandia.common.jdbc.JdbcSql;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
@@ -46,7 +46,7 @@ public class Table extends InitializeObject implements Serializable {
   private List<Column> columns;
   private transient String entityClassName;
 
-  @TSExcluded
+  @TSIdHash
   private transient Column singleKey;
   private List<AnnotationModel> annotations;
 

@@ -20,7 +20,8 @@
 
 package com.appslandia.common.base;
 
-import java.lang.annotation.Annotation;
+import java.io.InputStream;
+import java.io.Writer;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -31,11 +32,14 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.math.BigDecimal;
+import java.net.URI;
+import java.net.URL;
 import java.nio.Buffer;
 import java.time.Clock;
 import java.time.Period;
 import java.time.ZoneId;
 import java.time.temporal.Temporal;
+import java.util.BitSet;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -68,33 +72,25 @@ public class ToStringBuilder {
   public @interface TSIdHash {
   }
 
-  @Target({ ElementType.FIELD })
-  @Retention(RetentionPolicy.RUNTIME)
-  @Documented
-  public @interface TSExcluded {
-  }
+  public static class TSPolicy {
 
-  public static class ToStringDecision {
-
-    public boolean tsIdHash(Object value, Field field) {
+    public boolean tsIdHash(Field field, Object value) {
       Asserts.notNull(value);
 
-      return checkAnnotation(value, field, TSIdHash.class);
-    }
-
-    public boolean tsToString(Class<?> type) {
-      try {
-        return type.getMethod("toString").getDeclaringClass() != Object.class;
-
-      } catch (NoSuchMethodException ex) {
-        return false;
-      } catch (SecurityException ex) {
-        return false;
+      if (value instanceof InputStream || value instanceof Writer) {
+        return true;
       }
-    }
 
-    public boolean tsExcluded(Field field) {
-      return field.getAnnotation(TSExcluded.class) != null;
+      if (field != null) {
+        if (field.getAnnotation(TSIdHash.class) != null) {
+          return true;
+        }
+      }
+
+      if (value.getClass().getAnnotation(TSIdHash.class) != null) {
+        return true;
+      }
+      return false;
     }
 
     public boolean isBasicType(Class<?> type) {
@@ -108,10 +104,8 @@ public class ToStringBuilder {
         return true;
       }
 
-      if (Date.class.isAssignableFrom(type) || Calendar.class.isAssignableFrom(type)) {
-        return true;
-      }
-      if (Temporal.class.isAssignableFrom(type) || Period.class.isAssignableFrom(type)) {
+      if (Date.class.isAssignableFrom(type) || Temporal.class.isAssignableFrom(type)
+          || Period.class.isAssignableFrom(type)) {
         return true;
       }
 
@@ -120,32 +114,17 @@ public class ToStringBuilder {
         return true;
       }
 
-      if (Locale.class.isAssignableFrom(type)) {
-        return true;
-      }
-      return false;
-    }
-
-    protected boolean checkAnnotation(Object value, Field field, Class<? extends Annotation> annotationType) {
-      // field
-      if (field != null) {
-        if (field.getAnnotation(annotationType) != null) {
-          return true;
-        }
-      }
-
-      // value type
-      if (value.getClass().getAnnotation(annotationType) != null) {
+      if (URL.class.isAssignableFrom(type) || URI.class.isAssignableFrom(type)) {
         return true;
       }
       return false;
     }
   }
 
-  public static final ToStringDecision TS_DECISION = new ToStringDecision();
+  private static final TSPolicy DEFAULT_TS_POLICY = new TSPolicy();
 
   private int level;
-  private ToStringDecision tsDecision = TS_DECISION;
+  private TSPolicy tsPolicy = DEFAULT_TS_POLICY;
 
   private int identTabs;
   private boolean toOneLine;
@@ -164,8 +143,8 @@ public class ToStringBuilder {
     return this;
   }
 
-  public ToStringBuilder setToStringDecision(ToStringDecision tsDecision) {
-    this.tsDecision = tsDecision;
+  public ToStringBuilder setTSPolicy(TSPolicy tsPolicy) {
+    this.tsPolicy = tsPolicy;
     return this;
   }
 
@@ -210,8 +189,14 @@ public class ToStringBuilder {
       return;
     }
 
+    // toIdHash
+    if (this.tsPolicy.tsIdHash(null, obj)) {
+      builder.append(ObjectUtils.toIdHash(obj));
+      return;
+    }
+
     // Basic Types
-    if (this.tsDecision.isBasicType(obj.getClass())) {
+    if (this.tsPolicy.isBasicType(obj.getClass())) {
 
       // Character
       if (obj.getClass() == Character.class) {
@@ -228,7 +213,7 @@ public class ToStringBuilder {
       // *
       if (CharSequence.class.isAssignableFrom(obj.getClass()) || Date.class.isAssignableFrom(obj.getClass())
           || Temporal.class.isAssignableFrom(obj.getClass()) || Clock.class.isAssignableFrom(obj.getClass())
-          || obj.getClass() == Period.class) {
+          || obj.getClass() == Period.class || obj.getClass() == URL.class || obj.getClass() == URI.class) {
 
         builder.append("\"").append(obj).append("\"?");
         return;
@@ -248,22 +233,6 @@ public class ToStringBuilder {
         return;
       }
 
-      // Calendar
-      if (Calendar.class.isAssignableFrom(obj.getClass())) {
-        Calendar c = (Calendar) obj;
-        builder.append("Calendar(\"").append(c.getTime()).append("\", \"").append(c.getTimeZone().getID())
-            .append("\")");
-        return;
-      }
-
-      // Locale
-      if (obj.getClass() == Locale.class) {
-        Locale l = (Locale) obj;
-        builder.append("Locale(\"").append(l.getLanguage()).append("\", \"").append(l.getCountry()).append("\", \"")
-            .append(l.getVariant()).append("\")");
-        return;
-      }
-
       if (obj.getClass() == BigDecimal.class) {
         builder.append(((BigDecimal) obj).toPlainString());
         return;
@@ -273,32 +242,55 @@ public class ToStringBuilder {
       return;
     }
 
+    // Calendar
+    if (Calendar.class.isAssignableFrom(obj.getClass())) {
+      Calendar c = (Calendar) obj;
+      builder.append("Calendar(\"").append(c.getTime()).append("\", \"").append(c.getTimeZone().getID()).append("\")");
+      return;
+    }
+
+    // Locale
+    if (obj.getClass() == Locale.class) {
+      Locale l = (Locale) obj;
+      builder.append("Locale(\"").append(l.getLanguage()).append("\", \"").append(l.getCountry()).append("\", \"")
+          .append(l.getVariant()).append("\")");
+      return;
+    }
+
+    // BitSet
+    if (obj.getClass() == BitSet.class) {
+      builder.append("BitSet(").append(obj).append(")");
+      return;
+    }
+
     // Try to determine iterLen and iterElementType
-    iterLen = (obj instanceof Collection) ? ((Collection<?>) obj).size() : iterLen;
+    if (iterLen == null) {
+      iterLen = (obj instanceof Collection) ? ((Collection<?>) obj).size() : null;
+    }
     iterElementType = (obj instanceof Collection) ? getIterElementType((Collection<?>) obj) : iterElementType;
 
     if (obj instanceof Iterable) {
       toStringIterator(obj,
-          new IteratorIterator(((Iterable<?>) obj).iterator(), iterLen, iterElementType, this.tsDecision), level,
+          new IteratorIterator(((Iterable<?>) obj).iterator(), iterLen, iterElementType, this.tsPolicy), level,
           builder);
       return;
     }
     if (obj instanceof Iterator) {
-      toStringIterator(obj, new IteratorIterator((Iterator<?>) obj, iterLen, iterElementType, this.tsDecision), level,
+      toStringIterator(obj, new IteratorIterator((Iterator<?>) obj, iterLen, iterElementType, this.tsPolicy), level,
           builder);
       return;
     }
     if (obj instanceof Enumeration) {
-      toStringIterator(obj, new EnumerationIterator((Enumeration<?>) obj, iterLen, iterElementType, this.tsDecision),
+      toStringIterator(obj, new EnumerationIterator((Enumeration<?>) obj, iterLen, iterElementType, this.tsPolicy),
           level, builder);
       return;
     }
     if (obj.getClass().isArray()) {
-      toStringIterator(obj, new ArrayIterator(obj, this.tsDecision), level, builder);
+      toStringIterator(obj, new ArrayIterator(obj, this.tsPolicy), level, builder);
       return;
     }
     if (obj instanceof Buffer) {
-      toStringIterator(obj, new ArrayIterator(((Buffer) obj).array(), this.tsDecision), level, builder);
+      toStringIterator(obj, new ArrayIterator(((Buffer) obj).array(), this.tsPolicy), level, builder);
       return;
     }
     if (obj instanceof Map) {
@@ -307,12 +299,6 @@ public class ToStringBuilder {
     }
     if (obj instanceof Throwable) {
       builder.append(ExceptionUtils.toStackTrace((Throwable) obj));
-      return;
-    }
-
-    // Use toString()
-    if (this.tsDecision.tsToString(obj.getClass())) {
-      builder.append(obj);
       return;
     }
 
@@ -335,9 +321,7 @@ public class ToStringBuilder {
         if (field.getName().equals("serialVersionUID")) {
           continue;
         }
-        if (this.tsDecision.tsExcluded(field)) {
-          continue;
-        }
+
         if (!isFirst) {
           builder.append(this.toOneLine ? ", " : ",");
         } else {
@@ -353,7 +337,7 @@ public class ToStringBuilder {
           if (fieldVal == null) {
             builder.append("null");
           } else {
-            if (this.tsDecision.tsIdHash(fieldVal, field)) {
+            if (this.tsPolicy.tsIdHash(field, fieldVal)) {
               builder.append(ObjectUtils.toIdHash(fieldVal));
 
             } else {
@@ -405,7 +389,7 @@ public class ToStringBuilder {
       if (element == null) {
         builder.append("null");
       } else {
-        if (this.tsDecision.tsIdHash(element, null)) {
+        if (this.tsPolicy.tsIdHash(null, element)) {
           builder.append(ObjectUtils.toIdHash(element));
 
         } else {
@@ -442,7 +426,7 @@ public class ToStringBuilder {
       if (entryVal == null) {
         builder.append("null");
       } else {
-        if (this.tsDecision.tsIdHash(entryVal, null)) {
+        if (this.tsPolicy.tsIdHash(null, entryVal)) {
           builder.append(ObjectUtils.toIdHash(entryVal));
 
         } else {
@@ -481,7 +465,7 @@ public class ToStringBuilder {
               || "javax.servlet.error.exception".equals(attribute)) {
             builder.append(ExceptionUtils.buildMessage((Throwable) element));
 
-          } else if (this.tsDecision.tsIdHash(element, null)) {
+          } else if (this.tsPolicy.tsIdHash(null, element)) {
             builder.append(ObjectUtils.toIdHash(element));
 
           } else {
@@ -628,7 +612,7 @@ public class ToStringBuilder {
 
     int index = 0;
 
-    public ArrayIterator(Object obj, ToStringDecision tsDecision) {
+    public ArrayIterator(Object obj, TSPolicy tsDecision) {
       this.obj = obj;
       this.len = Array.getLength(obj);
 
@@ -676,7 +660,7 @@ public class ToStringBuilder {
 
     int index = 0;
 
-    public IteratorIterator(Iterator<?> obj, Integer iterLen, Class<?> elementType, ToStringDecision tsDecision) {
+    public IteratorIterator(Iterator<?> obj, Integer iterLen, Class<?> elementType, TSPolicy tsDecision) {
       this.obj = obj;
       this.len = iterLen;
       this.elementType = elementType;
@@ -724,7 +708,7 @@ public class ToStringBuilder {
 
     int index = 0;
 
-    public EnumerationIterator(Enumeration<?> obj, Integer iterLen, Class<?> elementType, ToStringDecision tsDecision) {
+    public EnumerationIterator(Enumeration<?> obj, Integer iterLen, Class<?> elementType, TSPolicy tsDecision) {
       this.obj = obj;
       this.len = iterLen;
       this.elementType = elementType;
