@@ -47,6 +47,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
@@ -233,6 +234,16 @@ public class ToStringBuilder {
     if (obj == null) {
       builder.append("null");
       return;
+    }
+
+    // Optional
+    if (obj instanceof Optional) {
+      obj = ((Optional<?>) obj).orElse(null);
+
+      if (obj == null) {
+        builder.append("null?");
+        return;
+      }
     }
 
     // toIdHash
