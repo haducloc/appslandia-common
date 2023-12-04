@@ -193,10 +193,10 @@ public class ToStringBuilder {
 
   private static final TSPolicy DEFAULT_TS_POLICY = new TSPolicy();
 
-  private int level;
+  private int tsDepthLevel;
   private TSPolicy tsPolicy = DEFAULT_TS_POLICY;
 
-  private int identTabs;
+  private int initIndent;
   private boolean toOneLine;
   private int iterMaxSize;
 
@@ -204,12 +204,12 @@ public class ToStringBuilder {
     this(2);
   }
 
-  public ToStringBuilder(int level) {
-    setLevel(level);
+  public ToStringBuilder(int tsDepthLevel) {
+    setTsDepthLevel(tsDepthLevel);
   }
 
-  public ToStringBuilder setLevel(int level) {
-    this.level = ValueUtils.valueOrMin(level, 1);
+  public ToStringBuilder setTsDepthLevel(int tsDepthLevel) {
+    this.tsDepthLevel = ValueUtils.valueOrMin(tsDepthLevel, 1);
     return this;
   }
 
@@ -218,8 +218,8 @@ public class ToStringBuilder {
     return this;
   }
 
-  public ToStringBuilder setIdentTabs(int identTabs) {
-    this.identTabs = ValueUtils.valueOrMin(identTabs, 0);
+  public ToStringBuilder setInitIndent(int initIndent) {
+    this.initIndent = ValueUtils.valueOrMin(initIndent, 0);
     return this;
   }
 
@@ -235,7 +235,7 @@ public class ToStringBuilder {
 
   public String toString(Object obj) {
     TextBuilder builder = new TextBuilder();
-    appendtab(builder, this.identTabs);
+    appendInitIndent(builder, this.initIndent);
     if (obj == null) {
       return builder.append("null").toString();
     }
@@ -245,7 +245,7 @@ public class ToStringBuilder {
 
   public String toStringFields(Object obj) {
     TextBuilder builder = new TextBuilder();
-    appendtab(builder, this.identTabs);
+    appendInitIndent(builder, this.initIndent);
     if (obj == null) {
       return builder.append("null").toString();
     }
@@ -333,7 +333,7 @@ public class ToStringBuilder {
 
   private void toStringFields(Object obj, int level, TextBuilder builder) {
     builder.append(ObjectUtils.toIdHash(obj));
-    if (level > this.level) {
+    if (level > this.tsDepthLevel) {
       return;
     }
     builder.append("[");
@@ -352,7 +352,7 @@ public class ToStringBuilder {
         } else {
           isFirst = false;
         }
-        appendln(builder, level + this.identTabs, false);
+        appendln(builder, level + this.initIndent, false);
         builder.append(field.getName()).append(": ");
 
         try {
@@ -386,14 +386,14 @@ public class ToStringBuilder {
     if (isFirst) {
       builder.append(" no fields ]");
     } else {
-      appendln(builder, level - 1 + this.identTabs, false);
+      appendln(builder, level - 1 + this.initIndent, false);
       builder.append("]");
     }
   }
 
   private void toStringIterator(Object obj, ElementIterator iterator, int level, TextBuilder builder) {
     builder.append(ObjectUtils.toIdHash(obj));
-    if (level > this.level) {
+    if (level > this.tsDepthLevel) {
       return;
     }
     builder.append("[");
@@ -405,7 +405,9 @@ public class ToStringBuilder {
       // Sub-levels ONLY
       if ((level > 1)) {
         if ((this.iterMaxSize > 0) && (iterator.getIndex() > this.iterMaxSize)) {
-          builder.append(", ...");
+
+          builder.append(this.toOneLine || iterator.isCompact() ? ", " : ",");
+          appendln(builder, level + this.initIndent, iterator.isCompact()).append("...");
           break;
         }
       }
@@ -415,7 +417,7 @@ public class ToStringBuilder {
       } else {
         isFirst = false;
       }
-      appendln(builder, level + this.identTabs, iterator.isCompact());
+      appendln(builder, level + this.initIndent, iterator.isCompact());
 
       if (element == null) {
         builder.append("null");
@@ -431,14 +433,14 @@ public class ToStringBuilder {
     if (isFirst) {
       builder.append(" no elements ]");
     } else {
-      appendln(builder, level - 1 + this.identTabs, iterator.isCompact());
+      appendln(builder, level - 1 + this.initIndent, iterator.isCompact());
       builder.append("] (").append(iterator.getIterLen() != null ? iterator.getIterLen() : "?").append(")");
     }
   }
 
   private void toStringMap(Map<?, ?> map, int level, TextBuilder builder) {
     builder.append(ObjectUtils.toIdHash(map));
-    if (level > this.level) {
+    if (level > this.tsDepthLevel) {
       return;
     }
     builder.append("[");
@@ -450,7 +452,7 @@ public class ToStringBuilder {
       } else {
         isFirst = false;
       }
-      appendln(builder, level + this.identTabs, false);
+      appendln(builder, level + this.initIndent, false);
 
       builder.append(key).append(": ");
       Object entryVal = map.get(key);
@@ -468,7 +470,7 @@ public class ToStringBuilder {
     if (isFirst) {
       builder.append(" no entries ]");
     } else {
-      appendln(builder, level - 1 + this.identTabs, false);
+      appendln(builder, level - 1 + this.initIndent, false);
       builder.append("] (").append(map.size()).append(")");
     }
   }
@@ -484,7 +486,7 @@ public class ToStringBuilder {
       } else {
         isFirst = false;
       }
-      appendln(builder, level + this.identTabs, false);
+      appendln(builder, level + this.initIndent, false);
       builder.append(attribute).append(": ");
 
       try {
@@ -510,14 +512,14 @@ public class ToStringBuilder {
     if (isFirst) {
       builder.append(" no elements ]");
     } else {
-      appendln(builder, level - 1 + this.identTabs, false);
+      appendln(builder, level - 1 + this.initIndent, false);
       builder.append("]");
     }
   }
 
   public String toStringAttributes(Object obj) {
     TextBuilder builder = new TextBuilder();
-    appendtab(builder, this.identTabs);
+    appendInitIndent(builder, this.initIndent);
     if (obj == null) {
       builder.append("null");
       return builder.toString();
@@ -537,7 +539,7 @@ public class ToStringBuilder {
 
   public String toStringHeaders(Object obj) {
     TextBuilder builder = new TextBuilder();
-    appendtab(builder, this.identTabs);
+    appendInitIndent(builder, this.initIndent);
     if (obj == null) {
       builder.append("null");
       return builder.toString();
@@ -582,9 +584,9 @@ public class ToStringBuilder {
     return builder;
   }
 
-  private TextBuilder appendtab(TextBuilder builder, int n) {
+  private TextBuilder appendInitIndent(TextBuilder builder, int initIndent) {
     if (!this.toOneLine) {
-      builder.appendsp(2 * n);
+      builder.appendsp(2 * initIndent);
     }
     return builder;
   }
