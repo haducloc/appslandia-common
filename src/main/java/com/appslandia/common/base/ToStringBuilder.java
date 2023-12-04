@@ -20,8 +20,6 @@
 
 package com.appslandia.common.base;
 
-import java.io.InputStream;
-import java.io.Writer;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -80,10 +78,6 @@ public class ToStringBuilder {
     public boolean tsIdHash(Field field, Object value) {
       Asserts.notNull(value);
 
-      if (value instanceof InputStream || value instanceof Writer) {
-        return true;
-      }
-
       if (field != null) {
         if (field.getAnnotation(TSIdHash.class) != null) {
           return true;
@@ -96,7 +90,7 @@ public class ToStringBuilder {
       return false;
     }
 
-    public boolean tsBasicType(Class<?> type) {
+    public boolean tsSimpleType(Class<?> type) {
       if (TypeUtils.isPrimitiveOrWrapper(type)) {
         return true;
       }
@@ -126,55 +120,10 @@ public class ToStringBuilder {
       return false;
     }
 
-    public void tsBasicValue(Object value, TextBuilder builder) {
+    public void tsSimpleValue(Object value, TextBuilder builder) {
       // Character
-      if (value.getClass() == Character.class) {
+      if (value.getClass() == Character.class || value.getClass() == String.class) {
         builder.append("'").append(value).append("'");
-        return;
-      }
-
-      // String
-      if (value.getClass() == String.class) {
-        builder.append("\"").append(value).append("\"");
-        return;
-      }
-
-      // "{value}"?
-      if (CharSequence.class.isAssignableFrom(value.getClass()) || Date.class.isAssignableFrom(value.getClass())
-          || Temporal.class.isAssignableFrom(value.getClass()) || Clock.class.isAssignableFrom(value.getClass())
-          || value.getClass() == Period.class || value.getClass() == URL.class || value.getClass() == URI.class) {
-
-        builder.append("\"").append(value).append("\"?");
-        return;
-      }
-
-      // TimeZone
-      if (TimeZone.class.isAssignableFrom(value.getClass())) {
-        TimeZone tz = (TimeZone) value;
-        builder.append("\"").append(tz.getID()).append("\"?");
-        return;
-      }
-
-      // ZoneId
-      if (ZoneId.class.isAssignableFrom(value.getClass())) {
-        ZoneId z = (ZoneId) value;
-        builder.append("\"").append(z.getId()).append("\"?");
-        return;
-      }
-
-      // Calendar
-      if (Calendar.class.isAssignableFrom(value.getClass())) {
-        Calendar c = (Calendar) value;
-        builder.append("Calendar(\"").append(c.getTime()).append("\", \"").append(c.getTimeZone().getID())
-            .append("\")");
-        return;
-      }
-
-      // Locale
-      if (value.getClass() == Locale.class) {
-        Locale l = (Locale) value;
-        builder.append("Locale(\"").append(l.getLanguage()).append("\", \"").append(l.getCountry()).append("\", \"")
-            .append(l.getVariant()).append("\")");
         return;
       }
 
@@ -184,8 +133,61 @@ public class ToStringBuilder {
         return;
       }
 
+      // value.getClass().getSimpleName()
+      if (Date.class.isAssignableFrom(value.getClass()) || Temporal.class.isAssignableFrom(value.getClass())
+          || Clock.class.isAssignableFrom(value.getClass()) || value.getClass() == Period.class ||
+
+          CharSequence.class.isAssignableFrom(value.getClass()) || value.getClass() == URL.class
+          || value.getClass() == URI.class || value.getClass() == UUID.class) {
+
+        builder.append(value.getClass().getSimpleName()).append("('").append(value).append("')");
+        return;
+      }
+
+      // TimeZone
+      if (TimeZone.class.isAssignableFrom(value.getClass())) {
+        TimeZone tz = (TimeZone) value;
+        builder.append("TimeZone('").append(tz.getID()).append("')");
+        return;
+      }
+
+      // ZoneId
+      if (ZoneId.class.isAssignableFrom(value.getClass())) {
+        ZoneId z = (ZoneId) value;
+        builder.append("ZoneId('").append(z.getId()).append("')");
+        return;
+      }
+
+      // Calendar
+      if (Calendar.class.isAssignableFrom(value.getClass())) {
+        Calendar c = (Calendar) value;
+        builder.append("Calendar('").append(c.getTime()).append("', '").append(c.getTimeZone().getID()).append("')");
+        return;
+      }
+
+      // Locale
+      if (value.getClass() == Locale.class) {
+        Locale l = (Locale) value;
+        builder.append("Locale('").append(l.getLanguage()).append("', '").append(l.getCountry()).append("', '")
+            .append(l.getVariant()).append("')");
+        return;
+      }
+
       // Other
       builder.append(value);
+    }
+
+    public boolean tsIterCompact(Class<?> type) {
+      if (TypeUtils.isPrimitiveOrWrapper(type)) {
+        return true;
+      }
+      if (Number.class.isAssignableFrom(type)) {
+        return true;
+      }
+      if (type == Character.class || type == String.class) {
+        return true;
+      }
+      return false;
     }
   }
 
@@ -196,7 +198,7 @@ public class ToStringBuilder {
 
   private int identTabs;
   private boolean toOneLine;
-  private int iteratorLenMax;
+  private int iterMaxSize;
 
   public ToStringBuilder() {
     this(2);
@@ -226,8 +228,8 @@ public class ToStringBuilder {
     return this;
   }
 
-  public ToStringBuilder setIteratorLenMax(int iteratorLenMax) {
-    this.iteratorLenMax = iteratorLenMax;
+  public ToStringBuilder setIterMaxSize(int iterMaxSize) {
+    this.iterMaxSize = iterMaxSize;
     return this;
   }
 
@@ -273,9 +275,9 @@ public class ToStringBuilder {
       return;
     }
 
-    // Basic Types
-    if (this.tsPolicy.tsBasicType(obj.getClass())) {
-      this.tsPolicy.tsBasicValue(obj, builder);
+    // Simple Types
+    if (this.tsPolicy.tsSimpleType(obj.getClass())) {
+      this.tsPolicy.tsSimpleValue(obj, builder);
       return;
     }
 
@@ -370,8 +372,10 @@ public class ToStringBuilder {
             }
           }
         } catch (Exception ex) {
+
           if (ex instanceof InaccessibleObjectException) {
-            builder.append("error=").append(ex.getMessage());
+            int idx = ex.getMessage().indexOf("accessible: module");
+            builder.append("error=...").append(idx > 0 ? ex.getMessage().substring(idx + 12) : ex.getMessage());
           } else {
             builder.append("error=").append(ExceptionUtils.buildMessage(ex));
           }
@@ -400,7 +404,7 @@ public class ToStringBuilder {
 
       // Sub-levels ONLY
       if ((level > 1)) {
-        if ((this.iteratorLenMax > 0) && (iterator.getIndex() > this.iteratorLenMax)) {
+        if ((this.iterMaxSize > 0) && (iterator.getIndex() > this.iterMaxSize)) {
           builder.append(", ...");
           break;
         }
@@ -644,7 +648,7 @@ public class ToStringBuilder {
       this.len = Array.getLength(obj);
 
       this.elementType = obj.getClass().getComponentType();
-      this.isCompact = tsDecision.tsBasicType(this.elementType);
+      this.isCompact = tsDecision.tsIterCompact(this.elementType);
     }
 
     @Override
@@ -691,7 +695,7 @@ public class ToStringBuilder {
       this.obj = obj;
       this.len = iterLen;
       this.elementType = elementType;
-      this.isCompact = (elementType != null) && tsDecision.tsBasicType(elementType);
+      this.isCompact = (elementType != null) && tsDecision.tsIterCompact(elementType);
     }
 
     @Override
@@ -739,7 +743,7 @@ public class ToStringBuilder {
       this.obj = obj;
       this.len = iterLen;
       this.elementType = elementType;
-      this.isCompact = (elementType != null) && tsDecision.tsBasicType(elementType);
+      this.isCompact = (elementType != null) && tsDecision.tsIterCompact(elementType);
     }
 
     @Override
