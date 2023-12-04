@@ -90,91 +90,77 @@ public class ToStringBuilder {
       return false;
     }
 
-    public boolean tsSimpleType(Class<?> type) {
+    public boolean tsSimpleValue(Object value, TextBuilder builder) {
+      Class<?> type = value.getClass();
+
+      // Primitive or Wrapper
       if (TypeUtils.isPrimitiveOrWrapper(type)) {
-        return true;
-      }
-      if (AtomicBoolean.class.isAssignableFrom(type) || Number.class.isAssignableFrom(type)) {
-        return true;
-      }
-
-      if (CharSequence.class.isAssignableFrom(type) || Enum.class.isAssignableFrom(type) || (type == UUID.class)) {
+        builder.append(value);
         return true;
       }
 
-      if (Date.class.isAssignableFrom(type) || Temporal.class.isAssignableFrom(type)
-          || Period.class.isAssignableFrom(type) || Calendar.class.isAssignableFrom(type)) {
-        return true;
-      }
-      if (TimeZone.class.isAssignableFrom(type) || ZoneId.class.isAssignableFrom(type)
-          || Clock.class.isAssignableFrom(type)) {
-        return true;
-      }
-
-      if (type == URL.class || type == URI.class) {
-        return true;
-      }
-      if (type == Locale.class) {
-        return true;
-      }
-      return false;
-    }
-
-    public void tsSimpleValue(Object value, TextBuilder builder) {
-      // Character
-      if (value.getClass() == Character.class || value.getClass() == String.class) {
-        builder.append("'").append(value).append("'");
-        return;
-      }
-
-      // BigDecimal
-      if (value.getClass() == BigDecimal.class) {
+      // Primitive Related
+      if (type == BigDecimal.class) {
         builder.append(((BigDecimal) value).toPlainString());
-        return;
+        return true;
       }
 
-      // value.getClass().getSimpleName()
-      if (Date.class.isAssignableFrom(value.getClass()) || Temporal.class.isAssignableFrom(value.getClass())
-          || Clock.class.isAssignableFrom(value.getClass()) || value.getClass() == Period.class ||
+      if (Number.class.isAssignableFrom(type)) {
+        builder.append(value);
+        return true;
+      }
 
-          CharSequence.class.isAssignableFrom(value.getClass()) || value.getClass() == URL.class
-          || value.getClass() == URI.class || value.getClass() == UUID.class) {
+      if (AtomicBoolean.class.isAssignableFrom(type)) {
+        builder.append(value);
+        return true;
+      }
 
-        builder.append(value.getClass().getSimpleName()).append("('").append(value).append("')");
-        return;
+      // Character
+      if (type == Character.class || type == String.class) {
+        builder.append("'").append(value).append("'");
+        return true;
+      }
+
+      // type.getSimpleName()
+      if (Date.class.isAssignableFrom(type) || Temporal.class.isAssignableFrom(type)
+          || Clock.class.isAssignableFrom(type) || type == Period.class ||
+
+          CharSequence.class.isAssignableFrom(type) || type == URL.class || type == URI.class || type == UUID.class) {
+
+        builder.append(type.getSimpleName()).append("('").append(value).append("')");
+        return true;
       }
 
       // TimeZone
-      if (TimeZone.class.isAssignableFrom(value.getClass())) {
-        TimeZone tz = (TimeZone) value;
-        builder.append("TimeZone('").append(tz.getID()).append("')");
-        return;
+      if (TimeZone.class.isAssignableFrom(type)) {
+        TimeZone v = (TimeZone) value;
+        builder.append("TimeZone('").append(v.getID()).append("')");
+        return true;
       }
 
       // ZoneId
-      if (ZoneId.class.isAssignableFrom(value.getClass())) {
-        ZoneId z = (ZoneId) value;
-        builder.append("ZoneId('").append(z.getId()).append("')");
-        return;
+      if (ZoneId.class.isAssignableFrom(type)) {
+        ZoneId v = (ZoneId) value;
+        builder.append("ZoneId('").append(v.getId()).append("')");
+        return true;
       }
 
       // Calendar
-      if (Calendar.class.isAssignableFrom(value.getClass())) {
-        Calendar c = (Calendar) value;
-        builder.append("Calendar('").append(c.getTime()).append("', '").append(c.getTimeZone().getID()).append("')");
-        return;
+      if (Calendar.class.isAssignableFrom(type)) {
+        Calendar v = (Calendar) value;
+        builder.append("Calendar('").append(v.getTime()).append("', '").append(v.getTimeZone().getID()).append("')");
+        return true;
       }
 
       // Locale
-      if (value.getClass() == Locale.class) {
-        Locale l = (Locale) value;
-        builder.append("Locale('").append(l.getLanguage()).append("', '").append(l.getCountry()).append("', '")
-            .append(l.getVariant()).append("')");
-        return;
+      if (type == Locale.class) {
+        Locale v = (Locale) value;
+        builder.append("Locale('").append(v.getLanguage()).append("', '").append(v.getCountry()).append("', '")
+            .append(v.getVariant()).append("')");
+        return true;
       }
 
-      // Other
-      builder.append(value);
+      return false;
     }
 
     public boolean tsIterCompact(Class<?> type) {
@@ -276,8 +262,7 @@ public class ToStringBuilder {
     }
 
     // Simple Types
-    if (this.tsPolicy.tsSimpleType(obj.getClass())) {
-      this.tsPolicy.tsSimpleValue(obj, builder);
+    if (this.tsPolicy.tsSimpleValue(obj, builder)) {
       return;
     }
 
