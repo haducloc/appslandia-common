@@ -631,7 +631,7 @@ public class ToStringBuilder {
 
     Integer getIterLen();
 
-    Class<?> elementType();
+    Class<?> getElementType();
 
     boolean isCompact();
   }
@@ -674,7 +674,7 @@ public class ToStringBuilder {
     }
 
     @Override
-    public Class<?> elementType() {
+    public Class<?> getElementType() {
       return this.elementType;
     }
 
@@ -722,7 +722,7 @@ public class ToStringBuilder {
     }
 
     @Override
-    public Class<?> elementType() {
+    public Class<?> getElementType() {
       return this.elementType;
     }
 
@@ -770,7 +770,7 @@ public class ToStringBuilder {
     }
 
     @Override
-    public Class<?> elementType() {
+    public Class<?> getElementType() {
       return this.elementType;
     }
 
