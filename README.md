@@ -35,7 +35,7 @@ dependencies {
 ### ToString Builder
 ```java
 new ToStringBuilder().toString(anyObject);
-new ToStringBuilder().setLevel(3).toString(anyObject);
+new ToStringBuilder().setTsDepthLevel(3).toString(anyObject);
 new ToStringBuilder().setToOneLine(true).toString(anyObject);
 ```
 ### JDBC Named Parameters
@@ -130,7 +130,7 @@ try (ConnectionImpl connScoped = new ConnectionImpl(javax.sql.DataSource)) {
   CsvProcessor csvReader = new CsvProcessor();
   
   // This is also handing UTF BOM in the csv,if present
-  BufferedReader br = IOUtils.textReaderBOM(new FileInputStream("a_csv_file"), null);
+  BufferedReader br = IOUtils.readerBOM(new FileInputStream("a_csv_file"), null);
   
   List<CsvRecord> records = csvReader.parseRecords(br);
   records.get(0).getString(0);

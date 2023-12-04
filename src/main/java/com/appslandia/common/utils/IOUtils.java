@@ -116,7 +116,7 @@ public class IOUtils {
     return list;
   }
 
-  public static BufferedReader textReaderBOM(InputStream is, String encodingIfNoBOM) throws IOException {
+  public static BufferedReader readerBOM(InputStream is, String encodingIfNoBOM) throws IOException {
     if (encodingIfNoBOM == null) {
       encodingIfNoBOM = StandardCharsets.UTF_8.name();
     }
@@ -125,7 +125,7 @@ public class IOUtils {
         new InputStreamReader(bomIS, bomIS.getBOM() != null ? bomIS.getBOM().getEncoding() : encodingIfNoBOM));
   }
 
-  public static BufferedWriter textWriterBOM(OutputStream os, String encoding) throws IOException {
+  public static BufferedWriter writerBOM(OutputStream os, String encoding) throws IOException {
     if (encoding == null) {
       encoding = StandardCharsets.UTF_8.name();
     }
