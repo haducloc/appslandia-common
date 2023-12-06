@@ -63,7 +63,7 @@ public class SecurityProviderApp {
     Asserts.notNull(serviceType);
 
     System.out.println(String.format("***** Java Runtime Version: %s *****", Runtime.version().toString()));
-    System.out.println(String.format("***** Installed Security Providers for Service Type %s*****", serviceType));
+    System.out.println(String.format("***** Installed Security Providers for Service Type %s *****", serviceType));
     System.out.println();
 
     int seq = 0;
