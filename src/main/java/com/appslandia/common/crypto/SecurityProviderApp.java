@@ -26,6 +26,7 @@ import java.security.Security;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 
 import com.appslandia.common.utils.Asserts;
 
@@ -37,8 +38,8 @@ import com.appslandia.common.utils.Asserts;
 public class SecurityProviderApp {
 
   public static void main(String[] args) {
-    queryServiceTypes();
-    querySecurityProvider("KeyFactory");
+    // queryServiceTypes();
+    querySecurityProvider("Signature", ".*ECDSA.*");
   }
 
   public static void queryServiceTypes() {
@@ -59,7 +60,7 @@ public class SecurityProviderApp {
     System.out.println();
   }
 
-  public static void querySecurityProvider(String serviceType) {
+  public static void querySecurityProvider(String serviceType, String algorithmPattern) {
     Asserts.notNull(serviceType);
 
     System.out.println(String.format("***** Java Runtime Version: %s *****", Runtime.version().toString()));
@@ -77,12 +78,15 @@ public class SecurityProviderApp {
 
       for (Service service : services) {
         if (service.getType().equalsIgnoreCase(serviceType)) {
+          if (algorithmPattern == null
+              || Pattern.compile(algorithmPattern, Pattern.CASE_INSENSITIVE).matcher(algorithmPattern).matches()) {
 
-          System.out.println(String.format("* Service: %s, Algorithm: %s", service.getType(), service.getAlgorithm()));
-          System.out.println(service);
+            System.out
+                .println(String.format("* Service: %s, Algorithm: %s", service.getType(), service.getAlgorithm()));
+            System.out.println(service);
+          }
         }
       }
-
     }
 
     System.out.println("***** Done *****");
