@@ -23,7 +23,11 @@ package com.appslandia.common.crypto;
 import java.security.Provider;
 import java.security.Provider.Service;
 import java.security.Security;
+import java.util.Arrays;
 import java.util.Set;
+import java.util.TreeSet;
+
+import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -33,36 +37,55 @@ import java.util.Set;
 public class SecurityProviderApp {
 
   public static void main(String[] args) {
-    try {
-      System.out.println(String.format("***** Java Runtime Version: %s *****", Runtime.version().toString()));
-      System.out.println("***** Installed Security Providers *****");
+    queryServiceTypes();
+    querySecurityProvider("KeyFactory");
+  }
+
+  public static void queryServiceTypes() {
+    System.out.println(String.format("***** Java Runtime Version: %s *****", Runtime.version().toString()));
+    System.out.println("***** Installed Services *****");
+    System.out.println();
+
+    Set<String> serviceTypes = new TreeSet<>();
+
+    Arrays.stream(Security.getProviders()).forEach(p -> {
+      p.getServices().stream().forEach(s -> serviceTypes.add(s.getType()));
+    });
+
+    serviceTypes.forEach(s -> System.out.println(String.format("* Service: %s", s)));
+
+    System.out.println();
+    System.out.println("***** Done *****");
+    System.out.println();
+  }
+
+  public static void querySecurityProvider(String serviceType) {
+    Asserts.notNull(serviceType);
+
+    System.out.println(String.format("***** Java Runtime Version: %s *****", Runtime.version().toString()));
+    System.out.println(String.format("***** Installed Security Providers for Service Type %s*****", serviceType));
+    System.out.println();
+
+    int seq = 0;
+    for (Provider p : Security.getProviders()) {
+
+      System.out.println(String.format("[%02d] Provider: %s, Version: %s", (++seq), p.getName(), p.getVersionStr()));
+      System.out.println(p.getInfo());
       System.out.println();
 
-      int seq = 0;
-      for (Provider p : Security.getProviders()) {
+      Set<Service> services = p.getServices();
 
-        System.out.println(String.format("[%02d] %s - Version %s", (++seq), p.getName(), p.getVersionStr()));
-        System.out.println(p.getInfo());
-        System.out.println();
+      for (Service service : services) {
+        if (service.getType().equalsIgnoreCase(serviceType)) {
 
-        Set<Service> services = p.getServices();
-        if (!services.isEmpty()) {
-          System.out.println("* Services:");
-
-          int subseq = 0;
-          for (Service service : services) {
-
-            System.out.println(String.format("(%02d) Service: %s, Algorithm: %s", (++subseq), service.getType(),
-                service.getAlgorithm()));
-            System.out.println(service);
-          }
+          System.out.println(String.format("* Service: %s, Algorithm: %s", service.getType(), service.getAlgorithm()));
+          System.out.println(service);
         }
       }
 
-      System.out.println("***** Done *****");
-
-    } catch (Exception ex) {
-      ex.printStackTrace();
     }
+
+    System.out.println("***** Done *****");
+    System.out.println();
   }
 }
