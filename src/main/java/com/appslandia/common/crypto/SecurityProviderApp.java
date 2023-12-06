@@ -39,7 +39,7 @@ public class SecurityProviderApp {
 
   public static void main(String[] args) {
     // queryServiceTypes();
-    querySecurityProvider("Signature", ".*ECDSA.*");
+    querySecurityProviders("Signature", ".*ECDSA.*");
   }
 
   public static void queryServiceTypes() {
@@ -60,7 +60,7 @@ public class SecurityProviderApp {
     System.out.println();
   }
 
-  public static void querySecurityProvider(String serviceType, String algorithmPattern) {
+  public static void querySecurityProviders(String serviceType, String algorithmPattern) {
     Asserts.notNull(serviceType);
 
     System.out.println(String.format("***** Java Runtime Version: %s *****", Runtime.version().toString()));
