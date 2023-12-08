@@ -61,6 +61,8 @@ public abstract class SharedEmfTestEntityManagerExtension
     if (em != null) {
       return;
     }
+
+    Asserts.notNull(emf);
     em = emf.createEntityManager();
     emHolder.set(em);
 

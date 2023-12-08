@@ -85,7 +85,10 @@ public abstract class TestEntityManagerExtension
   }
 
   public static EntityManager newEntityManager() {
-    EntityManager em = emfHolder.val().createEntityManager();
+    EntityManagerFactory emf = emfHolder.get();
+    Asserts.notNull(emf);
+
+    EntityManager em = emf.createEntityManager();
     emHolder.set(em);
     return em;
   }
