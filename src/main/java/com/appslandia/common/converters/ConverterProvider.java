@@ -26,9 +26,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import org.junit.jupiter.api.Assertions;
-
 import com.appslandia.common.base.InitializeObject;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.STR;
 
@@ -197,7 +196,7 @@ public class ConverterProvider extends InitializeObject {
   }
 
   public static void setDefault(ConverterProvider impl) {
-    Assertions.assertNull(__default, "ConverterProvider.__default must be null.");
+    Asserts.isNull(__default, "ConverterProvider.__default must be null.");
 
     if (__default == null) {
       synchronized (MUTEX) {
@@ -212,7 +211,7 @@ public class ConverterProvider extends InitializeObject {
   private static Supplier<ConverterProvider> __provider;
 
   public static void setProvider(Supplier<ConverterProvider> impl) {
-    Assertions.assertNull(__default, "ConverterProvider.__default must be null.");
+    Asserts.isNull(__default, "ConverterProvider.__default must be null.");
 
     if (__default == null) {
       synchronized (MUTEX) {
