@@ -41,13 +41,13 @@ public class URLEncoding {
 
   static {
     // ALPHA, DIGIT
-    // "-", ".", "_", "*"
+    // "-", "_", ".", "*"
     // The space character " " is converted into a plus sign "+".
 
     // @formatter:off
 		URL_PARAM_NOT_ENCODED = new BitMap(256).on("a-zA-Z0-9")
-				.on('-', '.', '_', '*').on(' ');
-		// @formatter:on
+		    .on('-', '_', '.', '*').on(' ');
+	// @formatter:on
   }
   static final BitSet URL_PARAM_NOT_ENCODED_SP = new BitMap(URL_PARAM_NOT_ENCODED).off(' ');
 
@@ -62,7 +62,7 @@ public class URLEncoding {
 		URL_PATH_NOT_ENCODED = new BitMap(256).on("a-zA-Z0-9")
 				.on('-', '.', '_', '~').on(':', '@')
 				.on('!', '$', '&', '\'', '(', ')', '*', '+', ',', ';', '=');
-		// @formatter:on
+	// @formatter:on
   }
 
   public static String encodeParam(String s) {
