@@ -21,6 +21,8 @@
 package com.appslandia.common.utils;
 
 import java.time.LocalDateTime;
+import java.util.Locale;
+import java.util.regex.Pattern;
 
 import com.appslandia.common.base.UUIDGenerator;
 
@@ -30,6 +32,32 @@ import com.appslandia.common.base.UUIDGenerator;
  *
  */
 public class FileNameUtils {
+
+  private static final Pattern VALID_NAME_PATTERN = Pattern.compile(".*[a-z\\d].*", Pattern.CASE_INSENSITIVE);
+  private static final Pattern VALID_EXTENSION_PATTERN = Pattern.compile("[a-z\\d]+", Pattern.CASE_INSENSITIVE);
+
+  private static boolean isValidFileName(String fileName) {
+    if (fileName.isEmpty()) {
+      return false;
+    }
+
+    int lastDotIndex = fileName.lastIndexOf('.');
+    if (lastDotIndex <= 0 || lastDotIndex == fileName.length() - 1) {
+      return false;
+    }
+
+    String beforeDotPart = fileName.substring(0, lastDotIndex);
+
+    if (!VALID_NAME_PATTERN.matcher(beforeDotPart).matches()) {
+      return false;
+    }
+
+    String extension = fileName.substring(lastDotIndex + 1);
+    if (!VALID_EXTENSION_PATTERN.matcher(extension).matches()) {
+      return false;
+    }
+    return true;
+  }
 
   public static String toFileNameNow(String fileName) {
     return toFileName(fileName, DateUtils.getFormatter("yyyyMMdd-HHmmss-SSS").format(LocalDateTime.now()));
@@ -42,33 +70,15 @@ public class FileNameUtils {
   public static String toFileName(String fileName, Object extra) {
     Asserts.notNull(fileName);
 
-    // No extension
-    var dotIdx = fileName.lastIndexOf('.');
-    if (dotIdx < 0) {
-
-      String fn = NormalizeUtils.normalizeLabel(fileName);
-      if (fn == null) {
-        return null;
-      }
-      return (extra != null) ? (fn + '-' + extra) : fn;
-    }
-    String namePart = NormalizeUtils.normalizeLabel(fileName.substring(0, dotIdx));
-    String extPart = NormalizeUtils.normalizeLabel(fileName.substring(dotIdx + 1));
-
-    // No extPart
-    if (extPart == null) {
-      if (namePart == null) {
-        return null;
-      }
-      return (extra != null) ? (namePart + '-' + extra) : namePart;
+    if (!isValidFileName(fileName)) {
+      return null;
     }
 
-    // No namePart
-    if (namePart == null) {
-      return (extra != null) ? (extra.toString() + '.' + extPart) : ('.' + extPart);
-    }
+    int lastDotIndex = fileName.lastIndexOf('.');
 
-    // namePart & extPart
+    String namePart = NormalizeUtils.normalizeLabel(fileName.substring(0, lastDotIndex));
+    String extPart = fileName.substring(lastDotIndex + 1).toLowerCase(Locale.ROOT);
+
     return (extra != null) ? (namePart + '-' + extra + '.' + extPart) : (namePart + '.' + extPart);
   }
 
