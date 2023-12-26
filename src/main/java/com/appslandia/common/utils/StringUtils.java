@@ -98,7 +98,7 @@ public class StringUtils {
     return !str.isEmpty() ? str : defaultValue;
   }
 
-  public static String trimToNull(String str, char charToTrim) {
+  public static String trimChars(String str, char charToTrim) {
     if (str == null) {
       return null;
     }

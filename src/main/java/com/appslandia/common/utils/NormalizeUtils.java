@@ -69,7 +69,7 @@ public class NormalizeUtils {
 
   public static String normalizeLabel(String str) {
     str = normalize(str, WTSP_PUNCT_HYPHEN_PATTERNS, "-");
-    str = StringUtils.trimToNull(str, '-');
+    str = StringUtils.trimChars(str, '-');
     return StringUtils.toLowerCase(str, Locale.ROOT);
   }
 
