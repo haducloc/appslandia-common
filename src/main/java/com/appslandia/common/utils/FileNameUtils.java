@@ -33,7 +33,9 @@ import com.appslandia.common.base.UUIDGenerator;
  */
 public class FileNameUtils {
 
-  private static final Pattern VALID_NAME_PATTERN = Pattern.compile(".*[a-z\\d].*", Pattern.CASE_INSENSITIVE);
+  private static final Pattern VALID_NAME_PATTERN = Pattern.compile("(?=.*[a-z\\d])[a-z\\d_\\-' ]+",
+      Pattern.CASE_INSENSITIVE);
+
   private static final Pattern VALID_EXTENSION_PATTERN = Pattern.compile("[a-z\\d]+", Pattern.CASE_INSENSITIVE);
 
   private static boolean isValidFileName(String fileName) {
@@ -46,9 +48,9 @@ public class FileNameUtils {
       return false;
     }
 
-    String beforeDotPart = fileName.substring(0, lastDotIndex);
+    String namePart = fileName.substring(0, lastDotIndex);
 
-    if (!VALID_NAME_PATTERN.matcher(beforeDotPart).matches()) {
+    if (!VALID_NAME_PATTERN.matcher(namePart).matches()) {
       return false;
     }
 
@@ -76,9 +78,11 @@ public class FileNameUtils {
 
     int lastDotIndex = fileName.lastIndexOf('.');
 
-    String namePart = NormalizeUtils.normalizeLabel(fileName.substring(0, lastDotIndex));
-    String extPart = fileName.substring(lastDotIndex + 1).toLowerCase(Locale.ROOT);
+    String namePart = fileName.substring(0, lastDotIndex);
+    namePart = namePart.replaceAll(Pattern.quote("'"), "");
+    namePart = NormalizeUtils.normalizeLabel(namePart);
 
+    String extPart = fileName.substring(lastDotIndex + 1).toLowerCase(Locale.ROOT);
     return (extra != null) ? (namePart + '-' + extra + '.' + extPart) : (namePart + '.' + extPart);
   }
 
