@@ -51,7 +51,9 @@ public class NormalizeUtils {
     if (str == null) {
       return null;
     }
-    StringBuilder decomposed = new StringBuilder(Normalizer.normalize(str, Normalizer.Form.NFD));
+    String normalizedString = Normalizer.normalize(str, Normalizer.Form.NFD);
+    StringBuilder decomposed = new StringBuilder(normalizedString);
+
     if (decomposedCharacterConverter != null) {
       for (int i = 0; i < decomposed.length(); i++) {
         char converted = decomposedCharacterConverter.convert(decomposed.charAt(i));
