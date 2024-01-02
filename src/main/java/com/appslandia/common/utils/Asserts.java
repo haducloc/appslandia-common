@@ -99,6 +99,20 @@ public class Asserts {
     return array;
   }
 
+  public static int[] hasElements(int[] array, String errorMessage) {
+    if ((array == null) || (array.length == 0)) {
+      throw new AssertException(errorMessage);
+    }
+    return array;
+  }
+
+  public static int[] hasElements(int[] array, Supplier<String> errorMessage) {
+    if ((array == null) || (array.length == 0)) {
+      throw new AssertException(errorMessage.get());
+    }
+    return array;
+  }
+
   public static <T> T[] hasElements(T[] array) {
     if ((array == null) || (array.length == 0)) {
       throw new AssertException("The array must have elements.");
