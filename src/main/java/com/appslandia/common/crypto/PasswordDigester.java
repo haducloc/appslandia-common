@@ -63,8 +63,11 @@ public class PasswordDigester extends TextDigester {
     // key
     this.keySize = ValueUtils.valueOrMin(this.keySize, 32);
     this.saltSize = ValueUtils.valueOrMin(this.saltSize, this.keySize);
-    this.iterationCount = ValueUtils.valueOrMin(this.iterationCount, 10_000);
 
+    // https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+    // PBKDF2-HMAC-SHA512: 210_000 iterations
+
+    this.iterationCount = ValueUtils.valueOrMin(this.iterationCount, 210_000);
     this.secretKeyAlgorithm = ValueUtils.valueOrAlt(this.secretKeyAlgorithm, "PBKDF2WithHmacSHA512");
 
     // secretKeyFactory
