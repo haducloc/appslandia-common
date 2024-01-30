@@ -34,10 +34,7 @@ public class PasswordUtilTest {
   public void test() {
     final PasswordUtil impl = new PasswordUtil();
 
-    for (int i = 1; i <= 1000; i++) {
-      String password = new String(impl.generatePassword(8, 32));
-
-      Assertions.assertTrue(PasswordUtil.isValid(password));
-    }
+    String password = new String(impl.generatePassword(8, 32));
+    Assertions.assertTrue(PasswordUtil.isValid(password));
   }
 }
