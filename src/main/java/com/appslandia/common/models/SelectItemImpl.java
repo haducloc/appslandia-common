@@ -22,8 +22,6 @@ package com.appslandia.common.models;
 
 import java.util.Objects;
 
-import com.appslandia.common.utils.StringUtils;
-
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
@@ -31,20 +29,12 @@ import com.appslandia.common.utils.StringUtils;
  */
 public class SelectItemImpl implements SelectItem {
 
-  public static final SelectItemImpl EMPTY = new SelectItemImpl(null, StringUtils.EMPTY_STRING);
-
   final Object value;
   final String displayName;
-  final String name;
 
   public SelectItemImpl(Object value, String displayName) {
-    this(value, displayName, null);
-  }
-
-  public SelectItemImpl(Object value, String displayName, String name) {
     this.value = value;
     this.displayName = displayName;
-    this.name = name;
   }
 
   @Override
@@ -55,11 +45,6 @@ public class SelectItemImpl implements SelectItem {
   @Override
   public String getDisplayName() {
     return this.displayName;
-  }
-
-  @Override
-  public String getName() {
-    return (this.name != null) ? this.name : this.displayName;
   }
 
   @Override

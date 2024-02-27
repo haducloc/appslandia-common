@@ -30,8 +30,4 @@ public interface SelectItem {
   Object getValue();
 
   String getDisplayName();
-
-  default public String getName() {
-    return getDisplayName();
-  }
 }
