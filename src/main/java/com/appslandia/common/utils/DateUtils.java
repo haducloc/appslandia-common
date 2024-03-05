@@ -29,12 +29,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
-import java.time.OffsetTime;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
 import java.util.EnumMap;
@@ -214,6 +213,10 @@ public class DateUtils {
     return DateTimeFormattersHolder.FORMATTERS.computeIfAbsent(pattern, p -> DateTimeFormatter.ofPattern(p));
   }
 
+  public static String format(Temporal temporal, String pattern) {
+    return (temporal != null) ? getFormatter(pattern).format(temporal) : null;
+  }
+
   public static LocalDateTime atStartOfDay(LocalDate ld) {
     if (ld == null) {
       return null;
@@ -320,46 +323,6 @@ public class DateUtils {
       return null;
     }
     return firstDayOfWeek(ld, locale).plusDays(6);
-  }
-
-  public static LocalDate iso8601LocalDate(String date) throws DateTimeParseException {
-    return (date != null) ? LocalDate.parse(date, getFormatter(ISO8601_DATE)) : null;
-  }
-
-  public static String iso8601LocalDate(LocalDate date) {
-    return (date != null) ? getFormatter(ISO8601_DATE).format(date) : null;
-  }
-
-  public static LocalTime iso8601LocalTime(String time) throws DateTimeParseException {
-    return (time != null) ? LocalTime.parse(time, getFormatter(ISO8601_TIME_N3)) : null;
-  }
-
-  public static String iso8601LocalTime(LocalTime time) {
-    return (time != null) ? getFormatter(ISO8601_TIME_N3).format(time) : null;
-  }
-
-  public static LocalDateTime iso8601LocalDateTime(String dateTime) throws DateTimeParseException {
-    return (dateTime != null) ? LocalDateTime.parse(dateTime, getFormatter(ISO8601_DATETIME_N3)) : null;
-  }
-
-  public static String iso8601LocalDateTime(LocalDateTime dateTime) {
-    return (dateTime != null) ? getFormatter(ISO8601_DATETIME_N3).format(dateTime) : null;
-  }
-
-  public static OffsetTime iso8601OffsetTime(String timeZ) throws DateTimeParseException {
-    return (timeZ != null) ? OffsetTime.parse(timeZ, getFormatter(ISO8601_TIMEZ_N3)) : null;
-  }
-
-  public static String iso8601OffsetTime(OffsetTime timeZ) {
-    return (timeZ != null) ? getFormatter(ISO8601_TIMEZ_N3).format(timeZ) : null;
-  }
-
-  public static OffsetDateTime iso8601OffsetDateTime(String dateTimeZ) throws DateTimeParseException {
-    return (dateTimeZ != null) ? OffsetDateTime.parse(dateTimeZ, getFormatter(ISO8601_DATETIMEZ_N3)) : null;
-  }
-
-  public static String iso8601OffsetDateTime(OffsetDateTime dateTimeZ) {
-    return (dateTimeZ != null) ? getFormatter(ISO8601_DATETIMEZ_N3).format(dateTimeZ) : null;
   }
 
   // 1w 2d 3h 4m 50s 500ms

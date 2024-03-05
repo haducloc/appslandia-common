@@ -21,17 +21,22 @@
 package com.appslandia.common.csv;
 
 import java.io.BufferedWriter;
-import java.time.temporal.Temporal;
-import java.util.HashMap;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.appslandia.common.base.CaseInsensitiveMap;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
 import com.appslandia.common.data.RecordContext;
 import com.appslandia.common.jdbc.ConnectionImpl;
 import com.appslandia.common.jdbc.ResultSetColumn;
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.DateUtils;
 
 /**
  *
@@ -47,7 +52,14 @@ public class CsvExporter extends InitializeObject {
 
   private CsvProcessor csvProcessor;
 
-  final Map<String, DbToCsvConverter> converters = new HashMap<>();
+  private String datePattern;
+  private String timePattern;
+  private String dateTimePattern;
+
+  private String offsetTimePattern;
+  private String offsetDateTimePattern;
+
+  final Map<String, DbToCsvConverter> converters = new CaseInsensitiveMap<>();
 
   @Override
   protected void init() throws Exception {
@@ -59,6 +71,27 @@ public class CsvExporter extends InitializeObject {
     }
     if (this.csvProcessor == null) {
       this.csvProcessor = CsvProcessor.INSTANCE;
+    }
+
+    // Default patterns
+    if (this.datePattern == null) {
+      this.datePattern = CsvUtils.getCsvDtPattern(DateUtils.ISO8601_DATE);
+    }
+
+    if (this.timePattern == null) {
+      this.timePattern = CsvUtils.getCsvDtPattern(DateUtils.ISO8601_TIME_S);
+    }
+
+    if (this.dateTimePattern == null) {
+      this.dateTimePattern = CsvUtils.getCsvDtPattern(DateUtils.ISO8601_DATETIME_S);
+    }
+
+    if (this.offsetTimePattern == null) {
+      this.offsetTimePattern = CsvUtils.getCsvDtPattern(DateUtils.ISO8601_TIMEZ_S);
+    }
+
+    if (this.offsetDateTimePattern == null) {
+      this.offsetDateTimePattern = CsvUtils.getCsvDtPattern(DateUtils.ISO8601_DATETIMEZ_S);
     }
   }
 
@@ -93,6 +126,7 @@ public class CsvExporter extends InitializeObject {
           if (converter != null) {
             value = converter.apply(value);
           }
+
           if (column.getIndex() > 1) {
             this.csvOutput.write(csvProcessor.getSeparator());
           }
@@ -100,16 +134,37 @@ public class CsvExporter extends InitializeObject {
           if (value == null) {
             this.csvOutput.write(this.csvProcessor.escape(null));
 
-          } else if (Number.class.isAssignableFrom(value.getClass())
-              || Temporal.class.isAssignableFrom(value.getClass()) || value.getClass() == Boolean.class
-              || java.util.Date.class.isAssignableFrom(value.getClass())) {
-
-            this.csvOutput.write(value.toString());
           } else {
-            this.csvOutput.write(this.csvProcessor.escape((value != null) ? value.toString() : null));
-          }
+            Class<?> type = value.getClass();
 
-        }
+            if (Number.class.isAssignableFrom(type) || type == Boolean.class) {
+              this.csvOutput.write(value.toString());
+
+            } else if (type == LocalDate.class) {
+              this.csvOutput.write(this.csvProcessor.escape(DateUtils.format((LocalDate) value, this.datePattern)));
+
+            } else if (type == LocalTime.class) {
+              this.csvOutput.write(this.csvProcessor.escape(DateUtils.format((LocalTime) value, this.timePattern)));
+
+            } else if (type == LocalDateTime.class) {
+              this.csvOutput
+                  .write(this.csvProcessor.escape(DateUtils.format((LocalDateTime) value, this.dateTimePattern)));
+
+            } else if (type == OffsetTime.class) {
+              this.csvOutput
+                  .write(this.csvProcessor.escape(DateUtils.format((OffsetTime) value, this.offsetTimePattern)));
+
+            } else if (type == OffsetDateTime.class) {
+              this.csvOutput.write(
+                  this.csvProcessor.escape(DateUtils.format((OffsetDateTime) value, this.offsetDateTimePattern)));
+
+            } else {
+              // Other
+              this.csvOutput.write(this.csvProcessor.escape(value.toString()));
+            }
+          }
+        } // record
+
         this.csvOutput.newLine();
       });
 
@@ -145,6 +200,36 @@ public class CsvExporter extends InitializeObject {
   public CsvExporter setCsvProcessor(CsvProcessor csvProcessor) {
     assertNotInitialized();
     this.csvProcessor = csvProcessor;
+    return this;
+  }
+
+  public CsvExporter setDatePattern(String datePattern) {
+    assertNotInitialized();
+    this.datePattern = datePattern;
+    return this;
+  }
+
+  public CsvExporter setTimePattern(String timePattern) {
+    assertNotInitialized();
+    this.timePattern = timePattern;
+    return this;
+  }
+
+  public CsvExporter setDateTimePattern(String dateTimePattern) {
+    assertNotInitialized();
+    this.dateTimePattern = dateTimePattern;
+    return this;
+  }
+
+  public CsvExporter setOffsetTimePattern(String offsetTimePattern) {
+    assertNotInitialized();
+    this.offsetTimePattern = offsetTimePattern;
+    return this;
+  }
+
+  public CsvExporter setOffsetDateTimePattern(String offsetDateTimePattern) {
+    assertNotInitialized();
+    this.offsetDateTimePattern = offsetDateTimePattern;
     return this;
   }
 

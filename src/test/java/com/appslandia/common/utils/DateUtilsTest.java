@@ -20,11 +20,6 @@
 
 package com.appslandia.common.utils;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.OffsetDateTime;
-import java.time.OffsetTime;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Assertions;
@@ -54,73 +49,6 @@ public class DateUtilsTest {
       DateUtils.translateToMs("1d 4hr 8min");
       Assertions.fail();
     } catch (Exception ex) {
-    }
-  }
-
-  // Java8 Date/Time
-
-  @Test
-  public void test_parse_localDate() {
-    try {
-      LocalDate t = DateUtils.iso8601LocalDate("2017-11-02");
-      String s = DateUtils.iso8601LocalDate(t);
-
-      Assertions.assertEquals("2017-11-02", s);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-  }
-
-  @Test
-  public void test_parse_localTime() {
-    try {
-      LocalTime t = DateUtils.iso8601LocalTime("09:45:00.999");
-      String s = DateUtils.iso8601LocalTime(t);
-
-      Assertions.assertEquals("09:45:00.999", s);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-  }
-
-  @Test
-  public void test_parse_localDateTime() {
-    try {
-      LocalDateTime t = DateUtils.iso8601LocalDateTime("2017-11-02T09:45:00.999");
-      String s = DateUtils.iso8601LocalDateTime(t);
-
-      Assertions.assertEquals("2017-11-02T09:45:00.999", s);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-  }
-
-  @Test
-  public void test_parse_offsetTime() {
-    try {
-      OffsetTime t = DateUtils.iso8601OffsetTime("09:45:00.999-05:00");
-      String s = DateUtils.iso8601OffsetTime(t);
-
-      Assertions.assertEquals("09:45:00.999-05:00", s);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-  }
-
-  @Test
-  public void test_parse_offsetDateTime() {
-    try {
-      OffsetDateTime t = DateUtils.iso8601OffsetDateTime("2017-11-02T09:45:00.999-05:00");
-      String s = DateUtils.iso8601OffsetDateTime(t);
-
-      Assertions.assertEquals("2017-11-02T09:45:00.999-05:00", s);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
     }
   }
 }

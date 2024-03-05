@@ -33,27 +33,19 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
 
+import com.appslandia.common.base.CaseInsensitiveMap;
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.base.Language;
 import com.appslandia.common.data.Column;
 import com.appslandia.common.data.DataRecord;
 import com.appslandia.common.data.RecordContext;
 import com.appslandia.common.data.Table;
 import com.appslandia.common.jdbc.ConnectionImpl;
 import com.appslandia.common.jdbc.JdbcParam;
-import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
-import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.STR;
 import com.appslandia.common.utils.TypeUtils;
 
@@ -73,23 +65,14 @@ public class CsvImporter extends InitializeObject {
   private boolean executeInserts;
   private CsvDebugger csvDebugger;
 
-  private String[] datePatterns;
-  private String[] timePatterns;
-  private String[] dateTimePatterns;
+  private Collection<String> datePatterns;
+  private Collection<String> timePatterns;
+  private Collection<String> dateTimePatterns;
 
-  private String[] offsetTimePatterns;
-  private String[] offsetDateTimePatterns;
+  private Collection<String> offsetTimePatterns;
+  private Collection<String> offsetDateTimePatterns;
 
-  final Map<Indexes, Function<String, String>> postProcessors = new LinkedHashMap<>();
-  final Map<Integer, CsvToDbConverter> converters = new HashMap<>();
-
-  private static final Language DEFAULT_LANGUAGE;
-  static {
-    String defDatePattern = DateUtils.toDatePattern(Locale.getDefault());
-    DEFAULT_LANGUAGE = (defDatePattern != null)
-        ? new Language().setLocale(Locale.getDefault()).setDatePattern(defDatePattern)
-        : null;
-  }
+  final Map<String, CsvToDbConverter> converters = new CaseInsensitiveMap<>();
 
   @Override
   protected void init() throws Exception {
@@ -104,57 +87,24 @@ public class CsvImporter extends InitializeObject {
     }
 
     // Default patterns
-
-    if (!ArrayUtils.hasElements(this.datePatterns)) {
-      this.datePatterns = new DTPatterns(DateUtils.ISO8601_DATE).toArray();
+    if (this.datePatterns == null) {
+      this.datePatterns = CsvUtils.PATTERNS_DATE;
     }
 
-    if (!ArrayUtils.hasElements(this.timePatterns)) {
-      // @formatter:off
-			this.timePatterns = new String[]{DateUtils.ISO8601_TIME_M,
-					DateUtils.ISO8601_TIME_S, DateUtils.ISO8601_TIME_N1,
-					DateUtils.ISO8601_TIME_N2, DateUtils.ISO8601_TIME_N3,
-					DateUtils.ISO8601_TIME_N4, DateUtils.ISO8601_TIME_N5,
-					DateUtils.ISO8601_TIME_N6, DateUtils.ISO8601_TIME_N7};
-			// @formatter:on
+    if (this.timePatterns == null) {
+      this.timePatterns = CsvUtils.PATTERNS_TIME;
     }
 
-    if (!ArrayUtils.hasElements(this.dateTimePatterns)) {
-      // @formatter:off
-			this.dateTimePatterns = new DTPatterns(DateUtils.ISO8601_DATETIME_M,
-					DateUtils.ISO8601_DATETIME_S, DateUtils.ISO8601_DATETIME_N1,
-					DateUtils.ISO8601_DATETIME_N2,
-					DateUtils.ISO8601_DATETIME_N3,
-					DateUtils.ISO8601_DATETIME_N4,
-					DateUtils.ISO8601_DATETIME_N5,
-					DateUtils.ISO8601_DATETIME_N6,
-					DateUtils.ISO8601_DATETIME_N7).toArray();
-			// @formatter:on
+    if (this.dateTimePatterns == null) {
+      this.dateTimePatterns = CsvUtils.PATTERNS_DATETIME;
     }
 
-    if (!ArrayUtils.hasElements(this.offsetTimePatterns)) {
-      // @formatter:off
-			this.offsetTimePatterns = new String[]{DateUtils.ISO8601_TIMEZ_M,
-					DateUtils.ISO8601_TIMEZ_S, DateUtils.ISO8601_TIMEZ_N1,
-					DateUtils.ISO8601_TIMEZ_N2, DateUtils.ISO8601_TIMEZ_N3,
-					DateUtils.ISO8601_TIMEZ_N4, DateUtils.ISO8601_TIMEZ_N5,
-					DateUtils.ISO8601_TIMEZ_N6, DateUtils.ISO8601_TIMEZ_N7};
-			// @formatter:on
+    if (this.offsetTimePatterns == null) {
+      this.offsetTimePatterns = CsvUtils.PATTERNS_TIMEZ;
     }
 
-    if (!ArrayUtils.hasElements(this.offsetDateTimePatterns)) {
-      // @formatter:off
-			this.offsetDateTimePatterns = new DTPatterns(
-					DateUtils.ISO8601_DATETIMEZ_M,
-					DateUtils.ISO8601_DATETIMEZ_S,
-					DateUtils.ISO8601_DATETIMEZ_N1,
-					DateUtils.ISO8601_DATETIMEZ_N2,
-					DateUtils.ISO8601_DATETIMEZ_N3,
-					DateUtils.ISO8601_DATETIMEZ_N4,
-					DateUtils.ISO8601_DATETIMEZ_N5,
-					DateUtils.ISO8601_DATETIMEZ_N6,
-					DateUtils.ISO8601_DATETIMEZ_N7).toArray();
-			// @formatter:on
+    if (this.offsetDateTimePatterns == null) {
+      this.offsetDateTimePatterns = CsvUtils.PATTERNS_DATETIMEZ;
     }
   }
 
@@ -179,11 +129,6 @@ public class CsvImporter extends InitializeObject {
             if (idx == 0) {
               return;
             }
-          }
-
-          // Processors
-          for (Map.Entry<Indexes, Function<String, String>> processor : this.postProcessors.entrySet()) {
-            csvRecord.applyProcessor(processor.getValue(), processor.getKey().indexes);
           }
 
           // Build record
@@ -242,7 +187,7 @@ public class CsvImporter extends InitializeObject {
     String value = csv.getString(idx);
 
     // dbConverter
-    CsvToDbConverter dbConverter = this.converters.get(idx);
+    CsvToDbConverter dbConverter = this.converters.get(column.getName());
     if (dbConverter != null) {
       return dbConverter.apply(value, conn);
     }
@@ -362,95 +307,42 @@ public class CsvImporter extends InitializeObject {
     return this;
   }
 
-  public CsvImporter setDatePatterns(String... datePatterns) {
+  public CsvImporter setDatePatterns(Collection<String> datePatterns) {
     assertNotInitialized();
-    this.datePatterns = ArrayUtils.copy(datePatterns);
+    this.datePatterns = datePatterns;
     return this;
   }
 
-  public CsvImporter setTimePatterns(String... timePatterns) {
+  public CsvImporter setTimePatterns(Collection<String> timePatterns) {
     assertNotInitialized();
-    this.timePatterns = ArrayUtils.copy(timePatterns);
+    this.timePatterns = timePatterns;
     return this;
   }
 
-  public CsvImporter setDateTimePatterns(String... dateTimePatterns) {
+  public CsvImporter setDateTimePatterns(Collection<String> dateTimePatterns) {
     assertNotInitialized();
-    this.dateTimePatterns = ArrayUtils.copy(dateTimePatterns);
+    this.dateTimePatterns = dateTimePatterns;
     return this;
   }
 
-  public CsvImporter setOffsetTimePatterns(String... offsetTimePatterns) {
+  public CsvImporter setOffsetTimePatterns(Collection<String> offsetTimePatterns) {
     assertNotInitialized();
-    this.offsetTimePatterns = ArrayUtils.copy(offsetTimePatterns);
+    this.offsetTimePatterns = offsetTimePatterns;
     return this;
   }
 
-  public CsvImporter setOffsetDateTimePatterns(String... offsetDateTimePatterns) {
+  public CsvImporter setOffsetDateTimePatterns(Collection<String> offsetDateTimePatterns) {
     assertNotInitialized();
-    this.offsetDateTimePatterns = ArrayUtils.copy(offsetDateTimePatterns);
+    this.offsetDateTimePatterns = offsetDateTimePatterns;
     return this;
   }
 
-  public CsvImporter setPostProcessor(Function<String, String> processor, int... indexes) {
-    assertNotInitialized();
-
-    Asserts.notNull(processor);
-    Asserts.hasElements(indexes);
-
-    this.postProcessors.put(new Indexes(indexes), processor);
-    return this;
-  }
-
-  public CsvImporter setCsvToDbConverter(int index, CsvToDbConverter converter) {
+  public CsvImporter setCsvToDbConverter(String columnLabel, CsvToDbConverter converter) {
     assertNotInitialized();
 
     Asserts.notNull(converter);
 
-    this.converters.put(index, converter);
+    this.converters.put(columnLabel, converter);
     return this;
-  }
-
-  private static class Indexes {
-    final int[] indexes;
-
-    public Indexes(int[] indexes) {
-      this.indexes = ArrayUtils.copy(indexes);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-      Indexes other = (Indexes) obj;
-      return Arrays.equals(this.indexes, other.indexes);
-    }
-
-    @Override
-    public int hashCode() {
-      return Arrays.hashCode(this.indexes);
-    }
-
-    @Override
-    public String toString() {
-      return Arrays.toString(this.indexes);
-    }
-  }
-
-  private static class DTPatterns {
-
-    final List<String> values = new ArrayList<>();
-
-    public DTPatterns(String... isoPatterns) {
-      for (String isoPattern : isoPatterns) {
-        this.values.add(isoPattern);
-
-        if (DEFAULT_LANGUAGE != null) {
-          this.values.add(DEFAULT_LANGUAGE.getTemporalPattern(isoPattern));
-        }
-      }
-    }
-
-    public String[] toArray() {
-      return this.values.toArray(new String[this.values.size()]);
-    }
   }
 }
