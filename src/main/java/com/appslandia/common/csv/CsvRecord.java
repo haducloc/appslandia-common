@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
+import java.time.temporal.Temporal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
@@ -36,6 +37,7 @@ import com.appslandia.common.base.AssertException;
 import com.appslandia.common.base.BoolFormatException;
 import com.appslandia.common.base.DateFormatException;
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.ParseUtils;
 import com.appslandia.common.utils.STR;
 
@@ -373,6 +375,87 @@ public class CsvRecord {
 
     String value = getString(index);
     return (value != null) ? ParseUtils.parseOffsetDateTime(value, patterns) : null;
+  }
+
+  // Setters
+
+  public CsvRecord set(int index, String value) {
+    Objects.checkIndex(index, this.values.length);
+    this.values[index] = (value != null) ? value : null;
+    return this;
+  }
+
+  public CsvRecord set(int index, boolean value) {
+    return set(index, Boolean.toString(value));
+  }
+
+  public CsvRecord set(int index, byte value) {
+    return set(index, Byte.toString(value));
+  }
+
+  public CsvRecord set(int index, short value) {
+    return set(index, Short.toString(value));
+  }
+
+  public CsvRecord set(int index, int value) {
+    return set(index, Integer.toString(value));
+  }
+
+  public CsvRecord set(int index, long value) {
+    return set(index, Long.toString(value));
+  }
+
+  public CsvRecord set(int index, float value) {
+    return set(index, Float.toString(value));
+  }
+
+  public CsvRecord set(int index, double value) {
+    return set(index, Double.toString(value));
+  }
+
+  public CsvRecord set(int index, LocalDate value) {
+    return set(index, value, CsvUtils.getCsvDtPattern(DateUtils.ISO8601_DATE));
+  }
+
+  public CsvRecord set(int index, LocalTime value) {
+    return set(index, value, CsvUtils.getCsvDtPattern(DateUtils.ISO8601_TIME_S));
+  }
+
+  public CsvRecord set(int index, LocalDateTime value) {
+    return set(index, value, CsvUtils.getCsvDtPattern(DateUtils.ISO8601_DATETIME_S));
+  }
+
+  public CsvRecord set(int index, OffsetTime value) {
+    return set(index, value, CsvUtils.getCsvDtPattern(DateUtils.ISO8601_TIMEZ_S));
+  }
+
+  public CsvRecord set(int index, OffsetDateTime value) {
+    return set(index, value, CsvUtils.getCsvDtPattern(DateUtils.ISO8601_DATETIMEZ_S));
+  }
+
+  public CsvRecord set(int index, LocalDate value, String pattern) {
+    return setTemporal(index, value, pattern);
+  }
+
+  public CsvRecord set(int index, LocalTime value, String pattern) {
+    return setTemporal(index, value, pattern);
+  }
+
+  public CsvRecord set(int index, LocalDateTime value, String pattern) {
+    return setTemporal(index, value, pattern);
+  }
+
+  public CsvRecord set(int index, OffsetTime value, String pattern) {
+    return setTemporal(index, value, pattern);
+  }
+
+  public CsvRecord set(int index, OffsetDateTime value, String pattern) {
+    return setTemporal(index, value, pattern);
+  }
+
+  private CsvRecord setTemporal(int index, Temporal value, String pattern) {
+    Asserts.notNull(pattern);
+    return set(index, (value != null) ? DateUtils.getFormatter(pattern).format(value) : null);
   }
 
   @Override
