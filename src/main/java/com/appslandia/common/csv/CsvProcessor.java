@@ -197,7 +197,7 @@ public class CsvProcessor extends InitializeObject {
 
   public List<CsvRecord> parseRecords(BufferedReader reader) throws Exception {
     this.initialize();
-    List<CsvRecord> records = new ArrayList<>(128);
+    List<CsvRecord> records = new ArrayList<>();
 
     parse(reader, (idx, csvRecord) -> records.add(csvRecord));
     return records;
