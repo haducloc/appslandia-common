@@ -34,6 +34,8 @@ import java.util.regex.Pattern;
 public class StringUtils {
 
   public static final String EMPTY_STRING = "";
+  public static final String NULL_STRING = "null";
+
   public static final String[] EMPTY_ARRAY = {};
 
   public static String toLowerCase(String str) {
