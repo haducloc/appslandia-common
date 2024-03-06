@@ -21,11 +21,19 @@
 package com.appslandia.common.csv;
 
 import java.io.BufferedReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.appslandia.common.base.InitializeException;
 import com.appslandia.common.base.InitializeObject;
+import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.StringUtils;
 
 /**
@@ -41,9 +49,34 @@ public class CsvProcessor extends InitializeObject {
   private char separator = ',';
   private boolean escCrLf;
 
+  private String datePattern;
+  private String timePattern;
+  private String dateTimePattern;
+
+  private String offsetTimePattern;
+  private String offsetDateTimePattern;
+
   @Override
   protected void init() throws Exception {
-    // Validate separator?
+    if (this.datePattern == null) {
+      this.datePattern = CsvUtils.getCsvDtPattern(DateUtils.ISO8601_DATE);
+    }
+
+    if (this.timePattern == null) {
+      this.timePattern = CsvUtils.getCsvDtPattern(DateUtils.ISO8601_TIME_S);
+    }
+
+    if (this.dateTimePattern == null) {
+      this.dateTimePattern = CsvUtils.getCsvDtPattern(DateUtils.ISO8601_DATETIME_S);
+    }
+
+    if (this.offsetTimePattern == null) {
+      this.offsetTimePattern = CsvUtils.getCsvDtPattern(DateUtils.ISO8601_TIMEZ_S);
+    }
+
+    if (this.offsetDateTimePattern == null) {
+      this.offsetDateTimePattern = CsvUtils.getCsvDtPattern(DateUtils.ISO8601_DATETIMEZ_S);
+    }
   }
 
   @Override
@@ -52,59 +85,71 @@ public class CsvProcessor extends InitializeObject {
     return this;
   }
 
-  public boolean isWriteNull() {
+  protected DateFormat getDateFormat(String pattern) {
+    return new SimpleDateFormat(pattern);
+  }
+
+  public String escape(Object value) {
     this.initialize();
-    return this.writeNull;
-  }
-
-  public CsvProcessor setWriteNull(boolean writeNull) {
-    assertNotInitialized();
-
-    this.writeNull = writeNull;
-    return this;
-  }
-
-  public char getSeparator() {
-    this.initialize();
-    return this.separator;
-  }
-
-  public CsvProcessor setSeparator(char separator) {
-    assertNotInitialized();
-
-    this.separator = separator;
-    return this;
-  }
-
-  public boolean isEscCrLf() {
-    this.initialize();
-    return this.escCrLf;
-  }
-
-  public CsvProcessor setEscCrLf(boolean escCrLf) {
-    assertNotInitialized();
-
-    this.escCrLf = escCrLf;
-    return this;
-  }
-
-  public String escape(String value) {
-    return escape(value, (value != null) ? new StringBuilder((int) (value.length() * 1.25f)) : new StringBuilder());
-  }
-
-  public String escape(String value, StringBuilder buf) {
-    this.initialize();
-    buf.setLength(0);
 
     if (value == null) {
       if (this.writeNull) {
-        return "null";
+        return StringUtils.NULL_STRING;
       }
-      return "";
+      return StringUtils.EMPTY_STRING;
     }
+
+    if (value instanceof CharSequence) {
+      return doEscape(value.toString());
+    }
+    Class<?> type = value.getClass();
+
+    if (Number.class.isAssignableFrom(type) || type == Boolean.class || Enum.class.isAssignableFrom(type)) {
+      return value.toString();
+    }
+
+    if (type == LocalDate.class) {
+      return doEscape(DateUtils.format((LocalDate) value, this.datePattern));
+    }
+
+    if (type == LocalTime.class) {
+      return doEscape(DateUtils.format((LocalTime) value, this.timePattern));
+    }
+
+    if (type == LocalDateTime.class) {
+      return doEscape(DateUtils.format((LocalDateTime) value, this.dateTimePattern));
+    }
+
+    if (type == OffsetTime.class) {
+      return doEscape(DateUtils.format((OffsetTime) value, this.offsetTimePattern));
+    }
+
+    if (type == OffsetDateTime.class) {
+      return doEscape(DateUtils.format((OffsetDateTime) value, this.offsetDateTimePattern));
+    }
+
+    if (type == java.sql.Date.class) {
+      return doEscape(getDateFormat(this.datePattern).format((java.sql.Date) value));
+    }
+
+    if (type == java.sql.Time.class) {
+      return doEscape(getDateFormat(this.timePattern).format((java.sql.Time) value));
+    }
+
+    if (type == java.sql.Timestamp.class) {
+      return doEscape(getDateFormat(this.dateTimePattern).format((java.sql.Timestamp) value));
+    }
+
+    // Other
+    return doEscape(value.toString());
+  }
+
+  protected String doEscape(String value) {
     if (value.isEmpty()) {
-      return "";
+      return StringUtils.EMPTY_STRING;
     }
+
+    StringBuilder buf = new StringBuilder((int) (value.length() * 1.25f));
     buf.append('"');
 
     int start = 0;
@@ -137,7 +182,7 @@ public class CsvProcessor extends InitializeObject {
         }
 
         // add escaped
-        buf.append("\\").append(c == '\r' ? 'r' : 'n');
+        buf.append('\\').append(c == '\r' ? 'r' : 'n');
         start = i + 1;
       }
     }
@@ -265,5 +310,93 @@ public class CsvProcessor extends InitializeObject {
       }
     }
     return StringUtils.trimToNull(value.toString());
+  }
+
+  public boolean isWriteNull() {
+    initialize();
+    return this.writeNull;
+  }
+
+  public CsvProcessor setWriteNull(boolean writeNull) {
+    assertNotInitialized();
+    this.writeNull = writeNull;
+    return this;
+  }
+
+  public char getSeparator() {
+    initialize();
+    return this.separator;
+  }
+
+  public CsvProcessor setSeparator(char separator) {
+    assertNotInitialized();
+    this.separator = separator;
+    return this;
+  }
+
+  public boolean isEscCrLf() {
+    initialize();
+    return this.escCrLf;
+  }
+
+  public CsvProcessor setEscCrLf(boolean escCrLf) {
+    assertNotInitialized();
+    this.escCrLf = escCrLf;
+    return this;
+  }
+
+  public String getDatePattern() {
+    initialize();
+    return this.datePattern;
+  }
+
+  public CsvProcessor setDatePattern(String datePattern) {
+    assertNotInitialized();
+    this.datePattern = datePattern;
+    return this;
+  }
+
+  public String getTimePattern() {
+    initialize();
+    return this.timePattern;
+  }
+
+  public CsvProcessor setTimePattern(String timePattern) {
+    assertNotInitialized();
+    this.timePattern = timePattern;
+    return this;
+  }
+
+  public String getDateTimePattern() {
+    initialize();
+    return this.dateTimePattern;
+  }
+
+  public CsvProcessor setDateTimePattern(String dateTimePattern) {
+    assertNotInitialized();
+    this.dateTimePattern = dateTimePattern;
+    return this;
+  }
+
+  public String getOffsetTimePattern() {
+    initialize();
+    return this.offsetTimePattern;
+  }
+
+  public CsvProcessor setOffsetTimePattern(String offsetTimePattern) {
+    assertNotInitialized();
+    this.offsetTimePattern = offsetTimePattern;
+    return this;
+  }
+
+  public String getOffsetDateTimePattern() {
+    initialize();
+    return this.offsetDateTimePattern;
+  }
+
+  public CsvProcessor setOffsetDateTimePattern(String offsetDateTimePattern) {
+    assertNotInitialized();
+    this.offsetDateTimePattern = offsetDateTimePattern;
+    return this;
   }
 }
