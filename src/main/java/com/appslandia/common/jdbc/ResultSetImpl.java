@@ -65,7 +65,7 @@ public class ResultSetImpl implements ResultSet {
 
     Object[] values = Arrays.stream(columnLabels).map(columnLabel -> {
       try {
-        return this.rs.getObject(columnLabel);
+        return this.getObject(columnLabel);
 
       } catch (SQLException ex) {
         throw new UncheckedSQLException(ex);
