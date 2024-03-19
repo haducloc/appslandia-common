@@ -349,8 +349,8 @@ public class StatementImpl implements PreparedStatement {
   }
 
   protected String toLikeParamValue(String value, LikeType likeType) {
-    if (value != null && value.startsWith("***")) {
-      return value.substring(3);
+    if (value != null && value.startsWith("\"") && value.endsWith("\"")) {
+      return value.substring(1, value.length() - 1);
     } else {
       return SqlLikeEscaper.toLikePattern(value, likeType);
     }
