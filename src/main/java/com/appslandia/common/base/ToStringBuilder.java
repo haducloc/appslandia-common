@@ -73,6 +73,12 @@ public class ToStringBuilder {
   public @interface TSIdHash {
   }
 
+  @Target({ ElementType.TYPE, ElementType.FIELD })
+  @Retention(RetentionPolicy.RUNTIME)
+  @Documented
+  public @interface TSIgnore {
+  }
+
   public static class TSPolicy {
 
     public boolean tsIdHash(Field field, Object value) {
@@ -111,6 +117,18 @@ public class ToStringBuilder {
       }
 
       if (AtomicBoolean.class.isAssignableFrom(type)) {
+        builder.append(value);
+        return true;
+      }
+
+      // Enum
+      if (Enum.class.isAssignableFrom(type)) {
+        builder.append(value);
+        return true;
+      }
+
+      // Class
+      if (Class.class.isAssignableFrom(type)) {
         builder.append(value);
         return true;
       }
@@ -159,7 +177,6 @@ public class ToStringBuilder {
             .append(v.getVariant()).append("')");
         return true;
       }
-
       return false;
     }
 
@@ -170,7 +187,13 @@ public class ToStringBuilder {
       if (Number.class.isAssignableFrom(type)) {
         return true;
       }
-      if (type == Character.class || type == String.class) {
+      if (AtomicBoolean.class.isAssignableFrom(type)) {
+        return true;
+      }
+      if (Enum.class.isAssignableFrom(type)) {
+        return true;
+      }
+      if (type == Character.class) {
         return true;
       }
       return false;
@@ -327,8 +350,12 @@ public class ToStringBuilder {
     Class<?> clazz = obj.getClass();
     while (clazz != null) {
       Field[] fields = clazz.getDeclaredFields();
+
       for (Field field : fields) {
         if (field.getName().equals("serialVersionUID")) {
+          continue;
+        }
+        if ((field.getAnnotation(TSIgnore.class) != null) || (field.getType().getAnnotation(TSIgnore.class) != null)) {
           continue;
         }
 

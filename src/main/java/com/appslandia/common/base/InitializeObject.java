@@ -20,6 +20,7 @@
 
 package com.appslandia.common.base;
 
+import com.appslandia.common.base.ToStringBuilder.TSIgnore;
 import com.appslandia.common.json.JsonIgnore;
 
 /**
@@ -31,6 +32,7 @@ public abstract class InitializeObject implements InitializeSupport {
 
   private volatile boolean initialized = false;
 
+  @TSIgnore
   @JsonIgnore
   private final Object initMutex = new Object();
 
