@@ -31,6 +31,7 @@ import java.util.Map;
 import com.appslandia.common.base.InitializeException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
+import com.appslandia.common.base.ToStringBuilder;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
 
@@ -291,6 +292,8 @@ public class JdbcSql extends InitializeObject implements Serializable {
   }
 
   private static volatile char __paramPrefix;
+
+  @ToStringBuilder.TSIgnore
   private static final Object MUTEX = new Object();
 
   public static char getParamPrefix() {

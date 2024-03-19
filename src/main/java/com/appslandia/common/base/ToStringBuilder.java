@@ -99,6 +99,12 @@ public class ToStringBuilder {
     public boolean tsSimpleValue(Object value, TextBuilder builder) {
       Class<?> type = value.getClass();
 
+      // Character
+      if (type == char.class || type == Character.class || type == String.class) {
+        builder.append("'").append(value).append("'");
+        return true;
+      }
+
       // Primitive or Wrapper
       if (TypeUtils.isPrimitiveOrWrapper(type)) {
         builder.append(value);
@@ -130,12 +136,6 @@ public class ToStringBuilder {
       // Class
       if (Class.class.isAssignableFrom(type)) {
         builder.append(value);
-        return true;
-      }
-
-      // Character
-      if (type == Character.class || type == String.class) {
-        builder.append("'").append(value).append("'");
         return true;
       }
 
@@ -191,9 +191,6 @@ public class ToStringBuilder {
         return true;
       }
       if (Enum.class.isAssignableFrom(type)) {
-        return true;
-      }
-      if (type == Character.class) {
         return true;
       }
       return false;
