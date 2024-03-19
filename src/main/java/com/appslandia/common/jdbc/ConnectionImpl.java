@@ -666,7 +666,7 @@ public class ConnectionImpl implements Connection {
 
   @Override
   public String toString() {
-    return this.conn.toString();
+    return ConnectionImpl.class.getName() + "(" + this.conn.toString() + ")";
   }
 
   private static final ThreadLocalStorage<ConnectionImpl> CONNECTION_HOLDER = new ThreadLocalStorage<>();

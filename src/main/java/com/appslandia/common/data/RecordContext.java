@@ -338,7 +338,11 @@ public class RecordContext extends DbContext {
       if (!StringUtils.isNullOrEmpty(this.conn.getDsName())) {
         return this.conn.getDsName();
       }
-      return this.conn.getMetaData().getURL();
+      var url = this.conn.getMetaData().getURL();
+      if (url != null) {
+        return url;
+      }
+      throw new SQLException(STR.fmt("Couldn't determine getDataSourceID() on {}.", this.conn));
 
     } catch (SQLException ex) {
       throw new UncheckedSQLException(ex);
