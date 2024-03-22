@@ -39,7 +39,9 @@ import com.appslandia.common.utils.ValueUtils;
 public class PasswordDigester extends TextDigester {
 
   private int saltSize;
+  private int iterationCount;
   private int keySize;
+
   private SecretKeyGenerator secretKeyGenerator;
 
   final Random random = new SecureRandom();
@@ -49,9 +51,9 @@ public class PasswordDigester extends TextDigester {
     // baseEncoder
     this.baseEncoder = ValueUtils.valueOrAlt(this.baseEncoder, BaseEncoder.BASE64);
 
-    // key
     this.keySize = ValueUtils.valueOrMin(this.keySize, 32);
     this.saltSize = ValueUtils.valueOrMin(this.saltSize, this.keySize);
+    this.iterationCount = ValueUtils.valueOrMin(this.iterationCount, CryptoUtils.DEFAULT_ITERATION_COUNT);
 
     // secretKeyFactory
     if (this.secretKeyGenerator == null) {
@@ -67,7 +69,7 @@ public class PasswordDigester extends TextDigester {
     byte[] salt = RandomUtils.nextBytes(this.saltSize, this.random);
     char[] pwdChars = password.toCharArray();
     try {
-      byte[] secKey = this.secretKeyGenerator.generate(pwdChars, salt, this.saltSize, this.keySize);
+      byte[] secKey = this.secretKeyGenerator.generate(pwdChars, salt, this.iterationCount, this.keySize);
       String digested = this.baseEncoder.encode(ArrayUtils.append(salt, secKey));
 
       CryptoUtils.clear(secKey);
@@ -92,7 +94,7 @@ public class PasswordDigester extends TextDigester {
 
     char[] pwdChars = password.toCharArray();
     try {
-      byte[] computedSecKey = this.secretKeyGenerator.generate(pwdChars, salt, this.saltSize, this.keySize);
+      byte[] computedSecKey = this.secretKeyGenerator.generate(pwdChars, salt, this.iterationCount, this.keySize);
       boolean verified = Arrays.equals(computedSecKey, secKey);
 
       CryptoUtils.clear(secKey);
@@ -107,6 +109,12 @@ public class PasswordDigester extends TextDigester {
   public PasswordDigester setSaltSize(int saltSize) {
     this.assertNotInitialized();
     this.saltSize = saltSize;
+    return this;
+  }
+
+  public PasswordDigester setIterationCount(int iterationCount) {
+    this.assertNotInitialized();
+    this.iterationCount = iterationCount;
     return this;
   }
 
