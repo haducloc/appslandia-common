@@ -21,14 +21,9 @@
 package com.appslandia.common.crypto;
 
 import java.nio.charset.Charset;
-import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Random;
-
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 
 import com.appslandia.common.base.BaseEncoder;
 import com.appslandia.common.utils.ArrayUtils;
@@ -44,13 +39,9 @@ import com.appslandia.common.utils.ValueUtils;
 public class PasswordDigester extends TextDigester {
 
   private int saltSize;
-  private int iterationCount;
   private int keySize;
+  private SecretKeyGenerator secretKeyGenerator;
 
-  private String secretKeyAlgorithm, provider;
-  private SecretKeyFactory secretKeyFactory;
-
-  final Object mutex = new Object();
   final Random random = new SecureRandom();
 
   @Override
@@ -62,16 +53,9 @@ public class PasswordDigester extends TextDigester {
     this.keySize = ValueUtils.valueOrMin(this.keySize, 32);
     this.saltSize = ValueUtils.valueOrMin(this.saltSize, this.keySize);
 
-    // https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
-
-    this.iterationCount = ValueUtils.valueOrMin(this.iterationCount, 50_000);
-    this.secretKeyAlgorithm = ValueUtils.valueOrAlt(this.secretKeyAlgorithm, "PBKDF2WithHmacSHA512");
-
     // secretKeyFactory
-    if (this.provider == null) {
-      this.secretKeyFactory = SecretKeyFactory.getInstance(this.secretKeyAlgorithm);
-    } else {
-      this.secretKeyFactory = SecretKeyFactory.getInstance(this.secretKeyAlgorithm, this.provider);
+    if (this.secretKeyGenerator == null) {
+      this.secretKeyGenerator = new SecretKeyGenerator();
     }
   }
 
@@ -83,8 +67,11 @@ public class PasswordDigester extends TextDigester {
     byte[] salt = RandomUtils.nextBytes(this.saltSize, this.random);
     char[] pwdChars = password.toCharArray();
     try {
-      byte[] secKey = generateSecret(pwdChars, salt);
-      return this.baseEncoder.encode(ArrayUtils.append(salt, secKey));
+      byte[] secKey = this.secretKeyGenerator.generate(pwdChars, salt, this.saltSize, this.keySize);
+      String digested = this.baseEncoder.encode(ArrayUtils.append(salt, secKey));
+
+      CryptoUtils.clear(secKey);
+      return digested;
     } finally {
       CryptoUtils.clear(pwdChars);
     }
@@ -105,39 +92,21 @@ public class PasswordDigester extends TextDigester {
 
     char[] pwdChars = password.toCharArray();
     try {
-      byte[] computedSecKey = generateSecret(pwdChars, salt);
-      return Arrays.equals(computedSecKey, secKey);
+      byte[] computedSecKey = this.secretKeyGenerator.generate(pwdChars, salt, this.saltSize, this.keySize);
+      boolean verified = Arrays.equals(computedSecKey, secKey);
+
+      CryptoUtils.clear(secKey);
+      CryptoUtils.clear(computedSecKey);
+
+      return verified;
     } finally {
       CryptoUtils.clear(pwdChars);
     }
   }
 
-  private byte[] generateSecret(char[] password, byte[] salt) throws CryptoException {
-    PBEKeySpec keySpec = new PBEKeySpec(password, salt, this.iterationCount, this.keySize * 8);
-    SecretKey secretkey = null;
-    synchronized (this.mutex) {
-      try {
-        secretkey = this.secretKeyFactory.generateSecret(keySpec);
-      } catch (GeneralSecurityException ex) {
-        throw new CryptoException(ex);
-      } finally {
-        keySpec.clearPassword();
-      }
-    }
-    byte[] key = secretkey.getEncoded();
-    CryptoUtils.destroyQuietly(secretkey);
-    return key;
-  }
-
   public PasswordDigester setSaltSize(int saltSize) {
     this.assertNotInitialized();
     this.saltSize = saltSize;
-    return this;
-  }
-
-  public PasswordDigester setIterationCount(int iterationCount) {
-    this.assertNotInitialized();
-    this.iterationCount = iterationCount;
     return this;
   }
 
@@ -147,15 +116,9 @@ public class PasswordDigester extends TextDigester {
     return this;
   }
 
-  public PasswordDigester setSecretKeyAlgorithm(String secretKeyAlgorithm) {
+  public PasswordDigester setSecretKeyGenerator(SecretKeyGenerator secretKeyGenerator) {
     this.assertNotInitialized();
-    this.secretKeyAlgorithm = secretKeyAlgorithm;
-    return this;
-  }
-
-  public PasswordDigester setProvider(String provider) {
-    this.assertNotInitialized();
-    this.provider = provider;
+    this.secretKeyGenerator = secretKeyGenerator;
     return this;
   }
 

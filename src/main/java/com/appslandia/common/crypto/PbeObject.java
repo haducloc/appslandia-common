@@ -50,7 +50,7 @@ public abstract class PbeObject extends InitializeObject {
     Asserts.isTrue(this.keySize > 0, "keySize is required.");
 
     this.saltSize = ValueUtils.valueOrMin(this.saltSize, this.keySize);
-    this.iterationCount = ValueUtils.valueOrMin(this.iterationCount, 10_000);
+    this.iterationCount = ValueUtils.valueOrMin(this.iterationCount, CryptoUtils.DEFAULT_ITERATION_COUNT);
 
     Asserts.notNull(this.password, "password is required.");
 

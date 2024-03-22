@@ -32,6 +32,8 @@ import javax.security.auth.Destroyable;
  */
 public class CryptoUtils {
 
+  public static final int DEFAULT_ITERATION_COUNT = 50_000;
+
   public static void clear(char[] chars) {
     if (chars != null) {
       Arrays.fill(chars, (char) 0);
