@@ -20,6 +20,7 @@
 
 package com.appslandia.common.jpa;
 
+import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 
@@ -60,6 +61,10 @@ public class EntityManagerImpl implements EntityManager {
 
   protected EntityManager em() {
     return this.em;
+  }
+
+  public Connection getConnection() {
+    return (Connection) em().unwrap(Connection.class);
   }
 
   public void insert(Object entity) {
