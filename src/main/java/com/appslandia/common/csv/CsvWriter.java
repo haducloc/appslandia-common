@@ -69,7 +69,7 @@ public class CsvWriter {
 
   public CsvWriter out(Object... values) throws IOException {
     for (int i = 0; i < values.length; i++) {
-      out(values[i]);
+      out(values[i], false);
 
       if (i < values.length - 1) {
         outSeparator();
