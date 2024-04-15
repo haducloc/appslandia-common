@@ -128,6 +128,10 @@ public class CsvProcessor extends InitializeObject {
       return doEscape(DateUtils.format((OffsetDateTime) value, this.offsetDateTimePattern));
     }
 
+    if (type == java.util.Date.class) {
+      return doEscape(getDateFormat(this.dateTimePattern).format((java.util.Date) value));
+    }
+
     if (type == java.sql.Date.class) {
       return doEscape(getDateFormat(this.datePattern).format((java.sql.Date) value));
     }
