@@ -59,7 +59,7 @@ public class Language extends InitializeObject {
     String datePattern = this.temporalPatterns.get(DateUtils.ISO8601_DATE);
     if (datePattern != null) {
       Asserts.isTrue(DateUtils.isInputDatePatternValid(datePattern),
-          STR.fmt("The datePattern is invalid '{}'.", datePattern));
+          STR.fmt("The datePattern is invalid: '{}'.", datePattern));
     }
 
     if (datePattern == null) {
