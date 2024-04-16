@@ -33,6 +33,7 @@ import java.util.List;
 
 import com.appslandia.common.base.InitializeException;
 import com.appslandia.common.base.InitializeObject;
+import com.appslandia.common.base.Language;
 import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.StringUtils;
 
@@ -401,6 +402,18 @@ public class CsvProcessor extends InitializeObject {
   public CsvProcessor setOffsetDateTimePattern(String offsetDateTimePattern) {
     assertNotInitialized();
     this.offsetDateTimePattern = offsetDateTimePattern;
+    return this;
+  }
+
+  public CsvProcessor setLanguage(Language language) {
+    assertNotInitialized();
+
+    this.datePattern = language.getTemporalPattern(DateUtils.ISO8601_DATE);
+    this.timePattern = language.getTemporalPattern(DateUtils.ISO8601_TIME_S);
+    this.dateTimePattern = language.getTemporalPattern(DateUtils.ISO8601_DATETIME_S);
+
+    this.offsetTimePattern = language.getTemporalPattern(DateUtils.ISO8601_TIMEZ_S);
+    this.offsetDateTimePattern = language.getTemporalPattern(DateUtils.ISO8601_DATETIMEZ_S);
     return this;
   }
 }

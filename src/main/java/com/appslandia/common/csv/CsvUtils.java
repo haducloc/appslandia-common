@@ -40,7 +40,8 @@ import com.appslandia.common.utils.STR;
  */
 public class CsvUtils {
 
-  private static final Map<String, String> ISO_DT_PATTERNS;
+  // CSV Patterns: No 'T'
+  private static final Map<String, String> ISO_CSV_PATTERNS;
 
   static {
     Map<String, String> map = new TreeMap<>();
@@ -92,11 +93,11 @@ public class CsvUtils {
     map.put(DateUtils.ISO8601_TIMEZ_N6, DateUtils.ISO8601_TIMEZ_N6);
     map.put(DateUtils.ISO8601_TIMEZ_N7, DateUtils.ISO8601_TIMEZ_N7);
 
-    ISO_DT_PATTERNS = Collections.unmodifiableMap(map);
+    ISO_CSV_PATTERNS = Collections.unmodifiableMap(map);
   }
 
   public static String getCsvDtPattern(String isoDtPattern) {
-    return Asserts.notNull(ISO_DT_PATTERNS.get(isoDtPattern));
+    return Asserts.notNull(ISO_CSV_PATTERNS.get(isoDtPattern));
   }
 
   private static final Language DEFAULT_LANGUAGE;
