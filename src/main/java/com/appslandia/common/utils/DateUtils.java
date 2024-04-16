@@ -37,6 +37,7 @@ import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
@@ -469,5 +470,41 @@ public class DateUtils {
       return datePt.toString();
     }
     return null;
+  }
+
+  public static boolean isInputDatePatternValid(String datePattern) {
+    Asserts.notNull(datePattern);
+
+    if (datePattern.length() != 10) {
+      return false;
+    }
+    if (!datePattern.contains("dd") || !datePattern.contains("MM") || !datePattern.contains("yyyy")) {
+      return false;
+    }
+
+    // separators
+    HashMap<Character, Integer> separators = new HashMap<>(2);
+    char sep = 0;
+
+    for (int i = 0; i < datePattern.length(); i++) {
+      char c = datePattern.charAt(i);
+
+      if (c != 'd' && c != 'M' && c != 'y') {
+        separators.compute(c, (k, v) -> v != null ? v + 1 : 1);
+
+        sep = c;
+      }
+    }
+
+    if (separators.size() != 1) {
+      return false;
+    }
+    if (separators.get(sep) != 2) {
+      return false;
+    }
+    if (sep != '-' && sep != '/' && sep != '.') {
+      return false;
+    }
+    return true;
   }
 }

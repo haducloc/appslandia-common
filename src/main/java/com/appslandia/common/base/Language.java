@@ -58,12 +58,13 @@ public class Language extends InitializeObject {
 
     String datePattern = this.temporalPatterns.get(DateUtils.ISO8601_DATE);
     if (datePattern != null) {
-      // Validate datePattern
+      Asserts.isTrue(DateUtils.isInputDatePatternValid(datePattern),
+          STR.fmt("The datePattern is invalid '{}'.", datePattern));
     }
 
     if (datePattern == null) {
       datePattern = DateUtils.toDatePattern(this.locale);
-      Asserts.notNull(datePattern, () -> STR.fmt("Couldn't determine datePattern for the locale '{}'.", this.locale));
+      Asserts.notNull(datePattern, STR.fmt("Couldn't determine datePattern for the locale '{}'.", this.locale));
 
       this.temporalPatterns.put(DateUtils.ISO8601_DATE, datePattern);
     }
@@ -260,4 +261,5 @@ public class Language extends InitializeObject {
     }
     return datePattern.substring(0, idx - 1) + datePattern.substring(idx + 2);
   }
+
 }
