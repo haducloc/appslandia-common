@@ -60,7 +60,7 @@ public class ObjectFactory extends InitializeObject {
     validateFactory();
   }
 
-  private void validateFactory() throws ObjectException {
+  private void validateFactory() {
     for (ObjectInstance inst : this.instances) {
       if (inst.definition.getProducer() != null) {
         continue;
@@ -73,17 +73,17 @@ public class ObjectFactory extends InitializeObject {
         }
 
         @Override
-        public void onParameter(Parameter parameter) throws ObjectException {
+        public void onParameter(Parameter parameter) {
           validateInject(parameter.getType(), AnnotationUtils.parseQualifiers(parameter), parameter);
         }
 
         @Override
-        public void onField(Field field) throws ObjectException {
+        public void onField(Field field) {
           validateInject(field.getType(), AnnotationUtils.parseQualifiers(field), field);
         }
 
         @Override
-        public void onMethod(Method method) throws ObjectException {
+        public void onMethod(Method method) {
           throw new UnsupportedOperationException();
         }
 
@@ -94,8 +94,7 @@ public class ObjectFactory extends InitializeObject {
           return member.toString();
         }
 
-        private void validateInject(Class<?> type, Annotation[] qualifiers, AnnotatedElement member)
-            throws ObjectException {
+        private void validateInject(Class<?> type, Annotation[] qualifiers, AnnotatedElement member) {
           if (ObjectFactory.class.isAssignableFrom(type)) {
             return;
           }
@@ -210,10 +209,6 @@ public class ObjectFactory extends InitializeObject {
     return this;
   }
 
-  public ObjectFactory unregister(Class<?> type) {
-    return unregister(type, ReflectionUtils.EMPTY_ANNOTATIONS);
-  }
-
   public ObjectFactory unregister(Class<?> type, Annotation... qualifiers) {
     assertNotInitialized();
     Asserts.notNull(type);
@@ -236,12 +231,12 @@ public class ObjectFactory extends InitializeObject {
     return unregister(type, AnnotationUtils.parseQualifiers(implClass));
   }
 
-  public <T> Instance<T> select(Class<T> type, Annotation... qualifiers) throws ObjectException {
+  public <T> Instance<T> select(Class<T> type, Annotation... qualifiers) {
     List<ObjectInstance> insts = getObjectInsts(type, qualifiers);
     return new InstanceImpl<>(type, qualifiers, insts);
   }
 
-  public ObjectFactory inject(final Object obj) throws ObjectException {
+  public ObjectFactory inject(final Object obj) {
     initialize();
     Asserts.notNull(obj);
 
@@ -253,56 +248,39 @@ public class ObjectFactory extends InitializeObject {
       }
 
       @Override
-      public void onParameter(Parameter parameter) throws ObjectException {
+      public void onParameter(Parameter parameter) {
         throw new UnsupportedOperationException();
       }
 
       @Override
-      public void onField(Field field) throws ObjectException {
-        try {
-          field.setAccessible(true);
-          Annotation[] qualifiers = AnnotationUtils.parseQualifiers(field);
+      public void onField(Field field) {
+        Annotation[] qualifiers = AnnotationUtils.parseQualifiers(field);
 
-          // @Inject T t;
-          if (field.getType() != Instance.class) {
-            Object value = getObject(field.getType(), qualifiers);
-            field.set(obj, value);
-            return;
-          }
-
-          // @Inject @Instance<T>
-          Asserts.isTrue(field.getGenericType() instanceof ParameterizedType);
-          Class<?> type = ReflectionUtils.getArgTypes1(field.getGenericType());
-          Asserts.notNull(type);
-
-          // InstanceImpl
-          List<ObjectInstance> insts = getObjectInsts(type, qualifiers);
-          field.set(obj, new InstanceImpl<>(type, qualifiers, insts));
-
-        } catch (ObjectException ex) {
-          throw ex;
-        } catch (Exception ex) {
-          throw new ObjectException(ex);
+        // @Inject T t;
+        if (field.getType() != Instance.class) {
+          Object value = getObject(field.getType(), qualifiers);
+          ReflectionUtils.set(field, obj, value);
+          return;
         }
+
+        // @Inject @Instance<T>
+        Asserts.isTrue(field.getGenericType() instanceof ParameterizedType);
+        Class<?> type = ReflectionUtils.getArgTypes1(field.getGenericType());
+        Asserts.notNull(type);
+
+        List<ObjectInstance> insts = getObjectInsts(type, qualifiers);
+        ReflectionUtils.set(field, obj, new InstanceImpl<>(type, qualifiers, insts));
       }
 
       @Override
-      public void onMethod(Method method) throws ObjectException {
-        try {
-          method.setAccessible(true);
-          method.invoke(obj, createArguments(method.getParameters()));
-
-        } catch (ObjectException ex) {
-          throw ex;
-        } catch (Exception ex) {
-          throw new ObjectException(ex);
-        }
+      public void onMethod(Method method) {
+        ReflectionUtils.invoke(method, obj, createArguments(method.getParameters()));
       }
     }.traverse(obj.getClass());
     return this;
   }
 
-  private Object[] createArguments(Parameter[] parameters) throws ObjectException {
+  private Object[] createArguments(Parameter[] parameters) {
     Object[] args = new Object[parameters.length];
     for (int i = 0; i < parameters.length; i++) {
 
@@ -312,49 +290,40 @@ public class ObjectFactory extends InitializeObject {
     return args;
   }
 
-  private Object produceObject(ObjectDefinition definition) throws ObjectException {
-    try {
-      // Producer
-      if (definition.getProducer() != null) {
-        return definition.getProducer().produce(this);
-      }
-
-      // Constructor
-      Constructor<?> emptyCtor = null, injectCtor = null;
-      for (Constructor<?> ctor : definition.getImplClass().getDeclaredConstructors()) {
-
-        if (ctor.getDeclaredAnnotation(Inject.class) != null) {
-          injectCtor = ctor;
-          break;
-        }
-        if (ctor.getParameterCount() == 0) {
-          emptyCtor = ctor;
-        }
-      }
-      if ((injectCtor == null) && (emptyCtor == null)) {
-        throw new ObjectException(STR.fmt("Couldn't instantiate '{}'.", definition.getImplClass()));
-      }
-
-      Object instance = null;
-      if (injectCtor != null) {
-        injectCtor.setAccessible(true);
-        instance = injectCtor.newInstance(createArguments(injectCtor.getParameters()));
-      } else {
-        emptyCtor.setAccessible(true);
-        instance = emptyCtor.newInstance(ReflectionUtils.EMPTY_OBJECTS);
-      }
-
-      // Inject & Invoke @PostConstruct
-      return this.inject(instance).postConstruct(instance);
-
-    } catch (ObjectException ex) {
-      throw ex;
-    } catch (Exception ex) {
-      throw new ObjectException(ex);
+  private Object produceObject(ObjectDefinition definition) {
+    // Producer
+    if (definition.getProducer() != null) {
+      return definition.getProducer().produce(this);
     }
+
+    // Constructor
+    Constructor<?> emptyCtor = null, injectCtor = null;
+    for (Constructor<?> ctor : definition.getImplClass().getDeclaredConstructors()) {
+
+      if (ctor.getDeclaredAnnotation(Inject.class) != null) {
+        injectCtor = ctor;
+        break;
+      }
+      if (ctor.getParameterCount() == 0) {
+        emptyCtor = ctor;
+      }
+    }
+    if ((injectCtor == null) && (emptyCtor == null)) {
+      throw new ObjectException(STR.fmt("Couldn't instantiate '{}'.", definition.getImplClass()));
+    }
+
+    Object instance = null;
+    if (injectCtor != null) {
+      instance = ReflectionUtils.newInstance(injectCtor, createArguments(injectCtor.getParameters()));
+    } else {
+      instance = ReflectionUtils.newInstance(emptyCtor);
+    }
+
+    // Inject & Invoke @PostConstruct
+    return this.inject(instance).postConstruct(instance);
   }
 
-  private List<ObjectInstance> getObjectInsts(Class<?> type, Annotation[] qualifiers) throws ObjectException {
+  private List<ObjectInstance> getObjectInsts(Class<?> type, Annotation[] qualifiers) {
     List<ObjectInstance> insts = new LinkedList<>();
     for (ObjectInstance inst : this.instances) {
 
@@ -366,7 +335,7 @@ public class ObjectFactory extends InitializeObject {
     return insts;
   }
 
-  private ObjectInstance getObjectInst(Class<?> type, Annotation[] qualifiers) throws ObjectException {
+  private ObjectInstance getObjectInst(Class<?> type, Annotation[] qualifiers) {
     ObjectInstance obj = null;
     for (ObjectInstance inst : this.instances) {
 
@@ -382,7 +351,7 @@ public class ObjectFactory extends InitializeObject {
     return obj;
   }
 
-  public <T, I extends T> I getObject(Class<T> type, Annotation... qualifiers) throws ObjectException {
+  public <T, I extends T> I getObject(Class<T> type, Annotation... qualifiers) {
     initialize();
     Asserts.notNull(type);
     Asserts.notNull(qualifiers);
@@ -399,7 +368,7 @@ public class ObjectFactory extends InitializeObject {
     return ObjectUtils.cast(inst.getInstance());
   }
 
-  public <T> T postConstruct(T obj) throws ObjectException {
+  public <T> T postConstruct(T obj) {
     initialize();
     Asserts.notNull(obj);
 
@@ -412,14 +381,7 @@ public class ObjectFactory extends InitializeObject {
 
       @Override
       public boolean handle(Method m) throws ReflectionException {
-        try {
-          m.setAccessible(true);
-          m.invoke(obj);
-        } catch (ObjectException ex) {
-          throw ex;
-        } catch (Exception ex) {
-          throw new ObjectException(ex);
-        }
+        ReflectionUtils.invoke(m, obj);
         return false;
       }
     });
@@ -465,13 +427,13 @@ public class ObjectFactory extends InitializeObject {
 
     public abstract boolean isValidationContext();
 
-    public abstract void onParameter(Parameter parameter) throws ObjectException;
+    public abstract void onParameter(Parameter parameter);
 
-    public abstract void onField(Field field) throws ObjectException;
+    public abstract void onField(Field field);
 
-    public abstract void onMethod(Method method) throws ObjectException;
+    public abstract void onMethod(Method method);
 
-    public void traverse(Class<?> implClass) throws ObjectException {
+    public void traverse(Class<?> implClass) {
       Class<?> clazz = null;
       if (isValidationContext()) {
 

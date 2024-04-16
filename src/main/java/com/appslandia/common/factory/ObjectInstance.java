@@ -71,6 +71,7 @@ public class ObjectInstance {
     Asserts.notNull(impl);
 
     if (impl == this.singleton) {
+      // SINGLETON
       Asserts.isTrue(this.definition.getScope() == ObjectScope.SINGLETON);
 
       if (this.definition.getProducer() != null) {
@@ -83,6 +84,7 @@ public class ObjectInstance {
       return true;
 
     } else {
+      // PROTOTYPE
       Asserts.isTrue(this.definition.getScope() == ObjectScope.PROTOTYPE);
 
       for (Class<?> type : this.definition.getTypes()) {

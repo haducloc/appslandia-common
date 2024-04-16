@@ -365,8 +365,7 @@ public class ToStringBuilder {
         builder.append(field.getName()).append(": ");
 
         try {
-          field.setAccessible(true);
-          Object fieldVal = field.get(obj);
+          Object fieldVal = ReflectionUtils.get(field, obj);
 
           if (fieldVal == null) {
             builder.append("null");

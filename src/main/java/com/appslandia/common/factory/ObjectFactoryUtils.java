@@ -48,13 +48,7 @@ public class ObjectFactoryUtils {
 
       @Override
       public boolean handle(Method m) throws ReflectionException {
-        try {
-          m.setAccessible(true);
-          m.invoke(obj);
-
-        } catch (Exception ex) {
-          throw new DestroyException(ex);
-        }
+        ReflectionUtils.invoke(m, obj);
         return false;
       }
     });

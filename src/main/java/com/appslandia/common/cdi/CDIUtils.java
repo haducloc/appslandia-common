@@ -29,7 +29,6 @@ import java.util.function.Consumer;
 
 import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.ObjectUtils;
-import com.appslandia.common.utils.ReflectionUtils;
 
 import jakarta.el.ELProcessor;
 import jakarta.enterprise.context.spi.CreationalContext;
@@ -43,10 +42,6 @@ import jakarta.enterprise.inject.spi.BeanManager;
  *
  */
 public class CDIUtils {
-
-  public static <T> BeanInstance<T> getReference(BeanManager beanManager, Class<? extends T> type) {
-    return getReference(beanManager, type, ReflectionUtils.EMPTY_ANNOTATIONS);
-  }
 
   public static <T> BeanInstance<T> getReference(BeanManager beanManager, Class<? extends T> type,
       Annotation... qualifiers) {

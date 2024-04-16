@@ -21,7 +21,9 @@
 package com.appslandia.common.utils;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InaccessibleObjectException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
@@ -32,8 +34,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.IntStream;
 
-import com.appslandia.common.base.UncheckedException;
-
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
@@ -41,8 +41,6 @@ import com.appslandia.common.base.UncheckedException;
  */
 public class ReflectionUtils {
 
-  public static final Object[] EMPTY_OBJECTS = {};
-  public static final Class<?>[] EMPTY_CLASSES = {};
   public static final Annotation[] EMPTY_ANNOTATIONS = {};
 
   public interface FieldHandler {
@@ -181,9 +179,41 @@ public class ReflectionUtils {
     return null;
   }
 
+  public static <T> T newInstance(Class<T> clazz) throws ReflectionException {
+    try {
+      Constructor<T> c = clazz.getDeclaredConstructor();
+      if (c.trySetAccessible()) {
+
+        return c.newInstance();
+      } else {
+        throw new InaccessibleObjectException(STR.fmt("The constructor {} is inaccessible for reflection.", c));
+      }
+
+    } catch (ReflectiveOperationException ex) {
+      throw new ReflectionException(ex);
+    }
+  }
+
+  public static Object newInstance(Constructor<?> c, Object... args) throws ReflectionException {
+    try {
+      if (c.trySetAccessible()) {
+        return c.newInstance(args);
+      } else {
+        throw new InaccessibleObjectException(STR.fmt("The constructor {} is inaccessible for reflection.", c));
+      }
+    } catch (ReflectiveOperationException ex) {
+      throw new ReflectionException(ex);
+    }
+  }
+
   public static Object invoke(Method m, Object obj, Object... args) throws ReflectionException {
     try {
-      return m.invoke(obj, args);
+      if (m.trySetAccessible()) {
+        return m.invoke(obj, args);
+      } else {
+        throw new InaccessibleObjectException(STR.fmt("The method {} is inaccessible for reflection.", m));
+      }
+
     } catch (ReflectiveOperationException ex) {
       throw new ReflectionException(ex);
     }
@@ -191,7 +221,11 @@ public class ReflectionUtils {
 
   public static void set(Field m, Object obj, Object value) throws ReflectionException {
     try {
-      m.set(obj, value);
+      if (m.trySetAccessible()) {
+        m.set(obj, value);
+      } else {
+        throw new InaccessibleObjectException(STR.fmt("The field {} is inaccessible for reflection.", m));
+      }
     } catch (ReflectiveOperationException ex) {
       throw new ReflectionException(ex);
     }
@@ -199,7 +233,11 @@ public class ReflectionUtils {
 
   public static Object get(Field m, Object obj) throws ReflectionException {
     try {
-      return m.get(obj);
+      if (m.trySetAccessible()) {
+        return m.get(obj);
+      } else {
+        throw new InaccessibleObjectException(STR.fmt("The field {} is inaccessible for reflection.", m));
+      }
     } catch (ReflectiveOperationException ex) {
       throw new ReflectionException(ex);
     }
@@ -237,17 +275,6 @@ public class ReflectionUtils {
       return null;
     }
     return new Class<?>[] { (Class<?>) kt, (Class<?>) vt };
-  }
-
-  public static <T> T newInstance(Class<T> clazz) throws ReflectionException {
-    try {
-      return clazz.getDeclaredConstructor(EMPTY_CLASSES).newInstance(EMPTY_OBJECTS);
-
-    } catch (ReflectiveOperationException ex) {
-      throw new ReflectionException(ex);
-    } catch (SecurityException ex) {
-      throw new UncheckedException(ex);
-    }
   }
 
   public static <T> Class<? extends T> loadClass(String className, ClassLoader loader) throws ReflectionException {
@@ -289,8 +316,6 @@ public class ReflectionUtils {
 
     } catch (ReflectiveOperationException ex) {
       throw new ReflectionException(ex);
-    } catch (SecurityException ex) {
-      throw new UncheckedException(ex);
     }
   }
 
