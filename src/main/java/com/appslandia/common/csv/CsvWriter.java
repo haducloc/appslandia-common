@@ -20,14 +20,16 @@
 
 package com.appslandia.common.csv;
 
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.lang.reflect.RecordComponent;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.ReflectionException;
 import com.appslandia.common.utils.ReflectionUtils;
 import com.appslandia.common.utils.STR;
 
@@ -86,29 +88,25 @@ public class CsvWriter {
     return this;
   }
 
-  private final Map<Class<?>, RecordComponent[]> recordComponentCache = new HashMap<>();
-
   public <T extends Record> CsvWriter outRecord(T record, String... fieldNames) throws IOException {
     Asserts.notNull(record);
 
-    RecordComponent[] components = this.recordComponentCache.get(record.getClass());
-    if (components == null) {
-      components = record.getClass().getRecordComponents();
-
-      this.recordComponentCache.put(record.getClass(), components);
-    }
+    // recordFields
+    RecordComponent[] recordFields = record.getClass().getRecordComponents();
 
     for (int i = 0; i < fieldNames.length; i++) {
       String fieldName = fieldNames[i];
 
-      RecordComponent component = Arrays.stream(components).filter(c -> fieldName.equals(c.getName())).findFirst()
+      // recordField
+      RecordComponent recordField = Arrays.stream(recordFields).filter(f -> fieldName.equals(f.getName())).findFirst()
           .orElse(null);
 
-      if (component == null) {
+      if (recordField == null) {
         throw new IllegalArgumentException(STR.fmt("The field '{}' is not found.", fieldName));
       }
 
-      Object value = ReflectionUtils.invoke(component.getAccessor(), record);
+      // value
+      Object value = ReflectionUtils.invoke(recordField.getAccessor(), record);
       out(value, false);
 
       if (i < fieldNames.length - 1) {
@@ -116,6 +114,40 @@ public class CsvWriter {
       }
     }
 
+    return this;
+  }
+
+  public CsvWriter outModel(Object model, String... fieldNames) throws IOException {
+    Asserts.notNull(model);
+
+    // propDescs
+    PropertyDescriptor[] propDescs = null;
+    try {
+      propDescs = Introspector.getBeanInfo(model.getClass()).getPropertyDescriptors();
+    } catch (IntrospectionException ex) {
+      throw new ReflectionException(ex);
+    }
+
+    for (int i = 0; i < fieldNames.length; i++) {
+      String fieldName = fieldNames[i];
+
+      // propDesc
+      PropertyDescriptor propDesc = Arrays.stream(propDescs).filter(p -> fieldName.equals(p.getName())).findFirst()
+          .orElse(null);
+
+      if (propDesc == null) {
+        throw new IllegalArgumentException(STR.fmt("The property '{}' is not found.", fieldName));
+      }
+      Asserts.notNull(propDesc.getReadMethod());
+
+      // value
+      Object value = ReflectionUtils.invoke(propDesc.getReadMethod(), model);
+      out(value, false);
+
+      if (i < fieldNames.length - 1) {
+        outSeparator();
+      }
+    }
     return this;
   }
 }
