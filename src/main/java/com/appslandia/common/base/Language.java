@@ -254,6 +254,8 @@ public class Language extends InitializeObject {
     }
   }
 
+  // The datePattern includes "dd" "MM" and "yyyy" in any order.
+
   static String parseYearMonthPattern(String datePattern) {
     int idx = datePattern.indexOf("dd");
     if (idx == 0) {
@@ -261,5 +263,4 @@ public class Language extends InitializeObject {
     }
     return datePattern.substring(0, idx - 1) + datePattern.substring(idx + 2);
   }
-
 }
