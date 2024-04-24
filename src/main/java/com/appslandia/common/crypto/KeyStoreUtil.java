@@ -53,12 +53,21 @@ import com.appslandia.common.utils.SYS;
 public class KeyStoreUtil extends InitializeObject {
 
   // .jceks
+  // JCEKS (Java Cryptography Extension KeyStore)
+  // it can store private keys, public keys, and certificates.
   public static final String TYPE_JCEKS = "JCEKS";
 
   // .jks
+  // JKS (Java KeyStore)
+  // it can store private keys, public keys, and certificates.
+  // Best suited for Java-specific applications.
   public static final String TYPE_JKS = "JKS";
 
-  // .p12 or .pfx
+  // .p12 or .pfx (Personal Exchange Format)
+
+  // It can store private keys, public keys, certificates, and other cryptographic
+  // information like secret keys.
+  // Suitable for interoperability with non-Java systems.
   public static final String TYPE_PKCS12 = "PKCS12";
 
   private String type, provider;
@@ -190,6 +199,8 @@ public class KeyStoreUtil extends InitializeObject {
       }
       this.keyStore.setEntry(alias, new KeyStore.PrivateKeyEntry(privateKey, certificateChain, attributes),
           protectionParameter);
+
+      this.keyStore.setCertificateEntry(alias, null);
       return this;
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
