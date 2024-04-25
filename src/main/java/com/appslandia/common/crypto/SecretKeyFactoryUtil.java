@@ -34,22 +34,22 @@ import com.appslandia.common.utils.ValueUtils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class SecretKeyGenerator extends InitializeObject {
+public class SecretKeyFactoryUtil extends InitializeObject {
 
-  public static final SecretKeyGenerator PBKDF2_HMAC_SHA512 = new SecretKeyGenerator("PBKDF2WithHmacSHA512");
+  public static final SecretKeyFactoryUtil PBKDF2_HMAC_SHA512 = new SecretKeyFactoryUtil("PBKDF2WithHmacSHA512");
 
   private String algorithm, provider;
   private SecretKeyFactory secretKeyFactory;
   final Object mutex = new Object();
 
-  public SecretKeyGenerator() {
+  public SecretKeyFactoryUtil() {
   }
 
-  public SecretKeyGenerator(String algorithm) {
+  public SecretKeyFactoryUtil(String algorithm) {
     this.algorithm = algorithm;
   }
 
-  public SecretKeyGenerator(String algorithm, String provider) {
+  public SecretKeyFactoryUtil(String algorithm, String provider) {
     this.algorithm = algorithm;
     this.provider = provider;
   }
@@ -91,7 +91,7 @@ public class SecretKeyGenerator extends InitializeObject {
     return this.algorithm;
   }
 
-  public SecretKeyGenerator setAlgorithm(String algorithm) {
+  public SecretKeyFactoryUtil setAlgorithm(String algorithm) {
     this.assertNotInitialized();
     this.algorithm = algorithm;
     return this;
@@ -102,7 +102,7 @@ public class SecretKeyGenerator extends InitializeObject {
     return this.provider;
   }
 
-  public SecretKeyGenerator setProvider(String provider) {
+  public SecretKeyFactoryUtil setProvider(String provider) {
     this.assertNotInitialized();
     this.provider = provider;
     return this;

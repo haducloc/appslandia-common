@@ -37,7 +37,7 @@ import com.appslandia.common.utils.Asserts;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class SignatureSigner extends InitializeObject implements Digester {
+public class SignatureUtil extends InitializeObject implements Digester {
   private String algorithm, provider;
 
   private Signature sign;
@@ -139,7 +139,7 @@ public class SignatureSigner extends InitializeObject implements Digester {
     return this.algorithm;
   }
 
-  public SignatureSigner setAlgorithm(String algorithm) {
+  public SignatureUtil setAlgorithm(String algorithm) {
     assertNotInitialized();
     this.algorithm = algorithm;
     return this;
@@ -150,13 +150,13 @@ public class SignatureSigner extends InitializeObject implements Digester {
     return this.provider;
   }
 
-  public SignatureSigner setProvider(String provider) {
+  public SignatureUtil setProvider(String provider) {
     assertNotInitialized();
     this.provider = provider;
     return this;
   }
 
-  public SignatureSigner setPrivateKey(PrivateKey privateKey) {
+  public SignatureUtil setPrivateKey(PrivateKey privateKey) {
     assertNotInitialized();
     if (privateKey != null) {
       this.privateKey = new KeyFactoryUtil(privateKey.getAlgorithm()).copy(privateKey);
@@ -164,7 +164,7 @@ public class SignatureSigner extends InitializeObject implements Digester {
     return this;
   }
 
-  public SignatureSigner setPublicKey(PublicKey publicKey) {
+  public SignatureUtil setPublicKey(PublicKey publicKey) {
     assertNotInitialized();
     if (publicKey != null) {
       this.publicKey = new KeyFactoryUtil(publicKey.getAlgorithm()).copy(publicKey);
@@ -172,7 +172,7 @@ public class SignatureSigner extends InitializeObject implements Digester {
     return this;
   }
 
-  public SignatureSigner setKeyPair(KeyPair keyPair) {
+  public SignatureUtil setKeyPair(KeyPair keyPair) {
     assertNotInitialized();
     if (keyPair != null) {
       KeyFactoryUtil keyFactoryUtil = new KeyFactoryUtil(keyPair.getPrivate().getAlgorithm());
@@ -183,7 +183,7 @@ public class SignatureSigner extends InitializeObject implements Digester {
     return this;
   }
 
-  public SignatureSigner setAlgParamSpec(Function<String, AlgorithmParameterSpec> algParamSpec) {
+  public SignatureUtil setAlgParamSpec(Function<String, AlgorithmParameterSpec> algParamSpec) {
     assertNotInitialized();
     this.algParamSpec = algParamSpec;
     return this;

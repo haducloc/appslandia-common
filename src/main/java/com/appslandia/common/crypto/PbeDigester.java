@@ -160,8 +160,8 @@ public class PbeDigester extends PbeObject implements Digester {
   }
 
   @Override
-  public PbeDigester setSecretKeyGenerator(SecretKeyGenerator secretKeyGenerator) {
-    super.setSecretKeyGenerator(secretKeyGenerator);
+  public PbeDigester setSecretKeyFactoryUtil(SecretKeyFactoryUtil secretKeyFactoryUtil) {
+    super.setSecretKeyFactoryUtil(secretKeyFactoryUtil);
     return this;
   }
 }

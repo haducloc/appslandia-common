@@ -42,7 +42,7 @@ public class PasswordDigester extends TextDigester {
   private int iterationCount;
   private int keySize;
 
-  private SecretKeyGenerator secretKeyGenerator;
+  private SecretKeyFactoryUtil secretKeyFactoryUtil;
 
   final Random random = new SecureRandom();
 
@@ -55,9 +55,8 @@ public class PasswordDigester extends TextDigester {
     this.saltSize = ValueUtils.valueOrMin(this.saltSize, this.keySize);
     this.iterationCount = ValueUtils.valueOrMin(this.iterationCount, CryptoUtils.DEFAULT_ITERATION_COUNT);
 
-    // secretKeyFactory
-    if (this.secretKeyGenerator == null) {
-      this.secretKeyGenerator = new SecretKeyGenerator();
+    if (this.secretKeyFactoryUtil == null) {
+      this.secretKeyFactoryUtil = new SecretKeyFactoryUtil();
     }
   }
 
@@ -69,7 +68,7 @@ public class PasswordDigester extends TextDigester {
     byte[] salt = RandomUtils.nextBytes(this.saltSize, this.random);
     char[] pwdChars = password.toCharArray();
     try {
-      byte[] secKey = this.secretKeyGenerator.generate(pwdChars, salt, this.iterationCount, this.keySize);
+      byte[] secKey = this.secretKeyFactoryUtil.generate(pwdChars, salt, this.iterationCount, this.keySize);
       String digested = this.baseEncoder.encode(ArrayUtils.append(salt, secKey));
 
       CryptoUtils.clear(secKey);
@@ -94,7 +93,7 @@ public class PasswordDigester extends TextDigester {
 
     char[] pwdChars = password.toCharArray();
     try {
-      byte[] computedSecKey = this.secretKeyGenerator.generate(pwdChars, salt, this.iterationCount, this.keySize);
+      byte[] computedSecKey = this.secretKeyFactoryUtil.generate(pwdChars, salt, this.iterationCount, this.keySize);
       boolean verified = Arrays.equals(computedSecKey, secKey);
 
       CryptoUtils.clear(secKey);
@@ -124,9 +123,9 @@ public class PasswordDigester extends TextDigester {
     return this;
   }
 
-  public PasswordDigester setSecretKeyGenerator(SecretKeyGenerator secretKeyGenerator) {
+  public PasswordDigester setSecretKeyFactoryUtil(SecretKeyFactoryUtil secretKeyFactoryUtil) {
     this.assertNotInitialized();
-    this.secretKeyGenerator = secretKeyGenerator;
+    this.secretKeyFactoryUtil = secretKeyFactoryUtil;
     return this;
   }
 

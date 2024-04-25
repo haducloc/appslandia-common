@@ -20,13 +20,7 @@
 
 package com.appslandia.common.crypto;
 
-import java.nio.charset.StandardCharsets;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.SecureRandom;
-
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.appslandia.common.base.ThreadSafeTester;
@@ -36,31 +30,16 @@ import com.appslandia.common.base.ThreadSafeTester;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class SignatureSignerTest {
-
-  private KeyPair keyPair;
-
-  @BeforeEach
-  public void initialize() {
-    try {
-      KeyPairGenerator generator = KeyPairGenerator.getInstance("DSA");
-      generator.initialize(2048, new SecureRandom());
-      keyPair = generator.generateKeyPair();
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-  }
+public class SecretKeyFactoryUtilTest {
 
   @Test
   public void test() {
-    SignatureSigner impl = new SignatureSigner();
-    impl.setAlgorithm("SHA256withDSA");
-    impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
+    SecretKeyFactoryUtil impl = new SecretKeyFactoryUtil();
     try {
-      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-      byte[] sign = impl.digest(data);
+      byte[] key = impl.generate("password".toCharArray(), "salt".getBytes(), 1000, 16);
 
-      Assertions.assertTrue(impl.verify(data, sign));
+      Assertions.assertNotNull(key);
+      Assertions.assertTrue(key.length == 16);
 
     } catch (Exception ex) {
       Assertions.fail(ex.getMessage());
@@ -68,16 +47,13 @@ public class SignatureSignerTest {
   }
 
   @Test
-  public void test_invalid() {
-    SignatureSigner impl = new SignatureSigner();
-    impl.setAlgorithm("SHA256withDSA");
-    impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
+  public void test_anySize() {
+    SecretKeyFactoryUtil impl = new SecretKeyFactoryUtil();
     try {
-      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-      byte[] sign = impl.digest(data);
+      byte[] key = impl.generate("password".toCharArray(), "salt".getBytes(), 1000, 123);
 
-      byte[] modifiedData = "invalid".getBytes(StandardCharsets.UTF_8);
-      Assertions.assertFalse(impl.verify(modifiedData, sign));
+      Assertions.assertNotNull(key);
+      Assertions.assertTrue(key.length == 123);
 
     } catch (Exception ex) {
       Assertions.fail(ex.getMessage());
@@ -86,9 +62,7 @@ public class SignatureSignerTest {
 
   @Test
   public void test_threadSafe() {
-    final SignatureSigner impl = new SignatureSigner();
-    impl.setAlgorithm("SHA256withDSA");
-    impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
+    final SecretKeyFactoryUtil impl = new SecretKeyFactoryUtil();
 
     new ThreadSafeTester() {
 
@@ -99,14 +73,13 @@ public class SignatureSignerTest {
           @Override
           public void run() {
             try {
-              byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-              byte[] sign = impl.digest(data);
+              byte[] key = impl.generate("password".toCharArray(), "salt".getBytes(), 1000, 64);
 
-              Assertions.assertTrue(impl.verify(data, sign));
+              Assertions.assertNotNull(key);
+              Assertions.assertTrue(key.length == 64);
 
             } catch (Exception ex) {
               Assertions.fail(ex.getMessage());
-
             } finally {
               doneTask();
             }
