@@ -31,7 +31,7 @@ import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.crypto.CryptoException;
 import com.appslandia.common.crypto.Digester;
 import com.appslandia.common.crypto.MacSigner;
-import com.appslandia.common.crypto.SignatureUtil;
+import com.appslandia.common.crypto.DsaSigner;
 import com.appslandia.common.json.JsonException;
 import com.appslandia.common.json.JsonProcessor;
 import com.appslandia.common.utils.Asserts;
@@ -222,7 +222,7 @@ public class JwsSigner<P> extends InitializeObject {
     return this;
   }
 
-  public JwsSigner<P> setSigner(SignatureUtil signer) {
+  public JwsSigner<P> setSigner(DsaSigner signer) {
     assertNotInitialized();
     this.signer = signer;
     return this;

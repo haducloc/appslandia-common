@@ -36,7 +36,7 @@ import com.appslandia.common.base.ThreadSafeTester;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class SignatureUtilTest {
+public class DsaSignerTest {
 
   private KeyPair keyPair;
 
@@ -53,7 +53,7 @@ public class SignatureUtilTest {
 
   @Test
   public void test() {
-    SignatureUtil impl = new SignatureUtil();
+    DsaSigner impl = new DsaSigner();
     impl.setAlgorithm("SHA256withDSA");
     impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
     try {
@@ -69,7 +69,7 @@ public class SignatureUtilTest {
 
   @Test
   public void test_invalid() {
-    SignatureUtil impl = new SignatureUtil();
+    DsaSigner impl = new DsaSigner();
     impl.setAlgorithm("SHA256withDSA");
     impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
     try {
@@ -86,7 +86,7 @@ public class SignatureUtilTest {
 
   @Test
   public void test_threadSafe() {
-    final SignatureUtil impl = new SignatureUtil();
+    final DsaSigner impl = new DsaSigner();
     impl.setAlgorithm("SHA256withDSA");
     impl.setPublicKey(keyPair.getPublic()).setPrivateKey(keyPair.getPrivate());
 

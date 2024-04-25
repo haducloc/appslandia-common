@@ -26,7 +26,7 @@ import java.security.spec.AlgorithmParameterSpec;
 import java.util.function.Function;
 
 import com.appslandia.common.crypto.PSSParameterSpecUtil;
-import com.appslandia.common.crypto.SignatureUtil;
+import com.appslandia.common.crypto.DsaSigner;
 import com.appslandia.common.json.JsonProcessor;
 import com.appslandia.common.utils.Asserts;
 
@@ -43,11 +43,11 @@ public class DsaJwsSigner<P> {
   protected String alg;
   protected String kid;
 
-  protected SignatureUtil signer;
+  protected DsaSigner signer;
 
   public DsaJwsSigner(String jwsAlgorithm, String signatureAlgorithm, Class<P> payloadClass) {
     this.alg = Asserts.notNull(jwsAlgorithm);
-    this.signer = new SignatureUtil().setAlgorithm(Asserts.notNull(signatureAlgorithm));
+    this.signer = new DsaSigner().setAlgorithm(Asserts.notNull(signatureAlgorithm));
     this.payloadClass = Asserts.notNull(payloadClass);
   }
 
