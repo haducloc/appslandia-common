@@ -30,24 +30,24 @@ import com.appslandia.common.utils.STR;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class CipherOperations {
+public class CipherOps {
 
   final String algorithm;
   final String mode;
   final String padding;
 
-  public CipherOperations(String transformation) {
+  public CipherOps(String transformation) {
     Asserts.notNull(transformation);
 
-    String[] operations = transformation.split("/");
-    Asserts.isTrue(operations.length == 3, "transformation is invalid.");
+    String[] cipherOps = transformation.split("/");
+    Asserts.isTrue(cipherOps.length == 3, "transformation is invalid.");
 
-    operations[0] = operations[0].toUpperCase(Locale.ENGLISH);
-    operations[1] = operations[1].toUpperCase(Locale.ENGLISH);
+    cipherOps[0] = cipherOps[0].toUpperCase(Locale.ENGLISH);
+    cipherOps[1] = cipherOps[1].toUpperCase(Locale.ENGLISH);
 
-    this.algorithm = operations[0];
-    this.mode = operations[1];
-    this.padding = operations[2];
+    this.algorithm = cipherOps[0];
+    this.mode = cipherOps[1];
+    this.padding = cipherOps[2];
   }
 
   public String getAlgorithm() {

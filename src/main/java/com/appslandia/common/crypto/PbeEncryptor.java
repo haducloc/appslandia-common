@@ -42,11 +42,11 @@ import com.appslandia.common.utils.RandomUtils;
  */
 public class PbeEncryptor extends PbeObject implements Encryptor {
   private String transformation, provider;
-  private CipherOperations operations;
+  private CipherOps cipherOps;
 
   // -1: IV unsupported
   private int ivSize;
-  private BiFunction<CipherOperations, byte[], AlgorithmParameterSpec> algParamSpec;
+  private BiFunction<CipherOps, byte[], AlgorithmParameterSpec> algParamSpec;
 
   private Cipher cipher;
   final Object mutex = new Object();
@@ -57,10 +57,10 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
     super.init();
 
     Asserts.notNull(this.transformation, "transformation is required.");
-    CipherOperations operations = new CipherOperations(this.transformation);
+    CipherOps cipherOps = new CipherOps(this.transformation);
 
-    Asserts.isTrue(!"RSA".equals(operations.getAlgorithm()), "Use RsaEncryptor instead.");
-    this.operations = operations;
+    Asserts.isTrue(!"RSA".equals(cipherOps.getAlgorithm()), "Use RsaEncryptor instead.");
+    this.cipherOps = cipherOps;
 
     // algParamSpec
     if (this.algParamSpec == null) {
@@ -86,13 +86,13 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
     Asserts.notNull(message, "message is required.");
 
     byte[] salt = RandomUtils.nextBytes(this.saltSize, this.random);
-    SecretKey secretKey = buildSecretKey(salt, this.operations.getAlgorithm());
+    SecretKey secretKey = buildSecretKey(salt, this.cipherOps.getAlgorithm());
     byte[] iv = (this.ivSize > 0) ? RandomUtils.nextBytes(this.ivSize, this.random) : null;
 
     try {
       byte[] encMsg = null;
       synchronized (this.mutex) {
-        AlgorithmParameterSpec spec = this.algParamSpec.apply(this.operations, iv);
+        AlgorithmParameterSpec spec = this.algParamSpec.apply(this.cipherOps, iv);
 
         if (spec == null) {
           this.cipher.init(Cipher.ENCRYPT_MODE, secretKey);
@@ -127,10 +127,10 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
       ArrayUtils.copy(message, iv, salt);
     }
 
-    SecretKey secretKey = buildSecretKey(salt, this.operations.getAlgorithm());
+    SecretKey secretKey = buildSecretKey(salt, this.cipherOps.getAlgorithm());
     try {
       synchronized (this.mutex) {
-        AlgorithmParameterSpec spec = this.algParamSpec.apply(this.operations, iv);
+        AlgorithmParameterSpec spec = this.algParamSpec.apply(this.cipherOps, iv);
 
         if (spec == null) {
           this.cipher.init(Cipher.DECRYPT_MODE, secretKey);
@@ -215,15 +215,15 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
     return this;
   }
 
-  public PbeEncryptor setAlgParamSpec(BiFunction<CipherOperations, byte[], AlgorithmParameterSpec> algParamSpec) {
+  public PbeEncryptor setAlgParamSpec(BiFunction<CipherOps, byte[], AlgorithmParameterSpec> algParamSpec) {
     assertNotInitialized();
     this.algParamSpec = algParamSpec;
     return this;
   }
 
-  static AlgorithmParameterSpec toAlgParamSpec(CipherOperations operations, byte[] iv) {
+  static AlgorithmParameterSpec toAlgParamSpec(CipherOps cipherOps, byte[] iv) {
     if (iv != null) {
-      if ("GCM".equals(operations.getMode())) {
+      if ("GCM".equals(cipherOps.getMode())) {
         return new GCMParameterSpec(128, iv);
       }
       return new IvParameterSpec(iv);

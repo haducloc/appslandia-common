@@ -58,14 +58,14 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
   final Object decMutex = new Object();
   final Random random = new SecureRandom();
 
-  private Function<CipherOperations, AlgorithmParameterSpec> algParamSpec;
+  private Function<CipherOps, AlgorithmParameterSpec> algParamSpec;
 
   @Override
   protected void init() throws Exception {
     Asserts.notNull(this.transformation, "transformation is required.");
-    CipherOperations operations = new CipherOperations(this.transformation);
+    CipherOps cipherOps = new CipherOps(this.transformation);
 
-    Asserts.isTrue("RSA".equals(operations.getAlgorithm()), "RSA algorithm is required.");
+    Asserts.isTrue("RSA".equals(cipherOps.getAlgorithm()), "RSA algorithm is required.");
     Asserts.isTrue((this.privateKey != null) || (this.publicKey != null), "No key is provided.");
 
     // algParamSpec
@@ -81,7 +81,7 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
         this.encrypt = Cipher.getInstance(this.transformation, this.provider);
       }
 
-      AlgorithmParameterSpec spec = this.algParamSpec.apply(operations);
+      AlgorithmParameterSpec spec = this.algParamSpec.apply(cipherOps);
 
       if (spec == null) {
         this.encrypt.init(Cipher.ENCRYPT_MODE, this.publicKey);
@@ -98,7 +98,7 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
         this.decrypt = Cipher.getInstance(this.transformation, this.provider);
       }
 
-      AlgorithmParameterSpec spec = this.algParamSpec.apply(operations);
+      AlgorithmParameterSpec spec = this.algParamSpec.apply(cipherOps);
 
       if (spec == null) {
         this.decrypt.init(Cipher.DECRYPT_MODE, this.privateKey, spec);
@@ -212,14 +212,14 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
     return this;
   }
 
-  public RsaEncryptor setAlgParamSpec(Function<CipherOperations, AlgorithmParameterSpec> algParamSpec) {
+  public RsaEncryptor setAlgParamSpec(Function<CipherOps, AlgorithmParameterSpec> algParamSpec) {
     assertNotInitialized();
     this.algParamSpec = algParamSpec;
     return this;
   }
 
-  static AlgorithmParameterSpec toAlgParamSpec(CipherOperations operations) {
-    String padding = operations.getPadding();
+  static AlgorithmParameterSpec toAlgParamSpec(CipherOps cipherOps) {
+    String padding = cipherOps.getPadding();
 
     // OAEP (Optimal Asymmetric Encryption Padding): Encryption scheme
     // OAEPWith{HashAlg}AndMGF1Padding
