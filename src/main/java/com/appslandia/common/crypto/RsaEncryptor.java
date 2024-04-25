@@ -69,7 +69,7 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 
     // algParamSpec
     if (this.algParamSpec == null) {
-      this.algParamSpec = (opers) -> toAlgParamSpec(opers);
+      this.algParamSpec = (ops) -> toAlgParamSpec(ops);
     }
 
     // ENCRYPT

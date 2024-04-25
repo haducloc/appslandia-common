@@ -64,7 +64,7 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 
     // algParamSpec
     if (this.algParamSpec == null) {
-      this.algParamSpec = (opers, iv) -> toAlgParamSpec(opers, iv);
+      this.algParamSpec = (ops, iv) -> toAlgParamSpec(ops, iv);
     }
 
     // cipher
