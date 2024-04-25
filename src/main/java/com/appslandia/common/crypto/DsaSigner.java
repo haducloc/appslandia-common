@@ -68,10 +68,10 @@ public class DsaSigner extends InitializeObject implements Digester {
         this.sign = Signature.getInstance(this.algorithm, this.provider);
       }
 
-      AlgorithmParameterSpec algorithmParameterSpec = this.algParamSpec.apply(this.algorithm);
+      AlgorithmParameterSpec algParamSpec = this.algParamSpec.apply(this.algorithm);
 
-      if (algorithmParameterSpec != null) {
-        this.sign.setParameter(algorithmParameterSpec);
+      if (algParamSpec != null) {
+        this.sign.setParameter(algParamSpec);
       }
       this.sign.initSign(this.privateKey);
     }
@@ -84,10 +84,10 @@ public class DsaSigner extends InitializeObject implements Digester {
         this.ver = Signature.getInstance(this.algorithm, this.provider);
       }
 
-      AlgorithmParameterSpec algorithmParameterSpec = this.algParamSpec.apply(this.algorithm);
+      AlgorithmParameterSpec algParamSpec = this.algParamSpec.apply(this.algorithm);
 
-      if (algorithmParameterSpec != null) {
-        this.ver.setParameter(algorithmParameterSpec);
+      if (algParamSpec != null) {
+        this.ver.setParameter(algParamSpec);
       }
       this.ver.initVerify(this.publicKey);
     }
