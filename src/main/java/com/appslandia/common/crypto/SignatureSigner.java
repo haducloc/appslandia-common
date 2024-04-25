@@ -97,7 +97,7 @@ public class SignatureSigner extends InitializeObject implements Digester {
   @Override
   public void destroy() throws DestroyException {
     if (this.privateKey != null) {
-      CryptoUtils.destroyQuietly(this.privateKey);
+      CryptoUtils.destroy(this.privateKey);
     }
   }
 

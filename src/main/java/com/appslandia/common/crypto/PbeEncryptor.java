@@ -106,7 +106,7 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     } finally {
-      CryptoUtils.destroyQuietly(secretKey);
+      CryptoUtils.destroy(secretKey);
     }
   }
 
@@ -147,7 +147,7 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     } finally {
-      CryptoUtils.destroyQuietly(secretKey);
+      CryptoUtils.destroy(secretKey);
     }
   }
 

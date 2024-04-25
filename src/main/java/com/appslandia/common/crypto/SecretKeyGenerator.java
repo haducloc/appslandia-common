@@ -82,7 +82,7 @@ public class SecretKeyGenerator extends InitializeObject {
       keySpec.clearPassword();
     }
     byte[] key = secretkey.getEncoded();
-    CryptoUtils.destroyQuietly(secretkey);
+    CryptoUtils.destroy(secretkey);
     return key;
   }
 

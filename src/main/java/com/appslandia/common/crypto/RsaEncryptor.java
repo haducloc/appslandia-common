@@ -111,7 +111,7 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
   @Override
   public void destroy() throws DestroyException {
     if (this.privateKey != null) {
-      CryptoUtils.destroyQuietly(this.privateKey);
+      CryptoUtils.destroy(this.privateKey);
     }
   }
 

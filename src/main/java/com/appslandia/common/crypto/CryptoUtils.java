@@ -75,15 +75,11 @@ public class CryptoUtils {
     return bytes;
   }
 
-  public static void destroyQuietly(Object destroyable) {
-    if (destroyable instanceof Destroyable) {
-      Destroyable obj = (Destroyable) destroyable;
-
-      if (!obj.isDestroyed()) {
-        try {
-          obj.destroy();
-        } catch (DestroyFailedException ex) {
-        }
+  public static void destroy(Destroyable obj) {
+    if (!obj.isDestroyed()) {
+      try {
+        obj.destroy();
+      } catch (DestroyFailedException ex) {
       }
     }
   }

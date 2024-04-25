@@ -76,7 +76,7 @@ public class PbeDigester extends PbeObject implements Digester {
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     } finally {
-      CryptoUtils.destroyQuietly(secretKey);
+      CryptoUtils.destroy(secretKey);
     }
   }
 
@@ -103,7 +103,7 @@ public class PbeDigester extends PbeObject implements Digester {
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     } finally {
-      CryptoUtils.destroyQuietly(secretKey);
+      CryptoUtils.destroy(secretKey);
     }
   }
 
