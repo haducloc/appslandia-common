@@ -34,7 +34,7 @@ public class SecretKeyFactoryUtilTest {
 
   @Test
   public void test() {
-    SecretKeyFactoryUtil impl = new SecretKeyFactoryUtil();
+    PbeSecretKeyFactory impl = new PbeSecretKeyFactory();
     try {
       byte[] key = impl.generate("password".toCharArray(), "salt".getBytes(), 1000, 16);
 
@@ -48,7 +48,7 @@ public class SecretKeyFactoryUtilTest {
 
   @Test
   public void test_anySize() {
-    SecretKeyFactoryUtil impl = new SecretKeyFactoryUtil();
+    PbeSecretKeyFactory impl = new PbeSecretKeyFactory();
     try {
       byte[] key = impl.generate("password".toCharArray(), "salt".getBytes(), 1000, 123);
 
@@ -62,7 +62,7 @@ public class SecretKeyFactoryUtilTest {
 
   @Test
   public void test_threadSafe() {
-    final SecretKeyFactoryUtil impl = new SecretKeyFactoryUtil();
+    final PbeSecretKeyFactory impl = new PbeSecretKeyFactory();
 
     new ThreadSafeTester() {
 

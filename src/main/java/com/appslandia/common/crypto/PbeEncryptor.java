@@ -204,8 +204,8 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
   }
 
   @Override
-  public PbeEncryptor setSecretKeyFactoryUtil(SecretKeyFactoryUtil secretKeyFactoryUtil) {
-    super.setSecretKeyFactoryUtil(secretKeyFactoryUtil);
+  public PbeEncryptor setPbeSecretKeyFactory(PbeSecretKeyFactory pbeSecretKeyFactory) {
+    super.setPbeSecretKeyFactory(pbeSecretKeyFactory);
     return this;
   }
 

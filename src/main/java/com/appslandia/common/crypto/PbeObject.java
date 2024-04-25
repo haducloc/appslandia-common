@@ -43,7 +43,7 @@ public abstract class PbeObject extends InitializeObject {
   protected int keySize;
 
   protected char[] password;
-  protected SecretKeyFactoryUtil secretKeyFactoryUtil;
+  protected PbeSecretKeyFactory secretKeyFactoryUtil;
 
   @Override
   protected void init() throws Exception {
@@ -55,7 +55,7 @@ public abstract class PbeObject extends InitializeObject {
     Asserts.notNull(this.password, "password is required.");
 
     if (this.secretKeyFactoryUtil == null) {
-      this.secretKeyFactoryUtil = new SecretKeyFactoryUtil();
+      this.secretKeyFactoryUtil = new PbeSecretKeyFactory();
     }
   }
 
@@ -109,7 +109,7 @@ public abstract class PbeObject extends InitializeObject {
     return this;
   }
 
-  public PbeObject setSecretKeyFactoryUtil(SecretKeyFactoryUtil secretKeyFactoryUtil) {
+  public PbeObject setPbeSecretKeyFactory(PbeSecretKeyFactory secretKeyFactoryUtil) {
     this.assertNotInitialized();
     this.secretKeyFactoryUtil = secretKeyFactoryUtil;
     return this;

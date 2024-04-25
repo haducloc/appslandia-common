@@ -42,7 +42,7 @@ public class PasswordDigester extends TextDigester {
   private int iterationCount;
   private int keySize;
 
-  private SecretKeyFactoryUtil secretKeyFactoryUtil;
+  private PbeSecretKeyFactory secretKeyFactoryUtil;
 
   final Random random = new SecureRandom();
 
@@ -56,7 +56,7 @@ public class PasswordDigester extends TextDigester {
     this.iterationCount = ValueUtils.valueOrMin(this.iterationCount, CryptoUtils.DEFAULT_ITERATION_COUNT);
 
     if (this.secretKeyFactoryUtil == null) {
-      this.secretKeyFactoryUtil = new SecretKeyFactoryUtil();
+      this.secretKeyFactoryUtil = new PbeSecretKeyFactory();
     }
   }
 
@@ -123,7 +123,7 @@ public class PasswordDigester extends TextDigester {
     return this;
   }
 
-  public PasswordDigester setSecretKeyFactoryUtil(SecretKeyFactoryUtil secretKeyFactoryUtil) {
+  public PasswordDigester setPbeSecretKeyFactory(PbeSecretKeyFactory secretKeyFactoryUtil) {
     this.assertNotInitialized();
     this.secretKeyFactoryUtil = secretKeyFactoryUtil;
     return this;
