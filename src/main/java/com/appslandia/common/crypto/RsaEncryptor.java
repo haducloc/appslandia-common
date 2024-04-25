@@ -21,7 +21,6 @@
 package com.appslandia.common.crypto;
 
 import java.security.GeneralSecurityException;
-import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
@@ -169,46 +168,13 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 
   public RsaEncryptor setPrivateKey(PrivateKey privateKey) {
     assertNotInitialized();
-    if (privateKey != null) {
-      this.privateKey = new KeyFactoryUtil(privateKey.getAlgorithm()).copy(privateKey);
-    }
-    return this;
-  }
-
-  public RsaEncryptor setPrivateKey(String privateKeyPem) {
-    assertNotInitialized();
-    if (privateKeyPem != null) {
-      this.privateKey = new KeyFactoryUtil("RSA").toPrivateKey(privateKeyPem);
-    }
+    this.privateKey = privateKey;
     return this;
   }
 
   public RsaEncryptor setPublicKey(PublicKey publicKey) {
     assertNotInitialized();
-    if (publicKey != null) {
-      this.publicKey = new KeyFactoryUtil(publicKey.getAlgorithm()).copy(publicKey);
-    }
-    return this;
-  }
-
-  public RsaEncryptor setPublicKey(String publicKeyPem) {
-    assertNotInitialized();
-    if (publicKeyPem != null) {
-      this.publicKey = new KeyFactoryUtil("RSA").toPublicKey(publicKeyPem);
-    }
-    return this;
-  }
-
-  public RsaEncryptor setKeyPair(KeyPair keyPair) {
-    assertNotInitialized();
-    if (keyPair != null) {
-      Asserts.isTrue("RSA".equals(keyPair.getPrivate().getAlgorithm()));
-
-      KeyFactoryUtil keyFactoryUtil = new KeyFactoryUtil("RSA");
-
-      this.privateKey = keyFactoryUtil.copy(keyPair.getPrivate());
-      this.publicKey = keyFactoryUtil.copy(keyPair.getPublic());
-    }
+    this.publicKey = publicKey;
     return this;
   }
 

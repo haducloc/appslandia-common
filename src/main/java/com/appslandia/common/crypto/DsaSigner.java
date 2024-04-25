@@ -21,7 +21,6 @@
 package com.appslandia.common.crypto;
 
 import java.security.GeneralSecurityException;
-import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
@@ -158,28 +157,13 @@ public class DsaSigner extends InitializeObject implements Digester {
 
   public DsaSigner setPrivateKey(PrivateKey privateKey) {
     assertNotInitialized();
-    if (privateKey != null) {
-      this.privateKey = new KeyFactoryUtil(privateKey.getAlgorithm()).copy(privateKey);
-    }
+    this.privateKey = privateKey;
     return this;
   }
 
   public DsaSigner setPublicKey(PublicKey publicKey) {
     assertNotInitialized();
-    if (publicKey != null) {
-      this.publicKey = new KeyFactoryUtil(publicKey.getAlgorithm()).copy(publicKey);
-    }
-    return this;
-  }
-
-  public DsaSigner setKeyPair(KeyPair keyPair) {
-    assertNotInitialized();
-    if (keyPair != null) {
-      KeyFactoryUtil keyFactoryUtil = new KeyFactoryUtil(keyPair.getPrivate().getAlgorithm());
-
-      this.privateKey = keyFactoryUtil.copy(keyPair.getPrivate());
-      this.publicKey = keyFactoryUtil.copy(keyPair.getPublic());
-    }
+    this.publicKey = publicKey;
     return this;
   }
 
