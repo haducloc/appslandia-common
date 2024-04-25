@@ -30,7 +30,7 @@ import com.appslandia.common.base.ThreadSafeTester;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class SecretKeyFactoryUtilTest {
+public class PbeSecretKeyFactoryTest {
 
   @Test
   public void test() {
