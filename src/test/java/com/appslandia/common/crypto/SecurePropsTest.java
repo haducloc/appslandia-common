@@ -32,7 +32,7 @@ public class SecurePropsTest {
 
   @Test
   public void test() {
-    Encryptor encryptor = new PbeEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(16)
+    Encryptor encryptor = new PbeAesEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(16)
         .setPassword("password".toCharArray());
 
     TextEncryptor textEncryptor = new TextEncryptor().setEncryptor(encryptor);

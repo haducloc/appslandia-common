@@ -40,7 +40,7 @@ import com.appslandia.common.utils.RandomUtils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class PbeEncryptor extends PbeObject implements Encryptor {
+public class PbeAesEncryptor extends PbeObject implements Encryptor {
   private String transformation, provider;
   private CipherOps cipherOps;
 
@@ -59,7 +59,7 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
     Asserts.notNull(this.transformation, "transformation is required.");
     CipherOps cipherOps = new CipherOps(this.transformation);
 
-    Asserts.isTrue(!"RSA".equals(cipherOps.getAlgorithm()), "Use RsaEncryptor instead.");
+    Asserts.isTrue(cipherOps.isAlgorithm("AES"), "AES algorithm is required.");
     this.cipherOps = cipherOps;
 
     // algParamSpec
@@ -75,9 +75,17 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
     }
 
     // ivSize
-    if (this.ivSize == 0) {
-      this.ivSize = this.cipher.getBlockSize();
+    this.ivSize = getIvSize(this.cipher, cipherOps);
+  }
+
+  protected int getIvSize(Cipher cipher, CipherOps cipherOps) {
+    if (cipherOps.isMode("ECB")) {
+      return -1;
     }
+    if (cipherOps.isMode("GCM")) {
+      return 12;
+    }
+    return cipher.getBlockSize();
   }
 
   @Override
@@ -156,7 +164,7 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
     return this.transformation;
   }
 
-  public PbeEncryptor setTransformation(String transformation) {
+  public PbeAesEncryptor setTransformation(String transformation) {
     this.assertNotInitialized();
     this.transformation = transformation;
     return this;
@@ -167,55 +175,49 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
     return this.provider;
   }
 
-  public PbeEncryptor setProvider(String provider) {
+  public PbeAesEncryptor setProvider(String provider) {
     this.assertNotInitialized();
     this.provider = provider;
     return this;
   }
 
   @Override
-  public PbeEncryptor setSaltSize(int saltSize) {
+  public PbeAesEncryptor setSaltSize(int saltSize) {
     super.setSaltSize(saltSize);
     return this;
   }
 
   @Override
-  public PbeEncryptor setIterationCount(int iterationCount) {
+  public PbeAesEncryptor setIterationCount(int iterationCount) {
     super.setIterationCount(iterationCount);
     return this;
   }
 
   @Override
-  public PbeEncryptor setKeySize(int keySize) {
+  public PbeAesEncryptor setKeySize(int keySize) {
     super.setKeySize(keySize);
     return this;
   }
 
   @Override
-  public PbeEncryptor setPassword(char[] password) {
+  public PbeAesEncryptor setPassword(char[] password) {
     super.setPassword(password);
     return this;
   }
 
   @Override
-  public PbeEncryptor setPassword(String passwordOrEnv) {
+  public PbeAesEncryptor setPassword(String passwordOrEnv) {
     super.setPassword(passwordOrEnv);
     return this;
   }
 
   @Override
-  public PbeEncryptor setPbeSecretKeyGenerator(PbeSecretKeyGenerator pbeSecretKeyGenerator) {
+  public PbeAesEncryptor setPbeSecretKeyGenerator(PbeSecretKeyGenerator pbeSecretKeyGenerator) {
     super.setPbeSecretKeyGenerator(pbeSecretKeyGenerator);
     return this;
   }
 
-  public PbeEncryptor setIvSize(int ivSize) {
-    assertNotInitialized();
-    this.ivSize = ivSize;
-    return this;
-  }
-
-  public PbeEncryptor setAlgParamSpec(BiFunction<CipherOps, byte[], AlgorithmParameterSpec> algParamSpec) {
+  public PbeAesEncryptor setAlgParamSpec(BiFunction<CipherOps, byte[], AlgorithmParameterSpec> algParamSpec) {
     assertNotInitialized();
     this.algParamSpec = algParamSpec;
     return this;
@@ -223,8 +225,8 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 
   static AlgorithmParameterSpec toAlgParamSpec(CipherOps cipherOps, byte[] iv) {
     if (iv != null) {
-      if ("GCM".equals(cipherOps.getMode())) {
-        return new GCMParameterSpec(128, iv);
+      if (cipherOps.isMode("GCM")) {
+        return new GCMParameterSpec(iv.length * 8, iv);
       }
       return new IvParameterSpec(iv);
     }

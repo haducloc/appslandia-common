@@ -36,7 +36,7 @@ public class PbeEncryptorTest {
 
   @Test
   public void test() {
-    PbeEncryptor impl = new PbeEncryptor();
+    PbeAesEncryptor impl = new PbeAesEncryptor();
     impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
     impl.setPassword("password".toCharArray());
 
@@ -54,7 +54,7 @@ public class PbeEncryptorTest {
 
   @Test
   public void test_CBC() {
-    PbeEncryptor impl = new PbeEncryptor();
+    PbeAesEncryptor impl = new PbeAesEncryptor();
     impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
     impl.setPassword("password".toCharArray());
 
@@ -72,10 +72,9 @@ public class PbeEncryptorTest {
 
   @Test
   public void test_ECB() {
-    PbeEncryptor impl = new PbeEncryptor();
+    PbeAesEncryptor impl = new PbeAesEncryptor();
     impl.setTransformation("AES/ECB/PKCS5Padding").setKeySize(16);
     impl.setPassword("password".toCharArray());
-    impl.setIvSize(-1);
 
     try {
       byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -91,7 +90,7 @@ public class PbeEncryptorTest {
 
   @Test
   public void test_GCM() {
-    PbeEncryptor impl = new PbeEncryptor();
+    PbeAesEncryptor impl = new PbeAesEncryptor();
     impl.setTransformation("AES/GCM/NoPadding").setKeySize(16);
     impl.setPassword("password".toCharArray());
 
@@ -109,7 +108,7 @@ public class PbeEncryptorTest {
 
   @Test
   public void test_threadSafe() {
-    final PbeEncryptor impl = new PbeEncryptor();
+    final PbeAesEncryptor impl = new PbeAesEncryptor();
     impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
     impl.setPassword("password".toCharArray());
 

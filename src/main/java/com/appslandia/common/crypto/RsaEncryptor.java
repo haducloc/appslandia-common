@@ -64,7 +64,7 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
     Asserts.notNull(this.transformation, "transformation is required.");
     CipherOps cipherOps = new CipherOps(this.transformation);
 
-    Asserts.isTrue("RSA".equals(cipherOps.getAlgorithm()), "RSA algorithm is required.");
+    Asserts.isTrue(cipherOps.isAlgorithm("RSA"), "RSA algorithm is required.");
     Asserts.isTrue((this.privateKey != null) || (this.publicKey != null), "No key is provided.");
 
     // algParamSpec

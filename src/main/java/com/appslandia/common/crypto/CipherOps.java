@@ -20,8 +20,6 @@
 
 package com.appslandia.common.crypto;
 
-import java.util.Locale;
-
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
 
@@ -43,12 +41,17 @@ public class CipherOps {
     Asserts.isTrue(cipherOps.length == 3,
         "The transformation is invalid. The algorithm, mode, and padding must be explicitly provided.");
 
-    cipherOps[0] = cipherOps[0].toUpperCase(Locale.ENGLISH);
-    cipherOps[1] = cipherOps[1].toUpperCase(Locale.ENGLISH);
-
     this.algorithm = cipherOps[0];
     this.mode = cipherOps[1];
     this.padding = cipherOps[2];
+  }
+
+  public boolean isMode(String mode) {
+    return this.mode.equalsIgnoreCase(mode);
+  }
+
+  public boolean isAlgorithm(String algorithm) {
+    return this.algorithm.equalsIgnoreCase(algorithm);
   }
 
   public String getAlgorithm() {

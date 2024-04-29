@@ -32,7 +32,7 @@ public class TextEncryptorTest {
 
   @Test
   public void test() {
-    PbeEncryptor encryptor = new PbeEncryptor();
+    PbeAesEncryptor encryptor = new PbeAesEncryptor();
     encryptor.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
     encryptor.setPassword("password".toCharArray());
 
