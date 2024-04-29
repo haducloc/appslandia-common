@@ -193,7 +193,7 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
     if (StringUtils.startsWith(padding, "OAEPWith") && StringUtils.endsWith(padding, "AndMGF1Padding")) {
 
       int start = "OAEPWith".length();
-      int end = padding.lastIndexOf("AndMGF1Padding");
+      int end = padding.length() - "AndMGF1Padding".length();
 
       String hashAlg = padding.substring(start, end).toUpperCase(Locale.ENGLISH);
       MGF1ParameterSpec mgf1Spec = MGF1ParameterSpecUtil.getInstance(hashAlg);
