@@ -30,11 +30,11 @@ import com.appslandia.common.base.ThreadSafeTester;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class PbeSecretKeyFactoryTest {
+public class PbeSecretKeyGeneratorTest {
 
   @Test
   public void test() {
-    PbeSecretKeyFactory impl = new PbeSecretKeyFactory();
+    PbeSecretKeyGenerator impl = new PbeSecretKeyGenerator();
     try {
       byte[] key = impl.generate("password".toCharArray(), "salt".getBytes(), 1000, 16);
 
@@ -48,7 +48,7 @@ public class PbeSecretKeyFactoryTest {
 
   @Test
   public void test_anySize() {
-    PbeSecretKeyFactory impl = new PbeSecretKeyFactory();
+    PbeSecretKeyGenerator impl = new PbeSecretKeyGenerator();
     try {
       byte[] key = impl.generate("password".toCharArray(), "salt".getBytes(), 1000, 123);
 
@@ -62,7 +62,7 @@ public class PbeSecretKeyFactoryTest {
 
   @Test
   public void test_threadSafe() {
-    final PbeSecretKeyFactory impl = new PbeSecretKeyFactory();
+    final PbeSecretKeyGenerator impl = new PbeSecretKeyGenerator();
 
     new ThreadSafeTester() {
 

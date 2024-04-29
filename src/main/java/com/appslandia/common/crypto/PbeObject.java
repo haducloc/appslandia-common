@@ -43,7 +43,7 @@ public abstract class PbeObject extends InitializeObject {
   protected int keySize;
 
   protected char[] password;
-  protected PbeSecretKeyFactory pbeSecretKeyFactory;
+  protected PbeSecretKeyGenerator pbeSecretKeyGenerator;
 
   @Override
   protected void init() throws Exception {
@@ -54,8 +54,8 @@ public abstract class PbeObject extends InitializeObject {
 
     Asserts.notNull(this.password, "password is required.");
 
-    if (this.pbeSecretKeyFactory == null) {
-      this.pbeSecretKeyFactory = new PbeSecretKeyFactory();
+    if (this.pbeSecretKeyGenerator == null) {
+      this.pbeSecretKeyGenerator = new PbeSecretKeyGenerator();
     }
   }
 
@@ -67,7 +67,7 @@ public abstract class PbeObject extends InitializeObject {
   }
 
   protected SecretKey buildSecretKey(final byte[] salt, final String algorithm) throws CryptoException {
-    byte[] key = this.pbeSecretKeyFactory.generate(this.password, salt, this.iterationCount, this.keySize);
+    byte[] key = this.pbeSecretKeyGenerator.generate(this.password, salt, this.iterationCount, this.keySize);
     SecretKey secretKey = new SecretKeySpec(key, algorithm);
     CryptoUtils.clear(key);
     return secretKey;
@@ -109,9 +109,9 @@ public abstract class PbeObject extends InitializeObject {
     return this;
   }
 
-  public PbeObject setPbeSecretKeyFactory(PbeSecretKeyFactory pbeSecretKeyFactory) {
+  public PbeObject setPbeSecretKeyGenerator(PbeSecretKeyGenerator pbeSecretKeyGenerator) {
     this.assertNotInitialized();
-    this.pbeSecretKeyFactory = pbeSecretKeyFactory;
+    this.pbeSecretKeyGenerator = pbeSecretKeyGenerator;
     return this;
   }
 }
