@@ -40,7 +40,8 @@ public class CipherOps {
     Asserts.notNull(transformation);
 
     String[] cipherOps = transformation.split("/");
-    Asserts.isTrue(cipherOps.length == 3, "transformation is invalid.");
+    Asserts.isTrue(cipherOps.length == 3,
+        "The transformation is invalid. The algorithm, mode, and padding must be explicitly provided.");
 
     cipherOps[0] = cipherOps[0].toUpperCase(Locale.ENGLISH);
     cipherOps[1] = cipherOps[1].toUpperCase(Locale.ENGLISH);
