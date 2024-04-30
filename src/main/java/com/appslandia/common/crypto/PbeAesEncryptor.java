@@ -44,7 +44,6 @@ public class PbeAesEncryptor extends PbeObject implements Encryptor {
   private String transformation, provider;
   private CipherOps cipherOps;
 
-  // -1: IV unsupported
   private int ivSize;
   private BiFunction<CipherOps, byte[], AlgorithmParameterSpec> algParamSpec;
 
