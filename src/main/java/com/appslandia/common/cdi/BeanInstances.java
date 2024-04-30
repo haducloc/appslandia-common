@@ -38,8 +38,8 @@ public class BeanInstances implements Iterable<BeanInstance<?>> {
   }
 
   public void destroy() {
-
     for (int i = this.instances.size() - 1; i >= 0; i--) {
+
       this.instances.get(i).destroy();
     }
   }
