@@ -44,7 +44,9 @@ public class PasswordDigester extends TextDigester {
 
   private PbeSecretKeyGenerator pbeSecretKeyGenerator;
 
-  final Random random = new SecureRandom();
+  private static final class RandomHolder {
+    static final Random instance = new SecureRandom();
+  }
 
   @Override
   protected void init() throws Exception {
@@ -65,7 +67,7 @@ public class PasswordDigester extends TextDigester {
     this.initialize();
     Asserts.notNull(password, "password is required.");
 
-    byte[] salt = RandomUtils.nextBytes(this.saltSize, this.random);
+    byte[] salt = RandomUtils.nextBytes(this.saltSize, RandomHolder.instance);
     char[] pwdChars = password.toCharArray();
     try {
       byte[] secKey = this.pbeSecretKeyGenerator.generate(pwdChars, salt, this.iterationCount, this.keySize);

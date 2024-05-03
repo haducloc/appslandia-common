@@ -23,6 +23,7 @@ package com.appslandia.common.utils;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Random;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,7 @@ public class IOUtilsTest {
 
   @Test
   public void test_copyFromIsToOs() {
-    byte[] src = RandomUtils.nextBytes(100);
+    byte[] src = RandomUtils.nextBytes(100, new Random());
     ByteArrayInputStream is = new ByteArrayInputStream(src);
     ByteArrayOutputStream os = new ByteArrayOutputStream();
     try {
@@ -48,7 +49,7 @@ public class IOUtilsTest {
 
   @Test
   public void test_toByteArray() {
-    byte[] src = RandomUtils.nextBytes(100);
+    byte[] src = RandomUtils.nextBytes(100, new Random());
     ByteArrayInputStream is = new ByteArrayInputStream(src);
     try {
       byte[] ba = IOUtils.toByteArray(is);

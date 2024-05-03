@@ -23,11 +23,9 @@ package com.appslandia.common.crypto;
 import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.SecureRandom;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.MGF1ParameterSpec;
 import java.util.Locale;
-import java.util.Random;
 import java.util.function.Function;
 
 import javax.crypto.Cipher;
@@ -55,7 +53,6 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 
   final Object encMutex = new Object();
   final Object decMutex = new Object();
-  final Random random = new SecureRandom();
 
   private Function<CipherOps, AlgorithmParameterSpec> algParamSpec;
 

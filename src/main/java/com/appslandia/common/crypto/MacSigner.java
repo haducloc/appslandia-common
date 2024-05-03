@@ -21,9 +21,7 @@
 package com.appslandia.common.crypto;
 
 import java.nio.charset.StandardCharsets;
-import java.security.SecureRandom;
 import java.util.Arrays;
-import java.util.Random;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -40,12 +38,12 @@ import com.appslandia.common.utils.SYS;
  *
  */
 public class MacSigner extends InitializeObject implements Digester {
+
   private String algorithm, provider;
   private Mac mac;
   private byte[] secret;
 
   final Object mutex = new Object();
-  final Random random = new SecureRandom();
 
   @Override
   protected void init() throws Exception {

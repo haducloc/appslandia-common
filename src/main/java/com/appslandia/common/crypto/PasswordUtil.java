@@ -51,14 +51,16 @@ public class PasswordUtil {
   private static final char[][] ALPHABET = new char[][] { ALPHABET_DIGITS, ALPHABET_LOWER, ALPHABET_UPPER,
       ALPHABET_SYMBOLS };
 
-  final Random random = new SecureRandom();
+  private static final class RandomHolder {
+    static final Random instance = new SecureRandom();
+  }
 
   public char[] generatePassword(int minLength, int maxLength) {
     Asserts.isTrue(minLength <= maxLength, "minLength <= maxLength");
     Asserts.isTrue(minLength >= 8, "minLength >= 8");
 
-    int length = RandomUtils.nextInt(minLength, maxLength, this.random);
-    return CharUtils.randomChars(length, ALPHABET, this.random);
+    int length = RandomUtils.nextInt(minLength, maxLength, RandomHolder.instance);
+    return CharUtils.randomChars(length, ALPHABET, RandomHolder.instance);
   }
 
   public static boolean isValid(String password) {

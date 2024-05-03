@@ -20,6 +20,8 @@
 
 package com.appslandia.common.base;
 
+import java.util.Random;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -54,6 +56,8 @@ public class SimplePoolTest {
   @Test
   public void test_threadSafe() {
     final SimplePool<Object> pool = new SimplePool<>();
+    final Random random = new Random();
+
     new ThreadSafeTester() {
 
       @Override
@@ -64,7 +68,7 @@ public class SimplePoolTest {
           public void run() {
             try {
 
-              int n = RandomUtils.nextInt(1, 2);
+              int n = RandomUtils.nextInt(1, 2, random);
               if (n == 1) {
                 pool.put(new Object());
               } else {

@@ -49,7 +49,10 @@ public class PbeAesEncryptor extends PbeObject implements Encryptor {
 
   private Cipher cipher;
   final Object mutex = new Object();
-  final Random random = new SecureRandom();
+
+  private static final class RandomHolder {
+    static final Random instance = new SecureRandom();
+  }
 
   @Override
   protected void init() throws Exception {
@@ -92,9 +95,9 @@ public class PbeAesEncryptor extends PbeObject implements Encryptor {
     this.initialize();
     Asserts.notNull(message, "message is required.");
 
-    byte[] salt = RandomUtils.nextBytes(this.saltSize, this.random);
+    byte[] salt = RandomUtils.nextBytes(this.saltSize, RandomHolder.instance);
     SecretKey secretKey = buildSecretKey(salt, this.cipherOps.getAlgorithm());
-    byte[] iv = (this.ivSize > 0) ? RandomUtils.nextBytes(this.ivSize, this.random) : null;
+    byte[] iv = (this.ivSize > 0) ? RandomUtils.nextBytes(this.ivSize, RandomHolder.instance) : null;
 
     try {
       byte[] encMsg = null;

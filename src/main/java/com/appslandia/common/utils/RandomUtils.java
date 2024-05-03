@@ -20,9 +20,7 @@
 
 package com.appslandia.common.utils;
 
-import java.security.SecureRandom;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  *
@@ -31,26 +29,14 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class RandomUtils {
 
-  public static byte[] nextBytes(int length) {
-    return nextBytes(length, new SecureRandom());
-  }
-
   public static byte[] nextBytes(int length, Random random) {
     byte[] bytes = new byte[length];
     random.nextBytes(bytes);
     return bytes;
   }
 
-  public static int nextInt(int min, int max) {
-    return nextInt(min, max, ThreadLocalRandom.current());
-  }
-
   public static int nextInt(int min, int max, Random random) {
     return min + (int) (random.nextFloat() * (max - min + 1));
-  }
-
-  public static int[] nextIndexes(int n) {
-    return nextIndexes(n, ThreadLocalRandom.current());
   }
 
   public static int[] nextIndexes(int n, Random random) {
@@ -60,10 +46,6 @@ public class RandomUtils {
     }
     ArrayUtils.shuffle(indexes, random);
     return indexes;
-  }
-
-  public static int[] nextInts(int length, int min, int max) {
-    return nextInts(length, min, max, ThreadLocalRandom.current());
   }
 
   public static int[] nextInts(int length, int min, int max, Random random) {

@@ -21,7 +21,7 @@
 package com.appslandia.common.geo;
 
 import java.util.Locale;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
 
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
@@ -99,8 +99,12 @@ public enum Direction {
     }
   }
 
+  private static final class RandomHolder {
+    static final Random instance = new Random();
+  }
+
   public static Direction random() {
-    int ordinial = ThreadLocalRandom.current().nextInt(4);
+    int ordinial = RandomHolder.instance.nextInt(4);
     return DIRECTIONS[ordinial];
   }
 }

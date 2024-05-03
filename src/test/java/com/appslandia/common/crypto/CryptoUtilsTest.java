@@ -20,6 +20,8 @@
 
 package com.appslandia.common.crypto;
 
+import java.util.Random;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -34,7 +36,7 @@ public class CryptoUtilsTest {
 
   @Test
   public void test_toCharArray() {
-    byte[] randomBytes = RandomUtils.nextBytes(32);
+    byte[] randomBytes = RandomUtils.nextBytes(32, new Random());
 
     char[] toChars = CryptoUtils.toCharArray(randomBytes);
     Assertions.assertNotNull(toChars);

@@ -47,7 +47,9 @@ public class WordsGenerator extends InitializeObject implements TextGenerator {
   private int length;
   private Alphabet alphabet;
 
-  final Random random = new SecureRandom();
+  private static final class RandomHolder {
+    static final Random instance = new SecureRandom();
+  }
 
   public enum Alphabet {
     DIGITS, AZ, AZ_UPPER, AZ_LOWER, DIGITS_AZ_UPPER, DIGITS_AZ_LOWER, DIGITS_AZ
@@ -83,7 +85,7 @@ public class WordsGenerator extends InitializeObject implements TextGenerator {
   }
 
   private String generate(char[][] sources) {
-    char[] rdChars = CharUtils.randomChars(this.length, sources, this.random);
+    char[] rdChars = CharUtils.randomChars(this.length, sources, RandomHolder.instance);
     return new String(rdChars, 0, this.length);
   }
 
