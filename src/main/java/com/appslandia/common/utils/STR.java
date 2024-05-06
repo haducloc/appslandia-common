@@ -111,7 +111,14 @@ public class STR {
       String expr = "${" + parameterName + "}";
       Object parameterValue = parameters.apply(parameterName, expr);
 
-      String valueAsStr = formatParam(parameterValue, optional, pattern, expr);
+      if (parameterValue == MISSED_VALUE) {
+        throw new IllegalArgumentException(STR.fmt("The parameter {} must be provided", expr));
+      }
+      if (parameterValue == null && !optional) {
+        throw new IllegalArgumentException(STR.fmt("The parameter {} must be required.", expr));
+      }
+
+      String valueAsStr = formatParam(parameterValue, pattern);
       out.append(valueAsStr);
 
       prevEnd = matcher.end();
@@ -161,7 +168,15 @@ public class STR {
 
       index++;
       Object entryValue = ((0 <= index) && (index < entries.length)) ? entries[index] : MISSED_VALUE;
-      String valueAsStr = formatParam(entryValue, optional, pattern, "{}");
+
+      if (entryValue == MISSED_VALUE) {
+        throw new IllegalArgumentException("The entry {} must be provided.");
+      }
+      if (entryValue == null && !optional) {
+        throw new IllegalArgumentException("The entry {} must be required.");
+      }
+
+      String valueAsStr = formatParam(entryValue, pattern);
       out.append(valueAsStr);
 
       prevEnd = matcher.end();
@@ -187,7 +202,7 @@ public class STR {
       // Non parameter
       String chunk = str.substring(prevEnd, matcher.start());
       if (!chunk.isEmpty()) {
-        chunks.add(new StringFormat.Chunk(chunk, false, false, null, null));
+        chunks.add(new StringFormat.Chunk(chunk, false, null, null));
         outLen += chunk.length();
       }
 
@@ -209,7 +224,7 @@ public class STR {
         parameterName = parameterName.substring(0, parameterName.length() - 1);
       }
 
-      chunks.add(new StringFormat.Chunk(parameterName, true, optional, pattern, "${" + parameterName + "}"));
+      chunks.add(new StringFormat.Chunk(parameterName, true, pattern, "${" + parameterName + "}"));
       outLen += 16;
       prevEnd = matcher.end();
     }
@@ -217,16 +232,16 @@ public class STR {
     if (prevEnd < str.length()) {
       String chunk = str.substring(prevEnd);
       if (!chunk.isEmpty()) {
-        chunks.add(new StringFormat.Chunk(chunk, false, false, null, null));
+        chunks.add(new StringFormat.Chunk(chunk, false, null, null));
         outLen += chunk.length();
       }
     }
     return new StringFormat(outLen, chunks);
   }
 
-  static String formatParam(Object paramValue, boolean optional, String pattern, String paramExpr) {
-    if (paramValue == null || paramValue == MISSED_VALUE) {
-      return optional ? "" : paramExpr;
+  static String formatParam(Object paramValue, String pattern) {
+    if (paramValue == null) {
+      return "";
     }
     if (paramValue.getClass() == String.class) {
       return (String) paramValue;

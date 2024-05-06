@@ -36,10 +36,13 @@ public class STRTest {
 
   @Test
   public void test_map() {
-    String msg = STR.format("this is ${p1} and ${p2}", new Params().set("p1", "v1").set("p2", null));
-    Assertions.assertEquals("this is v1 and ${p2}", msg);
+    try {
+      STR.format("this is ${p1} and ${p2}", new Params().set("p1", "v1").set("p2", null));
+      Assertions.fail();
+    } catch (Exception e) {
+    }
 
-    msg = STR.format("this is ${p1} and ${p2}", new Params().set("p1", "v1").set("p2", "v2"));
+    String msg = STR.format("this is ${p1} and ${p2}", new Params().set("p1", "v1").set("p2", "v2"));
     Assertions.assertEquals("this is v1 and v2", msg);
   }
 
@@ -47,7 +50,7 @@ public class STRTest {
   @Test
   public void test_map_optional() {
     try {
-      String msg = STR.format("this is ${p1} and ${p2?}", new Params().set("p1", "v1"));
+      String msg = STR.format("this is ${p1} and ${p2?}", new Params().set("p1", "v1").set("p2", null));
       Assertions.assertEquals("this is v1 and ", msg);
 
     } catch (Exception ex) {
@@ -57,10 +60,13 @@ public class STRTest {
 
   @Test
   public void test_array() {
-    String msg = STR.format("this is ${0} and ${1}", "v1", null);
-    Assertions.assertEquals("this is v1 and ${1}", msg);
+    try {
+      STR.format("this is ${0} and ${1}", "v1", null);
+      Assertions.fail();
+    } catch (Exception e) {
+    }
 
-    msg = STR.format("this is ${0} and ${1}", "v1", "v2");
+    String msg = STR.format("this is ${0} and ${1}", "v1", "v2");
     Assertions.assertEquals("this is v1 and v2", msg);
   }
 
@@ -68,7 +74,7 @@ public class STRTest {
   @Test
   public void test_array_optional() {
     try {
-      String msg = STR.format("this is ${0} and ${1?}", "v1");
+      String msg = STR.format("this is ${0} and ${1?}", "v1", null);
       Assertions.assertEquals("this is v1 and ", msg);
 
     } catch (Exception ex) {
@@ -78,17 +84,20 @@ public class STRTest {
 
   @Test
   public void test_fmt() {
-    String msg = STR.fmt("this is {} and {}", "v1", null);
-    Assertions.assertEquals("this is v1 and {}", msg);
+    try {
+      STR.fmt("this is {} and {}", "v1", null);
+      Assertions.fail();
+    } catch (Exception ex) {
+    }
 
-    msg = STR.fmt("this is {} and {}", "v1", "v2");
+    String msg = STR.fmt("this is {} and {}", "v1", "v2");
     Assertions.assertEquals("this is v1 and v2", msg);
   }
 
   @Test
   public void test_fmt_optional() {
     try {
-      String msg = STR.fmt("this is {} and {?}", "v1");
+      String msg = STR.fmt("this is {} and {?}", "v1", null);
       Assertions.assertEquals("this is v1 and ", msg);
 
     } catch (Exception ex) {

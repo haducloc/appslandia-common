@@ -43,8 +43,8 @@ public class StringFormat {
     for (Chunk chunk : this.chunks) {
       if (chunk.isParam) {
 
-        Object parameterValue = parameters.apply(chunk.value, chunk.valueExpr);
-        String valueAsStr = STR.formatParam(parameterValue, chunk.optional, chunk.pattern, chunk.valueExpr);
+        Object parameterValue = parameters.apply(chunk.value, chunk.expr);
+        String valueAsStr = STR.formatParam(parameterValue, chunk.pattern);
         out.append(valueAsStr);
       } else {
         out.append(chunk.value);
@@ -81,17 +81,15 @@ public class StringFormat {
     final String value;
     final boolean isParam;
 
-    final boolean optional;
     final String pattern;
-    final String valueExpr;
+    final String expr;
 
-    public Chunk(String value, boolean isParam, boolean optional, String pattern, String valueExpr) {
+    public Chunk(String value, boolean isParam, String pattern, String expr) {
       this.value = value;
       this.isParam = isParam;
 
-      this.optional = optional;
       this.pattern = pattern;
-      this.valueExpr = valueExpr;
+      this.expr = expr;
     }
   }
 }
