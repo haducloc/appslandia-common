@@ -40,7 +40,9 @@ public class STR {
   public static final Object MISSED_VALUE = new Object() {
   };
 
-  // ${paramName}
+  // ${paramName} or ${paramName?} or ${paramName|pattern} or
+  // ${paramName?|pattern}
+
   private static final Pattern PARAM_HOLDER_PATTERN = Pattern
       .compile("\\$\\{\\s*([a-z0-9_]+)(\\?)?(\\|[^}\s][^}]*[^}\s])?\\s*}", Pattern.CASE_INSENSITIVE);
 
