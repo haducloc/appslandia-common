@@ -33,7 +33,7 @@ import com.appslandia.common.utils.STR;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class StringFormat {
+public class GroupFormat {
   private static final Pattern GROUP_PATTERN = Pattern.compile("\\{\\s*\\d+\\s*}");
 
   final String format;
@@ -43,11 +43,11 @@ public class StringFormat {
   private int inputLength;
   private int outputLength;
 
-  public StringFormat(String format) {
+  public GroupFormat(String format) {
     this(format, false);
   }
 
-  public StringFormat(String format, boolean validate) {
+  public GroupFormat(String format, boolean validate) {
     this.format = Asserts.notNull(format, "format is required.");
     this.validate = validate;
 
@@ -124,7 +124,6 @@ public class StringFormat {
   }
 
   private static class Group {
-
     final String text;
     final int length;
 

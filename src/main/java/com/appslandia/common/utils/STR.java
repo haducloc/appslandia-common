@@ -23,6 +23,8 @@ package com.appslandia.common.utils;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.temporal.TemporalAccessor;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.regex.Matcher;
@@ -39,8 +41,8 @@ public class STR {
   };
 
   // ${paramName}
-  private static final Pattern PARAM_HOLDER_PATTERN = Pattern.compile("\\$\\{\s*([a-z0-9_]+)(\\?)?(\s*\\|[^}]*)?\s*}",
-      Pattern.CASE_INSENSITIVE);
+  private static final Pattern PARAM_HOLDER_PATTERN = Pattern
+      .compile("\\$\\{\\s*([a-z0-9_]+)(\\?)?(\\|[^}\s][^}]*[^}\s])?\\s*}", Pattern.CASE_INSENSITIVE);
 
   public static String format(String str, Map<String, Object> parameters) {
     if (str == null) {
@@ -86,11 +88,7 @@ public class STR {
     while (matcher.find()) {
 
       // Non parameter
-      if (prevEnd == 0) {
-        out.append(str.substring(0, matcher.start()));
-      } else {
-        out.append(str.substring(prevEnd, matcher.start()));
-      }
+      out.append(str.substring(prevEnd, matcher.start()));
 
       // ${paramName}
       String parameterGroup = matcher.group();
@@ -98,49 +96,24 @@ public class STR {
           .trim();
 
       int idxVB = parameterName.indexOf('|');
-
       String pattern = null;
+
       if (idxVB > 0) {
-        pattern = parameterName.substring(idxVB + 1).trim();
-        parameterName = parameterName.substring(0, idxVB).trim();
+        pattern = parameterName.substring(idxVB + 1);
+        parameterName = parameterName.substring(0, idxVB);
       }
 
       boolean optional = parameterName.charAt(parameterName.length() - 1) == '?';
       if (optional) {
         parameterName = parameterName.substring(0, parameterName.length() - 1);
       }
-      Object parameterValue = parameters.apply(parameterName, parameterGroup);
 
-      if (parameterValue == null || parameterValue == MISSED_VALUE) {
-        out.append(optional ? "" : "${MISSED_VALUE}");
+      String expr = "${" + parameterName + "}";
+      Object parameterValue = parameters.apply(parameterName, expr);
 
-      } else {
-        if (parameterValue instanceof Iterable) {
-          out.append(ObjectUtils.asString((Iterable<?>) parameterValue));
+      String valueAsStr = formatParam(parameterValue, optional, pattern, expr);
+      out.append(valueAsStr);
 
-        } else if (parameterValue.getClass().isArray()) {
-          out.append(ObjectUtils.asString(parameterValue));
-        } else {
-
-          if (StringUtils.isNullOrEmpty(pattern)) {
-            out.append(parameterValue.toString());
-          } else {
-
-            if (parameterValue instanceof Number) {
-              out.append(new DecimalFormat(pattern).format(parameterValue));
-
-            } else if (parameterValue instanceof java.util.Date) {
-              out.append(new SimpleDateFormat(pattern).format(parameterValue));
-
-            } else if (parameterValue instanceof TemporalAccessor) {
-              out.append(DateUtils.getFormatter(pattern).format((TemporalAccessor) parameterValue));
-
-            } else {
-              out.append(parameterValue.toString());
-            }
-          }
-        }
-      }
       prevEnd = matcher.end();
     }
     if (prevEnd < str.length()) {
@@ -148,7 +121,10 @@ public class STR {
     }
   }
 
-  private static final Pattern SEQ_HOLDER_PATTERN = Pattern.compile("\\{\s*(\\?\s*\\|\s*)?([^}\s]*)\s*}");
+  // "" or ? or pattern or ?|pattern
+
+  private static final Pattern SEQ_HOLDER_PATTERN = Pattern
+      .compile("\\{(\\s*|\\s*\\?\\s*|\\s*[^}\s][^}]*[^}\s]\\s*|\\s*\\?\\|[^}\s][^}]*[^}\s]\\s*)}");
 
   public static String fmt(String str, Object... entries) {
     if (str == null) {
@@ -162,11 +138,7 @@ public class STR {
     while (matcher.find()) {
 
       // Non entry
-      if (prevEnd == 0) {
-        out.append(str.substring(0, matcher.start()));
-      } else {
-        out.append(str.substring(prevEnd, matcher.start()));
-      }
+      out.append(str.substring(prevEnd, matcher.start()));
 
       // {}
       String parameterGroup = matcher.group();
@@ -176,20 +148,11 @@ public class STR {
       boolean optional = false;
 
       if (!parameter.isEmpty()) {
-
         if (parameter.charAt(0) == '?') {
-          if (parameter.length() == 1) {
-            optional = true;
+          optional = true;
 
-          } else {
-            String pt = parameter.substring(1).trim();
-            if ((pt.length() > 0) && (pt.charAt(0) == '|')) {
-
-              optional = true;
-              pattern = pt.substring(1).trim();
-            } else {
-              pattern = parameter;
-            }
+          if (parameter.length() > 1) {
+            pattern = parameter.substring(2);
           }
         } else {
           pattern = parameter;
@@ -198,42 +161,94 @@ public class STR {
 
       index++;
       Object entryValue = ((0 <= index) && (index < entries.length)) ? entries[index] : MISSED_VALUE;
+      String valueAsStr = formatParam(entryValue, optional, pattern, "{}");
+      out.append(valueAsStr);
 
-      if (entryValue == null || entryValue == MISSED_VALUE) {
-        out.append(optional ? "" : "{MISSED_VALUE}");
-
-      } else {
-        if (entryValue instanceof Iterable) {
-          out.append(ObjectUtils.asString((Iterable<?>) entryValue));
-
-        } else if (entryValue.getClass().isArray()) {
-          out.append(ObjectUtils.asString(entryValue));
-        } else {
-
-          if (StringUtils.isNullOrEmpty(pattern)) {
-            out.append(entryValue.toString());
-          } else {
-
-            if (entryValue instanceof Number) {
-              out.append(new DecimalFormat(pattern).format(entryValue));
-
-            } else if (entryValue instanceof java.util.Date) {
-              out.append(new SimpleDateFormat(pattern).format(entryValue));
-
-            } else if (entryValue instanceof TemporalAccessor) {
-              out.append(DateUtils.getFormatter(pattern).format((TemporalAccessor) entryValue));
-
-            } else {
-              out.append(entryValue.toString());
-            }
-          }
-        }
-      }
       prevEnd = matcher.end();
     }
     if (prevEnd < str.length()) {
       out.append(str.substring(prevEnd));
     }
     return out.toString();
+  }
+
+  public static StringFormat compile(String str) {
+    Asserts.notNull(str);
+
+    int outLen = 0;
+    List<StringFormat.Chunk> chunks = new ArrayList<>();
+
+    // ${paramName}
+    Matcher matcher = PARAM_HOLDER_PATTERN.matcher(str);
+
+    int prevEnd = 0;
+    while (matcher.find()) {
+
+      // Non parameter
+      String chunk = str.substring(prevEnd, matcher.start());
+      if (!chunk.isEmpty()) {
+        chunks.add(new StringFormat.Chunk(chunk, false, false, null, null));
+        outLen += chunk.length();
+      }
+
+      // ${paramName}
+      String parameterGroup = matcher.group();
+      String parameterName = parameterGroup.substring(parameterGroup.indexOf('{') + 1, parameterGroup.length() - 1)
+          .trim();
+
+      int idxVB = parameterName.indexOf('|');
+      String pattern = null;
+
+      if (idxVB > 0) {
+        pattern = parameterName.substring(idxVB + 1);
+        parameterName = parameterName.substring(0, idxVB);
+      }
+
+      boolean optional = parameterName.charAt(parameterName.length() - 1) == '?';
+      if (optional) {
+        parameterName = parameterName.substring(0, parameterName.length() - 1);
+      }
+
+      chunks.add(new StringFormat.Chunk(parameterName, true, optional, pattern, "${" + parameterName + "}"));
+      outLen += 16;
+      prevEnd = matcher.end();
+    }
+
+    if (prevEnd < str.length()) {
+      String chunk = str.substring(prevEnd);
+      if (!chunk.isEmpty()) {
+        chunks.add(new StringFormat.Chunk(chunk, false, false, null, null));
+        outLen += chunk.length();
+      }
+    }
+    return new StringFormat(outLen, chunks);
+  }
+
+  static String formatParam(Object paramValue, boolean optional, String pattern, String paramExpr) {
+    if (paramValue == null || paramValue == MISSED_VALUE) {
+      return optional ? "" : paramExpr;
+    }
+    if (paramValue.getClass() == String.class) {
+      return (String) paramValue;
+    }
+    if (paramValue instanceof Iterable) {
+      return ObjectUtils.asString((Iterable<?>) paramValue);
+    }
+    if (paramValue.getClass().isArray()) {
+      return ObjectUtils.asString(paramValue);
+    }
+    if (StringUtils.isNullOrEmpty(pattern)) {
+      return paramValue.toString();
+    }
+    if (paramValue instanceof Number) {
+      return new DecimalFormat(pattern).format(paramValue);
+    }
+    if (paramValue instanceof java.util.Date) {
+      return new SimpleDateFormat(pattern).format(paramValue);
+    }
+    if (paramValue instanceof TemporalAccessor) {
+      return DateUtils.getFormatter(pattern).format((TemporalAccessor) paramValue);
+    }
+    return paramValue.toString();
   }
 }

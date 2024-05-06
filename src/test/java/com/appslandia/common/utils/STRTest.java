@@ -37,7 +37,7 @@ public class STRTest {
   @Test
   public void test_map() {
     String msg = STR.format("this is ${p1} and ${p2}", new Params().set("p1", "v1").set("p2", null));
-    Assertions.assertEquals("this is v1 and ${MISSED_VALUE}", msg);
+    Assertions.assertEquals("this is v1 and ${p2}", msg);
 
     msg = STR.format("this is ${p1} and ${p2}", new Params().set("p1", "v1").set("p2", "v2"));
     Assertions.assertEquals("this is v1 and v2", msg);
@@ -58,7 +58,7 @@ public class STRTest {
   @Test
   public void test_array() {
     String msg = STR.format("this is ${0} and ${1}", "v1", null);
-    Assertions.assertEquals("this is v1 and ${MISSED_VALUE}", msg);
+    Assertions.assertEquals("this is v1 and ${1}", msg);
 
     msg = STR.format("this is ${0} and ${1}", "v1", "v2");
     Assertions.assertEquals("this is v1 and v2", msg);
@@ -79,7 +79,7 @@ public class STRTest {
   @Test
   public void test_fmt() {
     String msg = STR.fmt("this is {} and {}", "v1", null);
-    Assertions.assertEquals("this is v1 and {MISSED_VALUE}", msg);
+    Assertions.assertEquals("this is v1 and {}", msg);
 
     msg = STR.fmt("this is {} and {}", "v1", "v2");
     Assertions.assertEquals("this is v1 and v2", msg);
