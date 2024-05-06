@@ -101,7 +101,7 @@ public class STR {
       Object parameterValue = parameters.apply(paramName, expr);
 
       if (parameterValue == MISSED_VALUE) {
-        throw new IllegalArgumentException(STR.fmt("The parameter {} must be provided", expr));
+        throw new IllegalArgumentException(STR.fmt("The parameter {} must be provided.", expr));
       }
       if (parameterValue == null && !optional) {
         throw new IllegalArgumentException(STR.fmt("The parameter {} must be required.", expr));

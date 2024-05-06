@@ -45,7 +45,7 @@ public class StringFormat {
         Object parameterValue = parameters.apply(chunk.text, chunk.expr);
 
         if (parameterValue == STR.MISSED_VALUE) {
-          throw new IllegalArgumentException(STR.fmt("The parameter {} must be provided", chunk.expr));
+          throw new IllegalArgumentException(STR.fmt("The parameter {} must be provided.", chunk.expr));
         }
         if (parameterValue == null && !chunk.optional) {
           throw new IllegalArgumentException(STR.fmt("The parameter {} must be required.", chunk.expr));
