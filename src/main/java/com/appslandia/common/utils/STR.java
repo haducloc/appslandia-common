@@ -204,7 +204,7 @@ public class STR {
       // Non parameter
       String chunk = str.substring(prevEnd, matcher.start());
       if (!chunk.isEmpty()) {
-        chunks.add(new StringFormat.Chunk(chunk, false, null, null));
+        chunks.add(new StringFormat.Chunk(chunk, false, false, null, null));
         outLen += chunk.length();
       }
 
@@ -226,7 +226,7 @@ public class STR {
         parameterName = parameterName.substring(0, parameterName.length() - 1);
       }
 
-      chunks.add(new StringFormat.Chunk(parameterName, true, pattern, "${" + parameterName + "}"));
+      chunks.add(new StringFormat.Chunk(parameterName, true, optional, pattern, "${" + parameterName + "}"));
       outLen += 16;
       prevEnd = matcher.end();
     }
@@ -234,7 +234,7 @@ public class STR {
     if (prevEnd < str.length()) {
       String chunk = str.substring(prevEnd);
       if (!chunk.isEmpty()) {
-        chunks.add(new StringFormat.Chunk(chunk, false, null, null));
+        chunks.add(new StringFormat.Chunk(chunk, false, false, null, null));
         outLen += chunk.length();
       }
     }
