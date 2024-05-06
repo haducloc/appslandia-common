@@ -20,8 +20,6 @@
 
 package com.appslandia.common.utils;
 
-import java.time.LocalDate;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -37,61 +35,91 @@ public class STRTest {
   @Test
   public void test_map() {
     try {
-      STR.format("this is ${p1} and ${p2}", new Params().set("p1", "v1").set("p2", null));
-      Assertions.fail();
-    } catch (Exception e) {
+      String msg = STR.format("this is ${p1} and ${p2}", new Params().set("p1", "v1").set("p2", "v2"));
+      Assertions.assertEquals("this is v1 and v2", msg);
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
     }
-
-    String msg = STR.format("this is ${p1} and ${p2}", new Params().set("p1", "v1").set("p2", "v2"));
-    Assertions.assertEquals("this is v1 and v2", msg);
   }
 
-  @SuppressWarnings("el-syntax")
   @Test
   public void test_map_optional() {
     try {
       String msg = STR.format("this is ${p1} and ${p2?}", new Params().set("p1", "v1").set("p2", null));
       Assertions.assertEquals("this is v1 and ", msg);
-
     } catch (Exception ex) {
       Assertions.fail(ex.getMessage());
     }
   }
 
   @Test
-  public void test_array() {
+  public void test_map_missing() {
     try {
-      STR.format("this is ${0} and ${1}", "v1", null);
+      STR.format("this is ${p1} and ${p2}", new Params().set("p1", "v1"));
       Assertions.fail();
-    } catch (Exception e) {
-    }
 
-    String msg = STR.format("this is ${0} and ${1}", "v1", "v2");
-    Assertions.assertEquals("this is v1 and v2", msg);
+    } catch (Exception ex) {
+    }
   }
 
-  @SuppressWarnings("el-syntax")
   @Test
-  public void test_array_optional() {
+  public void test_map_required() {
+    try {
+      STR.format("this is ${p1} and ${p2}", new Params().set("p1", "v1").set("p2", null));
+      Assertions.fail();
+
+    } catch (Exception ex) {
+    }
+  }
+
+  @Test
+  public void test_params() {
+    try {
+      String msg = STR.format("this is ${0} and ${1}", "v1", "v2");
+      Assertions.assertEquals("this is v1 and v2", msg);
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
+
+  @Test
+  public void test_params_optional() {
     try {
       String msg = STR.format("this is ${0} and ${1?}", "v1", null);
       Assertions.assertEquals("this is v1 and ", msg);
-
     } catch (Exception ex) {
       Assertions.fail(ex.getMessage());
+    }
+  }
+
+  @Test
+  public void test_params_missing() {
+    try {
+      STR.format("this is ${0} and ${1}", "v1");
+      Assertions.fail();
+
+    } catch (Exception ex) {
+    }
+  }
+
+  @Test
+  public void test_params_required() {
+    try {
+      STR.format("this is ${0} and ${1}", "v1", null);
+      Assertions.fail();
+
+    } catch (Exception ex) {
     }
   }
 
   @Test
   public void test_fmt() {
     try {
-      STR.fmt("this is {} and {}", "v1", null);
-      Assertions.fail();
+      String msg = STR.fmt("this is {} and {}", "v1", "v2");
+      Assertions.assertEquals("this is v1 and v2", msg);
     } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
     }
-
-    String msg = STR.fmt("this is {} and {}", "v1", "v2");
-    Assertions.assertEquals("this is v1 and v2", msg);
   }
 
   @Test
@@ -99,33 +127,28 @@ public class STRTest {
     try {
       String msg = STR.fmt("this is {} and {?}", "v1", null);
       Assertions.assertEquals("this is v1 and ", msg);
-
     } catch (Exception ex) {
       Assertions.fail(ex.getMessage());
     }
   }
 
-  @SuppressWarnings("el-syntax")
   @Test
-  public void test_format_pattern() {
+  public void test_fmt_missing() {
     try {
-      String msg = STR.format("this is ${0|#,##0} and ${1|MM/dd/yyyy}", 12345, LocalDate.of(2023, 1, 1));
-      Assertions.assertEquals("this is 12,345 and 01/01/2023", msg);
+      STR.fmt("this is {} and {}", "v1");
+      Assertions.fail();
 
     } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
     }
   }
 
-  @SuppressWarnings("el-syntax")
   @Test
-  public void test_fmt_pattern() {
+  public void test_fmt_required() {
     try {
-      String msg = STR.fmt("this is {#,##0} and {MM/dd/yyyy}", 12345, LocalDate.of(2023, 1, 1));
-      Assertions.assertEquals("this is 12,345 and 01/01/2023", msg);
+      STR.fmt("this is {} and {}", "v1", null);
+      Assertions.fail();
 
     } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
     }
   }
 }

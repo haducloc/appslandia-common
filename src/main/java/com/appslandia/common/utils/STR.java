@@ -20,9 +20,6 @@
 
 package com.appslandia.common.utils;
 
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -40,11 +37,10 @@ public class STR {
   public static final Object MISSED_VALUE = new Object() {
   };
 
-  // ${paramName} or ${paramName?} or ${paramName|pattern} or
-  // ${paramName?|pattern}
+  // ${paramName} or ${paramName?}
 
-  private static final Pattern PARAM_HOLDER_PATTERN = Pattern
-      .compile("\\$\\{\\s*([a-z0-9_]+)(\\?)?(\\|[^}\s][^}]*)?\\s*}", Pattern.CASE_INSENSITIVE);
+  private static final Pattern PARAM_HOLDER_PATTERN = Pattern.compile("\\$\\{\\s*([a-z0-9_]+)(\\?)?\\s*}",
+      Pattern.CASE_INSENSITIVE);
 
   public static String format(String str, Map<String, Object> parameters) {
     if (str == null) {
@@ -93,25 +89,16 @@ public class STR {
       out.append(str.substring(prevEnd, matcher.start()));
 
       // ${paramName}
-      String parameterGroup = matcher.group();
-      String parameterName = parameterGroup.substring(parameterGroup.indexOf('{') + 1, parameterGroup.length() - 1)
-          .trim();
+      String paramGroup = matcher.group();
+      String paramName = paramGroup.substring(paramGroup.indexOf('{') + 1, paramGroup.length() - 1).trim();
 
-      int idxVB = parameterName.indexOf('|');
-      String pattern = null;
-
-      if (idxVB > 0) {
-        pattern = parameterName.substring(idxVB + 1);
-        parameterName = parameterName.substring(0, idxVB);
-      }
-
-      boolean optional = parameterName.charAt(parameterName.length() - 1) == '?';
+      boolean optional = paramName.charAt(paramName.length() - 1) == '?';
       if (optional) {
-        parameterName = parameterName.substring(0, parameterName.length() - 1);
+        paramName = paramName.substring(0, paramName.length() - 1);
       }
 
-      String expr = "${" + parameterName + "}";
-      Object parameterValue = parameters.apply(parameterName, expr);
+      String expr = "${" + paramName + "}";
+      Object parameterValue = parameters.apply(paramName, expr);
 
       if (parameterValue == MISSED_VALUE) {
         throw new IllegalArgumentException(STR.fmt("The parameter {} must be provided", expr));
@@ -120,7 +107,7 @@ public class STR {
         throw new IllegalArgumentException(STR.fmt("The parameter {} must be required.", expr));
       }
 
-      String valueAsStr = formatParam(parameterValue, pattern);
+      String valueAsStr = formatParam(parameterValue);
       out.append(valueAsStr);
 
       prevEnd = matcher.end();
@@ -130,10 +117,9 @@ public class STR {
     }
   }
 
-  // "" or ? or pattern or ?|pattern
+  // "" or ?
 
-  private static final Pattern SEQ_HOLDER_PATTERN = Pattern
-      .compile("\\{(\\s*|\\s*\\?\\s*|\\s*[^}\s][^}]*\\s*|\\s*\\?\\|[^}\s][^}]*\\s*)}");
+  private static final Pattern SEQ_HOLDER_PATTERN = Pattern.compile("\\{\\s*(\\?)?\\s*}");
 
   public static String fmt(String str, Object... entries) {
     if (str == null) {
@@ -150,23 +136,10 @@ public class STR {
       out.append(str.substring(prevEnd, matcher.start()));
 
       // {}
-      String parameterGroup = matcher.group();
-      String parameter = parameterGroup.substring(parameterGroup.indexOf('{') + 1, parameterGroup.length() - 1).trim();
+      String paramGroup = matcher.group();
+      String parameter = paramGroup.substring(paramGroup.indexOf('{') + 1, paramGroup.length() - 1).trim();
 
-      String pattern = null;
-      boolean optional = false;
-
-      if (!parameter.isEmpty()) {
-        if (parameter.charAt(0) == '?') {
-          optional = true;
-
-          if (parameter.length() > 1) {
-            pattern = parameter.substring(2);
-          }
-        } else {
-          pattern = parameter;
-        }
-      }
+      boolean optional = "?".equals(parameter);
 
       index++;
       Object entryValue = ((0 <= index) && (index < entries.length)) ? entries[index] : MISSED_VALUE;
@@ -178,7 +151,7 @@ public class STR {
         throw new IllegalArgumentException("The entry {} must be required.");
       }
 
-      String valueAsStr = formatParam(entryValue, pattern);
+      String valueAsStr = formatParam(entryValue);
       out.append(valueAsStr);
 
       prevEnd = matcher.end();
@@ -204,29 +177,20 @@ public class STR {
       // Non parameter
       String chunk = str.substring(prevEnd, matcher.start());
       if (!chunk.isEmpty()) {
-        chunks.add(new StringFormat.Chunk(chunk, false, false, null, null));
+        chunks.add(new StringFormat.Chunk(chunk, false, false, null));
         outLen += chunk.length();
       }
 
       // ${paramName}
-      String parameterGroup = matcher.group();
-      String parameterName = parameterGroup.substring(parameterGroup.indexOf('{') + 1, parameterGroup.length() - 1)
-          .trim();
+      String paramGroup = matcher.group();
+      String paramName = paramGroup.substring(paramGroup.indexOf('{') + 1, paramGroup.length() - 1).trim();
 
-      int idxVB = parameterName.indexOf('|');
-      String pattern = null;
-
-      if (idxVB > 0) {
-        pattern = parameterName.substring(idxVB + 1);
-        parameterName = parameterName.substring(0, idxVB);
-      }
-
-      boolean optional = parameterName.charAt(parameterName.length() - 1) == '?';
+      boolean optional = paramName.charAt(paramName.length() - 1) == '?';
       if (optional) {
-        parameterName = parameterName.substring(0, parameterName.length() - 1);
+        paramName = paramName.substring(0, paramName.length() - 1);
       }
 
-      chunks.add(new StringFormat.Chunk(parameterName, true, optional, pattern, "${" + parameterName + "}"));
+      chunks.add(new StringFormat.Chunk(paramName, true, optional, "${" + paramName + "}"));
       outLen += 16;
       prevEnd = matcher.end();
     }
@@ -234,37 +198,16 @@ public class STR {
     if (prevEnd < str.length()) {
       String chunk = str.substring(prevEnd);
       if (!chunk.isEmpty()) {
-        chunks.add(new StringFormat.Chunk(chunk, false, false, null, null));
+        chunks.add(new StringFormat.Chunk(chunk, false, false, null));
         outLen += chunk.length();
       }
     }
     return new StringFormat(outLen, chunks);
   }
 
-  static String formatParam(Object paramValue, String pattern) {
+  static String formatParam(Object paramValue) {
     if (paramValue == null) {
       return "";
-    }
-    if (paramValue.getClass() == String.class) {
-      return (String) paramValue;
-    }
-    if (paramValue instanceof Iterable) {
-      return ObjectUtils.asString((Iterable<?>) paramValue);
-    }
-    if (paramValue.getClass().isArray()) {
-      return ObjectUtils.asString(paramValue);
-    }
-    if (StringUtils.isNullOrEmpty(pattern)) {
-      return paramValue.toString();
-    }
-    if (paramValue instanceof Number) {
-      return new DecimalFormat(pattern).format(paramValue);
-    }
-    if (paramValue instanceof java.util.Date) {
-      return new SimpleDateFormat(pattern).format(paramValue);
-    }
-    if (paramValue instanceof TemporalAccessor) {
-      return DateUtils.getFormatter(pattern).format((TemporalAccessor) paramValue);
     }
     return paramValue.toString();
   }

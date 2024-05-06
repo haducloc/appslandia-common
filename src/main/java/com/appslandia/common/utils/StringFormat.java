@@ -42,7 +42,7 @@ public class StringFormat {
   public void format(BiFunction<String, String, Object> parameters, StringBuilder out) {
     for (Chunk chunk : this.chunks) {
       if (chunk.isParam) {
-        Object parameterValue = parameters.apply(chunk.value, chunk.expr);
+        Object parameterValue = parameters.apply(chunk.text, chunk.expr);
 
         if (parameterValue == STR.MISSED_VALUE) {
           throw new IllegalArgumentException(STR.fmt("The parameter {} must be provided", chunk.expr));
@@ -51,11 +51,11 @@ public class StringFormat {
           throw new IllegalArgumentException(STR.fmt("The parameter {} must be required.", chunk.expr));
         }
 
-        String valueAsStr = STR.formatParam(parameterValue, chunk.pattern);
+        String valueAsStr = STR.formatParam(parameterValue);
         out.append(valueAsStr);
 
       } else {
-        out.append(chunk.value);
+        out.append(chunk.text);
       }
     }
   }
@@ -86,19 +86,17 @@ public class StringFormat {
   }
 
   static class Chunk {
-    final String value;
+    final String text;
     final boolean isParam;
 
     final boolean optional;
-    final String pattern;
     final String expr;
 
-    public Chunk(String value, boolean isParam, boolean optional, String pattern, String expr) {
-      this.value = value;
+    public Chunk(String text, boolean isParam, boolean optional, String expr) {
+      this.text = text;
       this.isParam = isParam;
 
       this.optional = optional;
-      this.pattern = pattern;
       this.expr = expr;
     }
   }
