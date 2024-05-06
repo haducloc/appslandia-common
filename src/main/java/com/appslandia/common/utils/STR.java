@@ -44,7 +44,7 @@ public class STR {
   // ${paramName?|pattern}
 
   private static final Pattern PARAM_HOLDER_PATTERN = Pattern
-      .compile("\\$\\{\\s*([a-z0-9_]+)(\\?)?(\\|[^}\s][^}]*[^}\s])?\\s*}", Pattern.CASE_INSENSITIVE);
+      .compile("\\$\\{\\s*([a-z0-9_]+)(\\?)?(\\|[^}\s][^}]*)?\\s*}", Pattern.CASE_INSENSITIVE);
 
   public static String format(String str, Map<String, Object> parameters) {
     if (str == null) {
@@ -133,7 +133,7 @@ public class STR {
   // "" or ? or pattern or ?|pattern
 
   private static final Pattern SEQ_HOLDER_PATTERN = Pattern
-      .compile("\\{(\\s*|\\s*\\?\\s*|\\s*[^}\s][^}]*[^}\s]\\s*|\\s*\\?\\|[^}\s][^}]*[^}\s]\\s*)}");
+      .compile("\\{(\\s*|\\s*\\?\\s*|\\s*[^}\s][^}]*\\s*|\\s*\\?\\|[^}\s][^}]*\\s*)}");
 
   public static String fmt(String str, Object... entries) {
     if (str == null) {
