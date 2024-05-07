@@ -67,6 +67,7 @@ public class TokenGenerator extends InitializeObject implements TextGenerator {
 
   @Override
   public boolean verify(String value) {
+    initialize();
     Asserts.notNull(value);
     if (value.length() != this.length) {
       return false;
