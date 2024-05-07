@@ -61,10 +61,14 @@ public class GroupFormatTest {
   @Test
   public void test_noGroup() {
     try {
-      new GroupFormat("()");
-      Assertions.fail();
+      GroupFormat format = new GroupFormat("ABC-123");
+      Assertions.assertEquals(0, format.getInputLength());
+
+      String result = format.format("XYZ");
+      Assertions.assertEquals("XYZ", result);
 
     } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
     }
   }
 

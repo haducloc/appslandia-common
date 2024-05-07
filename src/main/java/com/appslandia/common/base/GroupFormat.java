@@ -56,36 +56,42 @@ public class GroupFormat {
 
   private void parseFormat(String format) {
     Matcher matcher = GROUP_PATTERN.matcher(format);
-    List<Group> list = new ArrayList<>();
+    List<Group> groups = new ArrayList<>();
 
     int inputLength = 0;
     int outputLength = 0;
-    int lastEnd = 0;
 
+    int prevEnd = 0;
     while (matcher.find()) {
-      int start = matcher.start();
-      if (start > 0) {
-        String text = format.substring(lastEnd, start);
-        if (!text.isEmpty()) {
-          list.add(new Group(text, 0));
-          outputLength += text.length();
-        }
+
+      // Non group
+      String chunk = format.substring(prevEnd, matcher.start());
+      if (!chunk.isEmpty()) {
+        groups.add(new Group(chunk, 0));
+        outputLength += chunk.length();
       }
-      // {d+}
-      String sizeGroup = matcher.group();
-      int size = Integer.parseInt(sizeGroup.substring(1, sizeGroup.length() - 1).trim());
 
-      Asserts.isTrue(size > 0, () -> STR.fmt("The format '{}' is invalid.", format));
+      // {\d+}
+      String paramGroup = matcher.group();
+      String paramLen = paramGroup.substring(paramGroup.indexOf('{') + 1, paramGroup.length() - 1).trim();
+      int groupLen = Integer.parseInt(paramLen);
 
-      inputLength += size;
-      outputLength += size;
+      groups.add(new Group(null, groupLen));
+      inputLength += groupLen;
 
-      list.add(new Group(null, size));
-      lastEnd = matcher.end();
+      prevEnd = matcher.end();
     }
-    Asserts.isTrue(!list.isEmpty(), () -> STR.fmt("The format '{}' is invalid.", format));
 
-    this.groups = list.toArray(new Group[list.size()]);
+    if (prevEnd < format.length()) {
+      String chunk = format.substring(prevEnd);
+      if (!chunk.isEmpty()) {
+        groups.add(new Group(chunk, 0));
+        outputLength += chunk.length();
+      }
+    }
+    Asserts.isTrue(!groups.isEmpty(), () -> STR.fmt("The format '{}' is invalid.", format));
+
+    this.groups = groups.toArray(new Group[groups.size()]);
     this.inputLength = inputLength;
     this.outputLength = outputLength;
   }
@@ -101,6 +107,9 @@ public class GroupFormat {
   public String format(String str) {
     if (str == null) {
       return null;
+    }
+    if (this.inputLength == 0) {
+      return str;
     }
     if (str.length() != this.inputLength) {
       if (this.validate) {
