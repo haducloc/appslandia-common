@@ -73,9 +73,6 @@ public class CharUtils {
 
     // STEP1: Fill rdChars for rdCount [1, avgLen] positions
     for (int srcIndex = 0; srcIndex < sources.length; srcIndex++) {
-      if (rdLen >= len) {
-        break;
-      }
       int rdCount = RandomUtils.nextInt(1, avgLen, random);
 
       for (int i = 0; i < rdCount; i++) {
