@@ -71,14 +71,17 @@ public class CharUtils {
 
     int rdLen = 0;
 
-    // STEP1: Fill rdChars for rdCount [1, avgLen] positions
+    // STEP1: Fill rdChars equally from each source
     for (int srcIndex = 0; srcIndex < sources.length; srcIndex++) {
+      char[] src = sources[srcIndex];
       int rdCount = RandomUtils.nextInt(1, avgLen, random);
 
       for (int i = 0; i < rdCount; i++) {
-        rdChars[rdLen + i] = sources[srcIndex][random.nextInt(sources[srcIndex].length)];
+        if (rdLen + i < len) {
+          rdChars[rdLen + i] = src[random.nextInt(src.length)];
+          rdLen += 1;
+        }
       }
-      rdLen += rdCount;
     }
 
     // STEP2: Fill unfilled positions
@@ -88,9 +91,12 @@ public class CharUtils {
           continue;
         }
         int srcIndex = random.nextInt(sources.length);
-        rdChars[i] = sources[srcIndex][random.nextInt(sources[srcIndex].length)];
+        char[] src = sources[srcIndex];
+        rdChars[i] = src[random.nextInt(src.length)];
       }
     }
+
+    // STEP3: shuffle
     ArrayUtils.shuffle(rdChars, random);
     return rdChars;
   }

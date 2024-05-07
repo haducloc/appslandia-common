@@ -41,10 +41,8 @@ public class PasswordTest {
     Set<?> errors = ValidatorUtils.getValidator().validate(m);
     Assertions.assertTrue(errors.isEmpty());
 
-    final PasswordUtil passwordGenerator = new PasswordUtil();
-
     for (int i = 1; i < 1000; i++) {
-      m.password = new String(passwordGenerator.generatePassword(8, 32));
+      m.password = new String(PasswordUtil.generatePassword(8, 32));
 
       errors = ValidatorUtils.getValidator().validate(m);
       Assertions.assertTrue(errors.isEmpty());

@@ -35,7 +35,7 @@ public class URLEncodingTest {
 
   @Test
   public void test_encodeParam() {
-    String s = new String(PasswordUtil.generatePassword(1024));
+    String s = new String(PasswordUtil.generatePassword(512, 1024));
 
     String enc = URLEncoding.encodeParam(s);
     String dec = URLEncoding.decodeParam(enc);
@@ -67,7 +67,7 @@ public class URLEncodingTest {
 
   @Test
   public void test_encodePath() {
-    String s = new String(PasswordUtil.generatePassword(1024));
+    String s = new String(PasswordUtil.generatePassword(512, 1024));
 
     String enc = URLEncoding.encodePath(s);
     String dec = URLEncoding.decodePath(enc);

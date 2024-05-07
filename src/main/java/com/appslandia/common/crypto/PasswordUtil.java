@@ -55,7 +55,7 @@ public class PasswordUtil {
     static final Random instance = new SecureRandom();
   }
 
-  public char[] generatePassword(int minLength, int maxLength) {
+  public static char[] generatePassword(int minLength, int maxLength) {
     Asserts.isTrue(minLength <= maxLength, "minLength <= maxLength");
     Asserts.isTrue(minLength >= 8, "minLength >= 8");
 
@@ -66,9 +66,5 @@ public class PasswordUtil {
   public static boolean isValid(String password) {
     Asserts.notNull(password);
     return PASSWORD_PATTERN.matcher(password).matches();
-  }
-
-  public static char[] generatePassword(int length) {
-    return new PasswordUtil().generatePassword(length, length);
   }
 }

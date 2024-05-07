@@ -32,9 +32,7 @@ public class PasswordUtilTest {
 
   @Test
   public void test() {
-    final PasswordUtil impl = new PasswordUtil();
-
-    String password = new String(impl.generatePassword(8, 32));
+    String password = new String(PasswordUtil.generatePassword(8, 32));
     Assertions.assertTrue(PasswordUtil.isValid(password));
   }
 }
