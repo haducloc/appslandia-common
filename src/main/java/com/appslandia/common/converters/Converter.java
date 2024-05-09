@@ -113,6 +113,7 @@ public interface Converter<T> {
   public static final String OFFSET_DATETIME_N7 = "OffsetDateTimeN7";
 
   public static final String BOOLEAN = "Boolean";
+  public static final String UUID = "UUID";
 
   public static final String STRING = "String";
   public static final String STRING_UC = "StringUC";

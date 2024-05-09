@@ -78,6 +78,7 @@ public class ConverterProvider extends InitializeObject {
     this.converters.putIfAbsent(Converter.BIGDECIMAL8, new BigDecimalConverter(8));
 
     this.converters.putIfAbsent(Converter.BOOLEAN, new BooleanConverter());
+    this.converters.putIfAbsent(Converter.UUID, new UUIDConverter());
 
     this.converters.putIfAbsent(Converter.STRING, new StringConverter());
     this.converters.putIfAbsent(Converter.STRING_UC, new ULCStringConverter(true, Locale.ROOT));
