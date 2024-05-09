@@ -33,37 +33,22 @@ public class UUIDGenerator implements TextGenerator {
 
   public static final UUIDGenerator INSTANCE = new UUIDGenerator();
 
-  static final GroupFormat UUID_FORMAT = new GroupFormat("{8}-{4}-{4}-{4}-{12}");
-
   @Override
   public String generate() {
-    UUID uuid = UUID.randomUUID();
-    // @formatter:off
-		return (digits(uuid.getMostSignificantBits() >> 32, 8)
-				+ digits(uuid.getMostSignificantBits() >> 16, 4)
-				+ digits(uuid.getMostSignificantBits(), 4)
-				+ digits(uuid.getLeastSignificantBits() >> 48, 4)
-				+ digits(uuid.getLeastSignificantBits(), 12));
-		// @formatter:on
+    return UUID.randomUUID().toString();
   }
 
   @Override
   public boolean verify(String value) {
     Asserts.notNull(value);
-    if (value.length() != 32) {
+    if (value.length() != 36) {
       return false;
     }
     try {
-      String uuid = UUID_FORMAT.format(value);
-      UUID.fromString(uuid);
+      UUID.fromString(value);
       return true;
     } catch (IllegalArgumentException ex) {
       return false;
     }
-  }
-
-  private static String digits(long val, int digits) {
-    long hi = 1L << (digits * 4);
-    return Long.toHexString(hi | (val & (hi - 1))).substring(1);
   }
 }
