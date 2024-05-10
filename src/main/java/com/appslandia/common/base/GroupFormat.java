@@ -113,7 +113,8 @@ public class GroupFormat {
     }
     if (str.length() != this.inputLength) {
       if (this.validate) {
-        throw new IllegalArgumentException(STR.fmt("The given string '{}' has an invalid length for formatting.", str));
+        throw new IllegalArgumentException(
+            STR.fmt("The given string '{}' must have {} length to be formatted.", str, this.inputLength));
       }
       return str;
     }
