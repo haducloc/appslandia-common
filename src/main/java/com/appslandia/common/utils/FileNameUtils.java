@@ -88,16 +88,16 @@ public class FileNameUtils {
     return (extra != null) ? (namePart + '-' + extra + '.' + extPart) : (namePart + '.' + extPart);
   }
 
-  public static String toNewFileName(String fileNameWithoutExt, String fileNameToUseExt) {
-    Asserts.notNull(fileNameToUseExt);
+  public static String toNewFileName(String oldFileName, String newNameNoExt) {
+    Asserts.notNull(oldFileName);
 
-    if (!isValidFileName(fileNameToUseExt)) {
+    if (!isValidFileName(oldFileName)) {
       return null;
     }
-    int lastDotIndex = fileNameToUseExt.lastIndexOf('.');
-    String extPart = fileNameToUseExt.substring(lastDotIndex).toLowerCase(Locale.ROOT);
+    int lastDotIndex = oldFileName.lastIndexOf('.');
+    String extPart = oldFileName.substring(lastDotIndex).toLowerCase(Locale.ROOT);
 
-    return fileNameWithoutExt + extPart;
+    return newNameNoExt + extPart;
   }
 
   public static String toUnixPath(String path) {
