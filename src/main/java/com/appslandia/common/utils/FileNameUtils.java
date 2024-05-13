@@ -67,6 +67,10 @@ public class FileNameUtils {
     return toFileName(fileName, UUIDGenerator.INSTANCE.generate());
   }
 
+  public static String toFileName(String fileName) {
+    return toFileName(fileName, null);
+  }
+
   public static String toFileName(String fileName, Object extra) {
     Asserts.notNull(fileName);
 
