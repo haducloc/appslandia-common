@@ -53,7 +53,7 @@ public @interface Nickname {
   Class<? extends Payload>[] payload() default {};
 
   // contains a-z and 0-9
-  // start with a-z
+  // start with a-z, followed by zero or more digits
   // length 3-45
 
   static final Pattern NICKNAME_PATTERN = Pattern.compile("^(?=.{3,45}$)[a-z]{1,}[\\d]*$", Pattern.CASE_INSENSITIVE);
