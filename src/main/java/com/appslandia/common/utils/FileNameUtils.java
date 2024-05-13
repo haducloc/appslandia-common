@@ -39,9 +39,7 @@ public class FileNameUtils {
   private static final Pattern VALID_EXTENSION_PATTERN = Pattern.compile("[a-z\\d]+", Pattern.CASE_INSENSITIVE);
 
   private static boolean isValidFileName(String fileName) {
-    if (fileName.isEmpty()) {
-      return false;
-    }
+    Asserts.notNull(fileName);
 
     int lastDotIndex = fileName.lastIndexOf('.');
     if (lastDotIndex <= 0 || lastDotIndex == fileName.length() - 1) {
@@ -84,6 +82,18 @@ public class FileNameUtils {
 
     String extPart = fileName.substring(lastDotIndex + 1).toLowerCase(Locale.ROOT);
     return (extra != null) ? (namePart + '-' + extra + '.' + extPart) : (namePart + '.' + extPart);
+  }
+
+  public static String toNewFileName(String fileNameWithoutExt, String fileNameToUseExt) {
+    Asserts.notNull(fileNameToUseExt);
+
+    if (!isValidFileName(fileNameToUseExt)) {
+      return null;
+    }
+    int lastDotIndex = fileNameToUseExt.lastIndexOf('.');
+    String extPart = fileNameToUseExt.substring(lastDotIndex).toLowerCase(Locale.ROOT);
+
+    return fileNameWithoutExt + extPart;
   }
 
   public static String toUnixPath(String path) {
