@@ -30,7 +30,6 @@ import com.appslandia.common.crypto.SecureProps;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.ExceptionUtils;
-import com.appslandia.common.utils.ParseUtils;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.Session;
@@ -75,15 +74,15 @@ public class SmtpMailer extends InitializeObject {
 
     try (Transport transport = this.session.getTransport("smtp")) {
 
-      String user = Asserts.notNull(this.props.get("mail.smtp.user"), "mail.smtp.user is required.");
-      String password = Asserts.notNull(this.props.get("mail.smtp.password"), "mail.smtp.password is required.");
+      String user = this.props.getString("mail.smtp.user");
+      String password = this.props.getString("mail.smtp.password");
       transport.connect(user, password);
 
       String debugToEmails = null;
-      if (ParseUtils.isTrueValue(this.props.get("mail.smtp.debug.enabled"))) {
-        debugToEmails = Asserts.notNull(this.props.get("mail.smtp.debug.to_emails"),
-            "mail.smtp.debug.to_emails is required.");
+      if (this.props.getBool("mail.smtp.debug.enabled", true)) {
+        debugToEmails = this.props.getStringReq("mail.smtp.debug.to_emails");
       }
+
       for (MailerMessage mailerMessage : messages) {
         MimeMessage message = mailerMessage.toMimeMessage(this, debugToEmails);
         message.saveChanges();
@@ -119,6 +118,22 @@ public class SmtpMailer extends InitializeObject {
     });
   }
 
+  /**
+   * <ul>
+   * <li>mail.smtp.host=smtp.example.com</li>
+   * <li>mail.smtp.port=587</li>
+   * <li>mail.smtp.username=your-email@example.com</li>
+   * <li>mail.smtp.password=your-email-password</li>
+   * <li>mail.smtp.auth=true</li>
+   * <li>mail.smtp.starttls.enable=true</li>
+   * 
+   * <li>mail.smtp.debug.enabled=true</li>
+   * <li>mail.smtp.debug.to_emails=to-email@example.com</li>
+   * </ul>
+   * 
+   * @param props
+   * @return
+   */
   public SmtpMailer setProps(SecureProps props) {
     assertNotInitialized();
     this.props = props;
