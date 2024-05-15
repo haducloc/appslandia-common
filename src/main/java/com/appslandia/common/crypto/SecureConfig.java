@@ -45,10 +45,10 @@ public class SecureConfig extends PropertyConfig {
         new PbeAesEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(32).setPassword(password));
   }
 
-  public SecureConfig(String password) {
-    Asserts.notNull(password);
+  public SecureConfig(String passwordOrEnv) {
+    Asserts.notNull(passwordOrEnv);
     this.textEncryptor = new TextEncryptor(
-        new PbeAesEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(32).setPassword(password));
+        new PbeAesEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(32).setPassword(passwordOrEnv));
   }
 
   public SecureConfig(Encryptor encryptor) {
