@@ -39,8 +39,8 @@ public class STR {
 
   // ${paramName} or ${paramName?}
 
-  private static final Pattern PARAM_HOLDER_PATTERN = Pattern.compile("\\$\\{\\s*([a-z0-9_]+)(\\?)?\\s*}",
-      Pattern.CASE_INSENSITIVE);
+  private static final Pattern PARAM_HOLDER_PATTERN = Pattern
+      .compile("\\$\\{\\s*(?!.*\\.\\.)(?!.*\\.$)[a-z\\d][a-z\\d_.]*(\\?)?\\s*}", Pattern.CASE_INSENSITIVE);
 
   public static String format(String str, Map<String, Object> parameters) {
     if (str == null) {
