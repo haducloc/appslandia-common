@@ -31,8 +31,13 @@ import java.util.logging.Logger;
 public class JulAppLoggerManager extends AppLoggerManager {
 
   @Override
-  protected AppLogger createAppLogger(String name) {
+  public AppLogger getAppLogger(String name) {
     return new JulAppLogger(Logger.getLogger(name));
+  }
+
+  @Override
+  public AppLogger getAppLogger(Class<?> forClass) {
+    return new JulAppLogger(Logger.getLogger(forClass.getName()));
   }
 
   static class JulAppLogger implements AppLogger {

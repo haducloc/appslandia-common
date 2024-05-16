@@ -43,15 +43,20 @@ public class Log4JAppLoggerManager extends AppLoggerManager {
   }
 
   @Override
+  public AppLogger getAppLogger(String name) {
+    return new Log4JAppLogger(LogManager.getLogger(name));
+  }
+
+  @Override
+  public AppLogger getAppLogger(Class<?> forClass) {
+    return new Log4JAppLogger(LogManager.getLogger(forClass));
+  }
+
+  @Override
   public void close() {
     if (this.shutdownOnClose) {
       LogManager.shutdown();
     }
-  }
-
-  @Override
-  protected AppLogger createAppLogger(String name) {
-    return new Log4JAppLogger(LogManager.getLogger(name));
   }
 
   static class Log4JAppLogger implements AppLogger {
@@ -118,7 +123,6 @@ public class Log4JAppLoggerManager extends AppLoggerManager {
       if (level == org.apache.logging.log4j.Level.ERROR) {
         return this.logger.isErrorEnabled();
       }
-
       // OFF
       return false;
     }

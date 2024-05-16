@@ -20,9 +20,6 @@
 
 package com.appslandia.common.logging;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
@@ -30,28 +27,9 @@ import java.util.Map;
  */
 public abstract class AppLoggerManager {
 
-  final Map<String, AppLogger> loggers = new HashMap<>();
-  final Object mutex = new Object();
+  public abstract AppLogger getAppLogger(String name);
 
-  public AppLogger getAppLogger(String name) {
-    AppLogger logger = this.loggers.get(name);
-    if (logger == null) {
-      synchronized (this.mutex) {
-        if ((logger = this.loggers.get(name)) == null) {
-
-          logger = createAppLogger(name);
-          this.loggers.put(name, logger);
-        }
-      }
-    }
-    return logger;
-  }
-
-  public AppLogger getAppLogger(Class<?> clazz) {
-    return getAppLogger(clazz.getName());
-  }
-
-  protected abstract AppLogger createAppLogger(String name);
+  public abstract AppLogger getAppLogger(Class<?> forClass);
 
   public void close() {
   }
