@@ -39,9 +39,9 @@ public interface AppLogger {
 
   void log(Level level, String message, Throwable exception);
 
-  void log(Level level, Supplier<String> msgSupplier);
+  void log(Level level, Supplier<String> message);
 
-  void log(Level level, Supplier<String> msgSupplier, Throwable exception);
+  void log(Level level, Supplier<String> message, Throwable exception);
 
   default void trace(String message) {
     log(Level.TRACE, message);
