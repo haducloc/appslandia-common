@@ -84,18 +84,18 @@ public class Log4JAppLoggerManager extends AppLoggerManager {
     }
 
     @Override
-    public void log(Level level, Supplier<String> msgSupplier) {
+    public void log(Level level, Supplier<String> message) {
       org.apache.logging.log4j.Level l = toImplLevel(level);
       if (isLoggable(l)) {
-        this.logger.log(l, msgSupplier);
+        this.logger.log(l, message.get());
       }
     }
 
     @Override
-    public void log(Level level, Supplier<String> msgSupplier, Throwable exception) {
+    public void log(Level level, Supplier<String> message, Throwable exception) {
       org.apache.logging.log4j.Level l = toImplLevel(level);
       if (isLoggable(l)) {
-        this.logger.log(l, msgSupplier, exception);
+        this.logger.log(l, message.get(), exception);
       }
     }
 
