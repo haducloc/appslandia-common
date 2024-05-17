@@ -26,7 +26,7 @@ package com.appslandia.common.base;
  *
  */
 @FunctionalInterface
-public interface ExceptionBlock {
+public interface ExceptionScoped {
 
   void run() throws Exception;
 }
