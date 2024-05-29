@@ -149,7 +149,7 @@ public class SimpleConfig implements Config {
   @Override
   public String toString() {
     try {
-      StringWriter out = new StringWriter();
+      StringWriter out = new StringWriter(this.cfg.size() * 64);
       store(out, getClass().getName());
 
       return out.toString();
