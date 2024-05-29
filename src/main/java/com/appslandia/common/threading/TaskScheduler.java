@@ -53,7 +53,7 @@ public abstract class TaskScheduler {
     ScheduledTask scheduledTask = this.scheduledTasks.remove(taskId);
     Asserts.notNull(scheduledTask);
 
-    return scheduledTask.future.cancel(scheduledTask.attributes.isInterruptThreadOnCancel());
+    return scheduledTask.future.cancel(scheduledTask.attributes.mayInterruptIfRunningOnCancel());
   }
 
   public List<TaskAttributes> getScheduledTasks() {

@@ -39,7 +39,7 @@ public interface TaskAttributes {
     return null;
   }
 
-  default boolean isInterruptThreadOnCancel() {
+  default boolean mayInterruptIfRunningOnCancel() {
     return true;
   }
 }
