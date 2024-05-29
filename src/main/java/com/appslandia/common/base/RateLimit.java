@@ -36,15 +36,15 @@ import com.appslandia.common.utils.STR;
 public class RateLimit implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  final double accesses;
+  final int accesses;
   final long windowsMs;
 
-  public RateLimit(double accesses, long windowsMs) {
+  public RateLimit(int accesses, long windowsMs) {
     this.accesses = accesses;
     this.windowsMs = windowsMs;
   }
 
-  public double getAccesses() {
+  public long getAccesses() {
     return this.accesses;
   }
 
@@ -53,7 +53,7 @@ public class RateLimit implements Serializable {
   }
 
   public double getRatePerMs() {
-    return this.accesses / this.windowsMs;
+    return 1.0 * this.accesses / this.windowsMs;
   }
 
   @Override
@@ -61,17 +61,18 @@ public class RateLimit implements Serializable {
     return STR.fmt("RateLimit: accesses={}, windowsMs={}", this.accesses, this.windowsMs);
   }
 
-  static final Pattern RATE_LIMIT_PATTERN = Pattern.compile("(\\d+.\\d+|\\d+)\\s*/\\s*\\d+(w|d|h|m|s|ms)",
+  static final Pattern RATE_LIMIT_PATTERN = Pattern.compile("\\d+\\s*/\\s*\\d+(w|d|h|m|s|ms)",
       Pattern.CASE_INSENSITIVE);
 
   public static RateLimit parse(String rateLimit) {
     Asserts.notNull(rateLimit);
-    Asserts.isTrue(RATE_LIMIT_PATTERN.matcher(rateLimit).matches(),
-        () -> STR.fmt("rateLimit '{}' is invalid.", rateLimit));
+
+    if (!RATE_LIMIT_PATTERN.matcher(rateLimit).matches()) {
+      throw new IllegalArgumentException(STR.fmt("rateLimit '{}' is invalid.", rateLimit));
+    }
 
     int idx = rateLimit.indexOf('/');
-
-    double accesses = Double.parseDouble(rateLimit.substring(0, idx).trim());
+    int accesses = Integer.parseInt(rateLimit.substring(0, idx).trim());
     long windowsMs = DateUtils.translateToMs(rateLimit.substring(idx + 1).trim());
 
     return new RateLimit(accesses, windowsMs);
