@@ -20,6 +20,8 @@
 
 package com.appslandia.common.base;
 
+import java.math.BigDecimal;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -30,20 +32,158 @@ import org.junit.jupiter.api.Test;
  */
 public class SimpleConfigTest {
 
-  @Test
-  public void test() {
-    SimpleConfig config = new SimpleConfig();
-    config.set("config", "value");
-
-    Assertions.assertEquals("value", config.getString("config"));
-  }
+  final String NON_EXISTENT_KEY = "key-" + System.currentTimeMillis();
 
   @Test
   public void test_empty() {
     SimpleConfig config = new SimpleConfig();
-    config.set("config", "");
+    config.set("key1", "");
 
-    Assertions.assertEquals("", config.getString("config"));
+    Assertions.assertEquals("", config.getString("key1"));
+  }
+
+  @Test
+  public void test_getString() {
+    SimpleConfig config = new SimpleConfig();
+    config.set("key1", "value1");
+    Assertions.assertEquals("value1", config.getString("key1"));
+    Assertions.assertEquals("default", config.getString(NON_EXISTENT_KEY, "default"));
+  }
+
+  @Test
+  public void test_getStringReq() {
+    SimpleConfig config = new SimpleConfig();
+    config.set("key1", "value1");
+    Assertions.assertEquals("value1", config.getStringReq("key1"));
+    Assertions.assertThrows(AssertException.class, () -> config.getStringReq(NON_EXISTENT_KEY));
+  }
+
+  @Test
+  public void test_getStringArray() {
+    SimpleConfig config = new SimpleConfig();
+    config.set("key1", "value1,value2,value3");
+    Assertions.assertArrayEquals(new String[] { "value1", "value2", "value3" }, config.getStringArray("key1"));
+    Assertions.assertArrayEquals(new String[] {}, config.getStringArray(NON_EXISTENT_KEY));
+  }
+
+  @Test
+  public void test_getBool() {
+    SimpleConfig config = new SimpleConfig();
+    config.set("key1", "true");
+    Assertions.assertTrue(config.getBool("key1"));
+    Assertions.assertFalse(config.getBool(NON_EXISTENT_KEY, false));
+  }
+
+  @Test
+  public void test_getBoolReq() {
+    SimpleConfig config = new SimpleConfig();
+    config.set("key1", "true");
+    Assertions.assertTrue(config.getBool("key1"));
+    Assertions.assertThrows(AssertException.class, () -> config.getBool(NON_EXISTENT_KEY));
+  }
+
+  @Test
+  public void test_getBoolOpt() {
+    SimpleConfig config = new SimpleConfig();
+    config.set("key1", "true");
+    Assertions.assertTrue(config.getBoolOpt("key1"));
+    Assertions.assertNull(config.getBoolOpt(NON_EXISTENT_KEY));
+  }
+
+  @Test
+  public void test_getInt() {
+    SimpleConfig config = new SimpleConfig();
+    config.set("key1", "42");
+    Assertions.assertEquals(42, config.getInt("key1"));
+    Assertions.assertEquals(-1, config.getInt(NON_EXISTENT_KEY, -1));
+  }
+
+  @Test
+  public void test_getIntReq() {
+    SimpleConfig config = new SimpleConfig();
+    config.set("key1", "42");
+    Assertions.assertEquals(42, config.getInt("key1"));
+    Assertions.assertThrows(AssertException.class, () -> config.getInt(NON_EXISTENT_KEY));
+  }
+
+  @Test
+  public void test_getIntOpt() {
+    SimpleConfig config = new SimpleConfig();
+    config.set("key1", "42");
+    Assertions.assertEquals(Integer.valueOf(42), config.getIntOpt("key1"));
+    Assertions.assertNull(config.getIntOpt(NON_EXISTENT_KEY));
+  }
+
+  @Test
+  public void test_getLong() {
+    SimpleConfig config = new SimpleConfig();
+    config.set("key1", "123456789012345");
+    Assertions.assertEquals(123456789012345L, config.getLong("key1"));
+    Assertions.assertEquals(-1L, config.getLong(NON_EXISTENT_KEY, -1L));
+  }
+
+  @Test
+  public void test_getLongReq() {
+    SimpleConfig config = new SimpleConfig();
+    config.set("key1", "123456789012345");
+    Assertions.assertEquals(123456789012345L, config.getLong("key1"));
+    Assertions.assertThrows(AssertException.class, () -> config.getLong(NON_EXISTENT_KEY));
+  }
+
+  @Test
+  public void test_getLongOpt() {
+    SimpleConfig config = new SimpleConfig();
+    config.set("key1", "123456789012345");
+    Assertions.assertEquals(Long.valueOf(123456789012345L), config.getLongOpt("key1"));
+    Assertions.assertNull(config.getLongOpt(NON_EXISTENT_KEY));
+  }
+
+  @Test
+  public void test_getDouble() {
+    SimpleConfig config = new SimpleConfig();
+    config.set("key1", "3.14");
+    Assertions.assertEquals(3.14, config.getDouble("key1"));
+    Assertions.assertEquals(-1.0, config.getDouble(NON_EXISTENT_KEY, -1.0));
+  }
+
+  @Test
+  public void test_getDoubleReq() {
+    SimpleConfig config = new SimpleConfig();
+    config.set("key1", "3.14");
+    Assertions.assertEquals(3.14, config.getDouble("key1"));
+    Assertions.assertThrows(AssertException.class, () -> config.getDouble(NON_EXISTENT_KEY));
+  }
+
+  @Test
+  public void test_getDoubleOpt() {
+    SimpleConfig config = new SimpleConfig();
+    config.set("key1", "3.14");
+    Assertions.assertEquals(Double.valueOf(3.14), config.getDoubleOpt("key1"));
+    Assertions.assertNull(config.getDoubleOpt(NON_EXISTENT_KEY));
+  }
+
+  @Test
+  public void test_getDecimal() {
+    SimpleConfig config = new SimpleConfig();
+    config.set("key1", "3.14");
+    Assertions.assertEquals(new BigDecimal("3.14"), config.getDecimal("key1", 0.0d));
+    Assertions.assertEquals(new BigDecimal("-1.0"), config.getDecimal(NON_EXISTENT_KEY, -1.0d));
+  }
+
+  @Test
+  public void test_getDecimalReq() {
+    SimpleConfig config = new SimpleConfig();
+    config.set("key1", "3.14");
+    Assertions.assertEquals(new BigDecimal("3.14"), config.getDecimalReq("key1"));
+    Assertions.assertThrows(AssertException.class, () -> config.getDecimalReq(NON_EXISTENT_KEY));
+  }
+
+  @Test
+  public void test_getDecimalOpt() {
+    SimpleConfig config = new SimpleConfig();
+    config.set("key1", "3.14");
+    Assertions.assertEquals(new BigDecimal("3.14"), config.getDecimalOpt("key1"));
+    Assertions.assertNull(config.getDecimalOpt(NON_EXISTENT_KEY));
   }
 
   @Test
@@ -57,7 +197,7 @@ public class SimpleConfigTest {
   }
 
   @Test
-  public void test_resolve_map() {
+  public void test_resolve_params() {
     SimpleConfig config = new SimpleConfig();
     config.set("user", "user1");
     config.set("db", "db1");
