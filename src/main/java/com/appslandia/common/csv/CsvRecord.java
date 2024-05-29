@@ -41,6 +41,7 @@ import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.ParseUtils;
 import com.appslandia.common.utils.STR;
+import com.appslandia.common.utils.StringUtils;
 
 /**
  *
@@ -99,10 +100,8 @@ public class CsvRecord {
   }
 
   public String getStringUpper(int index, String ifNull) {
-    Asserts.notNull(ifNull);
-
     String value = getString(index);
-    return (value != null) ? value.toUpperCase(Locale.ROOT) : ifNull.toUpperCase(Locale.ROOT);
+    return (value != null) ? value.toUpperCase(Locale.ROOT) : StringUtils.toUpperCase(ifNull, Locale.ROOT);
   }
 
   public String getStringLowerReq(int index) {
@@ -116,10 +115,8 @@ public class CsvRecord {
   }
 
   public String getStringLower(int index, String ifNull) {
-    Asserts.notNull(ifNull);
-
     String value = getString(index);
-    return (value != null) ? value.toLowerCase(Locale.ROOT) : ifNull.toLowerCase(Locale.ROOT);
+    return (value != null) ? value.toLowerCase(Locale.ROOT) : StringUtils.toLowerCase(ifNull, Locale.ROOT);
   }
 
   public boolean getBool(int index) throws BoolFormatException {

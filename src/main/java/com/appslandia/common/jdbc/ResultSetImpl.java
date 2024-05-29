@@ -37,6 +37,7 @@ import com.appslandia.common.base.AssertException;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.NormalizeUtils;
 import com.appslandia.common.utils.STR;
+import com.appslandia.common.utils.StringUtils;
 
 /**
  *
@@ -84,7 +85,7 @@ public class ResultSetImpl implements ResultSet {
 
   public String getStringUpper(String columnLabel, String ifNull) throws java.sql.SQLException {
     String value = this.rs.getString(columnLabel);
-    return (value != null) ? value.toUpperCase(Locale.ROOT) : ifNull.toUpperCase(Locale.ROOT);
+    return (value != null) ? value.toUpperCase(Locale.ROOT) : StringUtils.toUpperCase(ifNull, Locale.ROOT);
   }
 
   public String getStringUpperReq(String columnLabel) throws java.sql.SQLException {
@@ -99,7 +100,7 @@ public class ResultSetImpl implements ResultSet {
 
   public String getStringLower(String columnLabel, String ifNull) throws java.sql.SQLException {
     String value = this.rs.getString(columnLabel);
-    return (value != null) ? value.toLowerCase(Locale.ROOT) : ifNull.toLowerCase(Locale.ROOT);
+    return (value != null) ? value.toLowerCase(Locale.ROOT) : StringUtils.toLowerCase(ifNull, Locale.ROOT);
   }
 
   public String getStringLowerReq(String columnLabel) throws java.sql.SQLException {

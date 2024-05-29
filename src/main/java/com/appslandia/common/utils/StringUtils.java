@@ -44,7 +44,7 @@ public class StringUtils {
 
   public static String toLowerCase(String str, Locale locale) {
     if (str == null || str.isEmpty()) {
-      return null;
+      return str;
     }
     return str.toLowerCase(locale);
   }
@@ -55,7 +55,7 @@ public class StringUtils {
 
   public static String toUpperCase(String str, Locale locale) {
     if (str == null || str.isEmpty()) {
-      return null;
+      return str;
     }
     return str.toUpperCase(locale);
   }
@@ -66,7 +66,7 @@ public class StringUtils {
 
   public static String firstLowerCase(String str, Locale locale) {
     if (str == null || str.isEmpty()) {
-      return null;
+      return str;
     }
     StringBuilder sb = new StringBuilder(str.length());
     return sb.append(str.substring(0, 1).toLowerCase(locale)).append(str.substring(1)).toString();
@@ -78,7 +78,7 @@ public class StringUtils {
 
   public static String firstUpperCase(String str, Locale locale) {
     if (str == null || str.isEmpty()) {
-      return null;
+      return str;
     }
     StringBuilder sb = new StringBuilder(str.length());
     return sb.append(str.substring(0, 1).toUpperCase(locale)).append(str.substring(1)).toString();
