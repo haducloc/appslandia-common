@@ -131,16 +131,13 @@ public class SimpleConfig implements Config {
     toProperties().store(outStream, comments);
   }
 
-  public void fromProperties(Properties props) {
+  protected void fromProperties(Properties props) {
     for (Entry<Object, Object> prop : props.entrySet()) {
-      String key = (String) prop.getKey();
-      String value = (String) prop.getValue();
-
-      this.cfg.put(key, value.trim());
+      this.cfg.put((String) prop.getKey(), ((String) prop.getValue()).trim());
     }
   }
 
-  private Properties toProperties() {
+  protected Properties toProperties() {
     Properties props = new Properties(this.cfg.size());
     props.putAll(this.cfg);
     return props;
