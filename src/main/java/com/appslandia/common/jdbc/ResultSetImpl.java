@@ -83,8 +83,6 @@ public class ResultSetImpl implements ResultSet {
   }
 
   public String getStringUpper(String columnLabel, String ifNull) throws java.sql.SQLException {
-    Asserts.notNull(ifNull);
-
     String value = this.rs.getString(columnLabel);
     return (value != null) ? value.toUpperCase(Locale.ROOT) : ifNull.toUpperCase(Locale.ROOT);
   }
@@ -100,8 +98,6 @@ public class ResultSetImpl implements ResultSet {
   }
 
   public String getStringLower(String columnLabel, String ifNull) throws java.sql.SQLException {
-    Asserts.notNull(ifNull);
-
     String value = this.rs.getString(columnLabel);
     return (value != null) ? value.toLowerCase(Locale.ROOT) : ifNull.toLowerCase(Locale.ROOT);
   }
@@ -154,13 +150,11 @@ public class ResultSetImpl implements ResultSet {
   }
 
   public String getString(String columnLabel, String ifNull) throws java.sql.SQLException {
-    Asserts.notNull(ifNull);
     String value = this.rs.getString(columnLabel);
     return (value != null) ? value : ifNull;
   }
 
   public String getNString(String columnLabel, String ifNull) throws java.sql.SQLException {
-    Asserts.notNull(ifNull);
     String value = this.rs.getNString(columnLabel);
     return (value != null) ? value : ifNull;
   }
