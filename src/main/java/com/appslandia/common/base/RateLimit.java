@@ -44,7 +44,7 @@ public class RateLimit implements Serializable {
     this.windowsMs = windowsMs;
   }
 
-  public long getAccesses() {
+  public int getAccesses() {
     return this.accesses;
   }
 
