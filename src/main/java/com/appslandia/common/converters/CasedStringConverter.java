@@ -30,18 +30,18 @@ import com.appslandia.common.utils.StringUtils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class ULCStringConverter implements Converter<String> {
+public class CasedStringConverter implements Converter<String> {
 
-  public static final String ERROR_MSG_KEY = ULCStringConverter.class.getName() + ".message";
+  public static final String ERROR_MSG_KEY = CasedStringConverter.class.getName() + ".message";
 
   final Locale locale;
   final boolean uppercase;
 
-  public ULCStringConverter(boolean uppercase) {
+  public CasedStringConverter(boolean uppercase) {
     this(uppercase, null);
   }
 
-  public ULCStringConverter(boolean uppercase, Locale locale) {
+  public CasedStringConverter(boolean uppercase, Locale locale) {
     this.uppercase = uppercase;
     this.locale = locale;
   }

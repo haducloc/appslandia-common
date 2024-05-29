@@ -20,45 +20,46 @@
 
 package com.appslandia.common.crypto;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 import com.appslandia.common.base.DestroyException;
-import com.appslandia.common.base.PropertyConfig;
+import com.appslandia.common.base.SimpleConfig;
 import com.appslandia.common.utils.Asserts;
-import com.appslandia.common.utils.StringUtils;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class SecureConfig extends PropertyConfig {
-  private static final long serialVersionUID = 1L;
+public class SecureConfig extends SimpleConfig {
 
   final TextEncryptor textEncryptor;
 
-  public SecureConfig(char[] password) {
+  public SecureConfig(char[] passwordExpr) {
+    this(passwordExpr, new HashMap<>());
+  }
+
+  public SecureConfig(char[] password, Map<String, String> newCfg) {
+    super(newCfg);
+
     Asserts.notNull(password);
     this.textEncryptor = new TextEncryptor(
         new PbeAesEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(32).setPassword(password));
   }
 
-  public SecureConfig(String passwordOrEnv) {
-    Asserts.notNull(passwordOrEnv);
+  public SecureConfig(String passwordExpr) {
+    this(passwordExpr, new HashMap<>());
+  }
+
+  public SecureConfig(String passwordExpr, Map<String, String> newCfg) {
+    super(newCfg);
+
+    Asserts.notNull(passwordExpr);
     this.textEncryptor = new TextEncryptor(
-        new PbeAesEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(32).setPassword(passwordOrEnv));
-  }
-
-  public SecureConfig(Encryptor encryptor) {
-    Asserts.notNull(encryptor);
-    this.textEncryptor = new TextEncryptor(encryptor);
-  }
-
-  public SecureConfig(TextEncryptor textEncryptor) {
-    Asserts.notNull(textEncryptor);
-    this.textEncryptor = textEncryptor;
+        new PbeAesEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(32).setPassword(passwordExpr));
   }
 
   public void destroy() throws DestroyException {
@@ -66,26 +67,9 @@ public class SecureConfig extends PropertyConfig {
   }
 
   @Override
-  public SecureConfig load(InputStream is) throws IOException {
-    super.load(is);
-    return this;
-  }
-
-  @Override
-  public SecureConfig load(Reader r) throws IOException {
-    super.load(r);
-    return this;
-  }
-
-  @Override
-  public SecureConfig load(String file) throws IOException {
-    super.load(file);
-    return this;
-  }
-
-  @Override
   public String getString(String key) {
     String value = super.getString(key);
+
     if (value == null) {
       return null;
     }
@@ -95,56 +79,47 @@ public class SecureConfig extends PropertyConfig {
     return this.textEncryptor.decrypt(CryptoUtils.parseEncValue(value));
   }
 
-  // Unsecured
-  public SecureConfig set(String key, String value) {
-    super.set(key, value);
+  public SecureConfig sets(String key, String value) throws CryptoException {
+    Asserts.notNull(key);
+    Asserts.notNull(value);
+    value = value.trim();
+
+    this.cfg.put(key, CryptoUtils.markEncValue(this.textEncryptor.encrypt(value)));
     return this;
   }
 
-  public SecureConfig set(String key, boolean value) {
-    super.set(key, value);
-    return this;
+  public SecureConfig sets(String key, boolean value) throws CryptoException {
+    Asserts.notNull(key);
+    return sets(key, Boolean.toString(value));
   }
 
-  public SecureConfig set(String key, int value) {
-    super.set(key, value);
-    return this;
+  public SecureConfig sets(String key, int value) throws CryptoException {
+    Asserts.notNull(key);
+    return sets(key, Integer.toString(value));
   }
 
-  public SecureConfig set(String key, long value) {
-    super.set(key, value);
-    return this;
+  public SecureConfig sets(String key, long value) throws CryptoException {
+    Asserts.notNull(key);
+    return sets(key, Long.toString(value));
   }
 
-  public SecureConfig set(String key, double value) {
-    super.set(key, value);
-    return this;
+  public SecureConfig sets(String key, double value) throws CryptoException {
+    Asserts.notNull(key);
+    return sets(key, Double.toString(value));
   }
 
-  // Secured
-  public SecureConfig enc(String key, String value) throws CryptoException {
-    value = StringUtils.trimToNull(value);
-    this.map.put(key, (value != null) ? CryptoUtils.markEncValue(this.textEncryptor.encrypt(value)) : null);
-    return this;
+  public SecureConfig sets(String key, BigDecimal value) throws CryptoException {
+    Asserts.notNull(key);
+    Asserts.notNull(value);
+
+    return sets(key, value.toPlainString());
   }
 
-  public SecureConfig enc(String key, boolean value) throws CryptoException {
-    this.map.put(key, CryptoUtils.markEncValue(this.textEncryptor.encrypt(Boolean.toString(value))));
-    return this;
-  }
-
-  public SecureConfig enc(String key, int value) throws CryptoException {
-    this.map.put(key, CryptoUtils.markEncValue(this.textEncryptor.encrypt(Integer.toString(value))));
-    return this;
-  }
-
-  public SecureConfig enc(String key, long value) throws CryptoException {
-    this.map.put(key, CryptoUtils.markEncValue(this.textEncryptor.encrypt(Long.toString(value))));
-    return this;
-  }
-
-  public SecureConfig enc(String key, double value) throws CryptoException {
-    this.map.put(key, CryptoUtils.markEncValue(this.textEncryptor.encrypt(Double.toString(value))));
-    return this;
+  public Properties toClearProperties() {
+    Properties props = new Properties(this.cfg.size());
+    for (String key : this.cfg.keySet()) {
+      props.put(key, getString(key));
+    }
+    return props;
   }
 }

@@ -35,18 +35,9 @@ public class STRTest {
   @Test
   public void test_map() {
     try {
-      String msg = STR.format("this is ${p1} and ${p2}", new Params().set("p1", "v1").set("p2", "v2"));
+      String msg = STR.format("this is {p1} and {p2}", new Params().set("p1", "v1").set("p2", "v2"));
       Assertions.assertEquals("this is v1 and v2", msg);
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-  }
 
-  @Test
-  public void test_map_optional() {
-    try {
-      String msg = STR.format("this is ${p1} and ${p2?}", new Params().set("p1", "v1").set("p2", null));
-      Assertions.assertEquals("this is v1 and ", msg);
     } catch (Exception ex) {
       Assertions.fail(ex.getMessage());
     }
@@ -55,7 +46,7 @@ public class STRTest {
   @Test
   public void test_map_missing() {
     try {
-      STR.format("this is ${p1} and ${p2}", new Params().set("p1", "v1"));
+      STR.format("this is {p1} and {p2}", new Params().set("p1", "v1"));
       Assertions.fail();
 
     } catch (Exception ex) {
@@ -63,30 +54,39 @@ public class STRTest {
   }
 
   @Test
-  public void test_map_required() {
+  public void test_map_null() {
     try {
-      STR.format("this is ${p1} and ${p2}", new Params().set("p1", "v1").set("p2", null));
-      Assertions.fail();
+      String msg = STR.format("this is {p1} and {p2}", new Params().set("p1", "v1").set("p2", null));
+      Assertions.assertEquals("this is v1 and null", msg);
 
-    } catch (Exception ex) {
-    }
-  }
-
-  @Test
-  public void test_params() {
-    try {
-      String msg = STR.format("this is ${0} and ${1}", "v1", "v2");
-      Assertions.assertEquals("this is v1 and v2", msg);
     } catch (Exception ex) {
       Assertions.fail(ex.getMessage());
     }
   }
 
   @Test
-  public void test_params_optional() {
+  public void test_map_prop() {
+    String propName = "prop" + System.currentTimeMillis();
     try {
-      String msg = STR.format("this is ${0} and ${1?}", "v1", null);
-      Assertions.assertEquals("this is v1 and ", msg);
+      System.setProperty(propName, "12345");
+
+      String msg = STR.format("this is {p1} and {" + propName + "}", new Params().set("p1", "v1"));
+      Assertions.assertEquals("this is v1 and 12345", msg);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+
+    } finally {
+      System.getProperties().remove(propName);
+    }
+  }
+
+  @Test
+  public void test_params() {
+    try {
+      String msg = STR.format("this is {0} and {1}", "v1", "v2");
+      Assertions.assertEquals("this is v1 and v2", msg);
+
     } catch (Exception ex) {
       Assertions.fail(ex.getMessage());
     }
@@ -95,7 +95,7 @@ public class STRTest {
   @Test
   public void test_params_missing() {
     try {
-      STR.format("this is ${0} and ${1}", "v1");
+      STR.format("this is {0} and {1}", "v1");
       Assertions.fail();
 
     } catch (Exception ex) {
@@ -103,10 +103,10 @@ public class STRTest {
   }
 
   @Test
-  public void test_params_required() {
+  public void test_params_null() {
     try {
-      STR.format("this is ${0} and ${1}", "v1", null);
-      Assertions.fail();
+      String msg = STR.format("this is {0} and {1}", "v1", null);
+      Assertions.assertEquals("this is v1 and null", msg);
 
     } catch (Exception ex) {
     }
@@ -117,16 +117,7 @@ public class STRTest {
     try {
       String msg = STR.fmt("this is {} and {}", "v1", "v2");
       Assertions.assertEquals("this is v1 and v2", msg);
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-  }
 
-  @Test
-  public void test_fmt_optional() {
-    try {
-      String msg = STR.fmt("this is {} and {?}", "v1", null);
-      Assertions.assertEquals("this is v1 and ", msg);
     } catch (Exception ex) {
       Assertions.fail(ex.getMessage());
     }
@@ -143,12 +134,13 @@ public class STRTest {
   }
 
   @Test
-  public void test_fmt_required() {
+  public void test_fmt_null() {
     try {
-      STR.fmt("this is {} and {}", "v1", null);
-      Assertions.fail();
+      String msg = STR.fmt("this is {} and {}", "v1", null);
+      Assertions.assertEquals("this is v1 and null", msg);
 
     } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
     }
   }
 }

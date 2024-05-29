@@ -73,7 +73,7 @@ public class CsvRecord {
   public String getStringReq(int index) {
     String value = getString(index);
     if (value == null) {
-      throw new AssertException(STR.fmt("The value read under the index '{}' must be not null.", index));
+      throw new AssertException(STR.fmt("No value found for the given index '{}'.", index));
     }
     return value;
   }
@@ -83,43 +83,43 @@ public class CsvRecord {
     return this.values[index];
   }
 
-  public String getString(int index, String defaultValue) {
+  public String getString(int index, String ifNull) {
     String value = getString(index);
-    return (value != null) ? value : defaultValue;
+    return (value != null) ? value : ifNull;
   }
 
-  public String getStringUC(int index) {
-    String value = getString(index);
-    return (value != null) ? value.toUpperCase(Locale.ROOT) : null;
-  }
-
-  public String getStringUC(int index, String valueIfNull) {
-    Asserts.notNull(valueIfNull);
-
-    String value = getString(index);
-    return (value != null) ? value.toUpperCase(Locale.ROOT) : valueIfNull.toUpperCase(Locale.ROOT);
-  }
-
-  public String getStringUCReq(int index) {
+  public String getStringUpperReq(int index) {
     String value = getStringReq(index);
     return value.toUpperCase(Locale.ROOT);
   }
 
-  public String getStringLC(int index) {
+  public String getStringUpper(int index) {
+    String value = getString(index);
+    return (value != null) ? value.toUpperCase(Locale.ROOT) : null;
+  }
+
+  public String getStringUpper(int index, String ifNull) {
+    Asserts.notNull(ifNull);
+
+    String value = getString(index);
+    return (value != null) ? value.toUpperCase(Locale.ROOT) : ifNull.toUpperCase(Locale.ROOT);
+  }
+
+  public String getStringLowerReq(int index) {
+    String value = getStringReq(index);
+    return value.toLowerCase(Locale.ROOT);
+  }
+
+  public String getStringLower(int index) {
     String value = getString(index);
     return (value != null) ? value.toLowerCase(Locale.ROOT) : null;
   }
 
-  public String getStringLC(int index, String valueIfNull) {
-    Asserts.notNull(valueIfNull);
+  public String getStringLower(int index, String ifNull) {
+    Asserts.notNull(ifNull);
 
     String value = getString(index);
-    return (value != null) ? value.toLowerCase(Locale.ROOT) : valueIfNull.toLowerCase(Locale.ROOT);
-  }
-
-  public String getStringLCReq(int index) {
-    String value = getStringReq(index);
-    return value.toLowerCase(Locale.ROOT);
+    return (value != null) ? value.toLowerCase(Locale.ROOT) : ifNull.toLowerCase(Locale.ROOT);
   }
 
   public boolean getBool(int index) throws BoolFormatException {
@@ -127,14 +127,14 @@ public class CsvRecord {
     return ParseUtils.parseBool(value);
   }
 
-  public boolean getBool(int index, boolean defaultValIfInvalid) {
+  public boolean getBool(int index, boolean ifNullOrInvalid) {
     String value = getString(index);
-    return ParseUtils.parseBool(value, defaultValIfInvalid);
+    return ParseUtils.parseBool(value, ifNullOrInvalid);
   }
 
   public Boolean getBoolOpt(int index) throws BoolFormatException {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseBool(value) : null;
+    return ParseUtils.parseBoolOpt(value);
   }
 
   public byte getByte(int index) throws NumberFormatException {
@@ -142,14 +142,14 @@ public class CsvRecord {
     return ParseUtils.parseByte(value);
   }
 
-  public byte getByte(int index, byte defaultValIfInvalid) {
+  public byte getByte(int index, byte ifNullOrInvalid) {
     String value = getString(index);
-    return ParseUtils.parseByte(value, defaultValIfInvalid);
+    return ParseUtils.parseByte(value, ifNullOrInvalid);
   }
 
   public Byte getByteOpt(int index) throws NumberFormatException {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseByte(value) : null;
+    return ParseUtils.parseByteOpt(value);
   }
 
   public short getShort(int index) throws NumberFormatException {
@@ -157,14 +157,14 @@ public class CsvRecord {
     return ParseUtils.parseShort(value);
   }
 
-  public short getShort(int index, short defaultValIfInvalid) {
+  public short getShort(int index, short ifNullOrInvalid) {
     String value = getString(index);
-    return ParseUtils.parseShort(value, defaultValIfInvalid);
+    return ParseUtils.parseShort(value, ifNullOrInvalid);
   }
 
   public Short getShortOpt(int index) throws NumberFormatException {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseShort(value) : null;
+    return ParseUtils.parseShortOpt(value);
   }
 
   public int getInt(int index) throws NumberFormatException {
@@ -172,14 +172,14 @@ public class CsvRecord {
     return ParseUtils.parseInt(value);
   }
 
-  public int getInt(int index, int defaultValIfInvalid) {
+  public int getInt(int index, int ifNullOrInvalid) {
     String value = getString(index);
-    return ParseUtils.parseInt(value, defaultValIfInvalid);
+    return ParseUtils.parseInt(value, ifNullOrInvalid);
   }
 
   public Integer getIntOpt(int index) throws NumberFormatException {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseInt(value) : null;
+    return ParseUtils.parseIntOpt(value);
   }
 
   public long getLong(int index) throws NumberFormatException {
@@ -187,14 +187,14 @@ public class CsvRecord {
     return ParseUtils.parseLong(value);
   }
 
-  public long getLong(int index, long defaultValIfInvalid) {
+  public long getLong(int index, long ifNullOrInvalid) {
     String value = getString(index);
-    return ParseUtils.parseLong(value, defaultValIfInvalid);
+    return ParseUtils.parseLong(value, ifNullOrInvalid);
   }
 
   public Long getLongOpt(int index) throws NumberFormatException {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseLong(value) : null;
+    return ParseUtils.parseLongOpt(value);
   }
 
   public float getFloat(int index) throws NumberFormatException {
@@ -202,14 +202,14 @@ public class CsvRecord {
     return ParseUtils.parseFloat(value);
   }
 
-  public float getFloat(int index, float defaultValIfInvalid) {
+  public float getFloat(int index, float ifNullOrInvalid) {
     String value = getString(index);
-    return ParseUtils.parseFloat(value, defaultValIfInvalid);
+    return ParseUtils.parseFloat(value, ifNullOrInvalid);
   }
 
   public Float getFloatOpt(int index) throws NumberFormatException {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseFloat(value) : null;
+    return ParseUtils.parseFloatOpt(value);
   }
 
   public double getDouble(int index) throws NumberFormatException {
@@ -217,14 +217,14 @@ public class CsvRecord {
     return ParseUtils.parseDouble(value);
   }
 
-  public double getDouble(int index, double defaultValIfInvalid) {
+  public double getDouble(int index, double ifNullOrInvalid) {
     String value = getString(index);
-    return ParseUtils.parseDouble(value, defaultValIfInvalid);
+    return ParseUtils.parseDouble(value, ifNullOrInvalid);
   }
 
   public Double getDoubleOpt(int index) throws NumberFormatException {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseDouble(value) : null;
+    return ParseUtils.parseDoubleOpt(value);
   }
 
   public BigDecimal getDecimalReq(int index) throws NumberFormatException {
@@ -234,21 +234,15 @@ public class CsvRecord {
 
   public BigDecimal getDecimal(int index) throws NumberFormatException {
     String value = getString(index);
-    return (value != null) ? new BigDecimal(value) : null;
+    return ParseUtils.parseDecimalOpt(value);
   }
 
-  public BigDecimal getDecimal(int index, double defaultValIfInvalid) {
+  public BigDecimal getDecimal(int index, double ifNullOrInvalid) {
     String value = getString(index);
-    return ParseUtils.parseDecimal(value, defaultValIfInvalid);
+    return ParseUtils.parseDecimal(value, ifNullOrInvalid);
   }
 
   // Temporal Types
-
-  public LocalDate getLocalDateReq(int index, String... patterns) throws DateFormatException {
-    String value = getStringReq(index);
-    return (patterns.length > 0) ? ParseUtils.parseLocalDate(value, patterns)
-        : ParseUtils.parseLocalDate(value, CsvUtils.PATTERNS_DATE);
-  }
 
   public LocalDate getLocalDate(int index, String... patterns) throws DateFormatException {
     String value = getString(index);
@@ -259,10 +253,10 @@ public class CsvRecord {
     return null;
   }
 
-  public LocalTime getLocalTimeReq(int index, String... patterns) throws DateFormatException {
+  public LocalDate getLocalDateReq(int index, String... patterns) throws DateFormatException {
     String value = getStringReq(index);
-    return (patterns.length > 0) ? ParseUtils.parseLocalTime(value, patterns)
-        : ParseUtils.parseLocalTime(value, CsvUtils.PATTERNS_TIME);
+    return (patterns.length > 0) ? ParseUtils.parseLocalDate(value, patterns)
+        : ParseUtils.parseLocalDate(value, CsvUtils.PATTERNS_DATE);
   }
 
   public LocalTime getLocalTime(int index, String... patterns) throws DateFormatException {
@@ -274,10 +268,10 @@ public class CsvRecord {
     return null;
   }
 
-  public LocalDateTime getLocalDateTimeReq(int index, String... patterns) throws DateFormatException {
+  public LocalTime getLocalTimeReq(int index, String... patterns) throws DateFormatException {
     String value = getStringReq(index);
-    return (patterns.length > 0) ? ParseUtils.parseLocalDateTime(value, patterns)
-        : ParseUtils.parseLocalDateTime(value, CsvUtils.PATTERNS_DATETIME);
+    return (patterns.length > 0) ? ParseUtils.parseLocalTime(value, patterns)
+        : ParseUtils.parseLocalTime(value, CsvUtils.PATTERNS_TIME);
   }
 
   public LocalDateTime getLocalDateTime(int index, String... patterns) throws DateFormatException {
@@ -289,10 +283,10 @@ public class CsvRecord {
     return null;
   }
 
-  public OffsetTime getOffsetTimeReq(int index, String... patterns) throws DateFormatException {
+  public LocalDateTime getLocalDateTimeReq(int index, String... patterns) throws DateFormatException {
     String value = getStringReq(index);
-    return (patterns.length > 0) ? ParseUtils.parseOffsetTime(value, patterns)
-        : ParseUtils.parseOffsetTime(value, CsvUtils.PATTERNS_TIMEZ);
+    return (patterns.length > 0) ? ParseUtils.parseLocalDateTime(value, patterns)
+        : ParseUtils.parseLocalDateTime(value, CsvUtils.PATTERNS_DATETIME);
   }
 
   public OffsetTime getOffsetTime(int index, String... patterns) throws DateFormatException {
@@ -304,10 +298,10 @@ public class CsvRecord {
     return null;
   }
 
-  public OffsetDateTime getOffsetDateTimeReq(int index, String... patterns) throws DateFormatException {
+  public OffsetTime getOffsetTimeReq(int index, String... patterns) throws DateFormatException {
     String value = getStringReq(index);
-    return (patterns.length > 0) ? ParseUtils.parseOffsetDateTime(value, patterns)
-        : ParseUtils.parseOffsetDateTime(value, CsvUtils.PATTERNS_DATETIMEZ);
+    return (patterns.length > 0) ? ParseUtils.parseOffsetTime(value, patterns)
+        : ParseUtils.parseOffsetTime(value, CsvUtils.PATTERNS_TIMEZ);
   }
 
   public OffsetDateTime getOffsetDateTime(int index, String... patterns) throws DateFormatException {
@@ -319,81 +313,67 @@ public class CsvRecord {
     return null;
   }
 
-  public LocalDate getLocalDateReq(int index, Collection<String> patterns) throws DateFormatException {
-    Asserts.hasElements(patterns);
+  public OffsetDateTime getOffsetDateTimeReq(int index, String... patterns) throws DateFormatException {
+    String value = getStringReq(index);
+    return (patterns.length > 0) ? ParseUtils.parseOffsetDateTime(value, patterns)
+        : ParseUtils.parseOffsetDateTime(value, CsvUtils.PATTERNS_DATETIMEZ);
+  }
 
+  public LocalDate getLocalDate(int index, Collection<String> patterns) throws DateFormatException {
+    String value = getString(index);
+    return ParseUtils.parseLocalDate(value, patterns);
+  }
+
+  public LocalDate getLocalDateReq(int index, Collection<String> patterns) throws DateFormatException {
     String value = getStringReq(index);
     return ParseUtils.parseLocalDate(value, patterns);
   }
 
-  public LocalDate getLocalDate(int index, Collection<String> patterns) throws DateFormatException {
-    Asserts.hasElements(patterns);
-
+  public LocalTime getLocalTime(int index, Collection<String> patterns) throws DateFormatException {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseLocalDate(value, patterns) : null;
+    return ParseUtils.parseLocalTime(value, patterns);
   }
 
   public LocalTime getLocalTimeReq(int index, Collection<String> patterns) throws DateFormatException {
-    Asserts.hasElements(patterns);
-
     String value = getStringReq(index);
     return ParseUtils.parseLocalTime(value, patterns);
   }
 
-  public LocalTime getLocalTime(int index, Collection<String> patterns) throws DateFormatException {
-    Asserts.hasElements(patterns);
-
+  public LocalDateTime getLocalDateTime(int index, Collection<String> patterns) throws DateFormatException {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseLocalTime(value, patterns) : null;
+    return ParseUtils.parseLocalDateTime(value, patterns);
   }
 
   public LocalDateTime getLocalDateTimeReq(int index, Collection<String> patterns) throws DateFormatException {
-    Asserts.hasElements(patterns);
-
     String value = getStringReq(index);
     return ParseUtils.parseLocalDateTime(value, patterns);
   }
 
-  public LocalDateTime getLocalDateTime(int index, Collection<String> patterns) throws DateFormatException {
-    Asserts.hasElements(patterns);
-
+  public OffsetTime getOffsetTime(int index, Collection<String> patterns) throws DateFormatException {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseLocalDateTime(value, patterns) : null;
+    return ParseUtils.parseOffsetTime(value, patterns);
   }
 
   public OffsetTime getOffsetTimeReq(int index, Collection<String> patterns) throws DateFormatException {
-    Asserts.hasElements(patterns);
-
     String value = getStringReq(index);
     return ParseUtils.parseOffsetTime(value, patterns);
   }
 
-  public OffsetTime getOffsetTime(int index, Collection<String> patterns) throws DateFormatException {
-    Asserts.hasElements(patterns);
-
+  public OffsetDateTime getOffsetDateTime(int index, Collection<String> patterns) throws DateFormatException {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseOffsetTime(value, patterns) : null;
-  }
-
-  public OffsetDateTime getOffsetDateTimeReq(int index, Collection<String> patterns) throws DateFormatException {
-    Asserts.hasElements(patterns);
-
-    String value = getStringReq(index);
     return ParseUtils.parseOffsetDateTime(value, patterns);
   }
 
-  public OffsetDateTime getOffsetDateTime(int index, Collection<String> patterns) throws DateFormatException {
-    Asserts.hasElements(patterns);
-
-    String value = getString(index);
-    return (value != null) ? ParseUtils.parseOffsetDateTime(value, patterns) : null;
+  public OffsetDateTime getOffsetDateTimeReq(int index, Collection<String> patterns) throws DateFormatException {
+    String value = getStringReq(index);
+    return ParseUtils.parseOffsetDateTime(value, patterns);
   }
 
   // Setters
 
   public CsvRecord set(int index, String value) {
     Objects.checkIndex(index, this.values.length);
-    this.values[index] = (value != null) ? value : null;
+    this.values[index] = value;
     return this;
   }
 
@@ -423,6 +403,14 @@ public class CsvRecord {
 
   public CsvRecord set(int index, double value) {
     return set(index, Double.toString(value));
+  }
+
+  public CsvRecord set(int index, BigDecimal value) {
+    return set(index, (value != null) ? value.toPlainString() : null);
+  }
+
+  public CsvRecord set(int index, Object value) {
+    return set(index, (value != null) ? value.toString() : null);
   }
 
   public CsvRecord set(int index, LocalDate value) {

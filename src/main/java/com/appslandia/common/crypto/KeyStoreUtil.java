@@ -256,11 +256,15 @@ public class KeyStoreUtil extends InitializeObject {
     return this;
   }
 
-  public KeyStoreUtil setPassword(String passwordOrEnv) {
+  public KeyStoreUtil setPassword(String passwordExpr) {
     assertNotInitialized();
 
-    if (passwordOrEnv != null) {
-      String resolvedValue = SYS.resolve(passwordOrEnv);
+    if (passwordExpr != null) {
+      String resolvedValue = SYS.resolve(passwordExpr);
+
+      if (resolvedValue == null) {
+        throw new IllegalArgumentException("Failed to resolve expression: " + passwordExpr);
+      }
       this.password = resolvedValue.toCharArray();
     }
     return this;

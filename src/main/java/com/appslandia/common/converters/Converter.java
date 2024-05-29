@@ -116,8 +116,8 @@ public interface Converter<T> {
   public static final String UUID = "UUID";
 
   public static final String STRING = "String";
-  public static final String STRING_UC = "StringUC";
-  public static final String STRING_LC = "StringLC";
+  public static final String STRING_UPPER = "StringUpper";
+  public static final String STRING_LOWER = "StringLower";
 
   public static final String TAG = "Tag";
   public static final String TAGS = "Tags";

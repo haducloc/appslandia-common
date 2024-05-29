@@ -208,8 +208,8 @@ public class PbeAesEncryptor extends PbeObject implements Encryptor {
   }
 
   @Override
-  public PbeAesEncryptor setPassword(String passwordOrEnv) {
-    super.setPassword(passwordOrEnv);
+  public PbeAesEncryptor setPassword(String passwordExpr) {
+    super.setPassword(passwordExpr);
     return this;
   }
 

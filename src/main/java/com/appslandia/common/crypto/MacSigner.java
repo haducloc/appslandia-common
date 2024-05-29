@@ -117,11 +117,15 @@ public class MacSigner extends InitializeObject implements Digester {
     return this;
   }
 
-  public MacSigner setSecret(String secretOrEnv) {
+  public MacSigner setSecret(String passwordExpr) {
     this.assertNotInitialized();
 
-    if (secretOrEnv != null) {
-      String resolvedValue = SYS.resolve(secretOrEnv);
+    if (passwordExpr != null) {
+      String resolvedValue = SYS.resolve(passwordExpr);
+
+      if (resolvedValue == null) {
+        throw new IllegalArgumentException("Failed to resolve expression: " + passwordExpr);
+      }
       this.secret = resolvedValue.getBytes(StandardCharsets.UTF_8);
     }
     return this;

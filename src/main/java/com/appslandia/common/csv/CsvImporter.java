@@ -339,7 +339,6 @@ public class CsvImporter extends InitializeObject {
 
   public CsvImporter setCsvToDbConverter(String columnLabel, CsvToDbConverter converter) {
     assertNotInitialized();
-
     Asserts.notNull(converter);
 
     this.converters.put(columnLabel, converter);

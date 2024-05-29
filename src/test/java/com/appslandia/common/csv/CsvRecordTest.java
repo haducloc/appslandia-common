@@ -112,11 +112,11 @@ public class CsvRecordTest {
   }
 
   @Test
-  public void test_bigDecimal() {
-    CsvRecord csvRecord = new CsvRecord(new String[] { "1234567890.1234567890" });
+  public void test_Decimal() {
+    CsvRecord csvRecord = new CsvRecord(new String[] { "1234567890.123" });
     try {
       BigDecimal val = csvRecord.getDecimal(0);
-      BigDecimal expected = new BigDecimal("1234567890.1234567890");
+      BigDecimal expected = new BigDecimal("1234567890.123");
       Assertions.assertEquals(expected, val);
 
     } catch (Exception ex) {
@@ -134,7 +134,6 @@ public class CsvRecordTest {
       Assertions.assertEquals(expected, val);
 
     } catch (Exception ex) {
-      ex.printStackTrace();
       Assertions.fail(ex);
     }
   }
@@ -149,7 +148,6 @@ public class CsvRecordTest {
       Assertions.assertEquals(expected, val);
 
     } catch (Exception ex) {
-      ex.printStackTrace();
       Assertions.fail(ex);
     }
   }
@@ -164,7 +162,6 @@ public class CsvRecordTest {
       Assertions.assertEquals(expected, val);
 
     } catch (Exception ex) {
-      ex.printStackTrace();
       Assertions.fail(ex);
     }
   }
@@ -179,7 +176,6 @@ public class CsvRecordTest {
       Assertions.assertEquals(expected, val);
 
     } catch (Exception ex) {
-      ex.printStackTrace();
       Assertions.fail(ex);
     }
   }
@@ -195,7 +191,6 @@ public class CsvRecordTest {
       Assertions.assertEquals(expected, val);
 
     } catch (Exception ex) {
-      ex.printStackTrace();
       Assertions.fail(ex);
     }
   }

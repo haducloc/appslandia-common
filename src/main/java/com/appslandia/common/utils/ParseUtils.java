@@ -41,7 +41,6 @@ public class ParseUtils {
 
   public static boolean parseBool(String value) throws BoolFormatException {
     Asserts.notNull(value);
-
     if (isTrueValue(value)) {
       return true;
     }
@@ -51,14 +50,14 @@ public class ParseUtils {
     throw new BoolFormatException(value);
   }
 
-  public static boolean parseBool(String value, boolean defaultValIfInvalid) {
+  public static boolean parseBool(String value, boolean ifNullOrInvalid) {
     if (value == null) {
-      return defaultValIfInvalid;
+      return ifNullOrInvalid;
     }
     try {
       return parseBool(value);
     } catch (BoolFormatException ex) {
-      return defaultValIfInvalid;
+      return ifNullOrInvalid;
     }
   }
 
@@ -67,14 +66,14 @@ public class ParseUtils {
     return Byte.parseByte(value);
   }
 
-  public static byte parseByte(String value, byte defaultValIfInvalid) {
+  public static byte parseByte(String value, byte ifNullOrInvalid) {
     if (value == null) {
-      return defaultValIfInvalid;
+      return ifNullOrInvalid;
     }
     try {
       return Byte.parseByte(value);
     } catch (NumberFormatException ex) {
-      return defaultValIfInvalid;
+      return ifNullOrInvalid;
     }
   }
 
@@ -83,14 +82,14 @@ public class ParseUtils {
     return Short.parseShort(value);
   }
 
-  public static short parseShort(String value, short defaultValIfInvalid) {
+  public static short parseShort(String value, short ifNullOrInvalid) {
     if (value == null) {
-      return defaultValIfInvalid;
+      return ifNullOrInvalid;
     }
     try {
       return Short.parseShort(value);
     } catch (NumberFormatException ex) {
-      return defaultValIfInvalid;
+      return ifNullOrInvalid;
     }
   }
 
@@ -99,14 +98,14 @@ public class ParseUtils {
     return Integer.parseInt(value);
   }
 
-  public static int parseInt(String value, int defaultValIfInvalid) {
+  public static int parseInt(String value, int ifNullOrInvalid) {
     if (value == null) {
-      return defaultValIfInvalid;
+      return ifNullOrInvalid;
     }
     try {
       return Integer.parseInt(value);
     } catch (NumberFormatException ex) {
-      return defaultValIfInvalid;
+      return ifNullOrInvalid;
     }
   }
 
@@ -115,14 +114,14 @@ public class ParseUtils {
     return Long.parseLong(value);
   }
 
-  public static long parseLong(String value, long defaultValIfInvalid) {
+  public static long parseLong(String value, long ifNullOrInvalid) {
     if (value == null) {
-      return defaultValIfInvalid;
+      return ifNullOrInvalid;
     }
     try {
       return Long.parseLong(value);
     } catch (NumberFormatException ex) {
-      return defaultValIfInvalid;
+      return ifNullOrInvalid;
     }
   }
 
@@ -131,14 +130,14 @@ public class ParseUtils {
     return Float.parseFloat(value);
   }
 
-  public static float parseFloat(String value, float defaultValIfInvalid) {
+  public static float parseFloat(String value, float ifNullOrInvalid) {
     if (value == null) {
-      return defaultValIfInvalid;
+      return ifNullOrInvalid;
     }
     try {
       return Float.parseFloat(value);
     } catch (NumberFormatException ex) {
-      return defaultValIfInvalid;
+      return ifNullOrInvalid;
     }
   }
 
@@ -147,30 +146,25 @@ public class ParseUtils {
     return Double.parseDouble(value);
   }
 
-  public static double parseDouble(String value, double defaultValIfInvalid) {
+  public static double parseDouble(String value, double ifNullOrInvalid) {
     if (value == null) {
-      return defaultValIfInvalid;
+      return ifNullOrInvalid;
     }
     try {
       return Double.parseDouble(value);
     } catch (NumberFormatException ex) {
-      return defaultValIfInvalid;
+      return ifNullOrInvalid;
     }
   }
 
-  public static BigDecimal parseDecimal(String value) throws NumberFormatException {
-    Asserts.notNull(value);
-    return new BigDecimal(value);
-  }
-
-  public static BigDecimal parseDecimal(String value, double defaultValIfInvalid) {
+  public static BigDecimal parseDecimal(String value, double ifNullOrInvalid) {
     if (value == null) {
-      return new BigDecimal(Double.toString(defaultValIfInvalid));
+      return new BigDecimal(Double.toString(ifNullOrInvalid));
     }
     try {
       return new BigDecimal(value);
     } catch (NumberFormatException ex) {
-      return new BigDecimal(Double.toString(defaultValIfInvalid));
+      return new BigDecimal(Double.toString(ifNullOrInvalid));
     }
   }
 
@@ -178,106 +172,32 @@ public class ParseUtils {
     return (value != null) ? parseBool(value) : null;
   }
 
-  public static Boolean parseBoolOpt(String value, Boolean defaultValIfInvalid) {
-    if (value == null) {
-      return null;
-    }
-    try {
-      return parseBool(value);
-    } catch (BoolFormatException ex) {
-      return defaultValIfInvalid;
-    }
-  }
-
   public static Byte parseByteOpt(String value) throws NumberFormatException {
     return (value != null) ? Byte.parseByte(value) : null;
-  }
-
-  public static Byte parseByteOpt(String value, Byte defaultValIfInvalid) {
-    if (value == null) {
-      return null;
-    }
-    try {
-      return Byte.parseByte(value);
-    } catch (NumberFormatException ex) {
-      return defaultValIfInvalid;
-    }
   }
 
   public static Short parseShortOpt(String value) throws NumberFormatException {
     return (value != null) ? Short.parseShort(value) : null;
   }
 
-  public static Short parseShortOpt(String value, Short defaultValIfInvalid) {
-    if (value == null) {
-      return null;
-    }
-    try {
-      return Short.parseShort(value);
-    } catch (NumberFormatException ex) {
-      return defaultValIfInvalid;
-    }
-  }
-
   public static Integer parseIntOpt(String value) throws NumberFormatException {
     return (value != null) ? Integer.parseInt(value) : null;
-  }
-
-  public static Integer parseIntOpt(String value, Integer defaultValIfInvalid) {
-    if (value == null) {
-      return null;
-    }
-    try {
-      return Integer.parseInt(value);
-    } catch (NumberFormatException ex) {
-      return defaultValIfInvalid;
-    }
   }
 
   public static Long parseLongOpt(String value) throws NumberFormatException {
     return (value != null) ? Long.parseLong(value) : null;
   }
 
-  public static Long parseLongOpt(String value, Long defaultValIfInvalid) {
-    if (value == null) {
-      return null;
-    }
-    try {
-      return Long.parseLong(value);
-    } catch (NumberFormatException ex) {
-      return defaultValIfInvalid;
-    }
-  }
-
   public static Float parseFloatOpt(String value) throws NumberFormatException {
     return (value != null) ? parseFloat(value) : null;
-  }
-
-  public static Float parseFloatOpt(String value, Float defaultValIfInvalid) {
-    if (value == null) {
-      return null;
-    }
-    try {
-      return parseFloat(value);
-
-    } catch (NumberFormatException ex) {
-      return defaultValIfInvalid;
-    }
   }
 
   public static Double parseDoubleOpt(String value) throws NumberFormatException {
     return (value != null) ? Double.parseDouble(value) : null;
   }
 
-  public static Double parseDoubleOpt(String value, Double defaultValIfInvalid) {
-    if (value == null) {
-      return null;
-    }
-    try {
-      return Double.parseDouble(value);
-    } catch (NumberFormatException ex) {
-      return defaultValIfInvalid;
-    }
+  public static BigDecimal parseDecimalOpt(String value) throws NumberFormatException {
+    return (value != null) ? new BigDecimal(value) : null;
   }
 
   public static boolean isTrueValue(String value) {
@@ -291,34 +211,30 @@ public class ParseUtils {
   }
 
   public static LocalDate parseLocalDate(String value, String... patterns) throws DateFormatException {
-    Asserts.hasElements(patterns);
     return doParseDate(value, LocalDate.class, patterns, (v, p) -> LocalDate.parse(v, DateUtils.getFormatter(p)));
   }
 
   public static LocalTime parseLocalTime(String value, String... patterns) throws DateFormatException {
-    Asserts.hasElements(patterns);
     return doParseDate(value, LocalTime.class, patterns, (v, p) -> LocalTime.parse(v, DateUtils.getFormatter(p)));
   }
 
   public static LocalDateTime parseLocalDateTime(String value, String... patterns) throws DateFormatException {
-    Asserts.hasElements(patterns);
     return doParseDate(value, LocalDateTime.class, patterns,
         (v, p) -> LocalDateTime.parse(v, DateUtils.getFormatter(p)));
   }
 
   public static OffsetTime parseOffsetTime(String value, String... patterns) throws DateFormatException {
-    Asserts.hasElements(patterns);
     return doParseDate(value, OffsetTime.class, patterns, (v, p) -> OffsetTime.parse(v, DateUtils.getFormatter(p)));
   }
 
   public static OffsetDateTime parseOffsetDateTime(String value, String... patterns) throws DateFormatException {
-    Asserts.hasElements(patterns);
     return doParseDate(value, OffsetDateTime.class, patterns,
         (v, p) -> OffsetDateTime.parse(v, DateUtils.getFormatter(p)));
   }
 
   private static <T> T doParseDate(String value, Class<T> targetClass, String[] patterns,
       BiFunction<String, String, T> converter) throws DateFormatException {
+    Asserts.hasElements(patterns);
     if (value == null) {
       return null;
     }
@@ -326,41 +242,39 @@ public class ParseUtils {
       try {
         return converter.apply(value, pattern);
       } catch (Exception ex) {
+        // ignore
       }
     }
     throw new DateFormatException(STR.fmt("Failed to parse {} from '{}'.", targetClass, value));
   }
 
   public static LocalDate parseLocalDate(String value, Collection<String> patterns) throws DateFormatException {
-    Asserts.hasElements(patterns);
     return doParseDate(value, LocalDate.class, patterns, (v, p) -> LocalDate.parse(v, DateUtils.getFormatter(p)));
   }
 
   public static LocalTime parseLocalTime(String value, Collection<String> patterns) throws DateFormatException {
-    Asserts.hasElements(patterns);
     return doParseDate(value, LocalTime.class, patterns, (v, p) -> LocalTime.parse(v, DateUtils.getFormatter(p)));
   }
 
   public static LocalDateTime parseLocalDateTime(String value, Collection<String> patterns) throws DateFormatException {
-    Asserts.hasElements(patterns);
     return doParseDate(value, LocalDateTime.class, patterns,
         (v, p) -> LocalDateTime.parse(v, DateUtils.getFormatter(p)));
   }
 
   public static OffsetTime parseOffsetTime(String value, Collection<String> patterns) throws DateFormatException {
-    Asserts.hasElements(patterns);
     return doParseDate(value, OffsetTime.class, patterns, (v, p) -> OffsetTime.parse(v, DateUtils.getFormatter(p)));
   }
 
   public static OffsetDateTime parseOffsetDateTime(String value, Collection<String> patterns)
       throws DateFormatException {
-    Asserts.hasElements(patterns);
     return doParseDate(value, OffsetDateTime.class, patterns,
         (v, p) -> OffsetDateTime.parse(v, DateUtils.getFormatter(p)));
   }
 
   private static <T> T doParseDate(String value, Class<T> targetClass, Collection<String> patterns,
       BiFunction<String, String, T> converter) throws DateFormatException {
+    Asserts.hasElements(patterns);
+
     if (value == null) {
       return null;
     }
@@ -368,6 +282,7 @@ public class ParseUtils {
       try {
         return converter.apply(value, pattern);
       } catch (Exception ex) {
+        // ignore
       }
     }
     throw new DateFormatException(STR.fmt("Failed to parse {} from '{}'.", targetClass, value));

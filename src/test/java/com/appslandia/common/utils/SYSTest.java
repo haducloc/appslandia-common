@@ -31,10 +31,12 @@ import org.junit.jupiter.api.Test;
 public class SYSTest {
 
   @Test
-  public void test_resolve_prop() {
+  public void test_resolve() {
+    String propName = "db.password." + System.currentTimeMillis();
+
     try {
-      System.setProperty("__sys__test__password__", "12345");
-      String resolvedValue = SYS.resolve("${__sys__test__password__}");
+      System.setProperty(propName, "12345");
+      String resolvedValue = SYS.resolve("{" + propName + "}");
 
       Assertions.assertNotNull(resolvedValue);
       Assertions.assertEquals("12345", resolvedValue);
@@ -43,29 +45,17 @@ public class SYSTest {
       Assertions.fail(ex.getMessage());
 
     } finally {
-      System.getProperties().remove("__sys__test__password__");
+      System.getProperties().remove(propName);
     }
   }
 
   @Test
-  public void test_resolve_prop_novalue() {
+  public void test_resolve_failed() {
+    String propName = "db.password." + System.currentTimeMillis();
+
     try {
-      String resolvedValue = SYS.resolve("${__sys__test__password__}");
+      String resolvedValue = SYS.resolve("{" + propName + "}");
       Assertions.assertNull(resolvedValue);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-  }
-
-  @SuppressWarnings("el-syntax")
-  @Test
-  public void test_resolve_prop_default() {
-    try {
-      String resolvedValue = SYS.resolve("${__sys__test__password__:12345}");
-
-      Assertions.assertNotNull(resolvedValue);
-      Assertions.assertEquals("12345", resolvedValue);
 
     } catch (Exception ex) {
       Assertions.fail(ex.getMessage());
@@ -78,7 +68,7 @@ public class SYSTest {
       return;
     }
     try {
-      String resolvedValue = SYS.resolve("${env.TMP}");
+      String resolvedValue = SYS.resolve("{env.TMP}");
       Assertions.assertNotNull(resolvedValue);
 
     } catch (Exception ex) {
@@ -87,9 +77,11 @@ public class SYSTest {
   }
 
   @Test
-  public void test_resolve_env_novalue() {
+  public void test_resolve_env_failed() {
+    String varName = "env.TMP." + System.currentTimeMillis();
+
     try {
-      String resolvedValue = SYS.resolve("${env.__SYS__TEST__TMP__}");
+      String resolvedValue = SYS.resolve("{" + varName + "}");
       Assertions.assertNull(resolvedValue);
 
     } catch (Exception ex) {
@@ -99,40 +91,15 @@ public class SYSTest {
 
   @SuppressWarnings("el-syntax")
   @Test
-  public void test_resolve_env_default() {
-    try {
-      String resolvedValue = SYS.resolve("${env.__SYS__TEST__TMP__:/upload}");
-
-      Assertions.assertNotNull(resolvedValue);
-      Assertions.assertEquals("/upload", resolvedValue);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-  }
-
-  @SuppressWarnings("el-syntax")
-  @Test
-  public void test_resolve_prop_env() {
+  public void test_resolve_vars() {
     if (System.getenv("TMP") == null) {
       return;
     }
-    try {
-      String resolvedValue = SYS.resolve("${__sys__test__tmp__,env.TMP}");
-      Assertions.assertNotNull(resolvedValue);
+    String varName = "temp.dir." + System.currentTimeMillis();
 
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-  }
-
-  @SuppressWarnings("el-syntax")
-  @Test
-  public void test_resolve_prop_env_default() {
     try {
-      String resolvedValue = SYS.resolve("${__sys__test__tmp__,env.__SYS__TEST__TMP__:/upload}");
+      String resolvedValue = SYS.resolve("{" + varName + ",env.TMP}");
       Assertions.assertNotNull(resolvedValue);
-      Assertions.assertEquals("/upload", resolvedValue);
 
     } catch (Exception ex) {
       Assertions.fail(ex.getMessage());

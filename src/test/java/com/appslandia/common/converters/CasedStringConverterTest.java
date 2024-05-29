@@ -33,17 +33,17 @@ import com.appslandia.common.base.Language;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class ULCStringConverterTest {
+public class CasedStringConverterTest {
 
   @Test
   public void test_targetType() {
-    ULCStringConverter converter = new ULCStringConverter(true);
+    CasedStringConverter converter = new CasedStringConverter(true);
     Assertions.assertEquals(String.class, converter.getTargetType());
   }
 
   @Test
   public void test_lower() {
-    ULCStringConverter converter = new ULCStringConverter(false);
+    CasedStringConverter converter = new CasedStringConverter(false);
     try {
       String value = "JavaEE-7";
       String str = converter.parse(value, new FormatProviderImpl(Language.EN_US));
@@ -57,7 +57,7 @@ public class ULCStringConverterTest {
 
   @Test
   public void test_upper() {
-    ULCStringConverter converter = new ULCStringConverter(true);
+    CasedStringConverter converter = new CasedStringConverter(true);
     try {
       String value = "JavaEE-7";
       String str = converter.parse(value, new FormatProviderImpl(Language.EN_US));
@@ -71,7 +71,7 @@ public class ULCStringConverterTest {
 
   @Test
   public void test_en_lower() {
-    ULCStringConverter converter = new ULCStringConverter(false, Locale.ENGLISH);
+    CasedStringConverter converter = new CasedStringConverter(false, Locale.ENGLISH);
     try {
       String value = "JavaEE-7";
       String str = converter.parse(value, null);
@@ -85,7 +85,7 @@ public class ULCStringConverterTest {
 
   @Test
   public void test_en_upper() {
-    ULCStringConverter converter = new ULCStringConverter(true, Locale.ENGLISH);
+    CasedStringConverter converter = new CasedStringConverter(true, Locale.ENGLISH);
     try {
       String value = "JavaEE-7";
       String str = converter.parse(value, null);
@@ -99,7 +99,7 @@ public class ULCStringConverterTest {
 
   @Test
   public void test_invariant_lower() {
-    ULCStringConverter converter = new ULCStringConverter(false, Locale.ROOT);
+    CasedStringConverter converter = new CasedStringConverter(false, Locale.ROOT);
     try {
       String value = "JavaEE-7";
       String str = converter.parse(value, null);
@@ -113,7 +113,7 @@ public class ULCStringConverterTest {
 
   @Test
   public void test_invariant_upper() {
-    ULCStringConverter converter = new ULCStringConverter(true, Locale.ROOT);
+    CasedStringConverter converter = new CasedStringConverter(true, Locale.ROOT);
     try {
       String value = "JavaEE-7";
       String str = converter.parse(value, null);
@@ -127,7 +127,7 @@ public class ULCStringConverterTest {
 
   @Test
   public void test_null() {
-    ULCStringConverter converter = new ULCStringConverter(true);
+    CasedStringConverter converter = new CasedStringConverter(true);
     try {
       String value = null;
       String str = converter.parse(value, new FormatProviderImpl(Language.EN_US));

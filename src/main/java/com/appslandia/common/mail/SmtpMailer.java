@@ -26,7 +26,7 @@ import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.crypto.SecureProps;
+import com.appslandia.common.crypto.SecureConfig;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.ExceptionUtils;
@@ -44,20 +44,20 @@ import jakarta.mail.internet.MimeMessage;
  */
 public class SmtpMailer extends InitializeObject {
 
-  protected SecureProps props;
+  protected SecureConfig config;
   protected Session session;
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.props, "props is required.");
+    Asserts.notNull(this.config, "config is required.");
 
-    this.session = Session.getInstance(this.props);
+    this.session = Session.getInstance(this.config.toClearProperties());
   }
 
   public MailerMessage newMessage() throws AddressException {
     MailerMessage msg = new MailerMessage();
 
-    String msgFrom = this.props.get("mail.smtp.msg.from");
+    String msgFrom = this.config.getString("mail.smtp.msg.from");
     if (msgFrom != null) {
       msg.from(msgFrom);
     }
@@ -74,13 +74,13 @@ public class SmtpMailer extends InitializeObject {
 
     try (Transport transport = this.session.getTransport("smtp")) {
 
-      String user = this.props.getString("mail.smtp.user");
-      String password = this.props.getString("mail.smtp.password");
+      String user = this.config.getString("mail.smtp.user");
+      String password = this.config.getString("mail.smtp.password");
       transport.connect(user, password);
 
       String debugToEmails = null;
-      if (this.props.getBool("mail.smtp.debug.enabled", true)) {
-        debugToEmails = this.props.getStringReq("mail.smtp.debug.to_emails");
+      if (this.config.getBool("mail.smtp.debug.enabled", true)) {
+        debugToEmails = this.config.getStringReq("mail.smtp.debug.to_emails");
       }
 
       for (MailerMessage mailerMessage : messages) {
@@ -131,12 +131,12 @@ public class SmtpMailer extends InitializeObject {
    * <li>mail.smtp.debug.to_emails=to-email@example.com</li>
    * </ul>
    * 
-   * @param props
+   * @param config
    * @return
    */
-  public SmtpMailer setProps(SecureProps props) {
+  public SmtpMailer setConfig(SecureConfig config) {
     assertNotInitialized();
-    this.props = props;
+    this.config = config;
     return this;
   }
 }

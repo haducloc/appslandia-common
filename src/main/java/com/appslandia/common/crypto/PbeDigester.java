@@ -157,8 +157,8 @@ public class PbeDigester extends PbeObject implements Digester {
   }
 
   @Override
-  public PbeDigester setPassword(String passwordOrEnv) {
-    super.setPassword(passwordOrEnv);
+  public PbeDigester setPassword(String passwordExpr) {
+    super.setPassword(passwordExpr);
     return this;
   }
 

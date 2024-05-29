@@ -81,8 +81,8 @@ public class ConverterProvider extends InitializeObject {
     this.converters.putIfAbsent(Converter.UUID, new UUIDConverter());
 
     this.converters.putIfAbsent(Converter.STRING, new StringConverter());
-    this.converters.putIfAbsent(Converter.STRING_UC, new ULCStringConverter(true, Locale.ROOT));
-    this.converters.putIfAbsent(Converter.STRING_LC, new ULCStringConverter(false, Locale.ROOT));
+    this.converters.putIfAbsent(Converter.STRING_UPPER, new CasedStringConverter(true, Locale.ROOT));
+    this.converters.putIfAbsent(Converter.STRING_LOWER, new CasedStringConverter(false, Locale.ROOT));
 
     this.converters.putIfAbsent(Converter.TAG, new TagConverter());
     this.converters.putIfAbsent(Converter.TAGS, new TagsConverter());

@@ -75,189 +75,167 @@ public class ResultSetImpl implements ResultSet {
     return NormalizeUtils.valuesAsID(values);
   }
 
-  // UpperCase/LowerCase with Locale.ROOT
+  // UpperCase/LowerCase
 
-  public String getStringUC(String columnLabel) throws java.sql.SQLException {
+  public String getStringUpper(String columnLabel) throws java.sql.SQLException {
     String value = this.rs.getString(columnLabel);
     return (value != null) ? value.toUpperCase(Locale.ROOT) : null;
   }
 
-  public String getStringUC(String columnLabel, String valueIfNull) throws java.sql.SQLException {
-    Asserts.notNull(valueIfNull);
+  public String getStringUpper(String columnLabel, String ifNull) throws java.sql.SQLException {
+    Asserts.notNull(ifNull);
 
     String value = this.rs.getString(columnLabel);
-    return (value != null) ? value.toUpperCase(Locale.ROOT) : valueIfNull.toUpperCase(Locale.ROOT);
+    return (value != null) ? value.toUpperCase(Locale.ROOT) : ifNull.toUpperCase(Locale.ROOT);
   }
 
-  public String getStringUCReq(String columnLabel) throws java.sql.SQLException {
+  public String getStringUpperReq(String columnLabel) throws java.sql.SQLException {
     String value = getStringReq(columnLabel);
     return value.toUpperCase(Locale.ROOT);
   }
 
-  public String getStringLC(String columnLabel) throws java.sql.SQLException {
+  public String getStringLower(String columnLabel) throws java.sql.SQLException {
     String value = this.rs.getString(columnLabel);
     return (value != null) ? value.toLowerCase(Locale.ROOT) : null;
   }
 
-  public String getStringLC(String columnLabel, String valueIfNull) throws java.sql.SQLException {
-    Asserts.notNull(valueIfNull);
+  public String getStringLower(String columnLabel, String ifNull) throws java.sql.SQLException {
+    Asserts.notNull(ifNull);
 
     String value = this.rs.getString(columnLabel);
-    return (value != null) ? value.toLowerCase(Locale.ROOT) : valueIfNull.toLowerCase(Locale.ROOT);
+    return (value != null) ? value.toLowerCase(Locale.ROOT) : ifNull.toLowerCase(Locale.ROOT);
   }
 
-  public String getStringLCReq(String columnLabel) throws java.sql.SQLException {
+  public String getStringLowerReq(String columnLabel) throws java.sql.SQLException {
     String value = getStringReq(columnLabel);
     return value.toLowerCase(Locale.ROOT);
   }
 
-  // Get with default values
+  // Default Values
 
-  public boolean getBoolean(String columnLabel, boolean valueIfNull) throws java.sql.SQLException {
+  public boolean getBoolean(String columnLabel, boolean ifNull) throws java.sql.SQLException {
     boolean value = this.rs.getBoolean(columnLabel);
-    return !this.rs.wasNull() ? value : valueIfNull;
+    return !this.rs.wasNull() ? value : ifNull;
   }
 
-  public byte getByte(String columnLabel, byte valueIfNull) throws java.sql.SQLException {
+  public byte getByte(String columnLabel, byte ifNull) throws java.sql.SQLException {
     byte value = this.rs.getByte(columnLabel);
-    return !this.rs.wasNull() ? value : valueIfNull;
+    return !this.rs.wasNull() ? value : ifNull;
   }
 
-  public short getShort(String columnLabel, short valueIfNull) throws java.sql.SQLException {
+  public short getShort(String columnLabel, short ifNull) throws java.sql.SQLException {
     short value = this.rs.getShort(columnLabel);
-    return !this.rs.wasNull() ? value : valueIfNull;
+    return !this.rs.wasNull() ? value : ifNull;
   }
 
-  public int getInt(String columnLabel, int valueIfNull) throws java.sql.SQLException {
+  public int getInt(String columnLabel, int ifNull) throws java.sql.SQLException {
     int value = this.rs.getInt(columnLabel);
-    return !this.rs.wasNull() ? value : valueIfNull;
+    return !this.rs.wasNull() ? value : ifNull;
   }
 
-  public long getLong(String columnLabel, long valueIfNull) throws java.sql.SQLException {
+  public long getLong(String columnLabel, long ifNull) throws java.sql.SQLException {
     long value = this.rs.getLong(columnLabel);
-    return !this.rs.wasNull() ? value : valueIfNull;
+    return !this.rs.wasNull() ? value : ifNull;
   }
 
-  public float getFloat(String columnLabel, float valueIfNull) throws java.sql.SQLException {
+  public float getFloat(String columnLabel, float ifNull) throws java.sql.SQLException {
     float value = this.rs.getFloat(columnLabel);
-    return !this.rs.wasNull() ? value : valueIfNull;
+    return !this.rs.wasNull() ? value : ifNull;
   }
 
-  public double getDouble(String columnLabel, double valueIfNull) throws java.sql.SQLException {
+  public double getDouble(String columnLabel, double ifNull) throws java.sql.SQLException {
     double value = this.rs.getDouble(columnLabel);
-    return !this.rs.wasNull() ? value : valueIfNull;
+    return !this.rs.wasNull() ? value : ifNull;
   }
 
-  public BigDecimal getBigDecimal(String columnLabel, double valueIfNull) throws java.sql.SQLException {
+  public BigDecimal getBigDecimal(String columnLabel, double ifNull) throws java.sql.SQLException {
     BigDecimal value = this.rs.getBigDecimal(columnLabel);
-    return (value != null) ? value : new BigDecimal(Double.toString(valueIfNull));
+    return (value != null) ? value : new BigDecimal(Double.toString(ifNull));
   }
 
-  public String getString(String columnLabel, String valueIfNull) throws java.sql.SQLException {
-    Asserts.notNull(valueIfNull);
-
+  public String getString(String columnLabel, String ifNull) throws java.sql.SQLException {
+    Asserts.notNull(ifNull);
     String value = this.rs.getString(columnLabel);
-    return (value != null) ? value : valueIfNull;
+    return (value != null) ? value : ifNull;
   }
 
-  public String getNString(String columnLabel, String valueIfNull) throws java.sql.SQLException {
-    Asserts.notNull(valueIfNull);
-
+  public String getNString(String columnLabel, String ifNull) throws java.sql.SQLException {
+    Asserts.notNull(ifNull);
     String value = this.rs.getNString(columnLabel);
-    return (value != null) ? value : valueIfNull;
+    return (value != null) ? value : ifNull;
   }
 
-  // Get required values
+  // Required Values
 
-  private AssertException nullValueFoundException(String columnLabel) {
-    return new AssertException(STR.fmt("Null value found under the label '{}'.", columnLabel));
+  private void assertNotNull(String columnLabel) throws java.sql.SQLException {
+    if (this.rs.wasNull()) {
+      throw new AssertException(STR.fmt("Null value found under the label '{}'.", columnLabel));
+    }
   }
 
   public boolean getBooleanReq(String columnLabel) throws java.sql.SQLException {
     boolean value = this.rs.getBoolean(columnLabel);
-    if (this.rs.wasNull()) {
-      throw nullValueFoundException(columnLabel);
-    }
+    assertNotNull(columnLabel);
     return value;
   }
 
   public byte getByteReq(String columnLabel) throws java.sql.SQLException {
     byte value = this.rs.getByte(columnLabel);
-    if (this.rs.wasNull()) {
-      throw nullValueFoundException(columnLabel);
-    }
+    assertNotNull(columnLabel);
     return value;
   }
 
   public short getShortReq(String columnLabel) throws java.sql.SQLException {
     short value = this.rs.getShort(columnLabel);
-    if (this.rs.wasNull()) {
-      throw nullValueFoundException(columnLabel);
-    }
+    assertNotNull(columnLabel);
     return value;
   }
 
   public int getIntReq(String columnLabel) throws java.sql.SQLException {
     int value = this.rs.getInt(columnLabel);
-    if (this.rs.wasNull()) {
-      throw nullValueFoundException(columnLabel);
-    }
+    assertNotNull(columnLabel);
     return value;
   }
 
   public long getLongReq(String columnLabel) throws java.sql.SQLException {
     long value = this.rs.getLong(columnLabel);
-    if (this.rs.wasNull()) {
-      throw nullValueFoundException(columnLabel);
-    }
+    assertNotNull(columnLabel);
     return value;
   }
 
   public float getFloatReq(String columnLabel) throws java.sql.SQLException {
     float value = this.rs.getFloat(columnLabel);
-    if (this.rs.wasNull()) {
-      throw nullValueFoundException(columnLabel);
-    }
+    assertNotNull(columnLabel);
     return value;
   }
 
   public double getDoubleReq(String columnLabel) throws java.sql.SQLException {
     double value = this.rs.getDouble(columnLabel);
-    if (this.rs.wasNull()) {
-      throw nullValueFoundException(columnLabel);
-    }
+    assertNotNull(columnLabel);
     return value;
   }
 
   public BigDecimal getBigDecimalReq(String columnLabel) throws java.sql.SQLException {
     BigDecimal value = this.rs.getBigDecimal(columnLabel);
-    if (value == null) {
-      throw nullValueFoundException(columnLabel);
-    }
+    assertNotNull(columnLabel);
     return value;
   }
 
   public String getStringReq(String columnLabel) throws java.sql.SQLException {
     String value = this.rs.getString(columnLabel);
-    if (value == null) {
-      throw nullValueFoundException(columnLabel);
-    }
+    assertNotNull(columnLabel);
     return value;
   }
 
   public String getNStringReq(String columnLabel) throws java.sql.SQLException {
     String value = this.rs.getNString(columnLabel);
-    if (value == null) {
-      throw nullValueFoundException(columnLabel);
-    }
+    assertNotNull(columnLabel);
     return value;
   }
 
   public <T> T getObjectReq(String columnLabel, Class<T> type) throws java.sql.SQLException {
     T value = this.rs.getObject(columnLabel, type);
-    if (value == null) {
-      throw nullValueFoundException(columnLabel);
-    }
+    assertNotNull(columnLabel);
     return value;
   }
 
@@ -303,7 +281,7 @@ public class ResultSetImpl implements ResultSet {
     return this.rs.getObject(columnLabel, OffsetTime.class);
   }
 
-  // Get Primitive Wrappers
+  // Primitive Wrappers
 
   public Boolean getBooleanOpt(String columnLabel) throws java.sql.SQLException {
     boolean value = this.rs.getBoolean(columnLabel);
@@ -342,22 +320,14 @@ public class ResultSetImpl implements ResultSet {
 
   // java.sql.ResultSet
 
-  private AssertException nullValueFoundException(int columnIndex) {
-    return new AssertException(STR.fmt("Null value found under the index {}.", columnIndex));
-  }
-
   @Override
   public boolean getBoolean(int columnIndex) throws java.sql.SQLException {
-    boolean value = this.rs.getBoolean(columnIndex);
-    if (this.rs.wasNull()) {
-      throw nullValueFoundException(columnIndex);
-    }
-    return value;
+    return this.rs.getBoolean(columnIndex);
   }
 
   @Override
   public boolean getBoolean(String columnLabel) throws java.sql.SQLException {
-    return getBooleanReq(columnLabel);
+    return this.rs.getBoolean(columnLabel);
   }
 
   @Override
@@ -382,16 +352,12 @@ public class ResultSetImpl implements ResultSet {
 
   @Override
   public byte getByte(String columnLabel) throws java.sql.SQLException {
-    return getByteReq(columnLabel);
+    return this.rs.getByte(columnLabel);
   }
 
   @Override
   public byte getByte(int columnIndex) throws java.sql.SQLException {
-    byte value = this.rs.getByte(columnIndex);
-    if (this.rs.wasNull()) {
-      throw nullValueFoundException(columnIndex);
-    }
-    return value;
+    return this.rs.getByte(columnIndex);
   }
 
   @Override
@@ -406,72 +372,52 @@ public class ResultSetImpl implements ResultSet {
 
   @Override
   public short getShort(int columnIndex) throws java.sql.SQLException {
-    short value = this.rs.getShort(columnIndex);
-    if (this.rs.wasNull()) {
-      throw nullValueFoundException(columnIndex);
-    }
-    return value;
+    return this.rs.getShort(columnIndex);
   }
 
   @Override
   public short getShort(String columnLabel) throws java.sql.SQLException {
-    return getShortReq(columnLabel);
+    return this.rs.getShort(columnLabel);
   }
 
   @Override
   public int getInt(int columnIndex) throws java.sql.SQLException {
-    int value = this.rs.getInt(columnIndex);
-    if (this.rs.wasNull()) {
-      throw nullValueFoundException(columnIndex);
-    }
-    return value;
+    return this.rs.getInt(columnIndex);
   }
 
   @Override
   public int getInt(String columnLabel) throws java.sql.SQLException {
-    return getIntReq(columnLabel);
+    return this.rs.getInt(columnLabel);
   }
 
   @Override
   public long getLong(String columnLabel) throws java.sql.SQLException {
-    return getLongReq(columnLabel);
+    return this.rs.getLong(columnLabel);
   }
 
   @Override
   public long getLong(int columnIndex) throws java.sql.SQLException {
-    long value = this.rs.getLong(columnIndex);
-    if (this.rs.wasNull()) {
-      throw nullValueFoundException(columnIndex);
-    }
-    return value;
+    return this.rs.getLong(columnIndex);
   }
 
   @Override
   public float getFloat(String columnLabel) throws java.sql.SQLException {
-    return getFloatReq(columnLabel);
+    return this.rs.getFloat(columnLabel);
   }
 
   @Override
   public float getFloat(int columnIndex) throws java.sql.SQLException {
-    float value = this.rs.getFloat(columnIndex);
-    if (this.rs.wasNull()) {
-      throw nullValueFoundException(columnIndex);
-    }
-    return value;
+    return this.rs.getFloat(columnIndex);
   }
 
   @Override
   public double getDouble(String columnLabel) throws java.sql.SQLException {
-    return getDoubleReq(columnLabel);
+    return this.rs.getDouble(columnLabel);
   }
 
   @Override
   public double getDouble(int columnIndex) throws java.sql.SQLException {
-    double value = this.rs.getDouble(columnIndex);
-    if (this.rs.wasNull()) {
-      throw nullValueFoundException(columnIndex);
-    }
-    return value;
+    return this.rs.getDouble(columnIndex);
   }
 
   @Override

@@ -18,9 +18,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.crypto;
-
-import java.util.Properties;
+package com.appslandia.common.base;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -30,31 +28,41 @@ import org.junit.jupiter.api.Test;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class SecureConfigTest {
+public class SimpleConfigTest {
 
   @Test
   public void test() {
-    SecureConfig config = new SecureConfig("password".toCharArray());
-    config.set("config", "clearValue");
+    SimpleConfig config = new SimpleConfig();
+    config.set("config", "value");
 
-    Assertions.assertEquals("clearValue", config.getString("config"));
+    Assertions.assertEquals("value", config.getString("config"));
   }
 
   @Test
-  public void test_password() {
-    SecureConfig config = new SecureConfig("password".toCharArray());
-    config.sets("config", "secret");
+  public void test_empty() {
+    SimpleConfig config = new SimpleConfig();
+    config.set("config", "");
 
-    Assertions.assertEquals("secret", config.getString("config"));
+    Assertions.assertEquals("", config.getString("config"));
   }
 
   @Test
-  public void test_toProperties() {
-    SecureConfig config = new SecureConfig("password".toCharArray());
-    config.sets("config", "secret");
+  public void test_resolve() {
+    SimpleConfig config = new SimpleConfig();
+    config.set("user", "user1");
+    config.set("db", "db1");
+    config.set("conn", "db={db}&user={user}");
 
-    // Properties
-    Properties props = config.toClearProperties();
-    Assertions.assertEquals("secret", props.getProperty("config"));
+    Assertions.assertEquals("db=db1&user=user1", config.resolve("conn"));
+  }
+
+  @Test
+  public void test_resolve_map() {
+    SimpleConfig config = new SimpleConfig();
+    config.set("user", "user1");
+    config.set("db", "db1");
+    config.set("conn", "db={db}&user={user}");
+
+    Assertions.assertEquals("db=db1&user=user2", config.resolve("conn", new Params().set("user", "user2")));
   }
 }

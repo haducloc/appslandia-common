@@ -99,11 +99,15 @@ public abstract class PbeObject extends InitializeObject {
     return this;
   }
 
-  public PbeObject setPassword(String passwordOrEnv) {
+  public PbeObject setPassword(String passwordExpr) {
     this.assertNotInitialized();
 
-    if (passwordOrEnv != null) {
-      String resolvedValue = SYS.resolve(passwordOrEnv);
+    if (passwordExpr != null) {
+      String resolvedValue = SYS.resolve(passwordExpr);
+
+      if (resolvedValue == null) {
+        throw new IllegalArgumentException("Failed to resolve expression: " + passwordExpr);
+      }
       this.password = resolvedValue.toCharArray();
     }
     return this;
