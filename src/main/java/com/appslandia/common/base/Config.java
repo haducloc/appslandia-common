@@ -21,6 +21,7 @@
 package com.appslandia.common.base;
 
 import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.Map;
 
 import com.appslandia.common.utils.ParseUtils;
@@ -35,6 +36,8 @@ import com.appslandia.common.utils.StringUtils;
  *
  */
 public interface Config {
+
+  Iterator<String> getKeys();
 
   String getString(String key);
 

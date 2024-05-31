@@ -27,6 +27,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -48,6 +49,11 @@ public class SimpleConfig implements Config {
 
   public SimpleConfig(Map<String, String> newCfg) {
     this.cfg = newCfg;
+  }
+
+  @Override
+  public Iterator<String> getKeys() {
+    return new UnmodifiableIterator<String>(cfg.keySet().iterator());
   }
 
   @Override
