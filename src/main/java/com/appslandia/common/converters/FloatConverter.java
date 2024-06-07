@@ -24,7 +24,6 @@ import java.math.RoundingMode;
 import java.text.NumberFormat;
 
 import com.appslandia.common.base.FormatProvider;
-import com.appslandia.common.utils.ParseUtils;
 import com.appslandia.common.utils.StringUtils;
 
 /**
@@ -81,15 +80,9 @@ public class FloatConverter extends NumberConverter<Float> {
       return null;
     }
     try {
-      return ParseUtils.parseFloat(str);
-
+      return Float.parseFloat(str);
     } catch (NumberFormatException ex) {
+      throw toParsingError(str, getTargetType().getName());
     }
-
-    Number number = this.parseNumber(str, formatProvider.getNumberParser());
-    if (number != null) {
-      return number.floatValue();
-    }
-    throw toParsingError(str, getTargetType().getName());
   }
 }

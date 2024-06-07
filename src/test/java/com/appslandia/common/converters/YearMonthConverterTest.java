@@ -47,21 +47,6 @@ public class YearMonthConverterTest {
     YearMonthConverter converter = new YearMonthConverter();
     FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
     try {
-      YearMonth v = converter.parse("10/2010", formatProvider);
-      Assertions.assertNotNull(v);
-      Assertions.assertEquals("10/2010", converter.format(v, formatProvider, true));
-      Assertions.assertEquals("2010-10", converter.format(v, formatProvider, false));
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-  }
-
-  @Test
-  public void test_iso() {
-    YearMonthConverter converter = new YearMonthConverter();
-    FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-    try {
       YearMonth v = converter.parse("2010-10", formatProvider);
       Assertions.assertNotNull(v);
       Assertions.assertEquals("10/2010", converter.format(v, formatProvider, true));

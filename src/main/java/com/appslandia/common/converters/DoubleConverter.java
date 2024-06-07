@@ -81,14 +81,8 @@ public class DoubleConverter extends NumberConverter<Double> {
     }
     try {
       return Double.parseDouble(str);
-
     } catch (NumberFormatException ex) {
+      throw toParsingError(str, getTargetType().getName());
     }
-
-    Number number = this.parseNumber(str, formatProvider.getNumberParser());
-    if (number != null) {
-      return (number instanceof Double) ? (Double) number : number.doubleValue();
-    }
-    throw toParsingError(str, getTargetType().getName());
   }
 }

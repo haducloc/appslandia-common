@@ -58,9 +58,8 @@ public class LongConverter extends NumberConverter<Long> {
     }
     try {
       return Long.parseLong(str);
-
     } catch (NumberFormatException ex) {
+      throw toParsingError(str, getTargetType().getName());
     }
-    throw toParsingError(str, getTargetType().getName());
   }
 }

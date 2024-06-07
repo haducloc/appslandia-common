@@ -48,22 +48,6 @@ public class BigDecimalConverterTest {
     BigDecimalConverter converter = new BigDecimalConverter(3, RoundingMode.HALF_EVEN);
     FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
     try {
-      BigDecimal v = converter.parse("1234,1235", formatProvider);
-      Assertions.assertEquals(1234.1235, v.doubleValue(), 0.00001);
-
-      Assertions.assertEquals("1234,124", converter.format(v, formatProvider, true));
-      Assertions.assertEquals("1234.124", converter.format(v, formatProvider, false));
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-  }
-
-  @Test
-  public void test_decimal_format() {
-    BigDecimalConverter converter = new BigDecimalConverter(3, RoundingMode.HALF_EVEN);
-    FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
-    try {
       BigDecimal v = converter.parse("1234.1235", formatProvider);
       Assertions.assertEquals(1234.1235, v.doubleValue(), 0.00001);
 

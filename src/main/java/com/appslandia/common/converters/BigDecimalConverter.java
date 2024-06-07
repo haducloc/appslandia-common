@@ -82,14 +82,8 @@ public class BigDecimalConverter extends NumberConverter<BigDecimal> {
     }
     try {
       return new BigDecimal(str);
-
     } catch (NumberFormatException ex) {
+      throw toParsingError(str, getTargetType().getName());
     }
-
-    Number number = parseNumber(str, formatProvider.getNumberParser());
-    if (number != null) {
-      return (number instanceof BigDecimal) ? (BigDecimal) number : new BigDecimal(number.toString());
-    }
-    throw toParsingError(str, getTargetType().getName());
   }
 }

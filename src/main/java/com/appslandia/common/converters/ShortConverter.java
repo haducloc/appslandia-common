@@ -58,9 +58,8 @@ public class ShortConverter extends NumberConverter<Short> {
     }
     try {
       return Short.parseShort(str);
-
     } catch (NumberFormatException ex) {
+      throw toParsingError(str, getTargetType().getName());
     }
-    throw toParsingError(str, getTargetType().getName());
   }
 }

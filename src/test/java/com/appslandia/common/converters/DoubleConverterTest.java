@@ -47,22 +47,6 @@ public class DoubleConverterTest {
     DoubleConverter converter = new DoubleConverter(3, RoundingMode.HALF_EVEN);
     FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
     try {
-      Double v = converter.parse("1234,1236", formatProvider);
-      Assertions.assertEquals(1234.1236, v.doubleValue(), 0.00001);
-
-      Assertions.assertEquals("1234,124", converter.format(v, formatProvider, true));
-      Assertions.assertEquals("1234.124", converter.format(v, formatProvider, false));
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-  }
-
-  @Test
-  public void test_decimal_format() {
-    DoubleConverter converter = new DoubleConverter(3, RoundingMode.HALF_EVEN);
-    FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
-    try {
       Double v = converter.parse("1234.1236", formatProvider);
       Assertions.assertEquals(1234.1236, v.doubleValue(), 0.00001);
 

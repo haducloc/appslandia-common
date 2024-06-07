@@ -47,22 +47,6 @@ public class FloatConverterTest {
     FloatConverter converter = new FloatConverter(2, RoundingMode.HALF_EVEN);
     FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
     try {
-      Float v = converter.parse("1234,126", formatProvider);
-      Assertions.assertEquals(1234.126, v.doubleValue(), 0.0001);
-
-      Assertions.assertEquals("1234,13", converter.format(v, formatProvider, true));
-      Assertions.assertEquals("1234.13", converter.format(v, formatProvider, false));
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-  }
-
-  @Test
-  public void test_decimal_format() {
-    FloatConverter converter = new FloatConverter(2, RoundingMode.HALF_EVEN);
-    FormatProvider formatProvider = new FormatProviderImpl(Language.VI_VN);
-    try {
       Float v = converter.parse("1234.126", formatProvider);
       Assertions.assertEquals(1234.126, v.doubleValue(), 0.0001);
 

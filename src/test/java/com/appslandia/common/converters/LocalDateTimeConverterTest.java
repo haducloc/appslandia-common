@@ -47,22 +47,6 @@ public class LocalDateTimeConverterTest {
     LocalDateTimeConverter converter = new LocalDateTimeConverter();
     FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
     try {
-      LocalDateTime v = converter.parse("10/10/2010 09:30:00.999", formatProvider);
-      Assertions.assertNotNull(v);
-
-      Assertions.assertEquals("10/10/2010 09:30:00.999", converter.format(v, formatProvider, true));
-      Assertions.assertEquals("2010-10-10T09:30:00.999", converter.format(v, formatProvider, false));
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-  }
-
-  @Test
-  public void test_iso() {
-    LocalDateTimeConverter converter = new LocalDateTimeConverter();
-    FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-    try {
       LocalDateTime v = converter.parse("2010-10-10T09:30:00.999", formatProvider);
       Assertions.assertNotNull(v);
 

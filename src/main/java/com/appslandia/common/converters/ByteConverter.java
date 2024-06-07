@@ -58,9 +58,8 @@ public class ByteConverter extends NumberConverter<Byte> {
     }
     try {
       return Byte.parseByte(str);
-
     } catch (NumberFormatException ex) {
+      throw toParsingError(str, getTargetType().getName());
     }
-    throw toParsingError(str, getTargetType().getName());
   }
 }

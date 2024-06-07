@@ -58,9 +58,9 @@ public class IntegerConverter extends NumberConverter<Integer> {
     }
     try {
       return Integer.parseInt(str);
-
     } catch (NumberFormatException ex) {
+      throw toParsingError(str, getTargetType().getName());
     }
-    throw toParsingError(str, getTargetType().getName());
+
   }
 }
