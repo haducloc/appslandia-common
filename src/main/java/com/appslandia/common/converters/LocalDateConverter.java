@@ -21,10 +21,13 @@
 package com.appslandia.common.converters;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+import java.util.Collection;
 
+import com.appslandia.common.base.FormatProvider;
+import com.appslandia.common.base.TemporalFormatException;
+import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.DateUtils;
+import com.appslandia.common.utils.ParseUtils;
 
 /**
  *
@@ -49,8 +52,15 @@ public class LocalDateConverter extends TemporalConverter<LocalDate> {
     return LocalDate.class;
   }
 
+  static final Collection<String> PARSE_PATTERNS = CollectionUtils.unmodifiableSet(DateUtils.ISO8601_DATE);
+
   @Override
-  protected LocalDate parse(String str, DateTimeFormatter converter) throws DateTimeParseException {
-    return LocalDate.parse(str, converter);
+  protected Collection<String> getParsingPatterns(FormatProvider formatProvider) {
+    return PARSE_PATTERNS;
+  }
+
+  @Override
+  protected LocalDate parse(String str, Collection<String> patterns) throws TemporalFormatException {
+    return ParseUtils.parseLocalDate(str, patterns);
   }
 }

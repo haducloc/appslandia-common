@@ -129,9 +129,9 @@ public interface Config {
     return new BigDecimal(value);
   }
 
-  default public BigDecimal getDecimalOpt(String key) throws NumberFormatException {
+  default public BigDecimal getDecimal(String key) throws NumberFormatException {
     String value = getString(key);
-    return ParseUtils.parseDecimalOpt(value);
+    return ParseUtils.parseDecimal(value);
   }
 
   default public String resolve(String key) {

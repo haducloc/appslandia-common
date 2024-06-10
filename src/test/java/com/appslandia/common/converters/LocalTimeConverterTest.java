@@ -72,16 +72,4 @@ public class LocalTimeConverterTest {
       Assertions.fail(ex.getMessage());
     }
   }
-
-  @Test
-  public void test_invalid() {
-    LocalTimeConverter converter = new LocalTimeConverter();
-    FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
-    try {
-      converter.parse("09:30:00", formatProvider);
-      Assertions.fail();
-    } catch (Exception ex) {
-      Assertions.assertTrue(ex instanceof ConverterException);
-    }
-  }
 }

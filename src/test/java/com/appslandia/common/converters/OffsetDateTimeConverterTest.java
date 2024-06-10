@@ -78,7 +78,7 @@ public class OffsetDateTimeConverterTest {
     OffsetDateTimeConverter converter = new OffsetDateTimeConverter();
     FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
     try {
-      converter.parse("2010-10-10T09:30:00+07:00", formatProvider);
+      converter.parse("10/10/2010T09:30:61+07:00", formatProvider);
       Assertions.fail();
     } catch (Exception ex) {
       Assertions.assertTrue(ex instanceof ConverterException);

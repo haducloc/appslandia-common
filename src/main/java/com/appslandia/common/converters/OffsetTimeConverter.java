@@ -21,10 +21,13 @@
 package com.appslandia.common.converters;
 
 import java.time.OffsetTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+import java.util.Collection;
 
+import com.appslandia.common.base.FormatProvider;
+import com.appslandia.common.base.TemporalFormatException;
+import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.DateUtils;
+import com.appslandia.common.utils.ParseUtils;
 
 /**
  *
@@ -53,8 +56,17 @@ public class OffsetTimeConverter extends TemporalConverter<OffsetTime> {
     return OffsetTime.class;
   }
 
+  static final Collection<String> PARSE_PATTERNS = CollectionUtils.unmodifiableSet(DateUtils.ISO8601_TIMEZ_M,
+      DateUtils.ISO8601_TIMEZ_S, DateUtils.ISO8601_TIMEZ_N1, DateUtils.ISO8601_TIMEZ_N2, DateUtils.ISO8601_TIMEZ_N3,
+      DateUtils.ISO8601_TIMEZ_N4, DateUtils.ISO8601_TIMEZ_N5, DateUtils.ISO8601_TIMEZ_N6, DateUtils.ISO8601_TIMEZ_N7);
+
   @Override
-  protected OffsetTime parse(String str, DateTimeFormatter converter) throws DateTimeParseException {
-    return OffsetTime.parse(str, converter);
+  protected Collection<String> getParsingPatterns(FormatProvider formatProvider) {
+    return PARSE_PATTERNS;
+  }
+
+  @Override
+  protected OffsetTime parse(String str, Collection<String> patterns) throws TemporalFormatException {
+    return ParseUtils.parseOffsetTime(str, patterns);
   }
 }

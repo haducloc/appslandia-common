@@ -22,13 +22,14 @@ package com.appslandia.common.utils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Collections;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.time.YearMonth;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import com.appslandia.common.base.BoolFormatException;
-import com.appslandia.common.base.DateFormatException;
 
 /**
  *
@@ -38,101 +39,102 @@ import com.appslandia.common.base.DateFormatException;
 public class ParseUtilsTest {
 
   @Test
-  public void test_parseBool() throws BoolFormatException {
-    Assertions.assertTrue(ParseUtils.parseBool("true"));
-    Assertions.assertFalse(ParseUtils.parseBool("false"));
+  public void test_parseBool() {
+    try {
+      boolean val = ParseUtils.parseBool("true");
+      Assertions.assertTrue(val);
+
+      val = ParseUtils.parseBool("false");
+      Assertions.assertFalse(val);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
     Assertions.assertTrue(ParseUtils.parseBool("invalid", true));
   }
 
   @Test
   public void test_parseByte() {
-    Assertions.assertEquals((byte) 42, ParseUtils.parseByte("42"));
+    try {
+      byte val = ParseUtils.parseByte("42");
+      Assertions.assertEquals(42, val);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
     Assertions.assertEquals((byte) 0, ParseUtils.parseByte("invalid", (byte) 0));
   }
 
   @Test
   public void test_parseShort() {
-    Assertions.assertEquals((short) 42, ParseUtils.parseShort("42"));
+    try {
+      short val = ParseUtils.parseShort("42");
+      Assertions.assertEquals(42, val);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
     Assertions.assertEquals((short) 0, ParseUtils.parseShort("invalid", (short) 0));
   }
 
   @Test
   public void test_parseInt() {
-    Assertions.assertEquals(42, ParseUtils.parseInt("42"));
+    try {
+      int val = ParseUtils.parseInt("42");
+      Assertions.assertEquals(42, val);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
     Assertions.assertEquals(0, ParseUtils.parseInt("invalid", 0));
   }
 
   @Test
   public void test_parseLong() {
-    Assertions.assertEquals(42L, ParseUtils.parseLong("42"));
+    try {
+      long val = ParseUtils.parseLong("42");
+      Assertions.assertEquals(42, val);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
     Assertions.assertEquals(0L, ParseUtils.parseLong("invalid", 0L));
   }
 
   @Test
   public void test_parseFloat() {
-    Assertions.assertEquals(3.14f, ParseUtils.parseFloat("3.14"));
+    try {
+      float val = ParseUtils.parseFloat("3.14");
+      Assertions.assertEquals(3.14f, val);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
     Assertions.assertEquals(0.0f, ParseUtils.parseFloat("invalid", 0.0f));
   }
 
   @Test
   public void test_parseDouble() {
-    Assertions.assertEquals(3.14, ParseUtils.parseDouble("3.14"));
+    try {
+      double val = ParseUtils.parseDouble("3.14");
+      Assertions.assertEquals(3.14, val);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
     Assertions.assertEquals(0.0, ParseUtils.parseDouble("invalid", 0.0));
   }
 
   @Test
   public void test_parseDecimal() {
-    Assertions.assertEquals(new BigDecimal("3.14"), ParseUtils.parseDecimal("3.14", 0.0));
+    try {
+      BigDecimal val = ParseUtils.parseDecimal("3.14");
+      Assertions.assertEquals(new BigDecimal("3.14"), val);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
     Assertions.assertEquals(new BigDecimal("0.0"), ParseUtils.parseDecimal("invalid", 0.0));
-  }
-
-  @Test
-  public void test_parseBoolOpt() throws BoolFormatException {
-    Assertions.assertTrue(ParseUtils.parseBoolOpt("true"));
-    Assertions.assertFalse(ParseUtils.parseBoolOpt("false"));
-    Assertions.assertThrows(BoolFormatException.class, () -> ParseUtils.parseBoolOpt("invalid"));
-  }
-
-  @Test
-  public void test_parseByteOpt() {
-    Assertions.assertEquals(Byte.valueOf((byte) 42), ParseUtils.parseByteOpt("42"));
-    Assertions.assertThrows(NumberFormatException.class, () -> ParseUtils.parseByteOpt("invalid"));
-  }
-
-  @Test
-  public void test_parseShortOpt() {
-    Assertions.assertEquals(Short.valueOf((short) 42), ParseUtils.parseShortOpt("42"));
-    Assertions.assertThrows(NumberFormatException.class, () -> ParseUtils.parseShortOpt("invalid"));
-  }
-
-  @Test
-  public void test_parseIntOpt() {
-    Assertions.assertEquals(Integer.valueOf(42), ParseUtils.parseIntOpt("42"));
-    Assertions.assertThrows(NumberFormatException.class, () -> ParseUtils.parseIntOpt("invalid"));
-  }
-
-  @Test
-  public void test_parseLongOpt() {
-    Assertions.assertEquals(Long.valueOf(42), ParseUtils.parseLongOpt("42"));
-    Assertions.assertThrows(NumberFormatException.class, () -> ParseUtils.parseLongOpt("invalid"));
-  }
-
-  @Test
-  public void test_parseFloatOpt() {
-    Assertions.assertEquals(Float.valueOf(3.14f), ParseUtils.parseFloatOpt("3.14"));
-    Assertions.assertThrows(NumberFormatException.class, () -> ParseUtils.parseFloatOpt("invalid"));
-  }
-
-  @Test
-  public void test_parseDoubleOpt() {
-    Assertions.assertEquals(Double.valueOf(3.14), ParseUtils.parseDoubleOpt("3.14"));
-    Assertions.assertThrows(NumberFormatException.class, () -> ParseUtils.parseDoubleOpt("invalid"));
-  }
-
-  @Test
-  public void test_parseDecimalOpt() {
-    Assertions.assertEquals(new BigDecimal("3.14"), ParseUtils.parseDecimalOpt("3.14"));
-    Assertions.assertThrows(NumberFormatException.class, () -> ParseUtils.parseDecimalOpt("invalid"));
   }
 
   @Test
@@ -160,34 +162,110 @@ public class ParseUtilsTest {
   }
 
   @Test
-  public void test_parseLocalDate() throws DateFormatException {
-    Assertions.assertEquals(LocalDate.parse("2024-05-29"), ParseUtils.parseLocalDate("2024-05-29", "yyyy-MM-dd"));
-    Assertions.assertNull(ParseUtils.parseLocalDate(null, "yyyy-MM-dd"));
+  public void test_parseLocalDate() {
+    try {
+      LocalDate val = ParseUtils.parseLocalDate("2024-05-29", DateUtils.ISO8601_DATE);
+      Assertions.assertEquals(LocalDate.parse("2024-05-29"), val);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+    try {
+      LocalDate val = ParseUtils.parseLocalDate(null, DateUtils.ISO8601_DATE);
+      Assertions.assertNull(val);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
   }
 
   @Test
-  public void test_parseLocalTime() throws DateFormatException {
-    Assertions.assertEquals(LocalDate.parse("2024-05-29"),
-        ParseUtils.parseLocalDate("2024-05-29", Collections.singletonList("yyyy-MM-dd")));
-    Assertions.assertNull(ParseUtils.parseLocalDate(null, Collections.singletonList("yyyy-MM-dd")));
+  public void test_parseLocalTime() {
+    try {
+      LocalTime val = ParseUtils.parseLocalTime("12:30:45", DateUtils.ISO8601_TIME_S);
+      Assertions.assertEquals(LocalTime.parse("12:30:45"), val);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+    try {
+      LocalTime val = ParseUtils.parseLocalTime(null, DateUtils.ISO8601_TIME_S);
+      Assertions.assertNull(val);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
   }
 
   @Test
-  public void test_parseLocalDateTime() throws DateFormatException {
-    Assertions.assertEquals(LocalDate.parse("2024-05-29"), ParseUtils.parseLocalDate("2024-05-29", "yyyy-MM-dd"));
-    Assertions.assertNull(ParseUtils.parseLocalDate(null, "yyyy-MM-dd"));
+  public void test_parseLocalDateTime() {
+    try {
+      LocalDateTime val = ParseUtils.parseLocalDateTime("2024-05-29T12:30:45", DateUtils.ISO8601_DATETIME_S);
+      Assertions.assertEquals(LocalDateTime.parse("2024-05-29T12:30:45"), val);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+    try {
+      LocalDateTime val = ParseUtils.parseLocalDateTime(null, DateUtils.ISO8601_DATETIME_S);
+      Assertions.assertNull(val);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
   }
 
   @Test
-  public void test_parseOffsetTime() throws DateFormatException {
-    Assertions.assertEquals(LocalDate.parse("2024-05-29"),
-        ParseUtils.parseLocalDate("2024-05-29", Collections.singletonList("yyyy-MM-dd")));
-    Assertions.assertNull(ParseUtils.parseLocalDate(null, Collections.singletonList("yyyy-MM-dd")));
+  public void test_parseOffsetDateTime() {
+    try {
+      OffsetDateTime val = ParseUtils.parseOffsetDateTime("2024-05-29T12:30:45Z", DateUtils.ISO8601_DATETIMEZ_S);
+      Assertions.assertEquals(OffsetDateTime.parse("2024-05-29T12:30:45Z"), val);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+    try {
+      OffsetDateTime val = ParseUtils.parseOffsetDateTime(null, DateUtils.ISO8601_DATETIMEZ_S);
+      Assertions.assertNull(val);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
   }
 
   @Test
-  public void test_parseOffsetDateTime() throws DateFormatException {
-    Assertions.assertEquals(LocalDate.parse("2024-05-29"), ParseUtils.parseLocalDate("2024-05-29", "yyyy-MM-dd"));
-    Assertions.assertNull(ParseUtils.parseLocalDate(null, "yyyy-MM-dd"));
+  public void test_parseOffsetTime() {
+    try {
+      OffsetTime val = ParseUtils.parseOffsetTime("12:30:45+01:00", DateUtils.ISO8601_TIMEZ_S);
+      Assertions.assertEquals(OffsetTime.parse("12:30:45+01:00"), val);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+    try {
+      OffsetTime val = ParseUtils.parseOffsetTime(null, DateUtils.ISO8601_TIMEZ_S);
+      Assertions.assertNull(val);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
+
+  @Test
+  public void test_parseYearMonth() {
+    try {
+      YearMonth val = ParseUtils.parseYearMonth("2024-05", DateUtils.ISO8601_YEAR_MONTH);
+      Assertions.assertEquals(YearMonth.parse("2024-05"), val);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+    try {
+      YearMonth val = ParseUtils.parseYearMonth(null, DateUtils.ISO8601_YEAR_MONTH);
+      Assertions.assertNull(val);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
   }
 }

@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 import com.appslandia.common.base.AssertException;
 import com.appslandia.common.base.BoolFormatException;
-import com.appslandia.common.base.DateFormatException;
+import com.appslandia.common.base.TemporalFormatException;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.ParseUtils;
@@ -231,7 +231,7 @@ public class CsvRecord {
 
   public BigDecimal getDecimal(int index) throws NumberFormatException {
     String value = getString(index);
-    return ParseUtils.parseDecimalOpt(value);
+    return ParseUtils.parseDecimal(value);
   }
 
   public BigDecimal getDecimal(int index, double ifNullOrInvalid) {
@@ -241,7 +241,7 @@ public class CsvRecord {
 
   // Temporal Types
 
-  public LocalDate getLocalDate(int index, String... patterns) throws DateFormatException {
+  public LocalDate getLocalDate(int index, String... patterns) throws TemporalFormatException {
     String value = getString(index);
     if (value != null) {
       return (patterns.length > 0) ? ParseUtils.parseLocalDate(value, patterns)
@@ -250,13 +250,13 @@ public class CsvRecord {
     return null;
   }
 
-  public LocalDate getLocalDateReq(int index, String... patterns) throws DateFormatException {
+  public LocalDate getLocalDateReq(int index, String... patterns) throws TemporalFormatException {
     String value = getStringReq(index);
     return (patterns.length > 0) ? ParseUtils.parseLocalDate(value, patterns)
         : ParseUtils.parseLocalDate(value, CsvUtils.PATTERNS_DATE);
   }
 
-  public LocalTime getLocalTime(int index, String... patterns) throws DateFormatException {
+  public LocalTime getLocalTime(int index, String... patterns) throws TemporalFormatException {
     String value = getString(index);
     if (value != null) {
       return (patterns.length > 0) ? ParseUtils.parseLocalTime(value, patterns)
@@ -265,13 +265,13 @@ public class CsvRecord {
     return null;
   }
 
-  public LocalTime getLocalTimeReq(int index, String... patterns) throws DateFormatException {
+  public LocalTime getLocalTimeReq(int index, String... patterns) throws TemporalFormatException {
     String value = getStringReq(index);
     return (patterns.length > 0) ? ParseUtils.parseLocalTime(value, patterns)
         : ParseUtils.parseLocalTime(value, CsvUtils.PATTERNS_TIME);
   }
 
-  public LocalDateTime getLocalDateTime(int index, String... patterns) throws DateFormatException {
+  public LocalDateTime getLocalDateTime(int index, String... patterns) throws TemporalFormatException {
     String value = getString(index);
     if (value != null) {
       return (patterns.length > 0) ? ParseUtils.parseLocalDateTime(value, patterns)
@@ -280,13 +280,13 @@ public class CsvRecord {
     return null;
   }
 
-  public LocalDateTime getLocalDateTimeReq(int index, String... patterns) throws DateFormatException {
+  public LocalDateTime getLocalDateTimeReq(int index, String... patterns) throws TemporalFormatException {
     String value = getStringReq(index);
     return (patterns.length > 0) ? ParseUtils.parseLocalDateTime(value, patterns)
         : ParseUtils.parseLocalDateTime(value, CsvUtils.PATTERNS_DATETIME);
   }
 
-  public OffsetTime getOffsetTime(int index, String... patterns) throws DateFormatException {
+  public OffsetTime getOffsetTime(int index, String... patterns) throws TemporalFormatException {
     String value = getString(index);
     if (value != null) {
       return (patterns.length > 0) ? ParseUtils.parseOffsetTime(value, patterns)
@@ -295,13 +295,13 @@ public class CsvRecord {
     return null;
   }
 
-  public OffsetTime getOffsetTimeReq(int index, String... patterns) throws DateFormatException {
+  public OffsetTime getOffsetTimeReq(int index, String... patterns) throws TemporalFormatException {
     String value = getStringReq(index);
     return (patterns.length > 0) ? ParseUtils.parseOffsetTime(value, patterns)
         : ParseUtils.parseOffsetTime(value, CsvUtils.PATTERNS_TIMEZ);
   }
 
-  public OffsetDateTime getOffsetDateTime(int index, String... patterns) throws DateFormatException {
+  public OffsetDateTime getOffsetDateTime(int index, String... patterns) throws TemporalFormatException {
     String value = getString(index);
     if (value != null) {
       return (patterns.length > 0) ? ParseUtils.parseOffsetDateTime(value, patterns)
@@ -310,58 +310,58 @@ public class CsvRecord {
     return null;
   }
 
-  public OffsetDateTime getOffsetDateTimeReq(int index, String... patterns) throws DateFormatException {
+  public OffsetDateTime getOffsetDateTimeReq(int index, String... patterns) throws TemporalFormatException {
     String value = getStringReq(index);
     return (patterns.length > 0) ? ParseUtils.parseOffsetDateTime(value, patterns)
         : ParseUtils.parseOffsetDateTime(value, CsvUtils.PATTERNS_DATETIMEZ);
   }
 
-  public LocalDate getLocalDate(int index, Collection<String> patterns) throws DateFormatException {
+  public LocalDate getLocalDate(int index, Collection<String> patterns) throws TemporalFormatException {
     String value = getString(index);
     return ParseUtils.parseLocalDate(value, patterns);
   }
 
-  public LocalDate getLocalDateReq(int index, Collection<String> patterns) throws DateFormatException {
+  public LocalDate getLocalDateReq(int index, Collection<String> patterns) throws TemporalFormatException {
     String value = getStringReq(index);
     return ParseUtils.parseLocalDate(value, patterns);
   }
 
-  public LocalTime getLocalTime(int index, Collection<String> patterns) throws DateFormatException {
+  public LocalTime getLocalTime(int index, Collection<String> patterns) throws TemporalFormatException {
     String value = getString(index);
     return ParseUtils.parseLocalTime(value, patterns);
   }
 
-  public LocalTime getLocalTimeReq(int index, Collection<String> patterns) throws DateFormatException {
+  public LocalTime getLocalTimeReq(int index, Collection<String> patterns) throws TemporalFormatException {
     String value = getStringReq(index);
     return ParseUtils.parseLocalTime(value, patterns);
   }
 
-  public LocalDateTime getLocalDateTime(int index, Collection<String> patterns) throws DateFormatException {
+  public LocalDateTime getLocalDateTime(int index, Collection<String> patterns) throws TemporalFormatException {
     String value = getString(index);
     return ParseUtils.parseLocalDateTime(value, patterns);
   }
 
-  public LocalDateTime getLocalDateTimeReq(int index, Collection<String> patterns) throws DateFormatException {
+  public LocalDateTime getLocalDateTimeReq(int index, Collection<String> patterns) throws TemporalFormatException {
     String value = getStringReq(index);
     return ParseUtils.parseLocalDateTime(value, patterns);
   }
 
-  public OffsetTime getOffsetTime(int index, Collection<String> patterns) throws DateFormatException {
+  public OffsetTime getOffsetTime(int index, Collection<String> patterns) throws TemporalFormatException {
     String value = getString(index);
     return ParseUtils.parseOffsetTime(value, patterns);
   }
 
-  public OffsetTime getOffsetTimeReq(int index, Collection<String> patterns) throws DateFormatException {
+  public OffsetTime getOffsetTimeReq(int index, Collection<String> patterns) throws TemporalFormatException {
     String value = getStringReq(index);
     return ParseUtils.parseOffsetTime(value, patterns);
   }
 
-  public OffsetDateTime getOffsetDateTime(int index, Collection<String> patterns) throws DateFormatException {
+  public OffsetDateTime getOffsetDateTime(int index, Collection<String> patterns) throws TemporalFormatException {
     String value = getString(index);
     return ParseUtils.parseOffsetDateTime(value, patterns);
   }
 
-  public OffsetDateTime getOffsetDateTimeReq(int index, Collection<String> patterns) throws DateFormatException {
+  public OffsetDateTime getOffsetDateTimeReq(int index, Collection<String> patterns) throws TemporalFormatException {
     String value = getStringReq(index);
     return ParseUtils.parseOffsetDateTime(value, patterns);
   }

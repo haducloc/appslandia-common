@@ -182,8 +182,8 @@ public class SimpleConfigTest {
   public void test_getDecimalOpt() {
     SimpleConfig config = new SimpleConfig();
     config.set("key1", "3.14");
-    Assertions.assertEquals(new BigDecimal("3.14"), config.getDecimalOpt("key1"));
-    Assertions.assertNull(config.getDecimalOpt(NON_EXISTENT_KEY));
+    Assertions.assertEquals(new BigDecimal("3.14"), config.getDecimal("key1"));
+    Assertions.assertNull(config.getDecimal(NON_EXISTENT_KEY));
   }
 
   @Test

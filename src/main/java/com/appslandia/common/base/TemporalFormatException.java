@@ -27,14 +27,14 @@ import java.text.ParseException;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class DateFormatException extends IllegalArgumentException {
+public class TemporalFormatException extends IllegalArgumentException {
   private static final long serialVersionUID = 1L;
 
-  public DateFormatException(String message) {
+  public TemporalFormatException(String message) {
     super(message);
   }
 
-  public DateFormatException(ParseException cause) {
+  public TemporalFormatException(ParseException cause) {
     super(cause.getMessage(), cause);
   }
 }

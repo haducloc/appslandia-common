@@ -26,11 +26,12 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
+import java.time.YearMonth;
 import java.util.Collection;
 import java.util.function.BiFunction;
 
 import com.appslandia.common.base.BoolFormatException;
-import com.appslandia.common.base.DateFormatException;
+import com.appslandia.common.base.TemporalFormatException;
 
 /**
  *
@@ -196,7 +197,7 @@ public class ParseUtils {
     return (value != null) ? Double.parseDouble(value) : null;
   }
 
-  public static BigDecimal parseDecimalOpt(String value) throws NumberFormatException {
+  public static BigDecimal parseDecimal(String value) throws NumberFormatException {
     return (value != null) ? new BigDecimal(value) : null;
   }
 
@@ -210,30 +211,34 @@ public class ParseUtils {
         || "n".equalsIgnoreCase(value);
   }
 
-  public static LocalDate parseLocalDate(String value, String... patterns) throws DateFormatException {
-    return doParseDate(value, LocalDate.class, patterns, (v, p) -> LocalDate.parse(v, DateUtils.getFormatter(p)));
+  public static LocalDate parseLocalDate(String value, String... patterns) throws TemporalFormatException {
+    return doParseTemporal(value, LocalDate.class, patterns, (v, p) -> LocalDate.parse(v, DateUtils.getFormatter(p)));
   }
 
-  public static LocalTime parseLocalTime(String value, String... patterns) throws DateFormatException {
-    return doParseDate(value, LocalTime.class, patterns, (v, p) -> LocalTime.parse(v, DateUtils.getFormatter(p)));
+  public static LocalTime parseLocalTime(String value, String... patterns) throws TemporalFormatException {
+    return doParseTemporal(value, LocalTime.class, patterns, (v, p) -> LocalTime.parse(v, DateUtils.getFormatter(p)));
   }
 
-  public static LocalDateTime parseLocalDateTime(String value, String... patterns) throws DateFormatException {
-    return doParseDate(value, LocalDateTime.class, patterns,
+  public static LocalDateTime parseLocalDateTime(String value, String... patterns) throws TemporalFormatException {
+    return doParseTemporal(value, LocalDateTime.class, patterns,
         (v, p) -> LocalDateTime.parse(v, DateUtils.getFormatter(p)));
   }
 
-  public static OffsetTime parseOffsetTime(String value, String... patterns) throws DateFormatException {
-    return doParseDate(value, OffsetTime.class, patterns, (v, p) -> OffsetTime.parse(v, DateUtils.getFormatter(p)));
+  public static YearMonth parseYearMonth(String value, String... patterns) throws TemporalFormatException {
+    return doParseTemporal(value, YearMonth.class, patterns, (v, p) -> YearMonth.parse(v, DateUtils.getFormatter(p)));
   }
 
-  public static OffsetDateTime parseOffsetDateTime(String value, String... patterns) throws DateFormatException {
-    return doParseDate(value, OffsetDateTime.class, patterns,
+  public static OffsetTime parseOffsetTime(String value, String... patterns) throws TemporalFormatException {
+    return doParseTemporal(value, OffsetTime.class, patterns, (v, p) -> OffsetTime.parse(v, DateUtils.getFormatter(p)));
+  }
+
+  public static OffsetDateTime parseOffsetDateTime(String value, String... patterns) throws TemporalFormatException {
+    return doParseTemporal(value, OffsetDateTime.class, patterns,
         (v, p) -> OffsetDateTime.parse(v, DateUtils.getFormatter(p)));
   }
 
-  private static <T> T doParseDate(String value, Class<T> targetClass, String[] patterns,
-      BiFunction<String, String, T> converter) throws DateFormatException {
+  private static <T> T doParseTemporal(String value, Class<T> targetClass, String[] patterns,
+      BiFunction<String, String, T> converter) throws TemporalFormatException {
     Asserts.hasElements(patterns);
     if (value == null) {
       return null;
@@ -245,34 +250,39 @@ public class ParseUtils {
         // ignore
       }
     }
-    throw new DateFormatException(STR.fmt("Failed to parse {} from '{}'.", targetClass, value));
+    throw new TemporalFormatException(STR.fmt("Failed to parse {} from '{}'.", targetClass, value));
   }
 
-  public static LocalDate parseLocalDate(String value, Collection<String> patterns) throws DateFormatException {
-    return doParseDate(value, LocalDate.class, patterns, (v, p) -> LocalDate.parse(v, DateUtils.getFormatter(p)));
+  public static LocalDate parseLocalDate(String value, Collection<String> patterns) throws TemporalFormatException {
+    return doParseTemporal(value, LocalDate.class, patterns, (v, p) -> LocalDate.parse(v, DateUtils.getFormatter(p)));
   }
 
-  public static LocalTime parseLocalTime(String value, Collection<String> patterns) throws DateFormatException {
-    return doParseDate(value, LocalTime.class, patterns, (v, p) -> LocalTime.parse(v, DateUtils.getFormatter(p)));
+  public static LocalTime parseLocalTime(String value, Collection<String> patterns) throws TemporalFormatException {
+    return doParseTemporal(value, LocalTime.class, patterns, (v, p) -> LocalTime.parse(v, DateUtils.getFormatter(p)));
   }
 
-  public static LocalDateTime parseLocalDateTime(String value, Collection<String> patterns) throws DateFormatException {
-    return doParseDate(value, LocalDateTime.class, patterns,
+  public static LocalDateTime parseLocalDateTime(String value, Collection<String> patterns)
+      throws TemporalFormatException {
+    return doParseTemporal(value, LocalDateTime.class, patterns,
         (v, p) -> LocalDateTime.parse(v, DateUtils.getFormatter(p)));
   }
 
-  public static OffsetTime parseOffsetTime(String value, Collection<String> patterns) throws DateFormatException {
-    return doParseDate(value, OffsetTime.class, patterns, (v, p) -> OffsetTime.parse(v, DateUtils.getFormatter(p)));
+  public static YearMonth parseYearMonth(String value, Collection<String> patterns) throws TemporalFormatException {
+    return doParseTemporal(value, YearMonth.class, patterns, (v, p) -> YearMonth.parse(v, DateUtils.getFormatter(p)));
+  }
+
+  public static OffsetTime parseOffsetTime(String value, Collection<String> patterns) throws TemporalFormatException {
+    return doParseTemporal(value, OffsetTime.class, patterns, (v, p) -> OffsetTime.parse(v, DateUtils.getFormatter(p)));
   }
 
   public static OffsetDateTime parseOffsetDateTime(String value, Collection<String> patterns)
-      throws DateFormatException {
-    return doParseDate(value, OffsetDateTime.class, patterns,
+      throws TemporalFormatException {
+    return doParseTemporal(value, OffsetDateTime.class, patterns,
         (v, p) -> OffsetDateTime.parse(v, DateUtils.getFormatter(p)));
   }
 
-  private static <T> T doParseDate(String value, Class<T> targetClass, Collection<String> patterns,
-      BiFunction<String, String, T> converter) throws DateFormatException {
+  private static <T> T doParseTemporal(String value, Class<T> targetClass, Collection<String> patterns,
+      BiFunction<String, String, T> converter) throws TemporalFormatException {
     Asserts.hasElements(patterns);
 
     if (value == null) {
@@ -285,6 +295,6 @@ public class ParseUtils {
         // ignore
       }
     }
-    throw new DateFormatException(STR.fmt("Failed to parse {} from '{}'.", targetClass, value));
+    throw new TemporalFormatException(STR.fmt("Failed to parse {} from '{}'.", targetClass, value));
   }
 }
