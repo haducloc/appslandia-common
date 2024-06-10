@@ -35,7 +35,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,19 +115,15 @@ public class IOUtils {
     return list;
   }
 
-  public static BufferedReader readerBOM(InputStream is, String encodingIfNoBOM) throws IOException {
-    if (encodingIfNoBOM == null) {
-      encodingIfNoBOM = StandardCharsets.UTF_8.name();
-    }
+  public static BufferedReader readerBOM(InputStream is, String altEncoding) throws IOException {
+    Asserts.notNull(altEncoding);
     var bomIS = new BOMInputStream(is);
     return new BufferedReader(
-        new InputStreamReader(bomIS, bomIS.getBOM() != null ? bomIS.getBOM().getEncoding() : encodingIfNoBOM));
+        new InputStreamReader(bomIS, bomIS.getBOM() != null ? bomIS.getBOM().getEncoding() : altEncoding));
   }
 
   public static BufferedWriter writerBOM(OutputStream os, String encoding) throws IOException {
-    if (encoding == null) {
-      encoding = StandardCharsets.UTF_8.name();
-    }
+    Asserts.notNull(encoding);
     return new BufferedWriter(new OutputStreamWriter(new BOMOutputStream(os, encoding), encoding));
   }
 

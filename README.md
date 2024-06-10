@@ -129,8 +129,8 @@ try (ConnectionImpl connScoped = new ConnectionImpl(javax.sql.DataSource)) {
   // Can be reused
   CsvProcessor csvReader = new CsvProcessor();
   
-  // This is also handing UTF BOM in the csv,if present
-  BufferedReader br = IOUtils.readerBOM(new FileInputStream("a_csv_file"), null);
+  // BufferedReader
+  BufferedReader br = IOUtils.readerBOM(new FileInputStream("a_csv_file"), "UTF-8");
   
   List<CsvRecord> records = csvReader.parseRecords(br);
   records.get(0).getString(0);
