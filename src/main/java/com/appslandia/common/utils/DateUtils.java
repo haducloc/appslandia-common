@@ -44,6 +44,7 @@ import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
@@ -512,39 +513,39 @@ public class DateUtils {
     return true;
   }
 
-  static final Collection<String> ISO8601_DATETIME_PATTERNS = CollectionUtils.unmodifiableSet(ISO8601_DATETIME_M,
-      ISO8601_DATETIME_S, ISO8601_DATETIME_N1, ISO8601_DATETIME_N2, ISO8601_DATETIME_N3, ISO8601_DATETIME_N4,
-      ISO8601_DATETIME_N5, ISO8601_DATETIME_N6, ISO8601_DATETIME_N7);
+  public static final Collection<String> ISO8601_PATTERNS_TIME = CollectionUtils.unmodifiableSet(new TreeSet<>(),
+      ISO8601_TIME_M, ISO8601_TIME_S, ISO8601_TIME_N1, ISO8601_TIME_N2, ISO8601_TIME_N3, ISO8601_TIME_N4,
+      ISO8601_TIME_N5, ISO8601_TIME_N6, ISO8601_TIME_N7);
 
-  static final Collection<String> ISO8601_TIME_PATTERNS = CollectionUtils.unmodifiableSet(ISO8601_TIME_M,
-      ISO8601_TIME_S, ISO8601_TIME_N1, ISO8601_TIME_N2, ISO8601_TIME_N3, ISO8601_TIME_N4, ISO8601_TIME_N5,
-      ISO8601_TIME_N6, ISO8601_TIME_N7);
+  public static final Collection<String> ISO8601_PATTERNS_TIMEZ = CollectionUtils.unmodifiableSet(new TreeSet<>(),
+      ISO8601_TIMEZ_M, ISO8601_TIMEZ_S, ISO8601_TIMEZ_N1, ISO8601_TIMEZ_N2, ISO8601_TIMEZ_N3, ISO8601_TIMEZ_N4,
+      ISO8601_TIMEZ_N5, ISO8601_TIMEZ_N6, ISO8601_TIMEZ_N7);
 
-  static final Collection<String> ISO8601_DATETIMEZ_PATTERNS = CollectionUtils.unmodifiableSet(ISO8601_DATETIMEZ_M,
-      ISO8601_DATETIMEZ_S, ISO8601_DATETIMEZ_N1, ISO8601_DATETIMEZ_N2, ISO8601_DATETIMEZ_N3, ISO8601_DATETIMEZ_N4,
-      ISO8601_DATETIMEZ_N5, ISO8601_DATETIMEZ_N6, ISO8601_DATETIMEZ_N7);
+  public static final Collection<String> ISO8601_PATTERNS_DATETIME = CollectionUtils.unmodifiableSet(new TreeSet<>(),
+      ISO8601_DATETIME_M, ISO8601_DATETIME_S, ISO8601_DATETIME_N1, ISO8601_DATETIME_N2, ISO8601_DATETIME_N3,
+      ISO8601_DATETIME_N4, ISO8601_DATETIME_N5, ISO8601_DATETIME_N6, ISO8601_DATETIME_N7);
 
-  static final Collection<String> ISO8601_TIMEZ_PATTERNS = CollectionUtils.unmodifiableSet(ISO8601_TIMEZ_M,
-      ISO8601_TIMEZ_S, ISO8601_TIMEZ_N1, ISO8601_TIMEZ_N2, ISO8601_TIMEZ_N3, ISO8601_TIMEZ_N4, ISO8601_TIMEZ_N5,
-      ISO8601_TIMEZ_N6, ISO8601_TIMEZ_N7);
+  public static final Collection<String> ISO8601_PATTERNS_DATETIMEZ = CollectionUtils.unmodifiableSet(new TreeSet<>(),
+      ISO8601_DATETIMEZ_M, ISO8601_DATETIMEZ_S, ISO8601_DATETIMEZ_N1, ISO8601_DATETIMEZ_N2, ISO8601_DATETIMEZ_N3,
+      ISO8601_DATETIMEZ_N4, ISO8601_DATETIMEZ_N5, ISO8601_DATETIMEZ_N6, ISO8601_DATETIMEZ_N7);
 
   public static LocalDate parseLocalDate(String isoValue) throws TemporalFormatException {
     return (isoValue != null) ? ParseUtils.parseLocalDate(isoValue, ISO8601_DATE) : null;
   }
 
-  public static LocalDateTime parseLocalDateTime(String isoValue) throws TemporalFormatException {
-    return (isoValue != null) ? ParseUtils.parseLocalDateTime(isoValue, ISO8601_DATETIME_PATTERNS) : null;
-  }
-
   public static LocalTime parseLocalTime(String isoValue) throws TemporalFormatException {
-    return (isoValue != null) ? ParseUtils.parseLocalTime(isoValue, ISO8601_TIME_PATTERNS) : null;
-  }
-
-  public static OffsetDateTime parseOffsetDateTime(String isoValue) throws TemporalFormatException {
-    return (isoValue != null) ? ParseUtils.parseOffsetDateTime(isoValue, ISO8601_DATETIMEZ_PATTERNS) : null;
+    return (isoValue != null) ? ParseUtils.parseLocalTime(isoValue, ISO8601_PATTERNS_TIME) : null;
   }
 
   public static OffsetTime parseOffsetTime(String isoValue) throws TemporalFormatException {
-    return (isoValue != null) ? ParseUtils.parseOffsetTime(isoValue, ISO8601_TIMEZ_PATTERNS) : null;
+    return (isoValue != null) ? ParseUtils.parseOffsetTime(isoValue, ISO8601_PATTERNS_TIMEZ) : null;
+  }
+
+  public static LocalDateTime parseLocalDateTime(String isoValue) throws TemporalFormatException {
+    return (isoValue != null) ? ParseUtils.parseLocalDateTime(isoValue, ISO8601_PATTERNS_DATETIME) : null;
+  }
+
+  public static OffsetDateTime parseOffsetDateTime(String isoValue) throws TemporalFormatException {
+    return (isoValue != null) ? ParseUtils.parseOffsetDateTime(isoValue, ISO8601_PATTERNS_DATETIMEZ) : null;
   }
 }

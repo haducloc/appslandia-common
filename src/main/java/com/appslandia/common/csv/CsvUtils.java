@@ -20,6 +20,7 @@
 
 package com.appslandia.common.csv;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
@@ -108,42 +109,32 @@ public class CsvUtils {
         : null;
   }
 
+  public static Collection<String> PATTERNS_DATE;
+  static {
+    PATTERNS_DATE = toCsvDtPatterns(new TreeSet<>(), Arrays.asList(DateUtils.ISO8601_DATE));
+  }
+
   public static Collection<String> PATTERNS_TIME;
   static {
-    PATTERNS_TIME = toCsvDtPatterns(new TreeSet<>(), DateUtils.ISO8601_TIME_M, DateUtils.ISO8601_TIME_S,
-        DateUtils.ISO8601_TIME_N1, DateUtils.ISO8601_TIME_N2, DateUtils.ISO8601_TIME_N3, DateUtils.ISO8601_TIME_N4,
-        DateUtils.ISO8601_TIME_N5, DateUtils.ISO8601_TIME_N6, DateUtils.ISO8601_TIME_N7);
+    PATTERNS_TIME = toCsvDtPatterns(new TreeSet<>(), DateUtils.ISO8601_PATTERNS_TIME);
   }
 
   public static Collection<String> PATTERNS_TIMEZ;
   static {
-    PATTERNS_TIMEZ = toCsvDtPatterns(new TreeSet<>(), DateUtils.ISO8601_TIMEZ_M, DateUtils.ISO8601_TIMEZ_S,
-        DateUtils.ISO8601_TIMEZ_N1, DateUtils.ISO8601_TIMEZ_N2, DateUtils.ISO8601_TIMEZ_N3, DateUtils.ISO8601_TIMEZ_N4,
-        DateUtils.ISO8601_TIMEZ_N5, DateUtils.ISO8601_TIMEZ_N6, DateUtils.ISO8601_TIMEZ_N7);
-  }
-
-  public static Collection<String> PATTERNS_DATE;
-  static {
-    PATTERNS_DATE = toCsvDtPatterns(new TreeSet<>(), DateUtils.ISO8601_DATE);
+    PATTERNS_TIMEZ = toCsvDtPatterns(new TreeSet<>(), DateUtils.ISO8601_PATTERNS_TIMEZ);
   }
 
   public static Collection<String> PATTERNS_DATETIME;
   static {
-    PATTERNS_DATETIME = toCsvDtPatterns(new TreeSet<>(), DateUtils.ISO8601_DATETIME_M, DateUtils.ISO8601_DATETIME_S,
-        DateUtils.ISO8601_DATETIME_N1, DateUtils.ISO8601_DATETIME_N2, DateUtils.ISO8601_DATETIME_N3,
-        DateUtils.ISO8601_DATETIME_N4, DateUtils.ISO8601_DATETIME_N5, DateUtils.ISO8601_DATETIME_N6,
-        DateUtils.ISO8601_DATETIME_N7);
+    PATTERNS_DATETIME = toCsvDtPatterns(new TreeSet<>(), DateUtils.ISO8601_PATTERNS_DATETIME);
   }
 
   public static Collection<String> PATTERNS_DATETIMEZ;
   static {
-    PATTERNS_DATETIMEZ = toCsvDtPatterns(new TreeSet<>(), DateUtils.ISO8601_DATETIMEZ_M, DateUtils.ISO8601_DATETIMEZ_S,
-        DateUtils.ISO8601_DATETIMEZ_N1, DateUtils.ISO8601_DATETIMEZ_N2, DateUtils.ISO8601_DATETIMEZ_N3,
-        DateUtils.ISO8601_DATETIMEZ_N4, DateUtils.ISO8601_DATETIMEZ_N5, DateUtils.ISO8601_DATETIMEZ_N6,
-        DateUtils.ISO8601_DATETIMEZ_N7);
+    PATTERNS_DATETIMEZ = toCsvDtPatterns(new TreeSet<>(), DateUtils.ISO8601_PATTERNS_DATETIMEZ);
   }
 
-  private static Set<String> toCsvDtPatterns(Set<String> csvDtPatterns, String... isoDtPatterns) {
+  private static Set<String> toCsvDtPatterns(Set<String> csvDtPatterns, Collection<String> isoDtPatterns) {
     for (String isoDtPattern : isoDtPatterns) {
       var mappedPattern = getCsvDtPattern(isoDtPattern);
       csvDtPatterns.add(mappedPattern);
