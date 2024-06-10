@@ -189,7 +189,7 @@ public class ParseUtils {
   }
 
   public static Float parseFloatOpt(String value) throws NumberFormatException {
-    return (value != null) ? parseFloat(value) : null;
+    return (value != null) ? Float.parseFloat(value) : null;
   }
 
   public static Double parseDoubleOpt(String value) throws NumberFormatException {
