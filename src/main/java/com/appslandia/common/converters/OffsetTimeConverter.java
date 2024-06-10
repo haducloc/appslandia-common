@@ -56,13 +56,13 @@ public class OffsetTimeConverter extends TemporalConverter<OffsetTime> {
     return OffsetTime.class;
   }
 
-  static final Collection<String> PARSE_PATTERNS = CollectionUtils.unmodifiableSet(DateUtils.ISO8601_TIMEZ_M,
+  static final Collection<String> PARSING_PATTERNS = CollectionUtils.unmodifiableSet(DateUtils.ISO8601_TIMEZ_M,
       DateUtils.ISO8601_TIMEZ_S, DateUtils.ISO8601_TIMEZ_N1, DateUtils.ISO8601_TIMEZ_N2, DateUtils.ISO8601_TIMEZ_N3,
       DateUtils.ISO8601_TIMEZ_N4, DateUtils.ISO8601_TIMEZ_N5, DateUtils.ISO8601_TIMEZ_N6, DateUtils.ISO8601_TIMEZ_N7);
 
   @Override
   protected Collection<String> getParsingPatterns(FormatProvider formatProvider) {
-    return PARSE_PATTERNS;
+    return PARSING_PATTERNS;
   }
 
   @Override

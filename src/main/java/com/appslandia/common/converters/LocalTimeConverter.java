@@ -56,13 +56,13 @@ public class LocalTimeConverter extends TemporalConverter<LocalTime> {
     return LocalTime.class;
   }
 
-  static final Collection<String> PARSE_PATTERNS = CollectionUtils.unmodifiableSet(DateUtils.ISO8601_TIME_M,
+  static final Collection<String> PARSING_PATTERNS = CollectionUtils.unmodifiableSet(DateUtils.ISO8601_TIME_M,
       DateUtils.ISO8601_TIME_S, DateUtils.ISO8601_TIME_N1, DateUtils.ISO8601_TIME_N2, DateUtils.ISO8601_TIME_N3,
       DateUtils.ISO8601_TIME_N4, DateUtils.ISO8601_TIME_N5, DateUtils.ISO8601_TIME_N6, DateUtils.ISO8601_TIME_N7);
 
   @Override
   protected Collection<String> getParsingPatterns(FormatProvider formatProvider) {
-    return PARSE_PATTERNS;
+    return PARSING_PATTERNS;
   }
 
   @Override
