@@ -43,7 +43,7 @@ public class CsvRecordTest {
   public void test_null() {
     CsvRecord csvRecord = new CsvRecord(new String[] { null });
     try {
-      Integer val = csvRecord.getIntOpt(0);
+      String val = csvRecord.getString(0);
       Assertions.assertNull(val);
 
     } catch (Exception ex) {

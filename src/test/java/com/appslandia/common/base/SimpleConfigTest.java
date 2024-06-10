@@ -83,14 +83,6 @@ public class SimpleConfigTest {
   }
 
   @Test
-  public void test_getBoolOpt() {
-    SimpleConfig config = new SimpleConfig();
-    config.set("key1", "true");
-    Assertions.assertTrue(config.getBoolOpt("key1"));
-    Assertions.assertNull(config.getBoolOpt(NON_EXISTENT_KEY));
-  }
-
-  @Test
   public void test_getInt() {
     SimpleConfig config = new SimpleConfig();
     config.set("key1", "42");
@@ -104,14 +96,6 @@ public class SimpleConfigTest {
     config.set("key1", "42");
     Assertions.assertEquals(42, config.getInt("key1"));
     Assertions.assertThrows(AssertException.class, () -> config.getInt(NON_EXISTENT_KEY));
-  }
-
-  @Test
-  public void test_getIntOpt() {
-    SimpleConfig config = new SimpleConfig();
-    config.set("key1", "42");
-    Assertions.assertEquals(Integer.valueOf(42), config.getIntOpt("key1"));
-    Assertions.assertNull(config.getIntOpt(NON_EXISTENT_KEY));
   }
 
   @Test
@@ -131,14 +115,6 @@ public class SimpleConfigTest {
   }
 
   @Test
-  public void test_getLongOpt() {
-    SimpleConfig config = new SimpleConfig();
-    config.set("key1", "123456789012345");
-    Assertions.assertEquals(Long.valueOf(123456789012345L), config.getLongOpt("key1"));
-    Assertions.assertNull(config.getLongOpt(NON_EXISTENT_KEY));
-  }
-
-  @Test
   public void test_getDouble() {
     SimpleConfig config = new SimpleConfig();
     config.set("key1", "3.14");
@@ -152,14 +128,6 @@ public class SimpleConfigTest {
     config.set("key1", "3.14");
     Assertions.assertEquals(3.14, config.getDouble("key1"));
     Assertions.assertThrows(AssertException.class, () -> config.getDouble(NON_EXISTENT_KEY));
-  }
-
-  @Test
-  public void test_getDoubleOpt() {
-    SimpleConfig config = new SimpleConfig();
-    config.set("key1", "3.14");
-    Assertions.assertEquals(Double.valueOf(3.14), config.getDoubleOpt("key1"));
-    Assertions.assertNull(config.getDoubleOpt(NON_EXISTENT_KEY));
   }
 
   @Test

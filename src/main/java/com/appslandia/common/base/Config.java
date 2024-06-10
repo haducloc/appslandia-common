@@ -23,6 +23,7 @@ package com.appslandia.common.base;
 import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.appslandia.common.utils.ParseUtils;
 import com.appslandia.common.utils.STR;
@@ -69,11 +70,6 @@ public interface Config {
     return ParseUtils.parseBool(value);
   }
 
-  default public Boolean getBoolOpt(String key) throws BoolFormatException {
-    String value = getString(key);
-    return ParseUtils.parseBoolOpt(value);
-  }
-
   default public int getInt(String key, int ifNullOrInvalid) {
     String value = getString(key);
     return ParseUtils.parseInt(value, ifNullOrInvalid);
@@ -82,11 +78,6 @@ public interface Config {
   default public int getInt(String key) throws NumberFormatException {
     String value = getStringReq(key);
     return Integer.parseInt(value);
-  }
-
-  default public Integer getIntOpt(String key) throws NumberFormatException {
-    String value = getString(key);
-    return ParseUtils.parseIntOpt(value);
   }
 
   default public long getLong(String key, long ifNullOrInvalid) {
@@ -99,11 +90,6 @@ public interface Config {
     return Long.parseLong(value);
   }
 
-  default public Long getLongOpt(String key) throws NumberFormatException {
-    String value = getString(key);
-    return ParseUtils.parseLongOpt(value);
-  }
-
   default public double getDouble(String key, double ifNullOrInvalid) {
     String value = getString(key);
     return ParseUtils.parseDouble(value, ifNullOrInvalid);
@@ -112,11 +98,6 @@ public interface Config {
   default public double getDouble(String key) throws NumberFormatException {
     String value = getStringReq(key);
     return Double.parseDouble(value);
-  }
-
-  default public Double getDoubleOpt(String key) throws NumberFormatException {
-    String value = getString(key);
-    return ParseUtils.parseDoubleOpt(value);
   }
 
   default public BigDecimal getDecimal(String key, double ifNullOrInvalid) {
@@ -132,6 +113,11 @@ public interface Config {
   default public BigDecimal getDecimal(String key) throws NumberFormatException {
     String value = getString(key);
     return ParseUtils.parseDecimal(value);
+  }
+
+  default public <T> T getValue(String key, Function<String, T> converter) {
+    String value = getString(key);
+    return ParseUtils.parseValue(value, converter);
   }
 
   default public String resolve(String key) {

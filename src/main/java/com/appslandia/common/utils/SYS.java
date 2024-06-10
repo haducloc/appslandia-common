@@ -20,6 +20,7 @@
 
 package com.appslandia.common.utils;
 
+import java.util.function.Function;
 import java.util.regex.Pattern;
 
 import com.appslandia.common.base.AssertException;
@@ -62,11 +63,6 @@ public class SYS {
     return ParseUtils.parseBool(value, ifNullOrInvalid);
   }
 
-  public static Boolean getBoolPropOpt(String key) throws BoolFormatException {
-    String value = getProp(key);
-    return ParseUtils.parseBoolOpt(value);
-  }
-
   public static int getIntProp(String key) throws NumberFormatException {
     String value = getPropReq(key);
     return Integer.parseInt(value);
@@ -75,11 +71,6 @@ public class SYS {
   public static int getIntProp(String key, int ifNullOrInvalid) {
     String value = getProp(key);
     return ParseUtils.parseInt(value, ifNullOrInvalid);
-  }
-
-  public static Integer getIntPropOpt(String key) throws NumberFormatException {
-    String value = getProp(key);
-    return ParseUtils.parseIntOpt(value);
   }
 
   public static long getLongProp(String key) throws NumberFormatException {
@@ -92,11 +83,6 @@ public class SYS {
     return ParseUtils.parseLong(value, ifNullOrInvalid);
   }
 
-  public static Long getLongPropOpt(String key) throws NumberFormatException {
-    String value = getProp(key);
-    return ParseUtils.parseLongOpt(value);
-  }
-
   public static double getDoubleProp(String key) throws NumberFormatException {
     String value = getPropReq(key);
     return Double.parseDouble(value);
@@ -107,9 +93,9 @@ public class SYS {
     return ParseUtils.parseDouble(value, ifNullOrInvalid);
   }
 
-  public static Double getDoublePropOpt(String key) throws NumberFormatException {
+  public static <T> T getValueProp(String key, Function<String, T> converter) {
     String value = getProp(key);
-    return ParseUtils.parseDoubleOpt(value);
+    return ParseUtils.parseValue(value, converter);
   }
 
   // System.getenv
@@ -142,11 +128,6 @@ public class SYS {
     return ParseUtils.parseBool(value, ifNullOrInvalid);
   }
 
-  public static Boolean getBoolEnvOpt(String key) throws BoolFormatException {
-    String value = getEnv(key);
-    return ParseUtils.parseBoolOpt(value);
-  }
-
   public static int getIntEnv(String key) throws NumberFormatException {
     String value = getEnvReq(key);
     return Integer.parseInt(value);
@@ -155,11 +136,6 @@ public class SYS {
   public static int getIntEnv(String key, int ifNullOrInvalid) {
     String value = getEnv(key);
     return ParseUtils.parseInt(value, ifNullOrInvalid);
-  }
-
-  public static Integer getIntEnvOpt(String key) throws NumberFormatException {
-    String value = getEnv(key);
-    return ParseUtils.parseIntOpt(value);
   }
 
   public static long getLongEnv(String key) throws NumberFormatException {
@@ -172,11 +148,6 @@ public class SYS {
     return ParseUtils.parseLong(value, ifNullOrInvalid);
   }
 
-  public static Long getLongEnvOpt(String key) throws NumberFormatException {
-    String value = getEnv(key);
-    return ParseUtils.parseLongOpt(value);
-  }
-
   public static double getDoubleEnv(String key) throws NumberFormatException {
     String value = getEnvReq(key);
     return Double.parseDouble(value);
@@ -187,9 +158,9 @@ public class SYS {
     return ParseUtils.parseDouble(value, ifNullOrInvalid);
   }
 
-  public static Double getDoubleEnvOpt(String key) throws NumberFormatException {
+  public static <T> T getValueEnv(String key, Function<String, T> converter) {
     String value = getEnv(key);
-    return ParseUtils.parseDoubleOpt(value);
+    return ParseUtils.parseValue(value, converter);
   }
 
   // {var1}

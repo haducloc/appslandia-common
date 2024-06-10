@@ -29,6 +29,7 @@ import java.time.OffsetTime;
 import java.time.YearMonth;
 import java.util.Collection;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import com.appslandia.common.base.BoolFormatException;
 import com.appslandia.common.base.TemporalFormatException;
@@ -169,36 +170,12 @@ public class ParseUtils {
     }
   }
 
-  public static Boolean parseBoolOpt(String value) throws BoolFormatException {
-    return (value != null) ? parseBool(value) : null;
-  }
-
-  public static Byte parseByteOpt(String value) throws NumberFormatException {
-    return (value != null) ? Byte.parseByte(value) : null;
-  }
-
-  public static Short parseShortOpt(String value) throws NumberFormatException {
-    return (value != null) ? Short.parseShort(value) : null;
-  }
-
-  public static Integer parseIntOpt(String value) throws NumberFormatException {
-    return (value != null) ? Integer.parseInt(value) : null;
-  }
-
-  public static Long parseLongOpt(String value) throws NumberFormatException {
-    return (value != null) ? Long.parseLong(value) : null;
-  }
-
-  public static Float parseFloatOpt(String value) throws NumberFormatException {
-    return (value != null) ? Float.parseFloat(value) : null;
-  }
-
-  public static Double parseDoubleOpt(String value) throws NumberFormatException {
-    return (value != null) ? Double.parseDouble(value) : null;
-  }
-
   public static BigDecimal parseDecimal(String value) throws NumberFormatException {
     return (value != null) ? new BigDecimal(value) : null;
+  }
+
+  public static <T> T parseValue(String value, Function<String, T> converter) {
+    return (value != null) ? converter.apply(value) : null;
   }
 
   public static boolean isTrueValue(String value) {

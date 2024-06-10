@@ -129,11 +129,6 @@ public class CsvRecord {
     return ParseUtils.parseBool(value, ifNullOrInvalid);
   }
 
-  public Boolean getBoolOpt(int index) throws BoolFormatException {
-    String value = getString(index);
-    return ParseUtils.parseBoolOpt(value);
-  }
-
   public byte getByte(int index) throws NumberFormatException {
     String value = getStringReq(index);
     return ParseUtils.parseByte(value);
@@ -142,11 +137,6 @@ public class CsvRecord {
   public byte getByte(int index, byte ifNullOrInvalid) {
     String value = getString(index);
     return ParseUtils.parseByte(value, ifNullOrInvalid);
-  }
-
-  public Byte getByteOpt(int index) throws NumberFormatException {
-    String value = getString(index);
-    return ParseUtils.parseByteOpt(value);
   }
 
   public short getShort(int index) throws NumberFormatException {
@@ -159,11 +149,6 @@ public class CsvRecord {
     return ParseUtils.parseShort(value, ifNullOrInvalid);
   }
 
-  public Short getShortOpt(int index) throws NumberFormatException {
-    String value = getString(index);
-    return ParseUtils.parseShortOpt(value);
-  }
-
   public int getInt(int index) throws NumberFormatException {
     String value = getStringReq(index);
     return ParseUtils.parseInt(value);
@@ -172,11 +157,6 @@ public class CsvRecord {
   public int getInt(int index, int ifNullOrInvalid) {
     String value = getString(index);
     return ParseUtils.parseInt(value, ifNullOrInvalid);
-  }
-
-  public Integer getIntOpt(int index) throws NumberFormatException {
-    String value = getString(index);
-    return ParseUtils.parseIntOpt(value);
   }
 
   public long getLong(int index) throws NumberFormatException {
@@ -189,11 +169,6 @@ public class CsvRecord {
     return ParseUtils.parseLong(value, ifNullOrInvalid);
   }
 
-  public Long getLongOpt(int index) throws NumberFormatException {
-    String value = getString(index);
-    return ParseUtils.parseLongOpt(value);
-  }
-
   public float getFloat(int index) throws NumberFormatException {
     String value = getStringReq(index);
     return ParseUtils.parseFloat(value);
@@ -204,11 +179,6 @@ public class CsvRecord {
     return ParseUtils.parseFloat(value, ifNullOrInvalid);
   }
 
-  public Float getFloatOpt(int index) throws NumberFormatException {
-    String value = getString(index);
-    return ParseUtils.parseFloatOpt(value);
-  }
-
   public double getDouble(int index) throws NumberFormatException {
     String value = getStringReq(index);
     return ParseUtils.parseDouble(value);
@@ -217,11 +187,6 @@ public class CsvRecord {
   public double getDouble(int index, double ifNullOrInvalid) {
     String value = getString(index);
     return ParseUtils.parseDouble(value, ifNullOrInvalid);
-  }
-
-  public Double getDoubleOpt(int index) throws NumberFormatException {
-    String value = getString(index);
-    return ParseUtils.parseDoubleOpt(value);
   }
 
   public BigDecimal getDecimalReq(int index) throws NumberFormatException {
@@ -237,6 +202,11 @@ public class CsvRecord {
   public BigDecimal getDecimal(int index, double ifNullOrInvalid) {
     String value = getString(index);
     return ParseUtils.parseDecimal(value, ifNullOrInvalid);
+  }
+
+  public <T> T getValue(int index, Function<String, T> converter) {
+    String value = getString(index);
+    return ParseUtils.parseValue(value, converter);
   }
 
   // Temporal Types
