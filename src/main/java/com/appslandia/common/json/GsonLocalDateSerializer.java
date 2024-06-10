@@ -46,6 +46,6 @@ public class GsonLocalDateSerializer extends GsonTemporalSerializer<LocalDate> {
   @Override
   public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
       throws JsonParseException {
-    return LocalDate.parse(json.getAsString(), DateUtils.getFormatter(DateUtils.ISO8601_DATE));
+    return DateUtils.parseLocalDate(json.getAsString());
   }
 }

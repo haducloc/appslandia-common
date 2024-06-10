@@ -45,6 +45,6 @@ public class JsonbOffsetDateTimeSerializer extends JsonbTemporalSerializer<Offse
 
   @Override
   public OffsetDateTime deserialize(JsonParser parser, DeserializationContext ctx, Type rtType) {
-    return parseOffsetDateTime(parser.getString());
+    return DateUtils.parseOffsetDateTime(parser.getString());
   }
 }

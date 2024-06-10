@@ -45,6 +45,6 @@ public class JsonbLocalTimeSerializer extends JsonbTemporalSerializer<LocalTime>
 
   @Override
   public LocalTime deserialize(JsonParser parser, DeserializationContext ctx, Type rtType) {
-    return parseLocalTime(parser.getString());
+    return DateUtils.parseLocalTime(parser.getString());
   }
 }

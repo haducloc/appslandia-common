@@ -45,6 +45,6 @@ public class JsonbLocalDateSerializer extends JsonbTemporalSerializer<LocalDate>
 
   @Override
   public LocalDate deserialize(JsonParser parser, DeserializationContext ctx, Type rtType) {
-    return LocalDate.parse(parser.getString(), DateUtils.getFormatter(DateUtils.ISO8601_DATE));
+    return DateUtils.parseLocalDate(parser.getString());
   }
 }
