@@ -61,12 +61,7 @@ public class OffsetTimeConverter extends TemporalConverter<OffsetTime> {
       DateUtils.ISO8601_TIMEZ_N4, DateUtils.ISO8601_TIMEZ_N5, DateUtils.ISO8601_TIMEZ_N6, DateUtils.ISO8601_TIMEZ_N7);
 
   @Override
-  protected Collection<String> getParsingPatterns(FormatProvider formatProvider) {
-    return PARSING_PATTERNS;
-  }
-
-  @Override
-  protected OffsetTime parse(String str, Collection<String> patterns) throws TemporalFormatException {
-    return ParseUtils.parseOffsetTime(str, patterns);
+  protected OffsetTime doParse(String str, FormatProvider formatProvider) throws TemporalFormatException {
+    return ParseUtils.parseOffsetTime(str, PARSING_PATTERNS);
   }
 }

@@ -21,7 +21,6 @@
 package com.appslandia.common.converters;
 
 import java.time.temporal.Temporal;
-import java.util.Collection;
 
 import com.appslandia.common.base.FormatProvider;
 import com.appslandia.common.base.TemporalFormatException;
@@ -41,9 +40,7 @@ public abstract class TemporalConverter<T extends Temporal> implements Converter
     this.isoPattern = isoPattern;
   }
 
-  protected abstract Collection<String> getParsingPatterns(FormatProvider formatProvider);
-
-  protected abstract T parse(String str, Collection<String> patterns) throws TemporalFormatException;
+  protected abstract T doParse(String str, FormatProvider formatProvider) throws TemporalFormatException;
 
   @Override
   public String format(T obj, FormatProvider formatProvider, boolean localize) {
@@ -64,7 +61,7 @@ public abstract class TemporalConverter<T extends Temporal> implements Converter
       return null;
     }
     try {
-      return parse(str, getParsingPatterns(formatProvider));
+      return doParse(str, formatProvider);
     } catch (TemporalFormatException ex) {
       throw toParsingError(str, getTargetType().getName());
     }

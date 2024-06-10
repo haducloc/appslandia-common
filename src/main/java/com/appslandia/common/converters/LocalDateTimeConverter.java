@@ -62,12 +62,7 @@ public class LocalDateTimeConverter extends TemporalConverter<LocalDateTime> {
       DateUtils.ISO8601_DATETIME_N6, DateUtils.ISO8601_DATETIME_N7);
 
   @Override
-  protected Collection<String> getParsingPatterns(FormatProvider formatProvider) {
-    return PARSING_PATTERNS;
-  }
-
-  @Override
-  protected LocalDateTime parse(String str, Collection<String> patterns) throws TemporalFormatException {
-    return ParseUtils.parseLocalDateTime(str, patterns);
+  protected LocalDateTime doParse(String str, FormatProvider formatProvider) throws TemporalFormatException {
+    return ParseUtils.parseLocalDateTime(str, PARSING_PATTERNS);
   }
 }

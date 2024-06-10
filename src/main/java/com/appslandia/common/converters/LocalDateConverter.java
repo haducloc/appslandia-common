@@ -55,12 +55,7 @@ public class LocalDateConverter extends TemporalConverter<LocalDate> {
   static final Collection<String> PARSING_PATTERNS = CollectionUtils.unmodifiableSet(DateUtils.ISO8601_DATE);
 
   @Override
-  protected Collection<String> getParsingPatterns(FormatProvider formatProvider) {
-    return PARSING_PATTERNS;
-  }
-
-  @Override
-  protected LocalDate parse(String str, Collection<String> patterns) throws TemporalFormatException {
-    return ParseUtils.parseLocalDate(str, patterns);
+  protected LocalDate doParse(String str, FormatProvider formatProvider) throws TemporalFormatException {
+    return ParseUtils.parseLocalDate(str, PARSING_PATTERNS);
   }
 }

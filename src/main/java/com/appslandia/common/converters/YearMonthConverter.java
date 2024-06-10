@@ -55,12 +55,7 @@ public class YearMonthConverter extends TemporalConverter<YearMonth> {
   static final Collection<String> PARSING_PATTERNS = CollectionUtils.unmodifiableSet(DateUtils.ISO8601_YEAR_MONTH);
 
   @Override
-  protected Collection<String> getParsingPatterns(FormatProvider formatProvider) {
-    return PARSING_PATTERNS;
-  }
-
-  @Override
-  protected YearMonth parse(String str, Collection<String> patterns) throws TemporalFormatException {
-    return ParseUtils.parseYearMonth(str, patterns);
+  protected YearMonth doParse(String str, FormatProvider formatProvider) throws TemporalFormatException {
+    return ParseUtils.parseYearMonth(str, PARSING_PATTERNS);
   }
 }
