@@ -529,22 +529,22 @@ public class DateUtils {
       ISO8601_TIMEZ_N6, ISO8601_TIMEZ_N7);
 
   public static LocalDate parseLocalDate(String isoValue) throws TemporalFormatException {
-    return ParseUtils.parseLocalDate(isoValue, ISO8601_DATE);
+    return (isoValue != null) ? ParseUtils.parseLocalDate(isoValue, ISO8601_DATE) : null;
   }
 
   public static LocalDateTime parseLocalDateTime(String isoValue) throws TemporalFormatException {
-    return ParseUtils.parseLocalDateTime(isoValue, ISO8601_DATETIME_PATTERNS);
+    return (isoValue != null) ? ParseUtils.parseLocalDateTime(isoValue, ISO8601_DATETIME_PATTERNS) : null;
   }
 
   public static LocalTime parseLocalTime(String isoValue) throws TemporalFormatException {
-    return ParseUtils.parseLocalTime(isoValue, ISO8601_TIME_PATTERNS);
+    return (isoValue != null) ? ParseUtils.parseLocalTime(isoValue, ISO8601_TIME_PATTERNS) : null;
   }
 
   public static OffsetDateTime parseOffsetDateTime(String isoValue) throws TemporalFormatException {
-    return ParseUtils.parseOffsetDateTime(isoValue, ISO8601_DATETIMEZ_PATTERNS);
+    return (isoValue != null) ? ParseUtils.parseOffsetDateTime(isoValue, ISO8601_DATETIMEZ_PATTERNS) : null;
   }
 
   public static OffsetTime parseOffsetTime(String isoValue) throws TemporalFormatException {
-    return ParseUtils.parseOffsetTime(isoValue, ISO8601_TIMEZ_PATTERNS);
+    return (isoValue != null) ? ParseUtils.parseOffsetTime(isoValue, ISO8601_TIMEZ_PATTERNS) : null;
   }
 }
