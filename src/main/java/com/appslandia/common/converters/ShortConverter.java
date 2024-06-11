@@ -21,6 +21,7 @@
 package com.appslandia.common.converters;
 
 import com.appslandia.common.base.FormatProvider;
+import com.appslandia.common.utils.ParseUtils;
 import com.appslandia.common.utils.StringUtils;
 
 /**
@@ -57,7 +58,7 @@ public class ShortConverter extends NumberConverter<Short> {
       return null;
     }
     try {
-      return Short.parseShort(str);
+      return ParseUtils.parseShort(str);
     } catch (NumberFormatException ex) {
       throw toParsingError(str, getTargetType().getName());
     }

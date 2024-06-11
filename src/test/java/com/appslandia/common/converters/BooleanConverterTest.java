@@ -45,13 +45,12 @@ public class BooleanConverterTest {
     BooleanConverter converter = new BooleanConverter();
     FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
     try {
-      Boolean v = converter.parse("true", formatProvider);
-      Assertions.assertTrue(v);
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-    try {
-      Boolean val = converter.parse("false", formatProvider);
+      Boolean val = converter.parse("true", formatProvider);
+      Assertions.assertNotNull(val);
+      Assertions.assertTrue(val);
+
+      val = converter.parse("false", formatProvider);
+      Assertions.assertNotNull(val);
       Assertions.assertFalse(val);
     } catch (Exception ex) {
       Assertions.fail(ex.getMessage());
@@ -74,12 +73,54 @@ public class BooleanConverterTest {
   }
 
   @Test
-  public void test_invalid() {
+  public void test_yesno() {
     BooleanConverter converter = new BooleanConverter();
     FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
     try {
-      converter.parse("yes", formatProvider);
-      Assertions.fail();
+      Boolean val = converter.parse("yes", formatProvider);
+      Assertions.assertNotNull(val);
+      Assertions.assertTrue(val);
+
+      val = converter.parse("no", formatProvider);
+      Assertions.assertNotNull(val);
+      Assertions.assertFalse(val);
+
+    } catch (Exception ex) {
+      Assertions.assertTrue(ex instanceof ConverterException);
+    }
+  }
+
+  @Test
+  public void test_yn() {
+    BooleanConverter converter = new BooleanConverter();
+    FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+    try {
+      Boolean val = converter.parse("y", formatProvider);
+      Assertions.assertNotNull(val);
+      Assertions.assertTrue(val);
+
+      val = converter.parse("n", formatProvider);
+      Assertions.assertNotNull(val);
+      Assertions.assertFalse(val);
+
+    } catch (Exception ex) {
+      Assertions.assertTrue(ex instanceof ConverterException);
+    }
+  }
+
+  @Test
+  public void test_tf() {
+    BooleanConverter converter = new BooleanConverter();
+    FormatProvider formatProvider = new FormatProviderImpl(Language.EN_US);
+    try {
+      Boolean val = converter.parse("t", formatProvider);
+      Assertions.assertNotNull(val);
+      Assertions.assertTrue(val);
+
+      val = converter.parse("f", formatProvider);
+      Assertions.assertNotNull(val);
+      Assertions.assertFalse(val);
+
     } catch (Exception ex) {
       Assertions.assertTrue(ex instanceof ConverterException);
     }

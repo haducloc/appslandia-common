@@ -21,6 +21,7 @@
 package com.appslandia.common.converters;
 
 import com.appslandia.common.base.FormatProvider;
+import com.appslandia.common.utils.ParseUtils;
 import com.appslandia.common.utils.StringUtils;
 
 /**
@@ -57,7 +58,7 @@ public class ByteConverter extends NumberConverter<Byte> {
       return null;
     }
     try {
-      return Byte.parseByte(str);
+      return ParseUtils.parseByte(str);
     } catch (NumberFormatException ex) {
       throw toParsingError(str, getTargetType().getName());
     }

@@ -20,7 +20,6 @@
 
 package com.appslandia.common.base;
 
-import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.function.Function;
@@ -62,7 +61,7 @@ public interface Config {
 
   default public boolean getBool(String key, boolean ifNullOrInvalid) {
     String value = getString(key);
-    return ParseUtils.parseBool(value, ifNullOrInvalid);
+    return (value != null) ? ParseUtils.parseBool(value, ifNullOrInvalid) : ifNullOrInvalid;
   }
 
   default public boolean getBool(String key) throws BoolFormatException {
@@ -72,52 +71,37 @@ public interface Config {
 
   default public int getInt(String key, int ifNullOrInvalid) {
     String value = getString(key);
-    return ParseUtils.parseInt(value, ifNullOrInvalid);
+    return (value != null) ? ParseUtils.parseInt(value, ifNullOrInvalid) : ifNullOrInvalid;
   }
 
   default public int getInt(String key) throws NumberFormatException {
     String value = getStringReq(key);
-    return Integer.parseInt(value);
+    return ParseUtils.parseInt(value);
   }
 
   default public long getLong(String key, long ifNullOrInvalid) {
     String value = getString(key);
-    return ParseUtils.parseLong(value, ifNullOrInvalid);
+    return (value != null) ? ParseUtils.parseLong(value, ifNullOrInvalid) : ifNullOrInvalid;
   }
 
   default public long getLong(String key) throws NumberFormatException {
     String value = getStringReq(key);
-    return Long.parseLong(value);
+    return ParseUtils.parseLong(value);
   }
 
   default public double getDouble(String key, double ifNullOrInvalid) {
     String value = getString(key);
-    return ParseUtils.parseDouble(value, ifNullOrInvalid);
+    return (value != null) ? ParseUtils.parseDouble(value, ifNullOrInvalid) : ifNullOrInvalid;
   }
 
   default public double getDouble(String key) throws NumberFormatException {
     String value = getStringReq(key);
-    return Double.parseDouble(value);
-  }
-
-  default public BigDecimal getDecimal(String key, double ifNullOrInvalid) {
-    String value = getString(key);
-    return ParseUtils.parseDecimal(value, ifNullOrInvalid);
-  }
-
-  default public BigDecimal getDecimalReq(String key) throws NumberFormatException {
-    String value = getStringReq(key);
-    return new BigDecimal(value);
-  }
-
-  default public BigDecimal getDecimal(String key) throws NumberFormatException {
-    String value = getString(key);
-    return ParseUtils.parseDecimal(value);
+    return ParseUtils.parseDouble(value);
   }
 
   default public <T> T getValue(String key, Function<String, T> converter) {
     String value = getString(key);
-    return ParseUtils.parseValue(value, converter);
+    return (value != null) ? ParseUtils.parseValue(value, converter) : null;
   }
 
   default public String resolve(String key) {

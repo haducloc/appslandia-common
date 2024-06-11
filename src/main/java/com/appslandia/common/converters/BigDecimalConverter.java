@@ -25,6 +25,7 @@ import java.math.RoundingMode;
 import java.text.NumberFormat;
 
 import com.appslandia.common.base.FormatProvider;
+import com.appslandia.common.utils.ParseUtils;
 import com.appslandia.common.utils.StringUtils;
 
 /**
@@ -81,7 +82,7 @@ public class BigDecimalConverter extends NumberConverter<BigDecimal> {
       return null;
     }
     try {
-      return new BigDecimal(str);
+      return ParseUtils.parseDecimal(str);
     } catch (NumberFormatException ex) {
       throw toParsingError(str, getTargetType().getName());
     }

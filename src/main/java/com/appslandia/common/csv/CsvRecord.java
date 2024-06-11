@@ -126,7 +126,7 @@ public class CsvRecord {
 
   public boolean getBool(int index, boolean ifNullOrInvalid) {
     String value = getString(index);
-    return ParseUtils.parseBool(value, ifNullOrInvalid);
+    return (value != null) ? ParseUtils.parseBool(value, ifNullOrInvalid) : ifNullOrInvalid;
   }
 
   public byte getByte(int index) throws NumberFormatException {
@@ -136,7 +136,7 @@ public class CsvRecord {
 
   public byte getByte(int index, byte ifNullOrInvalid) {
     String value = getString(index);
-    return ParseUtils.parseByte(value, ifNullOrInvalid);
+    return (value != null) ? ParseUtils.parseByte(value, ifNullOrInvalid) : ifNullOrInvalid;
   }
 
   public short getShort(int index) throws NumberFormatException {
@@ -146,7 +146,7 @@ public class CsvRecord {
 
   public short getShort(int index, short ifNullOrInvalid) {
     String value = getString(index);
-    return ParseUtils.parseShort(value, ifNullOrInvalid);
+    return (value != null) ? ParseUtils.parseShort(value, ifNullOrInvalid) : ifNullOrInvalid;
   }
 
   public int getInt(int index) throws NumberFormatException {
@@ -156,7 +156,7 @@ public class CsvRecord {
 
   public int getInt(int index, int ifNullOrInvalid) {
     String value = getString(index);
-    return ParseUtils.parseInt(value, ifNullOrInvalid);
+    return (value != null) ? ParseUtils.parseInt(value, ifNullOrInvalid) : ifNullOrInvalid;
   }
 
   public long getLong(int index) throws NumberFormatException {
@@ -166,7 +166,7 @@ public class CsvRecord {
 
   public long getLong(int index, long ifNullOrInvalid) {
     String value = getString(index);
-    return ParseUtils.parseLong(value, ifNullOrInvalid);
+    return (value != null) ? ParseUtils.parseLong(value, ifNullOrInvalid) : ifNullOrInvalid;
   }
 
   public float getFloat(int index) throws NumberFormatException {
@@ -176,7 +176,7 @@ public class CsvRecord {
 
   public float getFloat(int index, float ifNullOrInvalid) {
     String value = getString(index);
-    return ParseUtils.parseFloat(value, ifNullOrInvalid);
+    return (value != null) ? ParseUtils.parseFloat(value, ifNullOrInvalid) : ifNullOrInvalid;
   }
 
   public double getDouble(int index) throws NumberFormatException {
@@ -186,7 +186,7 @@ public class CsvRecord {
 
   public double getDouble(int index, double ifNullOrInvalid) {
     String value = getString(index);
-    return ParseUtils.parseDouble(value, ifNullOrInvalid);
+    return (value != null) ? ParseUtils.parseDouble(value, ifNullOrInvalid) : ifNullOrInvalid;
   }
 
   public BigDecimal getDecimalReq(int index) throws NumberFormatException {
@@ -204,9 +204,91 @@ public class CsvRecord {
     return ParseUtils.parseDecimal(value, ifNullOrInvalid);
   }
 
+  public Boolean getBoolOpt(int index) throws BoolFormatException {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseBool(value) : null;
+  }
+
+  public Boolean getBoolOpt(int index, Boolean ifNullOrInvalid) {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseValue(value, ifNullOrInvalid, val -> ParseUtils.parseBool(value))
+        : ifNullOrInvalid;
+  }
+
+  public Byte getByteOpt(int index) throws NumberFormatException {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseByte(value) : null;
+  }
+
+  public Byte getByteOpt(int index, Byte ifNullOrInvalid) {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseValue(value, ifNullOrInvalid, val -> ParseUtils.parseByte(value))
+        : ifNullOrInvalid;
+  }
+
+  public Short getShortOpt(int index) throws NumberFormatException {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseShort(value) : null;
+  }
+
+  public Short getShortOpt(int index, Short ifNullOrInvalid) {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseValue(value, ifNullOrInvalid, val -> ParseUtils.parseShort(value))
+        : ifNullOrInvalid;
+  }
+
+  public Integer getIntOpt(int index) throws NumberFormatException {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseInt(value) : null;
+  }
+
+  public Integer getIntOpt(int index, Integer ifNullOrInvalid) {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseValue(value, ifNullOrInvalid, val -> ParseUtils.parseInt(value))
+        : ifNullOrInvalid;
+  }
+
+  public Long getLongOpt(int index) throws NumberFormatException {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseLong(value) : null;
+  }
+
+  public Long getLongOpt(int index, Long ifNullOrInvalid) {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseValue(value, ifNullOrInvalid, val -> ParseUtils.parseLong(value))
+        : ifNullOrInvalid;
+  }
+
+  public Float getFloatOpt(int index) throws NumberFormatException {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseFloat(value) : null;
+  }
+
+  public Float getFloatOpt(int index, Float ifNullOrInvalid) {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseValue(value, ifNullOrInvalid, val -> ParseUtils.parseFloat(value))
+        : ifNullOrInvalid;
+  }
+
+  public Double getDoubleOpt(int index) throws NumberFormatException {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseDouble(value) : null;
+  }
+
+  public Double getDoubleOpt(int index, Double ifNullOrInvalid) {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseValue(value, ifNullOrInvalid, val -> ParseUtils.parseDouble(value))
+        : ifNullOrInvalid;
+  }
+
   public <T> T getValue(int index, Function<String, T> converter) {
     String value = getString(index);
-    return ParseUtils.parseValue(value, converter);
+    return (value != null) ? ParseUtils.parseValue(value, converter) : null;
+  }
+
+  public <T> T getValue(int index, T ifNullOrInvalid, Function<String, T> converter) {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseValue(value, ifNullOrInvalid, converter) : ifNullOrInvalid;
   }
 
   // Temporal Types
@@ -288,7 +370,7 @@ public class CsvRecord {
 
   public LocalDate getLocalDate(int index, Collection<String> patterns) throws TemporalFormatException {
     String value = getString(index);
-    return ParseUtils.parseLocalDate(value, patterns);
+    return (value != null) ? ParseUtils.parseLocalDate(value, patterns) : null;
   }
 
   public LocalDate getLocalDateReq(int index, Collection<String> patterns) throws TemporalFormatException {
@@ -298,7 +380,7 @@ public class CsvRecord {
 
   public LocalTime getLocalTime(int index, Collection<String> patterns) throws TemporalFormatException {
     String value = getString(index);
-    return ParseUtils.parseLocalTime(value, patterns);
+    return (value != null) ? ParseUtils.parseLocalTime(value, patterns) : null;
   }
 
   public LocalTime getLocalTimeReq(int index, Collection<String> patterns) throws TemporalFormatException {
@@ -308,7 +390,7 @@ public class CsvRecord {
 
   public LocalDateTime getLocalDateTime(int index, Collection<String> patterns) throws TemporalFormatException {
     String value = getString(index);
-    return ParseUtils.parseLocalDateTime(value, patterns);
+    return (value != null) ? ParseUtils.parseLocalDateTime(value, patterns) : null;
   }
 
   public LocalDateTime getLocalDateTimeReq(int index, Collection<String> patterns) throws TemporalFormatException {
@@ -318,7 +400,7 @@ public class CsvRecord {
 
   public OffsetTime getOffsetTime(int index, Collection<String> patterns) throws TemporalFormatException {
     String value = getString(index);
-    return ParseUtils.parseOffsetTime(value, patterns);
+    return (value != null) ? ParseUtils.parseOffsetTime(value, patterns) : null;
   }
 
   public OffsetTime getOffsetTimeReq(int index, Collection<String> patterns) throws TemporalFormatException {
@@ -328,7 +410,7 @@ public class CsvRecord {
 
   public OffsetDateTime getOffsetDateTime(int index, Collection<String> patterns) throws TemporalFormatException {
     String value = getString(index);
-    return ParseUtils.parseOffsetDateTime(value, patterns);
+    return (value != null) ? ParseUtils.parseOffsetDateTime(value, patterns) : null;
   }
 
   public OffsetDateTime getOffsetDateTimeReq(int index, Collection<String> patterns) throws TemporalFormatException {

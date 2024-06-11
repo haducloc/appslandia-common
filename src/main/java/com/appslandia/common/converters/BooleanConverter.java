@@ -23,6 +23,7 @@ package com.appslandia.common.converters;
 import java.util.Locale;
 
 import com.appslandia.common.base.FormatProvider;
+import com.appslandia.common.utils.ParseUtils;
 import com.appslandia.common.utils.StringUtils;
 
 /**
@@ -33,9 +34,6 @@ import com.appslandia.common.utils.StringUtils;
 public class BooleanConverter implements Converter<Boolean> {
 
   public static final String ERROR_MSG_KEY = BooleanConverter.class.getName() + ".message";
-
-  public static final String VALUE_TRUE = Boolean.TRUE.toString();
-  public static final String VALUE_FALSE = Boolean.FALSE.toString();
 
   @Override
   public String getErrorMsgKey() {
@@ -52,7 +50,7 @@ public class BooleanConverter implements Converter<Boolean> {
     if (obj == null) {
       return null;
     }
-    return Boolean.TRUE.equals(obj) ? VALUE_TRUE : VALUE_FALSE;
+    return obj.toString();
   }
 
   @Override
@@ -62,10 +60,10 @@ public class BooleanConverter implements Converter<Boolean> {
       return null;
     }
     String val = str.toLowerCase(Locale.ENGLISH);
-    if (VALUE_TRUE.equals(val)) {
+    if (ParseUtils.isTrueValue(val)) {
       return Boolean.TRUE;
     }
-    if (VALUE_FALSE.equals(val)) {
+    if (ParseUtils.isFalseValue(val)) {
       return Boolean.FALSE;
     }
     throw toParsingError(str, getTargetType().getName());

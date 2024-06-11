@@ -20,8 +20,6 @@
 
 package com.appslandia.common.base;
 
-import java.math.BigDecimal;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -128,30 +126,6 @@ public class SimpleConfigTest {
     config.set("key1", "3.14");
     Assertions.assertEquals(3.14, config.getDouble("key1"));
     Assertions.assertThrows(AssertException.class, () -> config.getDouble(NON_EXISTENT_KEY));
-  }
-
-  @Test
-  public void test_getDecimal() {
-    SimpleConfig config = new SimpleConfig();
-    config.set("key1", "3.14");
-    Assertions.assertEquals(new BigDecimal("3.14"), config.getDecimal("key1", 0.0d));
-    Assertions.assertEquals(new BigDecimal("-1.0"), config.getDecimal(NON_EXISTENT_KEY, -1.0d));
-  }
-
-  @Test
-  public void test_getDecimalReq() {
-    SimpleConfig config = new SimpleConfig();
-    config.set("key1", "3.14");
-    Assertions.assertEquals(new BigDecimal("3.14"), config.getDecimalReq("key1"));
-    Assertions.assertThrows(AssertException.class, () -> config.getDecimalReq(NON_EXISTENT_KEY));
-  }
-
-  @Test
-  public void test_getDecimalOpt() {
-    SimpleConfig config = new SimpleConfig();
-    config.set("key1", "3.14");
-    Assertions.assertEquals(new BigDecimal("3.14"), config.getDecimal("key1"));
-    Assertions.assertNull(config.getDecimal(NON_EXISTENT_KEY));
   }
 
   @Test
