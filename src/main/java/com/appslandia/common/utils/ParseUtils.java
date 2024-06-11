@@ -247,12 +247,12 @@ public class ParseUtils {
 
   public static boolean isTrueValue(String value) {
     return "true".equalsIgnoreCase(value) || "t".equalsIgnoreCase(value) || "yes".equalsIgnoreCase(value)
-        || "y".equalsIgnoreCase(value);
+        || "y".equalsIgnoreCase(value) || "1".equalsIgnoreCase(value);
   }
 
   public static boolean isFalseValue(String value) {
     return "false".equalsIgnoreCase(value) || "f".equalsIgnoreCase(value) || "no".equalsIgnoreCase(value)
-        || "n".equalsIgnoreCase(value);
+        || "n".equalsIgnoreCase(value) || "0".equalsIgnoreCase(value);
   }
 
   public static LocalDate parseLocalDate(String value, String... patterns) throws TemporalFormatException {
