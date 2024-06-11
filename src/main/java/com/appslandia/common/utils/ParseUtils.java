@@ -207,30 +207,30 @@ public class ParseUtils {
     return (value != null) ? parseValue(value, throwErrorIfInvalid, val -> parseDecimalReq(val)) : null;
   }
 
-  public static <T> T parseValue(String value, Function<String, T> converter) {
-    return (value != null) ? converter.apply(value) : null;
+  public static <T> T parseValue(String value, Function<String, T> exceptionalConverter) {
+    return (value != null) ? exceptionalConverter.apply(value) : null;
   }
 
-  public static <T> T parseValue(String value, T ifNullOrInvalid, Function<String, T> converter) {
+  public static <T> T parseValue(String value, T ifNullOrInvalid, Function<String, T> exceptionalConverter) {
     if (value == null) {
       return ifNullOrInvalid;
     }
     try {
-      return converter.apply(value);
+      return exceptionalConverter.apply(value);
     } catch (Exception ex) {
       return ifNullOrInvalid;
     }
   }
 
-  public static <T> T parseValue(String value, boolean throwErrorIfInvalid, Function<String, T> converter) {
+  public static <T> T parseValue(String value, boolean throwErrorIfInvalid, Function<String, T> exceptionalConverter) {
     if (value == null) {
       return null;
     }
     if (throwErrorIfInvalid) {
-      return converter.apply(value);
+      return exceptionalConverter.apply(value);
     } else {
       try {
-        return converter.apply(value);
+        return exceptionalConverter.apply(value);
       } catch (Exception ex) {
         return null;
       }
@@ -292,12 +292,12 @@ public class ParseUtils {
   }
 
   private static <T> T doParseTemporal(String value, Class<T> targetClass, String[] patterns,
-      BiFunction<String, String, T> converter) throws TemporalFormatException {
+      BiFunction<String, String, T> exceptionalConverter) throws TemporalFormatException {
     Asserts.hasElements(patterns);
 
     for (String pattern : patterns) {
       try {
-        return converter.apply(value, pattern);
+        return exceptionalConverter.apply(value, pattern);
       } catch (Exception ex) {
         // ignore
       }
@@ -352,12 +352,12 @@ public class ParseUtils {
   }
 
   private static <T> T doParseTemporal(String value, Class<T> targetClass, Collection<String> patterns,
-      BiFunction<String, String, T> converter) throws TemporalFormatException {
+      BiFunction<String, String, T> exceptionalConverter) throws TemporalFormatException {
     Asserts.hasElements(patterns);
 
     for (String pattern : patterns) {
       try {
-        return converter.apply(value, pattern);
+        return exceptionalConverter.apply(value, pattern);
       } catch (Exception ex) {
         // ignore
       }

@@ -239,19 +239,19 @@ public class CsvRecord {
     return (value != null) ? ParseUtils.parseDecimalOpt(value, throwErrorIfInvalid) : null;
   }
 
-  public <T> T getValue(int index, Function<String, T> converter) {
+  public <T> T getValue(int index, Function<String, T> exceptionalConverter) {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseValue(value, converter) : null;
+    return (value != null) ? ParseUtils.parseValue(value, exceptionalConverter) : null;
   }
 
-  public <T> T getValue(int index, T ifNullOrInvalid, Function<String, T> converter) {
+  public <T> T getValue(int index, T ifNullOrInvalid, Function<String, T> exceptionalConverter) {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseValue(value, ifNullOrInvalid, converter) : ifNullOrInvalid;
+    return (value != null) ? ParseUtils.parseValue(value, ifNullOrInvalid, exceptionalConverter) : ifNullOrInvalid;
   }
 
-  public <T> T getValue(int index, boolean throwErrorIfInvalid, Function<String, T> converter) {
+  public <T> T getValue(int index, boolean throwErrorIfInvalid, Function<String, T> exceptionalConverter) {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseValue(value, throwErrorIfInvalid, converter) : null;
+    return (value != null) ? ParseUtils.parseValue(value, throwErrorIfInvalid, exceptionalConverter) : null;
   }
 
   // Temporal Types
