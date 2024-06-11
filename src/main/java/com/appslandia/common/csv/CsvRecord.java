@@ -191,12 +191,7 @@ public class CsvRecord {
 
   public BigDecimal getDecimalReq(int index) throws NumberFormatException {
     String value = getStringReq(index);
-    return new BigDecimal(value);
-  }
-
-  public BigDecimal getDecimal(int index) throws NumberFormatException {
-    String value = getString(index);
-    return (value != null) ? ParseUtils.parseDecimal(value) : null;
+    return ParseUtils.parseDecimalReq(value);
   }
 
   public BigDecimal getDecimal(int index, double ifNullOrInvalid) {
@@ -204,81 +199,44 @@ public class CsvRecord {
     return ParseUtils.parseDecimal(value, ifNullOrInvalid);
   }
 
-  public Boolean getBoolOpt(int index) throws BoolFormatException {
+  public Boolean getBoolOpt(int index, boolean throwErrorIfInvalid) throws BoolFormatException {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseBool(value) : null;
+    return (value != null) ? ParseUtils.parseBoolOpt(value, throwErrorIfInvalid) : null;
   }
 
-  public Boolean getBoolOpt(int index, Boolean ifNullOrInvalid) {
+  public Byte getByteOpt(int index, boolean throwErrorIfInvalid) throws NumberFormatException {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseValue(value, ifNullOrInvalid, val -> ParseUtils.parseBool(value))
-        : ifNullOrInvalid;
+    return (value != null) ? ParseUtils.parseByteOpt(value, throwErrorIfInvalid) : null;
   }
 
-  public Byte getByteOpt(int index) throws NumberFormatException {
+  public Short getShortOpt(int index, boolean throwErrorIfInvalid) throws NumberFormatException {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseByte(value) : null;
+    return (value != null) ? ParseUtils.parseShortOpt(value, throwErrorIfInvalid) : null;
   }
 
-  public Byte getByteOpt(int index, Byte ifNullOrInvalid) {
+  public Integer getIntOpt(int index, boolean throwErrorIfInvalid) throws NumberFormatException {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseValue(value, ifNullOrInvalid, val -> ParseUtils.parseByte(value))
-        : ifNullOrInvalid;
+    return (value != null) ? ParseUtils.parseIntOpt(value, throwErrorIfInvalid) : null;
   }
 
-  public Short getShortOpt(int index) throws NumberFormatException {
+  public Long getLongOpt(int index, boolean throwErrorIfInvalid) throws NumberFormatException {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseShort(value) : null;
+    return (value != null) ? ParseUtils.parseLongOpt(value, throwErrorIfInvalid) : null;
   }
 
-  public Short getShortOpt(int index, Short ifNullOrInvalid) {
+  public Float getFloatOpt(int index, boolean throwErrorIfInvalid) throws NumberFormatException {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseValue(value, ifNullOrInvalid, val -> ParseUtils.parseShort(value))
-        : ifNullOrInvalid;
+    return (value != null) ? ParseUtils.parseFloatOpt(value, throwErrorIfInvalid) : null;
   }
 
-  public Integer getIntOpt(int index) throws NumberFormatException {
+  public Double getDoubleOpt(int index, boolean throwErrorIfInvalid) throws NumberFormatException {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseInt(value) : null;
+    return (value != null) ? ParseUtils.parseDoubleOpt(value, throwErrorIfInvalid) : null;
   }
 
-  public Integer getIntOpt(int index, Integer ifNullOrInvalid) {
+  public BigDecimal getDecimalOpt(int index, boolean throwErrorIfInvalid) throws NumberFormatException {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseValue(value, ifNullOrInvalid, val -> ParseUtils.parseInt(value))
-        : ifNullOrInvalid;
-  }
-
-  public Long getLongOpt(int index) throws NumberFormatException {
-    String value = getString(index);
-    return (value != null) ? ParseUtils.parseLong(value) : null;
-  }
-
-  public Long getLongOpt(int index, Long ifNullOrInvalid) {
-    String value = getString(index);
-    return (value != null) ? ParseUtils.parseValue(value, ifNullOrInvalid, val -> ParseUtils.parseLong(value))
-        : ifNullOrInvalid;
-  }
-
-  public Float getFloatOpt(int index) throws NumberFormatException {
-    String value = getString(index);
-    return (value != null) ? ParseUtils.parseFloat(value) : null;
-  }
-
-  public Float getFloatOpt(int index, Float ifNullOrInvalid) {
-    String value = getString(index);
-    return (value != null) ? ParseUtils.parseValue(value, ifNullOrInvalid, val -> ParseUtils.parseFloat(value))
-        : ifNullOrInvalid;
-  }
-
-  public Double getDoubleOpt(int index) throws NumberFormatException {
-    String value = getString(index);
-    return (value != null) ? ParseUtils.parseDouble(value) : null;
-  }
-
-  public Double getDoubleOpt(int index, Double ifNullOrInvalid) {
-    String value = getString(index);
-    return (value != null) ? ParseUtils.parseValue(value, ifNullOrInvalid, val -> ParseUtils.parseDouble(value))
-        : ifNullOrInvalid;
+    return (value != null) ? ParseUtils.parseDecimalOpt(value, throwErrorIfInvalid) : null;
   }
 
   public <T> T getValue(int index, Function<String, T> converter) {

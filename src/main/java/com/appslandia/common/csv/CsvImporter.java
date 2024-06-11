@@ -227,7 +227,7 @@ public class CsvImporter extends InitializeObject {
       return csv.getDouble(idx);
     }
     if (type == BigDecimal.class) {
-      return csv.getDecimal(idx);
+      return csv.getDecimalReq(idx);
     }
 
     // Temporals

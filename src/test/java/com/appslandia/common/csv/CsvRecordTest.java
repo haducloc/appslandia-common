@@ -115,7 +115,7 @@ public class CsvRecordTest {
   public void test_Decimal() {
     CsvRecord csvRecord = new CsvRecord(new String[] { "1234567890.123" });
     try {
-      BigDecimal val = csvRecord.getDecimal(0);
+      BigDecimal val = csvRecord.getDecimalReq(0);
       BigDecimal expected = new BigDecimal("1234567890.123");
       Assertions.assertEquals(expected, val);
 

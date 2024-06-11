@@ -128,7 +128,7 @@ public class ParseUtilsTest {
   @Test
   public void test_parseDecimal() {
     try {
-      BigDecimal val = ParseUtils.parseDecimal("3.14");
+      BigDecimal val = ParseUtils.parseDecimalReq("3.14");
       Assertions.assertEquals(new BigDecimal("3.14"), val);
 
     } catch (Exception ex) {
@@ -143,22 +143,16 @@ public class ParseUtilsTest {
     Assertions.assertTrue(ParseUtils.isTrueValue("t"));
     Assertions.assertTrue(ParseUtils.isTrueValue("yes"));
     Assertions.assertTrue(ParseUtils.isTrueValue("y"));
-    Assertions.assertFalse(ParseUtils.isTrueValue("false"));
-    Assertions.assertFalse(ParseUtils.isTrueValue("f"));
-    Assertions.assertFalse(ParseUtils.isTrueValue("no"));
-    Assertions.assertFalse(ParseUtils.isTrueValue("n"));
+    Assertions.assertTrue(ParseUtils.isTrueValue("1"));
   }
 
   @Test
   public void test_isFalseValue() {
-    Assertions.assertFalse(ParseUtils.isFalseValue("true"));
-    Assertions.assertFalse(ParseUtils.isFalseValue("t"));
-    Assertions.assertFalse(ParseUtils.isFalseValue("yes"));
-    Assertions.assertFalse(ParseUtils.isFalseValue("y"));
     Assertions.assertTrue(ParseUtils.isFalseValue("false"));
     Assertions.assertTrue(ParseUtils.isFalseValue("f"));
     Assertions.assertTrue(ParseUtils.isFalseValue("no"));
     Assertions.assertTrue(ParseUtils.isFalseValue("n"));
+    Assertions.assertTrue(ParseUtils.isFalseValue("0"));
   }
 
   @Test
