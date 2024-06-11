@@ -196,7 +196,7 @@ public class CsvRecord {
 
   public BigDecimal getDecimal(int index) throws NumberFormatException {
     String value = getString(index);
-    return ParseUtils.parseDecimal(value);
+    return (value != null) ? ParseUtils.parseDecimal(value) : null;
   }
 
   public BigDecimal getDecimal(int index, double ifNullOrInvalid) {
