@@ -207,21 +207,6 @@ public class ParseUtils {
     return (value != null) ? parseValue(value, throwErrorIfInvalid, val -> parseDecimalReq(val)) : null;
   }
 
-  public static <T> T parseValue(String value, boolean throwErrorIfInvalid, Function<String, T> converter) {
-    if (value == null) {
-      return null;
-    }
-    if (throwErrorIfInvalid) {
-      return converter.apply(value);
-    } else {
-      try {
-        return converter.apply(value);
-      } catch (Exception ex) {
-        return null;
-      }
-    }
-  }
-
   public static <T> T parseValue(String value, Function<String, T> converter) {
     return (value != null) ? converter.apply(value) : null;
   }
@@ -234,6 +219,21 @@ public class ParseUtils {
       return converter.apply(value);
     } catch (Exception ex) {
       return ifNullOrInvalid;
+    }
+  }
+
+  public static <T> T parseValue(String value, boolean throwErrorIfInvalid, Function<String, T> converter) {
+    if (value == null) {
+      return null;
+    }
+    if (throwErrorIfInvalid) {
+      return converter.apply(value);
+    } else {
+      try {
+        return converter.apply(value);
+      } catch (Exception ex) {
+        return null;
+      }
     }
   }
 

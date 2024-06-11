@@ -249,6 +249,11 @@ public class CsvRecord {
     return (value != null) ? ParseUtils.parseValue(value, ifNullOrInvalid, converter) : ifNullOrInvalid;
   }
 
+  public <T> T getValue(int index, boolean throwErrorIfInvalid, Function<String, T> converter) {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseValue(value, throwErrorIfInvalid, converter) : null;
+  }
+
   // Temporal Types
 
   public LocalDate getLocalDate(int index, String... patterns) throws TemporalFormatException {
