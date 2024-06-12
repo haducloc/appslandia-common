@@ -175,36 +175,36 @@ public class ParseUtils {
     }
   }
 
-  public static Boolean parseBoolOpt(String value, boolean throwErrorIfInvalid) throws BoolFormatException {
-    return (value != null) ? parseValue(value, throwErrorIfInvalid, val -> parseBool(val)) : null;
+  public static Boolean parseBoolOpt(String value, Boolean ifNullOrInvalid) {
+    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseBool(val)) : null;
   }
 
-  public static Byte parseByteOpt(String value, boolean throwErrorIfInvalid) throws NumberFormatException {
-    return (value != null) ? parseValue(value, throwErrorIfInvalid, val -> parseByte(val)) : null;
+  public static Byte parseByteOpt(String value, Byte ifNullOrInvalid) {
+    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseByte(val)) : null;
   }
 
-  public static Short parseShortOpt(String value, boolean throwErrorIfInvalid) throws NumberFormatException {
-    return (value != null) ? parseValue(value, throwErrorIfInvalid, val -> parseShort(val)) : null;
+  public static Short parseShortOpt(String value, Short ifNullOrInvalid) {
+    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseShort(val)) : null;
   }
 
-  public static Integer parseIntOpt(String value, boolean throwErrorIfInvalid) throws NumberFormatException {
-    return (value != null) ? parseValue(value, throwErrorIfInvalid, val -> parseInt(val)) : null;
+  public static Integer parseIntOpt(String value, Integer ifNullOrInvalid) {
+    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseInt(val)) : null;
   }
 
-  public static Long parseLongOpt(String value, boolean throwErrorIfInvalid) throws NumberFormatException {
-    return (value != null) ? parseValue(value, throwErrorIfInvalid, val -> parseLong(val)) : null;
+  public static Long parseLongOpt(String value, Long ifNullOrInvalid) {
+    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseLong(val)) : null;
   }
 
-  public static Float parseFloatOpt(String value, boolean throwErrorIfInvalid) throws NumberFormatException {
-    return (value != null) ? parseValue(value, throwErrorIfInvalid, val -> parseFloat(val)) : null;
+  public static Float parseFloatOpt(String value, Float ifNullOrInvalid) {
+    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseFloat(val)) : null;
   }
 
-  public static Double parseDoubleOpt(String value, boolean throwErrorIfInvalid) throws NumberFormatException {
-    return (value != null) ? parseValue(value, throwErrorIfInvalid, val -> parseDouble(val)) : null;
+  public static Double parseDoubleOpt(String value, Double ifNullOrInvalid) {
+    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseDouble(val)) : null;
   }
 
-  public static BigDecimal parseDecimalOpt(String value, boolean throwErrorIfInvalid) throws NumberFormatException {
-    return (value != null) ? parseValue(value, throwErrorIfInvalid, val -> parseDecimalReq(val)) : null;
+  public static BigDecimal parseDecimalOpt(String value, BigDecimal ifNullOrInvalid) {
+    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseDecimalReq(val)) : null;
   }
 
   public static <T> T parseValue(String value, Function<String, T> exceptionalConverter) {
@@ -219,21 +219,6 @@ public class ParseUtils {
       return exceptionalConverter.apply(value);
     } catch (Exception ex) {
       return ifNullOrInvalid;
-    }
-  }
-
-  public static <T> T parseValue(String value, boolean throwErrorIfInvalid, Function<String, T> exceptionalConverter) {
-    if (value == null) {
-      return null;
-    }
-    if (throwErrorIfInvalid) {
-      return exceptionalConverter.apply(value);
-    } else {
-      try {
-        return exceptionalConverter.apply(value);
-      } catch (Exception ex) {
-        return null;
-      }
     }
   }
 

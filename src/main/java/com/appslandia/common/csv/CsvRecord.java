@@ -199,44 +199,44 @@ public class CsvRecord {
     return ParseUtils.parseDecimal(value, ifNullOrInvalid);
   }
 
-  public Boolean getBoolOpt(int index, boolean throwErrorIfInvalid) throws BoolFormatException {
+  public Boolean getBoolOpt(int index, Boolean ifNullOrInvalid) {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseBoolOpt(value, throwErrorIfInvalid) : null;
+    return (value != null) ? ParseUtils.parseBoolOpt(value, ifNullOrInvalid) : null;
   }
 
-  public Byte getByteOpt(int index, boolean throwErrorIfInvalid) throws NumberFormatException {
+  public Byte getByteOpt(int index, Byte ifNullOrInvalid) {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseByteOpt(value, throwErrorIfInvalid) : null;
+    return (value != null) ? ParseUtils.parseByteOpt(value, ifNullOrInvalid) : null;
   }
 
-  public Short getShortOpt(int index, boolean throwErrorIfInvalid) throws NumberFormatException {
+  public Short getShortOpt(int index, Short ifNullOrInvalid) {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseShortOpt(value, throwErrorIfInvalid) : null;
+    return (value != null) ? ParseUtils.parseShortOpt(value, ifNullOrInvalid) : null;
   }
 
-  public Integer getIntOpt(int index, boolean throwErrorIfInvalid) throws NumberFormatException {
+  public Integer getIntOpt(int index, Integer ifNullOrInvalid) {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseIntOpt(value, throwErrorIfInvalid) : null;
+    return (value != null) ? ParseUtils.parseIntOpt(value, ifNullOrInvalid) : null;
   }
 
-  public Long getLongOpt(int index, boolean throwErrorIfInvalid) throws NumberFormatException {
+  public Long getLongOpt(int index, Long ifNullOrInvalid) {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseLongOpt(value, throwErrorIfInvalid) : null;
+    return (value != null) ? ParseUtils.parseLongOpt(value, ifNullOrInvalid) : null;
   }
 
-  public Float getFloatOpt(int index, boolean throwErrorIfInvalid) throws NumberFormatException {
+  public Float getFloatOpt(int index, Float ifNullOrInvalid) {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseFloatOpt(value, throwErrorIfInvalid) : null;
+    return (value != null) ? ParseUtils.parseFloatOpt(value, ifNullOrInvalid) : null;
   }
 
-  public Double getDoubleOpt(int index, boolean throwErrorIfInvalid) throws NumberFormatException {
+  public Double getDoubleOpt(int index, Double ifNullOrInvalid) {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseDoubleOpt(value, throwErrorIfInvalid) : null;
+    return (value != null) ? ParseUtils.parseDoubleOpt(value, ifNullOrInvalid) : null;
   }
 
-  public BigDecimal getDecimalOpt(int index, boolean throwErrorIfInvalid) throws NumberFormatException {
+  public BigDecimal getDecimalOpt(int index, BigDecimal ifNullOrInvalid) {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseDecimalOpt(value, throwErrorIfInvalid) : null;
+    return (value != null) ? ParseUtils.parseDecimalOpt(value, ifNullOrInvalid) : null;
   }
 
   public <T> T getValue(int index, Function<String, T> exceptionalConverter) {
@@ -246,12 +246,7 @@ public class CsvRecord {
 
   public <T> T getValue(int index, T ifNullOrInvalid, Function<String, T> exceptionalConverter) {
     String value = getString(index);
-    return (value != null) ? ParseUtils.parseValue(value, ifNullOrInvalid, exceptionalConverter) : ifNullOrInvalid;
-  }
-
-  public <T> T getValue(int index, boolean throwErrorIfInvalid, Function<String, T> exceptionalConverter) {
-    String value = getString(index);
-    return (value != null) ? ParseUtils.parseValue(value, throwErrorIfInvalid, exceptionalConverter) : null;
+    return (value != null) ? ParseUtils.parseValue(value, ifNullOrInvalid, exceptionalConverter) : null;
   }
 
   // Temporal Types

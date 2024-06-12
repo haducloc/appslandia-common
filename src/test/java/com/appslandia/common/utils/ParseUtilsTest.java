@@ -31,8 +31,6 @@ import java.time.YearMonth;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.appslandia.common.base.BoolFormatException;
-
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
@@ -201,70 +199,6 @@ public class ParseUtilsTest {
     Assertions.assertEquals(new BigDecimal("123.456"), ParseUtils.parseDecimal("123.456", 0.0));
     Assertions.assertEquals(new BigDecimal("-123.456"), ParseUtils.parseDecimal("-123.456", 0.0));
     Assertions.assertEquals(new BigDecimal("0.0"), ParseUtils.parseDecimal("invalid", 0.0));
-  }
-
-  @Test
-  public void test_parseBoolOpt() {
-    Assertions.assertNull(ParseUtils.parseBoolOpt(null, false));
-    Assertions.assertTrue(ParseUtils.parseBoolOpt("true", false));
-    Assertions.assertFalse(ParseUtils.parseBoolOpt("false", true));
-    Assertions.assertThrows(BoolFormatException.class, () -> ParseUtils.parseBoolOpt("invalid", true));
-  }
-
-  @Test
-  public void test_parseByteOpt() {
-    Assertions.assertNull(ParseUtils.parseByteOpt(null, false));
-    Assertions.assertEquals(Byte.valueOf((byte) 123), ParseUtils.parseByteOpt("123", false));
-    Assertions.assertEquals(Byte.valueOf((byte) -123), ParseUtils.parseByteOpt("-123", false));
-    Assertions.assertThrows(NumberFormatException.class, () -> ParseUtils.parseByteOpt("invalid", true));
-  }
-
-  @Test
-  public void test_parseShortOpt() {
-    Assertions.assertNull(ParseUtils.parseShortOpt(null, false));
-    Assertions.assertEquals(Short.valueOf((short) 12345), ParseUtils.parseShortOpt("12345", false));
-    Assertions.assertEquals(Short.valueOf((short) -12345), ParseUtils.parseShortOpt("-12345", false));
-    Assertions.assertThrows(NumberFormatException.class, () -> ParseUtils.parseShortOpt("invalid", true));
-  }
-
-  @Test
-  public void test_parseIntOpt() {
-    Assertions.assertNull(ParseUtils.parseIntOpt(null, false));
-    Assertions.assertEquals(Integer.valueOf(123456), ParseUtils.parseIntOpt("123456", false));
-    Assertions.assertEquals(Integer.valueOf(-123456), ParseUtils.parseIntOpt("-123456", false));
-    Assertions.assertThrows(NumberFormatException.class, () -> ParseUtils.parseIntOpt("invalid", true));
-  }
-
-  @Test
-  public void test_parseLongOpt() {
-    Assertions.assertNull(ParseUtils.parseLongOpt(null, false));
-    Assertions.assertEquals(Long.valueOf(1234567890L), ParseUtils.parseLongOpt("1234567890", false));
-    Assertions.assertEquals(Long.valueOf(-1234567890L), ParseUtils.parseLongOpt("-1234567890", false));
-    Assertions.assertThrows(NumberFormatException.class, () -> ParseUtils.parseLongOpt("invalid", true));
-  }
-
-  @Test
-  public void test_parseFloatOpt() {
-    Assertions.assertNull(ParseUtils.parseFloatOpt(null, false));
-    Assertions.assertEquals(Float.valueOf(123.456f), ParseUtils.parseFloatOpt("123.456", false));
-    Assertions.assertEquals(Float.valueOf(-123.456f), ParseUtils.parseFloatOpt("-123.456", false));
-    Assertions.assertThrows(NumberFormatException.class, () -> ParseUtils.parseFloatOpt("invalid", true));
-  }
-
-  @Test
-  public void test_parseDoubleOpt() {
-    Assertions.assertNull(ParseUtils.parseDoubleOpt(null, false));
-    Assertions.assertEquals(Double.valueOf(123.456), ParseUtils.parseDoubleOpt("123.456", false));
-    Assertions.assertEquals(Double.valueOf(-123.456), ParseUtils.parseDoubleOpt("-123.456", false));
-    Assertions.assertThrows(NumberFormatException.class, () -> ParseUtils.parseDoubleOpt("invalid", true));
-  }
-
-  @Test
-  public void test_parseDecimalOpt() {
-    Assertions.assertNull(ParseUtils.parseDecimalOpt(null, false));
-    Assertions.assertEquals(new BigDecimal("123.456"), ParseUtils.parseDecimalOpt("123.456", false));
-    Assertions.assertEquals(new BigDecimal("-123.456"), ParseUtils.parseDecimalOpt("-123.456", false));
-    Assertions.assertThrows(NumberFormatException.class, () -> ParseUtils.parseDecimalOpt("invalid", true));
   }
 
   @Test
