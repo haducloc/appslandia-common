@@ -62,6 +62,5 @@ public class IntegerConverter extends NumberConverter<Integer> {
     } catch (NumberFormatException ex) {
       throw toParsingError(str, getTargetType().getName());
     }
-
   }
 }
