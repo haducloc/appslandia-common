@@ -41,11 +41,6 @@ public interface Config {
 
   String getString(String key);
 
-  default public String getString(String key, String ifNull) {
-    String value = getString(key);
-    return (value != null) ? value : ifNull;
-  }
-
   default public String getStringReq(String key) {
     String value = getString(key);
     if (value == null) {
@@ -54,24 +49,9 @@ public interface Config {
     return value;
   }
 
-  default public String[] getStringArray(String key) {
-    String value = getString(key);
-    return (value != null) ? SplitUtils.splitByComma(value) : StringUtils.EMPTY_ARRAY;
-  }
-
-  default public boolean getBool(String key, boolean ifNullOrInvalid) {
-    String value = getString(key);
-    return (value != null) ? ParseUtils.parseBool(value, ifNullOrInvalid) : ifNullOrInvalid;
-  }
-
   default public boolean getBool(String key) throws BoolFormatException {
     String value = getStringReq(key);
     return ParseUtils.parseBool(value);
-  }
-
-  default public int getInt(String key, int ifNullOrInvalid) {
-    String value = getString(key);
-    return (value != null) ? ParseUtils.parseInt(value, ifNullOrInvalid) : ifNullOrInvalid;
   }
 
   default public int getInt(String key) throws NumberFormatException {
@@ -79,19 +59,9 @@ public interface Config {
     return ParseUtils.parseInt(value);
   }
 
-  default public long getLong(String key, long ifNullOrInvalid) {
-    String value = getString(key);
-    return (value != null) ? ParseUtils.parseLong(value, ifNullOrInvalid) : ifNullOrInvalid;
-  }
-
   default public long getLong(String key) throws NumberFormatException {
     String value = getStringReq(key);
     return ParseUtils.parseLong(value);
-  }
-
-  default public double getDouble(String key, double ifNullOrInvalid) {
-    String value = getString(key);
-    return (value != null) ? ParseUtils.parseDouble(value, ifNullOrInvalid) : ifNullOrInvalid;
   }
 
   default public double getDouble(String key) throws NumberFormatException {
@@ -99,9 +69,39 @@ public interface Config {
     return ParseUtils.parseDouble(value);
   }
 
+  default public String getString(String key, String ifNull) {
+    String value = getString(key);
+    return (value != null) ? value : ifNull;
+  }
+
+  default public boolean getBool(String key, boolean ifNullOrInvalid) {
+    String value = getString(key);
+    return (value != null) ? ParseUtils.parseBool(value, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
+  default public int getInt(String key, int ifNullOrInvalid) {
+    String value = getString(key);
+    return (value != null) ? ParseUtils.parseInt(value, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
+  default public long getLong(String key, long ifNullOrInvalid) {
+    String value = getString(key);
+    return (value != null) ? ParseUtils.parseLong(value, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
+  default public double getDouble(String key, double ifNullOrInvalid) {
+    String value = getString(key);
+    return (value != null) ? ParseUtils.parseDouble(value, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
   default public <T> T getValue(String key, Function<String, T> converter) {
     String value = getString(key);
     return (value != null) ? ParseUtils.parseValue(value, converter) : null;
+  }
+
+  default public String[] getStringArray(String key) {
+    String value = getString(key);
+    return (value != null) ? SplitUtils.splitByComma(value) : StringUtils.EMPTY_ARRAY;
   }
 
   default public String resolve(String key) {

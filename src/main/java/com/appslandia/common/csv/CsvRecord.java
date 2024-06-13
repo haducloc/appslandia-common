@@ -124,19 +124,9 @@ public class CsvRecord {
     return ParseUtils.parseBool(value);
   }
 
-  public boolean getBool(int index, boolean ifNullOrInvalid) {
-    String value = getString(index);
-    return (value != null) ? ParseUtils.parseBool(value, ifNullOrInvalid) : ifNullOrInvalid;
-  }
-
   public byte getByte(int index) throws NumberFormatException {
     String value = getStringReq(index);
     return ParseUtils.parseByte(value);
-  }
-
-  public byte getByte(int index, byte ifNullOrInvalid) {
-    String value = getString(index);
-    return (value != null) ? ParseUtils.parseByte(value, ifNullOrInvalid) : ifNullOrInvalid;
   }
 
   public short getShort(int index) throws NumberFormatException {
@@ -144,19 +134,9 @@ public class CsvRecord {
     return ParseUtils.parseShort(value);
   }
 
-  public short getShort(int index, short ifNullOrInvalid) {
-    String value = getString(index);
-    return (value != null) ? ParseUtils.parseShort(value, ifNullOrInvalid) : ifNullOrInvalid;
-  }
-
   public int getInt(int index) throws NumberFormatException {
     String value = getStringReq(index);
     return ParseUtils.parseInt(value);
-  }
-
-  public int getInt(int index, int ifNullOrInvalid) {
-    String value = getString(index);
-    return (value != null) ? ParseUtils.parseInt(value, ifNullOrInvalid) : ifNullOrInvalid;
   }
 
   public long getLong(int index) throws NumberFormatException {
@@ -164,19 +144,9 @@ public class CsvRecord {
     return ParseUtils.parseLong(value);
   }
 
-  public long getLong(int index, long ifNullOrInvalid) {
-    String value = getString(index);
-    return (value != null) ? ParseUtils.parseLong(value, ifNullOrInvalid) : ifNullOrInvalid;
-  }
-
   public float getFloat(int index) throws NumberFormatException {
     String value = getStringReq(index);
     return ParseUtils.parseFloat(value);
-  }
-
-  public float getFloat(int index, float ifNullOrInvalid) {
-    String value = getString(index);
-    return (value != null) ? ParseUtils.parseFloat(value, ifNullOrInvalid) : ifNullOrInvalid;
   }
 
   public double getDouble(int index) throws NumberFormatException {
@@ -184,14 +154,44 @@ public class CsvRecord {
     return ParseUtils.parseDouble(value);
   }
 
-  public double getDouble(int index, double ifNullOrInvalid) {
-    String value = getString(index);
-    return (value != null) ? ParseUtils.parseDouble(value, ifNullOrInvalid) : ifNullOrInvalid;
-  }
-
   public BigDecimal getDecimalReq(int index) throws NumberFormatException {
     String value = getStringReq(index);
     return ParseUtils.parseDecimalReq(value);
+  }
+
+  public boolean getBool(int index, boolean ifNullOrInvalid) {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseBool(value, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
+  public byte getByte(int index, byte ifNullOrInvalid) {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseByte(value, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
+  public short getShort(int index, short ifNullOrInvalid) {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseShort(value, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
+  public int getInt(int index, int ifNullOrInvalid) {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseInt(value, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
+  public long getLong(int index, long ifNullOrInvalid) {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseLong(value, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
+  public float getFloat(int index, float ifNullOrInvalid) {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseFloat(value, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
+  public double getDouble(int index, double ifNullOrInvalid) {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseDouble(value, ifNullOrInvalid) : ifNullOrInvalid;
   }
 
   public BigDecimal getDecimal(int index, double ifNullOrInvalid) {

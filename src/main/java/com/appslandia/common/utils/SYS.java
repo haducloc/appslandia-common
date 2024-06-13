@@ -57,19 +57,9 @@ public class SYS {
     return ParseUtils.parseBool(value);
   }
 
-  public static boolean getBoolProp(String key, boolean ifNullOrInvalid) {
-    String value = getProp(key);
-    return (value != null) ? ParseUtils.parseBool(value, ifNullOrInvalid) : ifNullOrInvalid;
-  }
-
   public static int getIntProp(String key) throws NumberFormatException {
     String value = getPropReq(key);
     return ParseUtils.parseInt(value);
-  }
-
-  public static int getIntProp(String key, int ifNullOrInvalid) {
-    String value = getProp(key);
-    return (value != null) ? ParseUtils.parseInt(value, ifNullOrInvalid) : ifNullOrInvalid;
   }
 
   public static long getLongProp(String key) throws NumberFormatException {
@@ -77,14 +67,24 @@ public class SYS {
     return ParseUtils.parseLong(value);
   }
 
-  public static long getLongProp(String key, long ifNullOrInvalid) {
-    String value = getProp(key);
-    return (value != null) ? ParseUtils.parseLong(value, ifNullOrInvalid) : ifNullOrInvalid;
-  }
-
   public static double getDoubleProp(String key) throws NumberFormatException {
     String value = getPropReq(key);
     return ParseUtils.parseDouble(value);
+  }
+
+  public static boolean getBoolProp(String key, boolean ifNullOrInvalid) {
+    String value = getProp(key);
+    return (value != null) ? ParseUtils.parseBool(value, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
+  public static int getIntProp(String key, int ifNullOrInvalid) {
+    String value = getProp(key);
+    return (value != null) ? ParseUtils.parseInt(value, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
+  public static long getLongProp(String key, long ifNullOrInvalid) {
+    String value = getProp(key);
+    return (value != null) ? ParseUtils.parseLong(value, ifNullOrInvalid) : ifNullOrInvalid;
   }
 
   public static double getDoubleProp(String key, double ifNullOrInvalid) {
@@ -117,19 +117,9 @@ public class SYS {
     return ParseUtils.parseBool(value);
   }
 
-  public static boolean getBoolEnv(String key, boolean ifNullOrInvalid) {
-    String value = getEnv(key);
-    return (value != null) ? ParseUtils.parseBool(value, ifNullOrInvalid) : ifNullOrInvalid;
-  }
-
   public static int getIntEnv(String key) throws NumberFormatException {
     String value = getEnvReq(key);
     return ParseUtils.parseInt(value);
-  }
-
-  public static int getIntEnv(String key, int ifNullOrInvalid) {
-    String value = getEnv(key);
-    return (value != null) ? ParseUtils.parseInt(value, ifNullOrInvalid) : ifNullOrInvalid;
   }
 
   public static long getLongEnv(String key) throws NumberFormatException {
@@ -137,14 +127,24 @@ public class SYS {
     return ParseUtils.parseLong(value);
   }
 
-  public static long getLongEnv(String key, long ifNullOrInvalid) {
-    String value = getEnv(key);
-    return (value != null) ? ParseUtils.parseLong(value, ifNullOrInvalid) : ifNullOrInvalid;
-  }
-
   public static double getDoubleEnv(String key) throws NumberFormatException {
     String value = getEnvReq(key);
     return ParseUtils.parseDouble(value);
+  }
+
+  public static boolean getBoolEnv(String key, boolean ifNullOrInvalid) {
+    String value = getEnv(key);
+    return (value != null) ? ParseUtils.parseBool(value, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
+  public static int getIntEnv(String key, int ifNullOrInvalid) {
+    String value = getEnv(key);
+    return (value != null) ? ParseUtils.parseInt(value, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
+  public static long getLongEnv(String key, long ifNullOrInvalid) {
+    String value = getEnv(key);
+    return (value != null) ? ParseUtils.parseLong(value, ifNullOrInvalid) : ifNullOrInvalid;
   }
 
   public static double getDoubleEnv(String key, double ifNullOrInvalid) {
