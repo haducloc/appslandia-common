@@ -20,20 +20,20 @@
 
 package com.appslandia.common.json;
 
-import java.lang.reflect.Array;
-import java.time.temporal.Temporal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.time.YearMonth;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
 
 import com.appslandia.common.base.MapWrapper;
-import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
-import com.appslandia.common.utils.ObjectUtils;
+import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.STR;
 
 /**
@@ -61,108 +61,265 @@ public abstract class JsonMapObject extends MapWrapper<String, Object> {
   }
 
   public JsonMapObject set(String key, Object value) {
-    Asserts.notNull(key);
-    Asserts.isTrue(isValueSupported(value), "The value is unsuppored.");
-
-    super.put(key, value);
+    put(key, value);
     return this;
   }
 
-  public Object getRequired(String key) {
+  public Object getReq(String key) {
     Object value = this.get(key);
     return Asserts.notNull(value, "The value is required.");
   }
 
-  public Date getDate(String key) {
-    Object d = this.get(key);
-    if (d == null) {
-      return null;
+  public boolean getBool(String key) {
+    Object value = this.getReq(key);
+    if (value.getClass() == Boolean.class) {
+      return (Boolean) value;
     }
-    if (d instanceof Date) {
-      return (Date) d;
-    }
-    if (d.getClass() == Long.class) {
-      return new Date((Long) d);
-    }
-    throw new IllegalArgumentException(STR.fmt("Failed to getDate('{}')", key));
+    throw new IllegalArgumentException(STR.fmt("Failed to getBool('{}')", key));
   }
 
-  public Integer getInteger(String key) {
-    Object d = this.get(key);
-    if (d == null) {
-      return null;
+  public int getInt(String key) {
+    Object value = this.getReq(key);
+    if (value.getClass() == Integer.class) {
+      return (Integer) value;
     }
-    if (d instanceof Integer) {
-      return (Integer) d;
+    if (value instanceof Number) {
+      return ((Number) value).intValue();
     }
-    if (d instanceof Number) {
-      return ((Number) d).intValue();
-    }
-    throw new IllegalArgumentException(STR.fmt("Failed to getInteger('{}')", key));
+    throw new IllegalArgumentException(STR.fmt("Failed to getInt('{}')", key));
   }
 
-  public Long getLong(String key) {
-    Object d = this.get(key);
-    if (d == null) {
-      return null;
+  public long getLong(String key) {
+    Object value = this.getReq(key);
+    if (value.getClass() == Long.class) {
+      return (Long) value;
     }
-    if (d instanceof Long) {
-      return (Long) d;
-    }
-    if (d instanceof Number) {
-      return ((Number) d).longValue();
+    if (value instanceof Number) {
+      return ((Number) value).longValue();
     }
     throw new IllegalArgumentException(STR.fmt("Failed to getLong('{}')", key));
   }
 
-  public Double getDouble(String key) {
-    Object d = this.get(key);
-    if (d == null) {
-      return null;
+  public double getDouble(String key) {
+    Object value = this.getReq(key);
+    if (value.getClass() == Double.class) {
+      return (Double) value;
     }
-    if (d instanceof Double) {
-      return (Double) d;
-    }
-    if (d instanceof Number) {
-      return ((Number) d).doubleValue();
+    if (value instanceof Number) {
+      return ((Number) value).doubleValue();
     }
     throw new IllegalArgumentException(STR.fmt("Failed to getDouble('{}')", key));
   }
 
-  public Boolean getBoolean(String key) {
-    Object d = this.get(key);
-    if (d == null) {
-      return null;
+  public BigDecimal getDecimalReq(String key) {
+    Object value = this.getReq(key);
+    if (value.getClass() == BigDecimal.class) {
+      return (BigDecimal) value;
     }
-    if (d instanceof Boolean) {
-      return (Boolean) d;
+    if (value instanceof Number) {
+      return new BigDecimal(value.toString());
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getBoolean('{}')", key));
+    throw new IllegalArgumentException(STR.fmt("Failed to getDecimalReq('{}')", key));
   }
 
-  public <E> List<E> getList(String key) {
+  public LocalDate getLocalDateReq(String key) {
+    Object value = this.getReq(key);
+    if (value.getClass() == LocalDate.class) {
+      return (LocalDate) value;
+    }
+    if (value.getClass() == String.class) {
+      return DateUtils.parseLocalDate((String) value);
+    }
+    throw new IllegalArgumentException(STR.fmt("Failed to getLocalDateReq('{}')", key));
+  }
+
+  public LocalTime getLocalTimeReq(String key) {
+    Object value = this.getReq(key);
+    if (value.getClass() == LocalTime.class) {
+      return (LocalTime) value;
+    }
+    if (value.getClass() == String.class) {
+      return DateUtils.parseLocalTime((String) value);
+    }
+    throw new IllegalArgumentException(STR.fmt("Failed to getLocalTimeReq('{}')", key));
+  }
+
+  public LocalDateTime getLocalDateTimeReq(String key) {
+    Object value = this.getReq(key);
+    if (value.getClass() == LocalDateTime.class) {
+      return (LocalDateTime) value;
+    }
+    if (value.getClass() == String.class) {
+      return DateUtils.parseLocalDateTime((String) value);
+    }
+    throw new IllegalArgumentException(STR.fmt("Failed to getLocalDateTimeReq('{}')", key));
+  }
+
+  public OffsetTime getOffsetTimeReq(String key) {
+    Object value = this.getReq(key);
+    if (value.getClass() == OffsetTime.class) {
+      return (OffsetTime) value;
+    }
+    if (value.getClass() == String.class) {
+      return DateUtils.parseOffsetTime((String) value);
+    }
+    throw new IllegalArgumentException(STR.fmt("Failed to getOffsetTimeReq('{}')", key));
+  }
+
+  public OffsetDateTime getOffsetDateTimeReq(String key) {
+    Object value = this.getReq(key);
+    if (value.getClass() == OffsetDateTime.class) {
+      return (OffsetDateTime) value;
+    }
+    if (value.getClass() == String.class) {
+      return DateUtils.parseOffsetDateTime((String) value);
+    }
+    throw new IllegalArgumentException(STR.fmt("Failed to getOffsetDateTimeReq('{}')", key));
+  }
+
+  public YearMonth getYearMonthReq(String key) {
+    Object value = this.getReq(key);
+    if (value.getClass() == YearMonth.class) {
+      return (YearMonth) value;
+    }
+    if (value.getClass() == String.class) {
+      return DateUtils.parseYearMonth((String) value);
+    }
+    throw new IllegalArgumentException(STR.fmt("Failed to getYearMonthReq('{}')", key));
+  }
+
+  public String getStringReq(String key) {
     Object value = this.get(key);
-    if (value == null) {
-      return null;
+    if (value.getClass() == String.class) {
+      return (String) value;
     }
+    throw new IllegalArgumentException(STR.fmt("Failed to getStringReq('{}')", key));
+  }
 
-    // List
-    if (value instanceof List) {
-      return ObjectUtils.cast(value);
+  public Boolean getBoolOpt(String key) {
+    Object value = this.get(key);
+    if (value == null || value.getClass() == Boolean.class) {
+      return (Boolean) value;
     }
+    throw new IllegalArgumentException(STR.fmt("Failed to getBoolOpt('{}')", key));
+  }
 
-    // Collection
-    if (value instanceof Collection) {
-      Collection<E> col = ObjectUtils.cast(value);
-      return new ArrayList<>(col);
+  public Integer getIntOpt(String key) {
+    Object value = this.get(key);
+    if (value == null || value.getClass() == Integer.class) {
+      return (Integer) value;
     }
+    if (value instanceof Number) {
+      return ((Number) value).intValue();
+    }
+    throw new IllegalArgumentException(STR.fmt("Failed to getIntOpt('{}')", key));
+  }
 
-    // Array
-    if (value.getClass().isArray()) {
-      List<Object> list = ArrayUtils.toList(value);
-      return ObjectUtils.cast(list);
+  public Long getLongOpt(String key) {
+    Object value = this.get(key);
+    if (value == null || value.getClass() == Long.class) {
+      return (Long) value;
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getList('{}')", key));
+    if (value instanceof Number) {
+      return ((Number) value).longValue();
+    }
+    throw new IllegalArgumentException(STR.fmt("Failed to getLongOpt('{}')", key));
+  }
+
+  public Double getDoubleOpt(String key) {
+    Object value = this.get(key);
+    if (value == null || value.getClass() == Double.class) {
+      return (Double) value;
+    }
+    if (value instanceof Number) {
+      return ((Number) value).doubleValue();
+    }
+    throw new IllegalArgumentException(STR.fmt("Failed to getDoubleOpt('{}')", key));
+  }
+
+  public BigDecimal getDecimal(String key) {
+    Object value = this.get(key);
+    if (value == null || value.getClass() == BigDecimal.class) {
+      return (BigDecimal) value;
+    }
+    if (value instanceof Number) {
+      return new BigDecimal(value.toString());
+    }
+    throw new IllegalArgumentException(STR.fmt("Failed to getDecimal('{}')", key));
+  }
+
+  public LocalDate getLocalDate(String key) {
+    Object value = this.get(key);
+    if (value == null || value.getClass() == LocalDate.class) {
+      return (LocalDate) value;
+    }
+    if (value.getClass() == String.class) {
+      return DateUtils.parseLocalDate((String) value);
+    }
+    throw new IllegalArgumentException(STR.fmt("Failed to getLocalDate('{}')", key));
+  }
+
+  public LocalTime getLocalTime(String key) {
+    Object value = this.get(key);
+    if (value == null || value.getClass() == LocalTime.class) {
+      return (LocalTime) value;
+    }
+    if (value.getClass() == String.class) {
+      return DateUtils.parseLocalTime((String) value);
+    }
+    throw new IllegalArgumentException(STR.fmt("Failed to getLocalTime('{}')", key));
+  }
+
+  public LocalDateTime getLocalDateTime(String key) {
+    Object value = this.get(key);
+    if (value == null || value.getClass() == LocalDateTime.class) {
+      return (LocalDateTime) value;
+    }
+    if (value.getClass() == String.class) {
+      return DateUtils.parseLocalDateTime((String) value);
+    }
+    throw new IllegalArgumentException(STR.fmt("Failed to getLocalDateTime('{}')", key));
+  }
+
+  public OffsetTime getOffsetTime(String key) {
+    Object value = this.get(key);
+    if (value == null || value.getClass() == OffsetTime.class) {
+      return (OffsetTime) value;
+    }
+    if (value.getClass() == String.class) {
+      return DateUtils.parseOffsetTime((String) value);
+    }
+    throw new IllegalArgumentException(STR.fmt("Failed to getOffsetTime('{}')", key));
+  }
+
+  public OffsetDateTime getOffsetDateTime(String key) {
+    Object value = this.get(key);
+    if (value == null || value.getClass() == OffsetDateTime.class) {
+      return (OffsetDateTime) value;
+    }
+    if (value.getClass() == String.class) {
+      return DateUtils.parseOffsetDateTime((String) value);
+    }
+    throw new IllegalArgumentException(STR.fmt("Failed to getOffsetDateTime('{}')", key));
+  }
+
+  public YearMonth getYearMonth(String key) {
+    Object value = this.get(key);
+    if (value == null || value.getClass() == YearMonth.class) {
+      return (YearMonth) value;
+    }
+    if (value.getClass() == String.class) {
+      return DateUtils.parseYearMonth((String) value);
+    }
+    throw new IllegalArgumentException(STR.fmt("Failed to getYearMonth('{}')", key));
+  }
+
+  public String getString(String key) {
+    Object value = this.get(key);
+    if (value == null || value.getClass() == String.class) {
+      return (String) value;
+    }
+    throw new IllegalArgumentException(STR.fmt("Failed to getString('{}')", key));
   }
 
   protected boolean isValueSupported(Object value) {
@@ -175,26 +332,22 @@ public abstract class JsonMapObject extends MapWrapper<String, Object> {
       return true;
     }
 
-    // Collection
-    if (value instanceof Collection) {
-      return validateCollection((Collection<?>) value);
+    // List
+    if (value instanceof List) {
+      return validateList((List<?>) value);
     }
 
     // Map
     if (value instanceof Map) {
       return validateMap((Map<?, ?>) value);
     }
-
-    // Array
-    if (value.getClass().isArray()) {
-      return validateArray(value);
-    }
     return false;
   }
 
-  protected boolean isBasicType(Class<?> c) {
-    return (c == String.class) || Number.class.isAssignableFrom(c) || (c == Boolean.class)
-        || Date.class.isAssignableFrom(c) || Temporal.class.isAssignableFrom(c);
+  protected boolean isBasicType(Class<?> type) {
+    return (type == String.class) || Number.class.isAssignableFrom(type) || (type == Boolean.class)
+        || (type == LocalDate.class) || (type == LocalTime.class) || (type == LocalDateTime.class)
+        || (type == OffsetTime.class) || (type == OffsetDateTime.class) || (type == YearMonth.class);
   }
 
   private boolean validateMap(Map<?, ?> map) {
@@ -203,16 +356,7 @@ public abstract class JsonMapObject extends MapWrapper<String, Object> {
     });
   }
 
-  private boolean validateCollection(Collection<?> col) {
-    return col.stream().allMatch(value -> (value == null) || isValueSupported(value));
-  }
-
-  private boolean validateArray(Object array) {
-    int len = Array.getLength(array);
-
-    return IntStream.range(0, len).allMatch(i -> {
-      Object value = Array.get(array, i);
-      return (value == null) || isValueSupported(value);
-    });
+  private boolean validateList(List<?> list) {
+    return list.stream().allMatch(value -> (value == null) || isValueSupported(value));
   }
 }

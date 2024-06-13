@@ -548,4 +548,8 @@ public class DateUtils {
   public static OffsetDateTime parseOffsetDateTime(String isoValue) throws TemporalFormatException {
     return (isoValue != null) ? ParseUtils.parseOffsetDateTime(isoValue, ISO8601_PATTERNS_DATETIMEZ) : null;
   }
+
+  public static YearMonth parseYearMonth(String isoValue) throws TemporalFormatException {
+    return (isoValue != null) ? ParseUtils.parseYearMonth(isoValue, ISO8601_YEAR_MONTH) : null;
+  }
 }

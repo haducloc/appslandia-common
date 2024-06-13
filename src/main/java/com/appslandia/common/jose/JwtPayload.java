@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.ObjectUtils;
 
 /**
  *
@@ -97,7 +98,7 @@ public class JwtPayload extends JoseMapObject {
   }
 
   public List<String> getAud() {
-    return getList(AUD);
+    return ObjectUtils.cast(this.get(AUD));
   }
 
   public JwtPayload setAud(String... values) {

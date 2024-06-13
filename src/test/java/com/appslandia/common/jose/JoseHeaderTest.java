@@ -33,17 +33,6 @@ import org.junit.jupiter.api.Test;
 public class JoseHeaderTest {
 
   @Test
-  public void test_date() {
-    JoseHeader header = new JoseHeader();
-
-    Date d = new Date();
-    header.set("d", d.getTime());
-
-    Date d1 = header.getDate("d");
-    Assertions.assertEquals(d.getTime(), d1.getTime());
-  }
-
-  @Test
   public void test_numericDate() {
     JoseHeader header = new JoseHeader();
 

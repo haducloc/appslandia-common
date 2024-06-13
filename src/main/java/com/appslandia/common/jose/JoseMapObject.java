@@ -49,7 +49,7 @@ public abstract class JoseMapObject extends JsonMapObject {
   }
 
   public Date getNumericDate(String key) {
-    Number nd = (Number) this.get(key);
+    Long nd = this.getLongOpt(key);
     return (nd != null) ? JoseUtils.toDate(nd.longValue()) : null;
   }
 
