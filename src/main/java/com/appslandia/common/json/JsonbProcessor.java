@@ -125,4 +125,9 @@ public class JsonbProcessor extends JsonProcessor {
     config.withBinaryDataStrategy(BinaryDataStrategy.BASE_64_URL);
     return config;
   }
+
+  public static JsonbMapAdapter<JsonMapObject> newJsonMapObjectAdapter() {
+    return new JsonbMapAdapter<>(m -> new JsonMapObject(m)) {
+    }.setMapConverter(m -> new JsonMapObject(m));
+  }
 }

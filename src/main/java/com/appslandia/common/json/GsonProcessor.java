@@ -138,4 +138,8 @@ public class GsonProcessor extends JsonProcessor {
 
     return builder;
   }
+
+  public static GsonMapAdapter<JsonMapObject> newJsonMapObjectAdapter() {
+    return new GsonMapAdapter<>(m -> new JsonMapObject(m)).setMapConverter(m -> new JsonMapObject(m));
+  }
 }

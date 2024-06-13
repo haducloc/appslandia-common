@@ -38,10 +38,7 @@ public class JoseGson {
 		return GsonProcessor.newBuilder(serializeNulls, prettyPrinting)
 
         // JsonMapObject
-        .registerTypeAdapter(JsonMapObject.class,
-            new GsonMapAdapter<>(m -> new JsonMapObject(m))
-              .setMapConverter(m -> new JsonMapObject(m))
-            ) 
+        .registerTypeAdapter(JsonMapObject.class, GsonProcessor.newJsonMapObjectAdapter()) 
         
 		    // JoseMapObject
         .registerTypeAdapter(JoseMapObject.class,

@@ -20,7 +20,6 @@
 
 package com.appslandia.common.jose;
 
-import com.appslandia.common.json.JsonMapObject;
 import com.appslandia.common.json.JsonbMapAdapter;
 import com.appslandia.common.json.JsonbProcessor;
 import com.appslandia.common.utils.ObjectUtils;
@@ -40,8 +39,7 @@ public class JoseJsonb {
 				.withAdapters(
 
             // JsonMapObject
-            new JsonbMapAdapter<>(m -> new JsonMapObject(m)) {}
-                .setMapConverter(m -> new JsonMapObject(m)),
+            JsonbProcessor.newJsonMapObjectAdapter(),
                 
             // JoseMapObject
             new JsonbMapAdapter<>(m -> new JoseMapObject(m)) {}
