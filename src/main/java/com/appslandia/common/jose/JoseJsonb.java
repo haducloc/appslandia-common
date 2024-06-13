@@ -20,6 +20,7 @@
 
 package com.appslandia.common.jose;
 
+import com.appslandia.common.json.JsonMapObject;
 import com.appslandia.common.json.JsonbMapAdapter;
 import com.appslandia.common.json.JsonbProcessor;
 import com.appslandia.common.utils.ObjectUtils;
@@ -38,21 +39,28 @@ public class JoseJsonb {
 		return JsonbProcessor.newConfig(serializeNulls, prettyPrinting)
 				.withAdapters(
 
+            // JsonMapObject
+            new JsonbMapAdapter<>(m -> new JsonMapObject(m)) {}
+                .setMapConverter(m -> new JsonMapObject(m)),
+                
+            // JoseMapObject
+            new JsonbMapAdapter<>(m -> new JoseMapObject(m)) {}
+                .setMapConverter(m -> new JoseMapObject(m)),                
+                
 						// JsonWebKey
-						new JsonbMapAdapter<>(true, m -> new JsonWebKey(m)) {
-						},
+						new JsonbMapAdapter<>(m -> new JsonWebKey(m)) {}
+						    .setMapConverter(m -> new JoseMapObject(m)),
 
 						// JoseHeader
-						new JsonbMapAdapter<JoseHeader>(true,
-								m -> new JoseHeader(m)) {
-						}.setValueConverter(new String[]{"jwk"},
-								m -> new JsonWebKey(ObjectUtils.cast(m))),
+						new JsonbMapAdapter<JoseHeader>(m -> new JoseHeader(m)) {}
+						      .setValueConverter(new String[]{"jwk"}, m -> new JsonWebKey(ObjectUtils.cast(m)))
+						      .setMapConverter(m -> new JoseMapObject(m)),
 
 						// JwtPayload
-						new JsonbMapAdapter<JwtPayload>(true,
-								m -> new JwtPayload(m)) {
-						}.setValueConverter(new String[]{"jwks\\[\\d+]"},
-								m -> new JsonWebKey(ObjectUtils.cast(m))));
+						new JsonbMapAdapter<JwtPayload>(m -> new JwtPayload(m)) {}
+						      .setValueConverter(new String[]{"jwks\\[\\d+]"}, m -> new JsonWebKey(ObjectUtils.cast(m)))
+						      .setMapConverter(m -> new JoseMapObject(m))  
+				    );
 		// @formatter:on
   }
 

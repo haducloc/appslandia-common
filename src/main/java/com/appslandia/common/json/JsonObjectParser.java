@@ -20,7 +20,6 @@
 
 package com.appslandia.common.json;
 
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -48,6 +47,7 @@ public class JsonObjectParser extends InitializeObject {
   final Map<String, Pattern> pathPatterns = new ConcurrentHashMap<>();
 
   private JsonValueConverter jsonValueConverter;
+  private Function<Map<String, Object>, Object> mapConverter;
 
   @Override
   protected void init() throws Exception {
@@ -76,34 +76,46 @@ public class JsonObjectParser extends InitializeObject {
     return this;
   }
 
-  public Object parse(Object rootElement, boolean unmodifiable) {
+  public JsonObjectParser setMapConverter(Function<Map<String, Object>, Object> mapConverter) {
+    this.assertNotInitialized();
+    this.mapConverter = mapConverter;
+    return this;
+  }
+
+  public Object parse(Object rootElement) {
     this.initialize();
     Asserts.notNull(rootElement);
 
-    Object rootObj = parseValue(rootElement, unmodifiable, new StringBuilder(), new Out<>());
+    Object rootObj = parseValue(rootElement, new StringBuilder(), new Out<>());
 
     Function<Object, Object> rootConverter = this.valueConverters.get(ROOT_PATH);
     return (rootConverter != null) ? rootConverter.apply(rootObj) : rootObj;
   }
 
-  protected Object convertValue(Object value, String path, boolean unmodifiable) {
+  @SuppressWarnings("unchecked")
+  protected Object convertValue(Object value, String path) {
     Function<Object, Object> converter = this.valueConverters.get(path);
     if (converter != null) {
       return converter.apply(value);
     }
-    for (Map.Entry<String, Function<Object, Object>> converterEntry : this.valueConverters.entrySet()) {
 
+    for (Map.Entry<String, Function<Object, Object>> converterEntry : this.valueConverters.entrySet()) {
       Pattern pattern = this.pathPatterns.computeIfAbsent(converterEntry.getKey(),
           (p) -> Pattern.compile(p, Pattern.CASE_INSENSITIVE));
-      if (pattern.matcher(path).matches()) {
 
+      if (pattern.matcher(path).matches()) {
         return converterEntry.getValue().apply(value);
       }
+    }
+
+    // mapConverter
+    if (this.mapConverter != null && value instanceof Map) {
+      value = this.mapConverter.apply((Map<String, Object>) value);
     }
     return value;
   }
 
-  protected Object parseValue(Object element, boolean unmodifiable, StringBuilder path, Out<Boolean> asResult) {
+  protected Object parseValue(Object element, StringBuilder path, Out<Boolean> asResult) {
     // NULL
     if (this.jsonValueConverter.isJsonNull(element)) {
       return null;
@@ -145,13 +157,13 @@ public class JsonObjectParser extends InitializeObject {
         int len = path.length();
         path.append("[" + (idx++) + "]");
 
-        Object parsedVal = parseValue(childElement, unmodifiable, path, asResult.set(false));
-        parsedVal = convertValue(parsedVal, path.toString(), unmodifiable);
+        Object parsedVal = parseValue(childElement, path, asResult.set(false));
+        parsedVal = convertValue(parsedVal, path.toString());
 
         list.add(parsedVal);
         path.setLength(len);
       }
-      return unmodifiable ? Collections.unmodifiableList(list) : list;
+      return list;
     }
 
     // MAP
@@ -170,13 +182,13 @@ public class JsonObjectParser extends InitializeObject {
         }
         path.append(childElementEntry.getKey());
 
-        Object parsedVal = parseValue(childElementEntry.getValue(), unmodifiable, path, asResult.set(false));
-        parsedVal = convertValue(parsedVal, path.toString(), unmodifiable);
+        Object parsedVal = parseValue(childElementEntry.getValue(), path, asResult.set(false));
+        parsedVal = convertValue(parsedVal, path.toString());
 
         map.put(childElementEntry.getKey(), parsedVal);
         path.setLength(len);
       }
-      return unmodifiable ? Collections.unmodifiableMap(map) : map;
+      return map;
     }
 
     throw new Error();

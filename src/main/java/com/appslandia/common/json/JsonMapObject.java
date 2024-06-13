@@ -41,7 +41,7 @@ import com.appslandia.common.utils.STR;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public abstract class JsonMapObject extends MapWrapper<String, Object> {
+public class JsonMapObject extends MapWrapper<String, Object> {
   private static final long serialVersionUID = 1L;
 
   public JsonMapObject() {

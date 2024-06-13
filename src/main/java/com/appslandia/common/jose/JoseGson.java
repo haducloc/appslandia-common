@@ -22,6 +22,7 @@ package com.appslandia.common.jose;
 
 import com.appslandia.common.json.GsonMapAdapter;
 import com.appslandia.common.json.GsonProcessor;
+import com.appslandia.common.json.JsonMapObject;
 import com.appslandia.common.utils.ObjectUtils;
 import com.google.gson.GsonBuilder;
 
@@ -36,22 +37,35 @@ public class JoseGson {
     // @formatter:off
 		return GsonProcessor.newBuilder(serializeNulls, prettyPrinting)
 
+        // JsonMapObject
+        .registerTypeAdapter(JsonMapObject.class,
+            new GsonMapAdapter<>(m -> new JsonMapObject(m))
+              .setMapConverter(m -> new JsonMapObject(m))
+            ) 
+        
+		    // JoseMapObject
+        .registerTypeAdapter(JoseMapObject.class,
+            new GsonMapAdapter<>(m -> new JoseMapObject(m))
+              .setMapConverter(m -> new JoseMapObject(m))
+            )
+        
 				// JsonWebKey
 				.registerTypeAdapter(JsonWebKey.class,
-						new GsonMapAdapter<>(true, m -> new JsonWebKey(m)))
+						new GsonMapAdapter<>(m -> new JsonWebKey(m))
+						  .setMapConverter(m -> new JoseMapObject(m))
+						)
 
 				// JoseHeader
 				.registerTypeAdapter(JoseHeader.class,
-						new GsonMapAdapter<>(true, m -> new JoseHeader(m))
-								.setValueConverter(new String[]{"jwk"},
-										m -> new JsonWebKey(
-												ObjectUtils.cast(m))))
+						new GsonMapAdapter<>(m -> new JoseHeader(m))
+								.setValueConverter(new String[]{"jwk"}, m -> new JsonWebKey(ObjectUtils.cast(m)))
+								.setMapConverter(m -> new JoseMapObject(m)))
 
 				// JwtPayload
-				.registerTypeAdapter(JwtPayload.class, new GsonMapAdapter<>(
-						true, (m) -> new JwtPayload(m))
-						.setValueConverter(new String[]{"jwks\\[\\d+]"},
-								m -> new JsonWebKey(ObjectUtils.cast(m))));
+				.registerTypeAdapter(JwtPayload.class, 
+				    new GsonMapAdapter<>(m -> new JwtPayload(m))
+						    .setValueConverter(new String[]{"jwks\\[\\d+]"}, m -> new JsonWebKey(ObjectUtils.cast(m)))
+						    .setMapConverter(m -> new JoseMapObject(m)));
 		// @formatter:on
   }
 

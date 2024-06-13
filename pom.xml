@@ -29,6 +29,7 @@
 		<version.auth0-jwt>4.4.0</version.auth0-jwt>
 		<version.fusionauth-jwt>5.3.2</version.fusionauth-jwt>
 		<version.bouncy-castle-bcpkix>1.77</version.bouncy-castle-bcpkix>
+		<version.yasson>3.0.3</version.yasson>
 		<version.junit-jupiter-api>5.10.2</version.junit-jupiter-api>
 	</properties>
 	<licenses>
@@ -204,6 +205,12 @@
 			<version>${version.byte-buddy}</version>
 			<scope>provided</scope>
 			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse</groupId>
+			<artifactId>yasson</artifactId>
+			<version>${version.yasson}</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.auth0</groupId>

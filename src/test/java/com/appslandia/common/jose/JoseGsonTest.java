@@ -20,46 +20,38 @@
 
 package com.appslandia.common.jose;
 
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import com.appslandia.common.json.JsonMapObject;
+import com.appslandia.common.json.JsonProcessor;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JoseMapObject extends JsonMapObject {
-  private static final long serialVersionUID = 1L;
+public class JoseGsonTest {
 
-  public JoseMapObject() {
-    super(new LinkedHashMap<>());
-  }
+  @Test
+  public void test() {
+    try {
+      JsonProcessor json = JoseGson.newJsonProcessor();
 
-  public JoseMapObject(Map<String, Object> map) {
-    super(map);
-  }
+      JoseMapObject user = new JoseMapObject();
+      user.set("username", "user1");
 
-  @Override
-  public JoseMapObject set(String key, Object value) {
-    super.set(key, value);
-    return this;
-  }
+      JoseMapObject address = new JoseMapObject();
+      user.set("address", address);
+      address.set("city", "city1");
 
-  public Date getNumericDate(String key) {
-    Long nd = this.getLongOpt(key);
-    return (nd != null) ? JoseUtils.toDate(nd.longValue()) : null;
-  }
+      String jsonStr = json.toString(user);
+      JoseMapObject readUser = json.read(jsonStr, JoseMapObject.class);
 
-  public JoseMapObject setNumericDate(String key, Date value) {
-    set(key, JoseUtils.toNumericDate(value));
-    return this;
-  }
+      Assertions.assertTrue(readUser.get("username") instanceof String);
+      Assertions.assertTrue(readUser.get("address") instanceof JoseMapObject);
 
-  public JoseMapObject setNumericDate(String key, long timeInMs) {
-    set(key, JoseUtils.toNumericDate(timeInMs));
-    return this;
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
   }
 }

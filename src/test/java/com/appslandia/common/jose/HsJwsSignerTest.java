@@ -38,7 +38,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
  */
 public class HsJwsSignerTest {
 
-  static class JwsPayload {
+  public static class JwsPayload {
     String iss;
     Long exp;
 

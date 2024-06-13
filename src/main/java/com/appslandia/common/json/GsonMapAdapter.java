@@ -37,12 +37,10 @@ import com.google.gson.JsonParseException;
  */
 public class GsonMapAdapter<T extends Map<String, Object>> implements JsonDeserializer<T> {
 
-  final boolean unmodifiable;
   final JsonObjectParser jsonObjectParser = new JsonObjectParser()
       .setJsonValueConverter(GsonJsonValueConverter.INSTANCE);
 
-  public GsonMapAdapter(boolean unmodifiable, Function<Map<String, Object>, T> rootConverter) {
-    this.unmodifiable = unmodifiable;
+  public GsonMapAdapter(Function<Map<String, Object>, T> rootConverter) {
     this.jsonObjectParser.setRootConverter(ObjectUtils.cast(rootConverter));
   }
 
@@ -51,13 +49,14 @@ public class GsonMapAdapter<T extends Map<String, Object>> implements JsonDeseri
     return this;
   }
 
-  @Override
-  public T deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-    Object value = this.jsonObjectParser.parse(json, this.unmodifiable);
-    return ObjectUtils.cast(value);
+  public <F, V> GsonMapAdapter<T> setMapConverter(Function<Map<String, Object>, Object> mapConverter) {
+    this.jsonObjectParser.setMapConverter(mapConverter);
+    return this;
   }
 
-  public boolean isUnmodifiable() {
-    return this.unmodifiable;
+  @Override
+  public T deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    Object value = this.jsonObjectParser.parse(json);
+    return ObjectUtils.cast(value);
   }
 }
