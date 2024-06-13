@@ -20,6 +20,7 @@
 
 package com.appslandia.common.base;
 
+import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.function.Function;
@@ -79,6 +80,11 @@ public interface Config {
     return ParseUtils.parseDouble(value);
   }
 
+  default public BigDecimal getDecimalReq(String key) throws NumberFormatException {
+    String value = getStringReq(key);
+    return ParseUtils.parseDecimalReq(value);
+  }
+
   default public boolean getBool(String key, boolean ifNullOrInvalid) {
     String value = getString(key);
     return (value != null) ? ParseUtils.parseBool(value, ifNullOrInvalid) : ifNullOrInvalid;
@@ -97,6 +103,11 @@ public interface Config {
   default public double getDouble(String key, double ifNullOrInvalid) {
     String value = getString(key);
     return (value != null) ? ParseUtils.parseDouble(value, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
+  default public BigDecimal getDecimal(String key, double ifNullOrInvalid) {
+    String value = getString(key);
+    return ParseUtils.parseDecimal(value, ifNullOrInvalid);
   }
 
   default public <T> T getValue(String key, Function<String, T> converter) {
