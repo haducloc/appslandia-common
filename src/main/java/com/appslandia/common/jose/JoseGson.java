@@ -22,7 +22,6 @@ package com.appslandia.common.jose;
 
 import com.appslandia.common.json.GsonMapAdapter;
 import com.appslandia.common.json.GsonProcessor;
-import com.appslandia.common.json.JsonMapObject;
 import com.appslandia.common.utils.ObjectUtils;
 import com.google.gson.GsonBuilder;
 
@@ -37,9 +36,6 @@ public class JoseGson {
     // @formatter:off
 		return GsonProcessor.newBuilder(serializeNulls, prettyPrinting)
 
-        // JsonMapObject
-        .registerTypeAdapter(JsonMapObject.class, GsonProcessor.newJsonMapObjectAdapter()) 
-        
 		    // JoseMapObject
         .registerTypeAdapter(JoseMapObject.class,
             new GsonMapAdapter<>(m -> new JoseMapObject(m))

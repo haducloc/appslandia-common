@@ -136,10 +136,10 @@ public class GsonProcessor extends JsonProcessor {
     builder.registerTypeAdapter(OffsetDateTime.class, new GsonOffsetDateTimeSerializer());
     builder.registerTypeAdapter(OffsetTime.class, new GsonOffsetTimeSerializer());
 
-    return builder;
-  }
+    // Adapter for JsonMapObject
+    builder.registerTypeAdapter(JsonMapObject.class,
+        new GsonMapAdapter<>(m -> new JsonMapObject(m)).setMapConverter(m -> new JsonMapObject(m)));
 
-  public static GsonMapAdapter<JsonMapObject> newJsonMapObjectAdapter() {
-    return new GsonMapAdapter<>(m -> new JsonMapObject(m)).setMapConverter(m -> new JsonMapObject(m));
+    return builder;
   }
 }

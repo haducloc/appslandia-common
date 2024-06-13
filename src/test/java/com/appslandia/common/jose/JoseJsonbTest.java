@@ -23,6 +23,7 @@ package com.appslandia.common.jose;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import com.appslandia.common.json.JsonMapObject;
 import com.appslandia.common.json.JsonProcessor;
 
 /**
@@ -49,6 +50,29 @@ public class JoseJsonbTest {
 
       Assertions.assertTrue(readUser.get("username") instanceof String);
       Assertions.assertTrue(readUser.get("address") instanceof JoseMapObject);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
+
+  @Test
+  public void test_JsonMapObject() {
+    try {
+      JsonProcessor json = JoseJsonb.newJsonProcessor();
+
+      JsonMapObject user = new JsonMapObject();
+      user.set("username", "user1");
+
+      JsonMapObject address = new JsonMapObject();
+      user.set("address", address);
+      address.set("city", "city1");
+
+      String jsonStr = json.toString(user);
+      JsonMapObject readUser = json.read(jsonStr, JsonMapObject.class);
+
+      Assertions.assertTrue(readUser.get("username") instanceof String);
+      Assertions.assertTrue(readUser.get("address") instanceof JsonMapObject);
 
     } catch (Exception ex) {
       Assertions.fail(ex.getMessage());

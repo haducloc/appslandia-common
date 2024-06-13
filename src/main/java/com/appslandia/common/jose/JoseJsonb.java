@@ -38,9 +38,6 @@ public class JoseJsonb {
 		return JsonbProcessor.newConfig(serializeNulls, prettyPrinting)
 				.withAdapters(
 
-            // JsonMapObject
-            JsonbProcessor.newJsonMapObjectAdapter(),
-                
             // JoseMapObject
             new JsonbMapAdapter<>(m -> new JoseMapObject(m)) {}
                 .setMapConverter(m -> new JoseMapObject(m)),                
