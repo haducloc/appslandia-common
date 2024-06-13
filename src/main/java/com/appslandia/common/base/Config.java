@@ -41,12 +41,22 @@ public interface Config {
 
   String getString(String key);
 
+  default public String getString(String key, String ifNull) {
+    String value = getString(key);
+    return (value != null) ? value : ifNull;
+  }
+
   default public String getStringReq(String key) {
     String value = getString(key);
     if (value == null) {
       throw new AssertException(STR.fmt("No value found for the given key '{}'.", key));
     }
     return value;
+  }
+
+  default public String[] getStringArray(String key) {
+    String value = getString(key);
+    return (value != null) ? SplitUtils.splitByComma(value) : StringUtils.EMPTY_ARRAY;
   }
 
   default public boolean getBool(String key) throws BoolFormatException {
@@ -67,11 +77,6 @@ public interface Config {
   default public double getDouble(String key) throws NumberFormatException {
     String value = getStringReq(key);
     return ParseUtils.parseDouble(value);
-  }
-
-  default public String getString(String key, String ifNull) {
-    String value = getString(key);
-    return (value != null) ? value : ifNull;
   }
 
   default public boolean getBool(String key, boolean ifNullOrInvalid) {
@@ -97,11 +102,6 @@ public interface Config {
   default public <T> T getValue(String key, Function<String, T> converter) {
     String value = getString(key);
     return (value != null) ? ParseUtils.parseValue(value, converter) : null;
-  }
-
-  default public String[] getStringArray(String key) {
-    String value = getString(key);
-    return (value != null) ? SplitUtils.splitByComma(value) : StringUtils.EMPTY_ARRAY;
   }
 
   default public String resolve(String key) {
