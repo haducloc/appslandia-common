@@ -52,6 +52,41 @@ public class ParseUtils {
     throw new BoolFormatException(value);
   }
 
+  public static byte parseByte(String value) throws NumberFormatException {
+    Asserts.notNull(value);
+    return Byte.parseByte(value);
+  }
+
+  public static short parseShort(String value) throws NumberFormatException {
+    Asserts.notNull(value);
+    return Short.parseShort(value);
+  }
+
+  public static int parseInt(String value) throws NumberFormatException {
+    Asserts.notNull(value);
+    return Integer.parseInt(value);
+  }
+
+  public static long parseLong(String value) throws NumberFormatException {
+    Asserts.notNull(value);
+    return Long.parseLong(value);
+  }
+
+  public static float parseFloat(String value) throws NumberFormatException {
+    Asserts.notNull(value);
+    return Float.parseFloat(value);
+  }
+
+  public static double parseDouble(String value) throws NumberFormatException {
+    Asserts.notNull(value);
+    return Double.parseDouble(value);
+  }
+
+  public static BigDecimal parseDecimalReq(String value) throws NumberFormatException {
+    Asserts.notNull(value);
+    return new BigDecimal(value);
+  }
+
   public static boolean parseBool(String value, boolean ifNullOrInvalid) {
     if (value == null) {
       return ifNullOrInvalid;
@@ -61,11 +96,6 @@ public class ParseUtils {
     } catch (BoolFormatException ex) {
       return ifNullOrInvalid;
     }
-  }
-
-  public static byte parseByte(String value) throws NumberFormatException {
-    Asserts.notNull(value);
-    return Byte.parseByte(value);
   }
 
   public static byte parseByte(String value, byte ifNullOrInvalid) {
@@ -79,11 +109,6 @@ public class ParseUtils {
     }
   }
 
-  public static short parseShort(String value) throws NumberFormatException {
-    Asserts.notNull(value);
-    return Short.parseShort(value);
-  }
-
   public static short parseShort(String value, short ifNullOrInvalid) {
     if (value == null) {
       return ifNullOrInvalid;
@@ -93,11 +118,6 @@ public class ParseUtils {
     } catch (NumberFormatException ex) {
       return ifNullOrInvalid;
     }
-  }
-
-  public static int parseInt(String value) throws NumberFormatException {
-    Asserts.notNull(value);
-    return Integer.parseInt(value);
   }
 
   public static int parseInt(String value, int ifNullOrInvalid) {
@@ -111,11 +131,6 @@ public class ParseUtils {
     }
   }
 
-  public static long parseLong(String value) throws NumberFormatException {
-    Asserts.notNull(value);
-    return Long.parseLong(value);
-  }
-
   public static long parseLong(String value, long ifNullOrInvalid) {
     if (value == null) {
       return ifNullOrInvalid;
@@ -125,11 +140,6 @@ public class ParseUtils {
     } catch (NumberFormatException ex) {
       return ifNullOrInvalid;
     }
-  }
-
-  public static float parseFloat(String value) throws NumberFormatException {
-    Asserts.notNull(value);
-    return Float.parseFloat(value);
   }
 
   public static float parseFloat(String value, float ifNullOrInvalid) {
@@ -143,11 +153,6 @@ public class ParseUtils {
     }
   }
 
-  public static double parseDouble(String value) throws NumberFormatException {
-    Asserts.notNull(value);
-    return Double.parseDouble(value);
-  }
-
   public static double parseDouble(String value, double ifNullOrInvalid) {
     if (value == null) {
       return ifNullOrInvalid;
@@ -157,11 +162,6 @@ public class ParseUtils {
     } catch (NumberFormatException ex) {
       return ifNullOrInvalid;
     }
-  }
-
-  public static BigDecimal parseDecimalReq(String value) throws NumberFormatException {
-    Asserts.notNull(value);
-    return new BigDecimal(value);
   }
 
   public static BigDecimal parseDecimal(String value, double ifNullOrInvalid) {
