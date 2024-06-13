@@ -53,7 +53,7 @@ public class RateLimit implements Serializable {
   }
 
   public double getRatePerMs() {
-    return 1.0 * this.accesses / this.windowsMs;
+    return (1.0d * this.accesses) / this.windowsMs;
   }
 
   @Override
