@@ -54,16 +54,11 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     super(map);
   }
 
-  @Override
-  public Object put(String key, Object value) {
+  public JsonMapObject set(String key, Object value) {
     Asserts.notNull(key);
     Asserts.isTrue(isValueSupported(value), "The value is unsuppored.");
 
-    return super.put(key, value);
-  }
-
-  public JsonMapObject set(String key, Object value) {
-    put(key, value);
+    super.put(key, value);
     return this;
   }
 
@@ -371,6 +366,11 @@ public class JsonMapObject extends MapWrapper<String, Object> {
   }
 
   // UnsupportedOperationException
+
+  @Override
+  public Object put(String key, Object value) {
+    throw new UnsupportedOperationException("Use set(key, value) instead.");
+  }
 
   @Override
   public void putAll(Map<? extends String, ? extends Object> m) {
