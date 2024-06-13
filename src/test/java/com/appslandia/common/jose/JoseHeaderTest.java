@@ -20,10 +20,17 @@
 
 package com.appslandia.common.jose;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.util.Date;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import com.appslandia.common.utils.DateUtils;
 
 /**
  *
@@ -41,5 +48,59 @@ public class JoseHeaderTest {
 
     Date d1 = header.getNumericDate("nd");
     Assertions.assertEquals((d.getTime() / 1000) * 1000, d1.getTime());
+  }
+
+  @Test
+  public void test_LocalDate() {
+    JoseHeader header = new JoseHeader();
+    header.set("key", "2024-06-13");
+
+    LocalDate val = header.getLocalDate("key");
+    Assertions.assertEquals(DateUtils.parseLocalDate("2024-06-13"), val);
+  }
+
+  @Test
+  public void test_LocalTime() {
+    JoseHeader header = new JoseHeader();
+    header.set("key", "12:34:56");
+
+    LocalTime val = header.getLocalTime("key");
+    Assertions.assertEquals(DateUtils.parseLocalTime("12:34:56"), val);
+  }
+
+  @Test
+  public void test_LocalDateTime() {
+    JoseHeader header = new JoseHeader();
+    header.set("key", "2024-06-13T12:34:56");
+
+    LocalDateTime val = header.getLocalDateTime("key");
+    Assertions.assertEquals(DateUtils.parseLocalDateTime("2024-06-13T12:34:56"), val);
+  }
+
+  @Test
+  public void test_OffsetTime() {
+    JoseHeader header = new JoseHeader();
+    header.set("key", "12:34:56+01:00");
+
+    OffsetTime val = header.getOffsetTime("key");
+    Assertions.assertEquals(DateUtils.parseOffsetTime("12:34:56+01:00"), val);
+  }
+
+  @Test
+  public void test_OffsetDateTime() {
+    JoseHeader header = new JoseHeader();
+    header.set("key", "2024-06-13T12:34:56+01:00");
+
+    OffsetDateTime val = header.getOffsetDateTime("key");
+    Assertions.assertEquals(DateUtils.parseOffsetDateTime("2024-06-13T12:34:56+01:00"), val);
+  }
+
+  @Test
+  public void test_YearMonth() {
+    JoseHeader header = new JoseHeader();
+    header.set("key", "2024-06");
+
+    OffsetDateTime val = header.getOffsetDateTime("key");
+    Assertions.assertEquals(DateUtils.parseYearMonth("2024-06"), val);
   }
 }
