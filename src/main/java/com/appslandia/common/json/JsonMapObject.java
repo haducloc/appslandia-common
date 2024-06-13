@@ -189,7 +189,7 @@ public abstract class JsonMapObject extends MapWrapper<String, Object> {
   }
 
   public String getStringReq(String key) {
-    Object value = this.get(key);
+    Object value = this.getReq(key);
     if (value.getClass() == String.class) {
       return (String) value;
     }
