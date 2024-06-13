@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
+import java.time.YearMonth;
 import java.util.Date;
 
 import org.junit.jupiter.api.Assertions;
@@ -100,7 +101,7 @@ public class JoseHeaderTest {
     JoseHeader header = new JoseHeader();
     header.set("key", "2024-06");
 
-    OffsetDateTime val = header.getOffsetDateTime("key");
+    YearMonth val = header.getYearMonth("key");
     Assertions.assertEquals(DateUtils.parseYearMonth("2024-06"), val);
   }
 }
