@@ -21,13 +21,10 @@
 package com.appslandia.common.converters;
 
 import java.time.YearMonth;
-import java.util.Collection;
 
 import com.appslandia.common.base.FormatProvider;
 import com.appslandia.common.base.TemporalFormatException;
-import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.DateUtils;
-import com.appslandia.common.utils.ParseUtils;
 
 /**
  *
@@ -52,10 +49,8 @@ public class YearMonthConverter extends TemporalConverter<YearMonth> {
     return YearMonth.class;
   }
 
-  static final Collection<String> PARSING_PATTERNS = CollectionUtils.unmodifiableSet(DateUtils.ISO8601_YEAR_MONTH);
-
   @Override
   protected YearMonth doParse(String str, FormatProvider formatProvider) throws TemporalFormatException {
-    return ParseUtils.parseYearMonth(str, PARSING_PATTERNS);
+    return DateUtils.parseYearMonth(str);
   }
 }
