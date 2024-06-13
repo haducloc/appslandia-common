@@ -77,7 +77,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     if (value.getClass() == String.class) {
       return (String) value;
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getStringReq('{}')", key));
+    throw new JsonValueException(STR.fmt("Failed to getStringReq('{}')", key));
   }
 
   public boolean getBool(String key) {
@@ -85,7 +85,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     if (value.getClass() == Boolean.class) {
       return (Boolean) value;
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getBool('{}')", key));
+    throw new JsonValueException(STR.fmt("Failed to getBool('{}')", key));
   }
 
   public int getInt(String key) {
@@ -96,7 +96,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     if (value instanceof Number) {
       return ((Number) value).intValue();
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getInt('{}')", key));
+    throw new JsonValueException(STR.fmt("Failed to getInt('{}')", key));
   }
 
   public long getLong(String key) {
@@ -107,7 +107,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     if (value instanceof Number) {
       return ((Number) value).longValue();
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getLong('{}')", key));
+    throw new JsonValueException(STR.fmt("Failed to getLong('{}')", key));
   }
 
   public double getDouble(String key) {
@@ -118,7 +118,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     if (value instanceof Number) {
       return ((Number) value).doubleValue();
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getDouble('{}')", key));
+    throw new JsonValueException(STR.fmt("Failed to getDouble('{}')", key));
   }
 
   public BigDecimal getDecimalReq(String key) {
@@ -129,7 +129,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     if (value instanceof Number) {
       return new BigDecimal(value.toString());
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getDecimalReq('{}')", key));
+    throw new JsonValueException(STR.fmt("Failed to getDecimalReq('{}')", key));
   }
 
   public LocalDate getLocalDateReq(String key) {
@@ -140,7 +140,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     if (value.getClass() == String.class) {
       return DateUtils.parseLocalDate((String) value);
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getLocalDateReq('{}')", key));
+    throw new JsonValueException(STR.fmt("Failed to getLocalDateReq('{}')", key));
   }
 
   public LocalTime getLocalTimeReq(String key) {
@@ -151,7 +151,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     if (value.getClass() == String.class) {
       return DateUtils.parseLocalTime((String) value);
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getLocalTimeReq('{}')", key));
+    throw new JsonValueException(STR.fmt("Failed to getLocalTimeReq('{}')", key));
   }
 
   public LocalDateTime getLocalDateTimeReq(String key) {
@@ -162,7 +162,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     if (value.getClass() == String.class) {
       return DateUtils.parseLocalDateTime((String) value);
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getLocalDateTimeReq('{}')", key));
+    throw new JsonValueException(STR.fmt("Failed to getLocalDateTimeReq('{}')", key));
   }
 
   public OffsetTime getOffsetTimeReq(String key) {
@@ -173,7 +173,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     if (value.getClass() == String.class) {
       return DateUtils.parseOffsetTime((String) value);
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getOffsetTimeReq('{}')", key));
+    throw new JsonValueException(STR.fmt("Failed to getOffsetTimeReq('{}')", key));
   }
 
   public OffsetDateTime getOffsetDateTimeReq(String key) {
@@ -184,7 +184,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     if (value.getClass() == String.class) {
       return DateUtils.parseOffsetDateTime((String) value);
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getOffsetDateTimeReq('{}')", key));
+    throw new JsonValueException(STR.fmt("Failed to getOffsetDateTimeReq('{}')", key));
   }
 
   public YearMonth getYearMonthReq(String key) {
@@ -195,7 +195,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     if (value.getClass() == String.class) {
       return DateUtils.parseYearMonth((String) value);
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getYearMonthReq('{}')", key));
+    throw new JsonValueException(STR.fmt("Failed to getYearMonthReq('{}')", key));
   }
 
   public String getString(String key) {
@@ -203,7 +203,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     if (value == null || value.getClass() == String.class) {
       return (String) value;
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getString('{}')", key));
+    throw new JsonValueException(STR.fmt("Failed to getString('{}')", key));
   }
 
   public Boolean getBoolOpt(String key) {
@@ -211,7 +211,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     if (value == null || value.getClass() == Boolean.class) {
       return (Boolean) value;
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getBoolOpt('{}')", key));
+    throw new JsonValueException(STR.fmt("Failed to getBoolOpt('{}')", key));
   }
 
   public Integer getIntOpt(String key) {
@@ -222,7 +222,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     if (value instanceof Number) {
       return ((Number) value).intValue();
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getIntOpt('{}')", key));
+    throw new JsonValueException(STR.fmt("Failed to getIntOpt('{}')", key));
   }
 
   public Long getLongOpt(String key) {
@@ -233,7 +233,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     if (value instanceof Number) {
       return ((Number) value).longValue();
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getLongOpt('{}')", key));
+    throw new JsonValueException(STR.fmt("Failed to getLongOpt('{}')", key));
   }
 
   public Double getDoubleOpt(String key) {
@@ -244,7 +244,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     if (value instanceof Number) {
       return ((Number) value).doubleValue();
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getDoubleOpt('{}')", key));
+    throw new JsonValueException(STR.fmt("Failed to getDoubleOpt('{}')", key));
   }
 
   public BigDecimal getDecimal(String key) {
@@ -255,7 +255,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     if (value instanceof Number) {
       return new BigDecimal(value.toString());
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getDecimal('{}')", key));
+    throw new JsonValueException(STR.fmt("Failed to getDecimal('{}')", key));
   }
 
   public LocalDate getLocalDate(String key) {
@@ -266,7 +266,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     if (value.getClass() == String.class) {
       return DateUtils.parseLocalDate((String) value);
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getLocalDate('{}')", key));
+    throw new JsonValueException(STR.fmt("Failed to getLocalDate('{}')", key));
   }
 
   public LocalTime getLocalTime(String key) {
@@ -277,7 +277,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     if (value.getClass() == String.class) {
       return DateUtils.parseLocalTime((String) value);
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getLocalTime('{}')", key));
+    throw new JsonValueException(STR.fmt("Failed to getLocalTime('{}')", key));
   }
 
   public LocalDateTime getLocalDateTime(String key) {
@@ -288,7 +288,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     if (value.getClass() == String.class) {
       return DateUtils.parseLocalDateTime((String) value);
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getLocalDateTime('{}')", key));
+    throw new JsonValueException(STR.fmt("Failed to getLocalDateTime('{}')", key));
   }
 
   public OffsetTime getOffsetTime(String key) {
@@ -299,7 +299,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     if (value.getClass() == String.class) {
       return DateUtils.parseOffsetTime((String) value);
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getOffsetTime('{}')", key));
+    throw new JsonValueException(STR.fmt("Failed to getOffsetTime('{}')", key));
   }
 
   public OffsetDateTime getOffsetDateTime(String key) {
@@ -310,7 +310,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     if (value.getClass() == String.class) {
       return DateUtils.parseOffsetDateTime((String) value);
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getOffsetDateTime('{}')", key));
+    throw new JsonValueException(STR.fmt("Failed to getOffsetDateTime('{}')", key));
   }
 
   public YearMonth getYearMonth(String key) {
@@ -321,7 +321,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     if (value.getClass() == String.class) {
       return DateUtils.parseYearMonth((String) value);
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getYearMonth('{}')", key));
+    throw new JsonValueException(STR.fmt("Failed to getYearMonth('{}')", key));
   }
 
   protected boolean isValueSupported(Object value) {
