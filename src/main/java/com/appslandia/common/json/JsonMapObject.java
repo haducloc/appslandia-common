@@ -70,6 +70,14 @@ public abstract class JsonMapObject extends MapWrapper<String, Object> {
     return Asserts.notNull(value, "The value is required.");
   }
 
+  public String getStringReq(String key) {
+    Object value = this.getReq(key);
+    if (value.getClass() == String.class) {
+      return (String) value;
+    }
+    throw new IllegalArgumentException(STR.fmt("Failed to getStringReq('{}')", key));
+  }
+
   public boolean getBool(String key) {
     Object value = this.getReq(key);
     if (value.getClass() == Boolean.class) {
@@ -188,12 +196,12 @@ public abstract class JsonMapObject extends MapWrapper<String, Object> {
     throw new IllegalArgumentException(STR.fmt("Failed to getYearMonthReq('{}')", key));
   }
 
-  public String getStringReq(String key) {
-    Object value = this.getReq(key);
-    if (value.getClass() == String.class) {
+  public String getString(String key) {
+    Object value = this.get(key);
+    if (value == null || value.getClass() == String.class) {
       return (String) value;
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to getStringReq('{}')", key));
+    throw new IllegalArgumentException(STR.fmt("Failed to getString('{}')", key));
   }
 
   public Boolean getBoolOpt(String key) {
@@ -312,14 +320,6 @@ public abstract class JsonMapObject extends MapWrapper<String, Object> {
       return DateUtils.parseYearMonth((String) value);
     }
     throw new IllegalArgumentException(STR.fmt("Failed to getYearMonth('{}')", key));
-  }
-
-  public String getString(String key) {
-    Object value = this.get(key);
-    if (value == null || value.getClass() == String.class) {
-      return (String) value;
-    }
-    throw new IllegalArgumentException(STR.fmt("Failed to getString('{}')", key));
   }
 
   protected boolean isValueSupported(Object value) {
