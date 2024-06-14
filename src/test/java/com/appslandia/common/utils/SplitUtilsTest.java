@@ -31,8 +31,17 @@ import org.junit.jupiter.api.Test;
 public class SplitUtilsTest {
 
   @Test
-  public void test_splitByLine() {
+  public void test_split_sep() {
+    String[] items = SplitUtils.split("|abc|def | ghk||", '|');
+    Assertions.assertTrue(items.length == 3);
 
+    Assertions.assertEquals("abc", items[0]);
+    Assertions.assertEquals("def", items[1]);
+    Assertions.assertEquals("ghk", items[2]);
+  }
+
+  @Test
+  public void test_splitByLine() {
     String[] items = SplitUtils.splitByLine("abc \r\n\t def \r\n\t\t ghk");
     Assertions.assertTrue(items.length == 3);
 
@@ -42,13 +51,38 @@ public class SplitUtilsTest {
   }
 
   @Test
-  public void test_split() {
-
-    String[] items = SplitUtils.split("|abc|def | ghk||", '|');
+  public void test_splitByComma() {
+    String[] items = SplitUtils.splitByComma(",1,2,,3,");
     Assertions.assertTrue(items.length == 3);
 
-    Assertions.assertEquals("abc", items[0]);
-    Assertions.assertEquals("def", items[1]);
-    Assertions.assertEquals("ghk", items[2]);
+    Assertions.assertEquals("1", items[0]);
+    Assertions.assertEquals("2", items[1]);
+    Assertions.assertEquals("3", items[2]);
+  }
+
+  @Test
+  public void test_splitByComma_original() {
+    String[] items = SplitUtils.splitByComma(",1,2, ,3,", SplittingBehavior.ORIGINAL);
+    Assertions.assertTrue(items.length == 6);
+
+    Assertions.assertEquals("", items[0]);
+    Assertions.assertEquals("1", items[1]);
+    Assertions.assertEquals("2", items[2]);
+    Assertions.assertEquals(" ", items[3]);
+    Assertions.assertEquals("3", items[4]);
+    Assertions.assertEquals("", items[5]);
+  }
+
+  @Test
+  public void test_splitByComma_trimToNull() {
+    String[] items = SplitUtils.splitByComma(",1,2,,3,", SplittingBehavior.TRIM_TO_NULL);
+    Assertions.assertTrue(items.length == 6);
+
+    Assertions.assertNull(items[0]);
+    Assertions.assertEquals("1", items[1]);
+    Assertions.assertEquals("2", items[2]);
+    Assertions.assertNull(items[3]);
+    Assertions.assertEquals("3", items[4]);
+    Assertions.assertNull(items[5]);
   }
 }
