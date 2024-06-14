@@ -84,7 +84,7 @@ public class JwtPayload extends JoseMapObject {
   }
 
   public JwtPayload setIss(String value) {
-    this.put(ISS, value);
+    this.set(ISS, value);
     return this;
   }
 
@@ -93,7 +93,7 @@ public class JwtPayload extends JoseMapObject {
   }
 
   public JwtPayload setSub(String value) {
-    this.put(SUB, value);
+    this.set(SUB, value);
     return this;
   }
 
@@ -102,7 +102,7 @@ public class JwtPayload extends JoseMapObject {
   }
 
   public JwtPayload setAud(String... values) {
-    this.put(AUD, values);
+    this.set(AUD, values);
     return this;
   }
 
@@ -147,7 +147,7 @@ public class JwtPayload extends JoseMapObject {
   }
 
   public JwtPayload setJti(String value) {
-    this.put(JTI, value);
+    this.set(JTI, value);
     return this;
   }
 }

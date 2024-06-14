@@ -34,6 +34,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import com.appslandia.common.base.MapWrapper;
+import com.appslandia.common.base.Unsupported;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.STR;
@@ -367,53 +368,63 @@ public class JsonMapObject extends MapWrapper<String, Object> {
 
   // UnsupportedOperationException
 
+  @Unsupported
   @Override
   public Object put(String key, Object value) {
     throw new UnsupportedOperationException("Use set(key, value) instead.");
   }
 
+  @Unsupported
   @Override
   public void putAll(Map<? extends String, ? extends Object> m) {
     throw new UnsupportedOperationException();
   }
 
+  @Unsupported
   @Override
   public Object compute(String key, BiFunction<? super String, ? super Object, ? extends Object> remappingFunction) {
     throw new UnsupportedOperationException();
   }
 
+  @Unsupported
   @Override
   public Object computeIfAbsent(String key, Function<? super String, ? extends Object> mappingFunction) {
     throw new UnsupportedOperationException();
   }
 
+  @Unsupported
   @Override
   public Object computeIfPresent(String key,
       BiFunction<? super String, ? super Object, ? extends Object> remappingFunction) {
     throw new UnsupportedOperationException();
   }
 
+  @Unsupported
   @Override
   public Object merge(String key, Object value,
       BiFunction<? super Object, ? super Object, ? extends Object> remappingFunction) {
     throw new UnsupportedOperationException();
   }
 
+  @Unsupported
   @Override
   public boolean replace(String key, Object oldValue, Object newValue) {
     throw new UnsupportedOperationException();
   }
 
+  @Unsupported
   @Override
   public Object replace(String key, Object value) {
     throw new UnsupportedOperationException();
   }
 
+  @Unsupported
   @Override
   public void replaceAll(BiFunction<? super String, ? super Object, ? extends Object> function) {
     throw new UnsupportedOperationException();
   }
 
+  @Unsupported
   @Override
   public boolean remove(Object key, Object value) {
     throw new UnsupportedOperationException();

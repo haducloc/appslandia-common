@@ -24,13 +24,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.function.Supplier;
 
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.DateUtils;
-import com.appslandia.common.utils.ReflectionUtils;
 import com.appslandia.common.utils.STR;
-import com.appslandia.common.utils.SYS;
 
 /**
  *
@@ -209,7 +206,7 @@ public class Language extends InitializeObject {
     if (obj == null) {
       synchronized (MUTEX) {
         if ((obj = __default) == null) {
-          __default = obj = initLanguage();
+          __default = obj = initDefault();
         }
       }
     }
@@ -218,41 +215,14 @@ public class Language extends InitializeObject {
 
   public static void setDefault(Language impl) {
     Asserts.isNull(__default, "Language.__default must be null.");
-
-    if (__default == null) {
-      synchronized (MUTEX) {
-        if (__default == null) {
-          __default = impl;
-          return;
-        }
-      }
-    }
+    __default = impl;
   }
 
-  private static Supplier<Language> __provider;
-
-  public static void setProvider(Supplier<Language> provider) {
-    Asserts.isNull(__default);
-    __provider = provider;
-  }
-
-  @SuppressWarnings("el-syntax")
-  private static Language initLanguage() {
-    if (__provider != null) {
-      return __provider.get();
+  private static Language initDefault() {
+    if (Locale.US.equals(Locale.getDefault())) {
+      return EN_US;
     }
-    try {
-      String implName = SYS.resolve("{language_impl,env.LANGUAGE_IMPL}");
-      if (implName == null) {
-        return EN_US;
-      }
-
-      Class<? extends Language> implClass = ReflectionUtils.loadClass(implName, null);
-      return ReflectionUtils.newInstance(implClass);
-
-    } catch (Exception ex) {
-      throw new InitializeException(ex);
-    }
+    return new Language().setLocale(Locale.getDefault()).initialize();
   }
 
   // The datePattern includes "dd" "MM" and "yyyy" in any order.
