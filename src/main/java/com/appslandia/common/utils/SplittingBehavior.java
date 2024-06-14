@@ -25,7 +25,7 @@ package com.appslandia.common.utils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public enum SplitOptions {
+public enum SplittingBehavior {
 
-  NONE, TRIM_NULL, EXCLUDE_NULL
+  ORIGINAL, TRIM_TO_NULL, SKIP_NULL
 }

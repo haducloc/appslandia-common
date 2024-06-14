@@ -29,6 +29,7 @@ import com.appslandia.common.utils.ParseUtils;
 import com.appslandia.common.utils.STR;
 import com.appslandia.common.utils.SYS;
 import com.appslandia.common.utils.SplitUtils;
+import com.appslandia.common.utils.SplittingBehavior;
 import com.appslandia.common.utils.StringUtils;
 
 /**
@@ -56,8 +57,12 @@ public interface Config {
   }
 
   default public String[] getStringArray(String key) {
+    return getStringArray(key, SplittingBehavior.SKIP_NULL);
+  }
+
+  default public String[] getStringArray(String key, SplittingBehavior behavior) {
     String value = getString(key);
-    return (value != null) ? SplitUtils.splitByComma(value) : StringUtils.EMPTY_ARRAY;
+    return (value != null) ? SplitUtils.splitByComma(value, behavior) : StringUtils.EMPTY_ARRAY;
   }
 
   default public boolean getBool(String key) throws BoolFormatException {

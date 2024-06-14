@@ -34,18 +34,18 @@ public class SplitUtils {
   private static final Pattern NEWLINE_SEP_PATTERN = Pattern.compile("(\r?\n)+");
 
   public static String[] splitByLine(String str) {
-    return splitByLine(str, SplitOptions.EXCLUDE_NULL);
+    return splitByLine(str, SplittingBehavior.SKIP_NULL);
   }
 
-  public static String[] splitByLine(String str, SplitOptions splitOptions) {
-    return split(str, NEWLINE_SEP_PATTERN, splitOptions);
+  public static String[] splitByLine(String str, SplittingBehavior behavior) {
+    return split(str, NEWLINE_SEP_PATTERN, behavior);
   }
 
   public static String[] split(String str, Pattern separator) {
-    return split(str, separator, SplitOptions.EXCLUDE_NULL);
+    return split(str, separator, SplittingBehavior.SKIP_NULL);
   }
 
-  public static String[] split(String str, Pattern separator, SplitOptions splitOptions) {
+  public static String[] split(String str, Pattern separator, SplittingBehavior behavior) {
     if (str == null) {
       return StringUtils.EMPTY_ARRAY;
     }
@@ -53,12 +53,12 @@ public class SplitUtils {
     List<String> list = new ArrayList<>(items.length);
 
     for (String item : items) {
-      item = convertItem(item, splitOptions);
+      item = convertItem(item, behavior);
 
       if (item != null) {
         list.add(item);
       } else {
-        if (splitOptions != SplitOptions.EXCLUDE_NULL) {
+        if (behavior != SplittingBehavior.SKIP_NULL) {
           list.add(null);
         }
       }
@@ -67,18 +67,18 @@ public class SplitUtils {
   }
 
   public static String[] splitByComma(String str) {
-    return splitByComma(str, SplitOptions.EXCLUDE_NULL);
+    return splitByComma(str, SplittingBehavior.SKIP_NULL);
   }
 
-  public static String[] splitByComma(String str, SplitOptions splitOptions) {
-    return split(str, ',', splitOptions);
+  public static String[] splitByComma(String str, SplittingBehavior behavior) {
+    return split(str, ',', behavior);
   }
 
   public static String[] split(String str, char separator) {
-    return split(str, separator, SplitOptions.EXCLUDE_NULL);
+    return split(str, separator, SplittingBehavior.SKIP_NULL);
   }
 
-  public static String[] split(String str, char separator, SplitOptions splitOptions) {
+  public static String[] split(String str, char separator, SplittingBehavior behavior) {
     if (str == null) {
       return StringUtils.EMPTY_ARRAY;
     }
@@ -98,12 +98,12 @@ public class SplitUtils {
         escapeNextChar = true;
 
       } else if (c == separator) {
-        String item = convertItem(currentItem.toString(), splitOptions);
+        String item = convertItem(currentItem.toString(), behavior);
 
         if (item != null) {
           list.add(item);
         } else {
-          if (splitOptions != SplitOptions.EXCLUDE_NULL) {
+          if (behavior != SplittingBehavior.SKIP_NULL) {
             list.add(null);
           }
         }
@@ -115,20 +115,20 @@ public class SplitUtils {
     }
 
     // Last item
-    String item = convertItem(currentItem.toString(), splitOptions);
+    String item = convertItem(currentItem.toString(), behavior);
 
     if (item != null) {
       list.add(item);
     } else {
-      if (splitOptions != SplitOptions.EXCLUDE_NULL) {
+      if (behavior != SplittingBehavior.SKIP_NULL) {
         list.add(null);
       }
     }
     return list.toArray(new String[list.size()]);
   }
 
-  private static String convertItem(String item, SplitOptions splitOptions) {
-    if (splitOptions == null || splitOptions == SplitOptions.NONE) {
+  private static String convertItem(String item, SplittingBehavior behavior) {
+    if (behavior == null || behavior == SplittingBehavior.ORIGINAL) {
       return item;
     } else {
       item = item.trim();

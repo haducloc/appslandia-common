@@ -29,8 +29,8 @@ import java.util.Arrays;
 
 import com.appslandia.common.base.AssertException;
 import com.appslandia.common.utils.STR;
-import com.appslandia.common.utils.SplitOptions;
 import com.appslandia.common.utils.SplitUtils;
+import com.appslandia.common.utils.SplittingBehavior;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
@@ -94,7 +94,7 @@ public @interface MultiValues {
       if (values == null) {
         return true;
       }
-      String[] vals = SplitUtils.splitByComma(values, SplitOptions.EXCLUDE_NULL);
+      String[] vals = SplitUtils.splitByComma(values, SplittingBehavior.SKIP_NULL);
       for (String value : vals) {
 
         if (!Arrays.stream(this.validValues).anyMatch(v -> v.equalsIgnoreCase(value))) {
