@@ -136,7 +136,7 @@ public class CsvProcessorTest {
     String csvContent = "abc\r\n";
 
     try {
-      List<CsvRecord> records = csv.parseRecords(new BufferedReader(new StringReader(csvContent)));
+      List<CsvRecord> records = csv.parseRecords(new BufferedReader(new StringReader(csvContent)), false, null);
       Assertions.assertTrue(records.size() == 1);
 
       CsvRecord rec = records.get(0);
@@ -154,7 +154,7 @@ public class CsvProcessorTest {
     String csvContent = "\r\n";
 
     try {
-      List<CsvRecord> records = csv.parseRecords(new BufferedReader(new StringReader(csvContent)));
+      List<CsvRecord> records = csv.parseRecords(new BufferedReader(new StringReader(csvContent)), false, null);
       Assertions.assertTrue(records.size() == 1);
 
       CsvRecord rec = records.get(0);
@@ -172,7 +172,7 @@ public class CsvProcessorTest {
     String csvContent = " \r\n";
 
     try {
-      List<CsvRecord> records = csv.parseRecords(new BufferedReader(new StringReader(csvContent)));
+      List<CsvRecord> records = csv.parseRecords(new BufferedReader(new StringReader(csvContent)), false, null);
       Assertions.assertTrue(records.size() == 1);
 
       CsvRecord rec = records.get(0);
@@ -190,7 +190,7 @@ public class CsvProcessorTest {
     String csvContent = "null\r\n";
 
     try {
-      List<CsvRecord> records = csv.parseRecords(new BufferedReader(new StringReader(csvContent)));
+      List<CsvRecord> records = csv.parseRecords(new BufferedReader(new StringReader(csvContent)), false, null);
       Assertions.assertTrue(records.size() == 1);
 
       CsvRecord rec = records.get(0);
@@ -208,7 +208,7 @@ public class CsvProcessorTest {
     String csvContent = "null\r\n";
 
     try {
-      List<CsvRecord> records = csv.parseRecords(new BufferedReader(new StringReader(csvContent)));
+      List<CsvRecord> records = csv.parseRecords(new BufferedReader(new StringReader(csvContent)), false, null);
       Assertions.assertTrue(records.size() == 1);
 
       CsvRecord rec = records.get(0);
@@ -226,7 +226,7 @@ public class CsvProcessorTest {
 
     String csvContent = "abc\\r\\ndef\r\n";
     try {
-      List<CsvRecord> records = csv.parseRecords(new BufferedReader(new StringReader(csvContent)));
+      List<CsvRecord> records = csv.parseRecords(new BufferedReader(new StringReader(csvContent)), false, null);
       Assertions.assertTrue(records.size() == 1);
 
       CsvRecord rec = records.get(0);

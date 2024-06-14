@@ -34,6 +34,7 @@ import java.util.List;
 import com.appslandia.common.base.InitializeException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Language;
+import com.appslandia.common.base.Out;
 import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.StringUtils;
 
@@ -200,11 +201,24 @@ public class CsvProcessor extends InitializeObject {
     return useWrap ? buf.toString() : value;
   }
 
-  public List<CsvRecord> parseRecords(BufferedReader reader) throws Exception {
+  public List<CsvRecord> parseRecords(BufferedReader reader, boolean record0AsHeader, Out<CsvRecord> header)
+      throws Exception {
     this.initialize();
     List<CsvRecord> records = new ArrayList<>();
 
-    parse(reader, (idx, csvRecord) -> records.add(csvRecord));
+    parse(reader, (idx, csvRecord) -> {
+      if (idx == 0) {
+        if (record0AsHeader) {
+          if (header != null) {
+            header.value = csvRecord;
+          }
+        } else {
+          records.add(csvRecord);
+        }
+      } else {
+        records.add(csvRecord);
+      }
+    });
     return records;
   }
 
