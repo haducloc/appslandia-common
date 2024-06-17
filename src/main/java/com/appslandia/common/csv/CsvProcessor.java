@@ -201,8 +201,8 @@ public class CsvProcessor extends InitializeObject {
     return useWrap ? buf.toString() : value;
   }
 
-  public List<CsvRecord> parseRecords(BufferedReader reader) throws Exception {
-    return parseRecords(reader, true, null);
+  public List<CsvRecord> parseRecords(BufferedReader reader, boolean record0AsHeader) throws Exception {
+    return parseRecords(reader, record0AsHeader, null);
   }
 
   public List<CsvRecord> parseRecords(BufferedReader reader, boolean record0AsHeader, Out<CsvRecord> header)
