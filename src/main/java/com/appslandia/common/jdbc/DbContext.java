@@ -109,20 +109,35 @@ public class DbContext implements AutoCloseable {
 
   public <K, V> Map<K, V> executeMap(String sql, ResultSetMapper<K> keyMapper, ResultSetMapper<V> valueMapper)
       throws java.sql.SQLException {
-    return this.conn.executeMap(sql, keyMapper, valueMapper);
+    return executeMap(sql, keyMapper, valueMapper, new LinkedHashMap<>());
+  }
+
+  public <K, V> Map<K, V> executeMap(String sql, ResultSetMapper<K> keyMapper, ResultSetMapper<V> valueMapper,
+      Map<K, V> map) throws java.sql.SQLException {
+    return this.conn.executeMap(sql, keyMapper, valueMapper, map);
   }
 
   public <K, V> Map<K, V> executeMap(String pSql, Object[] params, ResultSetMapper<K> keyMapper,
       ResultSetMapper<V> valueMapper) throws java.sql.SQLException {
-    return executeMap(pSql, JdbcUtils.toParameters(params), keyMapper, valueMapper);
+    return executeMap(pSql, params, keyMapper, valueMapper, new LinkedHashMap<>());
+  }
+
+  public <K, V> Map<K, V> executeMap(String pSql, Object[] params, ResultSetMapper<K> keyMapper,
+      ResultSetMapper<V> valueMapper, Map<K, V> map) throws java.sql.SQLException {
+    return executeMap(pSql, JdbcUtils.toParameters(params), keyMapper, valueMapper, map);
   }
 
   public <K, V> Map<K, V> executeMap(String pSql, Map<String, Object> params, ResultSetMapper<K> keyMapper,
       ResultSetMapper<V> valueMapper) throws java.sql.SQLException {
+    return executeMap(pSql, params, keyMapper, valueMapper, new LinkedHashMap<>());
+  }
+
+  public <K, V> Map<K, V> executeMap(String pSql, Map<String, Object> params, ResultSetMapper<K> keyMapper,
+      ResultSetMapper<V> valueMapper, Map<K, V> map) throws java.sql.SQLException {
     StatementImpl stat = getStatement(pSql, params);
 
     try (ResultSetImpl rs = stat.executeQuery()) {
-      return JdbcUtils.executeMap(rs, keyMapper, valueMapper, new LinkedHashMap<>());
+      return JdbcUtils.executeMap(rs, keyMapper, valueMapper, map);
     }
   }
 

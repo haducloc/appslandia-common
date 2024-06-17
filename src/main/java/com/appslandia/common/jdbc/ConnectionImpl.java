@@ -150,28 +150,43 @@ public class ConnectionImpl implements Connection {
 
   public <K, V> Map<K, V> executeMap(String sql, ResultSetMapper<K> keyMapper, ResultSetMapper<V> valueMapper)
       throws java.sql.SQLException {
+    return executeMap(sql, keyMapper, valueMapper, new LinkedHashMap<>());
+  }
+
+  public <K, V> Map<K, V> executeMap(String sql, ResultSetMapper<K> keyMapper, ResultSetMapper<V> valueMapper,
+      Map<K, V> map) throws java.sql.SQLException {
     try (Statement stat = this.conn.createStatement()) {
       try (ResultSetImpl rs = new ResultSetImpl(stat.executeQuery(sql))) {
 
-        return JdbcUtils.executeMap(rs, keyMapper, valueMapper, new LinkedHashMap<>());
+        return JdbcUtils.executeMap(rs, keyMapper, valueMapper, map);
       }
     }
   }
 
   public <K, V> Map<K, V> executeMap(String pSql, Object[] params, ResultSetMapper<K> keyMapper,
       ResultSetMapper<V> valueMapper) throws java.sql.SQLException {
-    return executeMap(pSql, JdbcUtils.toParameters(params), keyMapper, valueMapper);
+    return executeMap(pSql, params, keyMapper, valueMapper, new LinkedHashMap<>());
+  }
+
+  public <K, V> Map<K, V> executeMap(String pSql, Object[] params, ResultSetMapper<K> keyMapper,
+      ResultSetMapper<V> valueMapper, Map<K, V> map) throws java.sql.SQLException {
+    return executeMap(pSql, JdbcUtils.toParameters(params), keyMapper, valueMapper, map);
   }
 
   public <K, V> Map<K, V> executeMap(String pSql, Map<String, Object> params, ResultSetMapper<K> keyMapper,
       ResultSetMapper<V> valueMapper) throws java.sql.SQLException {
+    return executeMap(pSql, params, keyMapper, valueMapper, new LinkedHashMap<>());
+  }
+
+  public <K, V> Map<K, V> executeMap(String pSql, Map<String, Object> params, ResultSetMapper<K> keyMapper,
+      ResultSetMapper<V> valueMapper, Map<K, V> map) throws java.sql.SQLException {
     JdbcSql sql = new JdbcSql(pSql);
     try (StatementImpl stat = prepareStatement(sql)) {
       if (params != null) {
         JdbcUtils.setParameters(stat, sql, params);
       }
       try (ResultSetImpl rs = stat.executeQuery()) {
-        return JdbcUtils.executeMap(rs, keyMapper, valueMapper, new LinkedHashMap<>());
+        return JdbcUtils.executeMap(rs, keyMapper, valueMapper, map);
       }
     }
   }
