@@ -23,7 +23,7 @@ package com.appslandia.common.data;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -292,7 +292,7 @@ public class RecordContext extends DbContext {
     try (Statement stat = this.conn.createStatement()) {
       try (ResultSetImpl rs = new ResultSetImpl(stat.executeQuery(sql))) {
 
-        return JdbcUtils.executeList(rs, r -> RecordUtils.toRecord(r), new ArrayList<>());
+        return JdbcUtils.executeList(rs, r -> RecordUtils.toRecord(r), new LinkedList<>());
       }
     }
   }
@@ -306,7 +306,7 @@ public class RecordContext extends DbContext {
 
     try (ResultSetImpl rs = stat.executeQuery()) {
 
-      return JdbcUtils.executeList(rs, r -> RecordUtils.toRecord(r), new ArrayList<>());
+      return JdbcUtils.executeList(rs, r -> RecordUtils.toRecord(r), new LinkedList<>());
     }
   }
 
@@ -326,11 +326,6 @@ public class RecordContext extends DbContext {
 
       return RecordUtils.toRecord(rs);
     });
-  }
-
-  public List<DataRecord> executeList(String fromTable, String[] joinExpressions, String filterExpression,
-      String orderExpression) throws java.sql.SQLException {
-    throw new UnsupportedOperationException();
   }
 
   protected String getDataSourceID() throws UncheckedSQLException {
