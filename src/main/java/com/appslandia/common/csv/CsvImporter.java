@@ -62,7 +62,7 @@ public class CsvImporter extends InitializeObject {
   private String tableName;
   private CsvProcessor csvProcessor;
 
-  private boolean enableInsert;
+  private boolean enableDebug = true;
   private CsvDebugger csvDebugger;
 
   private Collection<String> datePatterns;
@@ -116,7 +116,7 @@ public class CsvImporter extends InitializeObject {
 
       try {
         // Transactional
-        if (this.enableInsert) {
+        if (!this.enableDebug) {
           ctx.setTransactional(true);
         }
 
@@ -145,7 +145,7 @@ public class CsvImporter extends InitializeObject {
           }
 
           // Insert the record (batch)
-          if (this.enableInsert) {
+          if (!this.enableDebug) {
             ctx.insert(table.getName(), dataRecord, true);
           }
 
@@ -154,19 +154,19 @@ public class CsvImporter extends InitializeObject {
           // executeBatch markers
           if (inserts > 0 && inserts % 100 == 0) {
 
-            if (this.enableInsert) {
+            if (!this.enableDebug) {
               ctx.executeBatch();
             }
           }
         });
 
         // last executeBatch
-        if (this.enableInsert) {
+        if (!this.enableDebug) {
           ctx.executeBatch();
         }
 
         // Commit all batches
-        if (this.enableInsert) {
+        if (!this.enableDebug) {
           ctx.commit();
         }
 
@@ -175,7 +175,7 @@ public class CsvImporter extends InitializeObject {
       } catch (Exception ex) {
 
         // Rollback
-        if (this.enableInsert) {
+        if (this.enableDebug) {
           ctx.rollback();
         }
         throw ex;
@@ -295,9 +295,9 @@ public class CsvImporter extends InitializeObject {
     return this;
   }
 
-  public CsvImporter setEnableInsert(boolean enableInsert) {
+  public CsvImporter setEnableDebug(boolean enableDebug) {
     assertNotInitialized();
-    this.enableInsert = enableInsert;
+    this.enableDebug = enableDebug;
     return this;
   }
 
