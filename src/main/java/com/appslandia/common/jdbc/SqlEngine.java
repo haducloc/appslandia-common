@@ -30,7 +30,7 @@ import com.appslandia.common.utils.STR;
  */
 public enum SqlEngine {
 
-  MSSQL(), MYSQL(), POSTGRESQL(), ORACLE(), SQLITE();
+  POSTGRESQL, MYSQL, MARIADB, MSSQL, ORACLE, DB2, SQLITE, H2;
 
   private SqlEngine() {
   }
@@ -38,20 +38,29 @@ public enum SqlEngine {
   public static SqlEngine parse(String url) {
     Asserts.notNull(url);
 
-    if (url.startsWith("jdbc:sqlserver")) {
-      return MSSQL;
+    if (url.startsWith("jdbc:postgresql")) {
+      return POSTGRESQL;
     }
     if (url.startsWith("jdbc:mysql")) {
       return MYSQL;
     }
-    if (url.startsWith("jdbc:postgresql")) {
-      return POSTGRESQL;
+    if (url.startsWith("jdbc:mariadb")) {
+      return MARIADB;
+    }
+    if (url.startsWith("jdbc:sqlserver")) {
+      return MSSQL;
     }
     if (url.startsWith("jdbc:oracle")) {
       return ORACLE;
     }
+    if (url.startsWith("jdbc:db2")) {
+      return DB2;
+    }
     if (url.startsWith("jdbc:sqlite")) {
       return SQLITE;
+    }
+    if (url.startsWith("jdbc:h2")) {
+      return H2;
     }
     throw new IllegalArgumentException(STR.fmt("Failed to parse SqlEngine from the given url: {}", url));
   }
