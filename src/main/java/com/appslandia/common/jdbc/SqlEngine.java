@@ -62,6 +62,6 @@ public enum SqlEngine {
     if (url.startsWith("jdbc:h2")) {
       return H2;
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to parse SqlEngine from the given url: {}", url));
+    throw new IllegalArgumentException(STR.fmt("Failed to parse SqlEngine from: {}", url));
   }
 }
