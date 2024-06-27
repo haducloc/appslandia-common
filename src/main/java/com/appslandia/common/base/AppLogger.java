@@ -24,7 +24,6 @@ import java.lang.System.Logger.Level;
 import java.util.function.Supplier;
 
 import com.appslandia.common.utils.ExceptionUtils;
-import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -53,23 +52,23 @@ public class AppLogger {
   }
 
   public void trace(String format, Object... params) {
-    this.logger.log(Level.TRACE, STR.fmt(format, params));
+    this.logger.log(Level.TRACE, format, params);
   }
 
   public void debug(String format, Object... params) {
-    this.logger.log(Level.DEBUG, STR.fmt(format, params));
+    this.logger.log(Level.DEBUG, format, params);
   }
 
   public void info(String format, Object... params) {
-    this.logger.log(Level.INFO, STR.fmt(format, params));
+    this.logger.log(Level.INFO, format, params);
   }
 
   public void warn(String format, Object... params) {
-    this.logger.log(Level.WARNING, STR.fmt(format, params));
+    this.logger.log(Level.WARNING, format, params);
   }
 
   public void error(String format, Object... params) {
-    this.logger.log(Level.ERROR, STR.fmt(format, params));
+    this.logger.log(Level.ERROR, format, params);
   }
 
   public void trace(String message) {
