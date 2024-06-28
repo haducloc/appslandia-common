@@ -82,7 +82,7 @@ public class SecureConfig extends SimpleConfig {
   public SecureConfig sets(String key, String value) throws CryptoException {
     Asserts.notNull(key);
     Asserts.notNull(value);
-    value = value.trim();
+    value = value.strip();
 
     this.cfg.put(key, CryptoUtils.markEncValue(this.textEncryptor.encrypt(value)));
     return this;

@@ -46,7 +46,7 @@ public class CharsetUtils {
     if (idx < 0) {
       return defaultValue;
     }
-    String charset = contentType.substring(idx + 1).trim();
+    String charset = contentType.substring(idx + 1).strip();
 
     if (charset.toLowerCase(Locale.ENGLISH).startsWith("charset=")) {
       return charset.substring(8);

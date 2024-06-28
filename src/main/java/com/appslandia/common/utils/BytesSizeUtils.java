@@ -54,7 +54,7 @@ public class BytesSizeUtils {
       }
 
       double amt = Double.parseDouble(sizeAmt.substring(i, j));
-      String unit = sizeAmt.substring(j, k).trim().toUpperCase(Locale.ENGLISH);
+      String unit = sizeAmt.substring(j, k).strip().toUpperCase(Locale.ENGLISH);
 
       switch (unit) {
       case "GB":

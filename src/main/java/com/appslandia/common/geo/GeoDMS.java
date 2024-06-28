@@ -140,10 +140,10 @@ public class GeoDMS implements Serializable {
 
     String[] items = DMS_SYMBOLS.split(dms);
 
-    int degrees = Integer.parseInt(items[0].trim());
-    int minutes = Integer.parseInt(items[1].trim());
-    double seconds = Double.parseDouble(items[2].trim());
-    Direction direction = Direction.parseValue(items[3].trim());
+    int degrees = Integer.parseInt(items[0].strip());
+    int minutes = Integer.parseInt(items[1].strip());
+    double seconds = Double.parseDouble(items[2].strip());
+    Direction direction = Direction.parseValue(items[3].strip());
 
     boolean invalidDms1 = (direction.isY() & (degrees > 90 || minutes >= 60 || seconds >= 60.0))
         || (direction.isX() & (degrees > 180 || minutes >= 60 || seconds >= 60.0));

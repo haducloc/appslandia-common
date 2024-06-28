@@ -89,14 +89,14 @@ public class StringUtils {
   }
 
   public static String trimToEmpty(String str) {
-    return (str != null) ? str.trim() : EMPTY_STRING;
+    return (str != null) ? str.strip() : EMPTY_STRING;
   }
 
   public static String trimToDefault(String str, String defaultValue) {
     if (str == null || str.isEmpty()) {
       return defaultValue;
     }
-    str = str.trim();
+    str = str.strip();
     return !str.isEmpty() ? str : defaultValue;
   }
 

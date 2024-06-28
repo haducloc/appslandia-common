@@ -57,7 +57,7 @@ public class PKIUtils {
     if (idx2 < 0) {
       return null;
     }
-    return pem.substring(idx1 + beginMarker.length(), idx2).trim();
+    return pem.substring(idx1 + beginMarker.length(), idx2).strip();
   }
 
   public static String removeBeginEnd(String pem) {
@@ -92,7 +92,7 @@ public class PKIUtils {
     }
     Asserts.isTrue(valid, "The pem is invalid.");
 
-    return pem.substring(0, idx).trim();
+    return pem.substring(0, idx).strip();
   }
 
   // PEM: Privacy-enhanced Electronic Mail

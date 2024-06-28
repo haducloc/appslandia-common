@@ -67,7 +67,7 @@ public class SimpleConfig implements Config {
     Asserts.notNull(key);
     Asserts.notNull(value);
 
-    this.cfg.putIfAbsent(key, value.trim());
+    this.cfg.putIfAbsent(key, value.strip());
     return this;
   }
 
@@ -75,7 +75,7 @@ public class SimpleConfig implements Config {
     Asserts.notNull(key);
     Asserts.notNull(value);
 
-    this.cfg.put(key, value.trim());
+    this.cfg.put(key, value.strip());
     return this;
   }
 
@@ -139,7 +139,7 @@ public class SimpleConfig implements Config {
 
   protected void fromProperties(Properties props) {
     for (Entry<Object, Object> prop : props.entrySet()) {
-      this.cfg.put((String) prop.getKey(), ((String) prop.getValue()).trim());
+      this.cfg.put((String) prop.getKey(), ((String) prop.getValue()).strip());
     }
   }
 

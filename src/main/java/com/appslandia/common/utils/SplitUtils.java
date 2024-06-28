@@ -131,7 +131,7 @@ public class SplitUtils {
     if (behavior == null || behavior == SplittingBehavior.ORIGINAL) {
       return item;
     } else {
-      item = item.trim();
+      item = item.strip();
       return !item.isEmpty() ? item : null;
     }
   }

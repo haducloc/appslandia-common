@@ -36,7 +36,7 @@ public class SYS {
 
   public static String getProp(String key) {
     String value = System.getProperty(key);
-    return (value != null) ? value.trim() : null;
+    return (value != null) ? value.strip() : null;
   }
 
   public static String getProp(String key, String ifNull) {
@@ -96,7 +96,7 @@ public class SYS {
 
   public static String getEnv(String key) {
     String value = System.getenv(key);
-    return (value != null) ? value.trim() : null;
+    return (value != null) ? value.strip() : null;
   }
 
   public static String getEnv(String key, String ifNull) {
@@ -165,7 +165,7 @@ public class SYS {
       return null;
     }
 
-    String vars = expr.substring(1, expr.length() - 1).trim();
+    String vars = expr.substring(1, expr.length() - 1).strip();
     String[] varArr = SplitUtils.splitByComma(vars);
 
     for (String var : varArr) {

@@ -355,7 +355,7 @@ public class DateUtils {
       }
 
       double amt = Double.parseDouble(temporalAmt.substring(i, j));
-      String unit = temporalAmt.substring(j, k).trim().toLowerCase(Locale.ENGLISH);
+      String unit = temporalAmt.substring(j, k).strip().toLowerCase(Locale.ENGLISH);
 
       switch (unit) {
       case "w":

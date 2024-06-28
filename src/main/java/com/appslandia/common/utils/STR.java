@@ -98,7 +98,7 @@ public class STR {
 
       // {paramName}
       String paramGroup = matcher.group();
-      String paramName = paramGroup.substring(paramGroup.indexOf('{') + 1, paramGroup.length() - 1).trim();
+      String paramName = paramGroup.substring(paramGroup.indexOf('{') + 1, paramGroup.length() - 1).strip();
 
       String expr = "{" + paramName + "}";
       Object paramValue = parameters.apply(paramName, expr);
@@ -174,7 +174,7 @@ public class STR {
 
       // {paramName}
       String paramGroup = matcher.group();
-      String paramName = paramGroup.substring(paramGroup.indexOf('{') + 1, paramGroup.length() - 1).trim();
+      String paramName = paramGroup.substring(paramGroup.indexOf('{') + 1, paramGroup.length() - 1).strip();
 
       chunks.add(new StringFormat.Chunk(paramName, true, "{" + paramName + "}"));
       outLen += 16;

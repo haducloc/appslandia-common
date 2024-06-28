@@ -72,8 +72,8 @@ public class RateLimit implements Serializable {
     }
 
     int idx = rateLimit.indexOf('/');
-    int accesses = Integer.parseInt(rateLimit.substring(0, idx).trim());
-    long windowsMs = DateUtils.translateToMs(rateLimit.substring(idx + 1).trim());
+    int accesses = Integer.parseInt(rateLimit.substring(0, idx).strip());
+    long windowsMs = DateUtils.translateToMs(rateLimit.substring(idx + 1).strip());
 
     return new RateLimit(accesses, windowsMs);
   }

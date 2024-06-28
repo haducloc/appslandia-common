@@ -73,7 +73,7 @@ public class GroupFormat {
 
       // {\d+}
       String paramGroup = matcher.group();
-      String paramLen = paramGroup.substring(paramGroup.indexOf('{') + 1, paramGroup.length() - 1).trim();
+      String paramLen = paramGroup.substring(paramGroup.indexOf('{') + 1, paramGroup.length() - 1).strip();
       int groupLen = Integer.parseInt(paramLen);
 
       groups.add(new Group(null, groupLen));
