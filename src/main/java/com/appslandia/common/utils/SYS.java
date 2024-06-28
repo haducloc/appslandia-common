@@ -162,7 +162,7 @@ public class SYS {
     Asserts.notNull(expr);
 
     if (!VARS_PATTERN.matcher(expr).matches()) {
-      return null;
+      throw new IllegalArgumentException("Invalid expression: " + expr);
     }
 
     String vars = expr.substring(1, expr.length() - 1).strip();
