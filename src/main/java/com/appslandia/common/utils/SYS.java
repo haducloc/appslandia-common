@@ -158,6 +158,11 @@ public class SYS {
   private static final Pattern VARS_PATTERN = Pattern.compile("\\{\\s*[a-z\\d_.]+\\s*(\\s*\\,\\s*[a-z\\d_.]+\\s*)*}",
       Pattern.CASE_INSENSITIVE);
 
+  public static String resolve(String expr, String defaultValue) {
+    String resolvedVal = resolve(expr);
+    return (resolvedVal != null) ? resolvedVal : defaultValue;
+  }
+
   public static String resolve(String expr) {
     Asserts.notNull(expr);
 
