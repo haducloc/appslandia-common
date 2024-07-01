@@ -278,13 +278,11 @@ public class DbContext implements AutoCloseable {
 
   public void executeBatch() throws java.sql.SQLException {
     this.assertTransactional();
-
     doBatch("execute");
   }
 
   public void clearBatch() throws java.sql.SQLException {
     this.assertTransactional();
-
     doBatch("clear");
   }
 
