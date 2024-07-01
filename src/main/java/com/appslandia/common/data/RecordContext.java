@@ -380,7 +380,6 @@ public class RecordContext extends DbContext {
 
     setters.append("// ").append(tableName).appendln();
     setters.append("var dataRecord = new DataRecord();").appendln();
-    setters.appendln();
 
     for (Column col : table.getColumns()) {
       setters.append("dataRecord.set(\"").append(col.getName()).append("\", NULL); // ")
