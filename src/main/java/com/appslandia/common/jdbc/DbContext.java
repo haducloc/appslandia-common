@@ -107,6 +107,10 @@ public class DbContext implements AutoCloseable {
 
   // Execute Utilities
 
+  public String getDistinctValues(String tableName, String columnLabel) throws java.sql.SQLException {
+    return this.conn.getDistinctValues(tableName, columnLabel);
+  }
+
   public <K, V> Map<K, V> executeMap(String sql, ResultSetMapper<K> keyMapper, ResultSetMapper<V> valueMapper)
       throws java.sql.SQLException {
     return executeMap(sql, keyMapper, valueMapper, new LinkedHashMap<>());

@@ -33,6 +33,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -110,6 +112,27 @@ public class JdbcUtils {
   }
 
   // Execute ResultSets
+
+  public static String toDistinctValues(ResultSet rs, String tableName, String columnLabel) throws SQLException {
+    Set<String> values = new TreeSet<>();
+    boolean tooMany = false;
+
+    while (rs.next()) {
+      Object obj = rs.getObject(columnLabel);
+      values.add((obj != null) ? obj.toString() : null);
+
+      if (values.size() > 255) {
+        tooMany = true;
+        break;
+      }
+    }
+
+    String valuesAsStr = values.stream().collect(Collectors.joining(", "));
+    if (tooMany) {
+      return valuesAsStr + ", ...";
+    }
+    return valuesAsStr;
+  }
 
   public static <K, V> Map<K, V> executeMap(ResultSetImpl rs, ResultSetMapper<K> keyMapper,
       ResultSetMapper<V> valueMapper, Map<K, V> map) throws SQLException {

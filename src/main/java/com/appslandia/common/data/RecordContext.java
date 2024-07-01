@@ -358,7 +358,10 @@ public class RecordContext extends DbContext {
     return tables.computeIfAbsent(tableName, tn -> {
       try {
         Table table = RecordUtils.loadTable(this.conn, this.conn.getCatalog(), this.conn.getSchema(), tableName, null);
-        return Asserts.notNull(table);
+        if (table == null) {
+          throw new IllegalArgumentException("Table not found: " + tableName);
+        }
+        return table;
 
       } catch (SQLException ex) {
         throw new UncheckedSQLException(ex);
@@ -366,14 +369,16 @@ public class RecordContext extends DbContext {
     });
   }
 
-  public String toColumnNames(String tableName) throws UncheckedSQLException {
+  public String getColumnNames(String tableName) throws UncheckedSQLException {
     Table table = getTable(tableName);
     return table.getColumns().stream().map(c -> c.getName()).collect(Collectors.joining(", "));
   }
 
-  public String toColumnSetters(String tableName) throws UncheckedSQLException {
+  public String getColumnSetters(String tableName) throws UncheckedSQLException {
     Table table = getTable(tableName);
     TextBuilder setters = new TextBuilder();
+
+    setters.append("// ").append(tableName).appendln();
     setters.append("var dataRecord = new DataRecord();").appendln();
     setters.appendln();
 

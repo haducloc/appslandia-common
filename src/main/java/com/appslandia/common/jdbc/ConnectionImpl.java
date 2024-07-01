@@ -148,6 +148,19 @@ public class ConnectionImpl implements Connection {
 
   // Execute utilities
 
+  public String getDistinctValues(String tableName, String columnLabel) throws java.sql.SQLException {
+    Asserts.notNull(tableName);
+    Asserts.notNull(columnLabel);
+
+    String sql = "SELECT " + columnLabel + " FROM " + tableName;
+
+    try (Statement stat = this.conn.createStatement()) {
+      try (ResultSet rs = stat.executeQuery(sql)) {
+        return JdbcUtils.toDistinctValues(rs, tableName, columnLabel);
+      }
+    }
+  }
+
   public <K, V> Map<K, V> executeMap(String sql, ResultSetMapper<K> keyMapper, ResultSetMapper<V> valueMapper)
       throws java.sql.SQLException {
     return executeMap(sql, keyMapper, valueMapper, new LinkedHashMap<>());
