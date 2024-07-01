@@ -60,8 +60,7 @@ public class PSSParameterSpecUtil {
 
     PSSParameterSpec spec = SPECS.get(signatureAlg);
     if (spec == null) {
-      throw new IllegalArgumentException(
-          STR.fmt("The given signature algorithm name '{}' is unregistered.", signatureAlg));
+      throw new IllegalArgumentException(STR.fmt("The algorithm '{}' is unregistered.", signatureAlg));
     }
     return spec;
   }

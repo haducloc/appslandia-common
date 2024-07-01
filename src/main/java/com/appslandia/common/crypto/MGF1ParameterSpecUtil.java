@@ -64,7 +64,7 @@ public class MGF1ParameterSpecUtil {
 
     MGF1ParameterSpec spec = SPECS.get(hashAlg);
     if (spec == null) {
-      throw new IllegalArgumentException(STR.fmt("The given hash algorithm name '{}' is unregistered.", hashAlg));
+      throw new IllegalArgumentException(STR.fmt("The algorithm '{}' is unregistered.", hashAlg));
     }
     return spec;
   }
