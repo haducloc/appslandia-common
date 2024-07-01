@@ -25,7 +25,7 @@ package com.appslandia.common.base;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class AssertException extends RuntimeException {
+public class AssertException extends IllegalArgumentException {
   private static final long serialVersionUID = 1L;
 
   public AssertException(String message) {
