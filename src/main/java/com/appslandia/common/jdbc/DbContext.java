@@ -105,6 +105,14 @@ public class DbContext implements AutoCloseable {
     }
   }
 
+  public int dropTable(String tableName) throws java.sql.SQLException {
+    return this.conn.dropTable(tableName);
+  }
+
+  public int truncateTable(String tableName) throws java.sql.SQLException {
+    return this.conn.truncateTable(tableName);
+  }
+
   // Execute Utilities
 
   public String getDistinctValues(String tableName, String columnLabel) throws java.sql.SQLException {

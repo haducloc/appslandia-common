@@ -20,8 +20,6 @@
 
 package com.appslandia.common.utils;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -174,17 +172,5 @@ public class Asserts {
       throw new AssertException(errorMessage.get());
     }
     return map;
-  }
-
-  public static void authorize(long callerDateTimeID) {
-    LocalDateTime argLT = DateUtils.fromDateTimeID(callerDateTimeID);
-
-    LocalDateTime curLT = LocalDateTime.now();
-    long minDiff = Duration.between(argLT, curLT).toMinutes();
-
-    if (minDiff < 0 || minDiff > 3) {
-      throw new AssertException(
-          "The given callerDateTimeID is unauthorized. It must be within 3 minutes of the current time.");
-    }
   }
 }

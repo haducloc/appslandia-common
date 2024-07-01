@@ -112,17 +112,11 @@ public class ConnectionImpl implements Connection {
 
   // Update Utilities
 
-  public int dropTable(String tableName, long callerDateTimeID) throws java.sql.SQLException {
-    Asserts.notNull(callerDateTimeID);
-    Asserts.authorize(callerDateTimeID);
-
+  public int dropTable(String tableName) throws java.sql.SQLException {
     return executeUpdate(STR.fmt("DROP TABLE IF EXISTS {}", tableName));
   }
 
-  public int truncateTable(String tableName, long callerDateTimeID) throws java.sql.SQLException {
-    Asserts.notNull(callerDateTimeID);
-    Asserts.authorize(callerDateTimeID);
-
+  public int truncateTable(String tableName) throws java.sql.SQLException {
     return executeUpdate(STR.fmt("TRUNCATE TABLE {}", tableName));
   }
 

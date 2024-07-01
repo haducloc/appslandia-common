@@ -344,14 +344,6 @@ public class RecordContext extends DbContext {
     }
   }
 
-  public int dropTable(String tableName, long callerDateTimeID) throws java.sql.SQLException {
-    return this.conn.dropTable(tableName, callerDateTimeID);
-  }
-
-  public int truncateTable(String tableName, long callerDateTimeID) throws java.sql.SQLException {
-    return this.conn.truncateTable(tableName, callerDateTimeID);
-  }
-
   public Table getTable(String tableName) throws UncheckedSQLException {
     ConcurrentMap<String, Table> tables = TABLES.computeIfAbsent(getDataSourceID(), db -> new ConcurrentHashMap<>());
 
