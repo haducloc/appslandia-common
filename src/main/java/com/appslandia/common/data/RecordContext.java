@@ -351,7 +351,7 @@ public class RecordContext extends DbContext {
       try {
         Table table = RecordUtils.loadTable(this.conn, this.conn.getCatalog(), this.conn.getSchema(), tableName, null);
         if (table == null) {
-          throw new IllegalArgumentException("Table not found: " + tableName);
+          throw new IllegalArgumentException(STR.fmt("The table {} is not found.", tableName));
         }
         return table;
 
