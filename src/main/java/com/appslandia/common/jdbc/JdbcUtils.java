@@ -113,7 +113,7 @@ public class JdbcUtils {
 
   // Execute ResultSets
 
-  public static String toDistinctValues(ResultSet rs, String tableName, String columnLabel) throws SQLException {
+  public static String getDistinctValues(ResultSet rs, String tableName, String columnLabel) throws SQLException {
     Set<String> values = new TreeSet<>();
     boolean tooMany = false;
 

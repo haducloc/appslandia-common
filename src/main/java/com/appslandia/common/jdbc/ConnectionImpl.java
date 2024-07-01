@@ -150,7 +150,7 @@ public class ConnectionImpl implements Connection {
 
     try (Statement stat = this.conn.createStatement()) {
       try (ResultSet rs = stat.executeQuery(sql)) {
-        return JdbcUtils.toDistinctValues(rs, tableName, columnLabel);
+        return JdbcUtils.getDistinctValues(rs, tableName, columnLabel);
       }
     }
   }
