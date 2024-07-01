@@ -344,7 +344,7 @@ public class RecordContext extends DbContext {
     }
   }
 
-  public int deleteTable(String tableName, long callerDateTimeID) throws java.sql.SQLException {
+  public int dropTable(String tableName, long callerDateTimeID) throws java.sql.SQLException {
     return this.conn.dropTable(tableName, callerDateTimeID);
   }
 
