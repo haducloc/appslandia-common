@@ -374,8 +374,14 @@ public class RecordContext extends DbContext {
     setters.append("var dataRecord = new DataRecord();").appendln();
 
     for (Column col : table.getColumns()) {
-      setters.append("dataRecord.set(\"").append(col.getName()).append("\", NULL); // ")
-          .append(col.getJavaType().getSimpleName()).append(col.isNullable() ? "?" : "").appendln();
+
+      String code = null;
+      if (col.isNullable()) {
+        code = STR.fmt("dataRecord.set(\"{}\", {});", col.getName(), "NULLABLE");
+      } else {
+        code = STR.fmt("dataRecord.set(\"{}\", {});", col.getName(), "REQUIRED");
+      }
+      setters.append(code).appendln();
 
       if ((col.getPosition() + 1) % 5 == 0) {
         setters.appendln();
