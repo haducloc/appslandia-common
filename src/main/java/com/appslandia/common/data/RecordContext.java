@@ -302,7 +302,7 @@ public class RecordContext extends DbContext {
   }
 
   public List<DataRecord> executeList(String pSql, Map<String, Object> params) throws java.sql.SQLException {
-    StatementImpl stat = getStatement(pSql, params);
+    StatementImpl stat = prepareStatement(pSql, params);
 
     try (ResultSetImpl rs = stat.executeQuery()) {
 

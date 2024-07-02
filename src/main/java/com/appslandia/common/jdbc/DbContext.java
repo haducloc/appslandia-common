@@ -93,7 +93,7 @@ public class DbContext implements AutoCloseable {
   }
 
   public int executeUpdate(String pSql, Map<String, Object> params, boolean addBatch) throws java.sql.SQLException {
-    StatementImpl stat = getStatement(pSql, params);
+    StatementImpl stat = prepareStatement(pSql, params);
 
     if (!addBatch) {
       return stat.executeUpdate();
@@ -146,7 +146,7 @@ public class DbContext implements AutoCloseable {
 
   public <K, V> Map<K, V> executeMap(String pSql, Map<String, Object> params, ResultSetMapper<K> keyMapper,
       ResultSetMapper<V> valueMapper, Map<K, V> map) throws java.sql.SQLException {
-    StatementImpl stat = getStatement(pSql, params);
+    StatementImpl stat = prepareStatement(pSql, params);
 
     try (ResultSetImpl rs = stat.executeQuery()) {
       return JdbcUtils.executeMap(rs, keyMapper, valueMapper, map);
@@ -163,7 +163,7 @@ public class DbContext implements AutoCloseable {
 
   public <T> List<T> executeList(String pSql, Map<String, Object> params, ResultSetMapper<T> mapper)
       throws java.sql.SQLException {
-    StatementImpl stat = getStatement(pSql, params);
+    StatementImpl stat = prepareStatement(pSql, params);
 
     try (ResultSetImpl rs = stat.executeQuery()) {
       return JdbcUtils.executeList(rs, mapper, new LinkedList<>());
@@ -180,7 +180,7 @@ public class DbContext implements AutoCloseable {
 
   public <T> T executeSingle(String pSql, Map<String, Object> params, ResultSetMapper<T> mapper)
       throws java.sql.SQLException {
-    StatementImpl stat = getStatement(pSql, params);
+    StatementImpl stat = prepareStatement(pSql, params);
 
     try (ResultSetImpl rs = stat.executeQuery()) {
       return JdbcUtils.executeSingle(rs, mapper);
@@ -196,7 +196,7 @@ public class DbContext implements AutoCloseable {
   }
 
   public <T> T executeScalar(String pSql, Map<String, Object> params, Class<T> type) throws java.sql.SQLException {
-    StatementImpl stat = getStatement(pSql, params);
+    StatementImpl stat = prepareStatement(pSql, params);
 
     try (ResultSet rs = stat.executeQuery()) {
       return JdbcUtils.executeScalar(rs, type);
@@ -212,7 +212,7 @@ public class DbContext implements AutoCloseable {
   }
 
   public void executeQuery(String pSql, Map<String, Object> params, ResultSetHandler handler) throws Exception {
-    StatementImpl stat = getStatement(pSql, params);
+    StatementImpl stat = prepareStatement(pSql, params);
 
     try (ResultSetImpl rs = stat.executeQuery()) {
       while (rs.next()) {
@@ -233,7 +233,7 @@ public class DbContext implements AutoCloseable {
 
   public void executeStream(String pSql, Map<String, Object> params, String streamLabel, OutputStream out,
       ResultSetHandler handler) throws Exception {
-    StatementImpl stat = getStatement(pSql, params);
+    StatementImpl stat = prepareStatement(pSql, params);
 
     try (ResultSetImpl rs = stat.executeQuery()) {
       JdbcUtils.executeStream(rs, streamLabel, out, handler);
@@ -251,7 +251,7 @@ public class DbContext implements AutoCloseable {
 
   public void executeStream(String pSql, Map<String, Object> params, String streamLabel, Writer out,
       ResultSetHandler handler) throws Exception {
-    StatementImpl stat = getStatement(pSql, params);
+    StatementImpl stat = prepareStatement(pSql, params);
 
     try (ResultSetImpl rs = stat.executeQuery()) {
       JdbcUtils.executeStream(rs, streamLabel, out, handler);
@@ -269,7 +269,7 @@ public class DbContext implements AutoCloseable {
 
   public void executeNStream(String pSql, Map<String, Object> params, String streamLabel, Writer out,
       ResultSetHandler handler) throws Exception {
-    StatementImpl stat = getStatement(pSql, params);
+    StatementImpl stat = prepareStatement(pSql, params);
 
     try (ResultSetImpl rs = stat.executeQuery()) {
       JdbcUtils.executeNStream(rs, streamLabel, out, handler);
@@ -360,7 +360,7 @@ public class DbContext implements AutoCloseable {
     }
   }
 
-  protected StatementImpl getStatement(String pSql, Map<String, Object> params) throws java.sql.SQLException {
+  protected StatementImpl prepareStatement(String pSql, Map<String, Object> params) throws java.sql.SQLException {
     // StatementImpl
     JdbcSql sql = new JdbcSql(pSql);
     StatementImpl stat = this.stats.get(pSql);
