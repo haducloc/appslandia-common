@@ -57,7 +57,7 @@ public class CaseInsensitiveMap<V> implements Map<String, V>, Serializable {
 
   @Override
   public boolean containsKey(Object key) {
-    return this.map.containsKey(toLowerCase((String) key));
+    return this.map.containsKey(toKey((String) key));
   }
 
   @Override
@@ -67,17 +67,17 @@ public class CaseInsensitiveMap<V> implements Map<String, V>, Serializable {
 
   @Override
   public V get(Object key) {
-    return this.map.get(toLowerCase((String) key));
+    return this.map.get(toKey((String) key));
   }
 
   @Override
   public V put(String key, V value) {
-    return this.map.put(toLowerCase(key), value);
+    return this.map.put(toKey(key), value);
   }
 
   @Override
   public V remove(Object key) {
-    return this.map.remove(toLowerCase((String) key));
+    return this.map.remove(toKey((String) key));
   }
 
   @Override
@@ -124,7 +124,7 @@ public class CaseInsensitiveMap<V> implements Map<String, V>, Serializable {
     return this.map.hashCode();
   }
 
-  static String toLowerCase(String key) {
+  static String toKey(String key) {
     return (key != null) ? key.toLowerCase(Locale.ROOT) : null;
   }
 }

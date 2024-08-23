@@ -57,7 +57,7 @@ public class CaseInsensitiveSet implements Set<String>, Serializable {
 
   @Override
   public boolean contains(Object e) {
-    return this.elements.contains(toLowerCase((String) e));
+    return this.elements.contains(toValue((String) e));
   }
 
   @Override
@@ -77,12 +77,12 @@ public class CaseInsensitiveSet implements Set<String>, Serializable {
 
   @Override
   public boolean add(String e) {
-    return this.elements.add(toLowerCase(e));
+    return this.elements.add(toValue(e));
   }
 
   @Override
   public boolean remove(Object e) {
-    return this.elements.remove(toLowerCase((String) e));
+    return this.elements.remove(toValue((String) e));
   }
 
   @Override
@@ -153,7 +153,7 @@ public class CaseInsensitiveSet implements Set<String>, Serializable {
     return this.elements.hashCode();
   }
 
-  static String toLowerCase(String value) {
+  static String toValue(String value) {
     return (value != null) ? value.toLowerCase(Locale.ROOT) : null;
   }
 }
