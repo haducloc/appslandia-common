@@ -87,22 +87,48 @@ public class CaseInsensitiveSet implements Set<String>, Serializable {
 
   @Override
   public boolean containsAll(Collection<?> c) {
-    throw new UnsupportedOperationException();
+    for (Object e : c) {
+      if (!contains(e)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   @Override
   public boolean addAll(Collection<? extends String> c) {
-    throw new UnsupportedOperationException();
+    boolean modified = false;
+    for (String e : c) {
+      if (add(e)) {
+        modified = true;
+      }
+    }
+    return modified;
   }
 
   @Override
   public boolean retainAll(Collection<?> c) {
-    throw new UnsupportedOperationException();
+    boolean modified = false;
+    Iterator<String> it = this.elements.iterator();
+    while (it.hasNext()) {
+      String e = it.next();
+      if (!c.contains(e)) {
+        it.remove();
+        modified = true;
+      }
+    }
+    return modified;
   }
 
   @Override
   public boolean removeAll(Collection<?> c) {
-    throw new UnsupportedOperationException();
+    boolean modified = false;
+    for (Object e : c) {
+      if (remove(e)) {
+        modified = true;
+      }
+    }
+    return modified;
   }
 
   @Override
@@ -110,7 +136,24 @@ public class CaseInsensitiveSet implements Set<String>, Serializable {
     this.elements.clear();
   }
 
-  static String toLowerCase(String key) {
-    return (key != null) ? key.toLowerCase(Locale.ROOT) : null;
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Set)) {
+      return false;
+    }
+    Set<?> that = (Set<?>) o;
+    return this.elements.equals(that);
+  }
+
+  @Override
+  public int hashCode() {
+    return this.elements.hashCode();
+  }
+
+  static String toLowerCase(String value) {
+    return (value != null) ? value.toLowerCase(Locale.ROOT) : null;
   }
 }

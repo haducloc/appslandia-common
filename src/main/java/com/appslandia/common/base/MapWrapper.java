@@ -98,4 +98,21 @@ public class MapWrapper<K, V> implements Map<K, V>, Serializable {
   public Set<Entry<K, V>> entrySet() {
     return this.map.entrySet();
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Map)) {
+      return false;
+    }
+    Map<?, ?> that = (Map<?, ?>) o;
+    return this.map.equals(that);
+  }
+
+  @Override
+  public int hashCode() {
+    return this.map.hashCode();
+  }
 }
