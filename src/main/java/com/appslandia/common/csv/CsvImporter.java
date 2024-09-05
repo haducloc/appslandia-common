@@ -35,6 +35,8 @@ import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.util.Collection;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.appslandia.common.base.CaseInsensitiveMap;
@@ -73,6 +75,7 @@ public class CsvImporter extends InitializeObject {
   private Collection<String> offsetDateTimePatterns;
 
   final Map<String, CsvToDbConverter> converters = new CaseInsensitiveMap<>();
+  final Map<Integer, String> mappedColumns = new TreeMap<>();
 
   @Override
   protected void init() throws Exception {
@@ -133,10 +136,10 @@ public class CsvImporter extends InitializeObject {
 
           // Build record
           DataRecord dataRecord = new DataRecord();
-          for (int colIdx = 0; colIdx < table.getColumns().size(); colIdx++) {
+          for (int csvIdx = 0; csvIdx < csvRecord.length(); csvIdx++) {
 
-            Column col = table.getColumns().get(colIdx);
-            dataRecord.set(col.getName(), toColumnValue(csvRecord, colIdx, col, ctx.getConnection()));
+            Column col = getColumn(table, csvIdx);
+            dataRecord.set(col.getName(), toColumnValue(csvRecord, csvIdx, col, ctx.getConnection()));
           }
 
           // csvDebugger
@@ -181,6 +184,15 @@ public class CsvImporter extends InitializeObject {
         throw ex;
       }
     }
+  }
+
+  protected Column getColumn(Table table, int csvIndex) {
+    String mappedCol = this.mappedColumns.get(csvIndex);
+    if (mappedCol == null) {
+      return table.getColumns().get(csvIndex);
+    }
+    return table.getColumns().stream().filter(c -> c.getName().equalsIgnoreCase(mappedCol)).findFirst()
+        .orElseThrow(() -> new NoSuchElementException("No such column named " + mappedCol));
   }
 
   protected Object toColumnValue(CsvRecord csv, int idx, Column column, ConnectionImpl conn) throws Exception {
@@ -342,6 +354,14 @@ public class CsvImporter extends InitializeObject {
     Asserts.notNull(converter);
 
     this.converters.put(columnLabel, converter);
+    return this;
+  }
+
+  public CsvImporter setMappedColumn(int index, String columnLabel) {
+    assertNotInitialized();
+    Asserts.notNull(columnLabel);
+
+    this.mappedColumns.put(index, columnLabel);
     return this;
   }
 }
