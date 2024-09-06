@@ -42,7 +42,6 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
-import com.appslandia.common.base.CaseInsensitiveMap;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.data.Column;
 import com.appslandia.common.data.DataRecord;
@@ -80,7 +79,7 @@ public class CsvImporter extends InitializeObject {
   private Collection<String> offsetTimePatterns;
   private Collection<String> offsetDateTimePatterns;
 
-  final Map<String, CsvToDbConverter> converters = new CaseInsensitiveMap<>();
+  final Map<Integer, CsvToDbConverter> converters = new TreeMap<>();
 
   @Override
   protected void init() throws Exception {
@@ -206,11 +205,11 @@ public class CsvImporter extends InitializeObject {
         .orElseThrow(() -> new NoSuchElementException("No such column named " + mappedCol));
   }
 
-  protected Object toColumnValue(CsvRecord csv, int idx, Column column, ConnectionImpl conn) throws Exception {
-    String value = csv.getString(idx);
+  protected Object toColumnValue(CsvRecord csv, int csvIdx, Column column, ConnectionImpl conn) throws Exception {
+    String value = csv.getString(csvIdx);
 
     // dbConverter
-    CsvToDbConverter dbConverter = this.converters.get(column.getName());
+    CsvToDbConverter dbConverter = this.converters.get(csvIdx);
     if (dbConverter != null) {
       return dbConverter.apply(value, conn);
     }
@@ -227,47 +226,47 @@ public class CsvImporter extends InitializeObject {
     }
     // Boolean
     if (type == Boolean.class) {
-      return csv.getBool(idx);
+      return csv.getBool(csvIdx);
     }
 
     // Numeric Types
     if (type == Byte.class) {
-      return csv.getByte(idx);
+      return csv.getByte(csvIdx);
     }
     if (type == Short.class) {
-      return csv.getShort(idx);
+      return csv.getShort(csvIdx);
     }
     if (type == Integer.class) {
-      return csv.getInt(idx);
+      return csv.getInt(csvIdx);
     }
     if (type == Long.class) {
-      return csv.getLong(idx);
+      return csv.getLong(csvIdx);
     }
     if (type == Float.class) {
-      return csv.getFloat(idx);
+      return csv.getFloat(csvIdx);
     }
     if (type == Double.class) {
-      return csv.getDouble(idx);
+      return csv.getDouble(csvIdx);
     }
     if (type == BigDecimal.class) {
-      return csv.getDecimalReq(idx);
+      return csv.getDecimalReq(csvIdx);
     }
 
     // Temporals
     if (type == LocalDate.class) {
-      return csv.getLocalDate(idx, this.datePatterns);
+      return csv.getLocalDate(csvIdx, this.datePatterns);
     }
     if (type == LocalTime.class) {
-      return csv.getLocalTime(idx, this.timePatterns);
+      return csv.getLocalTime(csvIdx, this.timePatterns);
     }
     if (type == LocalDateTime.class) {
-      return csv.getLocalDateTime(idx, this.dateTimePatterns);
+      return csv.getLocalDateTime(csvIdx, this.dateTimePatterns);
     }
     if (type == OffsetTime.class) {
-      return csv.getOffsetTime(idx, this.offsetTimePatterns);
+      return csv.getOffsetTime(csvIdx, this.offsetTimePatterns);
     }
     if (type == OffsetDateTime.class) {
-      return csv.getOffsetDateTime(idx, this.offsetDateTimePatterns);
+      return csv.getOffsetDateTime(csvIdx, this.offsetDateTimePatterns);
     }
 
     // SQLXML
@@ -369,11 +368,11 @@ public class CsvImporter extends InitializeObject {
     return this;
   }
 
-  public CsvImporter setCsvToDbConverter(String columnLabel, CsvToDbConverter converter) {
+  public CsvImporter setCsvToDbConverter(int csvIndex, CsvToDbConverter converter) {
     assertNotInitialized();
     Asserts.notNull(converter);
 
-    this.converters.put(columnLabel, converter);
+    this.converters.put(csvIndex, converter);
     return this;
   }
 
@@ -383,9 +382,9 @@ public class CsvImporter extends InitializeObject {
     return this;
   }
 
-  public CsvImporter setMappedColumn(int index, String columnLabel) {
+  public CsvImporter setMappedColumn(int csvIndex, String columnLabel) {
     assertNotInitialized();
-    this.mappedColumns.put(index, columnLabel);
+    this.mappedColumns.put(csvIndex, columnLabel);
     return this;
   }
 }
