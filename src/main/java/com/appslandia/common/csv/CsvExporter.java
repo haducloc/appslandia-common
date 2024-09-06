@@ -21,6 +21,8 @@
 package com.appslandia.common.csv;
 
 import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -31,6 +33,7 @@ import com.appslandia.common.data.RecordContext;
 import com.appslandia.common.jdbc.ConnectionImpl;
 import com.appslandia.common.jdbc.ResultSetColumn;
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.IOUtils;
 
 /**
  *
@@ -40,6 +43,8 @@ import com.appslandia.common.utils.Asserts;
 public class CsvExporter extends InitializeObject {
 
   private BufferedWriter csvOutput;
+  private boolean closeStream;
+
   private ConnectionImpl connection;
   private String pQuery;
   private Map<String, Object> pQueryParams;
@@ -103,13 +108,26 @@ public class CsvExporter extends InitializeObject {
       });
 
       this.csvOutput.flush();
+    } finally {
+      if (this.closeStream) {
+        this.csvOutput.close();
+      }
     }
     return counter.get();
   }
 
+  public CsvExporter setCsvOutput(String csvLocation, String encoding) throws IOException {
+    return setCsvOutput(IOUtils.writerBOM(new FileOutputStream(csvLocation), encoding), true);
+  }
+
   public CsvExporter setCsvOutput(BufferedWriter csvOutput) {
+    return setCsvOutput(csvOutput, true);
+  }
+
+  public CsvExporter setCsvOutput(BufferedWriter csvOutput, boolean closeStream) {
     assertNotInitialized();
     this.csvOutput = csvOutput;
+    this.closeStream = closeStream;
     return this;
   }
 
