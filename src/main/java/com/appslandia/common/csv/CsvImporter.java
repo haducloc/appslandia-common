@@ -36,7 +36,6 @@ import java.time.OffsetTime;
 import java.util.Collection;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.appslandia.common.base.CaseInsensitiveMap;
@@ -59,6 +58,7 @@ import com.appslandia.common.utils.TypeUtils;
 public class CsvImporter extends InitializeObject {
 
   private BufferedReader csvInput;
+  private boolean closeStream;
   private boolean csvHeader;
   private ConnectionImpl connection;
   private String tableName;
@@ -66,6 +66,7 @@ public class CsvImporter extends InitializeObject {
 
   private boolean enableInserts = true;
   private CsvDebugger csvDebugger;
+  private String[] mappedColumns;
 
   private Collection<String> datePatterns;
   private Collection<String> timePatterns;
@@ -75,7 +76,6 @@ public class CsvImporter extends InitializeObject {
   private Collection<String> offsetDateTimePatterns;
 
   final Map<String, CsvToDbConverter> converters = new CaseInsensitiveMap<>();
-  final Map<Integer, String> mappedColumns = new TreeMap<>();
 
   @Override
   protected void init() throws Exception {
@@ -182,15 +182,21 @@ public class CsvImporter extends InitializeObject {
           ctx.rollback();
         }
         throw ex;
+
+      } finally {
+        if (this.closeStream) {
+          this.csvInput.close();
+        }
       }
     }
   }
 
   protected Column getColumn(Table table, int csvIndex) {
-    String mappedCol = this.mappedColumns.get(csvIndex);
-    if (mappedCol == null) {
+    if (this.mappedColumns == null) {
       return table.getColumns().get(csvIndex);
     }
+    String mappedCol = this.mappedColumns[csvIndex];
+
     return table.getColumns().stream().filter(c -> c.getName().equalsIgnoreCase(mappedCol)).findFirst()
         .orElseThrow(() -> new NoSuchElementException("No such column named " + mappedCol));
   }
@@ -278,8 +284,13 @@ public class CsvImporter extends InitializeObject {
   }
 
   public CsvImporter setCsvInput(BufferedReader csvInput) {
+    return setCsvInput(csvInput, true);
+  }
+
+  public CsvImporter setCsvInput(BufferedReader csvInput, boolean closeStreamOnDone) {
     assertNotInitialized();
     this.csvInput = csvInput;
+    this.closeStream = closeStreamOnDone;
     return this;
   }
 
@@ -357,11 +368,9 @@ public class CsvImporter extends InitializeObject {
     return this;
   }
 
-  public CsvImporter setMappedColumn(int index, String columnLabel) {
+  public CsvImporter setMappedColumns(String... columnLabels) {
     assertNotInitialized();
-    Asserts.notNull(columnLabel);
-
-    this.mappedColumns.put(index, columnLabel);
+    this.mappedColumns = columnLabels;
     return this;
   }
 }
