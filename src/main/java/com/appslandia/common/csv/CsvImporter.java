@@ -21,6 +21,8 @@
 package com.appslandia.common.csv;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
@@ -36,7 +38,9 @@ import java.time.OffsetTime;
 import java.util.Collection;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
 
 import com.appslandia.common.base.CaseInsensitiveMap;
 import com.appslandia.common.base.InitializeObject;
@@ -47,6 +51,7 @@ import com.appslandia.common.data.Table;
 import com.appslandia.common.jdbc.ConnectionImpl;
 import com.appslandia.common.jdbc.JdbcParam;
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.IOUtils;
 import com.appslandia.common.utils.STR;
 import com.appslandia.common.utils.TypeUtils;
 
@@ -66,7 +71,7 @@ public class CsvImporter extends InitializeObject {
 
   private boolean enableInserts = true;
   private CsvDebugger csvDebugger;
-  private String[] mappedColumns;
+  final Map<Integer, String> mappedColumns = new TreeMap<>();
 
   private Collection<String> datePatterns;
   private Collection<String> timePatterns;
@@ -192,11 +197,11 @@ public class CsvImporter extends InitializeObject {
   }
 
   protected Column getColumn(Table table, int csvIndex) {
-    if (this.mappedColumns == null) {
+    String mappedCol = this.mappedColumns.get(csvIndex);
+
+    if (mappedCol == null) {
       return table.getColumns().get(csvIndex);
     }
-    String mappedCol = this.mappedColumns[csvIndex];
-
     return table.getColumns().stream().filter(c -> c.getName().equalsIgnoreCase(mappedCol)).findFirst()
         .orElseThrow(() -> new NoSuchElementException("No such column named " + mappedCol));
   }
@@ -281,6 +286,10 @@ public class CsvImporter extends InitializeObject {
       }
     }
     throw new IllegalArgumentException(STR.fmt("Failed to convert value for the column {}.", column.toString()));
+  }
+
+  public CsvImporter setCsvInput(String csvLocation, String altEncoding) throws IOException {
+    return setCsvInput(IOUtils.readerBOM(new FileInputStream(csvLocation), altEncoding), true);
   }
 
   public CsvImporter setCsvInput(BufferedReader csvInput) {
@@ -368,9 +377,15 @@ public class CsvImporter extends InitializeObject {
     return this;
   }
 
-  public CsvImporter setMappedColumns(String... columnLabels) {
+  public CsvImporter setTableColumns(String... columnLabels) {
     assertNotInitialized();
-    this.mappedColumns = columnLabels;
+    IntStream.range(0, columnLabels.length).forEach(idx -> this.mappedColumns.put(idx, columnLabels[idx]));
+    return this;
+  }
+
+  public CsvImporter setMappedColumn(int index, String columnLabel) {
+    assertNotInitialized();
+    this.mappedColumns.put(index, columnLabel);
     return this;
   }
 }
