@@ -296,10 +296,10 @@ public class CsvImporter extends InitializeObject {
     return setCsvInput(csvInput, true);
   }
 
-  public CsvImporter setCsvInput(BufferedReader csvInput, boolean closeStreamOnDone) {
+  public CsvImporter setCsvInput(BufferedReader csvInput, boolean closeStream) {
     assertNotInitialized();
     this.csvInput = csvInput;
-    this.closeStream = closeStreamOnDone;
+    this.closeStream = closeStream;
     return this;
   }
 
