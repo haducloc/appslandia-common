@@ -47,80 +47,80 @@ public class DataRecord extends CaseInsensitiveMap<Object> {
     super(new LinkedHashMap<>());
   }
 
-  public DataRecord set(String columnName, Object value) {
-    super.put(columnName, value);
+  public DataRecord set(String columnLabel, Object value) {
+    super.put(columnLabel, value);
     return this;
   }
 
-  public Object getReq(String columnName) {
-    Object value = super.get(columnName);
+  public Object getReq(String columnLabel) {
+    Object value = super.get(columnLabel);
     if (value == null) {
-      throw new AssertException(STR.fmt("No value found for the given name '{}'.", columnName));
+      throw new AssertException(STR.fmt("No value found for the given label '{}'.", columnLabel));
     }
     return value;
   }
 
   // Strings
 
-  public String getStringReq(String columnName) {
-    return (String) getReq(columnName);
+  public String getStringReq(String columnLabel) {
+    return (String) getReq(columnLabel);
   }
 
-  public String getString(String columnName) {
-    return (String) super.get(columnName);
+  public String getString(String columnLabel) {
+    return (String) super.get(columnLabel);
   }
 
-  public String getStringUpperReq(String columnName) {
-    return getStringUpperReq(columnName, Locale.ROOT);
+  public String getStringUpperReq(String columnLabel) {
+    return getStringUpperReq(columnLabel, Locale.ROOT);
   }
 
-  public String getStringUpperReq(String columnName, Locale locale) {
-    String value = getStringReq(columnName);
+  public String getStringUpperReq(String columnLabel, Locale locale) {
+    String value = getStringReq(columnLabel);
     return value.toUpperCase(locale);
   }
 
-  public String getStringUpper(String columnName) {
-    return getStringUpper(columnName, Locale.ROOT);
+  public String getStringUpper(String columnLabel) {
+    return getStringUpper(columnLabel, Locale.ROOT);
   }
 
-  public String getStringUpper(String columnName, Locale locale) {
-    String value = getString(columnName);
+  public String getStringUpper(String columnLabel, Locale locale) {
+    String value = getString(columnLabel);
     return (value != null) ? value.toUpperCase(locale) : null;
   }
 
-  public String getStringUpper(String columnName, String ifNull) {
-    return getStringUpper(columnName, ifNull, Locale.ROOT);
+  public String getStringUpper(String columnLabel, String ifNull) {
+    return getStringUpper(columnLabel, ifNull, Locale.ROOT);
   }
 
-  public String getStringUpper(String columnName, String ifNull, Locale locale) {
-    String value = getString(columnName);
+  public String getStringUpper(String columnLabel, String ifNull, Locale locale) {
+    String value = getString(columnLabel);
     return (value != null) ? value.toUpperCase(locale) : StringUtils.toUpperCase(ifNull, locale);
   }
 
-  public String getStringLowerReq(String columnName) {
-    return getStringLowerReq(columnName, Locale.ROOT);
+  public String getStringLowerReq(String columnLabel) {
+    return getStringLowerReq(columnLabel, Locale.ROOT);
   }
 
-  public String getStringLowerReq(String columnName, Locale locale) {
-    String value = getStringReq(columnName);
+  public String getStringLowerReq(String columnLabel, Locale locale) {
+    String value = getStringReq(columnLabel);
     return value.toLowerCase(locale);
   }
 
-  public String getStringLower(String columnName) {
-    return getStringLower(columnName, Locale.ROOT);
+  public String getStringLower(String columnLabel) {
+    return getStringLower(columnLabel, Locale.ROOT);
   }
 
-  public String getStringLower(String columnName, Locale locale) {
-    String value = getString(columnName);
+  public String getStringLower(String columnLabel, Locale locale) {
+    String value = getString(columnLabel);
     return (value != null) ? value.toLowerCase(locale) : null;
   }
 
-  public String getStringLower(String columnName, String ifNull) {
-    return getStringLower(columnName, ifNull, Locale.ROOT);
+  public String getStringLower(String columnLabel, String ifNull) {
+    return getStringLower(columnLabel, ifNull, Locale.ROOT);
   }
 
-  public String getStringLower(String columnName, String ifNull, Locale locale) {
-    String value = getString(columnName);
+  public String getStringLower(String columnLabel, String ifNull, Locale locale) {
+    String value = getString(columnLabel);
     return (value != null) ? value.toLowerCase(locale) : StringUtils.toLowerCase(ifNull, locale);
   }
 
@@ -298,7 +298,7 @@ public class DataRecord extends CaseInsensitiveMap<Object> {
     return toValues(table.getColumnLabels());
   }
 
-  public Object[] toValues(String[] columnNames) {
-    return Arrays.stream(columnNames).map(l -> super.get(l)).toArray();
+  public Object[] toValues(String[] columnLabels) {
+    return Arrays.stream(columnLabels).map(l -> super.get(l)).toArray();
   }
 }

@@ -76,6 +76,17 @@ public class ResultSetImpl implements ResultSet {
     return NormalizeUtils.valuesAsID(values);
   }
 
+  /**
+   * @see getBigDecimal
+   * 
+   * @param columnLabel
+   * @return
+   * @throws java.sql.SQLException
+   */
+  public BigDecimal getDecimal(String columnLabel) throws java.sql.SQLException {
+    return this.rs.getBigDecimal(columnLabel);
+  }
+
   // UpperCase/LowerCase
 
   public String getStringUpper(String columnLabel) throws java.sql.SQLException {
