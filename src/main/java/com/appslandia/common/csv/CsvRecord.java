@@ -145,6 +145,48 @@ public class CsvRecord {
     return (value != null) ? value.toLowerCase(locale) : StringUtils.toLowerCase(ifNull, locale);
   }
 
+  // Optional Values
+
+  public Boolean getBoolOpt(int index, Boolean ifNullOrInvalid) {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseBoolOpt(value, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
+  public Byte getByteOpt(int index, Byte ifNullOrInvalid) {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseByteOpt(value, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
+  public Short getShortOpt(int index, Short ifNullOrInvalid) {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseShortOpt(value, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
+  public Integer getIntOpt(int index, Integer ifNullOrInvalid) {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseIntOpt(value, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
+  public Long getLongOpt(int index, Long ifNullOrInvalid) {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseLongOpt(value, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
+  public Float getFloatOpt(int index, Float ifNullOrInvalid) {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseFloatOpt(value, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
+  public Double getDoubleOpt(int index, Double ifNullOrInvalid) {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseDoubleOpt(value, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
+  public BigDecimal getDecimalOpt(int index, BigDecimal ifNullOrInvalid) {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseDecimalOpt(value, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
   // Required Values
 
   public boolean getBool(int index) throws BoolFormatException {
