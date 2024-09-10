@@ -82,11 +82,6 @@ public class ParseUtils {
     return Double.parseDouble(value);
   }
 
-  public static BigDecimal parseDecimalReq(String value) throws NumberFormatException {
-    Asserts.notNull(value);
-    return new BigDecimal(value);
-  }
-
   public static boolean parseBool(String value, boolean ifNullOrInvalid) {
     if (value == null) {
       return ifNullOrInvalid;
@@ -173,38 +168,6 @@ public class ParseUtils {
     } catch (NumberFormatException ex) {
       return new BigDecimal(Double.toString(ifNullOrInvalid));
     }
-  }
-
-  public static Boolean parseBoolOpt(String value, Boolean ifNullOrInvalid) {
-    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseBool(val)) : ifNullOrInvalid;
-  }
-
-  public static Byte parseByteOpt(String value, Byte ifNullOrInvalid) {
-    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseByte(val)) : ifNullOrInvalid;
-  }
-
-  public static Short parseShortOpt(String value, Short ifNullOrInvalid) {
-    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseShort(val)) : ifNullOrInvalid;
-  }
-
-  public static Integer parseIntOpt(String value, Integer ifNullOrInvalid) {
-    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseInt(val)) : ifNullOrInvalid;
-  }
-
-  public static Long parseLongOpt(String value, Long ifNullOrInvalid) {
-    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseLong(val)) : ifNullOrInvalid;
-  }
-
-  public static Float parseFloatOpt(String value, Float ifNullOrInvalid) {
-    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseFloat(val)) : ifNullOrInvalid;
-  }
-
-  public static Double parseDoubleOpt(String value, Double ifNullOrInvalid) {
-    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseDouble(val)) : ifNullOrInvalid;
-  }
-
-  public static BigDecimal parseDecimalOpt(String value, BigDecimal ifNullOrInvalid) {
-    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseDecimalReq(val)) : ifNullOrInvalid;
   }
 
   public static <T> T parseValue(String value, Function<String, T> exceptionalConverter) {

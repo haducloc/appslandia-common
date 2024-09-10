@@ -126,18 +126,6 @@ public class ParseUtilsTest {
   }
 
   @Test
-  public void test_parseDecimal() {
-    try {
-      BigDecimal val = ParseUtils.parseDecimalReq("3.14");
-      Assertions.assertEquals(new BigDecimal("3.14"), val);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-    Assertions.assertEquals(new BigDecimal("0.0"), ParseUtils.parseDecimal("invalid", 0.0));
-  }
-
-  @Test
   public void test_parseBool_ifNullOrInvalid() {
     Assertions.assertFalse(ParseUtils.parseBool(null, false));
     Assertions.assertTrue(ParseUtils.parseBool("true", false));
@@ -195,10 +183,10 @@ public class ParseUtilsTest {
 
   @Test
   public void test_parseDecimal_ifNullOrInvalid() {
-    Assertions.assertEquals(new BigDecimal("0.0"), ParseUtils.parseDecimal(null, 0.0));
-    Assertions.assertEquals(new BigDecimal("123.456"), ParseUtils.parseDecimal("123.456", 0.0));
-    Assertions.assertEquals(new BigDecimal("-123.456"), ParseUtils.parseDecimal("-123.456", 0.0));
-    Assertions.assertEquals(new BigDecimal("0.0"), ParseUtils.parseDecimal("invalid", 0.0));
+    Assertions.assertEquals(new BigDecimal("0.0"), ParseUtils.parseDecimal(null, 0.0d));
+    Assertions.assertEquals(new BigDecimal("123.456"), ParseUtils.parseDecimal("123.456", 0.0d));
+    Assertions.assertEquals(new BigDecimal("-123.456"), ParseUtils.parseDecimal("-123.456", 0.0d));
+    Assertions.assertEquals(new BigDecimal("0.0"), ParseUtils.parseDecimal("invalid", 0.0d));
   }
 
   @Test

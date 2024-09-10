@@ -79,33 +79,57 @@ public class ResultSetImpl implements ResultSet {
   // UpperCase/LowerCase
 
   public String getStringUpper(String columnLabel) throws java.sql.SQLException {
+    return getStringUpper(columnLabel, Locale.ROOT);
+  }
+
+  public String getStringUpper(String columnLabel, Locale locale) throws java.sql.SQLException {
     String value = this.rs.getString(columnLabel);
-    return (value != null) ? value.toUpperCase(Locale.ROOT) : null;
+    return (value != null) ? value.toUpperCase(locale) : null;
   }
 
   public String getStringUpper(String columnLabel, String ifNull) throws java.sql.SQLException {
+    return getStringUpper(columnLabel, ifNull, Locale.ROOT);
+  }
+
+  public String getStringUpper(String columnLabel, String ifNull, Locale locale) throws java.sql.SQLException {
     String value = this.rs.getString(columnLabel);
-    return (value != null) ? value.toUpperCase(Locale.ROOT) : StringUtils.toUpperCase(ifNull, Locale.ROOT);
+    return (value != null) ? value.toUpperCase(locale) : StringUtils.toUpperCase(ifNull, locale);
   }
 
   public String getStringUpperReq(String columnLabel) throws java.sql.SQLException {
+    return getStringUpperReq(columnLabel, Locale.ROOT);
+  }
+
+  public String getStringUpperReq(String columnLabel, Locale locale) throws java.sql.SQLException {
     String value = getStringReq(columnLabel);
-    return value.toUpperCase(Locale.ROOT);
+    return value.toUpperCase(locale);
   }
 
   public String getStringLower(String columnLabel) throws java.sql.SQLException {
+    return getStringLower(columnLabel, Locale.ROOT);
+  }
+
+  public String getStringLower(String columnLabel, Locale locale) throws java.sql.SQLException {
     String value = this.rs.getString(columnLabel);
-    return (value != null) ? value.toLowerCase(Locale.ROOT) : null;
+    return (value != null) ? value.toLowerCase(locale) : null;
   }
 
   public String getStringLower(String columnLabel, String ifNull) throws java.sql.SQLException {
+    return getStringLower(columnLabel, ifNull, Locale.ROOT);
+  }
+
+  public String getStringLower(String columnLabel, String ifNull, Locale locale) throws java.sql.SQLException {
     String value = this.rs.getString(columnLabel);
-    return (value != null) ? value.toLowerCase(Locale.ROOT) : StringUtils.toLowerCase(ifNull, Locale.ROOT);
+    return (value != null) ? value.toLowerCase(locale) : StringUtils.toLowerCase(ifNull, locale);
   }
 
   public String getStringLowerReq(String columnLabel) throws java.sql.SQLException {
+    return getStringLowerReq(columnLabel, Locale.ROOT);
+  }
+
+  public String getStringLowerReq(String columnLabel, Locale locale) throws java.sql.SQLException {
     String value = getStringReq(columnLabel);
-    return value.toLowerCase(Locale.ROOT);
+    return value.toLowerCase(locale);
   }
 
   // Default Values
@@ -145,7 +169,7 @@ public class ResultSetImpl implements ResultSet {
     return !this.rs.wasNull() ? value : ifNull;
   }
 
-  public BigDecimal getBigDecimal(String columnLabel, double ifNull) throws java.sql.SQLException {
+  public BigDecimal getDecimal(String columnLabel, double ifNull) throws java.sql.SQLException {
     BigDecimal value = this.rs.getBigDecimal(columnLabel);
     return (value != null) ? value : new BigDecimal(Double.toString(ifNull));
   }
@@ -210,7 +234,7 @@ public class ResultSetImpl implements ResultSet {
     return value;
   }
 
-  public BigDecimal getBigDecimalReq(String columnLabel) throws java.sql.SQLException {
+  public BigDecimal getDecimalReq(String columnLabel) throws java.sql.SQLException {
     BigDecimal value = this.rs.getBigDecimal(columnLabel);
     assertNotNull(columnLabel);
     return value;

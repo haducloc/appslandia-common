@@ -20,11 +20,20 @@
 
 package com.appslandia.common.data;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 
+import com.appslandia.common.base.AssertException;
 import com.appslandia.common.base.CaseInsensitiveMap;
-import com.appslandia.common.utils.ObjectUtils;
+import com.appslandia.common.utils.STR;
+import com.appslandia.common.utils.StringUtils;
 
 /**
  *
@@ -43,8 +52,246 @@ public class DataRecord extends CaseInsensitiveMap<Object> {
     return this;
   }
 
-  public <T> T get(String columnName) {
-    return ObjectUtils.cast(super.get(columnName));
+  public Object getReq(String columnName) {
+    Object value = super.get(columnName);
+    if (value == null) {
+      throw new AssertException(STR.fmt("No value found for the given name '{}'.", columnName));
+    }
+    return value;
+  }
+
+  // Strings
+
+  public String getStringReq(String columnName) {
+    return (String) getReq(columnName);
+  }
+
+  public String getString(String columnName) {
+    return (String) super.get(columnName);
+  }
+
+  public String getStringUpperReq(String columnName) {
+    return getStringUpperReq(columnName, Locale.ROOT);
+  }
+
+  public String getStringUpperReq(String columnName, Locale locale) {
+    String value = getStringReq(columnName);
+    return value.toUpperCase(locale);
+  }
+
+  public String getStringUpper(String columnName) {
+    return getStringUpper(columnName, Locale.ROOT);
+  }
+
+  public String getStringUpper(String columnName, Locale locale) {
+    String value = getString(columnName);
+    return (value != null) ? value.toUpperCase(locale) : null;
+  }
+
+  public String getStringUpper(String columnName, String ifNull) {
+    return getStringUpper(columnName, ifNull, Locale.ROOT);
+  }
+
+  public String getStringUpper(String columnName, String ifNull, Locale locale) {
+    String value = getString(columnName);
+    return (value != null) ? value.toUpperCase(locale) : StringUtils.toUpperCase(ifNull, locale);
+  }
+
+  public String getStringLowerReq(String columnName) {
+    return getStringLowerReq(columnName, Locale.ROOT);
+  }
+
+  public String getStringLowerReq(String columnName, Locale locale) {
+    String value = getStringReq(columnName);
+    return value.toLowerCase(locale);
+  }
+
+  public String getStringLower(String columnName) {
+    return getStringLower(columnName, Locale.ROOT);
+  }
+
+  public String getStringLower(String columnName, Locale locale) {
+    String value = getString(columnName);
+    return (value != null) ? value.toLowerCase(locale) : null;
+  }
+
+  public String getStringLower(String columnName, String ifNull) {
+    return getStringLower(columnName, ifNull, Locale.ROOT);
+  }
+
+  public String getStringLower(String columnName, String ifNull, Locale locale) {
+    String value = getString(columnName);
+    return (value != null) ? value.toLowerCase(locale) : StringUtils.toLowerCase(ifNull, locale);
+  }
+
+  // Optional Values
+
+  public Boolean getBoolOpt(String columnLabel) {
+    return (Boolean) super.get(columnLabel);
+  }
+
+  public Byte getByteOpt(String columnLabel) {
+    return (Byte) super.get(columnLabel);
+  }
+
+  public Short getShortOpt(String columnLabel) {
+    return (Short) super.get(columnLabel);
+  }
+
+  public Integer getIntOpt(String columnLabel) {
+    return (Integer) super.get(columnLabel);
+  }
+
+  public Long getLongOpt(String columnLabel) {
+    return (Long) super.get(columnLabel);
+  }
+
+  public Float getFloatOpt(String columnLabel) {
+    return (Float) super.get(columnLabel);
+  }
+
+  public Double getDoubleOpt(String columnLabel) {
+    return (Double) super.get(columnLabel);
+  }
+
+  public BigDecimal getDecimal(String columnLabel) {
+    return (BigDecimal) super.get(columnLabel);
+  }
+
+  // Required Values
+
+  public boolean getBool(String columnLabel) {
+    Object value = getReq(columnLabel);
+    return (boolean) value;
+  }
+
+  public byte getByte(String columnLabel) {
+    Object value = getReq(columnLabel);
+    return (byte) value;
+  }
+
+  public short getShort(String columnLabel) {
+    Object value = getReq(columnLabel);
+    return (short) value;
+  }
+
+  public int getInt(String columnLabel) {
+    Object value = getReq(columnLabel);
+    return (int) value;
+  }
+
+  public long getLong(String columnLabel) {
+    Object value = getReq(columnLabel);
+    return (long) value;
+  }
+
+  public float getFloat(String columnLabel) {
+    Object value = getReq(columnLabel);
+    return (float) value;
+  }
+
+  public double getDouble(String columnLabel) {
+    Object value = getReq(columnLabel);
+    return (double) value;
+  }
+
+  public BigDecimal getDecimalReq(String columnLabel) {
+    Object value = getReq(columnLabel);
+    return (BigDecimal) value;
+  }
+
+  // Required Values, ifNull
+
+  public boolean getBool(String columnLabel, boolean ifNull) {
+    Object value = get(columnLabel);
+    return (value != null) ? (boolean) value : ifNull;
+  }
+
+  public byte getByte(String columnLabel, byte ifNull) {
+    Object value = get(columnLabel);
+    return (value != null) ? (byte) value : ifNull;
+  }
+
+  public short getShort(String columnLabel, short ifNull) {
+    Object value = get(columnLabel);
+    return (value != null) ? (short) value : ifNull;
+  }
+
+  public int getInt(String columnLabel, int ifNull) {
+    Object value = get(columnLabel);
+    return (value != null) ? (int) value : ifNull;
+  }
+
+  public long getLong(String columnLabel, long ifNull) {
+    Object value = get(columnLabel);
+    return (value != null) ? (long) value : ifNull;
+  }
+
+  public float getFloat(String columnLabel, float ifNull) {
+    Object value = get(columnLabel);
+    return (value != null) ? (float) value : ifNull;
+  }
+
+  public double getDouble(String columnLabel, double ifNull) {
+    Object value = get(columnLabel);
+    return (value != null) ? (double) value : ifNull;
+  }
+
+  public BigDecimal getDecimal(String columnLabel, double ifNull) {
+    Object value = get(columnLabel);
+    return (value != null) ? (BigDecimal) value : new BigDecimal(Double.toString(ifNull));
+  }
+
+  // Java 8 Date/Times
+
+  public LocalDate getLocalDateReq(String columnLabel) {
+    Object value = getReq(columnLabel);
+    return (LocalDate) value;
+  }
+
+  public LocalDate getLocalDate(String columnLabel) {
+    Object value = get(columnLabel);
+    return (LocalDate) value;
+  }
+
+  public LocalDateTime getLocalDateTimeReq(String columnLabel) {
+    Object value = getReq(columnLabel);
+    return (LocalDateTime) value;
+  }
+
+  public LocalDateTime getLocalDateTime(String columnLabel) {
+    Object value = get(columnLabel);
+    return (LocalDateTime) value;
+  }
+
+  public LocalTime getLocalTimeReq(String columnLabel) {
+    Object value = getReq(columnLabel);
+    return (LocalTime) value;
+  }
+
+  public LocalTime getLocalTime(String columnLabel) {
+    Object value = get(columnLabel);
+    return (LocalTime) value;
+  }
+
+  public OffsetDateTime getOffsetDateTimeReq(String columnLabel) {
+    Object value = getReq(columnLabel);
+    return (OffsetDateTime) value;
+  }
+
+  public OffsetDateTime getOffsetDateTime(String columnLabel) {
+    Object value = get(columnLabel);
+    return (OffsetDateTime) value;
+  }
+
+  public OffsetTime getOffsetTimeReq(String columnLabel) {
+    Object value = getReq(columnLabel);
+    return (OffsetTime) value;
+  }
+
+  public OffsetTime getOffsetTime(String columnLabel) {
+    Object value = get(columnLabel);
+    return (OffsetTime) value;
   }
 
   public Object[] toValues(Table table) {

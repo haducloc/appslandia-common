@@ -71,6 +71,8 @@ public class CsvRecord {
     return this.values.length;
   }
 
+  // Strings
+
   public String getStringReq(int index) {
     String value = getString(index);
     if (value == null) {
@@ -90,34 +92,60 @@ public class CsvRecord {
   }
 
   public String getStringUpperReq(int index) {
+    return getStringUpperReq(index, Locale.ROOT);
+  }
+
+  public String getStringUpperReq(int index, Locale locale) {
     String value = getStringReq(index);
-    return value.toUpperCase(Locale.ROOT);
+    return value.toUpperCase(locale);
   }
 
   public String getStringUpper(int index) {
+    return getStringUpper(index, Locale.ROOT);
+  }
+
+  public String getStringUpper(int index, Locale locale) {
     String value = getString(index);
-    return (value != null) ? value.toUpperCase(Locale.ROOT) : null;
+    return (value != null) ? value.toUpperCase(locale) : null;
   }
 
   public String getStringUpper(int index, String ifNull) {
+    return getStringUpper(index, ifNull, Locale.ROOT);
+  }
+
+  public String getStringUpper(int index, String ifNull, Locale locale) {
     String value = getString(index);
-    return (value != null) ? value.toUpperCase(Locale.ROOT) : StringUtils.toUpperCase(ifNull, Locale.ROOT);
+    return (value != null) ? value.toUpperCase(locale) : StringUtils.toUpperCase(ifNull, locale);
   }
 
   public String getStringLowerReq(int index) {
+    return getStringLowerReq(index, Locale.ROOT);
+  }
+
+  public String getStringLowerReq(int index, Locale locale) {
     String value = getStringReq(index);
-    return value.toLowerCase(Locale.ROOT);
+    return value.toLowerCase(locale);
   }
 
   public String getStringLower(int index) {
+    return getStringLower(index, Locale.ROOT);
+  }
+
+  public String getStringLower(int index, Locale locale) {
     String value = getString(index);
-    return (value != null) ? value.toLowerCase(Locale.ROOT) : null;
+    return (value != null) ? value.toLowerCase(locale) : null;
   }
 
   public String getStringLower(int index, String ifNull) {
-    String value = getString(index);
-    return (value != null) ? value.toLowerCase(Locale.ROOT) : StringUtils.toLowerCase(ifNull, Locale.ROOT);
+    return getStringLower(index, ifNull, Locale.ROOT);
   }
+
+  public String getStringLower(int index, String ifNull, Locale locale) {
+    String value = getString(index);
+    return (value != null) ? value.toLowerCase(locale) : StringUtils.toLowerCase(ifNull, locale);
+  }
+
+  // Required Values
 
   public boolean getBool(int index) throws BoolFormatException {
     String value = getStringReq(index);
@@ -156,8 +184,10 @@ public class CsvRecord {
 
   public BigDecimal getDecimalReq(int index) throws NumberFormatException {
     String value = getStringReq(index);
-    return ParseUtils.parseDecimalReq(value);
+    return new BigDecimal(value);
   }
+
+  // Required Values, ifNullOrInvalid
 
   public boolean getBool(int index, boolean ifNullOrInvalid) {
     String value = getString(index);
@@ -199,45 +229,7 @@ public class CsvRecord {
     return ParseUtils.parseDecimal(value, ifNullOrInvalid);
   }
 
-  public Boolean getBoolOpt(int index, Boolean ifNullOrInvalid) {
-    String value = getString(index);
-    return (value != null) ? ParseUtils.parseBoolOpt(value, ifNullOrInvalid) : ifNullOrInvalid;
-  }
-
-  public Byte getByteOpt(int index, Byte ifNullOrInvalid) {
-    String value = getString(index);
-    return (value != null) ? ParseUtils.parseByteOpt(value, ifNullOrInvalid) : ifNullOrInvalid;
-  }
-
-  public Short getShortOpt(int index, Short ifNullOrInvalid) {
-    String value = getString(index);
-    return (value != null) ? ParseUtils.parseShortOpt(value, ifNullOrInvalid) : ifNullOrInvalid;
-  }
-
-  public Integer getIntOpt(int index, Integer ifNullOrInvalid) {
-    String value = getString(index);
-    return (value != null) ? ParseUtils.parseIntOpt(value, ifNullOrInvalid) : ifNullOrInvalid;
-  }
-
-  public Long getLongOpt(int index, Long ifNullOrInvalid) {
-    String value = getString(index);
-    return (value != null) ? ParseUtils.parseLongOpt(value, ifNullOrInvalid) : ifNullOrInvalid;
-  }
-
-  public Float getFloatOpt(int index, Float ifNullOrInvalid) {
-    String value = getString(index);
-    return (value != null) ? ParseUtils.parseFloatOpt(value, ifNullOrInvalid) : ifNullOrInvalid;
-  }
-
-  public Double getDoubleOpt(int index, Double ifNullOrInvalid) {
-    String value = getString(index);
-    return (value != null) ? ParseUtils.parseDoubleOpt(value, ifNullOrInvalid) : ifNullOrInvalid;
-  }
-
-  public BigDecimal getDecimalOpt(int index, BigDecimal ifNullOrInvalid) {
-    String value = getString(index);
-    return (value != null) ? ParseUtils.parseDecimalOpt(value, ifNullOrInvalid) : ifNullOrInvalid;
-  }
+  // getValue
 
   public <T> T getValue(int index, Function<String, T> exceptionalConverter) {
     String value = getString(index);

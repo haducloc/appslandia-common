@@ -87,7 +87,7 @@ public interface Config {
 
   default public BigDecimal getDecimalReq(String key) throws NumberFormatException {
     String value = getStringReq(key);
-    return ParseUtils.parseDecimalReq(value);
+    return new BigDecimal(value);
   }
 
   default public boolean getBool(String key, boolean ifNullOrInvalid) {
