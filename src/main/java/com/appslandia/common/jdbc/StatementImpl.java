@@ -468,12 +468,12 @@ public class StatementImpl implements PreparedStatement {
     }
   }
 
-  public void setBigDecimalArray(String parameterName, java.math.BigDecimal[] values) throws java.sql.SQLException {
+  public void setDecimalArray(String parameterName, java.math.BigDecimal[] values) throws java.sql.SQLException {
     int arrayLen = this.getSql().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
-      setBigDecimal(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
+      setDecimal(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
     }
   }
 
@@ -710,7 +710,7 @@ public class StatementImpl implements PreparedStatement {
     }
   }
 
-  public void setBigDecimal(String parameterName, java.math.BigDecimal x) throws java.sql.SQLException {
+  public void setDecimal(String parameterName, java.math.BigDecimal x) throws java.sql.SQLException {
     for (int index : this.getSql().getIndexes(parameterName)) {
       setBigDecimal(index, x);
     }
