@@ -20,178 +20,366 @@
 
 package com.appslandia.common.csv;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
+import java.time.ZoneOffset;
+import java.util.Locale;
+import java.util.function.Function;
 
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.appslandia.common.utils.DateUtils;
+import com.appslandia.common.base.AssertException;
 
-/**
- *
- * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
- *
- */
 public class CsvRecordTest {
 
-  @Test
-  public void test_null() {
-    CsvRecord csvRecord = new CsvRecord(new String[] { null });
-    try {
-      String val = csvRecord.getString(0);
-      Assertions.assertNull(val);
+  private CsvRecord csvRecord;
 
-    } catch (Exception ex) {
-      Assertions.fail(ex);
-    }
+  @BeforeEach
+  public void setUp() {
+    String[] values = { "abc", "123", "true", "1.23", null, "2023-09-01", "12:30", "2023-09-01 12:30:00" };
+    csvRecord = new CsvRecord(values);
   }
 
   @Test
-  public void test_byte() {
-    CsvRecord csvRecord = new CsvRecord(new String[] { "127" });
-    try {
-      byte val = csvRecord.getByte(0);
-      Assertions.assertEquals(127, val);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex);
-    }
+  public void testLength() {
+    assertEquals(8, csvRecord.length());
   }
 
   @Test
-  public void test_short() {
-    CsvRecord csvRecord = new CsvRecord(new String[] { "30000" });
-    try {
-      short val = csvRecord.getShort(0);
-      Assertions.assertEquals(30000, val);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex);
-    }
+  public void testApplyProcessor() {
+    Function<String, String> processor = String::toUpperCase;
+    csvRecord.applyProcessor(processor, 0);
+    assertEquals("ABC", csvRecord.getString(0));
   }
 
   @Test
-  public void test_int() {
-    CsvRecord csvRecord = new CsvRecord(new String[] { "300000" });
-    try {
-      int val = csvRecord.getInt(0);
-      Assertions.assertEquals(300000, val);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex);
-    }
+  public void testGetString() {
+    assertEquals("abc", csvRecord.getString(0));
+    assertEquals("123", csvRecord.getString(1));
   }
 
   @Test
-  public void test_long() {
-    CsvRecord csvRecord = new CsvRecord(new String[] { "10000000000" });
-    try {
-      long val = csvRecord.getLong(0);
-      Assertions.assertEquals(10000000000L, val);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex);
-    }
+  public void testGetStringReq() {
+    assertEquals("abc", csvRecord.getStringReq(0));
   }
 
   @Test
-  public void test_double() {
-    CsvRecord csvRecord = new CsvRecord(new String[] { "3.14" });
-    try {
-      double val = csvRecord.getDouble(0);
-      Assertions.assertEquals(3.14, val, 0.001);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex);
-    }
+  public void testGetStringReqThrowsException() {
+    assertThrows(AssertException.class, () -> csvRecord.getStringReq(4));
   }
 
   @Test
-  public void test_Decimal() {
-    CsvRecord csvRecord = new CsvRecord(new String[] { "1234567890.123" });
-    try {
-      BigDecimal val = csvRecord.getDecimalReq(0);
-      BigDecimal expected = new BigDecimal("1234567890.123");
-      Assertions.assertEquals(expected, val);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex);
-    }
+  public void testGetStringUpperReq() {
+    assertEquals("ABC", csvRecord.getStringUpperReq(0));
   }
 
   @Test
-  public void test_LocalDate() {
-    try {
-      var expected = LocalDate.parse("2024-01-03", DateUtils.getFormatter(DateUtils.ISO8601_DATE));
-      CsvRecord csvRecord = new CsvRecord(new String[] { "2024-01-03" });
-
-      var val = csvRecord.getLocalDate(0);
-      Assertions.assertEquals(expected, val);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex);
-    }
+  public void testGetStringUpperReqWithLocale() {
+    assertEquals("ABC", csvRecord.getStringUpperReq(0, Locale.US));
   }
 
   @Test
-  public void test_LocalTime() {
-    try {
-      var expected = LocalTime.parse("12:34:56", DateUtils.getFormatter(DateUtils.ISO8601_TIME_S));
-      CsvRecord csvRecord = new CsvRecord(new String[] { "12:34:56" });
-
-      var val = csvRecord.getLocalTime(0);
-      Assertions.assertEquals(expected, val);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex);
-    }
+  public void testGetStringUpper() {
+    assertEquals("ABC", csvRecord.getStringUpper(0));
+    assertNull(csvRecord.getStringUpper(4));
   }
 
   @Test
-  public void test_LocalDateTime() {
-    try {
-      var expected = LocalDateTime.parse("2024-01-03T12:34:56", DateUtils.getFormatter(DateUtils.ISO8601_DATETIME_S));
-      CsvRecord csvRecord = new CsvRecord(new String[] { "2024-01-03T12:34:56" });
-
-      var val = csvRecord.getLocalDateTime(0);
-      Assertions.assertEquals(expected, val);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex);
-    }
+  public void testGetStringUpperWithLocale() {
+    assertEquals("ABC", csvRecord.getStringUpper(0, Locale.US));
   }
 
   @Test
-  public void test_OffsetTime() {
-    try {
-      var expected = OffsetTime.parse("12:34:56+01:00", DateUtils.getFormatter(DateUtils.ISO8601_TIMEZ_S));
-      CsvRecord csvRecord = new CsvRecord(new String[] { "12:34:56+01:00" });
-
-      var val = csvRecord.getOffsetTime(0);
-      Assertions.assertEquals(expected, val);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex);
-    }
+  public void testGetStringUpperWithIfNull() {
+    assertEquals("DEFAULT", csvRecord.getStringUpper(4, "default"));
   }
 
   @Test
-  public void test_OffsetDateTime() {
-    try {
-      var expected = OffsetDateTime.parse("2024-01-03T12:34:56+01:00",
-          DateUtils.getFormatter(DateUtils.ISO8601_DATETIMEZ_S));
-      CsvRecord csvRecord = new CsvRecord(new String[] { "2024-01-03T12:34:56+01:00" });
+  public void testGetStringLowerReq() {
+    assertEquals("abc", csvRecord.getStringLowerReq(0));
+  }
 
-      var val = csvRecord.getOffsetDateTime(0);
-      Assertions.assertEquals(expected, val);
+  @Test
+  public void testGetStringLowerReqWithLocale() {
+    assertEquals("abc", csvRecord.getStringLowerReq(0, Locale.US));
+  }
 
-    } catch (Exception ex) {
-      Assertions.fail(ex);
-    }
+  @Test
+  public void testGetStringLower() {
+    assertEquals("abc", csvRecord.getStringLower(0));
+    assertNull(csvRecord.getStringLower(4));
+  }
+
+  @Test
+  public void testGetStringLowerWithLocale() {
+    assertEquals("abc", csvRecord.getStringLower(0, Locale.US));
+  }
+
+  @Test
+  public void testGetStringLowerWithIfNull() {
+    assertEquals("default", csvRecord.getStringLower(4, "default"));
+  }
+
+  @Test
+  public void testGetBoolOpt() {
+    assertTrue(csvRecord.getBoolOpt(2, false));
+  }
+
+  @Test
+  public void testGetByteOpt() {
+    assertEquals(Byte.valueOf((byte) 123), csvRecord.getByteOpt(1, (byte) 0));
+  }
+
+  @Test
+  public void testGetShortOpt() {
+    assertEquals(Short.valueOf((short) 123), csvRecord.getShortOpt(1, (short) 0));
+  }
+
+  @Test
+  public void testGetIntOpt() {
+    assertEquals(Integer.valueOf(123), csvRecord.getIntOpt(1, 0));
+  }
+
+  @Test
+  public void testGetLongOpt() {
+    assertEquals(Long.valueOf(123), csvRecord.getLongOpt(1, 0L));
+  }
+
+  @Test
+  public void testGetFloatOpt() {
+    assertEquals(Float.valueOf(1.23f), csvRecord.getFloatOpt(3, 0f));
+  }
+
+  @Test
+  public void testGetDoubleOpt() {
+    assertEquals(Double.valueOf(1.23), csvRecord.getDoubleOpt(3, 0.0));
+  }
+
+  @Test
+  public void testGetDecimalOpt() {
+    assertEquals(new BigDecimal("1.23"), csvRecord.getDecimalOpt(3, BigDecimal.ZERO));
+  }
+
+  @Test
+  public void testGetBool() {
+    assertTrue(csvRecord.getBool(2));
+  }
+
+  @Test
+  public void testGetByte() {
+    assertEquals((byte) 123, csvRecord.getByte(1));
+  }
+
+  @Test
+  public void testGetShort() {
+    assertEquals((short) 123, csvRecord.getShort(1));
+  }
+
+  @Test
+  public void testGetInt() {
+    assertEquals(123, csvRecord.getInt(1));
+  }
+
+  @Test
+  public void testGetLong() {
+    assertEquals(123L, csvRecord.getLong(1));
+  }
+
+  @Test
+  public void testGetFloat() {
+    assertEquals(1.23f, csvRecord.getFloat(3), 0.001f);
+  }
+
+  @Test
+  public void testGetDouble() {
+    assertEquals(1.23, csvRecord.getDouble(3), 0.001);
+  }
+
+  @Test
+  public void testGetDecimalReq() {
+    assertEquals(new BigDecimal("1.23"), csvRecord.getDecimalReq(3));
+  }
+
+  @Test
+  public void testGetBoolWithIfNull() {
+    assertTrue(csvRecord.getBool(2, false));
+    assertFalse(csvRecord.getBool(4, false));
+  }
+
+  @Test
+  public void testGetByteWithIfNull() {
+    assertEquals((byte) 123, csvRecord.getByte(1, (byte) 0));
+    assertEquals((byte) 0, csvRecord.getByte(4, (byte) 0));
+  }
+
+  @Test
+  public void testGetShortWithIfNull() {
+    assertEquals((short) 123, csvRecord.getShort(1, (short) 0));
+    assertEquals((short) 0, csvRecord.getShort(4, (short) 0));
+  }
+
+  @Test
+  public void testGetIntWithIfNull() {
+    assertEquals(123, csvRecord.getInt(1, 0));
+    assertEquals(0, csvRecord.getInt(4, 0));
+  }
+
+  @Test
+  public void testGetLongWithIfNull() {
+    assertEquals(123L, csvRecord.getLong(1, 0L));
+    assertEquals(0L, csvRecord.getLong(4, 0L));
+  }
+
+  @Test
+  public void testGetFloatWithIfNull() {
+    assertEquals(1.23f, csvRecord.getFloat(3, 0f), 0.001f);
+    assertEquals(0f, csvRecord.getFloat(4, 0f), 0.001f);
+  }
+
+  @Test
+  public void testGetDoubleWithIfNull() {
+    assertEquals(1.23, csvRecord.getDouble(3, 0.0), 0.001);
+    assertEquals(0.0, csvRecord.getDouble(4, 0.0), 0.001);
+  }
+
+  @Test
+  public void testGetDecimalWithIfNull() {
+    assertEquals(new BigDecimal("1.23"), csvRecord.getDecimal(3, 0.0));
+    assertEquals(new BigDecimal("0.0"), csvRecord.getDecimal(4, 0.0));
+  }
+
+  @Test
+  public void testGetLocalDateReq() {
+    LocalDate expectedDate = LocalDate.of(2023, 9, 1);
+    assertEquals(expectedDate, csvRecord.getLocalDateReq(5));
+  }
+
+  @Test
+  public void testGetLocalTimeReq() {
+    LocalTime expectedTime = LocalTime.of(12, 30);
+    assertEquals(expectedTime, csvRecord.getLocalTimeReq(6));
+  }
+
+  @Test
+  public void testGetLocalDateTimeReq() {
+    LocalDateTime expectedDateTime = LocalDateTime.of(2023, 9, 1, 12, 30);
+    assertEquals(expectedDateTime, csvRecord.getLocalDateTimeReq(7));
+  }
+
+  @Test
+  public void testGetOffsetTimeReq() {
+    String[] valuesWithOffsetTime = { "09:00+01:00" };
+    csvRecord = new CsvRecord(valuesWithOffsetTime);
+    OffsetTime expectedOffsetTime = OffsetTime.parse("09:00+01:00");
+    assertEquals(expectedOffsetTime, csvRecord.getOffsetTimeReq(0));
+  }
+
+  @Test
+  public void testGetOffsetDateTimeReq() {
+    String[] valuesWithOffsetDateTime = { "2023-09-01 09:00+01:00" };
+    csvRecord = new CsvRecord(valuesWithOffsetDateTime);
+    OffsetDateTime expectedOffsetDateTime = OffsetDateTime.parse("2023-09-01T09:00+01:00");
+    assertEquals(expectedOffsetDateTime, csvRecord.getOffsetDateTimeReq(0));
+  }
+
+  @Test
+  public void testGetValueWithConverter() {
+    Function<String, Integer> stringToInteger = Integer::parseInt;
+    assertEquals(123, csvRecord.getValue(1, stringToInteger));
+  }
+
+  @Test
+  public void testGetValueWithConverterAndDefault() {
+    Function<String, Integer> stringToInteger = Integer::parseInt;
+    assertEquals(123, csvRecord.getValue(1, 0, stringToInteger));
+    assertEquals(0, csvRecord.getValue(4, 0, stringToInteger));
+  }
+
+  @Test
+  public void testSetValues() {
+    csvRecord.set(0, "value");
+    assertEquals("value", csvRecord.getString(0));
+  }
+
+  @Test
+  public void testSetBooleanValue() {
+    csvRecord.set(2, true);
+    assertEquals("true", csvRecord.getString(2));
+  }
+
+  @Test
+  public void testSetIntValue() {
+    csvRecord.set(1, 456);
+    assertEquals("456", csvRecord.getString(1));
+  }
+
+  @Test
+  public void testSetLongValue() {
+    csvRecord.set(1, 456L);
+    assertEquals("456", csvRecord.getString(1));
+  }
+
+  @Test
+  public void testSetFloatValue() {
+    csvRecord.set(3, 123.45f);
+    assertEquals("123.45", csvRecord.getString(3));
+  }
+
+  @Test
+  public void testSetDoubleValue() {
+    csvRecord.set(3, 789.12);
+    assertEquals("789.12", csvRecord.getString(3));
+  }
+
+  @Test
+  public void testSetBigDecimalValue() {
+    csvRecord.set(3, new BigDecimal("789.12"));
+    assertEquals("789.12", csvRecord.getString(3));
+  }
+
+  @Test
+  public void testSetLocalDateValue() {
+    LocalDate date = LocalDate.of(2024, 1, 1);
+    csvRecord.set(5, date);
+    assertEquals("2024-01-01", csvRecord.getString(5));
+  }
+
+  @Test
+  public void testSetLocalTimeValue() {
+    LocalTime time = LocalTime.of(10, 15);
+    csvRecord.set(6, time);
+    assertEquals("10:15:00", csvRecord.getString(6));
+  }
+
+  @Test
+  public void testSetLocalDateTimeValue() {
+    LocalDateTime dateTime = LocalDateTime.of(2024, 1, 1, 10, 15);
+    csvRecord.set(7, dateTime);
+    assertEquals("2024-01-01 10:15:00", csvRecord.getString(7));
+  }
+
+  @Test
+  public void testSetOffsetTimeValue() {
+    OffsetTime offsetTime = OffsetTime.of(10, 15, 0, 0, ZoneOffset.ofHours(1));
+    csvRecord.set(6, offsetTime);
+    assertEquals("10:15:00+01:00", csvRecord.getString(6));
+  }
+
+  @Test
+  public void testSetOffsetDateTimeValue() {
+    OffsetDateTime offsetDateTime = OffsetDateTime.of(2024, 1, 1, 10, 15, 0, 0, ZoneOffset.ofHours(1));
+    csvRecord.set(7, offsetDateTime);
+    assertEquals("2024-01-01 10:15:00+01:00", csvRecord.getString(7));
   }
 }
