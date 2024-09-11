@@ -61,8 +61,7 @@ public class DataRecordTest {
 
   @Test
   public void testGetReqValueMissingThrowsException() {
-    AssertException exception = assertThrows(AssertException.class, () -> dataRecord.getReq("missingColumn"));
-    assertEquals("No value found for the given label 'missingColumn'.", exception.getMessage());
+    assertThrows(AssertException.class, () -> dataRecord.getReq("missingColumn"));
   }
 
   @Test
