@@ -35,7 +35,7 @@ import java.util.Set;
 public class CaseInsensitiveMap<V> implements Map<String, V>, Serializable {
   private static final long serialVersionUID = 1L;
 
-  final Map<String, V> map;
+  protected final Map<String, V> map;
 
   public CaseInsensitiveMap() {
     this(new HashMap<String, V>());

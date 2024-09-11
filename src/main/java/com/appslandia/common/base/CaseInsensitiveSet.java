@@ -35,7 +35,7 @@ import java.util.Set;
 public class CaseInsensitiveSet implements Set<String>, Serializable {
   private static final long serialVersionUID = 1L;
 
-  final Set<String> elements;
+  protected final Set<String> elements;
 
   public CaseInsensitiveSet() {
     this(new HashSet<String>());

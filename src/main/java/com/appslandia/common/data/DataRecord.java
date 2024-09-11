@@ -32,6 +32,7 @@ import java.util.Locale;
 
 import com.appslandia.common.base.AssertException;
 import com.appslandia.common.base.CaseInsensitiveMap;
+import com.appslandia.common.base.ToStringBuilder;
 import com.appslandia.common.utils.STR;
 import com.appslandia.common.utils.StringUtils;
 
@@ -300,5 +301,10 @@ public class DataRecord extends CaseInsensitiveMap<Object> {
 
   public Object[] toValues(String[] columnLabels) {
     return Arrays.stream(columnLabels).map(l -> super.get(l)).toArray();
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder().setToOneLine(true).toString(this);
   }
 }
