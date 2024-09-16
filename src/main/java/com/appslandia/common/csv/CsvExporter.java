@@ -121,7 +121,7 @@ public class CsvExporter extends InitializeObject {
   }
 
   public CsvExporter setCsvOutput(BufferedWriter csvOutput) {
-    return setCsvOutput(csvOutput, true);
+    return setCsvOutput(csvOutput, false);
   }
 
   public CsvExporter setCsvOutput(BufferedWriter csvOutput, boolean closeStream) {

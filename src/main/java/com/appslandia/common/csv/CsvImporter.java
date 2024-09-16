@@ -292,7 +292,7 @@ public class CsvImporter extends InitializeObject {
   }
 
   public CsvImporter setCsvInput(BufferedReader csvInput) {
-    return setCsvInput(csvInput, true);
+    return setCsvInput(csvInput, false);
   }
 
   public CsvImporter setCsvInput(BufferedReader csvInput, boolean closeStream) {
