@@ -21,6 +21,7 @@
 package com.appslandia.common.csv;
 
 import java.io.BufferedReader;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -105,6 +106,10 @@ public class CsvProcessor extends InitializeObject {
       return doEscape(value.toString());
     }
     Class<?> type = value.getClass();
+
+    if (type == BigDecimal.class) {
+      return ((BigDecimal) value).toPlainString();
+    }
 
     if (Number.class.isAssignableFrom(type) || type == Boolean.class || Enum.class.isAssignableFrom(type)) {
       return value.toString();
