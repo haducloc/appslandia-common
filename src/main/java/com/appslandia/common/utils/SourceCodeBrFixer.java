@@ -27,33 +27,56 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
+
+import com.appslandia.common.base.InitializeObject;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class SourceCodeBrFixer {
+public class SourceCodeBrFixer extends InitializeObject {
 
   private String sourceDir;
-  private String srcExt;
+  private Function<String, Boolean> srcExt;
 
-  public SourceCodeBrFixer(String sourceDir, String srcExt) {
+  @Override
+  protected void init() throws Exception {
+    Asserts.notNull(this.sourceDir);
+    Asserts.notNull(this.srcExt);
+  }
+
+  public SourceCodeBrFixer setSourceDir(String sourceDir) {
+    assertNotInitialized();
     this.sourceDir = sourceDir;
+    return this;
+  }
+
+  public SourceCodeBrFixer setSrcExt(Function<String, Boolean> srcExt) {
+    assertNotInitialized();
     this.srcExt = srcExt;
+    return this;
   }
 
   public void execute() throws IOException {
+    this.initialize();
+
+    final AtomicInteger seq = new AtomicInteger();
+
     Files.walk(Paths.get(this.sourceDir)).filter(Files::isRegularFile)
-        .filter(path -> path.toString().endsWith(this.srcExt)).forEach(this::processFile);
+        .filter(path -> this.srcExt.apply(path.getFileName().toString())).forEach(scPath -> processFile(scPath, seq));
   }
 
-  private void processFile(Path filePath) {
+  private void processFile(Path scPath, AtomicInteger seq) {
     try {
-      List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
+      System.out.println(STR.fmt("[{}] Handling {}", seq.incrementAndGet(), scPath));
+
+      List<String> lines = Files.readAllLines(scPath, StandardCharsets.UTF_8);
       String linesAsStr = String.join(System.lineSeparator(), lines);
 
-      Files.write(filePath, linesAsStr.getBytes(StandardCharsets.UTF_8));
+      Files.write(scPath, linesAsStr.getBytes(StandardCharsets.UTF_8));
 
     } catch (IOException ex) {
       throw new UncheckedIOException(ex);
@@ -61,11 +84,11 @@ public class SourceCodeBrFixer {
   }
 
   public static void main(String[] args) {
-    String sourceDirectory = "src";
-    String codeExt = ".java";
-
-    SourceCodeBrFixer fixer = new SourceCodeBrFixer(sourceDirectory, codeExt);
     try {
+      SourceCodeBrFixer fixer = new SourceCodeBrFixer();
+
+      fixer.setSourceDir("// TODO");
+      fixer.setSrcExt(fn -> fn.endsWith(".cs") || fn.endsWith(".cshtml"));
       fixer.execute();
 
     } catch (Exception ex) {
