@@ -26,7 +26,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
-import java.time.YearMonth;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +36,7 @@ import com.appslandia.common.base.MapWrapper;
 import com.appslandia.common.base.Unsupported;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.DateUtils;
+import com.appslandia.common.utils.ObjectUtils;
 import com.appslandia.common.utils.STR;
 
 /**
@@ -57,7 +57,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
 
   public JsonMapObject set(String key, Object value) {
     Asserts.notNull(key);
-    Asserts.isTrue(isValueSupported(value), "The value is unsuppored.");
+    validateValue(value);
 
     super.put(key, value);
     return this;
@@ -66,6 +66,14 @@ public class JsonMapObject extends MapWrapper<String, Object> {
   public Object getReq(String key) {
     Object value = this.get(key);
     return Asserts.notNull(value, "The value is required.");
+  }
+
+  public JsonMapObject getJsonMapReq(String key) {
+    Object value = this.getReq(key);
+    if (value instanceof JsonMapObject) {
+      return (JsonMapObject) value;
+    }
+    throw new JsonValueException(STR.fmt("Failed to getJsonMapReq('{}')", key));
   }
 
   public String getStringReq(String key) {
@@ -183,15 +191,12 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     throw new JsonValueException(STR.fmt("Failed to getOffsetDateTimeReq('{}')", key));
   }
 
-  public YearMonth getYearMonthReq(String key) {
-    Object value = this.getReq(key);
-    if (value.getClass() == YearMonth.class) {
-      return (YearMonth) value;
+  public JsonMapObject getJsonMap(String key) {
+    Object value = this.get(key);
+    if ((value == null) || (value instanceof JsonMapObject)) {
+      return (JsonMapObject) value;
     }
-    if (value.getClass() == String.class) {
-      return DateUtils.parseYearMonth((String) value);
-    }
-    throw new JsonValueException(STR.fmt("Failed to getYearMonthReq('{}')", key));
+    throw new JsonValueException(STR.fmt("Failed to getJsonMap('{}')", key));
   }
 
   public String getString(String key) {
@@ -309,76 +314,75 @@ public class JsonMapObject extends MapWrapper<String, Object> {
     throw new JsonValueException(STR.fmt("Failed to getOffsetDateTime('{}')", key));
   }
 
-  public YearMonth getYearMonth(String key) {
-    Object value = this.get(key);
-    if (value == null || value.getClass() == YearMonth.class) {
-      return (YearMonth) value;
-    }
-    if (value.getClass() == String.class) {
-      return DateUtils.parseYearMonth((String) value);
-    }
-    throw new JsonValueException(STR.fmt("Failed to getYearMonth('{}')", key));
-  }
-
-  protected boolean isValueSupported(Object value) {
+  protected void validateValue(Object value) throws IllegalArgumentException {
     if (value == null) {
-      return true;
+      return;
     }
-
-    // Basic Types
     if (isBasicType(value.getClass())) {
-      return true;
+      return;
     }
-
-    // List
     if (value instanceof List) {
-      return validateList((List<?>) value);
+      validateList((List<?>) value);
+      return;
     }
-
-    // Map
     if (value instanceof Map) {
-      return validateMap((Map<?, ?>) value);
+      validateMap((Map<?, ?>) value);
+      return;
     }
-    return false;
+    throw new IllegalArgumentException("Unsupported JSON value type: " + value.getClass());
   }
 
   protected boolean isBasicType(Class<?> type) {
     return (type == String.class) || Number.class.isAssignableFrom(type) || (type == Boolean.class)
         || (type == LocalDate.class) || (type == LocalTime.class) || (type == LocalDateTime.class)
-        || (type == OffsetTime.class) || (type == OffsetDateTime.class) || (type == YearMonth.class);
+        || (type == OffsetTime.class) || (type == OffsetDateTime.class);
   }
 
-  private boolean validateMap(Map<?, ?> map) {
-    return map.entrySet().stream().allMatch(entry -> {
-      return (entry.getKey() instanceof String) && ((entry.getValue() == null) || isValueSupported(entry.getValue()));
+  private void validateMap(Map<?, ?> map) {
+    if (map instanceof JsonMapObject) {
+      return;
+    }
+    map.forEach((key, value) -> {
+      Asserts.isTrue(key instanceof String, "Unsupported JSON key type: " + ObjectUtils.getClass(key));
+
+      validateValue(value);
     });
   }
 
-  private boolean validateList(List<?> list) {
-    return list.stream().allMatch(value -> (value == null) || isValueSupported(value));
+  private void validateList(List<?> list) {
+    list.forEach(value -> {
+      validateValue(value);
+    });
   }
 
   @Override
   public Object putIfAbsent(String key, Object value) {
     Asserts.notNull(key);
-    Asserts.isTrue(isValueSupported(value), "The value is unsuppored.");
+    validateValue(value);
 
     return super.putIfAbsent(key, value);
   }
 
-  // UnsupportedOperationException
-
-  @Unsupported
   @Override
   public Object put(String key, Object value) {
-    throw new UnsupportedOperationException("Use set(key, value) instead.");
+    Asserts.notNull(key);
+    validateValue(value);
+
+    return super.put(key, value);
   }
 
-  @Unsupported
   @Override
   public void putAll(Map<? extends String, ? extends Object> m) {
-    throw new UnsupportedOperationException();
+    for (Entry<? extends String, ? extends Object> entry : m.entrySet()) {
+      Asserts.isTrue(entry.getKey() instanceof String,
+          "Unsupported JSON key type: " + ObjectUtils.getClass(entry.getKey()));
+
+      validateValue(entry.getValue());
+      super.put(entry.getKey(), entry.getValue());
+    }
   }
+
+  // UnsupportedOperationException
 
   @Unsupported
   @Override

@@ -54,6 +54,13 @@ public class ObjectUtils {
     return obj.getClass().getName() + "@" + Integer.toHexString(System.identityHashCode(obj));
   }
 
+  public static Class<?> getClass(Object obj) {
+    if (obj == null) {
+      return null;
+    }
+    return obj.getClass();
+  }
+
   public static void closeQuietly(AutoCloseable obj) {
     if (obj != null) {
       try {
