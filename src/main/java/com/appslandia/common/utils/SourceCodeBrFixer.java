@@ -74,8 +74,9 @@ public class SourceCodeBrFixer extends InitializeObject {
       System.out.println(STR.fmt("[{}] Handling {}", seq.incrementAndGet(), scPath));
 
       List<String> lines = Files.readAllLines(scPath, StandardCharsets.UTF_8);
-      String linesAsStr = String.join(System.lineSeparator(), lines);
+      List<String> strippedLines = lines.stream().map(l -> l.stripTrailing()).toList();
 
+      String linesAsStr = String.join(System.lineSeparator(), strippedLines);
       Files.write(scPath, linesAsStr.getBytes(StandardCharsets.UTF_8));
 
     } catch (IOException ex) {
