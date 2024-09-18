@@ -27,14 +27,12 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -62,28 +60,6 @@ import com.appslandia.common.utils.StringUtils;
  *
  */
 public final class RecordUtils {
-
-  public static List<Column> getColumns(ResultSet rs) throws SQLException {
-    ResultSetMetaData md = rs.getMetaData();
-    List<Column> cols = new ArrayList<>(md.getColumnCount());
-
-    for (int col = 1; col <= md.getColumnCount(); col++) {
-      Column column = new Column();
-      column.setName(JdbcUtils.toColumnName(md.getColumnLabel(col)));
-      column.setPosition(col);
-
-      int sqlType = md.getColumnType(col);
-      column.setSqlType(sqlType);
-      column.setJavaType(SqlTypeMapper.getJavaType(sqlType));
-
-      column.setTableCat(md.getCatalogName(col));
-      column.setTableSchema(md.getSchemaName(col));
-      column.setTableName(md.getTableName(col));
-
-      cols.add(column);
-    }
-    return Collections.unmodifiableList(cols);
-  }
 
   public static Table loadTable(ConnectionImpl conn, String catalog, String schema, String tableName,
       Consumer<Column> columnInit) throws SQLException {
@@ -147,14 +123,10 @@ public final class RecordUtils {
     try (ResultSet rs = metaData.getColumns(catalog, schema, tableName, null)) {
       while (rs.next()) {
 
+        Column column = new Column();
         String columnName = rs.getString("COLUMN_NAME");
         columnName = JdbcUtils.toColumnName(columnName);
-        boolean isKey = keys.contains(columnName);
 
-        boolean autoIncr = "YES".equals(rs.getString("IS_AUTOINCREMENT"));
-        boolean genCol = "YES".equals(rs.getString("IS_GENERATEDCOLUMN"));
-
-        Column column = new Column();
         column.setName(columnName);
         column.setQName(ucKeywords.contains(columnName.toUpperCase(Locale.ENGLISH))
             ? conn.getSqlEngine().quoteIdentifier(columnName)
@@ -197,6 +169,10 @@ public final class RecordUtils {
 
         // Java Type
         column.setJavaType(SqlTypeMapper.getJavaType(sqlType));
+
+        boolean isKey = keys.contains(columnName);
+        boolean autoIncr = "YES".equals(rs.getString("IS_AUTOINCREMENT"));
+        boolean genCol = "YES".equals(rs.getString("IS_GENERATEDCOLUMN"));
 
         if (isKey) {
           column.setColumnType(autoIncr ? ColumnType.KEY_INCR : ColumnType.KEY);
