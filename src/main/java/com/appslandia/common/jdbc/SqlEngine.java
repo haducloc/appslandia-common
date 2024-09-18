@@ -64,4 +64,22 @@ public enum SqlEngine {
     }
     throw new IllegalArgumentException(STR.fmt("Failed to parse SqlEngine from: {}", url));
   }
+
+  public String quoteIdentifier(String name) {
+    switch (this) {
+    case MYSQL:
+    case SQLITE:
+      return "`" + name + "`";
+    case ORACLE:
+    case POSTGRESQL:
+    case DB2:
+    case H2:
+      return "\"" + name + "\"";
+    case MSSQL:
+      return "[" + name + "]";
+    default:
+      return name;
+    }
+  }
+
 }

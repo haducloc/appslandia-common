@@ -114,11 +114,20 @@ public class ConnectionImpl implements Connection {
   // Update Utilities
 
   public int dropTable(String tableName) throws java.sql.SQLException {
-    return executeUpdate(STR.fmt("DROP TABLE IF EXISTS {}", tableName));
+    return executeUpdate(STR.fmt("DROP TABLE IF EXISTS {}", this.sqlEngine.quoteIdentifier(tableName)));
   }
 
   public int truncateTable(String tableName) throws java.sql.SQLException {
-    return executeUpdate(STR.fmt("TRUNCATE TABLE {}", tableName));
+    return executeUpdate(STR.fmt("TRUNCATE TABLE {}", this.sqlEngine.quoteIdentifier(tableName)));
+  }
+
+  public int backupTable(String originalTable, String backupTable) throws java.sql.SQLException {
+    if (this.sqlEngine == SqlEngine.MSSQL) {
+      return executeUpdate(STR.fmt("SELECT * INTO {} FROM {}", this.sqlEngine.quoteIdentifier(backupTable),
+          this.sqlEngine.quoteIdentifier(originalTable)));
+    }
+    return executeUpdate(STR.fmt("CREATE TABLE {} AS SELECT * FROM {}", this.sqlEngine.quoteIdentifier(backupTable),
+        this.sqlEngine.quoteIdentifier(originalTable)));
   }
 
   public int executeUpdate(String sql) throws java.sql.SQLException {
@@ -147,7 +156,8 @@ public class ConnectionImpl implements Connection {
     Asserts.notNull(tableName);
     Asserts.notNull(columnLabel);
 
-    String sql = "SELECT " + columnLabel + " FROM " + tableName;
+    String sql = STR.fmt("SELECT DISTINCT {} FROM {}", this.sqlEngine.quoteIdentifier(columnLabel),
+        this.sqlEngine.quoteIdentifier(tableName));
 
     try (Statement stat = this.conn.createStatement()) {
       try (ResultSet rs = stat.executeQuery(sql)) {
