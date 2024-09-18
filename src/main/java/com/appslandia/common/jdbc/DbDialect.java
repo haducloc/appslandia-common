@@ -91,7 +91,7 @@ public class DbDialect {
     if (url.startsWith("jdbc:h2")) {
       return H2;
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to parse DbDialect from: {}", url));
+    throw new IllegalArgumentException(STR.fmt("Failed to parse dbName from: {}", url));
   }
 
   public String quoteIdentifier(String identifier) {
