@@ -20,6 +20,7 @@
 
 package com.appslandia.common.jdbc;
 
+import java.sql.Connection;
 import java.sql.Types;
 
 import com.appslandia.common.utils.Asserts;
@@ -37,8 +38,9 @@ public enum DbDialect {
   private DbDialect() {
   }
 
-  public static DbDialect parse(String url) {
-    Asserts.notNull(url);
+  public static DbDialect parse(Connection conn) throws java.sql.SQLException {
+    Asserts.notNull(conn);
+    String url = conn.getMetaData().getURL();
 
     if (url.startsWith("jdbc:postgresql")) {
       return POSTGRESQL;

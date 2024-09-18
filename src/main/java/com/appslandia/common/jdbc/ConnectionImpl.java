@@ -63,7 +63,7 @@ public class ConnectionImpl implements Connection {
     this.conn = dataSource.getConnection();
     this.dsName = Asserts.notNull(dsName, "dsName must be not null.");
 
-    this.dbDialect = DbDialect.parse(this.conn.getMetaData().getURL());
+    this.dbDialect = DbDialect.parse(this.conn);
     CONNECTION_HOLDER.set(this);
   }
 
