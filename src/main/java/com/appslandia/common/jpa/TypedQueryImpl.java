@@ -55,7 +55,7 @@ public class TypedQueryImpl<X> implements TypedQuery<X> {
   }
 
   protected JpaSql getSql() {
-    return Asserts.notNull(this.sql, "sql is required.");
+    return Asserts.notNull(this.sql, "No JpaSql is associated with the query.");
   }
 
   public List<X> executeList() {

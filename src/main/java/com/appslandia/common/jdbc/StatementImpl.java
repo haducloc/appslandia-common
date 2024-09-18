@@ -51,14 +51,13 @@ public class StatementImpl implements PreparedStatement {
     this(stat, null);
   }
 
-  public StatementImpl(PreparedStatement stat, JdbcSql sql) {
-    Asserts.isTrue(!(stat instanceof StatementImpl));
+  protected StatementImpl(PreparedStatement stat, JdbcSql sql) {
     this.stat = stat;
     this.sql = sql;
   }
 
   protected JdbcSql getSql() {
-    return Asserts.notNull(this.sql, "sql is required.");
+    return Asserts.notNull(this.sql, "No JdbcSql is associated with the PreparedStatement.");
   }
 
   // Update utilities

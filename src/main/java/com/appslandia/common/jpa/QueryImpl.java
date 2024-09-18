@@ -55,7 +55,7 @@ public class QueryImpl implements Query {
   }
 
   protected JpaSql getSql() {
-    return Asserts.notNull(this.sql, "sql is required.");
+    return Asserts.notNull(this.sql, "No JpaSql is associated with the query.");
   }
 
   public <T> List<T> executeList() {
