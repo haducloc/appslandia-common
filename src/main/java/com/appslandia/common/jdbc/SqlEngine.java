@@ -70,16 +70,15 @@ public enum SqlEngine {
     case MYSQL:
     case SQLITE:
       return "`" + name + "`";
-    case ORACLE:
+    case MSSQL:
+      return "[" + name + "]";
     case POSTGRESQL:
+    case ORACLE:
     case DB2:
     case H2:
       return "\"" + name + "\"";
-    case MSSQL:
-      return "[" + name + "]";
     default:
       return name;
     }
   }
-
 }
