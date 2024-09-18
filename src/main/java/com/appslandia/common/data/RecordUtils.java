@@ -25,6 +25,7 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -32,6 +33,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -39,6 +41,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import com.appslandia.common.jdbc.ConnectionImpl;
 import com.appslandia.common.jdbc.JdbcUtils;
@@ -49,6 +52,8 @@ import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.ReflectionException;
 import com.appslandia.common.utils.STR;
+import com.appslandia.common.utils.SplitUtils;
+import com.appslandia.common.utils.SplittingBehavior;
 import com.appslandia.common.utils.StringUtils;
 
 /**
@@ -85,18 +90,42 @@ public final class RecordUtils {
     Asserts.notNull(conn);
     Asserts.notNull(tableName);
 
+    // DatabaseMetaData
+    DatabaseMetaData metaData = conn.getMetaData();
+    String[] keywords = SplitUtils.splitByComma(metaData.getSQLKeywords(), SplittingBehavior.ORIGINAL);
+    Set<String> ucKeywords = Arrays.stream(keywords).map(k -> k.toUpperCase(Locale.ENGLISH))
+        .collect(Collectors.toSet());
+
     // Table
     Table table = null;
-    try (ResultSet rs = conn.getMetaData().getTables(catalog, schema, tableName, new String[] { "TABLE" })) {
+    try (ResultSet rs = metaData.getTables(catalog, schema, tableName, new String[] { "TABLE" })) {
       while (rs.next()) {
         if (table != null) {
           throw new IllegalArgumentException(STR.fmt("More than one table with name '{}' returned.", tableName));
         }
         table = new Table();
 
-        table.setTableCat(rs.getString("TABLE_CAT"));
-        table.setTableSchema(rs.getString("TABLE_SCHEM"));
-        table.setTableName(rs.getString("TABLE_NAME"));
+        // cat, schem, tname
+        String cat = rs.getString("TABLE_CAT");
+        String schem = rs.getString("TABLE_SCHEM");
+        String tname = rs.getString("TABLE_NAME");
+
+        table.setTableCat(cat);
+        table.setTableSchema(schem);
+        table.setTableName(tname);
+
+        if (cat != null) {
+          table.setQTableCat(
+              ucKeywords.contains(cat.toUpperCase(Locale.ENGLISH)) ? conn.getSqlEngine().quoteIdentifier(cat) : cat);
+        }
+        if (schem != null) {
+          table.setQTableSchema(
+              ucKeywords.contains(schem.toUpperCase(Locale.ENGLISH)) ? conn.getSqlEngine().quoteIdentifier(schem)
+                  : schem);
+        }
+        table.setQTableName(
+            ucKeywords.contains(tname.toUpperCase(Locale.ENGLISH)) ? conn.getSqlEngine().quoteIdentifier(tname)
+                : tname);
       }
     }
 
@@ -106,7 +135,7 @@ public final class RecordUtils {
 
     // Keys
     Set<String> keys = new LinkedHashSet<>();
-    try (ResultSet rs = conn.getMetaData().getPrimaryKeys(catalog, schema, tableName)) {
+    try (ResultSet rs = metaData.getPrimaryKeys(catalog, schema, tableName)) {
       while (rs.next()) {
         keys.add(rs.getString("COLUMN_NAME"));
       }
@@ -115,10 +144,11 @@ public final class RecordUtils {
     // columns
     List<Column> columns = new ArrayList<>();
 
-    try (ResultSet rs = conn.getMetaData().getColumns(catalog, schema, tableName, null)) {
+    try (ResultSet rs = metaData.getColumns(catalog, schema, tableName, null)) {
       while (rs.next()) {
 
         String columnName = rs.getString("COLUMN_NAME");
+        columnName = JdbcUtils.toColumnName(columnName);
         boolean isKey = keys.contains(columnName);
 
         boolean autoIncr = "YES".equals(rs.getString("IS_AUTOINCREMENT"));
@@ -126,6 +156,10 @@ public final class RecordUtils {
 
         Column column = new Column();
         column.setName(columnName);
+        column.setQName(ucKeywords.contains(columnName.toUpperCase(Locale.ENGLISH))
+            ? conn.getSqlEngine().quoteIdentifier(columnName)
+            : columnName);
+
         column.setTypeName(rs.getString("TYPE_NAME"));
 
         int sqlType = rs.getInt("DATA_TYPE");
@@ -139,9 +173,27 @@ public final class RecordUtils {
         column.setNullable("YES".equals(rs.getString("IS_NULLABLE")));
         column.setPosition(rs.getInt("ORDINAL_POSITION"));
 
-        column.setTableCat(rs.getString("TABLE_CAT"));
-        column.setTableSchema(rs.getString("TABLE_SCHEM"));
-        column.setTableName(rs.getString("TABLE_NAME"));
+        // cat, schem, tname
+        String cat = rs.getString("TABLE_CAT");
+        String schem = rs.getString("TABLE_SCHEM");
+        String tname = rs.getString("TABLE_NAME");
+
+        column.setTableCat(cat);
+        column.setTableSchema(schem);
+        column.setTableName(tname);
+
+        if (cat != null) {
+          column.setQTableCat(
+              ucKeywords.contains(cat.toUpperCase(Locale.ENGLISH)) ? conn.getSqlEngine().quoteIdentifier(cat) : cat);
+        }
+        if (schem != null) {
+          column.setQTableSchema(
+              ucKeywords.contains(schem.toUpperCase(Locale.ENGLISH)) ? conn.getSqlEngine().quoteIdentifier(schem)
+                  : schem);
+        }
+        column.setQTableName(
+            ucKeywords.contains(tname.toUpperCase(Locale.ENGLISH)) ? conn.getSqlEngine().quoteIdentifier(tname)
+                : tname);
 
         // Java Type
         column.setJavaType(SqlTypeMapper.getJavaType(sqlType));

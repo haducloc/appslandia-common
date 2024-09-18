@@ -26,7 +26,6 @@ import java.util.List;
 
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.jdbc.JdbcSql;
-import com.appslandia.common.jdbc.JdbcUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.STR;
@@ -44,7 +43,13 @@ public class Column extends InitializeObject implements Serializable {
   private String tableSchema;
   private String tableName;
 
+  private String qTableCat;
+  private String qTableSchema;
+  private String qTableName;
+
   private String name;
+  private String qName;
+
   private String typeName;
   private Integer sqlType;
   private Integer columnSize;
@@ -62,6 +67,8 @@ public class Column extends InitializeObject implements Serializable {
   @Override
   protected void init() throws Exception {
     Asserts.notNull(this.name, "name is required.");
+    Asserts.notNull(this.qName, "qName is required.");
+
     Asserts.notNull(this.sqlType, "sqlType is required.");
     Asserts.notNull(this.javaType, "javaType is required.");
 
@@ -132,6 +139,39 @@ public class Column extends InitializeObject implements Serializable {
     return this;
   }
 
+  public String getQTableCat() {
+    this.initialize();
+    return this.qTableCat;
+  }
+
+  public Column setQTableCat(String qTableCat) {
+    this.assertNotInitialized();
+    this.qTableCat = qTableCat;
+    return this;
+  }
+
+  public String getQTableSchema() {
+    this.initialize();
+    return this.qTableSchema;
+  }
+
+  public Column setQTableSchema(String qTableSchema) {
+    this.assertNotInitialized();
+    this.qTableSchema = qTableSchema;
+    return this;
+  }
+
+  public String getQTableName() {
+    this.initialize();
+    return this.qTableName;
+  }
+
+  public Column setQTableName(String qTableName) {
+    this.assertNotInitialized();
+    this.qTableName = qTableName;
+    return this;
+  }
+
   public String getName() {
     this.initialize();
     return this.name;
@@ -139,9 +179,18 @@ public class Column extends InitializeObject implements Serializable {
 
   public Column setName(String name) {
     this.assertNotInitialized();
-    if (name != null) {
-      this.name = JdbcUtils.toColumnName(name);
-    }
+    this.name = name;
+    return this;
+  }
+
+  public String getQName() {
+    this.initialize();
+    return this.qName;
+  }
+
+  public Column setQName(String qName) {
+    this.assertNotInitialized();
+    this.qName = qName;
     return this;
   }
 

@@ -43,6 +43,10 @@ public class Table extends InitializeObject implements Serializable {
   private String tableSchema;
   private String tableName;
 
+  private String qTableCat;
+  private String qTableSchema;
+  private String qTableName;
+
   private List<Column> columns;
   private transient String entityClassName;
 
@@ -59,9 +63,10 @@ public class Table extends InitializeObject implements Serializable {
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.tableName, "name is required.");
-    Asserts.hasElements(this.columns, "columns are required.");
+    Asserts.notNull(this.tableName, "tableName is required.");
+    Asserts.notNull(this.qTableName, "qTableName is required.");
 
+    Asserts.hasElements(this.columns, "columns are required.");
     this.entityClassName = RecordUtils.toEntityClassName(this.tableName);
 
     int keyIncr = (int) this.columns.stream().filter(column -> column.getColumnType() == ColumnType.KEY_INCR).count();
@@ -107,7 +112,7 @@ public class Table extends InitializeObject implements Serializable {
   }
 
   protected String buildInsertSQL() {
-    TextBuilder sb = new TextBuilder().append("INSERT INTO ").append(this.tableName);
+    TextBuilder sb = new TextBuilder().append("INSERT INTO ").append(this.qTableName);
     sb.append(" (");
 
     boolean isFirst = true;
@@ -116,10 +121,10 @@ public class Table extends InitializeObject implements Serializable {
       if (column.getColumnType() != ColumnType.KEY_INCR && column.getColumnType() != ColumnType.NON_KEY_GEN) {
 
         if (isFirst) {
-          sb.append(column.getName());
+          sb.append(column.getQName());
           isFirst = false;
         } else {
-          sb.append(", ").append(column.getName());
+          sb.append(", ").append(column.getQName());
         }
       }
     }
@@ -143,7 +148,7 @@ public class Table extends InitializeObject implements Serializable {
   }
 
   protected String buildUpdateSQL() {
-    TextBuilder sb = new TextBuilder().append("UPDATE ").append(this.tableName);
+    TextBuilder sb = new TextBuilder().append("UPDATE ").append(this.qTableName);
     sb.append(" SET ");
 
     boolean isFirst = true;
@@ -153,10 +158,10 @@ public class Table extends InitializeObject implements Serializable {
       if (column.getColumnType() == ColumnType.NON_KEY) {
 
         if (isFirst) {
-          sb.append(column.getName()).append("=").append(column.getParamName());
+          sb.append(column.getQName()).append("=").append(column.getParamName());
           isFirst = false;
         } else {
-          sb.append(",").append(column.getName()).append("=").append(column.getParamName());
+          sb.append(",").append(column.getQName()).append("=").append(column.getParamName());
         }
       }
     }
@@ -167,7 +172,7 @@ public class Table extends InitializeObject implements Serializable {
   }
 
   protected String buildDeleteSQL() {
-    TextBuilder sb = new TextBuilder().append("DELETE FROM ").append(this.tableName);
+    TextBuilder sb = new TextBuilder().append("DELETE FROM ").append(this.qTableName);
     sb.append(" WHERE ");
 
     this.appendWhereKeyConditions(sb);
@@ -175,7 +180,7 @@ public class Table extends InitializeObject implements Serializable {
   }
 
   protected String buildExistsSQL() {
-    TextBuilder sb = new TextBuilder().append("SELECT COUNT(1) FROM ").append(this.tableName);
+    TextBuilder sb = new TextBuilder().append("SELECT COUNT(1) FROM ").append(this.qTableName);
     sb.append(" WHERE ");
 
     this.appendWhereKeyConditions(sb);
@@ -183,7 +188,7 @@ public class Table extends InitializeObject implements Serializable {
   }
 
   protected String buildGetSQL() {
-    TextBuilder sb = new TextBuilder().append("SELECT * FROM ").append(this.tableName);
+    TextBuilder sb = new TextBuilder().append("SELECT * FROM ").append(this.qTableName);
     sb.append(" WHERE ");
 
     this.appendWhereKeyConditions(sb);
@@ -196,10 +201,10 @@ public class Table extends InitializeObject implements Serializable {
       if (column.getColumnType() == ColumnType.KEY_INCR || column.getColumnType() == ColumnType.KEY) {
 
         if (isFirst) {
-          sqlBuilder.append(column.getName()).append("=").append(column.getParamName());
+          sqlBuilder.append(column.getQName()).append("=").append(column.getParamName());
           isFirst = false;
         } else {
-          sqlBuilder.append(" AND ").append(column.getName()).append("=").append(column.getParamName());
+          sqlBuilder.append(" AND ").append(column.getQName()).append("=").append(column.getParamName());
         }
       }
     }
@@ -243,6 +248,39 @@ public class Table extends InitializeObject implements Serializable {
   public Table setTableName(String tableName) {
     this.assertNotInitialized();
     this.tableName = tableName;
+    return this;
+  }
+
+  public String getQTableCat() {
+    this.initialize();
+    return this.qTableCat;
+  }
+
+  public Table setQTableCat(String qTableCat) {
+    this.assertNotInitialized();
+    this.qTableCat = qTableCat;
+    return this;
+  }
+
+  public String getQTableSchema() {
+    this.initialize();
+    return this.qTableSchema;
+  }
+
+  public Table setQTableSchema(String qTableSchema) {
+    this.assertNotInitialized();
+    this.qTableSchema = qTableSchema;
+    return this;
+  }
+
+  public String getQTableName() {
+    this.initialize();
+    return this.qTableName;
+  }
+
+  public Table setQTableName(String qTableName) {
+    this.assertNotInitialized();
+    this.qTableName = qTableName;
     return this;
   }
 
