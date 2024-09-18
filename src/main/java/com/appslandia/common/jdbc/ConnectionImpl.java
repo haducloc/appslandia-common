@@ -144,7 +144,7 @@ public class ConnectionImpl implements Connection {
     if (backupTable == null) {
       backupTable = originalTable + "_BAK";
     }
-    if (getDbDialect().getName().equals(DbDialect.MSSQL)) {
+    if (getDbDialect().getType().equals(DbDialect.MSSQL)) {
       return executeUpdate(STR.fmt("SELECT * INTO {} FROM {}", getDbDialect().quoteIdentifier(backupTable),
           getDbDialect().quoteIdentifier(originalTable)));
     }

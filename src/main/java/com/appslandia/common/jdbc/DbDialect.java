@@ -41,17 +41,17 @@ public class DbDialect {
   public static final String SQLITE = "SQLITE";
   public static final String H2 = "H2";
 
-  final String name;
+  final String type;
   final String idQuote;
 
   private DbDialect(Connection conn) throws java.sql.SQLException {
     DatabaseMetaData mtdt = conn.getMetaData();
-    this.name = parseDbName(mtdt.getURL());
+    this.type = parseDbType(mtdt.getURL());
     this.idQuote = mtdt.getIdentifierQuoteString();
   }
 
-  public String getName() {
-    return this.name;
+  public String getType() {
+    return this.type;
   }
 
   public String getIdQuote() {
@@ -62,7 +62,7 @@ public class DbDialect {
     return new DbDialect(conn);
   }
 
-  private static final String parseDbName(String url) {
+  private static final String parseDbType(String url) {
     if (url.startsWith("jdbc:postgresql")) {
       return POSTGRESQL;
     }
@@ -87,14 +87,14 @@ public class DbDialect {
     if (url.startsWith("jdbc:h2")) {
       return H2;
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to parse dbName from: {}", url));
+    throw new IllegalArgumentException(STR.fmt("Failed to parse type from: {}", url));
   }
 
   public String quoteIdentifier(String identifier) {
     if (!" ".equals(this.idQuote)) {
       return this.idQuote + identifier + this.idQuote;
     }
-    switch (this.name) {
+    switch (this.type) {
     case MYSQL:
     case SQLITE:
       return "`" + identifier + "`";
@@ -114,17 +114,17 @@ public class DbDialect {
     switch (sqlType) {
     // INTEGER
     case java.sql.Types.INTEGER:
-      if (ORACLE.equals(this.name)) {
+      if (ORACLE.equals(this.type)) {
         return "NUMBER(10)";
       }
       return "INT";
 
     // BIGINT
     case java.sql.Types.BIGINT:
-      if (ORACLE.equals(this.name)) {
+      if (ORACLE.equals(this.type)) {
         return "NUMBER(19)";
       }
-      if (SQLITE.equals(this.name)) {
+      if (SQLITE.equals(this.type)) {
         return "INTEGER";
       }
       return "BIGINT";
