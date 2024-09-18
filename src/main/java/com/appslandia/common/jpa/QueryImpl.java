@@ -49,8 +49,7 @@ public class QueryImpl implements Query {
     this(query, null);
   }
 
-  public QueryImpl(Query query, JpaSql sql) {
-    Asserts.isTrue(!(query instanceof QueryImpl));
+  protected QueryImpl(Query query, JpaSql sql) {
     this.query = query;
     this.sql = sql;
   }
@@ -340,5 +339,10 @@ public class QueryImpl implements Query {
   @Override
   public <T> T unwrap(Class<T> cls) {
     return this.query.unwrap(cls);
+  }
+
+  @Override
+  public String toString() {
+    return ObjectUtils.toStringWrapper(this, this.query);
   }
 }

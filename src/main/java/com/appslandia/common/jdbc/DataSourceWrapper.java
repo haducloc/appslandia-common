@@ -27,6 +27,8 @@ import java.sql.SQLFeatureNotSupportedException;
 
 import javax.sql.DataSource;
 
+import com.appslandia.common.utils.ObjectUtils;
+
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
@@ -102,5 +104,10 @@ public class DataSourceWrapper implements DataSource {
   @Override
   public <T> T unwrap(Class<T> arg0) throws SQLException {
     return ds().unwrap(arg0);
+  }
+
+  @Override
+  public String toString() {
+    return ObjectUtils.toStringWrapper(this, this.ds);
   }
 }

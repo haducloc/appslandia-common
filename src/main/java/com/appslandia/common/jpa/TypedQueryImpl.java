@@ -26,6 +26,7 @@ import com.appslandia.common.jdbc.JdbcSql;
 import com.appslandia.common.jdbc.LikeType;
 import com.appslandia.common.jdbc.SqlLikeEscaper;
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.ObjectUtils;
 
 import jakarta.persistence.FlushModeType;
 import jakarta.persistence.LockModeType;
@@ -48,8 +49,7 @@ public class TypedQueryImpl<X> implements TypedQuery<X> {
     this(query, null);
   }
 
-  public TypedQueryImpl(TypedQuery<X> query, JpaSql sql) {
-    Asserts.isTrue(!(query instanceof TypedQueryImpl));
+  protected TypedQueryImpl(TypedQuery<X> query, JpaSql sql) {
     this.query = query;
     this.sql = sql;
   }
@@ -332,5 +332,10 @@ public class TypedQueryImpl<X> implements TypedQuery<X> {
   @Override
   public <T> T unwrap(Class<T> cls) {
     return this.query.unwrap(cls);
+  }
+
+  @Override
+  public String toString() {
+    return ObjectUtils.toStringWrapper(this, this.query);
   }
 }

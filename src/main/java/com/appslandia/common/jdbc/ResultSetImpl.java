@@ -36,6 +36,7 @@ import java.util.Locale;
 import com.appslandia.common.base.AssertException;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.NormalizeUtils;
+import com.appslandia.common.utils.ObjectUtils;
 import com.appslandia.common.utils.STR;
 import com.appslandia.common.utils.StringUtils;
 
@@ -1354,5 +1355,10 @@ public class ResultSetImpl implements ResultSet {
   @Override
   public void close() throws java.sql.SQLException {
     this.rs.close();
+  }
+
+  @Override
+  public String toString() {
+    return ObjectUtils.toStringWrapper(this, this.rs);
   }
 }

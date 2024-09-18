@@ -27,6 +27,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import com.appslandia.common.utils.ObjectUtils;
+
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
@@ -122,6 +124,11 @@ public class CaseInsensitiveMap<V> implements Map<String, V>, Serializable {
   @Override
   public int hashCode() {
     return this.map.hashCode();
+  }
+
+  @Override
+  public String toString() {
+    return ObjectUtils.toStringWrapper(this, this.map);
   }
 
   static String toKey(String key) {

@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.ObjectUtils;
 
 /**
  *
@@ -1538,5 +1539,10 @@ public class StatementImpl implements PreparedStatement {
   @Override
   public void close() throws java.sql.SQLException {
     this.stat.close();
+  }
+
+  @Override
+  public String toString() {
+    return ObjectUtils.toStringWrapper(this, this.stat);
   }
 }

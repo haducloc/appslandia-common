@@ -26,6 +26,7 @@ import java.util.Map;
 
 import com.appslandia.common.base.Params;
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.ObjectUtils;
 
 import jakarta.persistence.Cache;
 import jakarta.persistence.EntityGraph;
@@ -390,5 +391,10 @@ public class EntityManagerImpl implements EntityManager {
   @Override
   public <T> List<EntityGraph<? super T>> getEntityGraphs(Class<T> entityClass) {
     return em().getEntityGraphs(entityClass);
+  }
+
+  @Override
+  public String toString() {
+    return ObjectUtils.toStringWrapper(this, this.em);
   }
 }

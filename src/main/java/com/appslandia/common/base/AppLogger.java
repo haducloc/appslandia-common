@@ -24,6 +24,7 @@ import java.lang.System.Logger.Level;
 import java.util.function.Supplier;
 
 import com.appslandia.common.utils.ExceptionUtils;
+import com.appslandia.common.utils.ObjectUtils;
 
 /**
  *
@@ -150,4 +151,10 @@ public class AppLogger {
   public void error(Supplier<String> message, Throwable thrown) {
     this.logger.log(Level.ERROR, message, thrown);
   }
+
+  @Override
+  public String toString() {
+    return ObjectUtils.toStringWrapper(this, this.logger);
+  }
+
 }

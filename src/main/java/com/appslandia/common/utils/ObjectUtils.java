@@ -42,6 +42,10 @@ public class ObjectUtils {
     return (obj != null) ? obj.toString() : null;
   }
 
+  public static String toStringWrapper(Object wrapper, Object inner) {
+    return STR.fmt("{}@{}({})", wrapper.getClass().getName(), System.identityHashCode(wrapper), inner);
+  }
+
   @SuppressWarnings("unchecked")
   public static <F, T> T cast(F obj) throws ClassCastException {
     return (T) obj;

@@ -23,6 +23,7 @@ package com.appslandia.common.jpa;
 import java.util.Map;
 
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.ObjectUtils;
 
 import jakarta.persistence.Cache;
 import jakarta.persistence.EntityGraph;
@@ -124,5 +125,10 @@ public class EntityManagerFactoryImpl implements EntityManagerFactory {
   @Override
   public <T> T unwrap(Class<T> cls) {
     return emf().unwrap(cls);
+  }
+
+  @Override
+  public String toString() {
+    return ObjectUtils.toStringWrapper(this, this.emf);
   }
 }

@@ -35,6 +35,7 @@ import javax.sql.DataSource;
 import com.appslandia.common.base.AssertException;
 import com.appslandia.common.threading.ThreadLocalStorage;
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.ObjectUtils;
 import com.appslandia.common.utils.STR;
 
 /**
@@ -680,7 +681,7 @@ public class ConnectionImpl implements Connection {
 
   @Override
   public String toString() {
-    return ConnectionImpl.class.getName() + "(" + this.conn.toString() + ")";
+    return ObjectUtils.toStringWrapper(this, this.conn);
   }
 
   private static final ThreadLocalStorage<ConnectionImpl> CONNECTION_HOLDER = new ThreadLocalStorage<>();

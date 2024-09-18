@@ -27,6 +27,8 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
 
+import com.appslandia.common.utils.ObjectUtils;
+
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
@@ -151,6 +153,11 @@ public class CaseInsensitiveSet implements Set<String>, Serializable {
   @Override
   public int hashCode() {
     return this.elements.hashCode();
+  }
+
+  @Override
+  public String toString() {
+    return ObjectUtils.toStringWrapper(this, this.elements);
   }
 
   static String toValue(String value) {
