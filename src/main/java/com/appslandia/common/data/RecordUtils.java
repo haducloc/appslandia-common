@@ -92,15 +92,15 @@ public final class RecordUtils {
 
         if (cat != null) {
           table.setQTableCat(
-              ucKeywords.contains(cat.toUpperCase(Locale.ENGLISH)) ? conn.getSqlEngine().quoteIdentifier(cat) : cat);
+              ucKeywords.contains(cat.toUpperCase(Locale.ENGLISH)) ? conn.getDbDialect().quoteIdentifier(cat) : cat);
         }
         if (schem != null) {
           table.setQTableSchema(
-              ucKeywords.contains(schem.toUpperCase(Locale.ENGLISH)) ? conn.getSqlEngine().quoteIdentifier(schem)
+              ucKeywords.contains(schem.toUpperCase(Locale.ENGLISH)) ? conn.getDbDialect().quoteIdentifier(schem)
                   : schem);
         }
         table.setQTableName(
-            ucKeywords.contains(tname.toUpperCase(Locale.ENGLISH)) ? conn.getSqlEngine().quoteIdentifier(tname)
+            ucKeywords.contains(tname.toUpperCase(Locale.ENGLISH)) ? conn.getDbDialect().quoteIdentifier(tname)
                 : tname);
       }
     }
@@ -129,7 +129,7 @@ public final class RecordUtils {
 
         column.setName(columnName);
         column.setQName(ucKeywords.contains(columnName.toUpperCase(Locale.ENGLISH))
-            ? conn.getSqlEngine().quoteIdentifier(columnName)
+            ? conn.getDbDialect().quoteIdentifier(columnName)
             : columnName);
 
         column.setTypeName(rs.getString("TYPE_NAME"));
@@ -156,15 +156,15 @@ public final class RecordUtils {
 
         if (cat != null) {
           column.setQTableCat(
-              ucKeywords.contains(cat.toUpperCase(Locale.ENGLISH)) ? conn.getSqlEngine().quoteIdentifier(cat) : cat);
+              ucKeywords.contains(cat.toUpperCase(Locale.ENGLISH)) ? conn.getDbDialect().quoteIdentifier(cat) : cat);
         }
         if (schem != null) {
           column.setQTableSchema(
-              ucKeywords.contains(schem.toUpperCase(Locale.ENGLISH)) ? conn.getSqlEngine().quoteIdentifier(schem)
+              ucKeywords.contains(schem.toUpperCase(Locale.ENGLISH)) ? conn.getDbDialect().quoteIdentifier(schem)
                   : schem);
         }
         column.setQTableName(
-            ucKeywords.contains(tname.toUpperCase(Locale.ENGLISH)) ? conn.getSqlEngine().quoteIdentifier(tname)
+            ucKeywords.contains(tname.toUpperCase(Locale.ENGLISH)) ? conn.getDbDialect().quoteIdentifier(tname)
                 : tname);
 
         // Java Type

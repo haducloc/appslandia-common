@@ -20,6 +20,8 @@
 
 package com.appslandia.common.jdbc;
 
+import java.sql.Types;
+
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
 
@@ -28,14 +30,14 @@ import com.appslandia.common.utils.STR;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public enum SqlEngine {
+public enum DbDialect {
 
   POSTGRESQL, MYSQL, MARIADB, MSSQL, ORACLE, DB2, SQLITE, H2;
 
-  private SqlEngine() {
+  private DbDialect() {
   }
 
-  public static SqlEngine parse(String url) {
+  public static DbDialect parse(String url) {
     Asserts.notNull(url);
 
     if (url.startsWith("jdbc:postgresql")) {
@@ -62,7 +64,7 @@ public enum SqlEngine {
     if (url.startsWith("jdbc:h2")) {
       return H2;
     }
-    throw new IllegalArgumentException(STR.fmt("Failed to parse SqlEngine from: {}", url));
+    throw new IllegalArgumentException(STR.fmt("Failed to parse DbDialect from: {}", url));
   }
 
   public String quoteIdentifier(String name) {
@@ -79,6 +81,28 @@ public enum SqlEngine {
       return "\"" + name + "\"";
     default:
       return name;
+    }
+  }
+
+  public String getDbType(int sqlType) {
+    switch (sqlType) {
+    case Types.INTEGER: {
+      if (this == ORACLE) {
+        return "NUMBER(10)";
+      }
+      return "INT";
+    }
+    case Types.BIGINT: {
+      if (this == ORACLE) {
+        return "NUMBER(19)";
+      }
+      if (this == SQLITE) {
+        return "INTEGER";
+      }
+      return "BIGINT";
+    }
+    default:
+      throw new UnsupportedOperationException("Unhandled sqlType: " + sqlType);
     }
   }
 }

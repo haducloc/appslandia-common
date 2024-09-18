@@ -49,7 +49,7 @@ public class ConnectionImpl implements Connection {
   protected final String dsName;
   protected ConnectionImpl outer;
 
-  protected final SqlEngine sqlEngine;
+  protected final DbDialect dbDialect;
 
   public ConnectionImpl(DataSource dataSource) throws java.sql.SQLException {
     this(dataSource, "");
@@ -63,7 +63,7 @@ public class ConnectionImpl implements Connection {
     this.conn = dataSource.getConnection();
     this.dsName = Asserts.notNull(dsName, "dsName must be not null.");
 
-    this.sqlEngine = SqlEngine.parse(this.conn.getMetaData().getURL());
+    this.dbDialect = DbDialect.parse(this.conn.getMetaData().getURL());
     CONNECTION_HOLDER.set(this);
   }
 
@@ -75,8 +75,8 @@ public class ConnectionImpl implements Connection {
     return this.dsName;
   }
 
-  public SqlEngine getSqlEngine() {
-    return this.sqlEngine;
+  public DbDialect getDbDialect() {
+    return this.dbDialect;
   }
 
   // PrepareStatement utilities
@@ -114,11 +114,11 @@ public class ConnectionImpl implements Connection {
   // Update Utilities
 
   public int dropTable(String tableName) throws java.sql.SQLException {
-    return executeUpdate(STR.fmt("DROP TABLE IF EXISTS {}", this.sqlEngine.quoteIdentifier(tableName)));
+    return executeUpdate(STR.fmt("DROP TABLE IF EXISTS {}", this.dbDialect.quoteIdentifier(tableName)));
   }
 
   public int truncateTable(String tableName) throws java.sql.SQLException {
-    return executeUpdate(STR.fmt("TRUNCATE TABLE {}", this.sqlEngine.quoteIdentifier(tableName)));
+    return executeUpdate(STR.fmt("TRUNCATE TABLE {}", this.dbDialect.quoteIdentifier(tableName)));
   }
 
   public int backupTable(String originalTable) throws java.sql.SQLException {
@@ -129,12 +129,12 @@ public class ConnectionImpl implements Connection {
     if (backupTable == null) {
       backupTable = originalTable + "_BAK";
     }
-    if (this.sqlEngine == SqlEngine.MSSQL) {
-      return executeUpdate(STR.fmt("SELECT * INTO {} FROM {}", this.sqlEngine.quoteIdentifier(backupTable),
-          this.sqlEngine.quoteIdentifier(originalTable)));
+    if (this.dbDialect == DbDialect.MSSQL) {
+      return executeUpdate(STR.fmt("SELECT * INTO {} FROM {}", this.dbDialect.quoteIdentifier(backupTable),
+          this.dbDialect.quoteIdentifier(originalTable)));
     }
-    return executeUpdate(STR.fmt("CREATE TABLE {} AS SELECT * FROM {}", this.sqlEngine.quoteIdentifier(backupTable),
-        this.sqlEngine.quoteIdentifier(originalTable)));
+    return executeUpdate(STR.fmt("CREATE TABLE {} AS SELECT * FROM {}", this.dbDialect.quoteIdentifier(backupTable),
+        this.dbDialect.quoteIdentifier(originalTable)));
   }
 
   public int executeUpdate(String sql) throws java.sql.SQLException {
@@ -163,8 +163,8 @@ public class ConnectionImpl implements Connection {
     Asserts.notNull(tableName);
     Asserts.notNull(columnLabel);
 
-    String sql = STR.fmt("SELECT DISTINCT {} FROM {}", this.sqlEngine.quoteIdentifier(columnLabel),
-        this.sqlEngine.quoteIdentifier(tableName));
+    String sql = STR.fmt("SELECT DISTINCT {} FROM {}", this.dbDialect.quoteIdentifier(columnLabel),
+        this.dbDialect.quoteIdentifier(tableName));
 
     try (Statement stat = this.conn.createStatement()) {
       try (ResultSet rs = stat.executeQuery(sql)) {
