@@ -341,7 +341,7 @@ public class ToStringBuilder {
     if (level > this.tsDepthLevel) {
       return;
     }
-    builder.append("[");
+    builder.append("{");
     boolean isFirst = true;
 
     Class<?> clazz = obj.getClass();
@@ -362,7 +362,7 @@ public class ToStringBuilder {
           isFirst = false;
         }
         appendln(builder, level + this.initIndent, false);
-        builder.append(field.getName()).append(": ");
+        builder.append(field.getName()).append(":");
 
         try {
           Object fieldVal = ReflectionUtils.get(field, obj);
@@ -392,10 +392,10 @@ public class ToStringBuilder {
       clazz = clazz.getSuperclass();
     }
     if (isFirst) {
-      builder.append(" no fields ]");
+      builder.append("}");
     } else {
       appendln(builder, level - 1 + this.initIndent, false);
-      builder.append("]");
+      builder.append("}");
     }
   }
 
@@ -439,7 +439,7 @@ public class ToStringBuilder {
       }
     }
     if (isFirst) {
-      builder.append(" no elements ]");
+      builder.append("] (0)");
     } else {
       appendln(builder, level - 1 + this.initIndent, iterator.isCompact());
       builder.append("] (").append(iterator.getIterLen() != null ? iterator.getIterLen() : "?").append(")");
@@ -451,7 +451,7 @@ public class ToStringBuilder {
     if (level > this.tsDepthLevel) {
       return;
     }
-    builder.append("[");
+    builder.append("{");
     boolean isFirst = true;
 
     for (Object key : map.keySet()) {
@@ -462,7 +462,7 @@ public class ToStringBuilder {
       }
       appendln(builder, level + this.initIndent, false);
 
-      builder.append(key).append(": ");
+      builder.append(key).append(":");
       Object entryVal = map.get(key);
       if (entryVal == null) {
         builder.append("null");
@@ -476,16 +476,16 @@ public class ToStringBuilder {
       }
     }
     if (isFirst) {
-      builder.append(" no entries ]");
+      builder.append("} (0)");
     } else {
       appendln(builder, level - 1 + this.initIndent, false);
-      builder.append("] (").append(map.size()).append(")");
+      builder.append("} (").append(map.size()).append(")");
     }
   }
 
   private void toStringAttributes(Object obj, Method getAttributeMethod, Set<String> attributes, int level,
       TextBuilder builder) {
-    builder.append("[");
+    builder.append("{");
     boolean isFirst = true;
 
     for (String attribute : attributes) {
@@ -495,7 +495,7 @@ public class ToStringBuilder {
         isFirst = false;
       }
       appendln(builder, level + this.initIndent, false);
-      builder.append(attribute).append(": ");
+      builder.append(attribute).append(":");
 
       try {
         Object element = getAttributeMethod.invoke(obj, attribute);
@@ -518,10 +518,10 @@ public class ToStringBuilder {
       }
     }
     if (isFirst) {
-      builder.append(" no elements ]");
+      builder.append("} (0)");
     } else {
       appendln(builder, level - 1 + this.initIndent, false);
-      builder.append("]");
+      builder.append("}");
     }
   }
 

@@ -43,7 +43,7 @@ public class ObjectUtils {
   }
 
   public static String toStringWrapper(Object wrapper, Object inner) {
-    return STR.fmt("{}@{}({})", wrapper.getClass().getName(), System.identityHashCode(wrapper), inner);
+    return STR.fmt("{}({})", toIdHash(wrapper), inner);
   }
 
   @SuppressWarnings("unchecked")
