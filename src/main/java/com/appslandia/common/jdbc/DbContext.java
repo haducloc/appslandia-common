@@ -113,6 +113,14 @@ public class DbContext implements AutoCloseable {
     return this.conn.truncateTable(tableName);
   }
 
+  public int backupTable(String originalTable) throws java.sql.SQLException {
+    return this.conn.backupTable(originalTable);
+  }
+
+  public int backupTable(String originalTable, String backupTable) throws java.sql.SQLException {
+    return this.conn.backupTable(originalTable, backupTable);
+  }
+
   // Execute Utilities
 
   public String getDistinctValues(String tableName, String columnLabel) throws java.sql.SQLException {

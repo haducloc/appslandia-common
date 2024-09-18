@@ -121,7 +121,14 @@ public class ConnectionImpl implements Connection {
     return executeUpdate(STR.fmt("TRUNCATE TABLE {}", this.sqlEngine.quoteIdentifier(tableName)));
   }
 
+  public int backupTable(String originalTable) throws java.sql.SQLException {
+    return backupTable(originalTable, null);
+  }
+
   public int backupTable(String originalTable, String backupTable) throws java.sql.SQLException {
+    if (backupTable == null) {
+      backupTable = originalTable + "_BAK";
+    }
     if (this.sqlEngine == SqlEngine.MSSQL) {
       return executeUpdate(STR.fmt("SELECT * INTO {} FROM {}", this.sqlEngine.quoteIdentifier(backupTable),
           this.sqlEngine.quoteIdentifier(originalTable)));
