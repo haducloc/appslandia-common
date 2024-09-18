@@ -23,7 +23,6 @@ package com.appslandia.common.jdbc;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 
-import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
 
 /**
@@ -42,10 +41,13 @@ public class DbDialect {
   public static final String SQLITE = "SQLITE";
   public static final String H2 = "H2";
 
-  private String name;
-  private String idQuote;
+  final String name;
+  final String idQuote;
 
-  private DbDialect() {
+  private DbDialect(Connection conn) throws java.sql.SQLException {
+    DatabaseMetaData mtdt = conn.getMetaData();
+    this.name = parseDbName(mtdt.getURL());
+    this.idQuote = mtdt.getIdentifierQuoteString();
   }
 
   public String getName() {
@@ -57,13 +59,7 @@ public class DbDialect {
   }
 
   public static DbDialect parse(Connection conn) throws java.sql.SQLException {
-    Asserts.notNull(conn);
-    DatabaseMetaData mtdt = conn.getMetaData();
-
-    DbDialect dialect = new DbDialect();
-    dialect.name = parseDbName(mtdt.getURL());
-    dialect.idQuote = mtdt.getIdentifierQuoteString();
-    return dialect;
+    return new DbDialect(conn);
   }
 
   private static final String parseDbName(String url) {
