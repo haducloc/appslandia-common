@@ -81,7 +81,7 @@ public final class RecordUtils {
         }
         table = new Table();
 
-        // cat, schem, tname
+        // TABLE_CAT, TABLE_SCHEM, TABLE_NAME
         String cat = rs.getString("TABLE_CAT");
         String schem = rs.getString("TABLE_SCHEM");
         String tname = rs.getString("TABLE_NAME");
@@ -136,7 +136,6 @@ public final class RecordUtils {
 
         int sqlType = rs.getInt("DATA_TYPE");
         column.setSqlType(sqlType);
-
         column.setColumnSize(rs.getInt("COLUMN_SIZE"));
 
         int fractionDigits = rs.getInt("DECIMAL_DIGITS");
@@ -145,7 +144,7 @@ public final class RecordUtils {
         column.setNullable("YES".equals(rs.getString("IS_NULLABLE")));
         column.setPosition(rs.getInt("ORDINAL_POSITION"));
 
-        // cat, schem, tname
+        // TABLE_CAT, TABLE_SCHEM, TABLE_NAME
         String cat = rs.getString("TABLE_CAT");
         String schem = rs.getString("TABLE_SCHEM");
         String tname = rs.getString("TABLE_NAME");
