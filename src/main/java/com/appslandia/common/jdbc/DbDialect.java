@@ -21,7 +21,7 @@
 package com.appslandia.common.jdbc;
 
 import java.sql.Connection;
-import java.sql.Types;
+import java.sql.DatabaseMetaData;
 
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
@@ -31,17 +31,42 @@ import com.appslandia.common.utils.STR;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public enum DbDialect {
+public class DbDialect {
 
-  POSTGRESQL, MYSQL, MARIADB, MSSQL, ORACLE, DB2, SQLITE, H2;
+  public static final String POSTGRESQL = "POSTGRESQL";
+  public static final String MYSQL = "MYSQL";
+  public static final String MARIADB = "MARIADB";
+  public static final String MSSQL = "MSSQL";
+  public static final String ORACLE = "ORACLE";
+  public static final String DB2 = "DB2";
+  public static final String SQLITE = "SQLITE";
+  public static final String H2 = "H2";
+
+  private String name;
+  private String idQuote;
 
   private DbDialect() {
   }
 
+  public String getName() {
+    return this.name;
+  }
+
+  public String getIdQuote() {
+    return this.idQuote;
+  }
+
   public static DbDialect parse(Connection conn) throws java.sql.SQLException {
     Asserts.notNull(conn);
-    String url = conn.getMetaData().getURL();
+    DatabaseMetaData mtdt = conn.getMetaData();
 
+    DbDialect dialect = new DbDialect();
+    dialect.name = parseDbName(mtdt.getURL());
+    dialect.idQuote = mtdt.getIdentifierQuoteString();
+    return dialect;
+  }
+
+  private static final String parseDbName(String url) {
     if (url.startsWith("jdbc:postgresql")) {
       return POSTGRESQL;
     }
@@ -69,40 +94,44 @@ public enum DbDialect {
     throw new IllegalArgumentException(STR.fmt("Failed to parse DbDialect from: {}", url));
   }
 
-  public String quoteIdentifier(String name) {
-    switch (this) {
+  public String quoteIdentifier(String identifier) {
+    if (!" ".equals(this.idQuote)) {
+      return this.idQuote + identifier + this.idQuote;
+    }
+    switch (this.name) {
     case MYSQL:
     case SQLITE:
-      return "`" + name + "`";
+      return "`" + identifier + "`";
     case MSSQL:
-      return "[" + name + "]";
+      return "[" + identifier + "]";
     case POSTGRESQL:
     case ORACLE:
     case DB2:
     case H2:
-      return "\"" + name + "\"";
+      return "\"" + identifier + "\"";
     default:
-      return name;
+      return identifier;
     }
   }
 
   public String getDbType(int sqlType) {
     switch (sqlType) {
-    case Types.INTEGER: {
-      if (this == ORACLE) {
+    // INTEGER
+    case java.sql.Types.INTEGER:
+      if (ORACLE.equals(this.name)) {
         return "NUMBER(10)";
       }
       return "INT";
-    }
-    case Types.BIGINT: {
-      if (this == ORACLE) {
+
+    // BIGINT
+    case java.sql.Types.BIGINT:
+      if (ORACLE.equals(this.name)) {
         return "NUMBER(19)";
       }
-      if (this == SQLITE) {
+      if (SQLITE.equals(this.name)) {
         return "INTEGER";
       }
       return "BIGINT";
-    }
     default:
       throw new UnsupportedOperationException("Unhandled sqlType: " + sqlType);
     }

@@ -42,7 +42,6 @@ import com.appslandia.common.jdbc.StatementImpl;
 import com.appslandia.common.jdbc.UncheckedSQLException;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
-import com.appslandia.common.utils.StringUtils;
 
 /**
  *
@@ -328,24 +327,8 @@ public class RecordContext extends DbContext {
     });
   }
 
-  protected String getDataSourceID() throws UncheckedSQLException {
-    try {
-      if (!StringUtils.isNullOrEmpty(this.conn.getDsName())) {
-        return this.conn.getDsName();
-      }
-      var url = this.conn.getMetaData().getURL();
-      if (url != null) {
-        return url;
-      }
-      throw new SQLException(STR.fmt("Couldn't determine getDataSourceID() on {}.", this.conn));
-
-    } catch (SQLException ex) {
-      throw new UncheckedSQLException(ex);
-    }
-  }
-
   public Table getTable(String tableName) throws UncheckedSQLException {
-    ConcurrentMap<String, Table> tables = TABLES.computeIfAbsent(getDataSourceID(), db -> new ConcurrentHashMap<>());
+    ConcurrentMap<String, Table> tables = TABLES.computeIfAbsent(this.conn.getDsId(), db -> new ConcurrentHashMap<>());
 
     return tables.computeIfAbsent(tableName, tn -> {
       try {

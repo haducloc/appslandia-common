@@ -24,11 +24,14 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.sql.DataSource;
 
@@ -49,8 +52,6 @@ public class ConnectionImpl implements Connection {
   protected final String dsName;
   protected ConnectionImpl outer;
 
-  protected final DbDialect dbDialect;
-
   public ConnectionImpl(DataSource dataSource) throws java.sql.SQLException {
     this(dataSource, "");
   }
@@ -63,7 +64,6 @@ public class ConnectionImpl implements Connection {
     this.conn = dataSource.getConnection();
     this.dsName = Asserts.notNull(dsName, "dsName must be not null.");
 
-    this.dbDialect = DbDialect.parse(this.conn);
     CONNECTION_HOLDER.set(this);
   }
 
@@ -75,8 +75,23 @@ public class ConnectionImpl implements Connection {
     return this.dsName;
   }
 
-  public DbDialect getDbDialect() {
-    return this.dbDialect;
+  public String getDsId() throws UncheckedSQLException {
+    // dsName
+    if (!this.dsName.isEmpty()) {
+      return this.dsName;
+    }
+
+    try {
+      // URL
+      var url = this.conn.getMetaData().getURL();
+      if (url != null) {
+        return url;
+      }
+      throw new SQLException(STR.fmt("Couldn't determine getDsId() on {}.", this.conn));
+
+    } catch (SQLException ex) {
+      throw new UncheckedSQLException(ex);
+    }
   }
 
   // PrepareStatement utilities
@@ -114,11 +129,11 @@ public class ConnectionImpl implements Connection {
   // Update Utilities
 
   public int dropTable(String tableName) throws java.sql.SQLException {
-    return executeUpdate(STR.fmt("DROP TABLE IF EXISTS {}", this.dbDialect.quoteIdentifier(tableName)));
+    return executeUpdate(STR.fmt("DROP TABLE IF EXISTS {}", getDbDialect().quoteIdentifier(tableName)));
   }
 
   public int truncateTable(String tableName) throws java.sql.SQLException {
-    return executeUpdate(STR.fmt("TRUNCATE TABLE {}", this.dbDialect.quoteIdentifier(tableName)));
+    return executeUpdate(STR.fmt("TRUNCATE TABLE {}", getDbDialect().quoteIdentifier(tableName)));
   }
 
   public int backupTable(String originalTable) throws java.sql.SQLException {
@@ -129,12 +144,12 @@ public class ConnectionImpl implements Connection {
     if (backupTable == null) {
       backupTable = originalTable + "_BAK";
     }
-    if (this.dbDialect == DbDialect.MSSQL) {
-      return executeUpdate(STR.fmt("SELECT * INTO {} FROM {}", this.dbDialect.quoteIdentifier(backupTable),
-          this.dbDialect.quoteIdentifier(originalTable)));
+    if (getDbDialect().getName().equals(DbDialect.MSSQL)) {
+      return executeUpdate(STR.fmt("SELECT * INTO {} FROM {}", getDbDialect().quoteIdentifier(backupTable),
+          getDbDialect().quoteIdentifier(originalTable)));
     }
-    return executeUpdate(STR.fmt("CREATE TABLE {} AS SELECT * FROM {}", this.dbDialect.quoteIdentifier(backupTable),
-        this.dbDialect.quoteIdentifier(originalTable)));
+    return executeUpdate(STR.fmt("CREATE TABLE {} AS SELECT * FROM {}", getDbDialect().quoteIdentifier(backupTable),
+        getDbDialect().quoteIdentifier(originalTable)));
   }
 
   public int executeUpdate(String sql) throws java.sql.SQLException {
@@ -163,8 +178,8 @@ public class ConnectionImpl implements Connection {
     Asserts.notNull(tableName);
     Asserts.notNull(columnLabel);
 
-    String sql = STR.fmt("SELECT DISTINCT {} FROM {}", this.dbDialect.quoteIdentifier(columnLabel),
-        this.dbDialect.quoteIdentifier(tableName));
+    String sql = STR.fmt("SELECT DISTINCT {} FROM {}", getDbDialect().quoteIdentifier(columnLabel),
+        getDbDialect().quoteIdentifier(tableName));
 
     try (Statement stat = this.conn.createStatement()) {
       try (ResultSet rs = stat.executeQuery(sql)) {
@@ -711,4 +726,17 @@ public class ConnectionImpl implements Connection {
   public static boolean hasCurrent() {
     return CONNECTION_HOLDER.hasValue();
   }
+
+  public DbDialect getDbDialect() throws UncheckedSQLException {
+    return DB_DIALECTS.computeIfAbsent(this.getDsId(), u -> {
+
+      try {
+        return DbDialect.parse(this.conn);
+      } catch (SQLException ex) {
+        throw new UncheckedSQLException(ex);
+      }
+    });
+  }
+
+  private static final ConcurrentMap<String, DbDialect> DB_DIALECTS = new ConcurrentHashMap<>();
 }
