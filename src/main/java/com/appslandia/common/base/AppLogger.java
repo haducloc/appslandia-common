@@ -156,5 +156,4 @@ public class AppLogger {
   public String toString() {
     return ObjectUtils.toStringWrapper(this, this.logger);
   }
-
 }
