@@ -136,11 +136,16 @@ public class JsonObjectParser extends InitializeObject {
     // Double/Long
     String numberVal = this.jsonValueConverter.asNumber(element, asResult.set(false));
     if (Boolean.TRUE.equals(asResult.value)) {
-      try {
-        return Long.valueOf(numberVal);
 
-      } catch (NumberFormatException ex) {
-        return Double.valueOf(numberVal);
+      if (numberVal.indexOf('.') >= 0) {
+        return Double.parseDouble(numberVal);
+      } else {
+        try {
+          return Long.parseLong(numberVal);
+
+        } catch (NumberFormatException e) {
+          return Double.parseDouble(numberVal);
+        }
       }
     }
 
