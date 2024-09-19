@@ -65,7 +65,7 @@ public class SqlLikeEscaper {
         }
       }
     }
-    return sb.toString();
+    return sb.length() > 0 ? sb.toString() : value;
   }
 
   public String toLikePattern(String value, LikeType likeType) {
