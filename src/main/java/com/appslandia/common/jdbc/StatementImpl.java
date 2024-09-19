@@ -46,14 +46,16 @@ public class StatementImpl implements PreparedStatement {
 
   protected final JdbcSql sql;
   protected final PreparedStatement stat;
+  protected final DbDialect dbDialect;
 
-  public StatementImpl(PreparedStatement stat) {
-    this(stat, null);
+  public StatementImpl(PreparedStatement stat, DbDialect dbDialect) {
+    this(stat, null, dbDialect);
   }
 
-  protected StatementImpl(PreparedStatement stat, JdbcSql sql) {
+  public StatementImpl(PreparedStatement stat, JdbcSql sql, DbDialect dbDialect) {
     this.stat = stat;
     this.sql = sql;
+    this.dbDialect = dbDialect;
   }
 
   protected JdbcSql getSql() {
@@ -352,7 +354,7 @@ public class StatementImpl implements PreparedStatement {
     if (value != null && value.startsWith("\"") && value.endsWith("\"")) {
       return value.substring(1, value.length() - 1);
     } else {
-      return SqlLikeEscaper.toLikePattern(value, likeType);
+      return this.dbDialect.toLikePattern(value, likeType);
     }
   }
 

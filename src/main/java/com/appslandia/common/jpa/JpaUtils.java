@@ -18,25 +18,34 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.jdbc;
+package com.appslandia.common.jpa;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import com.appslandia.common.utils.STR;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceException;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class SqlLikeEscaperTest {
+public class JpaUtils {
 
-  @Test
-  public void test() {
-    SqlLikeEscaper escaper = new SqlLikeEscaper("\\", new char[] {'%', '_'});
-    String val = escaper.escape("%20");
-    Assertions.assertEquals("\\%20", val);
+  public static String getDataSourceId(EntityManager em) throws PersistenceException {
+    try {
+      var conn = em.unwrap(Connection.class);
+      var url = conn.getMetaData().getURL();
+      if (url != null) {
+        return url;
+      }
+      throw new PersistenceException(STR.fmt("Couldn't determine dataSourceId: em={}", em));
 
-    val = escaper.escape("_id");
-    Assertions.assertEquals("\\_id", val);
+    } catch (SQLException ex) {
+      throw new PersistenceException(ex.getMessage(), ex);
+    }
   }
 }

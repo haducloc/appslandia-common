@@ -20,7 +20,6 @@
 
 package com.appslandia.common.jdbc;
 
-import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.StringUtils;
 
@@ -32,13 +31,16 @@ import com.appslandia.common.utils.StringUtils;
  */
 public class SqlLikeEscaper {
 
-  final char escapeSignChar;
+  final String escapeMarker;
   final char[] charsToEscape;
 
-  public SqlLikeEscaper(char escapeSignChar, char[] charsToEscape) {
-    Asserts.notNull(charsToEscape);
+  public SqlLikeEscaper(String escapeMarker) {
+    this.escapeMarker = escapeMarker;
+    this.charsToEscape = new char[] { '%', '_' };
+  }
 
-    this.escapeSignChar = escapeSignChar;
+  public SqlLikeEscaper(String escapeMarker, char[] charsToEscape) {
+    this.escapeMarker = escapeMarker;
     this.charsToEscape = charsToEscape.clone();
   }
 
@@ -57,7 +59,7 @@ public class SqlLikeEscaper {
       }
       for (char c : this.charsToEscape) {
         if (c == sb.charAt(i)) {
-          sb.insert(i, this.escapeSignChar);
+          sb.insert(i, this.escapeMarker);
           i++;
           break;
         }
@@ -66,99 +68,18 @@ public class SqlLikeEscaper {
     return sb.toString();
   }
 
-  private static volatile SqlLikeEscaper __default;
-  private static volatile char __escapeSignChar;
-  private static volatile char[] __charsToEscape;
-
-  private static final Object MUTEX = new Object();
-
-  public static SqlLikeEscaper getDefault() {
-    SqlLikeEscaper obj = __default;
-    if (obj == null) {
-      synchronized (MUTEX) {
-        if ((obj = __default) == null) {
-          __default = obj = new SqlLikeEscaper(getEscapeSignChar(), getCharsToEscape());
-        }
-      }
-    }
-    return obj;
-  }
-
-  public static void setDefault(SqlLikeEscaper impl) {
-    Asserts.isNull(__default, "SqlLikeEscaper.__default must be null.");
-
-    if (__default == null) {
-      synchronized (MUTEX) {
-        if (__default == null) {
-          __default = impl;
-          return;
-        }
-      }
-    }
-  }
-
-  public static char getEscapeSignChar() {
-    char chr = __escapeSignChar;
-    if (chr == (char) 0) {
-      synchronized (MUTEX) {
-        if ((chr = __escapeSignChar) == (char) 0) {
-          __escapeSignChar = chr = '\\';
-        }
-      }
-    }
-    return chr;
-  }
-
-  public static void setEscapeSignChar(char impl) {
-    Asserts.isTrue(__escapeSignChar == 0, "SqlLikeEscaper.__escapeSignChar must be unset.");
-
-    if (__escapeSignChar == 0) {
-      synchronized (MUTEX) {
-        if (__escapeSignChar == 0) {
-          __escapeSignChar = impl;
-          return;
-        }
-      }
-    }
-  }
-
-  public static char[] getCharsToEscape() {
-    char[] obj = __charsToEscape;
-    if (obj == null) {
-      synchronized (MUTEX) {
-        if ((obj = __charsToEscape) == null) {
-          __charsToEscape = obj = new char[] { '%', '_' };
-        }
-      }
-    }
-    return obj.clone();
-  }
-
-  public static void setCharsToEscape(char[] impl) {
-    Asserts.isNull(__charsToEscape, "SqlLikeEscaper.__charsToEscape must be null.");
-
-    if (__charsToEscape == null) {
-      synchronized (MUTEX) {
-        if (__charsToEscape == null) {
-          __charsToEscape = ArrayUtils.copy(impl);
-          return;
-        }
-      }
-    }
-  }
-
-  public static String toLikePattern(String value, LikeType likeType) {
+  public String toLikePattern(String value, LikeType likeType) {
     Asserts.notNull(likeType);
 
     if (StringUtils.isNullOrEmpty(value)) {
       return value;
     }
     if (likeType == LikeType.CONTAINS) {
-      return "%" + getDefault().escape(value) + "%";
+      return "%" + escape(value) + "%";
     }
     if (likeType == LikeType.STARTS_WITH) {
-      return getDefault().escape(value) + "%";
+      return escape(value) + "%";
     }
-    return "%" + getDefault().escape(value);
+    return "%" + escape(value);
   }
 }

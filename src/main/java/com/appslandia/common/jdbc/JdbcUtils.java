@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -50,6 +51,19 @@ import com.appslandia.common.utils.StringUtils;
  *
  */
 public class JdbcUtils {
+
+  public static String getDataSourceId(Connection conn) throws UncheckedSQLException {
+    try {
+      var url = conn.getMetaData().getURL();
+      if (url != null) {
+        return url;
+      }
+      throw new SQLException(STR.fmt("Couldn't determine dataSourceId: conn={}", conn));
+
+    } catch (SQLException ex) {
+      throw new UncheckedSQLException(ex);
+    }
+  }
 
   public static List<ResultSetColumn> getResultSetColumns(ResultSet rs) throws SQLException {
     ResultSetMetaData md = rs.getMetaData();

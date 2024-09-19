@@ -22,9 +22,9 @@ package com.appslandia.common.jpa;
 
 import java.util.List;
 
+import com.appslandia.common.jdbc.DbDialect;
 import com.appslandia.common.jdbc.JdbcSql;
 import com.appslandia.common.jdbc.LikeType;
-import com.appslandia.common.jdbc.SqlLikeEscaper;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ObjectUtils;
 
@@ -44,14 +44,16 @@ public class TypedQueryImpl<X> implements TypedQuery<X> {
 
   final TypedQuery<X> query;
   final JpaSql sql;
+  final DbDialect dbDialect;
 
-  public TypedQueryImpl(TypedQuery<X> query) {
-    this(query, null);
+  public TypedQueryImpl(TypedQuery<X> query, DbDialect dbDialect) {
+    this(query, null, dbDialect);
   }
 
-  protected TypedQueryImpl(TypedQuery<X> query, JpaSql sql) {
+  public TypedQueryImpl(TypedQuery<X> query, JpaSql sql, DbDialect dbDialect) {
     this.query = query;
     this.sql = sql;
+    this.dbDialect = dbDialect;
   }
 
   protected JpaSql getSql() {
@@ -88,17 +90,17 @@ public class TypedQueryImpl<X> implements TypedQuery<X> {
   // :name = '' OR name LIKE :name
 
   public TypedQueryImpl<X> setLike(String parameterName, String value) {
-    this.query.setParameter(parameterName, SqlLikeEscaper.toLikePattern(value, LikeType.CONTAINS));
+    this.query.setParameter(parameterName, this.dbDialect.toLikePattern(value, LikeType.CONTAINS));
     return this;
   }
 
   public TypedQueryImpl<X> setLikeSW(String parameterName, String value) {
-    this.query.setParameter(parameterName, SqlLikeEscaper.toLikePattern(value, LikeType.STARTS_WITH));
+    this.query.setParameter(parameterName, this.dbDialect.toLikePattern(value, LikeType.STARTS_WITH));
     return this;
   }
 
   public TypedQueryImpl<X> setLikeEW(String parameterName, String value) {
-    this.query.setParameter(parameterName, SqlLikeEscaper.toLikePattern(value, LikeType.ENDS_WITH));
+    this.query.setParameter(parameterName, this.dbDialect.toLikePattern(value, LikeType.ENDS_WITH));
     return this;
   }
 
@@ -123,7 +125,7 @@ public class TypedQueryImpl<X> implements TypedQuery<X> {
 
     for (int i = 0; i < arrayLen; i++) {
       setParameter(JdbcSql.toParamName(parameterName, i),
-          (i < values.length) ? SqlLikeEscaper.toLikePattern(values[i], likeType) : falsePattern);
+          (i < values.length) ? this.dbDialect.toLikePattern(values[i], likeType) : falsePattern);
     }
     return this;
   }

@@ -54,7 +54,7 @@ public abstract class ConnScopedInterceptor implements Serializable {
     if (ConnectionImpl.hasCurrent()) {
 
       // Same DS
-      if (connScoped.ds().equals(ConnectionImpl.getCurrent().getDsName())) {
+      if (connScoped.ds().equals(ConnectionImpl.getCurrent().getDataSourceId())) {
         return context.proceed();
 
       } else {

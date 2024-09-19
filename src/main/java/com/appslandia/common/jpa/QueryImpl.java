@@ -22,9 +22,9 @@ package com.appslandia.common.jpa;
 
 import java.util.List;
 
+import com.appslandia.common.jdbc.DbDialect;
 import com.appslandia.common.jdbc.JdbcSql;
 import com.appslandia.common.jdbc.LikeType;
-import com.appslandia.common.jdbc.SqlLikeEscaper;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ObjectUtils;
 
@@ -44,14 +44,16 @@ public class QueryImpl implements Query {
 
   final Query query;
   final JpaSql sql;
+  final DbDialect dbDialect;
 
-  public QueryImpl(Query query) {
-    this(query, null);
+  public QueryImpl(Query query, DbDialect dbDialect) {
+    this(query, null, dbDialect);
   }
 
-  protected QueryImpl(Query query, JpaSql sql) {
+  public QueryImpl(Query query, JpaSql sql, DbDialect dbDialect) {
     this.query = query;
     this.sql = sql;
+    this.dbDialect = dbDialect;
   }
 
   protected JpaSql getSql() {
@@ -94,17 +96,17 @@ public class QueryImpl implements Query {
   // :name = '' OR name LIKE :name
 
   public QueryImpl setLike(String parameterName, String value) {
-    this.query.setParameter(parameterName, SqlLikeEscaper.toLikePattern(value, LikeType.CONTAINS));
+    this.query.setParameter(parameterName, this.dbDialect.toLikePattern(value, LikeType.CONTAINS));
     return this;
   }
 
   public QueryImpl setLikeSW(String parameterName, String value) {
-    this.query.setParameter(parameterName, SqlLikeEscaper.toLikePattern(value, LikeType.STARTS_WITH));
+    this.query.setParameter(parameterName, this.dbDialect.toLikePattern(value, LikeType.STARTS_WITH));
     return this;
   }
 
   public QueryImpl setLikeEW(String parameterName, String value) {
-    this.query.setParameter(parameterName, SqlLikeEscaper.toLikePattern(value, LikeType.ENDS_WITH));
+    this.query.setParameter(parameterName, this.dbDialect.toLikePattern(value, LikeType.ENDS_WITH));
     return this;
   }
 
@@ -129,7 +131,7 @@ public class QueryImpl implements Query {
 
     for (int i = 0; i < arrayLen; i++) {
       setParameter(JdbcSql.toParamName(parameterName, i),
-          (i < values.length) ? SqlLikeEscaper.toLikePattern(values[i], likeType) : falsePattern);
+          (i < values.length) ? this.dbDialect.toLikePattern(values[i], likeType) : falsePattern);
     }
     return this;
   }

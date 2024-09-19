@@ -27,8 +27,6 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 import com.appslandia.common.base.Out;
-import com.appslandia.common.jdbc.LikeType;
-import com.appslandia.common.jdbc.SqlLikeEscaper;
 
 /**
  *
@@ -131,10 +129,5 @@ public class TagUtils {
   // |#tag1|#tag2|
   public static String toDbTags(Collection<String> tags) {
     return StringUtils.join('|', true, tags);
-  }
-
-  // #tag -> %|#tag|%
-  public static String toTagLikeVal(String tag) {
-    return SqlLikeEscaper.toLikePattern(wrapTag(tag), LikeType.CONTAINS);
   }
 }

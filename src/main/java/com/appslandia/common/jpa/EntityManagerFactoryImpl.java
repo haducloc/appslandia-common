@@ -22,7 +22,6 @@ package com.appslandia.common.jpa;
 
 import java.util.Map;
 
-import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ObjectUtils;
 
 import jakarta.persistence.Cache;
@@ -41,90 +40,82 @@ import jakarta.persistence.metamodel.Metamodel;
  */
 public class EntityManagerFactoryImpl implements EntityManagerFactory {
 
-  private EntityManagerFactory emf;
-
-  public EntityManagerFactoryImpl() {
-  }
+  final EntityManagerFactory emf;
 
   public EntityManagerFactoryImpl(EntityManagerFactory emf) {
-    Asserts.isTrue(!(emf instanceof EntityManagerFactoryImpl));
     this.emf = emf;
-  }
-
-  protected EntityManagerFactory emf() {
-    return this.emf;
   }
 
   @Override
   public EntityManagerImpl createEntityManager() {
-    return new EntityManagerImpl(emf().createEntityManager());
+    return new EntityManagerImpl(this.emf.createEntityManager());
   }
 
   @SuppressWarnings("rawtypes")
   @Override
   public EntityManagerImpl createEntityManager(Map map) {
-    return new EntityManagerImpl(emf().createEntityManager(map));
+    return new EntityManagerImpl(this.emf.createEntityManager(map));
   }
 
   @Override
   public EntityManagerImpl createEntityManager(SynchronizationType synchronizationType) {
-    return new EntityManagerImpl(emf().createEntityManager(synchronizationType));
+    return new EntityManagerImpl(this.emf.createEntityManager(synchronizationType));
   }
 
   @SuppressWarnings("rawtypes")
   @Override
   public EntityManagerImpl createEntityManager(SynchronizationType synchronizationType, Map map) {
-    return new EntityManagerImpl(emf().createEntityManager(synchronizationType, map));
+    return new EntityManagerImpl(this.emf.createEntityManager(synchronizationType, map));
   }
 
   @Override
   public CriteriaBuilder getCriteriaBuilder() {
-    return emf().getCriteriaBuilder();
+    return this.emf.getCriteriaBuilder();
   }
 
   @Override
   public Metamodel getMetamodel() {
-    return emf().getMetamodel();
+    return this.emf.getMetamodel();
   }
 
   @Override
   public boolean isOpen() {
-    return emf().isOpen();
+    return this.emf.isOpen();
   }
 
   @Override
   public void close() {
-    emf().close();
+    this.emf.close();
   }
 
   @Override
   public Map<String, Object> getProperties() {
-    return emf().getProperties();
+    return this.emf.getProperties();
   }
 
   @Override
   public Cache getCache() {
-    return emf().getCache();
+    return this.emf.getCache();
   }
 
   @Override
   public PersistenceUnitUtil getPersistenceUnitUtil() {
-    return emf().getPersistenceUnitUtil();
+    return this.emf.getPersistenceUnitUtil();
   }
 
   @Override
   public void addNamedQuery(String name, Query query) {
-    emf().addNamedQuery(name, query);
+    this.emf.addNamedQuery(name, query);
   }
 
   @Override
   public <T> void addNamedEntityGraph(String graphName, EntityGraph<T> entityGraph) {
-    emf().addNamedEntityGraph(graphName, entityGraph);
+    this.emf.addNamedEntityGraph(graphName, entityGraph);
   }
 
   @Override
   public <T> T unwrap(Class<T> cls) {
-    return emf().unwrap(cls);
+    return this.emf.unwrap(cls);
   }
 
   @Override

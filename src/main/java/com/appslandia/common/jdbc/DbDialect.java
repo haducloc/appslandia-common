@@ -43,11 +43,14 @@ public class DbDialect {
 
   final String type;
   final String idQuote;
+  final SqlLikeEscaper likeEscaper;
 
   private DbDialect(Connection conn) throws java.sql.SQLException {
     DatabaseMetaData mtdt = conn.getMetaData();
+
     this.type = parseDbType(mtdt.getURL());
     this.idQuote = mtdt.getIdentifierQuoteString();
+    this.likeEscaper = new SqlLikeEscaper(mtdt.getSearchStringEscape());
   }
 
   public String getType() {
@@ -56,6 +59,34 @@ public class DbDialect {
 
   public String getIdQuote() {
     return this.idQuote;
+  }
+
+  public SqlLikeEscaper getLikeEscaper() {
+    return this.likeEscaper;
+  }
+
+  public String quoteIdentifier(String identifier) {
+    if (!" ".equals(this.idQuote)) {
+      return this.idQuote + identifier + this.idQuote;
+    }
+    switch (this.type) {
+    case MYSQL:
+    case SQLITE:
+      return "`" + identifier + "`";
+    case MSSQL:
+      return "[" + identifier + "]";
+    case POSTGRESQL:
+    case ORACLE:
+    case DB2:
+    case H2:
+      return "\"" + identifier + "\"";
+    default:
+      return identifier;
+    }
+  }
+
+  public String toLikePattern(String value, LikeType likeType) {
+    return this.likeEscaper.toLikePattern(value, likeType);
   }
 
   public static DbDialect parse(Connection conn) throws java.sql.SQLException {
@@ -88,48 +119,5 @@ public class DbDialect {
       return H2;
     }
     throw new IllegalArgumentException(STR.fmt("Failed to parse type from: {}", url));
-  }
-
-  public String quoteIdentifier(String identifier) {
-    if (!" ".equals(this.idQuote)) {
-      return this.idQuote + identifier + this.idQuote;
-    }
-    switch (this.type) {
-    case MYSQL:
-    case SQLITE:
-      return "`" + identifier + "`";
-    case MSSQL:
-      return "[" + identifier + "]";
-    case POSTGRESQL:
-    case ORACLE:
-    case DB2:
-    case H2:
-      return "\"" + identifier + "\"";
-    default:
-      return identifier;
-    }
-  }
-
-  public String getDbType(int sqlType) {
-    switch (sqlType) {
-    // INTEGER
-    case java.sql.Types.INTEGER:
-      if (ORACLE.equals(this.type)) {
-        return "NUMBER(10)";
-      }
-      return "INT";
-
-    // BIGINT
-    case java.sql.Types.BIGINT:
-      if (ORACLE.equals(this.type)) {
-        return "NUMBER(19)";
-      }
-      if (SQLITE.equals(this.type)) {
-        return "INTEGER";
-      }
-      return "BIGINT";
-    default:
-      throw new UnsupportedOperationException("Unhandled sqlType: " + sqlType);
-    }
   }
 }

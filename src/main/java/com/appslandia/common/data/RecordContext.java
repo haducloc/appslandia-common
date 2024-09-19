@@ -328,7 +328,8 @@ public class RecordContext extends DbContext {
   }
 
   public Table getTable(String tableName) throws UncheckedSQLException {
-    ConcurrentMap<String, Table> tables = TABLES.computeIfAbsent(this.conn.getDsId(), db -> new ConcurrentHashMap<>());
+    ConcurrentMap<String, Table> tables = TABLES.computeIfAbsent(this.conn.getDataSourceId(),
+        db -> new ConcurrentHashMap<>());
 
     return tables.computeIfAbsent(tableName, tn -> {
       try {
