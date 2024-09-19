@@ -63,7 +63,7 @@ public class ConnectionImpl implements Connection {
       this.outer = outer;
     }
     this.conn = dataSource.getConnection();
-    this.dataSourceId = StringUtils.isNullOrEmpty(dataSourceId) ? JdbcUtils.getDataSourceId(outer) : dataSourceId;
+    this.dataSourceId = StringUtils.isNullOrEmpty(dataSourceId) ? JdbcUtils.getDataSourceId(this.conn) : dataSourceId;
 
     CONNECTION_HOLDER.set(this);
   }
