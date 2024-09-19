@@ -42,14 +42,14 @@ public class DbDialect {
   public static final String H2 = "H2";
 
   final String type;
-  final String idQuote;
+  final String identifierQuote;
   final SqlLikeEscaper likeEscaper;
 
   private DbDialect(Connection conn) throws java.sql.SQLException {
     DatabaseMetaData mtdt = conn.getMetaData();
 
     this.type = parseDbType(mtdt.getURL());
-    this.idQuote = mtdt.getIdentifierQuoteString();
+    this.identifierQuote = mtdt.getIdentifierQuoteString();
     this.likeEscaper = new SqlLikeEscaper(mtdt.getSearchStringEscape());
   }
 
@@ -57,8 +57,8 @@ public class DbDialect {
     return this.type;
   }
 
-  public String getIdQuote() {
-    return this.idQuote;
+  public String getIdentifierQuote() {
+    return this.identifierQuote;
   }
 
   public SqlLikeEscaper getLikeEscaper() {
@@ -66,9 +66,11 @@ public class DbDialect {
   }
 
   public String quoteIdentifier(String identifier) {
-    if (!" ".equals(this.idQuote)) {
-      return this.idQuote + identifier + this.idQuote;
+    // Use identifierQuote
+    if (!" ".equals(this.identifierQuote)) {
+      return this.identifierQuote + identifier + this.identifierQuote;
     }
+    // Default implementation
     switch (this.type) {
     case MYSQL:
     case SQLITE:
