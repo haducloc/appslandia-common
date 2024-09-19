@@ -99,7 +99,6 @@ public class DbContext implements AutoCloseable {
       return stat.executeUpdate();
 
     } else {
-      this.assertTransactional();
       addBatch(stat, pSql);
       return -1;
     }
@@ -314,6 +313,7 @@ public class DbContext implements AutoCloseable {
   }
 
   protected void addBatch(StatementImpl stat, String pSql) throws java.sql.SQLException {
+    this.assertTransactional();
     this.batchPSqls.add(pSql);
     stat.addBatch();
   }
