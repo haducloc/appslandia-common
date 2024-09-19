@@ -40,7 +40,7 @@ import jakarta.persistence.metamodel.Metamodel;
  */
 public class EntityManagerFactoryImpl implements EntityManagerFactory {
 
-  final EntityManagerFactory emf;
+  protected final EntityManagerFactory emf;
 
   public EntityManagerFactoryImpl(EntityManagerFactory emf) {
     this.emf = emf;

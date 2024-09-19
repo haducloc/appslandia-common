@@ -29,9 +29,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import com.appslandia.common.base.Params;
 import com.appslandia.common.jdbc.DbDialect;
-import com.appslandia.common.jdbc.UncheckedSQLException;
 import com.appslandia.common.utils.ObjectUtils;
-import com.appslandia.common.utils.StringUtils;
 
 import jakarta.persistence.Cache;
 import jakarta.persistence.EntityGraph;
@@ -56,20 +54,26 @@ import jakarta.persistence.metamodel.Metamodel;
  */
 public class EntityManagerImpl implements EntityManager {
 
-  final EntityManager em;
-  final String dataSourceId;
+  protected final EntityManager em;
+  protected final String dataSourceId;
+  protected final DbDialect dbDialect;
 
   public EntityManagerImpl(EntityManager em) {
-    this(em, "");
+    this(em, null);
   }
 
   public EntityManagerImpl(EntityManager em, String dataSourceId) {
     this.em = em;
-    this.dataSourceId = StringUtils.isNullOrEmpty(dataSourceId) ? JpaUtils.getDataSourceId(em) : dataSourceId;
+    this.dataSourceId = (dataSourceId == null) ? JpaUtils.getDataSourceId(em) : dataSourceId;
+    this.dbDialect = lookupDbDialect();
   }
 
   public String getDataSourceId() {
     return this.dataSourceId;
+  }
+
+  public DbDialect getDbDialect() {
+    return this.dbDialect;
   }
 
   public Connection getConnection() throws PersistenceException {
@@ -124,22 +128,22 @@ public class EntityManagerImpl implements EntityManager {
 
   public <T> TypedQueryImpl<T> createQueryFetch(String qlString, Class<T> resultClass, String graphName) {
     return new TypedQueryImpl<T>(this.em.createQuery(qlString, resultClass).setHint(JpaHints.HINT_JPA_FETCH_GRAPH,
-        this.em.createEntityGraph(graphName)), getDbDialect());
+        this.em.createEntityGraph(graphName)), this.dbDialect);
   }
 
   public <T> TypedQueryImpl<T> createQueryLoad(String qlString, Class<T> resultClass, String graphName) {
     return new TypedQueryImpl<T>(this.em.createQuery(qlString, resultClass).setHint(JpaHints.HINT_JPA_LOAD_GRAPH,
-        this.em.createEntityGraph(graphName)), getDbDialect());
+        this.em.createEntityGraph(graphName)), this.dbDialect);
   }
 
   public <T> TypedQueryImpl<T> createNamedQueryFetch(String name, Class<T> resultClass, String graphName) {
     return new TypedQueryImpl<T>(this.em.createNamedQuery(name, resultClass).setHint(JpaHints.HINT_JPA_FETCH_GRAPH,
-        this.em.createEntityGraph(graphName)), getDbDialect());
+        this.em.createEntityGraph(graphName)), this.dbDialect);
   }
 
   public <T> TypedQueryImpl<T> createNamedQueryLoad(String name, Class<T> resultClass, String graphName) {
     return new TypedQueryImpl<T>(this.em.createNamedQuery(name, resultClass).setHint(JpaHints.HINT_JPA_LOAD_GRAPH,
-        this.em.createEntityGraph(graphName)), getDbDialect());
+        this.em.createEntityGraph(graphName)), this.dbDialect);
   }
 
   @Override
@@ -230,17 +234,17 @@ public class EntityManagerImpl implements EntityManager {
   @SuppressWarnings("rawtypes")
   @Override
   public QueryImpl createNativeQuery(String sqlString, Class resultClass) {
-    return new QueryImpl(this.em.createNativeQuery(sqlString, resultClass), getDbDialect());
+    return new QueryImpl(this.em.createNativeQuery(sqlString, resultClass), this.dbDialect);
   }
 
   @Override
   public QueryImpl createNativeQuery(String sqlString) {
-    return new QueryImpl(this.em.createNativeQuery(sqlString), getDbDialect());
+    return new QueryImpl(this.em.createNativeQuery(sqlString), this.dbDialect);
   }
 
   @Override
   public QueryImpl createNativeQuery(String sqlString, String resultSetMapping) {
-    return new QueryImpl(this.em.createNativeQuery(sqlString, resultSetMapping), getDbDialect());
+    return new QueryImpl(this.em.createNativeQuery(sqlString, resultSetMapping), this.dbDialect);
   }
 
   @Override
@@ -336,39 +340,39 @@ public class EntityManagerImpl implements EntityManager {
 
   @Override
   public <T> TypedQueryImpl<T> createQuery(CriteriaQuery<T> criteriaQuery) {
-    return new TypedQueryImpl<T>(this.em.createQuery(criteriaQuery), getDbDialect());
+    return new TypedQueryImpl<T>(this.em.createQuery(criteriaQuery), this.dbDialect);
   }
 
   @Override
   public <T> TypedQueryImpl<T> createQuery(String qlString, Class<T> resultClass) {
-    return new TypedQueryImpl<T>(this.em.createQuery(qlString, resultClass), getDbDialect());
+    return new TypedQueryImpl<T>(this.em.createQuery(qlString, resultClass), this.dbDialect);
   }
 
   @SuppressWarnings("rawtypes")
   @Override
   public QueryImpl createQuery(CriteriaUpdate updateQuery) {
-    return new QueryImpl(this.em.createQuery(updateQuery), getDbDialect());
+    return new QueryImpl(this.em.createQuery(updateQuery), this.dbDialect);
   }
 
   @SuppressWarnings("rawtypes")
   @Override
   public QueryImpl createQuery(CriteriaDelete deleteQuery) {
-    return new QueryImpl(this.em.createQuery(deleteQuery), getDbDialect());
+    return new QueryImpl(this.em.createQuery(deleteQuery), this.dbDialect);
   }
 
   @Override
   public QueryImpl createQuery(String qlString) {
-    return new QueryImpl(this.em.createQuery(qlString), getDbDialect());
+    return new QueryImpl(this.em.createQuery(qlString), this.dbDialect);
   }
 
   @Override
   public <T> TypedQueryImpl<T> createNamedQuery(String name, Class<T> resultClass) {
-    return new TypedQueryImpl<T>(this.em.createNamedQuery(name, resultClass), getDbDialect());
+    return new TypedQueryImpl<T>(this.em.createNamedQuery(name, resultClass), this.dbDialect);
   }
 
   @Override
   public QueryImpl createNamedQuery(String name) {
-    return new QueryImpl(this.em.createNamedQuery(name), getDbDialect());
+    return new QueryImpl(this.em.createNamedQuery(name), this.dbDialect);
   }
 
   @Override
@@ -406,14 +410,14 @@ public class EntityManagerImpl implements EntityManager {
     return ObjectUtils.toStringWrapper(this, this.em);
   }
 
-  public DbDialect getDbDialect() throws UncheckedSQLException {
+  protected DbDialect lookupDbDialect() throws PersistenceException {
     return DB_DIALECTS.computeIfAbsent(this.dataSourceId, u -> {
 
       try {
         return DbDialect.parse(getConnection());
 
       } catch (SQLException ex) {
-        throw new UncheckedSQLException(ex);
+        throw new PersistenceException(ex.getMessage(), ex);
       }
     });
   }
