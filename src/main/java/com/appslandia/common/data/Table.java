@@ -139,7 +139,7 @@ public class Table extends InitializeObject implements Serializable {
           sb.append(column.getParamName());
           isFirst = false;
         } else {
-          sb.append(",").append(column.getParamName());
+          sb.append(", ").append(column.getParamName());
         }
       }
     }
@@ -161,7 +161,7 @@ public class Table extends InitializeObject implements Serializable {
           sb.append(column.getQName()).append("=").append(column.getParamName());
           isFirst = false;
         } else {
-          sb.append(",").append(column.getQName()).append("=").append(column.getParamName());
+          sb.append(", ").append(column.getQName()).append("=").append(column.getParamName());
         }
       }
     }
