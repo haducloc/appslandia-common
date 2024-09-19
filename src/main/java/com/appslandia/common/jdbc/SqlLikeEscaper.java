@@ -44,7 +44,7 @@ public class SqlLikeEscaper {
     this.charsToEscape = charsToEscape.clone();
   }
 
-  public String escape(String value) {
+  public String toLikeEscape(String value) {
     if (value == null) {
       return null;
     }
@@ -75,11 +75,11 @@ public class SqlLikeEscaper {
       return value;
     }
     if (likeType == LikeType.CONTAINS) {
-      return "%" + escape(value) + "%";
+      return "%" + toLikeEscape(value) + "%";
     }
     if (likeType == LikeType.STARTS_WITH) {
-      return escape(value) + "%";
+      return toLikeEscape(value) + "%";
     }
-    return "%" + escape(value);
+    return "%" + toLikeEscape(value);
   }
 }

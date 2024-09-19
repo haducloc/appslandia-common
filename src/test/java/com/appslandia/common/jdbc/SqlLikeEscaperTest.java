@@ -31,12 +31,23 @@ import org.junit.jupiter.api.Test;
 public class SqlLikeEscaperTest {
 
   @Test
-  public void test() {
-    SqlLikeEscaper escaper = new SqlLikeEscaper("\\", new char[] {'%', '_'});
-    String val = escaper.escape("%20");
-    Assertions.assertEquals("\\%20", val);
+  public void test_toLikeEscape() {
+    SqlLikeEscaper escaper = new SqlLikeEscaper("\\", new char[] { '%', '_' });
+    String val = escaper.toLikeEscape("20%");
+    Assertions.assertEquals("20\\%", val);
 
-    val = escaper.escape("_id");
+    val = escaper.toLikeEscape("_id");
     Assertions.assertEquals("\\_id", val);
+  }
+
+  @Test
+  public void test_toLikePattern() {
+    SqlLikeEscaper escaper = new SqlLikeEscaper("\\", new char[] { '%', '_' });
+    String val = escaper.toLikePattern("20%", LikeType.CONTAINS);
+
+    Assertions.assertEquals("%20\\%%", val);
+
+    val = escaper.toLikePattern("_id", LikeType.CONTAINS);
+    Assertions.assertEquals("%\\_id%", val);
   }
 }

@@ -85,6 +85,10 @@ public class DbDialect {
     }
   }
 
+  public String toLikeEscape(String value) {
+    return this.likeEscaper.toLikeEscape(value);
+  }
+
   public String toLikePattern(String value, LikeType likeType) {
     return this.likeEscaper.toLikePattern(value, likeType);
   }
