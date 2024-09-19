@@ -21,7 +21,6 @@
 package com.appslandia.common.csv;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Reader;
 import java.math.BigDecimal;
@@ -288,7 +287,7 @@ public class CsvImporter extends InitializeObject {
   }
 
   public CsvImporter setCsvInput(String csvLocation, String altEncoding) throws IOException {
-    return setCsvInput(IOUtils.readerBOM(new FileInputStream(csvLocation), altEncoding), true);
+    return setCsvInput(IOUtils.readerBOM(csvLocation, altEncoding), true);
   }
 
   public CsvImporter setCsvInput(BufferedReader csvInput) {

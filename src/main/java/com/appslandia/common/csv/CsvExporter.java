@@ -21,7 +21,6 @@
 package com.appslandia.common.csv;
 
 import java.io.BufferedWriter;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -117,7 +116,7 @@ public class CsvExporter extends InitializeObject {
   }
 
   public CsvExporter setCsvOutput(String csvLocation, String encoding) throws IOException {
-    return setCsvOutput(IOUtils.writerBOM(new FileOutputStream(csvLocation), encoding), true);
+    return setCsvOutput(IOUtils.writerBOM(csvLocation, encoding), true);
   }
 
   public CsvExporter setCsvOutput(BufferedWriter csvOutput) {

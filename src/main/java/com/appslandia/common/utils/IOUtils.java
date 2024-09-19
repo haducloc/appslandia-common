@@ -24,6 +24,8 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FilterInputStream;
 import java.io.FilterOutputStream;
 import java.io.FilterReader;
@@ -115,11 +117,19 @@ public class IOUtils {
     return list;
   }
 
+  public static BufferedReader readerBOM(String inputFile, String altEncoding) throws IOException {
+    return readerBOM(new FileInputStream(inputFile), altEncoding);
+  }
+
   public static BufferedReader readerBOM(InputStream is, String altEncoding) throws IOException {
     Asserts.notNull(altEncoding);
     var bomIS = new BOMInputStream(is);
     return new BufferedReader(
         new InputStreamReader(bomIS, bomIS.getBOM() != null ? bomIS.getBOM().getEncoding() : altEncoding));
+  }
+
+  public static BufferedWriter writerBOM(String outputFile, String altEncoding) throws IOException {
+    return writerBOM(new FileOutputStream(outputFile), altEncoding);
   }
 
   public static BufferedWriter writerBOM(OutputStream os, String encoding) throws IOException {

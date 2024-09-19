@@ -127,14 +127,31 @@ try (ConnectionImpl connScoped = new ConnectionImpl(javax.sql.DataSource)) {
 ### CSV Reader
 ```java
   // Can be reused
-  CsvProcessor csvReader = new CsvProcessor();
+  CsvProcessor csv = new CsvProcessor();
   
   // BufferedReader
-  BufferedReader br = IOUtils.readerBOM(new FileInputStream("a_csv_file"), "UTF-8");
+  BufferedReader br = IOUtils.readerBOM("input.csv", "UTF-8");
   
-  List<CsvRecord> records = csvReader.parseRecords(br);
+  List<CsvRecord> records = csv.parseRecords(br, record0AsHeader);
   records.get(0).getString(0);
-  // getInt(), getBool(), ...
+  
+  // getInt(), getBool(), getLocalDate(), ...
+```
+### CSV Export
+```java
+  try (ConnectionImpl conn = new ConnectionImpl(javax.sql.DataSource)) {
+
+    CsvExporter exporter = new CsvExporter();
+    exporter.setConnection(conn);
+    exporter.setCsvOutput("output.csv", "UTF-8");
+
+    // Set query and parameters
+    exporter.setPQuery("SELECT * FROM User WHERE type=:type");
+    exporter.setPQueryParams(new Params().set("type", 1));
+    
+    // Export CSV
+    exporter.execute();
+  }
 ```
 ## License
 This code is distributed under the terms and conditions of the [MIT license](LICENSE).
