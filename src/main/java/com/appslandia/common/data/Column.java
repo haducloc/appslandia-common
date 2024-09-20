@@ -67,7 +67,9 @@ public class Column extends InitializeObject implements Serializable {
   @Override
   protected void init() throws Exception {
     Asserts.notNull(this.name, "name is required.");
-    Asserts.notNull(this.qName, "qName is required.");
+    if (this.qName == null) {
+      this.qName = this.name;
+    }
 
     Asserts.notNull(this.sqlType, "sqlType is required.");
     Asserts.notNull(this.javaType, "javaType is required.");

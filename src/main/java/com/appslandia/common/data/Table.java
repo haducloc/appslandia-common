@@ -64,7 +64,9 @@ public class Table extends InitializeObject implements Serializable {
   @Override
   protected void init() throws Exception {
     Asserts.notNull(this.tableName, "tableName is required.");
-    Asserts.notNull(this.qTableName, "qTableName is required.");
+    if (this.qTableName == null) {
+      this.qTableName = this.tableName;
+    }
 
     Asserts.hasElements(this.columns, "columns are required.");
     this.entityClassName = RecordUtils.toEntityClassName(this.tableName);
