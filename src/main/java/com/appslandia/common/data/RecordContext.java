@@ -67,19 +67,20 @@ public class RecordContext extends DbContext {
   }
 
   public long insert(String tableName, DataRecord dataRecord, boolean addBatch) throws java.sql.SQLException {
-    // StatementImpl
+    // Table
     Table table = getTable(tableName);
-    StatementImpl stat = this.stats.get(table.getInsertQuery().getPQuery());
+    String pQuery = table.getInsertQuery().getPQuery();
 
+    // StatementImpl
+    StatementImpl stat = this.stats.get(pQuery);
     if (stat == null) {
       stat = this.conn.prepareStatement(table.getInsertQuery(), (table.getIncrKey() != null));
-      this.stats.put(table.getInsertQuery().getPQuery(), stat);
+      this.stats.put(pQuery, stat);
     }
 
     // Parameters
     for (Column column : table.getColumns()) {
       if (column.getColumnType() != ColumnType.KEY_INCR && column.getColumnType() != ColumnType.NON_KEY_GEN) {
-
         Object val = dataRecord.get(column.getName());
 
         if (!column.isNullable()) {
@@ -109,7 +110,7 @@ public class RecordContext extends DbContext {
 
     } else {
       this.assertTransactional();
-      addBatch(stat, table.getInsertQuery().getPQuery());
+      addBatch(stat, pQuery);
       return -1;
     }
   }
@@ -129,13 +130,17 @@ public class RecordContext extends DbContext {
   }
 
   public int update(String tableName, DataRecord dataRecord, boolean addBatch) throws java.sql.SQLException {
-    // StatementImpl
+    // Table
     Table table = getTable(tableName);
-    StatementImpl stat = this.stats.get(table.getUpdateQuery().getPQuery());
+    String pQuery = table.getUpdateQuery().getPQuery();
+    Asserts.isTrue(!pQuery.isEmpty(),
+        () -> STR.fmt("The table {} has no key. The update() operation is unsupported.", table.getTableName()));
 
+    // StatementImpl
+    StatementImpl stat = this.stats.get(pQuery);
     if (stat == null) {
       stat = this.conn.prepareStatement(table.getUpdateQuery());
-      this.stats.put(table.getUpdateQuery().getPQuery(), stat);
+      this.stats.put(pQuery, stat);
     }
 
     // Parameters
@@ -156,7 +161,7 @@ public class RecordContext extends DbContext {
 
     } else {
       this.assertTransactional();
-      addBatch(stat, table.getUpdateQuery().getPQuery());
+      addBatch(stat, pQuery);
       return -1;
     }
   }
@@ -176,22 +181,24 @@ public class RecordContext extends DbContext {
   }
 
   public int delete(String tableName, Key key, boolean addBatch) throws java.sql.SQLException {
-    // StatementImpl
+    // Table
     Table table = getTable(tableName);
-    StatementImpl stat = this.stats.get(table.getDeleteQuery().getPQuery());
+    String pQuery = table.getDeleteQuery().getPQuery();
 
+    // StatementImpl
+    StatementImpl stat = this.stats.get(pQuery);
     if (stat == null) {
       stat = this.conn.prepareStatement(table.getDeleteQuery());
-      this.stats.put(table.getDeleteQuery().getPQuery(), stat);
+      this.stats.put(pQuery, stat);
     }
 
     // Parameters
     for (Column column : table.getColumns()) {
-      if (column.isKey()) {
-
+      if ((table.getKeysCount() == 0) || column.isKey()) {
         Object val = key.get(column.getName());
-        Asserts.notNull(val, () -> STR.fmt("The column value '{}' is required.", column.getName()));
-
+        if (column.isKey()) {
+          Asserts.notNull(val, () -> STR.fmt("The column value '{}' is required.", column.getName()));
+        }
         stat.setObject(column.getName(), new JdbcParam(val, column.getSqlType(), column.getScaleOrLength()));
       }
     }
@@ -202,7 +209,7 @@ public class RecordContext extends DbContext {
 
     } else {
       this.assertTransactional();
-      addBatch(stat, table.getDeleteQuery().getPQuery());
+      addBatch(stat, pQuery);
       return -1;
     }
   }
@@ -218,22 +225,24 @@ public class RecordContext extends DbContext {
   }
 
   public DataRecord getRecord(String tableName, Key key) throws java.sql.SQLException {
-    // StatementImpl
+    // Table
     Table table = getTable(tableName);
-    StatementImpl stat = this.stats.get(table.getGetQuery().getPQuery());
+    String pQuery = table.getGetQuery().getPQuery();
 
+    // StatementImpl
+    StatementImpl stat = this.stats.get(pQuery);
     if (stat == null) {
       stat = this.conn.prepareStatement(table.getGetQuery());
-      this.stats.put(table.getGetQuery().getPQuery(), stat);
+      this.stats.put(pQuery, stat);
     }
 
     // Parameters
     for (Column column : table.getColumns()) {
-      if (column.isKey()) {
-
+      if ((table.getKeysCount() == 0) || column.isKey()) {
         Object val = key.get(column.getName());
-        Asserts.notNull(val, () -> STR.fmt("The column value '{}' is required.", column.getName()));
-
+        if (column.isKey()) {
+          Asserts.notNull(val, () -> STR.fmt("The column value '{}' is required.", column.getName()));
+        }
         stat.setObject(column.getName(), new JdbcParam(val, column.getSqlType(), column.getScaleOrLength()));
       }
     }
@@ -251,32 +260,30 @@ public class RecordContext extends DbContext {
   }
 
   public boolean exists(String tableName, Key key) throws java.sql.SQLException {
-    // StatementImpl
+    // Table
     Table table = getTable(tableName);
-    StatementImpl stat = this.stats.get(table.getExistsQuery().getPQuery());
+    String pQuery = table.getExistsQuery().getPQuery();
 
+    // StatementImpl
+    StatementImpl stat = this.stats.get(pQuery);
     if (stat == null) {
       stat = this.conn.prepareStatement(table.getExistsQuery());
-      this.stats.put(table.getExistsQuery().getPQuery(), stat);
+      this.stats.put(pQuery, stat);
     }
 
     // Parameters
     for (Column column : table.getColumns()) {
-      if (column.isKey()) {
-
+      if ((table.getKeysCount() == 0) || column.isKey()) {
         Object val = key.get(column.getName());
-        Asserts.notNull(val, () -> STR.fmt("The column value '{}' is required.", column.getName()));
-
+        if (column.isKey()) {
+          Asserts.notNull(val, () -> STR.fmt("The column value '{}' is required.", column.getName()));
+        }
         stat.setObject(column.getName(), new JdbcParam(val, column.getSqlType(), column.getScaleOrLength()));
       }
     }
 
-    // Execute
     Long count = stat.executeScalar(Long.class);
-    if (count > 1) {
-      throw new SQLException("Duplicated keys.");
-    }
-    return true;
+    return count > 0;
   }
 
   public boolean exists(String tableName, Object pk) throws java.sql.SQLException {

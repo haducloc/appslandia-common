@@ -117,7 +117,6 @@ public class Table extends InitializeObject implements Serializable {
 
     boolean isFirst = true;
     for (Column column : this.columns) {
-
       if (column.getColumnType() != ColumnType.KEY_INCR && column.getColumnType() != ColumnType.NON_KEY_GEN) {
 
         if (isFirst) {
@@ -148,6 +147,9 @@ public class Table extends InitializeObject implements Serializable {
   }
 
   protected String buildUpdateQuery() {
+    if (this.keysCount == 0) {
+      return "";
+    }
     TextBuilder sb = new TextBuilder().append("UPDATE ").append(this.qTableName);
     sb.append(" SET ");
 
