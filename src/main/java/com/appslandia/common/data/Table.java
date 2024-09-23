@@ -27,6 +27,7 @@ import java.util.List;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.TextBuilder;
 import com.appslandia.common.base.ToStringBuilder.TSIdHash;
+import com.appslandia.common.jdbc.DbDialect;
 import com.appslandia.common.jdbc.SqlQuery;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
@@ -54,6 +55,7 @@ public class Table extends InitializeObject implements Serializable {
   @TSIdHash
   private transient Column singleKey;
   private List<AnnotationModel> annotations;
+  private DbDialect dbDialect;
 
   private transient SqlQuery insertQuery;
   private transient SqlQuery updateQuery;
@@ -65,6 +67,8 @@ public class Table extends InitializeObject implements Serializable {
   @Override
   protected void init() throws Exception {
     Asserts.notNull(this.tableName, "tableName is required.");
+    Asserts.notNull(this.dbDialect, "dbDialect is required.");
+
     if (this.qTableName == null) {
       this.qTableName = this.tableName;
     }
@@ -319,6 +323,17 @@ public class Table extends InitializeObject implements Serializable {
   public Table setAnnotations(List<AnnotationModel> annotations) {
     assertNotInitialized();
     this.annotations = annotations;
+    return this;
+  }
+
+  public DbDialect getDbDialect() {
+    initialize();
+    return this.dbDialect;
+  }
+
+  public Table setDbDialect(DbDialect dbDialect) {
+    assertNotInitialized();
+    this.dbDialect = dbDialect;
     return this;
   }
 

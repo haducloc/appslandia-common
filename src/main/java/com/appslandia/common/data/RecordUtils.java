@@ -102,6 +102,8 @@ public final class RecordUtils {
         table.setQTableName(
             ucKeywords.contains(tname.toUpperCase(Locale.ENGLISH)) ? conn.getDbDialect().quoteIdentifier(tname)
                 : tname);
+
+        table.setDbDialect(conn.getDbDialect());
       }
     }
 
