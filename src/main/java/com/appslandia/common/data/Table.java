@@ -76,18 +76,14 @@ public class Table extends InitializeObject implements Serializable {
     Asserts.hasElements(this.columns, "columns are required.");
     this.entityClassName = RecordUtils.toEntityClassName(this.tableName);
 
-    int keysIncr = (int) this.columns.stream().filter(column -> column.getColumnType() == ColumnType.KEY_INCR).count();
-    this.keysCount = (int) this.columns.stream()
-        .filter(column -> column.getColumnType() == ColumnType.KEY_INCR || column.getColumnType() == ColumnType.KEY)
-        .count();
-
-    if (keysIncr > 1) {
+    // Validate key
+    if (this.columns.stream().filter(column -> column.getColumnType() == ColumnType.KEY_INCR).count() > 1) {
       throw new IllegalArgumentException("More than one auto-increment key found.");
     }
+
+    this.keysCount = (int) this.columns.stream().filter(column -> column.isKey()).count();
     if (this.keysCount == 1) {
-      this.singleKey = this.columns.stream()
-          .filter(column -> column.getColumnType() == ColumnType.KEY_INCR || column.getColumnType() == ColumnType.KEY)
-          .findFirst().get();
+      this.singleKey = this.columns.stream().filter(column -> column.isKey()).findFirst().get();
     }
 
     this.insertQuery = new SqlQuery(this.buildInsertQuery());
@@ -202,8 +198,7 @@ public class Table extends InitializeObject implements Serializable {
   protected void appendWhereKeyConditions(TextBuilder sqlBuilder) {
     boolean isFirst = true;
     for (Column column : this.columns) {
-      if ((this.keysCount == 0)
-          || (column.getColumnType() == ColumnType.KEY_INCR || column.getColumnType() == ColumnType.KEY)) {
+      if ((this.keysCount == 0) || column.isKey()) {
 
         if (isFirst) {
           sqlBuilder.append(column.getQName()).append("=").append(column.getParamName());

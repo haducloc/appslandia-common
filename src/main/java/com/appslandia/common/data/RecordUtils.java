@@ -115,7 +115,7 @@ public final class RecordUtils {
     Set<String> keys = new LinkedHashSet<>();
     try (ResultSet rs = metaData.getPrimaryKeys(catalog, schema, tableName)) {
       while (rs.next()) {
-        keys.add(rs.getString("COLUMN_NAME"));
+        keys.add(rs.getString("COLUMN_NAME").toLowerCase(Locale.ENGLISH));
       }
     }
 
@@ -171,7 +171,7 @@ public final class RecordUtils {
         // Java Type
         column.setJavaType(SqlTypeMapper.getJavaType(sqlType));
 
-        boolean isKey = keys.contains(columnName);
+        boolean isKey = keys.contains(columnName.toLowerCase(Locale.ENGLISH));
         boolean autoIncr = "YES".equals(rs.getString("IS_AUTOINCREMENT"));
         boolean genCol = "YES".equals(rs.getString("IS_GENERATEDCOLUMN"));
 
