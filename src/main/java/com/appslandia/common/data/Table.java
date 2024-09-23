@@ -48,6 +48,7 @@ public class Table extends InitializeObject implements Serializable {
   private String qTableName;
 
   private List<Column> columns;
+  private transient int keysCount;
   private transient String entityClassName;
 
   @TSIdHash
@@ -71,18 +72,15 @@ public class Table extends InitializeObject implements Serializable {
     Asserts.hasElements(this.columns, "columns are required.");
     this.entityClassName = RecordUtils.toEntityClassName(this.tableName);
 
-    int keyIncr = (int) this.columns.stream().filter(column -> column.getColumnType() == ColumnType.KEY_INCR).count();
-    int keyCount = (int) this.columns.stream()
+    int keysIncr = (int) this.columns.stream().filter(column -> column.getColumnType() == ColumnType.KEY_INCR).count();
+    this.keysCount = (int) this.columns.stream()
         .filter(column -> column.getColumnType() == ColumnType.KEY_INCR || column.getColumnType() == ColumnType.KEY)
         .count();
 
-    if (keyCount == 0) {
-      throw new IllegalArgumentException("No keys found.");
+    if (keysIncr > 1) {
+      throw new IllegalArgumentException("More than one auto-increment key found.");
     }
-    if (keyIncr > 1) {
-      throw new IllegalArgumentException("More than one auto-increment keys.");
-    }
-    if (keyCount == 1) {
+    if (this.keysCount == 1) {
       this.singleKey = this.columns.stream()
           .filter(column -> column.getColumnType() == ColumnType.KEY_INCR || column.getColumnType() == ColumnType.KEY)
           .findFirst().get();
@@ -155,8 +153,6 @@ public class Table extends InitializeObject implements Serializable {
 
     boolean isFirst = true;
     for (Column column : this.columns) {
-
-      // Don't update Key & Generated columns
       if (column.getColumnType() == ColumnType.NON_KEY) {
 
         if (isFirst) {
@@ -200,7 +196,8 @@ public class Table extends InitializeObject implements Serializable {
   protected void appendWhereKeyConditions(TextBuilder sqlBuilder) {
     boolean isFirst = true;
     for (Column column : this.columns) {
-      if (column.getColumnType() == ColumnType.KEY_INCR || column.getColumnType() == ColumnType.KEY) {
+      if ((this.keysCount == 0)
+          || (column.getColumnType() == ColumnType.KEY_INCR || column.getColumnType() == ColumnType.KEY)) {
 
         if (isFirst) {
           sqlBuilder.append(column.getQName()).append("=").append(column.getParamName());
@@ -300,6 +297,11 @@ public class Table extends InitializeObject implements Serializable {
   public String getEntityClassName() {
     initialize();
     return this.entityClassName;
+  }
+
+  public int getKeysCount() {
+    initialize();
+    return this.keysCount;
   }
 
   public Column getSingleKey() {
