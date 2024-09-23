@@ -100,8 +100,9 @@ public class JdbcUtils {
         .collect(Collectors.toMap(idx -> Integer.toString(idx), idx -> params[idx]));
   }
 
-  public static void setParameters(StatementImpl stat, JdbcSql sql, Map<String, Object> params) throws SQLException {
-    for (Map.Entry<String, Integer> np : sql.getParamsMap().entrySet()) {
+  public static void setParameters(StatementImpl stat, SqlQuery pQuery, Map<String, Object> params)
+      throws SQLException {
+    for (Map.Entry<String, Integer> np : pQuery.getParamsMap().entrySet()) {
       Asserts.isTrue(params.containsKey(np.getKey()), () -> STR.fmt("The parameter '{}' is required.", np.getKey()));
 
       // Non-array parameter

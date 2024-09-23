@@ -29,6 +29,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import com.appslandia.common.base.Params;
 import com.appslandia.common.jdbc.DbDialect;
+import com.appslandia.common.jdbc.JdbcUtils;
 import com.appslandia.common.utils.ObjectUtils;
 
 import jakarta.persistence.Cache;
@@ -57,14 +58,17 @@ public class EntityManagerImpl implements EntityManager {
   protected final EntityManager em;
   protected final String dataSourceId;
   protected final DbDialect dbDialect;
+  protected final ConnectionUnwrapper connectionUnwrapper;
 
-  public EntityManagerImpl(EntityManager em) {
-    this(em, null);
+  public EntityManagerImpl(EntityManager em, ConnectionUnwrapper connectionUnwrapper) {
+    this(em, null, connectionUnwrapper);
   }
 
-  public EntityManagerImpl(EntityManager em, String dataSourceId) {
+  public EntityManagerImpl(EntityManager em, String dataSourceId, ConnectionUnwrapper connectionUnwrapper) {
     this.em = em;
-    this.dataSourceId = (dataSourceId == null) ? JpaUtils.getDataSourceId(em) : dataSourceId;
+    this.connectionUnwrapper = connectionUnwrapper;
+    this.dataSourceId = (dataSourceId == null) ? JdbcUtils.getDataSourceId(connectionUnwrapper.unwrap(em))
+        : dataSourceId;
     this.dbDialect = lookupDbDialect();
   }
 
@@ -76,8 +80,8 @@ public class EntityManagerImpl implements EntityManager {
     return this.dbDialect;
   }
 
-  public Connection getConnection() throws PersistenceException {
-    return (Connection) this.em.unwrap(Connection.class);
+  public Connection unwrapConnection() {
+    return this.connectionUnwrapper.unwrap(this.em);
   }
 
   public void insert(Object entity) {
@@ -118,32 +122,42 @@ public class EntityManagerImpl implements EntityManager {
 
   public <T> T findFetch(Class<T> entityClass, Object primaryKey, String graphName) {
     return this.em.find(entityClass, primaryKey,
-        new Params().set(JpaHints.HINT_JPA_FETCH_GRAPH, this.em.createEntityGraph(graphName)));
+        new Params().set(JpaHints.HINT_JPA_FETCH_GRAPH, this.em.getEntityGraph(graphName)));
   }
 
   public <T> T findLoad(Class<T> entityClass, Object primaryKey, String graphName) {
     return this.em.find(entityClass, primaryKey,
-        new Params().set(JpaHints.HINT_JPA_LOAD_GRAPH, this.em.createEntityGraph(graphName)));
+        new Params().set(JpaHints.HINT_JPA_LOAD_GRAPH, this.em.getEntityGraph(graphName)));
   }
 
   public <T> TypedQueryImpl<T> createQueryFetch(String qlString, Class<T> resultClass, String graphName) {
     return new TypedQueryImpl<T>(this.em.createQuery(qlString, resultClass).setHint(JpaHints.HINT_JPA_FETCH_GRAPH,
-        this.em.createEntityGraph(graphName)), this.dbDialect);
+        this.em.getEntityGraph(graphName)), this.dbDialect);
   }
 
   public <T> TypedQueryImpl<T> createQueryLoad(String qlString, Class<T> resultClass, String graphName) {
     return new TypedQueryImpl<T>(this.em.createQuery(qlString, resultClass).setHint(JpaHints.HINT_JPA_LOAD_GRAPH,
-        this.em.createEntityGraph(graphName)), this.dbDialect);
+        this.em.getEntityGraph(graphName)), this.dbDialect);
   }
 
   public <T> TypedQueryImpl<T> createNamedQueryFetch(String name, Class<T> resultClass, String graphName) {
     return new TypedQueryImpl<T>(this.em.createNamedQuery(name, resultClass).setHint(JpaHints.HINT_JPA_FETCH_GRAPH,
-        this.em.createEntityGraph(graphName)), this.dbDialect);
+        this.em.getEntityGraph(graphName)), this.dbDialect);
   }
 
   public <T> TypedQueryImpl<T> createNamedQueryLoad(String name, Class<T> resultClass, String graphName) {
     return new TypedQueryImpl<T>(this.em.createNamedQuery(name, resultClass).setHint(JpaHints.HINT_JPA_LOAD_GRAPH,
-        this.em.createEntityGraph(graphName)), this.dbDialect);
+        this.em.getEntityGraph(graphName)), this.dbDialect);
+  }
+
+  // JpaQuery
+
+  public <T> TypedQueryImpl<T> createQuery(JpaQuery pQuery, Class<T> resultClass) {
+    return new TypedQueryImpl<T>(this.em.createQuery(pQuery.getTranslatedQuery(), resultClass), pQuery, this.dbDialect);
+  }
+
+  public QueryImpl createQuery(JpaQuery pQuery) {
+    return new QueryImpl(this.em.createQuery(pQuery.getTranslatedQuery()), pQuery, this.dbDialect);
   }
 
   @Override
@@ -414,7 +428,7 @@ public class EntityManagerImpl implements EntityManager {
     return DB_DIALECTS.computeIfAbsent(this.dataSourceId, u -> {
 
       try {
-        return DbDialect.parse(getConnection());
+        return DbDialect.parse(this.unwrapConnection());
 
       } catch (SQLException ex) {
         throw new PersistenceException(ex.getMessage(), ex);

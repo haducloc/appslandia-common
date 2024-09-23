@@ -40,35 +40,33 @@ import com.appslandia.common.utils.STR;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JdbcSql extends InitializeObject implements Serializable {
+public class SqlQuery extends InitializeObject implements PQuery, Serializable {
   private static final long serialVersionUID = 1L;
 
-  public static final int DEFAULT_ARRAY_MAX_LENGTH = 32;
-
-  private String pSql;
+  private String pQuery;
   private Map<String, Integer> arrayLens;
   private transient Map<String, Integer> paramsMap;
 
-  private transient String translatedSql;
+  private transient String translatedQuery;
   private transient Map<String, List<Integer>> indexesMap;
 
-  public JdbcSql(String pSql) {
-    this.pSql = pSql;
+  public SqlQuery(String pQuery) {
+    this.pQuery = pQuery;
   }
 
   @Override
-  public JdbcSql initialize() throws InitializeException {
+  public SqlQuery initialize() throws InitializeException {
     super.initialize();
     return this;
   }
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.pSql, "pSql is required.");
-    translateSql();
+    Asserts.notNull(this.pQuery, "pQuery is required.");
+    translateQuery();
   }
 
-  public JdbcSql arrayLen(String parameterName, int maxLength) {
+  public SqlQuery arrayLen(String parameterName, int maxLength) {
     assertNotInitialized();
     Asserts.isTrue(maxLength > 0, "maxLength is required.");
 
@@ -79,8 +77,8 @@ public class JdbcSql extends InitializeObject implements Serializable {
     return this;
   }
 
-  private void translateSql() {
-    StringBuilder sb = new StringBuilder(this.pSql);
+  private void translateQuery() {
+    StringBuilder sb = new StringBuilder(this.pQuery);
     Map<String, List<Integer>> indexesMap = new LinkedHashMap<>();
     Map<String, Integer> paramsMap = new LinkedHashMap<>();
 
@@ -168,7 +166,7 @@ public class JdbcSql extends InitializeObject implements Serializable {
       }
       start = fieldIdx.value + 1;
     }
-    this.translatedSql = sb.toString();
+    this.translatedQuery = sb.toString();
 
     this.arrayLens = (this.arrayLens != null) ? Collections.unmodifiableMap(this.arrayLens) : null;
     this.paramsMap = Collections.unmodifiableMap(paramsMap);
@@ -187,31 +185,37 @@ public class JdbcSql extends InitializeObject implements Serializable {
     });
   }
 
-  public String getPSql() {
+  @Override
+  public String getPQuery() {
     initialize();
-    return this.pSql;
+    return this.pQuery;
   }
 
-  public String getTranslatedSql() {
+  @Override
+  public String getTranslatedQuery() {
     initialize();
-    return this.translatedSql;
+    return this.translatedQuery;
   }
 
+  @Override
   public Map<String, Integer> getParamsMap() {
     initialize();
     return this.paramsMap;
   }
 
+  @Override
   public boolean isParam(String parameterName) {
     initialize();
     return this.paramsMap.containsKey(parameterName);
   }
 
+  @Override
   public Map<String, List<Integer>> getIndexesMap() {
     initialize();
     return this.indexesMap;
   }
 
+  @Override
   public List<Integer> getIndexes(String parameterName) {
     initialize();
     List<Integer> indexes = this.indexesMap.get(parameterName);
@@ -219,6 +223,7 @@ public class JdbcSql extends InitializeObject implements Serializable {
     return Asserts.notNull(indexes, () -> STR.fmt("Parameter '{}' is not found.", parameterName));
   }
 
+  @Override
   public boolean isArrayParam(String parameterName) {
     initialize();
     return this.paramsMap.get(parameterName) != null;
@@ -309,7 +314,7 @@ public class JdbcSql extends InitializeObject implements Serializable {
   }
 
   public static void setParamPrefix(char impl) {
-    Asserts.isTrue(__paramPrefix == 0, "JdbcSql.__paramPrefix must be unset.");
+    Asserts.isTrue(__paramPrefix == 0, "SqlQuery.__paramPrefix must be unset.");
 
     if (__paramPrefix == 0) {
       synchronized (MUTEX) {

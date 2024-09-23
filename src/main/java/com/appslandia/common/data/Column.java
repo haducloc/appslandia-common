@@ -25,7 +25,7 @@ import java.sql.Types;
 import java.util.List;
 
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.jdbc.JdbcSql;
+import com.appslandia.common.jdbc.SqlQuery;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.STR;
@@ -90,7 +90,7 @@ public class Column extends InitializeObject implements Serializable {
   }
 
   public String getParamName() {
-    return JdbcSql.getParamPrefix() + getName();
+    return SqlQuery.getParamPrefix() + getName();
   }
 
   public Integer getScaleOrLength() {

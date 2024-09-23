@@ -69,11 +69,11 @@ public class RecordContext extends DbContext {
   public long insert(String tableName, DataRecord dataRecord, boolean addBatch) throws java.sql.SQLException {
     // StatementImpl
     Table table = getTable(tableName);
-    StatementImpl stat = this.stats.get(table.getInsertSql().getPSql());
+    StatementImpl stat = this.stats.get(table.getInsertQuery().getPQuery());
 
     if (stat == null) {
-      stat = this.conn.prepareStatement(table.getInsertSql(), (table.getIncrKey() != null));
-      this.stats.put(table.getInsertSql().getPSql(), stat);
+      stat = this.conn.prepareStatement(table.getInsertQuery(), (table.getIncrKey() != null));
+      this.stats.put(table.getInsertQuery().getPQuery(), stat);
     }
 
     // Parameters
@@ -109,7 +109,7 @@ public class RecordContext extends DbContext {
 
     } else {
       this.assertTransactional();
-      addBatch(stat, table.getInsertSql().getPSql());
+      addBatch(stat, table.getInsertQuery().getPQuery());
       return -1;
     }
   }
@@ -131,11 +131,11 @@ public class RecordContext extends DbContext {
   public int update(String tableName, DataRecord dataRecord, boolean addBatch) throws java.sql.SQLException {
     // StatementImpl
     Table table = getTable(tableName);
-    StatementImpl stat = this.stats.get(table.getUpdateSql().getPSql());
+    StatementImpl stat = this.stats.get(table.getUpdateQuery().getPQuery());
 
     if (stat == null) {
-      stat = this.conn.prepareStatement(table.getUpdateSql());
-      this.stats.put(table.getUpdateSql().getPSql(), stat);
+      stat = this.conn.prepareStatement(table.getUpdateQuery());
+      this.stats.put(table.getUpdateQuery().getPQuery(), stat);
     }
 
     // Parameters
@@ -156,7 +156,7 @@ public class RecordContext extends DbContext {
 
     } else {
       this.assertTransactional();
-      addBatch(stat, table.getUpdateSql().getPSql());
+      addBatch(stat, table.getUpdateQuery().getPQuery());
       return -1;
     }
   }
@@ -178,11 +178,11 @@ public class RecordContext extends DbContext {
   public int delete(String tableName, Key key, boolean addBatch) throws java.sql.SQLException {
     // StatementImpl
     Table table = getTable(tableName);
-    StatementImpl stat = this.stats.get(table.getDeleteSql().getPSql());
+    StatementImpl stat = this.stats.get(table.getDeleteQuery().getPQuery());
 
     if (stat == null) {
-      stat = this.conn.prepareStatement(table.getDeleteSql());
-      this.stats.put(table.getDeleteSql().getPSql(), stat);
+      stat = this.conn.prepareStatement(table.getDeleteQuery());
+      this.stats.put(table.getDeleteQuery().getPQuery(), stat);
     }
 
     // Parameters
@@ -202,7 +202,7 @@ public class RecordContext extends DbContext {
 
     } else {
       this.assertTransactional();
-      addBatch(stat, table.getDeleteSql().getPSql());
+      addBatch(stat, table.getDeleteQuery().getPQuery());
       return -1;
     }
   }
@@ -220,11 +220,11 @@ public class RecordContext extends DbContext {
   public DataRecord getRecord(String tableName, Key key) throws java.sql.SQLException {
     // StatementImpl
     Table table = getTable(tableName);
-    StatementImpl stat = this.stats.get(table.getGetSql().getPSql());
+    StatementImpl stat = this.stats.get(table.getGetQuery().getPQuery());
 
     if (stat == null) {
-      stat = this.conn.prepareStatement(table.getGetSql());
-      this.stats.put(table.getGetSql().getPSql(), stat);
+      stat = this.conn.prepareStatement(table.getGetQuery());
+      this.stats.put(table.getGetQuery().getPQuery(), stat);
     }
 
     // Parameters
@@ -253,11 +253,11 @@ public class RecordContext extends DbContext {
   public boolean exists(String tableName, Key key) throws java.sql.SQLException {
     // StatementImpl
     Table table = getTable(tableName);
-    StatementImpl stat = this.stats.get(table.getExistsSql().getPSql());
+    StatementImpl stat = this.stats.get(table.getExistsQuery().getPQuery());
 
     if (stat == null) {
-      stat = this.conn.prepareStatement(table.getExistsSql());
-      this.stats.put(table.getExistsSql().getPSql(), stat);
+      stat = this.conn.prepareStatement(table.getExistsQuery());
+      this.stats.put(table.getExistsQuery().getPQuery(), stat);
     }
 
     // Parameters
@@ -296,12 +296,12 @@ public class RecordContext extends DbContext {
     }
   }
 
-  public List<DataRecord> executeList(String pSql, Object... params) throws java.sql.SQLException {
-    return executeList(pSql, JdbcUtils.toParameters(params));
+  public List<DataRecord> executeList(String pQuery, Object... params) throws java.sql.SQLException {
+    return executeList(pQuery, JdbcUtils.toParameters(params));
   }
 
-  public List<DataRecord> executeList(String pSql, Map<String, Object> params) throws java.sql.SQLException {
-    StatementImpl stat = prepareStatement(pSql, params);
+  public List<DataRecord> executeList(String pQuery, Map<String, Object> params) throws java.sql.SQLException {
+    StatementImpl stat = prepareStatement(pQuery, params);
 
     try (ResultSetImpl rs = stat.executeQuery()) {
 
@@ -316,12 +316,12 @@ public class RecordContext extends DbContext {
     });
   }
 
-  public DataRecord executeSingle(String pSql, Object... params) throws java.sql.SQLException {
-    return executeSingle(pSql, JdbcUtils.toParameters(params));
+  public DataRecord executeSingle(String pQuery, Object... params) throws java.sql.SQLException {
+    return executeSingle(pQuery, JdbcUtils.toParameters(params));
   }
 
-  public DataRecord executeSingle(String pSql, Map<String, Object> params) throws java.sql.SQLException {
-    return executeSingle(pSql, params, rs -> {
+  public DataRecord executeSingle(String pQuery, Map<String, Object> params) throws java.sql.SQLException {
+    return executeSingle(pQuery, params, rs -> {
 
       return RecordUtils.toRecord(rs);
     });

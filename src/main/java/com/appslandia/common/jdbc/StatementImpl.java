@@ -44,7 +44,7 @@ import com.appslandia.common.utils.ObjectUtils;
  */
 public class StatementImpl implements PreparedStatement {
 
-  protected final JdbcSql sql;
+  protected final SqlQuery pQuery;
   protected final PreparedStatement stat;
   protected final DbDialect dbDialect;
 
@@ -52,14 +52,14 @@ public class StatementImpl implements PreparedStatement {
     this(stat, null, dbDialect);
   }
 
-  public StatementImpl(PreparedStatement stat, JdbcSql sql, DbDialect dbDialect) {
+  public StatementImpl(PreparedStatement stat, SqlQuery pQuery, DbDialect dbDialect) {
     this.stat = stat;
-    this.sql = sql;
+    this.pQuery = pQuery;
     this.dbDialect = dbDialect;
   }
 
-  protected JdbcSql getSql() {
-    return Asserts.notNull(this.sql, "No JdbcSql is associated with the PreparedStatement.");
+  protected SqlQuery getPQuery() {
+    return Asserts.notNull(this.pQuery, "No pQuery is associated with the PreparedStatement.");
   }
 
   // Update utilities
@@ -81,7 +81,7 @@ public class StatementImpl implements PreparedStatement {
 
   public long executeGeneratedKey(Map<String, Object> params) throws java.sql.SQLException {
     if (params != null) {
-      JdbcUtils.setParameters(this, getSql(), params);
+      JdbcUtils.setParameters(this, getPQuery(), params);
     }
     this.stat.executeUpdate();
 
@@ -99,7 +99,7 @@ public class StatementImpl implements PreparedStatement {
 
   public int executeUpdate(Map<String, Object> params) throws java.sql.SQLException {
     if (params != null) {
-      JdbcUtils.setParameters(this, getSql(), params);
+      JdbcUtils.setParameters(this, getPQuery(), params);
     }
     return this.stat.executeUpdate();
   }
@@ -121,7 +121,7 @@ public class StatementImpl implements PreparedStatement {
   public <K, V> Map<K, V> executeMap(Map<String, Object> params, ResultSetMapper<K> keyMapper,
       ResultSetMapper<V> valueMapper, Map<K, V> map) throws java.sql.SQLException {
     if (params != null) {
-      JdbcUtils.setParameters(this, getSql(), params);
+      JdbcUtils.setParameters(this, getPQuery(), params);
     }
     try (ResultSetImpl rs = executeQuery()) {
       return JdbcUtils.executeMap(rs, keyMapper, valueMapper, map);
@@ -142,7 +142,7 @@ public class StatementImpl implements PreparedStatement {
   public <T> List<T> executeList(Map<String, Object> params, ResultSetMapper<T> mapper, List<T> list)
       throws java.sql.SQLException {
     if (params != null) {
-      JdbcUtils.setParameters(this, getSql(), params);
+      JdbcUtils.setParameters(this, getPQuery(), params);
     }
     try (ResultSetImpl rs = executeQuery()) {
       return JdbcUtils.executeList(rs, mapper, list);
@@ -161,7 +161,7 @@ public class StatementImpl implements PreparedStatement {
 
   public <T> T executeSingle(Map<String, Object> params, ResultSetMapper<T> mapper) throws java.sql.SQLException {
     if (params != null) {
-      JdbcUtils.setParameters(this, getSql(), params);
+      JdbcUtils.setParameters(this, getPQuery(), params);
     }
     try (ResultSetImpl rs = executeQuery()) {
       return JdbcUtils.executeSingle(rs, mapper);
@@ -180,7 +180,7 @@ public class StatementImpl implements PreparedStatement {
 
   public <T> T executeScalar(Map<String, Object> params, Class<T> type) throws java.sql.SQLException {
     if (params != null) {
-      JdbcUtils.setParameters(this, getSql(), params);
+      JdbcUtils.setParameters(this, getPQuery(), params);
     }
     try (ResultSet rs = this.stat.executeQuery()) {
       return JdbcUtils.executeScalar(rs, type);
@@ -201,7 +201,7 @@ public class StatementImpl implements PreparedStatement {
 
   public void executeQuery(Map<String, Object> params, ResultSetHandler handler) throws Exception {
     if (params != null) {
-      JdbcUtils.setParameters(this, getSql(), params);
+      JdbcUtils.setParameters(this, getPQuery(), params);
     }
     try (ResultSetImpl rs = executeQuery()) {
       while (rs.next()) {
@@ -224,7 +224,7 @@ public class StatementImpl implements PreparedStatement {
   public void executeStream(Map<String, Object> params, String streamLabel, OutputStream out, ResultSetHandler handler)
       throws Exception {
     if (params != null) {
-      JdbcUtils.setParameters(this, getSql(), params);
+      JdbcUtils.setParameters(this, getPQuery(), params);
     }
     try (ResultSetImpl rs = executeQuery()) {
       JdbcUtils.executeStream(rs, streamLabel, out, handler);
@@ -245,7 +245,7 @@ public class StatementImpl implements PreparedStatement {
   public void executeStream(Map<String, Object> params, String streamLabel, Writer out, ResultSetHandler handler)
       throws Exception {
     if (params != null) {
-      JdbcUtils.setParameters(this, getSql(), params);
+      JdbcUtils.setParameters(this, getPQuery(), params);
     }
     try (ResultSetImpl rs = executeQuery()) {
       JdbcUtils.executeStream(rs, streamLabel, out, handler);
@@ -266,7 +266,7 @@ public class StatementImpl implements PreparedStatement {
   public void executeNStream(Map<String, Object> params, String streamLabel, Writer out, ResultSetHandler handler)
       throws Exception {
     if (params != null) {
-      JdbcUtils.setParameters(this, getSql(), params);
+      JdbcUtils.setParameters(this, getPQuery(), params);
     }
     try (ResultSetImpl rs = executeQuery()) {
       JdbcUtils.executeNStream(rs, streamLabel, out, handler);
@@ -318,11 +318,11 @@ public class StatementImpl implements PreparedStatement {
 
   public void setLikeAny(String parameterName, String[] values, LikeType likeType, String falsePattern)
       throws java.sql.SQLException {
-    int arrayLen = this.getSql().getArrayLen(parameterName);
+    int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
-      setString(JdbcSql.toParamName(parameterName, i),
+      setString(SqlQuery.toParamName(parameterName, i),
           (i < values.length) ? toLikeParamValue(values[i], likeType) : falsePattern);
     }
   }
@@ -341,11 +341,11 @@ public class StatementImpl implements PreparedStatement {
 
   public void setNLikeAny(String parameterName, String[] values, LikeType likeType, String falsePattern)
       throws java.sql.SQLException {
-    int arrayLen = this.getSql().getArrayLen(parameterName);
+    int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
-      setNString(JdbcSql.toParamName(parameterName, i),
+      setNString(SqlQuery.toParamName(parameterName, i),
           (i < values.length) ? toLikeParamValue(values[i], likeType) : falsePattern);
     }
   }
@@ -362,201 +362,201 @@ public class StatementImpl implements PreparedStatement {
   // type IN :types
 
   public void setStringArray(String parameterName, String[] values) throws java.sql.SQLException {
-    int arrayLen = this.getSql().getArrayLen(parameterName);
+    int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
-      setString(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
+      setString(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
     }
   }
 
   public void setNStringArray(String parameterName, String[] values) throws java.sql.SQLException {
-    int arrayLen = this.getSql().getArrayLen(parameterName);
+    int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
-      setNString(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
+      setNString(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
     }
   }
 
   public void setBoolArray(String parameterName, boolean[] values) throws java.sql.SQLException {
-    int arrayLen = this.getSql().getArrayLen(parameterName);
+    int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       if (i < values.length) {
-        setBoolean(JdbcSql.toParamName(parameterName, i), values[i]);
+        setBoolean(SqlQuery.toParamName(parameterName, i), values[i]);
       } else {
-        setBooleanOpt(JdbcSql.toParamName(parameterName, i), null);
+        setBooleanOpt(SqlQuery.toParamName(parameterName, i), null);
       }
     }
   }
 
   public void setByteArray(String parameterName, byte[] values) throws java.sql.SQLException {
-    int arrayLen = this.getSql().getArrayLen(parameterName);
+    int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       if (i < values.length) {
-        setByte(JdbcSql.toParamName(parameterName, i), values[i]);
+        setByte(SqlQuery.toParamName(parameterName, i), values[i]);
       } else {
-        setByteOpt(JdbcSql.toParamName(parameterName, i), null);
+        setByteOpt(SqlQuery.toParamName(parameterName, i), null);
       }
     }
   }
 
   public void setShortArray(String parameterName, short[] values) throws java.sql.SQLException {
-    int arrayLen = this.getSql().getArrayLen(parameterName);
+    int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       if (i < values.length) {
-        setShort(JdbcSql.toParamName(parameterName, i), values[i]);
+        setShort(SqlQuery.toParamName(parameterName, i), values[i]);
       } else {
-        setShortOpt(JdbcSql.toParamName(parameterName, i), null);
+        setShortOpt(SqlQuery.toParamName(parameterName, i), null);
       }
     }
   }
 
   public void setIntArray(String parameterName, int[] values) throws java.sql.SQLException {
-    int arrayLen = this.getSql().getArrayLen(parameterName);
+    int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       if (i < values.length) {
-        setInt(JdbcSql.toParamName(parameterName, i), values[i]);
+        setInt(SqlQuery.toParamName(parameterName, i), values[i]);
       } else {
-        setIntOpt(JdbcSql.toParamName(parameterName, i), null);
+        setIntOpt(SqlQuery.toParamName(parameterName, i), null);
       }
     }
   }
 
   public void setLongArray(String parameterName, long[] values) throws java.sql.SQLException {
-    int arrayLen = this.getSql().getArrayLen(parameterName);
+    int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       if (i < values.length) {
-        setLong(JdbcSql.toParamName(parameterName, i), values[i]);
+        setLong(SqlQuery.toParamName(parameterName, i), values[i]);
       } else {
-        setLongOpt(JdbcSql.toParamName(parameterName, i), null);
+        setLongOpt(SqlQuery.toParamName(parameterName, i), null);
       }
     }
   }
 
   public void setFloatArray(String parameterName, float[] values) throws java.sql.SQLException {
-    int arrayLen = this.getSql().getArrayLen(parameterName);
+    int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       if (i < values.length) {
-        setFloat(JdbcSql.toParamName(parameterName, i), values[i]);
+        setFloat(SqlQuery.toParamName(parameterName, i), values[i]);
       } else {
-        setFloatOpt(JdbcSql.toParamName(parameterName, i), null);
+        setFloatOpt(SqlQuery.toParamName(parameterName, i), null);
       }
     }
   }
 
   public void setDoubleArray(String parameterName, double[] values) throws java.sql.SQLException {
-    int arrayLen = this.getSql().getArrayLen(parameterName);
+    int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       if (i < values.length) {
-        setDouble(JdbcSql.toParamName(parameterName, i), values[i]);
+        setDouble(SqlQuery.toParamName(parameterName, i), values[i]);
       } else {
-        setDoubleOpt(JdbcSql.toParamName(parameterName, i), null);
+        setDoubleOpt(SqlQuery.toParamName(parameterName, i), null);
       }
     }
   }
 
   public void setDecimalArray(String parameterName, java.math.BigDecimal[] values) throws java.sql.SQLException {
-    int arrayLen = this.getSql().getArrayLen(parameterName);
+    int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
-      setDecimal(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
+      setDecimal(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
     }
   }
 
   public void setDateArray(String parameterName, java.sql.Date[] values) throws java.sql.SQLException {
-    int arrayLen = this.getSql().getArrayLen(parameterName);
+    int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
-      setDate(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
+      setDate(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
     }
   }
 
   public void setTimestampArray(String parameterName, java.sql.Timestamp[] values) throws java.sql.SQLException {
-    int arrayLen = this.getSql().getArrayLen(parameterName);
+    int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
-      setTimestamp(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
+      setTimestamp(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
     }
   }
 
   public void setTimeArray(String parameterName, java.sql.Time[] values) throws java.sql.SQLException {
-    int arrayLen = this.getSql().getArrayLen(parameterName);
+    int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
-      setTime(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
+      setTime(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
     }
   }
 
   public void setLocalDateArray(String parameterName, LocalDate[] values) throws java.sql.SQLException {
-    int arrayLen = this.getSql().getArrayLen(parameterName);
+    int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
-      setLocalDate(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
+      setLocalDate(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
     }
   }
 
   public void setLocalDateTimeArray(String parameterName, LocalDateTime[] values) throws java.sql.SQLException {
-    int arrayLen = this.getSql().getArrayLen(parameterName);
+    int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
-      setLocalDateTime(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
+      setLocalDateTime(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
     }
   }
 
   public void setLocalTimeArray(String parameterName, LocalTime[] values) throws java.sql.SQLException {
-    int arrayLen = this.getSql().getArrayLen(parameterName);
+    int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
-      setLocalTime(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
+      setLocalTime(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
     }
   }
 
   public void setOffsetDateTimeArray(String parameterName, OffsetDateTime[] values) throws java.sql.SQLException {
-    int arrayLen = this.getSql().getArrayLen(parameterName);
+    int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
-      setOffsetDateTime(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
+      setOffsetDateTime(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
     }
   }
 
   public void setOffsetTimeArray(String parameterName, OffsetTime[] values) throws java.sql.SQLException {
-    int arrayLen = this.getSql().getArrayLen(parameterName);
+    int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
-      setOffsetTime(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
+      setOffsetTime(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
     }
   }
 
   public void setObjectArray(String parameterName, Object[] values) throws java.sql.SQLException {
-    int arrayLen = this.getSql().getArrayLen(parameterName);
+    int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
-      setObject(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
+      setObject(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
     }
   }
 
@@ -621,31 +621,31 @@ public class StatementImpl implements PreparedStatement {
   // Java 8+ Date/Time
 
   public void setLocalDate(String parameterName, java.time.LocalDate x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setObject(index, x, Types.DATE);
     }
   }
 
   public void setLocalTime(String parameterName, java.time.LocalTime x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setObject(index, x, Types.TIME);
     }
   }
 
   public void setLocalDateTime(String parameterName, java.time.LocalDateTime x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setObject(index, x, Types.TIMESTAMP);
     }
   }
 
   public void setOffsetTime(String parameterName, java.time.OffsetTime x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setObject(index, x, Types.TIME_WITH_TIMEZONE);
     }
   }
 
   public void setOffsetDateTime(String parameterName, java.time.OffsetDateTime x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setObject(index, x, Types.TIMESTAMP_WITH_TIMEZONE);
     }
   }
@@ -653,307 +653,307 @@ public class StatementImpl implements PreparedStatement {
   // Set Parameter by Name
 
   public void setBoolean(String parameterName, boolean x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setBoolean(index, x);
     }
   }
 
   public void setString(String parameterName, String x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setString(index, x);
     }
   }
 
   public void setNString(String parameterName, String value) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setNString(index, value);
     }
   }
 
   public void setByte(String parameterName, byte x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setByte(index, x);
     }
   }
 
   public void setBytes(String parameterName, byte[] x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setBytes(index, x);
     }
   }
 
   public void setShort(String parameterName, short x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setShort(index, x);
     }
   }
 
   public void setInt(String parameterName, int x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setInt(index, x);
     }
   }
 
   public void setLong(String parameterName, long x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setLong(index, x);
     }
   }
 
   public void setFloat(String parameterName, float x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setFloat(index, x);
     }
   }
 
   public void setDouble(String parameterName, double x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setDouble(index, x);
     }
   }
 
   public void setDecimal(String parameterName, java.math.BigDecimal x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setBigDecimal(index, x);
     }
   }
 
   public void setDate(String parameterName, java.sql.Date x, java.util.Calendar cal) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setDate(index, x, cal);
     }
   }
 
   public void setDate(String parameterName, java.sql.Date x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setDate(index, x);
     }
   }
 
   public void setTimestamp(String parameterName, java.sql.Timestamp x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setTimestamp(index, x);
     }
   }
 
   public void setTimestamp(String parameterName, java.sql.Timestamp x, java.util.Calendar cal)
       throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setTimestamp(index, x, cal);
     }
   }
 
   public void setTime(String parameterName, java.sql.Time x, java.util.Calendar cal) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setTime(index, x, cal);
     }
   }
 
   public void setTime(String parameterName, java.sql.Time x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setTime(index, x);
     }
   }
 
   public void setNull(String parameterName, int sqlType, String typeName) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setNull(index, sqlType, typeName);
     }
   }
 
   public void setNull(String parameterName, int sqlType) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setNull(index, sqlType);
     }
   }
 
   public void setObject(String parameterName, Object x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setObject(index, x);
     }
   }
 
   public void setObject(String parameterName, Object x, int targetSqlType, int scaleOrLength)
       throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setObject(index, x, targetSqlType, scaleOrLength);
     }
   }
 
   public void setObject(String parameterName, Object x, java.sql.SQLType targetSqlType) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setObject(index, x, targetSqlType);
     }
   }
 
   public void setObject(String parameterName, Object x, int targetSqlType) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setObject(index, x, targetSqlType);
     }
   }
 
   public void setObject(String parameterName, Object x, java.sql.SQLType targetSqlType, int scaleOrLength)
       throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setObject(index, x, targetSqlType, scaleOrLength);
     }
   }
 
   public void setURL(String parameterName, java.net.URL x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setURL(index, x);
     }
   }
 
   public void setArray(String parameterName, java.sql.Array x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setArray(index, x);
     }
   }
 
   public void setSQLXML(String parameterName, java.sql.SQLXML xmlObject) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setSQLXML(index, xmlObject);
     }
   }
 
   public void setRef(String parameterName, java.sql.Ref x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setRef(index, x);
     }
   }
 
   public void setRowId(String parameterName, java.sql.RowId x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setRowId(index, x);
     }
   }
 
   public void setClob(String parameterName, java.io.Reader reader, long length) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setClob(index, reader, length);
     }
   }
 
   public void setClob(String parameterName, java.sql.Clob x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setClob(index, x);
     }
   }
 
   public void setClob(String parameterName, java.io.Reader reader) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setClob(index, reader);
     }
   }
 
   public void setNClob(String parameterName, java.sql.NClob value) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setNClob(index, value);
     }
   }
 
   public void setNClob(String parameterName, java.io.Reader reader, long length) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setNClob(index, reader, length);
     }
   }
 
   public void setNClob(String parameterName, java.io.Reader reader) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setNClob(index, reader);
     }
   }
 
   public void setAsciiStream(String parameterName, java.io.InputStream x, int length) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setAsciiStream(index, x, length);
     }
   }
 
   public void setAsciiStream(String parameterName, java.io.InputStream x, long length) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setAsciiStream(index, x, length);
     }
   }
 
   public void setAsciiStream(String parameterName, java.io.InputStream x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setAsciiStream(index, x);
     }
   }
 
   public void setCharacterStream(String parameterName, java.io.Reader reader, long length)
       throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setCharacterStream(index, reader, length);
     }
   }
 
   public void setCharacterStream(String parameterName, java.io.Reader reader, int length) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setCharacterStream(index, reader, length);
     }
   }
 
   public void setCharacterStream(String parameterName, java.io.Reader reader) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setCharacterStream(index, reader);
     }
   }
 
   public void setNCharacterStream(String parameterName, java.io.Reader value, long length)
       throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setNCharacterStream(index, value, length);
     }
   }
 
   public void setNCharacterStream(String parameterName, java.io.Reader value) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setNCharacterStream(index, value);
     }
   }
 
   @Deprecated
   public void setUnicodeStream(String parameterName, java.io.InputStream x, int length) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setUnicodeStream(index, x, length);
     }
   }
 
   public void setBlob(String parameterName, java.sql.Blob x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setBlob(index, x);
     }
   }
 
   public void setBlob(String parameterName, java.io.InputStream inputStream) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setBlob(index, inputStream);
     }
   }
 
   public void setBlob(String parameterName, java.io.InputStream inputStream, long length) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setBlob(index, inputStream, length);
     }
   }
 
   public void setBinaryStream(String parameterName, java.io.InputStream x, long length) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setBinaryStream(index, x, length);
     }
   }
 
   public void setBinaryStream(String parameterName, java.io.InputStream x) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setBinaryStream(index, x);
     }
   }
 
   public void setBinaryStream(String parameterName, java.io.InputStream x, int length) throws java.sql.SQLException {
-    for (int index : this.getSql().getIndexes(parameterName)) {
+    for (int index : this.getPQuery().getIndexes(parameterName)) {
       setBinaryStream(index, x, length);
     }
   }

@@ -23,8 +23,9 @@ package com.appslandia.common.jpa;
 import java.util.List;
 
 import com.appslandia.common.jdbc.DbDialect;
-import com.appslandia.common.jdbc.JdbcSql;
 import com.appslandia.common.jdbc.LikeType;
+import com.appslandia.common.jdbc.PQuery;
+import com.appslandia.common.jdbc.SqlQuery;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ObjectUtils;
 
@@ -43,21 +44,21 @@ import jakarta.persistence.TemporalType;
 public class QueryImpl implements Query {
 
   final Query query;
-  final JpaSql sql;
+  final PQuery pQuery;
   final DbDialect dbDialect;
 
   public QueryImpl(Query query, DbDialect dbDialect) {
     this(query, null, dbDialect);
   }
 
-  public QueryImpl(Query query, JpaSql sql, DbDialect dbDialect) {
+  public QueryImpl(Query query, PQuery pQuery, DbDialect dbDialect) {
     this.query = query;
-    this.sql = sql;
+    this.pQuery = pQuery;
     this.dbDialect = dbDialect;
   }
 
-  protected JpaSql getSql() {
-    return Asserts.notNull(this.sql, "No JpaSql is associated with the query.");
+  protected PQuery getPQuery() {
+    return Asserts.notNull(this.pQuery, "No pQuery is associated with the query.");
   }
 
   public <T> List<T> executeList() {
@@ -126,11 +127,11 @@ public class QueryImpl implements Query {
   }
 
   public QueryImpl setLikeAny(String parameterName, String[] values, LikeType likeType, String falsePattern) {
-    int arrayLen = this.getSql().getArrayLen(parameterName);
+    int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
-      setParameter(JdbcSql.toParamName(parameterName, i),
+      setParameter(SqlQuery.toParamName(parameterName, i),
           (i < values.length) ? this.dbDialect.toLikePattern(values[i], likeType) : falsePattern);
     }
     return this;
@@ -140,21 +141,21 @@ public class QueryImpl implements Query {
   // type IN :types
 
   public QueryImpl setObjectArray(String parameterName, Object[] values) {
-    int arrayLen = this.getSql().getArrayLen(parameterName);
+    int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
-      setParameter(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
+      setParameter(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
     }
     return this;
   }
 
   public QueryImpl setDateArray(String parameterName, java.util.Date[] values, TemporalType temporalType) {
-    int arrayLen = this.getSql().getArrayLen(parameterName);
+    int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
-      setParameter(JdbcSql.toParamName(parameterName, i), (i < values.length) ? values[i] : null, temporalType);
+      setParameter(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null, temporalType);
     }
     return this;
   }

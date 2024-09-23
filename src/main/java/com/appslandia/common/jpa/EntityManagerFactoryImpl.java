@@ -41,31 +41,33 @@ import jakarta.persistence.metamodel.Metamodel;
 public class EntityManagerFactoryImpl implements EntityManagerFactory {
 
   protected final EntityManagerFactory emf;
+  protected final ConnectionUnwrapper connectionUnwrapper;
 
-  public EntityManagerFactoryImpl(EntityManagerFactory emf) {
+  public EntityManagerFactoryImpl(EntityManagerFactory emf, ConnectionUnwrapper connectionUnwrapper) {
     this.emf = emf;
+    this.connectionUnwrapper = connectionUnwrapper;
   }
 
   @Override
   public EntityManagerImpl createEntityManager() {
-    return new EntityManagerImpl(this.emf.createEntityManager());
+    return new EntityManagerImpl(this.emf.createEntityManager(), this.connectionUnwrapper);
   }
 
   @SuppressWarnings("rawtypes")
   @Override
   public EntityManagerImpl createEntityManager(Map map) {
-    return new EntityManagerImpl(this.emf.createEntityManager(map));
+    return new EntityManagerImpl(this.emf.createEntityManager(map), this.connectionUnwrapper);
   }
 
   @Override
   public EntityManagerImpl createEntityManager(SynchronizationType synchronizationType) {
-    return new EntityManagerImpl(this.emf.createEntityManager(synchronizationType));
+    return new EntityManagerImpl(this.emf.createEntityManager(synchronizationType), this.connectionUnwrapper);
   }
 
   @SuppressWarnings("rawtypes")
   @Override
   public EntityManagerImpl createEntityManager(SynchronizationType synchronizationType, Map map) {
-    return new EntityManagerImpl(this.emf.createEntityManager(synchronizationType, map));
+    return new EntityManagerImpl(this.emf.createEntityManager(synchronizationType, map), this.connectionUnwrapper);
   }
 
   @Override

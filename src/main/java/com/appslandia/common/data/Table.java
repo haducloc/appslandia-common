@@ -27,7 +27,7 @@ import java.util.List;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.TextBuilder;
 import com.appslandia.common.base.ToStringBuilder.TSIdHash;
-import com.appslandia.common.jdbc.JdbcSql;
+import com.appslandia.common.jdbc.SqlQuery;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
 
@@ -54,12 +54,12 @@ public class Table extends InitializeObject implements Serializable {
   private transient Column singleKey;
   private List<AnnotationModel> annotations;
 
-  private transient JdbcSql insertSql;
-  private transient JdbcSql updateSql;
-  private transient JdbcSql deleteSql;
+  private transient SqlQuery insertQuery;
+  private transient SqlQuery updateQuery;
+  private transient SqlQuery deleteQuery;
 
-  private transient JdbcSql getSql;
-  private transient JdbcSql existsSql;
+  private transient SqlQuery getQuery;
+  private transient SqlQuery existsQuery;
 
   @Override
   protected void init() throws Exception {
@@ -88,12 +88,12 @@ public class Table extends InitializeObject implements Serializable {
           .findFirst().get();
     }
 
-    this.insertSql = new JdbcSql(this.buildInsertSQL());
-    this.updateSql = new JdbcSql(this.buildUpdateSQL());
-    this.deleteSql = new JdbcSql(this.buildDeleteSQL());
+    this.insertQuery = new SqlQuery(this.buildInsertQuery());
+    this.updateQuery = new SqlQuery(this.buildUpdateQuery());
+    this.deleteQuery = new SqlQuery(this.buildDeleteQuery());
 
-    this.getSql = new JdbcSql(this.buildGetSQL());
-    this.existsSql = new JdbcSql(this.buildExistsSQL());
+    this.getQuery = new SqlQuery(this.buildGetQuery());
+    this.existsQuery = new SqlQuery(this.buildExistsQuery());
 
     this.columns = Collections.unmodifiableList(this.columns);
     this.annotations = CollectionUtils.unmodifiable(this.annotations);
@@ -113,7 +113,7 @@ public class Table extends InitializeObject implements Serializable {
     return this.singleKey;
   }
 
-  protected String buildInsertSQL() {
+  protected String buildInsertQuery() {
     TextBuilder sb = new TextBuilder().append("INSERT INTO ").append(this.qTableName);
     sb.append(" (");
 
@@ -149,7 +149,7 @@ public class Table extends InitializeObject implements Serializable {
     return sb.toString();
   }
 
-  protected String buildUpdateSQL() {
+  protected String buildUpdateQuery() {
     TextBuilder sb = new TextBuilder().append("UPDATE ").append(this.qTableName);
     sb.append(" SET ");
 
@@ -173,7 +173,7 @@ public class Table extends InitializeObject implements Serializable {
     return sb.toString();
   }
 
-  protected String buildDeleteSQL() {
+  protected String buildDeleteQuery() {
     TextBuilder sb = new TextBuilder().append("DELETE FROM ").append(this.qTableName);
     sb.append(" WHERE ");
 
@@ -181,7 +181,7 @@ public class Table extends InitializeObject implements Serializable {
     return sb.toString();
   }
 
-  protected String buildExistsSQL() {
+  protected String buildExistsQuery() {
     TextBuilder sb = new TextBuilder().append("SELECT COUNT(1) FROM ").append(this.qTableName);
     sb.append(" WHERE ");
 
@@ -189,7 +189,7 @@ public class Table extends InitializeObject implements Serializable {
     return sb.toString();
   }
 
-  protected String buildGetSQL() {
+  protected String buildGetQuery() {
     TextBuilder sb = new TextBuilder().append("SELECT * FROM ").append(this.qTableName);
     sb.append(" WHERE ");
 
@@ -318,28 +318,28 @@ public class Table extends InitializeObject implements Serializable {
     return this;
   }
 
-  public JdbcSql getInsertSql() {
+  public SqlQuery getInsertQuery() {
     initialize();
-    return this.insertSql;
+    return this.insertQuery;
   }
 
-  public JdbcSql getUpdateSql() {
+  public SqlQuery getUpdateQuery() {
     initialize();
-    return this.updateSql;
+    return this.updateQuery;
   }
 
-  public JdbcSql getDeleteSql() {
+  public SqlQuery getDeleteQuery() {
     initialize();
-    return this.deleteSql;
+    return this.deleteQuery;
   }
 
-  public JdbcSql getGetSql() {
+  public SqlQuery getGetQuery() {
     initialize();
-    return this.getSql;
+    return this.getQuery;
   }
 
-  public JdbcSql getExistsSql() {
+  public SqlQuery getExistsQuery() {
     initialize();
-    return this.existsSql;
+    return this.existsQuery;
   }
 }

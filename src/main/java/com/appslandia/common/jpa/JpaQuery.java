@@ -24,12 +24,14 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.appslandia.common.base.InitializeException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
-import com.appslandia.common.jdbc.JdbcSql;
+import com.appslandia.common.jdbc.PQuery;
+import com.appslandia.common.jdbc.SqlQuery;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
 
@@ -38,35 +40,32 @@ import com.appslandia.common.utils.STR;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JpaSql extends InitializeObject implements Serializable {
+public class JpaQuery extends InitializeObject implements PQuery, Serializable {
   private static final long serialVersionUID = 1L;
 
-  public static final int DEFAULT_ARRAY_MAX_LENGTH = 32;
-
-  private String pSql;
-
+  private String pQuery;
   private Map<String, Integer> arrayLens;
+
   private transient Map<String, Integer> paramsMap;
+  private transient String translatedQuery;
 
-  private transient String translatedSql;
-
-  public JpaSql(String pSql) {
-    this.pSql = pSql;
+  public JpaQuery(String pQuery) {
+    this.pQuery = pQuery;
   }
 
   @Override
-  public JpaSql initialize() throws InitializeException {
+  public JpaQuery initialize() throws InitializeException {
     super.initialize();
     return this;
   }
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.pSql, "pSql is required.");
-    translateSql();
+    Asserts.notNull(this.pQuery, "pQuery is required.");
+    translateQuery();
   }
 
-  public JpaSql arrayLen(String parameterName, int maxLength) {
+  public JpaQuery arrayLen(String parameterName, int maxLength) {
     assertNotInitialized();
     Asserts.isTrue(maxLength > 0, "maxLength is required.");
 
@@ -77,8 +76,8 @@ public class JpaSql extends InitializeObject implements Serializable {
     return this;
   }
 
-  private void translateSql() {
-    StringBuilder sb = new StringBuilder(this.pSql);
+  private void translateQuery() {
+    StringBuilder sb = new StringBuilder(this.pQuery);
     Map<String, Integer> paramsMap = new LinkedHashMap<>();
 
     int start = 0;
@@ -97,7 +96,7 @@ public class JpaSql extends InitializeObject implements Serializable {
       Out<Integer> paramEnd = new Out<Integer>();
       Out<String> paramName = new Out<String>();
 
-      boolean isParamContext = JdbcSql.isParamContext(sb, paramIdx, paramEnd, paramName);
+      boolean isParamContext = SqlQuery.isParamContext(sb, paramIdx, paramEnd, paramName);
       if (!isParamContext) {
         start = paramIdx + 1;
         continue;
@@ -110,8 +109,8 @@ public class JpaSql extends InitializeObject implements Serializable {
       Out<Integer> fieldIdx = new Out<Integer>();
       Out<String> fieldName = new Out<String>();
 
-      boolean isInContext = JdbcSql.isContext(sb, paramIdx, "IN", fieldIdx, fieldName);
-      boolean isLikeAnyContext = JdbcSql.isContext(sb, paramIdx, "LIKE_ANY", fieldIdx, fieldName);
+      boolean isInContext = SqlQuery.isContext(sb, paramIdx, "IN", fieldIdx, fieldName);
+      boolean isLikeAnyContext = SqlQuery.isContext(sb, paramIdx, "LIKE_ANY", fieldIdx, fieldName);
 
       boolean isArrayParam = isInContext || isLikeAnyContext;
       Integer arrayLen = (this.arrayLens != null) ? this.arrayLens.get(paramName.value) : null;
@@ -137,7 +136,7 @@ public class JpaSql extends InitializeObject implements Serializable {
         sb.replace(paramIdx, paramEnd.value + 1, "()");
 
         for (int subIdx = arrayLen - 1; subIdx >= 0; subIdx--) {
-          String subParam = JdbcSql.toParamName(paramName.value, subIdx);
+          String subParam = SqlQuery.toParamName(paramName.value, subIdx);
           String expr = null;
 
           if (subIdx == arrayLen - 1) {
@@ -155,7 +154,7 @@ public class JpaSql extends InitializeObject implements Serializable {
       sb.delete(fieldIdx.value, paramEnd.value + 1);
 
       for (int subIdx = arrayLen - 1; subIdx >= 0; subIdx--) {
-        String subParam = JdbcSql.toParamName(paramName.value, subIdx);
+        String subParam = SqlQuery.toParamName(paramName.value, subIdx);
         String expr = null;
 
         if (subIdx == arrayLen - 1) {
@@ -167,37 +166,55 @@ public class JpaSql extends InitializeObject implements Serializable {
         start += expr.length();
       }
     }
-    this.translatedSql = sb.toString();
+    this.translatedQuery = sb.toString();
 
     this.arrayLens = (this.arrayLens != null) ? Collections.unmodifiableMap(this.arrayLens) : null;
     this.paramsMap = Collections.unmodifiableMap(paramsMap);
   }
 
-  public String getPSql() {
+  @Override
+  public String getPQuery() {
     initialize();
-    return this.pSql;
+    return this.pQuery;
   }
 
-  public String getTranslatedSql() {
+  @Override
+  public String getTranslatedQuery() {
     initialize();
-    return this.translatedSql;
+    return this.translatedQuery;
   }
 
+  @Override
   public Map<String, Integer> getParamsMap() {
     initialize();
     return this.paramsMap;
   }
 
+  @Override
   public boolean isParam(String parameterName) {
     initialize();
     return this.paramsMap.containsKey(parameterName);
   }
 
+  @Override
+  public Map<String, List<Integer>> getIndexesMap() {
+    initialize();
+    throw new UnsupportedOperationException("getIndexesMap()");
+  }
+
+  @Override
+  public List<Integer> getIndexes(String parameterName) {
+    initialize();
+    throw new UnsupportedOperationException("getIndexes(parameterName)");
+  }
+
+  @Override
   public boolean isArrayParam(String parameterName) {
     initialize();
     return this.paramsMap.get(parameterName) != null;
   }
 
+  @Override
   public int getArrayLen(String parameterName) {
     initialize();
     Integer len = this.paramsMap.get(parameterName);
