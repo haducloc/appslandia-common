@@ -3,7 +3,8 @@
 ## Features
 - Cryptography utilities
 - JDBC utilities (Named parameters, Array parameters, LIKE_ANY operator, etc.)
-- Record framework
+- JPA utilities (Array parameters, LIKE_ANY operator, etc.)
+- Record framework for SQL databases
 - JSON Web Signature/Json Web Token (HS/RS/ES/PS)
 - Geography utilities
 - CSV Utilities
