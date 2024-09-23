@@ -24,13 +24,11 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.appslandia.common.base.InitializeException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
-import com.appslandia.common.jdbc.PQuery;
 import com.appslandia.common.jdbc.SqlQuery;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
@@ -40,7 +38,7 @@ import com.appslandia.common.utils.STR;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class JpaQuery extends InitializeObject implements PQuery, Serializable {
+public class JpaQuery extends InitializeObject implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private String pQuery;
@@ -118,7 +116,7 @@ public class JpaQuery extends InitializeObject implements PQuery, Serializable {
       if (arrayLen != null) {
         Asserts.isTrue(isArrayParam, () -> STR.fmt("Array parameter '{}' is required.", paramName));
       } else {
-        arrayLen = DEFAULT_ARRAY_MAX_LENGTH;
+        arrayLen = SqlQuery.DEFAULT_ARRAY_MAX_LENGTH;
       }
       if (isArrayParam) {
         paramsMap.put(paramName.value, arrayLen);
@@ -172,49 +170,31 @@ public class JpaQuery extends InitializeObject implements PQuery, Serializable {
     this.paramsMap = Collections.unmodifiableMap(paramsMap);
   }
 
-  @Override
   public String getPQuery() {
     initialize();
     return this.pQuery;
   }
 
-  @Override
   public String getTranslatedQuery() {
     initialize();
     return this.translatedQuery;
   }
 
-  @Override
   public Map<String, Integer> getParamsMap() {
     initialize();
     return this.paramsMap;
   }
 
-  @Override
   public boolean isParam(String parameterName) {
     initialize();
     return this.paramsMap.containsKey(parameterName);
   }
 
-  @Override
-  public Map<String, List<Integer>> getIndexesMap() {
-    initialize();
-    throw new UnsupportedOperationException("getIndexesMap()");
-  }
-
-  @Override
-  public List<Integer> getIndexes(String parameterName) {
-    initialize();
-    throw new UnsupportedOperationException("getIndexes(parameterName)");
-  }
-
-  @Override
   public boolean isArrayParam(String parameterName) {
     initialize();
     return this.paramsMap.get(parameterName) != null;
   }
 
-  @Override
   public int getArrayLen(String parameterName) {
     initialize();
     Integer len = this.paramsMap.get(parameterName);

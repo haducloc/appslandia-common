@@ -24,7 +24,6 @@ import java.util.List;
 
 import com.appslandia.common.jdbc.DbDialect;
 import com.appslandia.common.jdbc.LikeType;
-import com.appslandia.common.jdbc.PQuery;
 import com.appslandia.common.jdbc.SqlQuery;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ObjectUtils;
@@ -44,20 +43,20 @@ import jakarta.persistence.TemporalType;
 public class QueryImpl implements Query {
 
   final Query query;
-  final PQuery pQuery;
+  final JpaQuery pQuery;
   final DbDialect dbDialect;
 
   public QueryImpl(Query query, DbDialect dbDialect) {
     this(query, null, dbDialect);
   }
 
-  public QueryImpl(Query query, PQuery pQuery, DbDialect dbDialect) {
+  public QueryImpl(Query query, JpaQuery pQuery, DbDialect dbDialect) {
     this.query = query;
     this.pQuery = pQuery;
     this.dbDialect = dbDialect;
   }
 
-  protected PQuery getPQuery() {
+  protected JpaQuery getPQuery() {
     return Asserts.notNull(this.pQuery, "No pQuery is associated with the query.");
   }
 

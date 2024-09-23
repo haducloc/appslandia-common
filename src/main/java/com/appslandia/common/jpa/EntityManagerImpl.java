@@ -160,6 +160,21 @@ public class EntityManagerImpl implements EntityManager {
     return new QueryImpl(this.em.createQuery(pQuery.getTranslatedQuery()), pQuery, this.dbDialect);
   }
 
+  public QueryImpl createNativeQuery(JpaQuery pQuery, Class<?> resultClass) {
+    return new QueryImpl(this.em.createNativeQuery(pQuery.getTranslatedQuery(), resultClass), pQuery, this.dbDialect);
+  }
+
+  public QueryImpl createNativeQuery(JpaQuery pQuery) {
+    return new QueryImpl(this.em.createNativeQuery(pQuery.getTranslatedQuery()), pQuery, this.dbDialect);
+  }
+
+  public QueryImpl createNativeQuery(JpaQuery pQuery, String resultSetMapping) {
+    return new QueryImpl(this.em.createNativeQuery(pQuery.getTranslatedQuery(), resultSetMapping), pQuery,
+        this.dbDialect);
+  }
+
+  // jakarta.persistence.EntityManager
+
   @Override
   public void remove(Object entity) {
     this.em.remove(entity);

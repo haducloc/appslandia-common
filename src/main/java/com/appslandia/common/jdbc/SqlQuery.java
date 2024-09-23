@@ -40,8 +40,10 @@ import com.appslandia.common.utils.STR;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class SqlQuery extends InitializeObject implements PQuery, Serializable {
+public class SqlQuery extends InitializeObject implements Serializable {
   private static final long serialVersionUID = 1L;
+
+  public static final int DEFAULT_ARRAY_MAX_LENGTH = 32;
 
   private String pQuery;
   private Map<String, Integer> arrayLens;
@@ -185,37 +187,31 @@ public class SqlQuery extends InitializeObject implements PQuery, Serializable {
     });
   }
 
-  @Override
   public String getPQuery() {
     initialize();
     return this.pQuery;
   }
 
-  @Override
   public String getTranslatedQuery() {
     initialize();
     return this.translatedQuery;
   }
 
-  @Override
   public Map<String, Integer> getParamsMap() {
     initialize();
     return this.paramsMap;
   }
 
-  @Override
   public boolean isParam(String parameterName) {
     initialize();
     return this.paramsMap.containsKey(parameterName);
   }
 
-  @Override
   public Map<String, List<Integer>> getIndexesMap() {
     initialize();
     return this.indexesMap;
   }
 
-  @Override
   public List<Integer> getIndexes(String parameterName) {
     initialize();
     List<Integer> indexes = this.indexesMap.get(parameterName);
@@ -223,7 +219,6 @@ public class SqlQuery extends InitializeObject implements PQuery, Serializable {
     return Asserts.notNull(indexes, () -> STR.fmt("Parameter '{}' is not found.", parameterName));
   }
 
-  @Override
   public boolean isArrayParam(String parameterName) {
     initialize();
     return this.paramsMap.get(parameterName) != null;
