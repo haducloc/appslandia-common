@@ -20,6 +20,8 @@
 
 package com.appslandia.common.jdbc;
 
+import java.io.Serializable;
+
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.StringUtils;
 
@@ -29,7 +31,8 @@ import com.appslandia.common.utils.StringUtils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class SqlLikeEscaper {
+public class SqlLikeEscaper implements Serializable {
+  private static final long serialVersionUID = 1L;
 
   final String escapeMarker;
   final char[] charsToEscape;

@@ -20,6 +20,7 @@
 
 package com.appslandia.common.jdbc;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 
@@ -30,7 +31,8 @@ import com.appslandia.common.utils.STR;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class DbDialect {
+public class DbDialect implements Serializable {
+  private static final long serialVersionUID = 1L;
 
   public static final String POSTGRESQL = "POSTGRESQL";
   public static final String MYSQL = "MYSQL";
