@@ -281,8 +281,7 @@ public class RecordContext extends DbContext {
         stat.setObject(column.getName(), new JdbcParam(val, column.getSqlType(), column.getScaleOrLength()));
       }
     }
-
-    Long count = stat.executeScalar(Long.class);
+    Integer count = stat.executeScalar(Integer.class);
     return count > 0;
   }
 
