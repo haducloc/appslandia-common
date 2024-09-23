@@ -69,7 +69,7 @@ public class ResultSetColumn {
     if (!(obj instanceof ResultSetColumn)) {
       return false;
     }
-    ResultSetColumn other = (ResultSetColumn) obj;
-    return this.index == other.index;
+    ResultSetColumn that = (ResultSetColumn) obj;
+    return this.index == that.index;
   }
 }

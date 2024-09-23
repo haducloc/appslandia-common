@@ -92,8 +92,8 @@ public class DeployEnv {
     if (!(obj instanceof DeployEnv)) {
       return false;
     }
-    DeployEnv other = (DeployEnv) obj;
-    return this.name.equalsIgnoreCase(other.name);
+    DeployEnv that = (DeployEnv) obj;
+    return this.name.equalsIgnoreCase(that.name);
   }
 
   private static volatile DeployEnv __current;
