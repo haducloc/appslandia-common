@@ -24,55 +24,79 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 
-import com.appslandia.common.utils.STR;
+import com.appslandia.common.base.InitializeObject;
+import com.appslandia.common.utils.Asserts;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class DbDialect implements Serializable {
+public class DbDialect extends InitializeObject implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  public static final String POSTGRESQL = "POSTGRESQL";
-  public static final String MYSQL = "MYSQL";
-  public static final String MARIADB = "MARIADB";
-  public static final String MSSQL = "MSSQL";
-  public static final String ORACLE = "ORACLE";
-  public static final String DB2 = "DB2";
-  public static final String SQLITE = "SQLITE";
-  public static final String H2 = "H2";
+  private DbType type;
+  private String identifierQuote;
+  private SqlLikeEscaper likeEscaper;
 
-  final String type;
-  final String identifierQuote;
-  final SqlLikeEscaper likeEscaper;
-
-  public DbDialect(Connection conn) throws java.sql.SQLException {
-    DatabaseMetaData mtdt = conn.getMetaData();
-
-    this.type = parseDbType(mtdt.getURL());
-    this.identifierQuote = mtdt.getIdentifierQuoteString();
-    this.likeEscaper = new SqlLikeEscaper(mtdt.getSearchStringEscape());
+  @Override
+  protected void init() throws Exception {
+    Asserts.notNull(this.type);
+    Asserts.notNull(this.identifierQuote);
+    Asserts.notNull(this.likeEscaper);
   }
 
-  public String getType() {
+  public DbDialect parse(Connection conn) throws java.sql.SQLException {
+    this.assertNotInitialized();
+    DatabaseMetaData mtdt = conn.getMetaData();
+
+    this.type = DbType.parseDbType(mtdt.getURL());
+    this.identifierQuote = mtdt.getIdentifierQuoteString();
+    this.likeEscaper = new SqlLikeEscaper(mtdt.getSearchStringEscape());
+
+    return this;
+  }
+
+  public DbType getType() {
+    this.initialize();
     return this.type;
   }
 
+  public DbDialect setType(DbType type) {
+    this.assertNotInitialized();
+    this.type = type;
+    return this;
+  }
+
   public String getIdentifierQuote() {
+    this.initialize();
     return this.identifierQuote;
   }
 
+  public DbDialect setIdentifierQuote(String identifierQuote) {
+    this.assertNotInitialized();
+    this.identifierQuote = identifierQuote;
+    return this;
+  }
+
   public SqlLikeEscaper getLikeEscaper() {
+    this.initialize();
     return this.likeEscaper;
   }
 
+  public DbDialect setLikeEscaper(SqlLikeEscaper likeEscaper) {
+    this.assertNotInitialized();
+    this.likeEscaper = likeEscaper;
+    return this;
+  }
+
   public String quoteIdentifier(String identifier) {
-    // Use identifierQuote
+    this.initialize();
+
     if (!" ".equals(this.identifierQuote)) {
       return this.identifierQuote + identifier + this.identifierQuote;
     }
-    // Default implementation
+
     switch (this.type) {
     case MYSQL:
     case SQLITE:
@@ -90,38 +114,12 @@ public class DbDialect implements Serializable {
   }
 
   public String toLikeEscape(String value) {
+    this.initialize();
     return this.likeEscaper.toLikeEscape(value);
   }
 
   public String toLikePattern(String value, LikeType likeType) {
+    this.initialize();
     return this.likeEscaper.toLikePattern(value, likeType);
-  }
-
-  private static final String parseDbType(String url) {
-    if (url.startsWith("jdbc:postgresql")) {
-      return POSTGRESQL;
-    }
-    if (url.startsWith("jdbc:mysql")) {
-      return MYSQL;
-    }
-    if (url.startsWith("jdbc:mariadb")) {
-      return MARIADB;
-    }
-    if (url.startsWith("jdbc:sqlserver")) {
-      return MSSQL;
-    }
-    if (url.startsWith("jdbc:oracle")) {
-      return ORACLE;
-    }
-    if (url.startsWith("jdbc:db2")) {
-      return DB2;
-    }
-    if (url.startsWith("jdbc:sqlite")) {
-      return SQLITE;
-    }
-    if (url.startsWith("jdbc:h2")) {
-      return H2;
-    }
-    throw new IllegalArgumentException(STR.fmt("Failed to parse type from: {}", url));
   }
 }

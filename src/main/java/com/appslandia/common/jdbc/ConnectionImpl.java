@@ -123,7 +123,7 @@ public class ConnectionImpl implements Connection {
       backupTable = originalTable + "_BAK";
     }
     DbDialect dbDialect = this.getDbDialect();
-    if (dbDialect.getType().equals(DbDialect.MSSQL)) {
+    if (dbDialect.getType() == DbType.MSSQL) {
 
       return executeUpdate(STR.fmt("SELECT * INTO {} FROM {}", dbDialect.quoteIdentifier(backupTable),
           dbDialect.quoteIdentifier(originalTable)));
@@ -717,7 +717,7 @@ public class ConnectionImpl implements Connection {
     return DB_DIALECTS.computeIfAbsent(this.getDataSourceId(), u -> {
 
       try {
-        return new DbDialect(this.conn);
+        return new DbDialect().parse(this.conn);
 
       } catch (SQLException ex) {
         throw new UncheckedSQLException(ex.getMessage(), ex);
