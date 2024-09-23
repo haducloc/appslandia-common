@@ -20,16 +20,10 @@
 
 package com.appslandia.common.jpa;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import com.appslandia.common.base.Params;
-import com.appslandia.common.jdbc.DbDialect;
-import com.appslandia.common.jdbc.JdbcUtils;
 import com.appslandia.common.utils.ObjectUtils;
 
 import jakarta.persistence.Cache;
@@ -40,7 +34,6 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.FlushModeType;
 import jakarta.persistence.LockModeType;
-import jakarta.persistence.PersistenceException;
 import jakarta.persistence.StoredProcedureQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaDelete;
@@ -56,32 +49,9 @@ import jakarta.persistence.metamodel.Metamodel;
 public class EntityManagerImpl implements EntityManager {
 
   protected final EntityManager em;
-  protected final String dataSourceId;
-  protected final DbDialect dbDialect;
-  protected final ConnectionUnwrapper connectionUnwrapper;
 
-  public EntityManagerImpl(EntityManager em, ConnectionUnwrapper connectionUnwrapper) {
-    this(em, null, connectionUnwrapper);
-  }
-
-  public EntityManagerImpl(EntityManager em, String dataSourceId, ConnectionUnwrapper connectionUnwrapper) {
+  public EntityManagerImpl(EntityManager em) {
     this.em = em;
-    this.connectionUnwrapper = connectionUnwrapper;
-    this.dataSourceId = (dataSourceId == null) ? JdbcUtils.getDataSourceId(connectionUnwrapper.unwrap(em))
-        : dataSourceId;
-    this.dbDialect = lookupDbDialect();
-  }
-
-  public String getDataSourceId() {
-    return this.dataSourceId;
-  }
-
-  public DbDialect getDbDialect() {
-    return this.dbDialect;
-  }
-
-  public Connection unwrapConnection() {
-    return this.connectionUnwrapper.unwrap(this.em);
   }
 
   public void insert(Object entity) {
@@ -132,46 +102,44 @@ public class EntityManagerImpl implements EntityManager {
 
   public <T> TypedQueryImpl<T> createQueryFetch(String qlString, Class<T> resultClass, String graphName) {
     return new TypedQueryImpl<T>(this.em.createQuery(qlString, resultClass).setHint(JpaHints.HINT_JPA_FETCH_GRAPH,
-        this.em.getEntityGraph(graphName)), this.dbDialect);
+        this.em.getEntityGraph(graphName)));
   }
 
   public <T> TypedQueryImpl<T> createQueryLoad(String qlString, Class<T> resultClass, String graphName) {
     return new TypedQueryImpl<T>(this.em.createQuery(qlString, resultClass).setHint(JpaHints.HINT_JPA_LOAD_GRAPH,
-        this.em.getEntityGraph(graphName)), this.dbDialect);
+        this.em.getEntityGraph(graphName)));
   }
 
   public <T> TypedQueryImpl<T> createNamedQueryFetch(String name, Class<T> resultClass, String graphName) {
     return new TypedQueryImpl<T>(this.em.createNamedQuery(name, resultClass).setHint(JpaHints.HINT_JPA_FETCH_GRAPH,
-        this.em.getEntityGraph(graphName)), this.dbDialect);
+        this.em.getEntityGraph(graphName)));
   }
 
   public <T> TypedQueryImpl<T> createNamedQueryLoad(String name, Class<T> resultClass, String graphName) {
     return new TypedQueryImpl<T>(this.em.createNamedQuery(name, resultClass).setHint(JpaHints.HINT_JPA_LOAD_GRAPH,
-        this.em.getEntityGraph(graphName)), this.dbDialect);
+        this.em.getEntityGraph(graphName)));
   }
 
   // JpaQuery
 
   public <T> TypedQueryImpl<T> createQuery(JpaQuery pQuery, Class<T> resultClass) {
-    return new TypedQueryImpl<T>(this.em.createQuery(pQuery.getTranslatedQuery(), resultClass), pQuery, this.dbDialect);
+    return new TypedQueryImpl<T>(this.em.createQuery(pQuery.getTranslatedQuery(), resultClass), pQuery);
   }
 
   public QueryImpl createQuery(JpaQuery pQuery) {
-    return new QueryImpl(this.em.createQuery(pQuery.getTranslatedQuery()), pQuery, this.dbDialect);
+    return new QueryImpl(this.em.createQuery(pQuery.getTranslatedQuery()), pQuery);
   }
 
   public QueryImpl createNativeQuery(JpaQuery pNativeQuery, Class<?> resultClass) {
-    return new QueryImpl(this.em.createNativeQuery(pNativeQuery.getTranslatedQuery(), resultClass), pNativeQuery,
-        this.dbDialect);
+    return new QueryImpl(this.em.createNativeQuery(pNativeQuery.getTranslatedQuery(), resultClass), pNativeQuery);
   }
 
   public QueryImpl createNativeQuery(JpaQuery pNativeQuery) {
-    return new QueryImpl(this.em.createNativeQuery(pNativeQuery.getTranslatedQuery()), pNativeQuery, this.dbDialect);
+    return new QueryImpl(this.em.createNativeQuery(pNativeQuery.getTranslatedQuery()), pNativeQuery);
   }
 
   public QueryImpl createNativeQuery(JpaQuery pNativeQuery, String resultSetMapping) {
-    return new QueryImpl(this.em.createNativeQuery(pNativeQuery.getTranslatedQuery(), resultSetMapping), pNativeQuery,
-        this.dbDialect);
+    return new QueryImpl(this.em.createNativeQuery(pNativeQuery.getTranslatedQuery(), resultSetMapping), pNativeQuery);
   }
 
   // jakarta.persistence.EntityManager
@@ -264,17 +232,17 @@ public class EntityManagerImpl implements EntityManager {
   @SuppressWarnings("rawtypes")
   @Override
   public QueryImpl createNativeQuery(String sqlString, Class resultClass) {
-    return new QueryImpl(this.em.createNativeQuery(sqlString, resultClass), this.dbDialect);
+    return new QueryImpl(this.em.createNativeQuery(sqlString, resultClass));
   }
 
   @Override
   public QueryImpl createNativeQuery(String sqlString) {
-    return new QueryImpl(this.em.createNativeQuery(sqlString), this.dbDialect);
+    return new QueryImpl(this.em.createNativeQuery(sqlString));
   }
 
   @Override
   public QueryImpl createNativeQuery(String sqlString, String resultSetMapping) {
-    return new QueryImpl(this.em.createNativeQuery(sqlString, resultSetMapping), this.dbDialect);
+    return new QueryImpl(this.em.createNativeQuery(sqlString, resultSetMapping));
   }
 
   @Override
@@ -370,39 +338,39 @@ public class EntityManagerImpl implements EntityManager {
 
   @Override
   public <T> TypedQueryImpl<T> createQuery(CriteriaQuery<T> criteriaQuery) {
-    return new TypedQueryImpl<T>(this.em.createQuery(criteriaQuery), this.dbDialect);
+    return new TypedQueryImpl<T>(this.em.createQuery(criteriaQuery));
   }
 
   @Override
   public <T> TypedQueryImpl<T> createQuery(String qlString, Class<T> resultClass) {
-    return new TypedQueryImpl<T>(this.em.createQuery(qlString, resultClass), this.dbDialect);
+    return new TypedQueryImpl<T>(this.em.createQuery(qlString, resultClass));
   }
 
   @SuppressWarnings("rawtypes")
   @Override
   public QueryImpl createQuery(CriteriaUpdate updateQuery) {
-    return new QueryImpl(this.em.createQuery(updateQuery), this.dbDialect);
+    return new QueryImpl(this.em.createQuery(updateQuery));
   }
 
   @SuppressWarnings("rawtypes")
   @Override
   public QueryImpl createQuery(CriteriaDelete deleteQuery) {
-    return new QueryImpl(this.em.createQuery(deleteQuery), this.dbDialect);
+    return new QueryImpl(this.em.createQuery(deleteQuery));
   }
 
   @Override
   public QueryImpl createQuery(String qlString) {
-    return new QueryImpl(this.em.createQuery(qlString), this.dbDialect);
+    return new QueryImpl(this.em.createQuery(qlString));
   }
 
   @Override
   public <T> TypedQueryImpl<T> createNamedQuery(String name, Class<T> resultClass) {
-    return new TypedQueryImpl<T>(this.em.createNamedQuery(name, resultClass), this.dbDialect);
+    return new TypedQueryImpl<T>(this.em.createNamedQuery(name, resultClass));
   }
 
   @Override
   public QueryImpl createNamedQuery(String name) {
-    return new QueryImpl(this.em.createNamedQuery(name), this.dbDialect);
+    return new QueryImpl(this.em.createNamedQuery(name));
   }
 
   @Override
@@ -439,18 +407,4 @@ public class EntityManagerImpl implements EntityManager {
   public String toString() {
     return ObjectUtils.toStringWrapper(this, this.em);
   }
-
-  protected DbDialect lookupDbDialect() throws PersistenceException {
-    return DB_DIALECTS.computeIfAbsent(this.dataSourceId, u -> {
-
-      try {
-        return DbDialect.parse(this.unwrapConnection());
-
-      } catch (SQLException ex) {
-        throw new PersistenceException(ex.getMessage(), ex);
-      }
-    });
-  }
-
-  private static final ConcurrentMap<String, DbDialect> DB_DIALECTS = new ConcurrentHashMap<>();
 }

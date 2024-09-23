@@ -44,16 +44,14 @@ public class QueryImpl implements Query {
 
   final Query query;
   final JpaQuery pQuery;
-  final DbDialect dbDialect;
 
-  public QueryImpl(Query query, DbDialect dbDialect) {
-    this(query, null, dbDialect);
+  public QueryImpl(Query query) {
+    this(query, null);
   }
 
-  public QueryImpl(Query query, JpaQuery pQuery, DbDialect dbDialect) {
+  public QueryImpl(Query query, JpaQuery pQuery) {
     this.query = query;
     this.pQuery = pQuery;
-    this.dbDialect = dbDialect;
   }
 
   protected JpaQuery getPQuery() {
@@ -95,43 +93,43 @@ public class QueryImpl implements Query {
   // :name IS NULL OR name LIKE :name
   // :name = '' OR name LIKE :name
 
-  public QueryImpl setLike(String parameterName, String value) {
-    this.query.setParameter(parameterName, this.dbDialect.toLikePattern(value, LikeType.CONTAINS));
+  public QueryImpl setLike(String parameterName, String value, DbDialect dbDialect) {
+    this.query.setParameter(parameterName, dbDialect.toLikePattern(value, LikeType.CONTAINS));
     return this;
   }
 
-  public QueryImpl setLikeSW(String parameterName, String value) {
-    this.query.setParameter(parameterName, this.dbDialect.toLikePattern(value, LikeType.STARTS_WITH));
+  public QueryImpl setLikeSW(String parameterName, String value, DbDialect dbDialect) {
+    this.query.setParameter(parameterName, dbDialect.toLikePattern(value, LikeType.STARTS_WITH));
     return this;
   }
 
-  public QueryImpl setLikeEW(String parameterName, String value) {
-    this.query.setParameter(parameterName, this.dbDialect.toLikePattern(value, LikeType.ENDS_WITH));
+  public QueryImpl setLikeEW(String parameterName, String value, DbDialect dbDialect) {
+    this.query.setParameter(parameterName, dbDialect.toLikePattern(value, LikeType.ENDS_WITH));
     return this;
   }
 
   // Set LIKE_ANY Parameters
   // name LIKE_ANY :names
 
-  public QueryImpl setLikeAny(String parameterName, String[] values) {
-    return setLikeAny(parameterName, values, LikeType.CONTAINS, null);
+  public QueryImpl setLikeAny(String parameterName, String[] values, DbDialect dbDialect) {
+    return setLikeAny(parameterName, values, LikeType.CONTAINS, dbDialect);
   }
 
-  public QueryImpl setLikeAnySW(String parameterName, String[] values) {
-    return setLikeAny(parameterName, values, LikeType.STARTS_WITH, null);
+  public QueryImpl setLikeAnySW(String parameterName, String[] values, DbDialect dbDialect) {
+    return setLikeAny(parameterName, values, LikeType.STARTS_WITH, dbDialect);
   }
 
-  public QueryImpl setLikeAnyEW(String parameterName, String[] values) {
-    return setLikeAny(parameterName, values, LikeType.ENDS_WITH, null);
+  public QueryImpl setLikeAnyEW(String parameterName, String[] values, DbDialect dbDialect) {
+    return setLikeAny(parameterName, values, LikeType.ENDS_WITH, dbDialect);
   }
 
-  public QueryImpl setLikeAny(String parameterName, String[] values, LikeType likeType, String falsePattern) {
+  protected QueryImpl setLikeAny(String parameterName, String[] values, LikeType likeType, DbDialect dbDialect) {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setParameter(SqlQuery.toParamName(parameterName, i),
-          (i < values.length) ? this.dbDialect.toLikePattern(values[i], likeType) : falsePattern);
+          (i < values.length) ? dbDialect.toLikePattern(values[i], likeType) : null);
     }
     return this;
   }

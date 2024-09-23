@@ -46,16 +46,14 @@ public class StatementImpl implements PreparedStatement {
 
   protected final SqlQuery pQuery;
   protected final PreparedStatement stat;
-  protected final DbDialect dbDialect;
 
-  public StatementImpl(PreparedStatement stat, DbDialect dbDialect) {
-    this(stat, null, dbDialect);
+  public StatementImpl(PreparedStatement stat) {
+    this(stat, null);
   }
 
-  public StatementImpl(PreparedStatement stat, SqlQuery pQuery, DbDialect dbDialect) {
+  public StatementImpl(PreparedStatement stat, SqlQuery pQuery) {
     this.stat = stat;
     this.pQuery = pQuery;
-    this.dbDialect = dbDialect;
   }
 
   protected SqlQuery getPQuery() {
@@ -277,84 +275,84 @@ public class StatementImpl implements PreparedStatement {
   // :name IS NULL OR name LIKE :name
   // :name = '' OR name LIKE :name
 
-  public void setLike(String parameterName, String value) throws java.sql.SQLException {
-    setString(parameterName, toLikeParamValue(value, LikeType.CONTAINS));
+  public void setLike(String parameterName, String value, DbDialect dbDialect) throws java.sql.SQLException {
+    setString(parameterName, toLikeParamValue(value, LikeType.CONTAINS, dbDialect));
   }
 
-  public void setLikeSW(String parameterName, String value) throws java.sql.SQLException {
-    setString(parameterName, toLikeParamValue(value, LikeType.STARTS_WITH));
+  public void setLikeSW(String parameterName, String value, DbDialect dbDialect) throws java.sql.SQLException {
+    setString(parameterName, toLikeParamValue(value, LikeType.STARTS_WITH, dbDialect));
   }
 
-  public void setLikeEW(String parameterName, String value) throws java.sql.SQLException {
-    setString(parameterName, toLikeParamValue(value, LikeType.ENDS_WITH));
+  public void setLikeEW(String parameterName, String value, DbDialect dbDialect) throws java.sql.SQLException {
+    setString(parameterName, toLikeParamValue(value, LikeType.ENDS_WITH, dbDialect));
   }
 
-  public void setNLike(String parameterName, String value) throws java.sql.SQLException {
-    setNString(parameterName, toLikeParamValue(value, LikeType.CONTAINS));
+  public void setNLike(String parameterName, String value, DbDialect dbDialect) throws java.sql.SQLException {
+    setNString(parameterName, toLikeParamValue(value, LikeType.CONTAINS, dbDialect));
   }
 
-  public void setNLikeSW(String parameterName, String value) throws java.sql.SQLException {
-    setNString(parameterName, toLikeParamValue(value, LikeType.STARTS_WITH));
+  public void setNLikeSW(String parameterName, String value, DbDialect dbDialect) throws java.sql.SQLException {
+    setNString(parameterName, toLikeParamValue(value, LikeType.STARTS_WITH, dbDialect));
   }
 
-  public void setNLikeEW(String parameterName, String value) throws java.sql.SQLException {
-    setNString(parameterName, toLikeParamValue(value, LikeType.ENDS_WITH));
+  public void setNLikeEW(String parameterName, String value, DbDialect dbDialect) throws java.sql.SQLException {
+    setNString(parameterName, toLikeParamValue(value, LikeType.ENDS_WITH, dbDialect));
   }
 
   // Set LIKE_ANY Parameters
   // name LIKE_ANY :names
 
-  public void setLikeAny(String parameterName, String[] values) throws java.sql.SQLException {
-    setLikeAny(parameterName, values, LikeType.CONTAINS, null);
+  public void setLikeAny(String parameterName, String[] values, DbDialect dbDialect) throws java.sql.SQLException {
+    setLikeAny(parameterName, values, LikeType.CONTAINS, dbDialect);
   }
 
-  public void setLikeAnySW(String parameterName, String[] values) throws java.sql.SQLException {
-    setLikeAny(parameterName, values, LikeType.STARTS_WITH, null);
+  public void setLikeAnySW(String parameterName, String[] values, DbDialect dbDialect) throws java.sql.SQLException {
+    setLikeAny(parameterName, values, LikeType.STARTS_WITH, dbDialect);
   }
 
-  public void setLikeAnyEW(String parameterName, String[] values) throws java.sql.SQLException {
-    setLikeAny(parameterName, values, LikeType.ENDS_WITH, null);
+  public void setLikeAnyEW(String parameterName, String[] values, DbDialect dbDialect) throws java.sql.SQLException {
+    setLikeAny(parameterName, values, LikeType.ENDS_WITH, dbDialect);
   }
 
-  public void setLikeAny(String parameterName, String[] values, LikeType likeType, String falsePattern)
+  protected void setLikeAny(String parameterName, String[] values, LikeType likeType, DbDialect dbDialect)
       throws java.sql.SQLException {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setString(SqlQuery.toParamName(parameterName, i),
-          (i < values.length) ? toLikeParamValue(values[i], likeType) : falsePattern);
+          (i < values.length) ? toLikeParamValue(values[i], likeType, dbDialect) : null);
     }
   }
 
-  public void setNLikeAny(String parameterName, String[] values) throws java.sql.SQLException {
-    setNLikeAny(parameterName, values, LikeType.CONTAINS, null);
+  public void setNLikeAny(String parameterName, String[] values, DbDialect dbDialect) throws java.sql.SQLException {
+    setNLikeAny(parameterName, values, LikeType.CONTAINS, dbDialect);
   }
 
-  public void setNLikeAnySW(String parameterName, String[] values) throws java.sql.SQLException {
-    setNLikeAny(parameterName, values, LikeType.STARTS_WITH, null);
+  public void setNLikeAnySW(String parameterName, String[] values, DbDialect dbDialect) throws java.sql.SQLException {
+    setNLikeAny(parameterName, values, LikeType.STARTS_WITH, dbDialect);
   }
 
-  public void setNLikeAnyEW(String parameterName, String[] values) throws java.sql.SQLException {
-    setNLikeAny(parameterName, values, LikeType.ENDS_WITH, null);
+  public void setNLikeAnyEW(String parameterName, String[] values, DbDialect dbDialect) throws java.sql.SQLException {
+    setNLikeAny(parameterName, values, LikeType.ENDS_WITH, dbDialect);
   }
 
-  public void setNLikeAny(String parameterName, String[] values, LikeType likeType, String falsePattern)
+  protected void setNLikeAny(String parameterName, String[] values, LikeType likeType, DbDialect dbDialect)
       throws java.sql.SQLException {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setNString(SqlQuery.toParamName(parameterName, i),
-          (i < values.length) ? toLikeParamValue(values[i], likeType) : falsePattern);
+          (i < values.length) ? toLikeParamValue(values[i], likeType, dbDialect) : null);
     }
   }
 
-  protected String toLikeParamValue(String value, LikeType likeType) {
+  protected String toLikeParamValue(String value, LikeType likeType, DbDialect dbDialect) {
     if (value != null && value.startsWith("\"") && value.endsWith("\"")) {
       return value.substring(1, value.length() - 1);
     } else {
-      return this.dbDialect.toLikePattern(value, likeType);
+      return dbDialect.toLikePattern(value, likeType);
     }
   }
 
