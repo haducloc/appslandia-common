@@ -160,16 +160,17 @@ public class EntityManagerImpl implements EntityManager {
     return new QueryImpl(this.em.createQuery(pQuery.getTranslatedQuery()), pQuery, this.dbDialect);
   }
 
-  public QueryImpl createNativeQuery(JpaQuery pQuery, Class<?> resultClass) {
-    return new QueryImpl(this.em.createNativeQuery(pQuery.getTranslatedQuery(), resultClass), pQuery, this.dbDialect);
+  public QueryImpl createNativeQuery(JpaQuery pNativeQuery, Class<?> resultClass) {
+    return new QueryImpl(this.em.createNativeQuery(pNativeQuery.getTranslatedQuery(), resultClass), pNativeQuery,
+        this.dbDialect);
   }
 
-  public QueryImpl createNativeQuery(JpaQuery pQuery) {
-    return new QueryImpl(this.em.createNativeQuery(pQuery.getTranslatedQuery()), pQuery, this.dbDialect);
+  public QueryImpl createNativeQuery(JpaQuery pNativeQuery) {
+    return new QueryImpl(this.em.createNativeQuery(pNativeQuery.getTranslatedQuery()), pNativeQuery, this.dbDialect);
   }
 
-  public QueryImpl createNativeQuery(JpaQuery pQuery, String resultSetMapping) {
-    return new QueryImpl(this.em.createNativeQuery(pQuery.getTranslatedQuery(), resultSetMapping), pQuery,
+  public QueryImpl createNativeQuery(JpaQuery pNativeQuery, String resultSetMapping) {
+    return new QueryImpl(this.em.createNativeQuery(pNativeQuery.getTranslatedQuery(), resultSetMapping), pNativeQuery,
         this.dbDialect);
   }
 
