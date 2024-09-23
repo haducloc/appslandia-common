@@ -81,6 +81,7 @@ try (ConnectionImpl connScoped = new ConnectionImpl(javax.sql.DataSource)) {
     db.insert("UserTable", new DataRecord().set("FirstName", fName)
                                        .set("LastName", lName)
                                        .set("Email", email));
+    // db.update, delete, getRecord, exists, etc.
   }
 }
 ```
