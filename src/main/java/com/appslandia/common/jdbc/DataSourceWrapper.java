@@ -39,16 +39,13 @@ public class DataSourceWrapper implements DataSource {
   private DataSource ds;
   private String name;
 
-  public DataSourceWrapper() {
+  public DataSourceWrapper(DataSource ds) {
+    this(ds, null);
   }
 
   public DataSourceWrapper(DataSource ds, String name) {
     this.ds = ds;
     this.name = name;
-  }
-
-  protected DataSource ds() {
-    return this.ds;
   }
 
   public String getName() {
@@ -59,51 +56,51 @@ public class DataSourceWrapper implements DataSource {
 
   @Override
   public Connection getConnection() throws SQLException {
-    return ds().getConnection();
+    return this.ds.getConnection();
   }
 
   @Override
   public Connection getConnection(String arg0, String arg1) throws SQLException {
-    return ds().getConnection(arg0, arg1);
+    return this.ds.getConnection(arg0, arg1);
   }
 
   // javax.sql.CommonDataSource
 
   @Override
   public PrintWriter getLogWriter() throws SQLException {
-    return ds().getLogWriter();
+    return this.ds.getLogWriter();
   }
 
   @Override
   public int getLoginTimeout() throws SQLException {
-    return ds().getLoginTimeout();
+    return this.ds.getLoginTimeout();
   }
 
   @Override
   public java.util.logging.Logger getParentLogger() throws SQLFeatureNotSupportedException {
-    return ds().getParentLogger();
+    return this.ds.getParentLogger();
   }
 
   @Override
   public void setLogWriter(PrintWriter arg0) throws SQLException {
-    ds().setLogWriter(arg0);
+    this.ds.setLogWriter(arg0);
   }
 
   @Override
   public void setLoginTimeout(int arg0) throws SQLException {
-    ds().setLoginTimeout(arg0);
+    this.ds.setLoginTimeout(arg0);
   }
 
   // Wrapper
 
   @Override
   public boolean isWrapperFor(Class<?> arg0) throws SQLException {
-    return ds().isWrapperFor(arg0);
+    return this.ds.isWrapperFor(arg0);
   }
 
   @Override
   public <T> T unwrap(Class<T> arg0) throws SQLException {
-    return ds().unwrap(arg0);
+    return this.ds.unwrap(arg0);
   }
 
   @Override
