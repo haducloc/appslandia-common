@@ -717,7 +717,7 @@ public class ConnectionImpl implements Connection {
     return DB_DIALECTS.computeIfAbsent(this.getDataSourceId(), u -> {
 
       try {
-        return DbDialect.parse(this.conn);
+        return new DbDialect(this.conn);
 
       } catch (SQLException ex) {
         throw new UncheckedSQLException(ex.getMessage(), ex);

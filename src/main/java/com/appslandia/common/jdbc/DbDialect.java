@@ -47,7 +47,7 @@ public class DbDialect implements Serializable {
   final String identifierQuote;
   final SqlLikeEscaper likeEscaper;
 
-  private DbDialect(Connection conn) throws java.sql.SQLException {
+  public DbDialect(Connection conn) throws java.sql.SQLException {
     DatabaseMetaData mtdt = conn.getMetaData();
 
     this.type = parseDbType(mtdt.getURL());
@@ -95,10 +95,6 @@ public class DbDialect implements Serializable {
 
   public String toLikePattern(String value, LikeType likeType) {
     return this.likeEscaper.toLikePattern(value, likeType);
-  }
-
-  public static DbDialect parse(Connection conn) throws java.sql.SQLException {
-    return new DbDialect(conn);
   }
 
   private static final String parseDbType(String url) {
