@@ -25,35 +25,7 @@ package com.appslandia.common.jdbc;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public enum DbType {
+public interface DbIdentifierQuoter {
 
-  // @formatter:off
-  POSTGRESQL("jdbc:postgresql"),
-  MYSQL("jdbc:mysql"),
-  MARIADB("jdbc:mariadb"),
-  MSSQL("jdbc:sqlserver"),
-  ORACLE("jdbc:oracle"),
-  DB2("jdbc:db2"),
-  SQLITE("jdbc:sqlite"),
-  H2("jdbc:h2");
-  // @formatter:on
-
-  private final String urlPrefix;
-
-  DbType(String urlPrefix) {
-    this.urlPrefix = urlPrefix;
-  }
-
-  public String getUrlPrefix() {
-    return this.urlPrefix;
-  }
-
-  public static DbType parseDbType(String databaseUrl) {
-    for (DbType dbType : DbType.values()) {
-      if (databaseUrl.startsWith(dbType.getUrlPrefix())) {
-        return dbType;
-      }
-    }
-    throw new IllegalArgumentException("Failed to parse type from: " + databaseUrl);
-  }
+  String quoteIdentifier(String identifier);
 }

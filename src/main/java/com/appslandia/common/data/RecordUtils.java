@@ -44,7 +44,6 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import com.appslandia.common.jdbc.ConnectionImpl;
-import com.appslandia.common.jdbc.JdbcUtils;
 import com.appslandia.common.jdbc.ResultSetColumn;
 import com.appslandia.common.jdbc.ResultSetImpl;
 import com.appslandia.common.jdbc.SqlTypeMapper;
@@ -129,7 +128,6 @@ public final class RecordUtils {
 
         Column column = new Column();
         String columnName = rs.getString("COLUMN_NAME");
-        columnName = JdbcUtils.toColumnName(columnName);
 
         column.setName(columnName);
         column.setQName(ucKeywords.contains(columnName.toUpperCase(Locale.ENGLISH))

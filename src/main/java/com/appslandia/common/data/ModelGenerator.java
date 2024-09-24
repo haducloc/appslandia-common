@@ -110,7 +110,7 @@ public class ModelGenerator extends InitializeObject {
 
     // @Embeddable
     pkAnnotations.add(AnnotationDescription.Builder.ofType(Embeddable.class).build());
-    String[] keys = table.getColumns().stream().filter(f -> f.isKey()).map(f -> f.getName())
+    String[] keys = table.getColumns().stream().filter(c -> c.isKey()).map(c -> c.getFieldName())
         .toArray(len -> new String[len]);
 
     // @TableMtdt
@@ -138,7 +138,7 @@ public class ModelGenerator extends InitializeObject {
               AnnotationDescription.Builder.ofType(MaxLength.class).define("value", column.getColumnSize()).build());
         }
 
-        builder = addField(builder, column.getName(), column.getJavaType(), fieldAnnotations);
+        builder = addField(builder, column.getFieldName(), column.getJavaType(), fieldAnnotations);
       }
     }
 
@@ -148,11 +148,11 @@ public class ModelGenerator extends InitializeObject {
     int index = 0;
     for (Column column : table.getColumns()) {
       if (column.isKey()) {
-        ctor = ctor.andThen(FieldAccessor.ofField(column.getName()).setsArgumentAt(index++));
+        ctor = ctor.andThen(FieldAccessor.ofField(column.getFieldName()).setsArgumentAt(index++));
       }
     }
 
-    List<Class<?>> argsTypes = table.getColumns().stream().filter(f -> f.isKey()).map(f -> f.getJavaType())
+    List<Class<?>> argsTypes = table.getColumns().stream().filter(c -> c.isKey()).map(c -> c.getJavaType())
         .collect(Collectors.toList());
     builder = builder.defineConstructor(Visibility.PUBLIC).withParameters(argsTypes).intercept(ctor);
 
@@ -171,7 +171,7 @@ public class ModelGenerator extends InitializeObject {
 
     String fullClass = this.classPackage != null ? this.classPackage + "." + table.getEntityClassName()
         : table.getEntityClassName();
-    String[] keys = table.getColumns().stream().filter(f -> f.isKey()).map(f -> f.getName())
+    String[] keys = table.getColumns().stream().filter(c -> c.isKey()).map(c -> c.getFieldName())
         .toArray(len -> new String[len]);
 
     // Class annotations
@@ -205,7 +205,7 @@ public class ModelGenerator extends InitializeObject {
 
       // pk
       builder = builder.defineMethod("getPk", table.getSingleKey().getJavaType(), Visibility.PUBLIC)
-          .intercept(FieldAccessor.ofField(table.getSingleKey().getName()));
+          .intercept(FieldAccessor.ofField(table.getSingleKey().getFieldName()));
     }
 
     for (Column column : table.getColumns()) {
@@ -246,7 +246,7 @@ public class ModelGenerator extends InitializeObject {
 
       if ((column.isKey() && embeddedIdClass == null) || !column.isKey()) {
 
-        builder = addField(builder, column.getName(), column.getJavaType(), fieldAnnotations);
+        builder = addField(builder, column.getFieldName(), column.getJavaType(), fieldAnnotations);
       }
     }
 
@@ -263,14 +263,14 @@ public class ModelGenerator extends InitializeObject {
       for (Column column : table.getColumns()) {
         if (!column.isKey()) {
 
-          ctor = ctor.andThen(FieldAccessor.ofField(column.getName()).setsArgumentAt(index++));
+          ctor = ctor.andThen(FieldAccessor.ofField(column.getFieldName()).setsArgumentAt(index++));
           argsTypes.add(column.getJavaType());
         }
       }
     } else {
 
       for (Column column : table.getColumns()) {
-        ctor = ctor.andThen(FieldAccessor.ofField(column.getName()).setsArgumentAt(index++));
+        ctor = ctor.andThen(FieldAccessor.ofField(column.getFieldName()).setsArgumentAt(index++));
         argsTypes.add(column.getJavaType());
       }
     }
@@ -294,7 +294,7 @@ public class ModelGenerator extends InitializeObject {
       List<AnnotationDescription> fieldAnnotations = new ArrayList<>();
       column.getAnnotations().forEach(fa -> fieldAnnotations.add(toAnnotationDescription(fa)));
 
-      builder = addField(builder, column.getName(), column.getJavaType(), fieldAnnotations);
+      builder = addField(builder, column.getFieldName(), column.getJavaType(), fieldAnnotations);
     }
 
     // Constructor
@@ -302,10 +302,10 @@ public class ModelGenerator extends InitializeObject {
 
     int index = 0;
     for (Column column : columns) {
-      ctor = ctor.andThen(FieldAccessor.ofField(column.getName()).setsArgumentAt(index++));
+      ctor = ctor.andThen(FieldAccessor.ofField(column.getFieldName()).setsArgumentAt(index++));
     }
 
-    List<Class<?>> argsTypes = columns.stream().map(f -> f.getJavaType()).collect(Collectors.toList());
+    List<Class<?>> argsTypes = columns.stream().map(c -> c.getJavaType()).collect(Collectors.toList());
     builder = builder.defineConstructor(Visibility.PUBLIC).withParameters(argsTypes).intercept(ctor);
 
     return make(builder);

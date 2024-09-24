@@ -25,6 +25,7 @@ import java.sql.Types;
 import java.util.List;
 
 import com.appslandia.common.base.InitializeObject;
+import com.appslandia.common.jdbc.JdbcUtils;
 import com.appslandia.common.jdbc.SqlQuery;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
@@ -49,6 +50,7 @@ public class Column extends InitializeObject implements Serializable {
 
   private String name;
   private String qName;
+  private String fieldName;
 
   private String typeName;
   private Integer sqlType;
@@ -74,6 +76,8 @@ public class Column extends InitializeObject implements Serializable {
     Asserts.notNull(this.sqlType, "sqlType is required.");
     Asserts.notNull(this.javaType, "javaType is required.");
 
+    this.fieldName = JdbcUtils.toFieldName(this.name);
+
     if (this.columnType == null) {
       this.columnType = ColumnType.NON_KEY;
     }
@@ -90,7 +94,7 @@ public class Column extends InitializeObject implements Serializable {
   }
 
   public String getParamName() {
-    return SqlQuery.getParamPrefix() + getName();
+    return SqlQuery.getParamPrefix() + getFieldName();
   }
 
   public Integer getScaleOrLength() {
@@ -193,6 +197,17 @@ public class Column extends InitializeObject implements Serializable {
   public Column setQName(String qName) {
     this.assertNotInitialized();
     this.qName = qName;
+    return this;
+  }
+
+  public String getFieldName() {
+    this.initialize();
+    return this.fieldName;
+  }
+
+  public Column setFieldName(String fieldName) {
+    this.assertNotInitialized();
+    this.fieldName = fieldName;
     return this;
   }
 

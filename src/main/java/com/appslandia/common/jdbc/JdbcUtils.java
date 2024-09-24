@@ -75,7 +75,7 @@ public class JdbcUtils {
     return Collections.unmodifiableList(cols);
   }
 
-  public static String toColumnName(String dbColumnName) {
+  public static String toFieldName(String dbColumnName) {
     Asserts.notNull(dbColumnName);
 
     // All Uppers
