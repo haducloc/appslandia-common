@@ -85,7 +85,7 @@ public class DbDialect extends InitializeObject implements Serializable {
 
   public String quoteIdentifier(String identifier) {
     this.initialize();
-    return this.identifierQuoter + identifier + this.identifierQuoter;
+    return this.identifierQuoter.quoteIdentifier(identifier);
   }
 
   public String toLikeEscape(String value) {
