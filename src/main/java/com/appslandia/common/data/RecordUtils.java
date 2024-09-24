@@ -30,7 +30,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -234,9 +236,10 @@ public final class RecordUtils {
     return new Key().set(keyColumn.getName(), pk);
   }
 
-  private static final Set<Class<?>> PK_JAVA_TYPES = CollectionUtils.unmodifiableSet(Short.class, Integer.class,
-      Long.class, Float.class, Double.class, BigDecimal.class, String.class, UUID.class, java.sql.Date.class,
-      java.sql.Timestamp.class, LocalDate.class, LocalDateTime.class, OffsetDateTime.class);
+  private static final Set<Class<?>> PK_JAVA_TYPES = CollectionUtils.unmodifiableSet(Byte.class, Short.class,
+      Integer.class, Long.class, Float.class, Double.class, BigDecimal.class, String.class, UUID.class,
+      java.sql.Date.class, java.sql.Timestamp.class, LocalDate.class, LocalTime.class, LocalDateTime.class,
+      OffsetDateTime.class, OffsetTime.class);
 
   public static String toEntityClassName(String tableName) {
     Asserts.notNull(tableName);
