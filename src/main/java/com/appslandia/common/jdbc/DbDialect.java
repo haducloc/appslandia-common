@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 
+import com.appslandia.common.base.InitializeException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.utils.Asserts;
 
@@ -44,6 +45,11 @@ public class DbDialect extends InitializeObject implements Serializable {
     Asserts.notNull(this.type);
     Asserts.notNull(this.identifierQuote);
     Asserts.notNull(this.likeEscaper);
+  }
+
+  @Override
+  public DbDialect initialize() throws InitializeException {
+    return (DbDialect) super.initialize();
   }
 
   public DbDialect parse(Connection conn) throws java.sql.SQLException {
