@@ -549,7 +549,7 @@ public class StatementImpl implements PreparedStatement {
     }
   }
 
-  public void setObjectArray(String parameterName, Object[] values) throws java.sql.SQLException {
+  public <T> void setObjectArray(String parameterName, T[] values) throws java.sql.SQLException {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
