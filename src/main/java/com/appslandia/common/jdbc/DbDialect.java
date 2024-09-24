@@ -22,7 +22,6 @@ package com.appslandia.common.jdbc;
 
 import java.io.Serializable;
 
-import com.appslandia.common.base.InitializeException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.utils.Asserts;
 
@@ -43,11 +42,6 @@ public class DbDialect extends InitializeObject implements Serializable {
     Asserts.notNull(this.type);
     Asserts.notNull(this.identifierQuoter);
     Asserts.notNull(this.likeEscaper);
-  }
-
-  @Override
-  public DbDialect initialize() throws InitializeException {
-    return (DbDialect) super.initialize();
   }
 
   public DbType getType() {
