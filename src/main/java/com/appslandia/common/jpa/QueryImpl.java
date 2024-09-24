@@ -137,7 +137,7 @@ public class QueryImpl implements Query {
   // Set IN Parameters
   // type IN :types
 
-  public QueryImpl setObjectArray(String parameterName, Object[] values) {
+  public <T> QueryImpl setObjectArray(String parameterName, T[] values) {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 

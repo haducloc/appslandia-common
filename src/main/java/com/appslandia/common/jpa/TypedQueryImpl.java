@@ -132,7 +132,7 @@ public class TypedQueryImpl<X> implements TypedQuery<X> {
   // Set IN Parameters
   // type IN :types
 
-  public TypedQueryImpl<X> setObjectArray(String parameterName, Object[] values) {
+  public <T> TypedQueryImpl<X> setObjectArray(String parameterName, T[] values) {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
