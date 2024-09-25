@@ -72,7 +72,8 @@ public class SourceCodeBrFixer extends InitializeObject {
 
   private void processFile(Path scPath, AtomicInteger seq) {
     try {
-      System.out.println(STR.fmt("[{}] Handling {}", seq.incrementAndGet(), scPath));
+      String unixPath = FileNameUtils.toUnixPath(scPath.toString());
+      System.out.println(STR.fmt("[{}] Handling {}", seq.incrementAndGet(), unixPath));
 
       List<String> lines = Files.readAllLines(scPath, StandardCharsets.UTF_8);
       List<String> strippedLines = lines.stream().map(l -> l.stripTrailing()).toList();
