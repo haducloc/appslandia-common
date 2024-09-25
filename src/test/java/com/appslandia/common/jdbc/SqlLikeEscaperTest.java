@@ -32,7 +32,7 @@ public class SqlLikeEscaperTest {
 
   @Test
   public void test_toLikeEscape() {
-    SqlLikeEscaper escaper = new SqlLikeEscaper("\\", new char[] { '%', '_' });
+    SqlLikeEscaper escaper = new SqlLikeEscaper('\\', new char[] { '%', '_' });
     String val = escaper.toLikeEscape("20%");
     Assertions.assertEquals("20\\%", val);
 
@@ -42,7 +42,7 @@ public class SqlLikeEscaperTest {
 
   @Test
   public void test_toLikePattern() {
-    SqlLikeEscaper escaper = new SqlLikeEscaper("\\", new char[] { '%', '_' });
+    SqlLikeEscaper escaper = new SqlLikeEscaper('\\', new char[] { '%', '_' });
     String val = escaper.toLikePattern("20%", LikeType.CONTAINS);
 
     Assertions.assertEquals("%20\\%%", val);

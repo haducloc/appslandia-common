@@ -34,13 +34,13 @@ public class DbDialect extends InitializeObject implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private DbType type;
-  private DbIdentifierQuoter identifierQuoter;
+  private Character idQuoteChar;
   private SqlLikeEscaper likeEscaper;
 
   @Override
   protected void init() throws Exception {
     Asserts.notNull(this.type);
-    Asserts.notNull(this.identifierQuoter);
+    Asserts.notNull(this.idQuoteChar);
     Asserts.notNull(this.likeEscaper);
   }
 
@@ -55,14 +55,14 @@ public class DbDialect extends InitializeObject implements Serializable {
     return this;
   }
 
-  public DbIdentifierQuoter getIdentifierQuoter() {
+  public Character getIdQuoteChar() {
     this.initialize();
-    return this.identifierQuoter;
+    return this.idQuoteChar;
   }
 
-  public DbDialect setIdentifierQuoter(DbIdentifierQuoter identifierQuoter) {
+  public DbDialect setIdQuoteChar(char idQuoteChar) {
     this.assertNotInitialized();
-    this.identifierQuoter = identifierQuoter;
+    this.idQuoteChar = idQuoteChar;
     return this;
   }
 
@@ -79,7 +79,7 @@ public class DbDialect extends InitializeObject implements Serializable {
 
   public String quoteIdentifier(String identifier) {
     this.initialize();
-    return this.identifierQuoter.quoteIdentifier(identifier);
+    return this.idQuoteChar + identifier + this.idQuoteChar;
   }
 
   public String toLikeEscape(String value) {
@@ -92,32 +92,32 @@ public class DbDialect extends InitializeObject implements Serializable {
     return this.likeEscaper.toLikePattern(value, likeType);
   }
 
-  public static final DbDialect DIALECT_POSTGRESQL = new DbDialect().setType(DbType.POSTGRESQL)
-      .setIdentifierQuoter(identifier -> quoteIdentifier(identifier, "\"")).setLikeEscaper(new SqlLikeEscaper("\\"));
+  public static final DbDialect DIALECT_POSTGRESQL = new DbDialect().setType(DbType.POSTGRESQL).setIdQuoteChar('"')
+      .setLikeEscaper(new SqlLikeEscaper('\\'));
 
-  public static final DbDialect DIALECT_MYSQL = new DbDialect().setType(DbType.MYSQL)
-      .setIdentifierQuoter(identifier -> quoteIdentifier(identifier, "`")).setLikeEscaper(new SqlLikeEscaper("\\"));
+  public static final DbDialect DIALECT_MYSQL = new DbDialect().setType(DbType.MYSQL).setIdQuoteChar('`')
+      .setLikeEscaper(new SqlLikeEscaper('\\'));
 
-  public static final DbDialect DIALECT_MARIADB = new DbDialect().setType(DbType.MARIADB)
-      .setIdentifierQuoter(identifier -> quoteIdentifier(identifier, "`")).setLikeEscaper(new SqlLikeEscaper("\\"));
+  public static final DbDialect DIALECT_MARIADB = new DbDialect().setType(DbType.MARIADB).setIdQuoteChar('`')
+      .setLikeEscaper(new SqlLikeEscaper('\\'));
 
-  public static final DbDialect DIALECT_MSSQL = new DbDialect().setType(DbType.MSSQL)
-      .setIdentifierQuoter(identifier -> quoteIdentifier(identifier, "\"")).setLikeEscaper(new SqlLikeEscaper("\\"));
+  public static final DbDialect DIALECT_MSSQL = new DbDialect().setType(DbType.MSSQL).setIdQuoteChar('"')
+      .setLikeEscaper(new SqlLikeEscaper('\\'));
 
-  public static final DbDialect DIALECT_SQLITE = new DbDialect().setType(DbType.SQLITE)
-      .setIdentifierQuoter(identifier -> quoteIdentifier(identifier, "\"")).setLikeEscaper(new SqlLikeEscaper("\\"));
+  public static final DbDialect DIALECT_SQLITE = new DbDialect().setType(DbType.SQLITE).setIdQuoteChar('"')
+      .setLikeEscaper(new SqlLikeEscaper('\\'));
 
-  public static final DbDialect DIALECT_H2 = new DbDialect().setType(DbType.H2)
-      .setIdentifierQuoter(identifier -> quoteIdentifier(identifier, "\"")).setLikeEscaper(new SqlLikeEscaper("\\"));
+  public static final DbDialect DIALECT_H2 = new DbDialect().setType(DbType.H2).setIdQuoteChar('"')
+      .setLikeEscaper(new SqlLikeEscaper('\\'));
 
-  public static final DbDialect DIALECT_ORACLE = new DbDialect().setType(DbType.ORACLE)
-      .setIdentifierQuoter(identifier -> quoteIdentifier(identifier, "\"")).setLikeEscaper(new SqlLikeEscaper("\\"));
+  public static final DbDialect DIALECT_ORACLE = new DbDialect().setType(DbType.ORACLE).setIdQuoteChar('"')
+      .setLikeEscaper(new SqlLikeEscaper('\\'));
 
-  public static final DbDialect DIALECT_DB2 = new DbDialect().setType(DbType.DB2)
-      .setIdentifierQuoter(identifier -> quoteIdentifier(identifier, "\"")).setLikeEscaper(new SqlLikeEscaper("\\"));
+  public static final DbDialect DIALECT_DB2 = new DbDialect().setType(DbType.DB2).setIdQuoteChar('"')
+      .setLikeEscaper(new SqlLikeEscaper('\\'));
 
-  public static final DbDialect DIALECT_SAP_HANA = new DbDialect().setType(DbType.SAP_HANA)
-      .setIdentifierQuoter(identifier -> quoteIdentifier(identifier, "\"")).setLikeEscaper(new SqlLikeEscaper("\\"));
+  public static final DbDialect DIALECT_SAP_HANA = new DbDialect().setType(DbType.SAP_HANA).setIdQuoteChar('"')
+      .setLikeEscaper(new SqlLikeEscaper('\\'));
 
   public static DbDialect parse(String databaseUrl) {
     DbType type = DbType.parseDbType(databaseUrl);
@@ -144,9 +144,5 @@ public class DbDialect extends InitializeObject implements Serializable {
     default:
       throw new IllegalArgumentException("Unsupported database type: " + type);
     }
-  }
-
-  static String quoteIdentifier(String identifier, String byStr) {
-    return byStr + identifier + byStr;
   }
 }

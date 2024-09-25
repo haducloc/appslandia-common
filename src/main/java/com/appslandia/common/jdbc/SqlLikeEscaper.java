@@ -34,15 +34,15 @@ import com.appslandia.common.utils.StringUtils;
 public class SqlLikeEscaper implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  final String escapeMarker;
+  final char escapeMarker;
   final char[] charsToEscape;
 
-  public SqlLikeEscaper(String escapeMarker) {
+  public SqlLikeEscaper(char escapeMarker) {
     this.escapeMarker = escapeMarker;
     this.charsToEscape = new char[] { '%', '_' };
   }
 
-  public SqlLikeEscaper(String escapeMarker, char[] charsToEscape) {
+  public SqlLikeEscaper(char escapeMarker, char[] charsToEscape) {
     this.escapeMarker = escapeMarker;
     this.charsToEscape = charsToEscape.clone();
   }
