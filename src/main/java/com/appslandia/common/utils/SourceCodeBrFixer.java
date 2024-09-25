@@ -66,7 +66,8 @@ public class SourceCodeBrFixer extends InitializeObject {
     final AtomicInteger seq = new AtomicInteger();
 
     Files.walk(Paths.get(this.sourceDir)).filter(Files::isRegularFile)
-        .filter(path -> this.srcExt.apply(path.getFileName().toString())).forEach(scPath -> processFile(scPath, seq));
+        .filter(path -> this.srcExt.apply(FileNameUtils.toUnixPath(path.toString())))
+        .forEach(scPath -> processFile(scPath, seq));
   }
 
   private void processFile(Path scPath, AtomicInteger seq) {
