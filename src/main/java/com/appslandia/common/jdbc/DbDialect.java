@@ -116,6 +116,9 @@ public class DbDialect extends InitializeObject implements Serializable {
   public static final DbDialect DIALECT_DB2 = new DbDialect().setType(DbType.DB2)
       .setIdentifierQuoter(identifier -> quoteIdentifier(identifier, "\"")).setLikeEscaper(new SqlLikeEscaper("\\"));
 
+  public static final DbDialect DIALECT_SAP_HANA = new DbDialect().setType(DbType.SAP_HANA)
+      .setIdentifierQuoter(identifier -> quoteIdentifier(identifier, "\"")).setLikeEscaper(new SqlLikeEscaper("\\"));
+
   public static DbDialect parse(String databaseUrl) {
     DbType type = DbType.parseDbType(databaseUrl);
 
@@ -136,6 +139,8 @@ public class DbDialect extends InitializeObject implements Serializable {
       return DIALECT_ORACLE;
     case DB2:
       return DIALECT_DB2;
+    case SAP_HANA:
+      return DIALECT_SAP_HANA;
     default:
       throw new IllegalArgumentException("Unsupported database type: " + type);
     }

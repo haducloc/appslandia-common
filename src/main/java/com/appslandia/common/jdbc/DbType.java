@@ -28,14 +28,15 @@ package com.appslandia.common.jdbc;
 public enum DbType {
 
   // @formatter:off
-  POSTGRESQL("jdbc:postgresql"),
-  MYSQL("jdbc:mysql"),
-  MARIADB("jdbc:mariadb"),
-  MSSQL("jdbc:sqlserver"),
-  ORACLE("jdbc:oracle"),
-  DB2("jdbc:db2"),
-  SQLITE("jdbc:sqlite"),
-  H2("jdbc:h2");
+  POSTGRESQL("jdbc:postgresql:"),
+  MYSQL("jdbc:mysql:"),
+  MARIADB("jdbc:mariadb:"),
+  MSSQL("jdbc:sqlserver:"),
+  SQLITE("jdbc:sqlite:"),
+  H2("jdbc:h2:"),
+  ORACLE("jdbc:oracle:"),
+  DB2("jdbc:db2:"),
+  SAP_HANA("jdbc:sap:");
   // @formatter:on
 
   private final String urlPrefix;
