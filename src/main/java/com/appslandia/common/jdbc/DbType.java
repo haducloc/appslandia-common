@@ -20,6 +20,8 @@
 
 package com.appslandia.common.jdbc;
 
+import com.appslandia.common.utils.StringUtils;
+
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
@@ -28,15 +30,15 @@ package com.appslandia.common.jdbc;
 public enum DbType {
 
   // @formatter:off
-  POSTGRESQL("jdbc:postgresql:"),
-  MYSQL("jdbc:mysql:"),
-  MARIADB("jdbc:mariadb:"),
-  MSSQL("jdbc:sqlserver:"),
-  SQLITE("jdbc:sqlite:"),
-  H2("jdbc:h2:"),
-  ORACLE("jdbc:oracle:"),
-  DB2("jdbc:db2:"),
-  SAP_HANA("jdbc:sap:");
+    POSTGRESQL("jdbc:postgresql://"),
+    MYSQL("jdbc:mysql://"),
+    MARIADB("jdbc:mariadb://"),
+    MSSQL("jdbc:sqlserver://"),
+    SQLITE("jdbc:sqlite://"),
+    H2("jdbc:h2://"),
+    ORACLE("jdbc:oracle://"),
+    DB2("jdbc:db2://"),
+    SAP_HANA("jdbc:sap://");
   // @formatter:on
 
   private final String urlPrefix;
@@ -51,7 +53,7 @@ public enum DbType {
 
   public static DbType parseDbType(String databaseUrl) {
     for (DbType dbType : DbType.values()) {
-      if (databaseUrl.startsWith(dbType.getUrlPrefix())) {
+      if (StringUtils.startsWith(databaseUrl, dbType.urlPrefix)) {
         return dbType;
       }
     }
