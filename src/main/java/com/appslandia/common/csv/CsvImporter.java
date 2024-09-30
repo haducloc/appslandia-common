@@ -129,7 +129,7 @@ public class CsvImporter extends InitializeObject {
         final AtomicInteger counter = new AtomicInteger(0);
 
         this.csvProcessor.parse(this.csvInput, (idx, csvRecord) -> {
-          Asserts.isTrue(table.getColumns().size() == csvRecord.length(), "The number of columns does not match.");
+          Asserts.isTrue(table.getColumns().size() == csvRecord.length(), "Unmatched column count.");
 
           if (this.csvHeader) {
             if (idx == 0) {
