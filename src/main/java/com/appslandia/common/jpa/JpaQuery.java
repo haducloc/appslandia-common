@@ -22,10 +22,10 @@ package com.appslandia.common.jpa;
 
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.appslandia.common.base.CaseInsensitiveMap;
 import com.appslandia.common.base.InitializeException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
@@ -68,7 +68,7 @@ public class JpaQuery extends InitializeObject implements Serializable {
     Asserts.isTrue(maxLength > 0, "maxLength is required.");
 
     if (this.arrayLens == null) {
-      this.arrayLens = new HashMap<>();
+      this.arrayLens = new CaseInsensitiveMap<>(new LinkedHashMap<>());
     }
     this.arrayLens.put(parameterName, maxLength);
     return this;
@@ -76,7 +76,7 @@ public class JpaQuery extends InitializeObject implements Serializable {
 
   private void translateQuery() {
     StringBuilder sb = new StringBuilder(this.pQuery);
-    Map<String, Integer> paramsMap = new LinkedHashMap<>();
+    Map<String, Integer> paramsMap = new CaseInsensitiveMap<>(new LinkedHashMap<>());
 
     int start = 0;
 
