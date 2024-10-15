@@ -40,7 +40,7 @@ public class Language extends InitializeObject {
   public static final Language VI_VN = new Language().setLocale(Locale.of("vi", "VN")).initialize();
 
   private Locale locale;
-  private String languageId;
+  private String id;
 
   private Map<String, String> temporalPatterns = new HashMap<>();
   private Map<String, String> attributes = new HashMap<>();
@@ -49,8 +49,8 @@ public class Language extends InitializeObject {
   protected void init() throws Exception {
     Asserts.notNull(this.locale, "locale is required.");
 
-    if (this.languageId == null) {
-      this.languageId = this.locale.getLanguage();
+    if (this.id == null) {
+      this.id = this.locale.getLanguage();
     }
 
     String datePattern = this.temporalPatterns.get(DateUtils.ISO8601_DATE);
@@ -129,14 +129,14 @@ public class Language extends InitializeObject {
     return this;
   }
 
-  public String getLanguageId() {
+  public String getId() {
     this.initialize();
-    return this.languageId;
+    return this.id;
   }
 
-  public Language setLanguageId(String languageId) {
+  public Language setId(String id) {
     this.assertNotInitialized();
-    this.languageId = languageId;
+    this.id = id;
     return this;
   }
 
@@ -183,7 +183,7 @@ public class Language extends InitializeObject {
 
   @Override
   public int hashCode() {
-    return this.getLanguageId().hashCode();
+    return this.getId().hashCode();
   }
 
   @Override
@@ -195,7 +195,7 @@ public class Language extends InitializeObject {
       return false;
     }
     Language that = (Language) obj;
-    return this.getLanguageId().equals(that.getLanguageId());
+    return this.getId().equals(that.getId());
   }
 
   private static volatile Language __default;
