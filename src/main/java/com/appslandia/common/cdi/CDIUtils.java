@@ -21,18 +21,14 @@
 package com.appslandia.common.cdi;
 
 import java.lang.annotation.Annotation;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.ObjectUtils;
 
 import jakarta.el.ELProcessor;
 import jakarta.enterprise.context.spi.CreationalContext;
-import jakarta.enterprise.inject.spi.Annotated;
 import jakarta.enterprise.inject.spi.Bean;
 import jakarta.enterprise.inject.spi.BeanManager;
 
@@ -45,12 +41,12 @@ public class CDIUtils {
 
   public static final Annotation[] EMPTY_ANNOTATIONS = new Annotation[] {};
 
-  public static <T> boolean consumeReference(BeanManager beanManager, Class<? extends T> type, Consumer<T> comsumer) {
-    return consumeReference(beanManager, type, EMPTY_ANNOTATIONS, comsumer);
+  public static <T> boolean consumeReference(BeanManager beanManager, Class<? extends T> type, Consumer<T> consumer) {
+    return consumeReference(beanManager, type, EMPTY_ANNOTATIONS, consumer);
   }
 
   public static <T> boolean consumeReference(BeanManager beanManager, Class<? extends T> type, Annotation[] qualifiers,
-      Consumer<T> comsumer) {
+      Consumer<T> consumer) {
     Set<Bean<?>> matchedBeans = beanManager.getBeans(type, qualifiers);
     if (matchedBeans.isEmpty()) {
       return false;
@@ -60,7 +56,7 @@ public class CDIUtils {
 
     try {
       T t = ObjectUtils.cast(beanManager.getReference(bean, type, ctx));
-      comsumer.accept(t);
+      consumer.accept(t);
 
       return true;
     } finally {
@@ -142,44 +138,6 @@ public class CDIUtils {
         consumer.accept(annotation, bean.getBeanClass());
       }
     }
-  }
-
-  public static <A extends Annotation> A getAnnotation(BeanManager beanManager, Annotated annotated,
-      Class<A> annotationType) {
-    if (annotated.getAnnotations().isEmpty()) {
-      return null;
-    }
-    if (annotated.isAnnotationPresent(annotationType)) {
-      return annotated.getAnnotation(annotationType);
-    }
-    Queue<Annotation> annotations = new LinkedList<>(annotated.getAnnotations());
-    return getAnnotation(beanManager, annotationType, annotations);
-  }
-
-  public static <A extends Annotation> A getAnnotation(BeanManager beanManager, Class<?> annotatedClass,
-      Class<A> annotationType) {
-    if (annotatedClass.isAnnotationPresent(annotationType)) {
-      return annotatedClass.getAnnotation(annotationType);
-    }
-    Queue<Annotation> annotations = new LinkedList<>();
-    CollectionUtils.toList(annotations, annotatedClass.getAnnotations());
-
-    return getAnnotation(beanManager, annotationType, annotations);
-  }
-
-  static <A extends Annotation> A getAnnotation(BeanManager beanManager, Class<A> annotationType,
-      Queue<Annotation> annotations) {
-    while (!annotations.isEmpty()) {
-      Annotation annotation = annotations.remove();
-
-      if (annotation.annotationType().equals(annotationType)) {
-        return annotationType.cast(annotation);
-      }
-      if (beanManager.isStereotype(annotation.annotationType())) {
-        annotations.addAll(beanManager.getStereotypeDefinition(annotation.annotationType()));
-      }
-    }
-    return null;
   }
 
   public static ELProcessor getELProcessor(BeanManager beanManager) {
