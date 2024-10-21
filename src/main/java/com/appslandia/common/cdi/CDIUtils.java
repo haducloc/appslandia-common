@@ -26,6 +26,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import com.appslandia.common.utils.ObjectUtils;
+import com.appslandia.common.utils.ReflectionUtils;
 
 import jakarta.el.ELProcessor;
 import jakarta.enterprise.context.spi.CreationalContext;
@@ -39,10 +40,8 @@ import jakarta.enterprise.inject.spi.BeanManager;
  */
 public class CDIUtils {
 
-  public static final Annotation[] EMPTY_ANNOTATIONS = new Annotation[] {};
-
   public static <T> boolean consumeReference(BeanManager beanManager, Class<? extends T> type, Consumer<T> consumer) {
-    return consumeReference(beanManager, type, EMPTY_ANNOTATIONS, consumer);
+    return consumeReference(beanManager, type, ReflectionUtils.EMPTY_ANNOTATIONS, consumer);
   }
 
   public static <T> boolean consumeReference(BeanManager beanManager, Class<? extends T> type, Annotation[] qualifiers,
