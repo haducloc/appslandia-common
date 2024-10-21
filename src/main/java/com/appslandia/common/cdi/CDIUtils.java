@@ -43,6 +43,31 @@ import jakarta.enterprise.inject.spi.BeanManager;
  */
 public class CDIUtils {
 
+  public static final Annotation[] EMPTY_ANNOTATIONS = new Annotation[] {};
+
+  public static <T> boolean consumeReference(BeanManager beanManager, Class<? extends T> type, Consumer<T> comsumer) {
+    return consumeReference(beanManager, type, EMPTY_ANNOTATIONS, comsumer);
+  }
+
+  public static <T> boolean consumeReference(BeanManager beanManager, Class<? extends T> type, Annotation[] qualifiers,
+      Consumer<T> comsumer) {
+    Set<Bean<?>> matchedBeans = beanManager.getBeans(type, qualifiers);
+    if (matchedBeans.isEmpty()) {
+      return false;
+    }
+    Bean<?> bean = beanManager.resolve(matchedBeans);
+    final CreationalContext<T> ctx = ObjectUtils.cast(beanManager.createCreationalContext(bean));
+
+    try {
+      T t = ObjectUtils.cast(beanManager.getReference(bean, type, ctx));
+      comsumer.accept(t);
+
+      return true;
+    } finally {
+      ctx.release();
+    }
+  }
+
   public static <T> BeanInstance<T> getReference(BeanManager beanManager, Class<? extends T> type,
       Annotation... qualifiers) {
     Set<Bean<?>> matchedBeans = beanManager.getBeans(type, qualifiers);
@@ -50,12 +75,9 @@ public class CDIUtils {
       return null;
     }
     Bean<?> bean = beanManager.resolve(matchedBeans);
-    if (bean == null) {
-      return null;
-    }
     CreationalContext<T> ctx = ObjectUtils.cast(beanManager.createCreationalContext(bean));
-    T t = ObjectUtils.cast(beanManager.getReference(bean, type, ctx));
 
+    T t = ObjectUtils.cast(beanManager.getReference(bean, type, ctx));
     return new BeanInstance<>(t, ctx);
   }
 
@@ -65,12 +87,9 @@ public class CDIUtils {
       return null;
     }
     Bean<?> bean = beanManager.resolve(matchedBeans);
-    if (bean == null) {
-      return null;
-    }
     CreationalContext<T> ctx = ObjectUtils.cast(beanManager.createCreationalContext(bean));
-    T t = ObjectUtils.cast(beanManager.getReference(bean, bean.getBeanClass(), ctx));
 
+    T t = ObjectUtils.cast(beanManager.getReference(bean, bean.getBeanClass(), ctx));
     return new BeanInstance<>(t, ctx);
   }
 
