@@ -41,11 +41,11 @@ new ToStringBuilder().setToOneLine(true).toString(anyObject);
 ```
 ### JDBC Named Parameters
 ```java
-// JdbcSql can be reused
-JdbcSql sql = new JdbcSql("SELECT * FROM User WHERE status=:status");
+// SqlQuery can be reused
+SqlQuery query = new SqlQuery("SELECT * FROM User WHERE status=:status");
 ConnectionImpl conn = new ConnectionImpl(javax.sql.DataSource);
 
-try (StatementImpl stat = conn.prepareStatement(sql)) {
+try (StatementImpl stat = conn.prepareStatement(query)) {
   stat.setInt("status", 1); // Named parameter
   //
   stat.executeQuery();
@@ -53,10 +53,10 @@ try (StatementImpl stat = conn.prepareStatement(sql)) {
 ```
 ### JDBC Named Array Parameters
 ```java
-JdbcSql sql = new JdbcSql("SELECT * FROM User WHERE userType IN :types");
+SqlQuery query = new SqlQuery("SELECT * FROM User WHERE userType IN :types");
 ConnectionImpl conn = new ConnectionImpl(javax.sql.DataSource);
 
-try (StatementImpl stat = conn.prepareStatement(sql)) {
+try (StatementImpl stat = conn.prepareStatement(query)) {
   stat.setIntArray("types", new int[] {1,2,3});
   //
   stat.executeQuery();
@@ -64,11 +64,11 @@ try (StatementImpl stat = conn.prepareStatement(sql)) {
 ```
 ### JDBC LIKE_ANY
 ```java
-JdbcSql sql = new JdbcSql("SELECT * FROM User WHERE name LIKE_ANY :names");
+SqlQuery query = new SqlQuery("SELECT * FROM User WHERE name LIKE_ANY :names");
 ConnectionImpl conn = new ConnectionImpl(javax.sql.DataSource);
 
-try (StatementImpl stat = conn.prepareStatement(sql)) {
-  stat.setLikeAny("names", new String[] {"a, "b"}); // name LIKE '%a%' OR name LIKE '%b%'
+try (StatementImpl stat = conn.prepareStatement(query)) {
+  stat.setLikeAny("names", new String[] {"a, "b"}, conn.getDbDialect()); // name LIKE '%a%' OR name LIKE '%b%'
   //
   stat.executeQuery();
 }
