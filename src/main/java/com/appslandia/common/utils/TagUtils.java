@@ -76,8 +76,7 @@ public class TagUtils {
       isValid.value = false;
     }
 
-    // #tbd must be first
-    // #unsorted resulting in removal of others
+    // #tbd & #unsorted
     boolean hasTbd = result.remove(TBD_TAG);
 
     if (result.contains(UNSORTED_TAG)) {
