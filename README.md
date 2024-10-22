@@ -68,7 +68,8 @@ SqlQuery query = new SqlQuery("SELECT * FROM User WHERE name LIKE_ANY :names");
 ConnectionImpl conn = new ConnectionImpl(javax.sql.DataSource);
 
 try (StatementImpl stat = conn.prepareStatement(query)) {
-  stat.setLikeAny("names", new String[] {"a, "b"}, conn.getDbDialect()); // name LIKE '%a%' OR name LIKE '%b%'
+  // name LIKE '%a%' OR name LIKE '%b%'
+  stat.setLikeAny("names", new String[] {"a, "b"}, conn.getDbDialect());
   //
   stat.executeQuery();
 }
