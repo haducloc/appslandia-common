@@ -21,15 +21,15 @@
 package com.appslandia.common.cdi;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class BeanInstances implements Iterable<BeanInstance<?>> {
+public class BeanInstances {
 
   final List<BeanInstance<?>> instances = new ArrayList<>();
 
@@ -37,15 +37,14 @@ public class BeanInstances implements Iterable<BeanInstance<?>> {
     this.instances.add(bi);
   }
 
-  public void destroy() {
+  public void destroy(Consumer<RuntimeException> logger) {
     for (int i = this.instances.size() - 1; i >= 0; i--) {
+      try {
+        this.instances.get(i).destroy();
 
-      this.instances.get(i).destroy();
+      } catch (RuntimeException ex) {
+        logger.accept(ex);
+      }
     }
-  }
-
-  @Override
-  public Iterator<BeanInstance<?>> iterator() {
-    return this.instances.iterator();
   }
 }
