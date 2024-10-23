@@ -118,15 +118,15 @@ public class QueryImpl implements Query {
   // Set LIKE_ANY Parameters
   // name LIKE_ANY :names
 
-  public QueryImpl setLikeAny(String parameterName, String[] values) {
+  public QueryImpl setLikeAny(String parameterName, String... values) {
     return setLikeAny(parameterName, values, LikeType.CONTAINS);
   }
 
-  public QueryImpl setLikeAnySW(String parameterName, String[] values) {
+  public QueryImpl setLikeAnySW(String parameterName, String... values) {
     return setLikeAny(parameterName, values, LikeType.STARTS_WITH);
   }
 
-  public QueryImpl setLikeAnyEW(String parameterName, String[] values) {
+  public QueryImpl setLikeAnyEW(String parameterName, String... values) {
     return setLikeAny(parameterName, values, LikeType.ENDS_WITH);
   }
 
@@ -144,7 +144,7 @@ public class QueryImpl implements Query {
   // Set IN Parameters
   // type IN :types
 
-  public <T> QueryImpl setObjectArray(String parameterName, T[] values) {
+  public QueryImpl setObjectArray(String parameterName, Object... values) {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
@@ -154,7 +154,7 @@ public class QueryImpl implements Query {
     return this;
   }
 
-  public QueryImpl setDateArray(String parameterName, java.util.Date[] values, TemporalType temporalType) {
+  public QueryImpl setDateArray(String parameterName, TemporalType temporalType, java.util.Date... values) {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 

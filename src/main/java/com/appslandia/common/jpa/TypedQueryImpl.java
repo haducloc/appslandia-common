@@ -112,15 +112,15 @@ public class TypedQueryImpl<X> implements TypedQuery<X> {
   // Set LIKE_ANY Parameters
   // name LIKE_ANY :names
 
-  public TypedQueryImpl<X> setLikeAny(String parameterName, String[] values) {
+  public TypedQueryImpl<X> setLikeAny(String parameterName, String... values) {
     return setLikeAny(parameterName, values, LikeType.CONTAINS);
   }
 
-  public TypedQueryImpl<X> setLikeAnySW(String parameterName, String[] values) {
+  public TypedQueryImpl<X> setLikeAnySW(String parameterName, String... values) {
     return setLikeAny(parameterName, values, LikeType.STARTS_WITH);
   }
 
-  public TypedQueryImpl<X> setLikeAnyEW(String parameterName, String[] values) {
+  public TypedQueryImpl<X> setLikeAnyEW(String parameterName, String... values) {
     return setLikeAny(parameterName, values, LikeType.ENDS_WITH);
   }
 
@@ -138,7 +138,7 @@ public class TypedQueryImpl<X> implements TypedQuery<X> {
   // Set IN Parameters
   // type IN :types
 
-  public <T> TypedQueryImpl<X> setObjectArray(String parameterName, T[] values) {
+  public TypedQueryImpl<X> setObjectArray(String parameterName, Object... values) {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
@@ -148,7 +148,7 @@ public class TypedQueryImpl<X> implements TypedQuery<X> {
     return this;
   }
 
-  public TypedQueryImpl<X> setDateArray(String parameterName, java.util.Date[] values, TemporalType temporalType) {
+  public TypedQueryImpl<X> setDateArray(String parameterName, TemporalType temporalType, java.util.Date... values) {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
