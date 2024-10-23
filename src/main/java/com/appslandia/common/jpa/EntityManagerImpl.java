@@ -27,6 +27,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import com.appslandia.common.base.Params;
 import com.appslandia.common.jdbc.DbDialect;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ObjectUtils;
 import com.appslandia.common.utils.STR;
 
@@ -71,28 +72,30 @@ public class EntityManagerImpl implements EntityManager {
 
   public boolean isInCache(Class<?> type, Object primaryKey) {
     Cache cache = this.em.getEntityManagerFactory().getCache();
-    return (cache != null) && cache.contains(type, primaryKey);
+    Asserts.notNull(cache);
+
+    return cache.contains(type, primaryKey);
   }
 
   public void evictCache() {
     Cache cache = this.em.getEntityManagerFactory().getCache();
-    if (cache != null) {
-      cache.evictAll();
-    }
+    Asserts.notNull(cache);
+
+    cache.evictAll();
   }
 
   public void evictCache(Class<?> type) {
     Cache cache = this.em.getEntityManagerFactory().getCache();
-    if (cache != null) {
-      cache.evict(type);
-    }
+    Asserts.notNull(cache);
+
+    cache.evict(type);
   }
 
   public void evictCache(Class<?> type, Object primaryKey) {
     Cache cache = this.em.getEntityManagerFactory().getCache();
-    if (cache != null) {
-      cache.evict(type, primaryKey);
-    }
+    Asserts.notNull(cache);
+
+    cache.evict(type, primaryKey);
   }
 
   public <T> T findFetch(Class<T> entityClass, Object primaryKey, String graphName) {
