@@ -30,6 +30,8 @@
 		<version.fusionauth-jwt>5.3.2</version.fusionauth-jwt>
 		<version.bouncy-castle-bcpkix>1.77</version.bouncy-castle-bcpkix>
 		<version.yasson>3.0.3</version.yasson>
+		<version.h2>2.3.232</version.h2>
+		<version.hibernate-core>6.6.1.Final</version.hibernate-core>
 		<version.junit-jupiter-api>5.10.2</version.junit-jupiter-api>
 	</properties>
 	<licenses>
@@ -234,6 +236,18 @@
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
 			<version>${version.hibernate-validator}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.orm</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${version.hibernate-core}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>${version.h2}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

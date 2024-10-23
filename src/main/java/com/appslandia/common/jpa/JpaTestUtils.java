@@ -45,4 +45,20 @@ public class JpaTestUtils {
 
     return props;
   }
+
+//  public void testPU() {
+//    PersistenceUnitInfoImpl pui = new PersistenceUnitInfoImpl();
+//
+//    pui.setPersistenceUnitName("testPU");
+//    pui.setPersistenceProviderClassName(HibernatePersistenceProvider.class.getName());
+//    pui.addManagedClassName(User.class.getName());
+//    pui.setExcludeUnlistedClasses(true);
+//    pui.setTransactionType(PersistenceUnitTransactionType.RESOURCE_LOCAL);
+//
+//    var testDbPuProps = JpaTestUtils.getTestDbPuProps();
+//    try (var emf = new HibernatePersistenceProvider().createContainerEntityManagerFactory(pui, testDbPuProps)) {
+//      try (var em = emf.createEntityManager()) {
+//      }
+//    }
+//  }
 }
