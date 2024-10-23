@@ -432,16 +432,8 @@ public class EntityManagerImpl implements EntityManager {
     return dbUrl;
   }
 
-  public DbDialect getDbDialect() throws PersistenceException {
-    return DB_DIALECTS.computeIfAbsent(this.getDbUrl(), url -> {
-
-      try {
-        return DbDialect.parse(url);
-
-      } catch (PersistenceException ex) {
-        throw new PersistenceException(ex.getMessage(), ex);
-      }
-    });
+  public DbDialect getDbDialect() {
+    return DB_DIALECTS.computeIfAbsent(this.getDbUrl(), url -> DbDialect.parse(url));
   }
 
   private static final ConcurrentMap<String, DbDialect> DB_DIALECTS = new ConcurrentHashMap<>();
