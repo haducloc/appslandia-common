@@ -432,7 +432,7 @@ public class EntityManagerImpl implements EntityManager {
     return dbUrl;
   }
 
-  public DbDialect getDbDialect() {
+  public DbDialect getDbDialect() throws PersistenceException {
     return DB_DIALECTS.computeIfAbsent(this.getDbUrl(), url -> DbDialect.parse(url));
   }
 
