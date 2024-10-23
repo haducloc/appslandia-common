@@ -33,8 +33,10 @@ public class JpaTestUtils {
   public static Map<String, String> getTestDbPuProps() {
     Map<String, String> props = new HashMap<>();
 
+    final String url = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1";
+
     props.put("jakarta.persistence.jdbc.driver", "org.h2.Driver");
-    props.put("jakarta.persistence.jdbc.url", "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1");
+    props.put("jakarta.persistence.jdbc.url", url);
     props.put("jakarta.persistence.jdbc.user", "sa");
     props.put("jakarta.persistence.jdbc.password", "");
 
@@ -42,6 +44,9 @@ public class JpaTestUtils {
     props.put("hibernate.hbm2ddl.auto", "create-drop");
     props.put("hibernate.show_sql", "true");
     props.put("hibernate.format_sql", "true");
+
+    // To help determine the database type from the given URL
+    props.put("jdbc.url", url);
 
     return props;
   }

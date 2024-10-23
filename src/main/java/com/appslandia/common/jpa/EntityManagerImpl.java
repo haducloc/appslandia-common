@@ -22,8 +22,11 @@ package com.appslandia.common.jpa;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import com.appslandia.common.base.Params;
+import com.appslandia.common.jdbc.DbDialect;
 import com.appslandia.common.utils.ObjectUtils;
 
 import jakarta.persistence.Cache;
@@ -34,6 +37,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.FlushModeType;
 import jakarta.persistence.LockModeType;
+import jakarta.persistence.PersistenceException;
 import jakarta.persistence.StoredProcedureQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaDelete;
@@ -123,23 +127,25 @@ public class EntityManagerImpl implements EntityManager {
   // JpaQuery
 
   public <T> TypedQueryImpl<T> createQuery(JpaQuery pQuery, Class<T> resultClass) {
-    return new TypedQueryImpl<T>(this.em.createQuery(pQuery.getTranslatedQuery(), resultClass), pQuery);
+    return new TypedQueryImpl<T>(this.em.createQuery(pQuery.getTranslatedQuery(), resultClass), pQuery, getDbDialect());
   }
 
   public QueryImpl createQuery(JpaQuery pQuery) {
-    return new QueryImpl(this.em.createQuery(pQuery.getTranslatedQuery()), pQuery);
+    return new QueryImpl(this.em.createQuery(pQuery.getTranslatedQuery()), pQuery, getDbDialect());
   }
 
   public QueryImpl createNativeQuery(JpaQuery pNativeQuery, Class<?> resultClass) {
-    return new QueryImpl(this.em.createNativeQuery(pNativeQuery.getTranslatedQuery(), resultClass), pNativeQuery);
+    return new QueryImpl(this.em.createNativeQuery(pNativeQuery.getTranslatedQuery(), resultClass), pNativeQuery,
+        getDbDialect());
   }
 
   public QueryImpl createNativeQuery(JpaQuery pNativeQuery) {
-    return new QueryImpl(this.em.createNativeQuery(pNativeQuery.getTranslatedQuery()), pNativeQuery);
+    return new QueryImpl(this.em.createNativeQuery(pNativeQuery.getTranslatedQuery()), pNativeQuery, getDbDialect());
   }
 
   public QueryImpl createNativeQuery(JpaQuery pNativeQuery, String resultSetMapping) {
-    return new QueryImpl(this.em.createNativeQuery(pNativeQuery.getTranslatedQuery(), resultSetMapping), pNativeQuery);
+    return new QueryImpl(this.em.createNativeQuery(pNativeQuery.getTranslatedQuery(), resultSetMapping), pNativeQuery,
+        getDbDialect());
   }
 
   // jakarta.persistence.EntityManager
@@ -407,4 +413,31 @@ public class EntityManagerImpl implements EntityManager {
   public String toString() {
     return ObjectUtils.toStringWrapper(this, this.em);
   }
+
+  public String getJdbcUrl() throws PersistenceException {
+    Map<String, Object> props = this.em.getEntityManagerFactory().getProperties();
+
+    String jdbcUrl = (String) props.get("jakarta.persistence.jdbc.url");
+    if (jdbcUrl == null) {
+      jdbcUrl = (String) props.get("jdbc.url");
+    }
+    if (jdbcUrl == null) {
+      throw new PersistenceException("No 'jdbc.url' property was found in the Entity Manager Factory properties.");
+    }
+    return jdbcUrl;
+  }
+
+  public DbDialect getDbDialect() throws PersistenceException {
+    return DB_DIALECTS.computeIfAbsent(this.getJdbcUrl(), url -> {
+
+      try {
+        return DbDialect.parse(url);
+
+      } catch (PersistenceException ex) {
+        throw new PersistenceException(ex.getMessage(), ex);
+      }
+    });
+  }
+
+  private static final ConcurrentMap<String, DbDialect> DB_DIALECTS = new ConcurrentHashMap<>();
 }

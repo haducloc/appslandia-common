@@ -126,6 +126,14 @@ public class JdbcUtils {
     }
   }
 
+  public static String toLikeParamValue(String value, LikeType likeType, DbDialect dbDialect) {
+    if (value != null && value.startsWith("\"") && value.endsWith("\"")) {
+      return value.substring(1, value.length() - 1);
+    } else {
+      return dbDialect.toLikePattern(value, likeType);
+    }
+  }
+
   // Execute ResultSets
 
   public static String getDistinctValues(ResultSet rs, String tableName, String columnLabel) throws SQLException {

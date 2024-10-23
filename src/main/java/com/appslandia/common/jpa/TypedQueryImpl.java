@@ -23,6 +23,7 @@ package com.appslandia.common.jpa;
 import java.util.List;
 
 import com.appslandia.common.jdbc.DbDialect;
+import com.appslandia.common.jdbc.JdbcUtils;
 import com.appslandia.common.jdbc.LikeType;
 import com.appslandia.common.jdbc.SqlQuery;
 import com.appslandia.common.utils.Asserts;
@@ -44,18 +45,24 @@ public class TypedQueryImpl<X> implements TypedQuery<X> {
 
   final TypedQuery<X> query;
   final JpaQuery pQuery;
+  final DbDialect dbDialect;
 
   public TypedQueryImpl(TypedQuery<X> query) {
-    this(query, null);
+    this(query, null, null);
   }
 
-  public TypedQueryImpl(TypedQuery<X> query, JpaQuery pQuery) {
+  public TypedQueryImpl(TypedQuery<X> query, JpaQuery pQuery, DbDialect dbDialect) {
     this.query = query;
     this.pQuery = pQuery;
+    this.dbDialect = dbDialect;
   }
 
   protected JpaQuery getPQuery() {
     return Asserts.notNull(this.pQuery, "No pQuery is associated with the query.");
+  }
+
+  protected DbDialect getDbDialect() {
+    return Asserts.notNull(this.dbDialect, "No dbDialect is associated with the query.");
   }
 
   public List<X> executeList() {
@@ -87,44 +94,43 @@ public class TypedQueryImpl<X> implements TypedQuery<X> {
   // :name IS NULL OR name LIKE :name
   // :name = '' OR name LIKE :name
 
-  public TypedQueryImpl<X> setLike(String parameterName, String value, DbDialect dbDialect) {
-    this.query.setParameter(parameterName, dbDialect.toLikePattern(value, LikeType.CONTAINS));
+  public TypedQueryImpl<X> setLike(String parameterName, String value) {
+    this.query.setParameter(parameterName, JdbcUtils.toLikeParamValue(value, LikeType.CONTAINS, getDbDialect()));
     return this;
   }
 
-  public TypedQueryImpl<X> setLikeSW(String parameterName, String value, DbDialect dbDialect) {
-    this.query.setParameter(parameterName, dbDialect.toLikePattern(value, LikeType.STARTS_WITH));
+  public TypedQueryImpl<X> setLikeSW(String parameterName, String value) {
+    this.query.setParameter(parameterName, JdbcUtils.toLikeParamValue(value, LikeType.STARTS_WITH, getDbDialect()));
     return this;
   }
 
-  public TypedQueryImpl<X> setLikeEW(String parameterName, String value, DbDialect dbDialect) {
-    this.query.setParameter(parameterName, dbDialect.toLikePattern(value, LikeType.ENDS_WITH));
+  public TypedQueryImpl<X> setLikeEW(String parameterName, String value) {
+    this.query.setParameter(parameterName, JdbcUtils.toLikeParamValue(value, LikeType.ENDS_WITH, getDbDialect()));
     return this;
   }
 
   // Set LIKE_ANY Parameters
   // name LIKE_ANY :names
 
-  public TypedQueryImpl<X> setLikeAny(String parameterName, String[] values, DbDialect dbDialect) {
-    return setLikeAny(parameterName, values, LikeType.CONTAINS, dbDialect);
+  public TypedQueryImpl<X> setLikeAny(String parameterName, String[] values) {
+    return setLikeAny(parameterName, values, LikeType.CONTAINS);
   }
 
-  public TypedQueryImpl<X> setLikeAnySW(String parameterName, String[] values, DbDialect dbDialect) {
-    return setLikeAny(parameterName, values, LikeType.STARTS_WITH, dbDialect);
+  public TypedQueryImpl<X> setLikeAnySW(String parameterName, String[] values) {
+    return setLikeAny(parameterName, values, LikeType.STARTS_WITH);
   }
 
-  public TypedQueryImpl<X> setLikeAnyEW(String parameterName, String[] values, DbDialect dbDialect) {
-    return setLikeAny(parameterName, values, LikeType.ENDS_WITH, dbDialect);
+  public TypedQueryImpl<X> setLikeAnyEW(String parameterName, String[] values) {
+    return setLikeAny(parameterName, values, LikeType.ENDS_WITH);
   }
 
-  protected TypedQueryImpl<X> setLikeAny(String parameterName, String[] values, LikeType likeType,
-      DbDialect dbDialect) {
+  protected TypedQueryImpl<X> setLikeAny(String parameterName, String[] values, LikeType likeType) {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
     Asserts.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setParameter(SqlQuery.toParamName(parameterName, i),
-          (i < values.length) ? dbDialect.toLikePattern(values[i], likeType) : null);
+          (i < values.length) ? JdbcUtils.toLikeParamValue(values[i], likeType, getDbDialect()) : null);
     }
     return this;
   }
