@@ -415,7 +415,7 @@ public class EntityManagerImpl implements EntityManager {
     return ObjectUtils.toStringWrapper(this, this.em);
   }
 
-  public String getJdbcUrl() throws PersistenceException {
+  public String getDbUrl() throws PersistenceException {
     Map<String, Object> props = this.em.getEntityManagerFactory().getProperties();
 
     String jdbcUrl = (String) props.get("jakarta.persistence.jdbc.url");
@@ -430,7 +430,7 @@ public class EntityManagerImpl implements EntityManager {
   }
 
   public DbDialect getDbDialect() throws PersistenceException {
-    return DB_DIALECTS.computeIfAbsent(this.getJdbcUrl(), url -> {
+    return DB_DIALECTS.computeIfAbsent(this.getDbUrl(), url -> {
 
       try {
         return DbDialect.parse(url);
