@@ -421,15 +421,15 @@ public class EntityManagerImpl implements EntityManager {
   public String getDbUrl() throws PersistenceException {
     Map<String, Object> props = this.em.getEntityManagerFactory().getProperties();
 
-    String jdbcUrl = (String) props.get("jakarta.persistence.jdbc.url");
-    if (jdbcUrl == null) {
-      jdbcUrl = (String) props.get(JpaUtils.PROP_DB_URL);
+    String dbUrl = (String) props.get("jakarta.persistence.jdbc.url");
+    if (dbUrl == null) {
+      dbUrl = (String) props.get(JpaUtils.PROP_DB_URL);
     }
-    if (jdbcUrl == null) {
+    if (dbUrl == null) {
       throw new PersistenceException(
           STR.fmt("No '{}' property was found in the Entity Manager Factory properties.", JpaUtils.PROP_DB_URL));
     }
-    return jdbcUrl;
+    return dbUrl;
   }
 
   public DbDialect getDbDialect() throws PersistenceException {
