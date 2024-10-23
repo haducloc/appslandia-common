@@ -55,7 +55,7 @@ public class PersistenceUnitInfoImpl extends InitializeObject implements Persist
   private List<URL> jarFileUrls = new ArrayList<>();
 
   private URL unitRootUrl;
-  private boolean excludeUnlistedClasses = false;
+  private boolean excludeUnlistedClasses = true;
 
   private SharedCacheMode sharedCacheMode;
   private ValidationMode validationMode;

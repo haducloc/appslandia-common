@@ -46,7 +46,7 @@ public class JpaTestUtils {
     props.put("hibernate.format_sql", "true");
 
     // To help determine the database type from the given URL
-    props.put("jdbc.url", url);
+    props.put(JpaUtils.PROP_DB_URL, url);
 
     return props;
   }

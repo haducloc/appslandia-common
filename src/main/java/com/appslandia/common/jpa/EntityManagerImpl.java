@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentMap;
 import com.appslandia.common.base.Params;
 import com.appslandia.common.jdbc.DbDialect;
 import com.appslandia.common.utils.ObjectUtils;
+import com.appslandia.common.utils.STR;
 
 import jakarta.persistence.Cache;
 import jakarta.persistence.EntityGraph;
@@ -419,10 +420,11 @@ public class EntityManagerImpl implements EntityManager {
 
     String jdbcUrl = (String) props.get("jakarta.persistence.jdbc.url");
     if (jdbcUrl == null) {
-      jdbcUrl = (String) props.get("jdbc.url");
+      jdbcUrl = (String) props.get(JpaUtils.PROP_DB_URL);
     }
     if (jdbcUrl == null) {
-      throw new PersistenceException("No 'jdbc.url' property was found in the Entity Manager Factory properties.");
+      throw new PersistenceException(
+          STR.fmt("No '{}' property was found in the Entity Manager Factory properties.", JpaUtils.PROP_DB_URL));
     }
     return jdbcUrl;
   }
