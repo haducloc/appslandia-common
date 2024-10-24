@@ -304,7 +304,7 @@ public class DbContext implements AutoCloseable {
         int[] updateCounts = stat.executeBatch();
 
         if (Arrays.stream(updateCounts).anyMatch(code -> code == Statement.EXECUTE_FAILED)) {
-          throw new SQLException("executeBatch returns Statement.EXECUTE_FAILED.");
+          throw new SQLException("Statement.EXECUTE_FAILED found.");
         }
       } else {
         stat.clearBatch();
