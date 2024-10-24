@@ -53,11 +53,12 @@ try (StatementImpl stat = conn.prepareStatement(query)) {
 ```
 ### JDBC Named Array Parameters
 ```java
-SqlQuery query = new SqlQuery("SELECT * FROM User WHERE userType IN :types");
+SqlQuery query = new SqlQuery("SELECT * FROM User WHERE type IN :types");
 ConnectionImpl conn = new ConnectionImpl(javax.sql.DataSource);
 
 try (StatementImpl stat = conn.prepareStatement(query)) {
-  stat.setIntArray("types", new int[] {1,2,3});
+  // type = 1 OR type = 2
+  stat.setIntArray("types", 1, 2);
   //
   stat.executeQuery();
 }
@@ -69,7 +70,7 @@ ConnectionImpl conn = new ConnectionImpl(javax.sql.DataSource);
 
 try (StatementImpl stat = conn.prepareStatement(query)) {
   // name LIKE '%a%' OR name LIKE '%b%'
-  stat.setLikeAny("names", new String[] {"a, "b"}, conn.getDbDialect());
+  stat.setLikeAny("names", "a", "b");
   //
   stat.executeQuery();
 }
