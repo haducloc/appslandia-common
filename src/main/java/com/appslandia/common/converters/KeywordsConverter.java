@@ -59,7 +59,7 @@ public class KeywordsConverter implements Converter<String> {
     Out<Boolean> isValid = new Out<Boolean>();
     String keywords = KeywordUtils.toKeywords(str, isValid);
 
-    if (!isValid.val()) {
+    if (!isValid.get()) {
       throw new ConverterException(STR.fmt("keywords '{}' is invalid.", str), getErrorMsgKey());
     }
     return keywords;

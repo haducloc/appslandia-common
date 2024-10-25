@@ -38,12 +38,12 @@ public class Out<T> {
     this.value = value;
   }
 
-  public T val() throws AssertException {
+  public T get() throws AssertException {
     return Asserts.notNull(this.value, "value is required.");
   }
 
   public T orElse(T defaultValue) {
-    return this.value != null ? this.value : defaultValue;
+    return (this.value != null) ? this.value : defaultValue;
   }
 
   public Out<T> set(T value) {

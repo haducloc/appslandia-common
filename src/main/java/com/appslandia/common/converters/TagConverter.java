@@ -58,7 +58,7 @@ public class TagConverter implements Converter<String> {
     Out<Boolean> isValid = new Out<Boolean>();
     String tag = TagUtils.toTag(str, isValid);
 
-    if (!isValid.val()) {
+    if (!isValid.get()) {
       throw toParsingError(str, "Tag");
     }
     return tag;
