@@ -125,11 +125,11 @@ public class IOUtils {
     Asserts.notNull(altEncoding);
     var bomIS = new BOMInputStream(is);
     return new BufferedReader(
-        new InputStreamReader(bomIS, bomIS.getBOM() != null ? bomIS.getBOM().getEncoding() : altEncoding));
+        new InputStreamReader(bomIS, (bomIS.getBOM() != null) ? bomIS.getBOM().getEncoding() : altEncoding));
   }
 
-  public static BufferedWriter writerBOM(String outputFile, String altEncoding) throws IOException {
-    return writerBOM(new FileOutputStream(outputFile), altEncoding);
+  public static BufferedWriter writerBOM(String outputFile, String encoding) throws IOException {
+    return writerBOM(new FileOutputStream(outputFile), encoding);
   }
 
   public static BufferedWriter writerBOM(OutputStream os, String encoding) throws IOException {

@@ -29,6 +29,7 @@ import java.lang.reflect.RecordComponent;
 import java.util.Arrays;
 
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.IOUtils;
 import com.appslandia.common.utils.ReflectionException;
 import com.appslandia.common.utils.ReflectionUtils;
 import com.appslandia.common.utils.STR;
@@ -38,10 +39,11 @@ import com.appslandia.common.utils.STR;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class CsvWriter {
+public class CsvWriter implements AutoCloseable {
 
   final BufferedWriter out;
   final CsvProcessor csvProcessor;
+  final boolean internalOut;
 
   public CsvWriter(BufferedWriter out) {
     this(out, CsvProcessor.INSTANCE);
@@ -49,12 +51,30 @@ public class CsvWriter {
 
   public CsvWriter(BufferedWriter out, CsvProcessor csvProcessor) {
     this.out = out;
+    this.internalOut = false;
+    this.csvProcessor = csvProcessor;
+  }
+
+  public CsvWriter(String csvLocation, String encoding) throws IOException {
+    this(csvLocation, encoding, CsvProcessor.INSTANCE);
+  }
+
+  public CsvWriter(String csvLocation, String encoding, CsvProcessor csvProcessor) throws IOException {
+    this.out = IOUtils.writerBOM(csvLocation, encoding);
+    this.internalOut = true;
     this.csvProcessor = csvProcessor;
   }
 
   public CsvWriter newLine() throws IOException {
     this.out.newLine();
     return this;
+  }
+
+  @Override
+  public void close() throws Exception {
+    if (this.internalOut) {
+      this.out.close();
+    }
   }
 
   public CsvWriter outSeparator() throws IOException {
@@ -77,7 +97,7 @@ public class CsvWriter {
     return this;
   }
 
-  public CsvWriter out(Object... values) throws IOException {
+  public CsvWriter outValues(Object... values) throws IOException {
     for (int i = 0; i < values.length; i++) {
       out(values[i], false);
 
