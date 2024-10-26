@@ -97,13 +97,12 @@ public class PasswordDigester extends TextDigester {
     try {
       byte[] computedSecKey = this.pbeSecretKeyGenerator.generate(pwdChars, salt, this.iterationCount, this.keySize);
       boolean verified = Arrays.equals(computedSecKey, secKey);
-
-      CryptoUtils.clear(secKey);
       CryptoUtils.clear(computedSecKey);
 
       return verified;
     } finally {
       CryptoUtils.clear(pwdChars);
+      CryptoUtils.clear(secKey);
     }
   }
 
