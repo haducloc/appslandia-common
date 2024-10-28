@@ -137,6 +137,26 @@ public class IOUtils {
     return new BufferedWriter(new OutputStreamWriter(new BOMOutputStream(os, encoding), encoding));
   }
 
+  public static BufferedReader reader(String inputFile, String encoding) throws IOException {
+    Asserts.notNull(encoding);
+    return reader(new FileInputStream(inputFile), encoding);
+  }
+
+  public static BufferedReader reader(InputStream is, String encoding) throws IOException {
+    Asserts.notNull(encoding);
+    return new BufferedReader(new InputStreamReader(is, encoding));
+  }
+
+  public static BufferedWriter writer(String outputFile, String encoding) throws IOException {
+    Asserts.notNull(encoding);
+    return writer(new FileOutputStream(outputFile), encoding);
+  }
+
+  public static BufferedWriter writer(OutputStream os, String encoding) throws IOException {
+    Asserts.notNull(encoding);
+    return new BufferedWriter(new OutputStreamWriter(os, encoding));
+  }
+
   public static void closeQuietly(Closeable closeable) {
     if (closeable != null) {
       try {
