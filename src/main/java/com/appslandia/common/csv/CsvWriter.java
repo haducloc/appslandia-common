@@ -114,6 +114,10 @@ public class CsvWriter implements AutoCloseable {
     // recordFields
     RecordComponent[] recordFields = record.getClass().getRecordComponents();
 
+    if (fieldNames.length == 0) {
+      fieldNames = Arrays.stream(recordFields).map(f -> f.getName()).toArray(String[]::new);
+    }
+
     for (int i = 0; i < fieldNames.length; i++) {
       String fieldName = fieldNames[i];
 
