@@ -108,6 +108,17 @@ public class CsvWriter implements AutoCloseable {
     return this;
   }
 
+  public CsvWriter out(CsvRecord record) throws IOException {
+    for (int i = 0; i < record.length(); i++) {
+      out(record.getString(i), false);
+
+      if (i < record.length() - 1) {
+        outSeparator();
+      }
+    }
+    return this;
+  }
+
   public <T extends Record> CsvWriter outRecord(T record, String... fieldNames) throws IOException {
     Asserts.notNull(record);
 
