@@ -47,25 +47,25 @@ public class EntityManagerFactoryImpl implements EntityManagerFactory {
   }
 
   @Override
-  public EntityRepository createEntityManager() {
-    return new EntityRepository(this.emf.createEntityManager());
+  public EntityManagerImpl createEntityManager() {
+    return new EntityManagerImpl(this.emf.createEntityManager());
   }
 
   @SuppressWarnings("rawtypes")
   @Override
-  public EntityRepository createEntityManager(Map map) {
-    return new EntityRepository(this.emf.createEntityManager(map));
+  public EntityManagerImpl createEntityManager(Map map) {
+    return new EntityManagerImpl(this.emf.createEntityManager(map));
   }
 
   @Override
-  public EntityRepository createEntityManager(SynchronizationType synchronizationType) {
-    return new EntityRepository(this.emf.createEntityManager(synchronizationType));
+  public EntityManagerImpl createEntityManager(SynchronizationType synchronizationType) {
+    return new EntityManagerImpl(this.emf.createEntityManager(synchronizationType));
   }
 
   @SuppressWarnings("rawtypes")
   @Override
-  public EntityRepository createEntityManager(SynchronizationType synchronizationType, Map map) {
-    return new EntityRepository(this.emf.createEntityManager(synchronizationType, map));
+  public EntityManagerImpl createEntityManager(SynchronizationType synchronizationType, Map map) {
+    return new EntityManagerImpl(this.emf.createEntityManager(synchronizationType, map));
   }
 
   @Override

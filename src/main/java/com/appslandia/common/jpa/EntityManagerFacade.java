@@ -52,7 +52,7 @@ import jakarta.persistence.metamodel.Metamodel;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public abstract class EntityRepositoryBase implements EntityManager {
+public abstract class EntityManagerFacade implements EntityManager {
 
   protected abstract EntityManager em();
 

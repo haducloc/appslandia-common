@@ -27,11 +27,11 @@ import jakarta.persistence.EntityManager;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class EntityRepository extends EntityRepositoryBase {
+public class EntityManagerImpl extends EntityManagerFacade {
 
   final EntityManager em;
 
-  public EntityRepository(EntityManager em) {
+  public EntityManagerImpl(EntityManager em) {
     this.em = em;
   }
 
