@@ -52,103 +52,128 @@ import jakarta.persistence.metamodel.Metamodel;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class EntityManagerImpl implements EntityManager {
+public abstract class EntityRepository implements EntityManager {
 
-  protected final EntityManager em;
-
-  public EntityManagerImpl(EntityManager em) {
-    this.em = em;
-  }
+  protected abstract EntityManager em();
 
   public void insert(Object entity) {
-    this.em.persist(entity);
-    this.em.flush();
+    this.em().persist(entity);
+    this.em().flush();
   }
 
   public void removeByPk(Class<?> type, Object primaryKey) throws EntityNotFoundException {
-    Object ref = this.em.getReference(type, primaryKey);
-    this.em.remove(ref);
+    Object ref = this.em().getReference(type, primaryKey);
+    this.em().remove(ref);
   }
 
   public boolean isInCache(Class<?> type, Object primaryKey) {
-    Cache cache = this.em.getEntityManagerFactory().getCache();
+    Cache cache = this.em().getEntityManagerFactory().getCache();
     Asserts.notNull(cache);
 
     return cache.contains(type, primaryKey);
   }
 
   public void evictCache() {
-    Cache cache = this.em.getEntityManagerFactory().getCache();
+    Cache cache = this.em().getEntityManagerFactory().getCache();
     Asserts.notNull(cache);
 
     cache.evictAll();
   }
 
   public void evictCache(Class<?> type) {
-    Cache cache = this.em.getEntityManagerFactory().getCache();
+    Cache cache = this.em().getEntityManagerFactory().getCache();
     Asserts.notNull(cache);
 
     cache.evict(type);
   }
 
   public void evictCache(Class<?> type, Object primaryKey) {
-    Cache cache = this.em.getEntityManagerFactory().getCache();
+    Cache cache = this.em().getEntityManagerFactory().getCache();
     Asserts.notNull(cache);
 
     cache.evict(type, primaryKey);
   }
 
   public <T> T findFetch(Class<T> entityClass, Object primaryKey, String graphName) {
-    return this.em.find(entityClass, primaryKey,
-        new Params().set(JpaHints.HINT_JPA_FETCH_GRAPH, this.em.getEntityGraph(graphName)));
+    return this.em().find(entityClass, primaryKey,
+        new Params().set(JpaHints.HINT_JPA_FETCH_GRAPH, this.em().getEntityGraph(graphName)));
   }
 
   public <T> T findLoad(Class<T> entityClass, Object primaryKey, String graphName) {
-    return this.em.find(entityClass, primaryKey,
-        new Params().set(JpaHints.HINT_JPA_LOAD_GRAPH, this.em.getEntityGraph(graphName)));
+    return this.em().find(entityClass, primaryKey,
+        new Params().set(JpaHints.HINT_JPA_LOAD_GRAPH, this.em().getEntityGraph(graphName)));
+  }
+
+  public <T> T findFetch(Class<T> entityClass, Object primaryKey, EntityGraph<T> graph) {
+    return this.em().find(entityClass, primaryKey, new Params().set(JpaHints.HINT_JPA_FETCH_GRAPH, graph));
+  }
+
+  public <T> T findLoad(Class<T> entityClass, Object primaryKey, EntityGraph<T> graph) {
+    return this.em().find(entityClass, primaryKey, new Params().set(JpaHints.HINT_JPA_LOAD_GRAPH, graph));
   }
 
   public <T> TypedQueryImpl<T> createQueryFetch(String qlString, Class<T> resultClass, String graphName) {
-    return new TypedQueryImpl<T>(this.em.createQuery(qlString, resultClass).setHint(JpaHints.HINT_JPA_FETCH_GRAPH,
-        this.em.getEntityGraph(graphName)));
+    return new TypedQueryImpl<T>(this.em().createQuery(qlString, resultClass).setHint(JpaHints.HINT_JPA_FETCH_GRAPH,
+        this.em().getEntityGraph(graphName)));
   }
 
   public <T> TypedQueryImpl<T> createQueryLoad(String qlString, Class<T> resultClass, String graphName) {
-    return new TypedQueryImpl<T>(this.em.createQuery(qlString, resultClass).setHint(JpaHints.HINT_JPA_LOAD_GRAPH,
-        this.em.getEntityGraph(graphName)));
+    return new TypedQueryImpl<T>(this.em().createQuery(qlString, resultClass).setHint(JpaHints.HINT_JPA_LOAD_GRAPH,
+        this.em().getEntityGraph(graphName)));
+  }
+
+  public <T> TypedQueryImpl<T> createQueryFetch(String qlString, Class<T> resultClass, EntityGraph<T> graph) {
+    return new TypedQueryImpl<T>(
+        this.em().createQuery(qlString, resultClass).setHint(JpaHints.HINT_JPA_FETCH_GRAPH, graph));
+  }
+
+  public <T> TypedQueryImpl<T> createQueryLoad(String qlString, Class<T> resultClass, EntityGraph<T> graph) {
+    return new TypedQueryImpl<T>(
+        this.em().createQuery(qlString, resultClass).setHint(JpaHints.HINT_JPA_LOAD_GRAPH, graph));
   }
 
   public <T> TypedQueryImpl<T> createNamedQueryFetch(String name, Class<T> resultClass, String graphName) {
-    return new TypedQueryImpl<T>(this.em.createNamedQuery(name, resultClass).setHint(JpaHints.HINT_JPA_FETCH_GRAPH,
-        this.em.getEntityGraph(graphName)));
+    return new TypedQueryImpl<T>(this.em().createNamedQuery(name, resultClass).setHint(JpaHints.HINT_JPA_FETCH_GRAPH,
+        this.em().getEntityGraph(graphName)));
   }
 
   public <T> TypedQueryImpl<T> createNamedQueryLoad(String name, Class<T> resultClass, String graphName) {
-    return new TypedQueryImpl<T>(this.em.createNamedQuery(name, resultClass).setHint(JpaHints.HINT_JPA_LOAD_GRAPH,
-        this.em.getEntityGraph(graphName)));
+    return new TypedQueryImpl<T>(this.em().createNamedQuery(name, resultClass).setHint(JpaHints.HINT_JPA_LOAD_GRAPH,
+        this.em().getEntityGraph(graphName)));
+  }
+
+  public <T> TypedQueryImpl<T> createNamedQueryFetch(String name, Class<T> resultClass, EntityGraph<T> graph) {
+    return new TypedQueryImpl<T>(
+        this.em().createNamedQuery(name, resultClass).setHint(JpaHints.HINT_JPA_FETCH_GRAPH, graph));
+  }
+
+  public <T> TypedQueryImpl<T> createNamedQueryLoad(String name, Class<T> resultClass, EntityGraph<T> graph) {
+    return new TypedQueryImpl<T>(
+        this.em().createNamedQuery(name, resultClass).setHint(JpaHints.HINT_JPA_LOAD_GRAPH, graph));
   }
 
   // JpaQuery
 
   public <T> TypedQueryImpl<T> createQuery(JpaQuery pQuery, Class<T> resultClass) {
-    return new TypedQueryImpl<T>(this.em.createQuery(pQuery.getTranslatedQuery(), resultClass), pQuery, getDbDialect());
+    return new TypedQueryImpl<T>(this.em().createQuery(pQuery.getTranslatedQuery(), resultClass), pQuery,
+        getDbDialect());
   }
 
   public QueryImpl createQuery(JpaQuery pQuery) {
-    return new QueryImpl(this.em.createQuery(pQuery.getTranslatedQuery()), pQuery, getDbDialect());
+    return new QueryImpl(this.em().createQuery(pQuery.getTranslatedQuery()), pQuery, getDbDialect());
   }
 
   public QueryImpl createNativeQuery(JpaQuery pNativeQuery, Class<?> resultClass) {
-    return new QueryImpl(this.em.createNativeQuery(pNativeQuery.getTranslatedQuery(), resultClass), pNativeQuery,
+    return new QueryImpl(this.em().createNativeQuery(pNativeQuery.getTranslatedQuery(), resultClass), pNativeQuery,
         getDbDialect());
   }
 
   public QueryImpl createNativeQuery(JpaQuery pNativeQuery) {
-    return new QueryImpl(this.em.createNativeQuery(pNativeQuery.getTranslatedQuery()), pNativeQuery, getDbDialect());
+    return new QueryImpl(this.em().createNativeQuery(pNativeQuery.getTranslatedQuery()), pNativeQuery, getDbDialect());
   }
 
   public QueryImpl createNativeQuery(JpaQuery pNativeQuery, String resultSetMapping) {
-    return new QueryImpl(this.em.createNativeQuery(pNativeQuery.getTranslatedQuery(), resultSetMapping), pNativeQuery,
+    return new QueryImpl(this.em().createNativeQuery(pNativeQuery.getTranslatedQuery(), resultSetMapping), pNativeQuery,
         getDbDialect());
   }
 
@@ -156,270 +181,270 @@ public class EntityManagerImpl implements EntityManager {
 
   @Override
   public void remove(Object entity) {
-    this.em.remove(entity);
+    this.em().remove(entity);
   }
 
   @Override
   public void lock(Object entity, LockModeType lockMode) {
-    this.em.lock(entity, lockMode);
+    this.em().lock(entity, lockMode);
   }
 
   @Override
   public void lock(Object entity, LockModeType lockMode, Map<String, Object> properties) {
-    this.em.lock(entity, lockMode, properties);
+    this.em().lock(entity, lockMode, properties);
   }
 
   @Override
   public void setProperty(String propertyName, Object value) {
-    this.em.setProperty(propertyName, value);
+    this.em().setProperty(propertyName, value);
   }
 
   @Override
   public void clear() {
-    this.em.clear();
+    this.em().clear();
   }
 
   @Override
   public boolean contains(Object entity) {
-    return this.em.contains(entity);
+    return this.em().contains(entity);
   }
 
   @Override
   public <T> T find(Class<T> entityClass, Object primaryKey) {
-    return this.em.find(entityClass, primaryKey);
+    return this.em().find(entityClass, primaryKey);
   }
 
   @Override
   public <T> T find(Class<T> entityClass, Object primaryKey, Map<String, Object> properties) {
-    return this.em.find(entityClass, primaryKey, properties);
+    return this.em().find(entityClass, primaryKey, properties);
   }
 
   @Override
   public <T> T find(Class<T> entityClass, Object primaryKey, LockModeType lockMode) {
-    return this.em.find(entityClass, primaryKey, lockMode);
+    return this.em().find(entityClass, primaryKey, lockMode);
   }
 
   @Override
   public <T> T find(Class<T> entityClass, Object primaryKey, LockModeType lockMode, Map<String, Object> properties) {
-    return this.em.find(entityClass, primaryKey, lockMode, properties);
+    return this.em().find(entityClass, primaryKey, lockMode, properties);
   }
 
   @Override
   public Map<String, Object> getProperties() {
-    return this.em.getProperties();
+    return this.em().getProperties();
   }
 
   @Override
   public void close() {
-    this.em.close();
+    this.em().close();
   }
 
   @Override
   public void flush() {
-    this.em.flush();
+    this.em().flush();
   }
 
   @Override
   public <T> T merge(T entity) {
-    return this.em.merge(entity);
+    return this.em().merge(entity);
   }
 
   @Override
   public <T> T unwrap(Class<T> cls) {
-    return this.em.unwrap(cls);
+    return this.em().unwrap(cls);
   }
 
   @Override
   public boolean isOpen() {
-    return this.em.isOpen();
+    return this.em().isOpen();
   }
 
   @Override
   public void detach(Object entity) {
-    this.em.detach(entity);
+    this.em().detach(entity);
   }
 
   @SuppressWarnings("rawtypes")
   @Override
   public QueryImpl createNativeQuery(String sqlString, Class resultClass) {
-    return new QueryImpl(this.em.createNativeQuery(sqlString, resultClass));
+    return new QueryImpl(this.em().createNativeQuery(sqlString, resultClass));
   }
 
   @Override
   public QueryImpl createNativeQuery(String sqlString) {
-    return new QueryImpl(this.em.createNativeQuery(sqlString));
+    return new QueryImpl(this.em().createNativeQuery(sqlString));
   }
 
   @Override
   public QueryImpl createNativeQuery(String sqlString, String resultSetMapping) {
-    return new QueryImpl(this.em.createNativeQuery(sqlString, resultSetMapping));
+    return new QueryImpl(this.em().createNativeQuery(sqlString, resultSetMapping));
   }
 
   @Override
   public StoredProcedureQuery createNamedStoredProcedureQuery(String name) {
-    return this.em.createNamedStoredProcedureQuery(name);
+    return this.em().createNamedStoredProcedureQuery(name);
   }
 
   @Override
   public StoredProcedureQuery createStoredProcedureQuery(String procedureName, String... resultSetMappings) {
-    return this.em.createStoredProcedureQuery(procedureName, resultSetMappings);
+    return this.em().createStoredProcedureQuery(procedureName, resultSetMappings);
   }
 
   @Override
   public StoredProcedureQuery createStoredProcedureQuery(String procedureName) {
-    return this.em.createStoredProcedureQuery(procedureName);
+    return this.em().createStoredProcedureQuery(procedureName);
   }
 
   @SuppressWarnings("rawtypes")
   @Override
   public StoredProcedureQuery createStoredProcedureQuery(String procedureName, Class... resultClasses) {
-    return this.em.createStoredProcedureQuery(procedureName, resultClasses);
+    return this.em().createStoredProcedureQuery(procedureName, resultClasses);
   }
 
   @Override
   public boolean isJoinedToTransaction() {
-    return this.em.isJoinedToTransaction();
+    return this.em().isJoinedToTransaction();
   }
 
   @Override
   public EntityManagerFactory getEntityManagerFactory() {
-    return this.em.getEntityManagerFactory();
+    return this.em().getEntityManagerFactory();
   }
 
   @Override
   public CriteriaBuilder getCriteriaBuilder() {
-    return this.em.getCriteriaBuilder();
+    return this.em().getCriteriaBuilder();
   }
 
   @Override
   public <T> EntityGraph<T> createEntityGraph(Class<T> rootType) {
-    return this.em.createEntityGraph(rootType);
+    return this.em().createEntityGraph(rootType);
   }
 
   @Override
   public EntityGraph<?> createEntityGraph(String graphName) {
-    return this.em.createEntityGraph(graphName);
+    return this.em().createEntityGraph(graphName);
   }
 
   @Override
   public void persist(Object entity) {
-    this.em.persist(entity);
+    this.em().persist(entity);
   }
 
   @Override
   public <T> T getReference(Class<T> entityClass, Object primaryKey) {
-    return this.em.getReference(entityClass, primaryKey);
+    return this.em().getReference(entityClass, primaryKey);
   }
 
   @Override
   public void setFlushMode(FlushModeType flushMode) {
-    this.em.setFlushMode(flushMode);
+    this.em().setFlushMode(flushMode);
   }
 
   @Override
   public FlushModeType getFlushMode() {
-    return this.em.getFlushMode();
+    return this.em().getFlushMode();
   }
 
   @Override
   public void refresh(Object entity, LockModeType lockMode) {
-    this.em.refresh(entity, lockMode);
+    this.em().refresh(entity, lockMode);
   }
 
   @Override
   public void refresh(Object entity, LockModeType lockMode, Map<String, Object> properties) {
-    this.em.refresh(entity, lockMode, properties);
+    this.em().refresh(entity, lockMode, properties);
   }
 
   @Override
   public void refresh(Object entity) {
-    this.em.refresh(entity);
+    this.em().refresh(entity);
   }
 
   @Override
   public void refresh(Object entity, Map<String, Object> properties) {
-    this.em.refresh(entity, properties);
+    this.em().refresh(entity, properties);
   }
 
   @Override
   public LockModeType getLockMode(Object entity) {
-    return this.em.getLockMode(entity);
+    return this.em().getLockMode(entity);
   }
 
   @Override
   public <T> TypedQueryImpl<T> createQuery(CriteriaQuery<T> criteriaQuery) {
-    return new TypedQueryImpl<T>(this.em.createQuery(criteriaQuery));
+    return new TypedQueryImpl<T>(this.em().createQuery(criteriaQuery));
   }
 
   @Override
   public <T> TypedQueryImpl<T> createQuery(String qlString, Class<T> resultClass) {
-    return new TypedQueryImpl<T>(this.em.createQuery(qlString, resultClass));
+    return new TypedQueryImpl<T>(this.em().createQuery(qlString, resultClass));
   }
 
   @SuppressWarnings("rawtypes")
   @Override
   public QueryImpl createQuery(CriteriaUpdate updateQuery) {
-    return new QueryImpl(this.em.createQuery(updateQuery));
+    return new QueryImpl(this.em().createQuery(updateQuery));
   }
 
   @SuppressWarnings("rawtypes")
   @Override
   public QueryImpl createQuery(CriteriaDelete deleteQuery) {
-    return new QueryImpl(this.em.createQuery(deleteQuery));
+    return new QueryImpl(this.em().createQuery(deleteQuery));
   }
 
   @Override
   public QueryImpl createQuery(String qlString) {
-    return new QueryImpl(this.em.createQuery(qlString));
+    return new QueryImpl(this.em().createQuery(qlString));
   }
 
   @Override
   public <T> TypedQueryImpl<T> createNamedQuery(String name, Class<T> resultClass) {
-    return new TypedQueryImpl<T>(this.em.createNamedQuery(name, resultClass));
+    return new TypedQueryImpl<T>(this.em().createNamedQuery(name, resultClass));
   }
 
   @Override
   public QueryImpl createNamedQuery(String name) {
-    return new QueryImpl(this.em.createNamedQuery(name));
+    return new QueryImpl(this.em().createNamedQuery(name));
   }
 
   @Override
   public void joinTransaction() {
-    this.em.joinTransaction();
+    this.em().joinTransaction();
   }
 
   @Override
   public Object getDelegate() {
-    return this.em.getDelegate();
+    return this.em().getDelegate();
   }
 
   @Override
   public EntityTransaction getTransaction() {
-    return this.em.getTransaction();
+    return this.em().getTransaction();
   }
 
   @Override
   public Metamodel getMetamodel() {
-    return this.em.getMetamodel();
+    return this.em().getMetamodel();
   }
 
   @Override
   public EntityGraph<?> getEntityGraph(String graphName) {
-    return this.em.getEntityGraph(graphName);
+    return this.em().getEntityGraph(graphName);
   }
 
   @Override
   public <T> List<EntityGraph<? super T>> getEntityGraphs(Class<T> entityClass) {
-    return this.em.getEntityGraphs(entityClass);
+    return this.em().getEntityGraphs(entityClass);
   }
 
   @Override
   public String toString() {
-    return ObjectUtils.toStringWrapper(this, this.em);
+    return ObjectUtils.toStringWrapper(this, this.em());
   }
 
   public String getDbUrl() throws PersistenceException {
-    Map<String, Object> props = this.em.getEntityManagerFactory().getProperties();
+    Map<String, Object> props = this.em().getEntityManagerFactory().getProperties();
 
     String dbUrl = (String) props.get("jakarta.persistence.jdbc.url");
     if (dbUrl == null) {
