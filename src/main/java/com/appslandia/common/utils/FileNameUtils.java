@@ -22,9 +22,8 @@ package com.appslandia.common.utils;
 
 import java.time.LocalDateTime;
 import java.util.Locale;
+import java.util.UUID;
 import java.util.regex.Pattern;
-
-import com.appslandia.common.base.UUIDGenerator;
 
 /**
  *
@@ -64,7 +63,7 @@ public class FileNameUtils {
   }
 
   public static String toFileNameUUID(String fileName) {
-    return toFileName(fileName, UUIDGenerator.INSTANCE.generate());
+    return toFileName(fileName, UUID.randomUUID().toString());
   }
 
   public static String toFileName(String fileName) {

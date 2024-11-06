@@ -207,6 +207,10 @@ public class DateUtils {
     return LocalDateTime.of(year, month, day, hour, minute);
   }
 
+  public static LocalDateTime toLocalDateTimeUTC(Long timeMillis) {
+    return Instant.ofEpochMilli(timeMillis).atOffset(ZoneOffset.UTC).toLocalDateTime();
+  }
+
   public static LocalDateTime toLocalDateTime(Long timeMillis, ZoneOffset offset) {
     return (timeMillis != null) ? Instant.ofEpochMilli(timeMillis).atOffset(offset).toLocalDateTime() : null;
   }
