@@ -113,7 +113,7 @@ public class DateUtils {
   }
 
   public static boolean isExpired(LocalDateTime expiresAtUtc, long leewayMs) {
-    return ChronoUnit.MILLIS.between(expiresAtUtc, LocalDateTime.now(ZoneOffset.UTC)) > leewayMs;
+    return ChronoUnit.MILLIS.between(expiresAtUtc, nowAtUtcN3().toLocalDateTime()) > leewayMs;
   }
 
   // Java8 Date/Time
