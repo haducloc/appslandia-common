@@ -20,8 +20,6 @@
 
 package com.appslandia.common.utils;
 
-import java.util.concurrent.TimeUnit;
-
 import com.appslandia.common.base.UncheckedException;
 
 /**
@@ -40,11 +38,7 @@ public class ThreadUtils {
     }
   }
 
-  public static void sleepInMs(long duration, TimeUnit unit) {
-    sleepInMs(TimeUnit.MILLISECONDS.convert(duration, unit));
-  }
-
-  public static void sleepInSec(long duration) {
-    sleepInMs(duration, TimeUnit.SECONDS);
+  public static void sleepInSec(int seconds) {
+    sleepInMs(seconds * 1000);
   }
 }

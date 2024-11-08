@@ -34,6 +34,7 @@ import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
@@ -107,12 +108,12 @@ public class DateUtils {
     return (timeInMs / 1000) * 1000;
   }
 
-  public static boolean isFutureTime(long timeMillis, int leewayMs) {
-    return System.currentTimeMillis() - leewayMs < timeMillis;
+  public static boolean isExpired(long timeInMs, long leewayMs) {
+    return System.currentTimeMillis() - timeInMs > leewayMs;
   }
 
-  public static boolean isPastTime(long timeMillis, int leewayMs) {
-    return System.currentTimeMillis() + leewayMs > timeMillis;
+  public static boolean isExpired(LocalDateTime expiresAtUtc, long leewayMs) {
+    return ChronoUnit.MILLIS.between(expiresAtUtc, LocalDateTime.now(ZoneOffset.UTC)) > leewayMs;
   }
 
   // Java8 Date/Time
@@ -207,8 +208,8 @@ public class DateUtils {
     return LocalDateTime.of(year, month, day, hour, minute);
   }
 
-  public static LocalDateTime toLocalDateTimeUTC(Long timeMillis) {
-    return Instant.ofEpochMilli(timeMillis).atOffset(ZoneOffset.UTC).toLocalDateTime();
+  public static LocalDateTime toLocalDateTimeUtc(Long timeMillis) {
+    return (timeMillis != null) ? Instant.ofEpochMilli(timeMillis).atOffset(ZoneOffset.UTC).toLocalDateTime() : null;
   }
 
   public static LocalDateTime toLocalDateTime(Long timeMillis, ZoneOffset offset) {
@@ -269,8 +270,12 @@ public class DateUtils {
     return OffsetDateTime.of(odt.toLocalDate(), LocalTime.MAX, odt.getOffset());
   }
 
-  public static OffsetDateTime nowAtUTC() {
+  public static OffsetDateTime nowAtUtc() {
     return nowAt(ZoneOffset.UTC);
+  }
+
+  public static OffsetDateTime nowAtUtcN3() {
+    return nowAtUtc().truncatedTo(ChronoUnit.MILLIS);
   }
 
   public static OffsetDateTime nowAt(String zoneId) {
@@ -289,7 +294,7 @@ public class DateUtils {
     return (zoneId != null) ? LocalDate.now(zoneId) : LocalDate.now();
   }
 
-  public static OffsetDateTime toSameInstantUTC(OffsetDateTime odt) {
+  public static OffsetDateTime toSameInstantUtc(OffsetDateTime odt) {
     return toSameInstant(odt, ZoneOffset.UTC);
   }
 
