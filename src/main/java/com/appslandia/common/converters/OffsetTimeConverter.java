@@ -36,7 +36,7 @@ public class OffsetTimeConverter extends TemporalConverter<OffsetTime> {
   public static final String ERROR_MSG_KEY = OffsetTimeConverter.class.getName() + ".message";
 
   public OffsetTimeConverter() {
-    super(DateUtils.ISO8601_TIMEZ_N3);
+    super(DateUtils.ISO8601_TIMEZ_F3);
   }
 
   public OffsetTimeConverter(String isoPattern) {

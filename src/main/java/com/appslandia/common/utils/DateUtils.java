@@ -66,43 +66,43 @@ public class DateUtils {
 
   public static final String ISO8601_TIME_M = "HH:mm";
   public static final String ISO8601_TIME_S = "HH:mm:ss";
-  public static final String ISO8601_TIME_N1 = "HH:mm:ss.S";
-  public static final String ISO8601_TIME_N2 = "HH:mm:ss.SS";
-  public static final String ISO8601_TIME_N3 = "HH:mm:ss.SSS";
-  public static final String ISO8601_TIME_N4 = "HH:mm:ss.SSSS";
-  public static final String ISO8601_TIME_N5 = "HH:mm:ss.SSSSS";
-  public static final String ISO8601_TIME_N6 = "HH:mm:ss.SSSSSS";
-  public static final String ISO8601_TIME_N7 = "HH:mm:ss.SSSSSSS";
+  public static final String ISO8601_TIME_F1 = "HH:mm:ss.S";
+  public static final String ISO8601_TIME_F2 = "HH:mm:ss.SS";
+  public static final String ISO8601_TIME_F3 = "HH:mm:ss.SSS";
+  public static final String ISO8601_TIME_F4 = "HH:mm:ss.SSSS";
+  public static final String ISO8601_TIME_F5 = "HH:mm:ss.SSSSS";
+  public static final String ISO8601_TIME_F6 = "HH:mm:ss.SSSSSS";
+  public static final String ISO8601_TIME_F7 = "HH:mm:ss.SSSSSSS";
 
   public static final String ISO8601_TIMEZ_M = "HH:mmXXX";
   public static final String ISO8601_TIMEZ_S = "HH:mm:ssXXX";
-  public static final String ISO8601_TIMEZ_N1 = "HH:mm:ss.SXXX";
-  public static final String ISO8601_TIMEZ_N2 = "HH:mm:ss.SSXXX";
-  public static final String ISO8601_TIMEZ_N3 = "HH:mm:ss.SSSXXX";
-  public static final String ISO8601_TIMEZ_N4 = "HH:mm:ss.SSSSXXX";
-  public static final String ISO8601_TIMEZ_N5 = "HH:mm:ss.SSSSSXXX";
-  public static final String ISO8601_TIMEZ_N6 = "HH:mm:ss.SSSSSSXXX";
-  public static final String ISO8601_TIMEZ_N7 = "HH:mm:ss.SSSSSSSXXX";
+  public static final String ISO8601_TIMEZ_F1 = "HH:mm:ss.SXXX";
+  public static final String ISO8601_TIMEZ_F2 = "HH:mm:ss.SSXXX";
+  public static final String ISO8601_TIMEZ_F3 = "HH:mm:ss.SSSXXX";
+  public static final String ISO8601_TIMEZ_F4 = "HH:mm:ss.SSSSXXX";
+  public static final String ISO8601_TIMEZ_F5 = "HH:mm:ss.SSSSSXXX";
+  public static final String ISO8601_TIMEZ_F6 = "HH:mm:ss.SSSSSSXXX";
+  public static final String ISO8601_TIMEZ_F7 = "HH:mm:ss.SSSSSSSXXX";
 
   public static final String ISO8601_DATETIME_M = "yyyy-MM-dd'T'HH:mm";
   public static final String ISO8601_DATETIME_S = "yyyy-MM-dd'T'HH:mm:ss";
-  public static final String ISO8601_DATETIME_N1 = "yyyy-MM-dd'T'HH:mm:ss.S";
-  public static final String ISO8601_DATETIME_N2 = "yyyy-MM-dd'T'HH:mm:ss.SS";
-  public static final String ISO8601_DATETIME_N3 = "yyyy-MM-dd'T'HH:mm:ss.SSS";
-  public static final String ISO8601_DATETIME_N4 = "yyyy-MM-dd'T'HH:mm:ss.SSSS";
-  public static final String ISO8601_DATETIME_N5 = "yyyy-MM-dd'T'HH:mm:ss.SSSSS";
-  public static final String ISO8601_DATETIME_N6 = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS";
-  public static final String ISO8601_DATETIME_N7 = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS";
+  public static final String ISO8601_DATETIME_F1 = "yyyy-MM-dd'T'HH:mm:ss.S";
+  public static final String ISO8601_DATETIME_F2 = "yyyy-MM-dd'T'HH:mm:ss.SS";
+  public static final String ISO8601_DATETIME_F3 = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+  public static final String ISO8601_DATETIME_F4 = "yyyy-MM-dd'T'HH:mm:ss.SSSS";
+  public static final String ISO8601_DATETIME_F5 = "yyyy-MM-dd'T'HH:mm:ss.SSSSS";
+  public static final String ISO8601_DATETIME_F6 = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS";
+  public static final String ISO8601_DATETIME_F7 = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS";
 
   public static final String ISO8601_DATETIMEZ_M = "yyyy-MM-dd'T'HH:mmXXX";
   public static final String ISO8601_DATETIMEZ_S = "yyyy-MM-dd'T'HH:mm:ssXXX";
-  public static final String ISO8601_DATETIMEZ_N1 = "yyyy-MM-dd'T'HH:mm:ss.SXXX";
-  public static final String ISO8601_DATETIMEZ_N2 = "yyyy-MM-dd'T'HH:mm:ss.SSXXX";
-  public static final String ISO8601_DATETIMEZ_N3 = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
-  public static final String ISO8601_DATETIMEZ_N4 = "yyyy-MM-dd'T'HH:mm:ss.SSSSXXX";
-  public static final String ISO8601_DATETIMEZ_N5 = "yyyy-MM-dd'T'HH:mm:ss.SSSSSXXX";
-  public static final String ISO8601_DATETIMEZ_N6 = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX";
-  public static final String ISO8601_DATETIMEZ_N7 = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSXXX";
+  public static final String ISO8601_DATETIMEZ_F1 = "yyyy-MM-dd'T'HH:mm:ss.SXXX";
+  public static final String ISO8601_DATETIMEZ_F2 = "yyyy-MM-dd'T'HH:mm:ss.SSXXX";
+  public static final String ISO8601_DATETIMEZ_F3 = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+  public static final String ISO8601_DATETIMEZ_F4 = "yyyy-MM-dd'T'HH:mm:ss.SSSSXXX";
+  public static final String ISO8601_DATETIMEZ_F5 = "yyyy-MM-dd'T'HH:mm:ss.SSSSSXXX";
+  public static final String ISO8601_DATETIMEZ_F6 = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX";
+  public static final String ISO8601_DATETIMEZ_F7 = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSXXX";
 
   public static long clearMs(long timeInMs) {
     return (timeInMs / 1000) * 1000;
@@ -113,7 +113,7 @@ public class DateUtils {
   }
 
   public static boolean isExpired(LocalDateTime expiresAtUtc, long leewayMs) {
-    return ChronoUnit.MILLIS.between(expiresAtUtc, nowAtUtcN3().toLocalDateTime()) > leewayMs;
+    return ChronoUnit.MILLIS.between(expiresAtUtc, nowAtUtcF3().toLocalDateTime()) > leewayMs;
   }
 
   // Java8 Date/Time
@@ -274,7 +274,7 @@ public class DateUtils {
     return nowAt(ZoneOffset.UTC);
   }
 
-  public static OffsetDateTime nowAtUtcN3() {
+  public static OffsetDateTime nowAtUtcF3() {
     return nowAtUtc().truncatedTo(ChronoUnit.MILLIS);
   }
 
@@ -523,20 +523,20 @@ public class DateUtils {
   }
 
   public static final Collection<String> ISO8601_PATTERNS_TIME = CollectionUtils.unmodifiableSet(new TreeSet<>(),
-      ISO8601_TIME_M, ISO8601_TIME_S, ISO8601_TIME_N1, ISO8601_TIME_N2, ISO8601_TIME_N3, ISO8601_TIME_N4,
-      ISO8601_TIME_N5, ISO8601_TIME_N6, ISO8601_TIME_N7);
+      ISO8601_TIME_M, ISO8601_TIME_S, ISO8601_TIME_F1, ISO8601_TIME_F2, ISO8601_TIME_F3, ISO8601_TIME_F4,
+      ISO8601_TIME_F5, ISO8601_TIME_F6, ISO8601_TIME_F7);
 
   public static final Collection<String> ISO8601_PATTERNS_TIMEZ = CollectionUtils.unmodifiableSet(new TreeSet<>(),
-      ISO8601_TIMEZ_M, ISO8601_TIMEZ_S, ISO8601_TIMEZ_N1, ISO8601_TIMEZ_N2, ISO8601_TIMEZ_N3, ISO8601_TIMEZ_N4,
-      ISO8601_TIMEZ_N5, ISO8601_TIMEZ_N6, ISO8601_TIMEZ_N7);
+      ISO8601_TIMEZ_M, ISO8601_TIMEZ_S, ISO8601_TIMEZ_F1, ISO8601_TIMEZ_F2, ISO8601_TIMEZ_F3, ISO8601_TIMEZ_F4,
+      ISO8601_TIMEZ_F5, ISO8601_TIMEZ_F6, ISO8601_TIMEZ_F7);
 
   public static final Collection<String> ISO8601_PATTERNS_DATETIME = CollectionUtils.unmodifiableSet(new TreeSet<>(),
-      ISO8601_DATETIME_M, ISO8601_DATETIME_S, ISO8601_DATETIME_N1, ISO8601_DATETIME_N2, ISO8601_DATETIME_N3,
-      ISO8601_DATETIME_N4, ISO8601_DATETIME_N5, ISO8601_DATETIME_N6, ISO8601_DATETIME_N7);
+      ISO8601_DATETIME_M, ISO8601_DATETIME_S, ISO8601_DATETIME_F1, ISO8601_DATETIME_F2, ISO8601_DATETIME_F3,
+      ISO8601_DATETIME_F4, ISO8601_DATETIME_F5, ISO8601_DATETIME_F6, ISO8601_DATETIME_F7);
 
   public static final Collection<String> ISO8601_PATTERNS_DATETIMEZ = CollectionUtils.unmodifiableSet(new TreeSet<>(),
-      ISO8601_DATETIMEZ_M, ISO8601_DATETIMEZ_S, ISO8601_DATETIMEZ_N1, ISO8601_DATETIMEZ_N2, ISO8601_DATETIMEZ_N3,
-      ISO8601_DATETIMEZ_N4, ISO8601_DATETIMEZ_N5, ISO8601_DATETIMEZ_N6, ISO8601_DATETIMEZ_N7);
+      ISO8601_DATETIMEZ_M, ISO8601_DATETIMEZ_S, ISO8601_DATETIMEZ_F1, ISO8601_DATETIMEZ_F2, ISO8601_DATETIMEZ_F3,
+      ISO8601_DATETIMEZ_F4, ISO8601_DATETIMEZ_F5, ISO8601_DATETIMEZ_F6, ISO8601_DATETIMEZ_F7);
 
   public static LocalDate parseLocalDate(String isoValue) throws TemporalFormatException {
     return (isoValue != null) ? ParseUtils.parseLocalDate(isoValue, ISO8601_DATE) : null;

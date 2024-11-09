@@ -36,7 +36,7 @@ import com.google.gson.JsonParseException;
 public class GsonLocalDateTimeSerializer extends GsonTemporalSerializer<LocalDateTime> {
 
   public GsonLocalDateTimeSerializer() {
-    this(DateUtils.ISO8601_DATETIME_N3);
+    this(DateUtils.ISO8601_DATETIME_F3);
   }
 
   public GsonLocalDateTimeSerializer(String serializeIsoPattern) {

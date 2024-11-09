@@ -36,7 +36,7 @@ public class LocalTimeConverter extends TemporalConverter<LocalTime> {
   public static final String ERROR_MSG_KEY = LocalTimeConverter.class.getName() + ".message";
 
   public LocalTimeConverter() {
-    super(DateUtils.ISO8601_TIME_N3);
+    super(DateUtils.ISO8601_TIME_F3);
   }
 
   public LocalTimeConverter(String isoPattern) {

@@ -36,7 +36,7 @@ import jakarta.json.stream.JsonParser;
 public class JsonbLocalTimeSerializer extends JsonbTemporalSerializer<LocalTime> {
 
   public JsonbLocalTimeSerializer() {
-    this(DateUtils.ISO8601_TIME_N3);
+    this(DateUtils.ISO8601_TIME_F3);
   }
 
   public JsonbLocalTimeSerializer(String serializeIsoPattern) {

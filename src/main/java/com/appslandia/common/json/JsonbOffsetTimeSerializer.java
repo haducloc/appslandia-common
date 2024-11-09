@@ -36,7 +36,7 @@ import jakarta.json.stream.JsonParser;
 public class JsonbOffsetTimeSerializer extends JsonbTemporalSerializer<OffsetTime> {
 
   public JsonbOffsetTimeSerializer() {
-    this(DateUtils.ISO8601_TIMEZ_N3);
+    this(DateUtils.ISO8601_TIMEZ_F3);
   }
 
   public JsonbOffsetTimeSerializer(String serializeIsoPattern) {

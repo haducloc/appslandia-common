@@ -71,50 +71,50 @@ public class Language extends InitializeObject {
 
     this.temporalPatterns.put(DateUtils.ISO8601_TIME_M, DateUtils.ISO8601_TIME_M);
     this.temporalPatterns.put(DateUtils.ISO8601_TIME_S, DateUtils.ISO8601_TIME_S);
-    this.temporalPatterns.put(DateUtils.ISO8601_TIME_N1, DateUtils.ISO8601_TIME_N1);
-    this.temporalPatterns.put(DateUtils.ISO8601_TIME_N2, DateUtils.ISO8601_TIME_N2);
-    this.temporalPatterns.put(DateUtils.ISO8601_TIME_N3, DateUtils.ISO8601_TIME_N3);
-    this.temporalPatterns.put(DateUtils.ISO8601_TIME_N4, DateUtils.ISO8601_TIME_N4);
-    this.temporalPatterns.put(DateUtils.ISO8601_TIME_N5, DateUtils.ISO8601_TIME_N5);
-    this.temporalPatterns.put(DateUtils.ISO8601_TIME_N6, DateUtils.ISO8601_TIME_N6);
-    this.temporalPatterns.put(DateUtils.ISO8601_TIME_N7, DateUtils.ISO8601_TIME_N7);
+    this.temporalPatterns.put(DateUtils.ISO8601_TIME_F1, DateUtils.ISO8601_TIME_F1);
+    this.temporalPatterns.put(DateUtils.ISO8601_TIME_F2, DateUtils.ISO8601_TIME_F2);
+    this.temporalPatterns.put(DateUtils.ISO8601_TIME_F3, DateUtils.ISO8601_TIME_F3);
+    this.temporalPatterns.put(DateUtils.ISO8601_TIME_F4, DateUtils.ISO8601_TIME_F4);
+    this.temporalPatterns.put(DateUtils.ISO8601_TIME_F5, DateUtils.ISO8601_TIME_F5);
+    this.temporalPatterns.put(DateUtils.ISO8601_TIME_F6, DateUtils.ISO8601_TIME_F6);
+    this.temporalPatterns.put(DateUtils.ISO8601_TIME_F7, DateUtils.ISO8601_TIME_F7);
 
     this.temporalPatterns.put(DateUtils.ISO8601_TIMEZ_M, DateUtils.ISO8601_TIMEZ_M);
     this.temporalPatterns.put(DateUtils.ISO8601_TIMEZ_S, DateUtils.ISO8601_TIMEZ_S);
-    this.temporalPatterns.put(DateUtils.ISO8601_TIMEZ_N1, DateUtils.ISO8601_TIMEZ_N1);
-    this.temporalPatterns.put(DateUtils.ISO8601_TIMEZ_N2, DateUtils.ISO8601_TIMEZ_N2);
-    this.temporalPatterns.put(DateUtils.ISO8601_TIMEZ_N3, DateUtils.ISO8601_TIMEZ_N3);
-    this.temporalPatterns.put(DateUtils.ISO8601_TIMEZ_N4, DateUtils.ISO8601_TIMEZ_N4);
-    this.temporalPatterns.put(DateUtils.ISO8601_TIMEZ_N5, DateUtils.ISO8601_TIMEZ_N5);
-    this.temporalPatterns.put(DateUtils.ISO8601_TIMEZ_N6, DateUtils.ISO8601_TIMEZ_N6);
-    this.temporalPatterns.put(DateUtils.ISO8601_TIMEZ_N7, DateUtils.ISO8601_TIMEZ_N7);
+    this.temporalPatterns.put(DateUtils.ISO8601_TIMEZ_F1, DateUtils.ISO8601_TIMEZ_F1);
+    this.temporalPatterns.put(DateUtils.ISO8601_TIMEZ_F2, DateUtils.ISO8601_TIMEZ_F2);
+    this.temporalPatterns.put(DateUtils.ISO8601_TIMEZ_F3, DateUtils.ISO8601_TIMEZ_F3);
+    this.temporalPatterns.put(DateUtils.ISO8601_TIMEZ_F4, DateUtils.ISO8601_TIMEZ_F4);
+    this.temporalPatterns.put(DateUtils.ISO8601_TIMEZ_F5, DateUtils.ISO8601_TIMEZ_F5);
+    this.temporalPatterns.put(DateUtils.ISO8601_TIMEZ_F6, DateUtils.ISO8601_TIMEZ_F6);
+    this.temporalPatterns.put(DateUtils.ISO8601_TIMEZ_F7, DateUtils.ISO8601_TIMEZ_F7);
 
     this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_M, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_M));
     this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_S, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_S));
-    this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_N1, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_N1));
-    this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_N2, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_N2));
-    this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_N3, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_N3));
-    this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_N4, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_N4));
-    this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_N5, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_N5));
-    this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_N6, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_N6));
-    this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_N7, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_N7));
+    this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_F1, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_F1));
+    this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_F2, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_F2));
+    this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_F3, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_F3));
+    this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_F4, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_F4));
+    this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_F5, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_F5));
+    this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_F6, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_F6));
+    this.temporalPatterns.put(DateUtils.ISO8601_DATETIME_F7, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIME_F7));
 
     this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_M, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_M));
     this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_S, STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_S));
-    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N1,
-        STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N1));
-    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N2,
-        STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N2));
-    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N3,
-        STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N3));
-    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N4,
-        STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N4));
-    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N5,
-        STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N5));
-    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N6,
-        STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N6));
-    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_N7,
-        STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_N7));
+    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_F1,
+        STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_F1));
+    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_F2,
+        STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_F2));
+    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_F3,
+        STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_F3));
+    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_F4,
+        STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_F4));
+    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_F5,
+        STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_F5));
+    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_F6,
+        STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_F6));
+    this.temporalPatterns.put(DateUtils.ISO8601_DATETIMEZ_F7,
+        STR.fmt("{} {}", datePattern, DateUtils.ISO8601_TIMEZ_F7));
 
     this.temporalPatterns = Collections.unmodifiableMap(this.temporalPatterns);
 

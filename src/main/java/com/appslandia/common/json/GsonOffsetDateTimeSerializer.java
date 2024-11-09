@@ -36,7 +36,7 @@ import com.google.gson.JsonParseException;
 public class GsonOffsetDateTimeSerializer extends GsonTemporalSerializer<OffsetDateTime> {
 
   public GsonOffsetDateTimeSerializer() {
-    this(DateUtils.ISO8601_DATETIMEZ_N3);
+    this(DateUtils.ISO8601_DATETIMEZ_F3);
   }
 
   public GsonOffsetDateTimeSerializer(String serializeIsoPattern) {
