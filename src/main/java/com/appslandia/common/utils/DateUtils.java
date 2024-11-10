@@ -209,7 +209,7 @@ public class DateUtils {
   }
 
   public static LocalDateTime toTimeAtUtc(Long timeMillis) {
-    return (timeMillis != null) ? Instant.ofEpochMilli(timeMillis).atOffset(ZoneOffset.UTC).toLocalDateTime() : null;
+    return toTimeAt(timeMillis, ZoneOffset.UTC);
   }
 
   public static LocalDateTime toTimeAt(Long timeMillis, ZoneOffset offset) {
