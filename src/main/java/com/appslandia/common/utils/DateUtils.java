@@ -113,7 +113,7 @@ public class DateUtils {
   }
 
   public static boolean isExpired(LocalDateTime expiresAtUtc, long leewayMs) {
-    return ChronoUnit.MILLIS.between(expiresAtUtc, nowAtUtcF3().toLocalDateTime()) > leewayMs;
+    return ChronoUnit.MILLIS.between(expiresAtUtc, timeAtUtcF3()) > leewayMs;
   }
 
   // Java8 Date/Time
@@ -208,11 +208,11 @@ public class DateUtils {
     return LocalDateTime.of(year, month, day, hour, minute);
   }
 
-  public static LocalDateTime toLocalDateTimeUtc(Long timeMillis) {
+  public static LocalDateTime toTimeAtUtc(Long timeMillis) {
     return (timeMillis != null) ? Instant.ofEpochMilli(timeMillis).atOffset(ZoneOffset.UTC).toLocalDateTime() : null;
   }
 
-  public static LocalDateTime toLocalDateTime(Long timeMillis, ZoneOffset offset) {
+  public static LocalDateTime toTimeAt(Long timeMillis, ZoneOffset offset) {
     return (timeMillis != null) ? Instant.ofEpochMilli(timeMillis).atOffset(offset).toLocalDateTime() : null;
   }
 
@@ -270,12 +270,28 @@ public class DateUtils {
     return OffsetDateTime.of(odt.toLocalDate(), LocalTime.MAX, odt.getOffset());
   }
 
-  public static OffsetDateTime nowAtUtc() {
-    return nowAt(ZoneOffset.UTC);
+  public static LocalDateTime timeAtUtcF3() {
+    return timeAtUtc().truncatedTo(ChronoUnit.MILLIS);
   }
 
   public static OffsetDateTime nowAtUtcF3() {
     return nowAtUtc().truncatedTo(ChronoUnit.MILLIS);
+  }
+
+  public static LocalDateTime timeAtUtc() {
+    return timeAt(ZoneOffset.UTC);
+  }
+
+  public static OffsetDateTime nowAtUtc() {
+    return nowAt(ZoneOffset.UTC);
+  }
+
+  public static LocalDateTime timeAt(String zoneId) {
+    return (zoneId != null) ? timeAt(ZoneId.of(zoneId)) : timeAt((ZoneId) null);
+  }
+
+  public static LocalDateTime timeAt(ZoneId zoneId) {
+    return (zoneId != null) ? LocalDateTime.now(zoneId) : LocalDateTime.now();
   }
 
   public static OffsetDateTime nowAt(String zoneId) {
