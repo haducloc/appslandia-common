@@ -112,8 +112,8 @@ public class DateUtils {
     return System.currentTimeMillis() - timeInMs > leewayMs;
   }
 
-  public static boolean isExpired(LocalDateTime expiresAtUtc, long leewayMs) {
-    return ChronoUnit.MILLIS.between(expiresAtUtc, timeAtUtcF3()) > leewayMs;
+  public static long betweenMs(LocalDateTime ldt1, LocalDateTime ldt2) {
+    return ChronoUnit.MILLIS.between(ldt1, ldt2);
   }
 
   // Java8 Date/Time
