@@ -25,9 +25,7 @@ import java.security.PublicKey;
 import java.security.spec.AlgorithmParameterSpec;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.function.Function;
 
-import com.appslandia.common.crypto.PSSParameterSpecUtil;
 import com.appslandia.common.json.JsonProcessor;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
@@ -53,7 +51,7 @@ public class DsaJwtSigner extends DsaJwsSigner<JwtPayload> {
     return this;
   }
 
-  public DsaJwtSigner setAlgParamSpec(Function<String, AlgorithmParameterSpec> algParamSpec) {
+  public DsaJwtSigner setAlgParamSpec(AlgorithmParameterSpec algParamSpec) {
     super.setAlgParamSpec(algParamSpec);
     return this;
   }
@@ -134,14 +132,14 @@ public class DsaJwtSigner extends DsaJwsSigner<JwtPayload> {
   }
 
   public static DsaJwtSigner PS256() {
-    return new DsaJwtSigner("PS256", "SHA256withRSA/PSS").setAlgParamSpec(PSSParameterSpecUtil::getInstance);
+    return new DsaJwtSigner("PS256", "SHA256withRSA/PSS");
   }
 
   public static DsaJwtSigner PS384() {
-    return new DsaJwtSigner("PS384", "SHA384withRSA/PSS").setAlgParamSpec(PSSParameterSpecUtil::getInstance);
+    return new DsaJwtSigner("PS384", "SHA384withRSA/PSS");
   }
 
   public static DsaJwtSigner PS512() {
-    return new DsaJwtSigner("PS512", "SHA512withRSA/PSS").setAlgParamSpec(PSSParameterSpecUtil::getInstance);
+    return new DsaJwtSigner("PS512", "SHA512withRSA/PSS");
   }
 }

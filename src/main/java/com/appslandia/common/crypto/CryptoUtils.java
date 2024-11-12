@@ -76,10 +76,10 @@ public class CryptoUtils {
   }
 
   public static void destroy(Destroyable obj) {
-    if (!obj.isDestroyed()) {
+    if (obj != null && !obj.isDestroyed()) {
       try {
         obj.destroy();
-      } catch (DestroyFailedException ex) {
+      } catch (DestroyFailedException ignored) {
       }
     }
   }

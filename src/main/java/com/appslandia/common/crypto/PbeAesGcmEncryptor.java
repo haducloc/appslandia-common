@@ -24,8 +24,9 @@ import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 import java.util.Random;
 
-import javax.crypto.Mac;
+import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.GCMParameterSpec;
 
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
@@ -36,8 +37,12 @@ import com.appslandia.common.utils.RandomUtils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class PbeDigester extends PbeObject implements Digester {
-  private String algorithm, provider;
+public class PbeAesGcmEncryptor extends PbeObject implements Encryptor {
+
+  private static final int GCM_NONCE_LENGTH = 12;
+  private static final int GCM_TAG_LENGTH = 16;
+
+  private String transformation, provider;
 
   private static final class RandomHolder {
     static final Random instance = new SecureRandom();
@@ -47,32 +52,39 @@ public class PbeDigester extends PbeObject implements Digester {
   protected void init() throws Exception {
     super.init();
 
-    Asserts.notNull(this.algorithm, "algorithm is required.");
+    Asserts.notNull(this.transformation, "transformation is required.");
+    CipherOps cipherOps = new CipherOps(this.transformation);
+
+    Asserts.isTrue(cipherOps.isAlgorithm("AES"), "AES algorithm is required.");
+    Asserts.isTrue(cipherOps.isMode("GCM"), "GCM mode is required.");
   }
 
-  protected Mac getImpl() throws GeneralSecurityException {
-    Mac impl = null;
+  protected Cipher getImpl() throws GeneralSecurityException {
+    Cipher impl = null;
     if (this.provider == null) {
-      impl = Mac.getInstance(this.algorithm);
+      impl = Cipher.getInstance(this.transformation);
     } else {
-      impl = Mac.getInstance(this.algorithm, this.provider);
+      impl = Cipher.getInstance(this.transformation, this.provider);
     }
     return impl;
   }
 
   @Override
-  public byte[] digest(byte[] message) throws CryptoException {
+  public byte[] encrypt(byte[] message) throws CryptoException {
     this.initialize();
     Asserts.notNull(message, "message is required.");
 
-    byte[] salt = RandomUtils.nextBytes(this.saltSize, RandomHolder.instance);
-    SecretKey key = toSecretKey(salt, this.algorithm);
+    SecretKey key = null;
     try {
-      Mac impl = this.getImpl();
-      impl.init(key);
+      byte[] salt = RandomUtils.nextBytes(this.saltSize, RandomHolder.instance);
+      key = toSecretKey(salt, "AES");
 
-      byte[] msgMac = impl.doFinal(message);
-      return ArrayUtils.append(salt, msgMac);
+      byte[] nonce = RandomUtils.nextBytes(GCM_NONCE_LENGTH, RandomHolder.instance);
+      Cipher impl = getImpl();
+      impl.init(Cipher.ENCRYPT_MODE, key, new GCMParameterSpec(GCM_TAG_LENGTH * 8, nonce));
+
+      byte[] encMsg = impl.doFinal(message);
+      return ArrayUtils.append(nonce, salt, encMsg);
 
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
@@ -82,22 +94,23 @@ public class PbeDigester extends PbeObject implements Digester {
   }
 
   @Override
-  public boolean verify(byte[] message, byte[] saltMac) throws CryptoException {
+  public byte[] decrypt(byte[] message) throws CryptoException {
     this.initialize();
+
     Asserts.notNull(message, "message is required.");
-    Asserts.notNull(saltMac, "saltMac is required.");
-    Asserts.isTrue(saltMac.length >= this.saltSize, "saltMac is invalid.");
-
-    byte[] salt = new byte[this.saltSize];
-    ArrayUtils.copy(saltMac, salt);
-    SecretKey key = toSecretKey(salt, this.algorithm);
-
+    SecretKey key = null;
     try {
-      Mac impl = this.getImpl();
-      impl.init(key);
+      byte[] salt = new byte[this.saltSize];
+      byte[] nonce = new byte[GCM_NONCE_LENGTH];
 
-      byte[] msgMac = impl.doFinal(message);
-      return ArrayUtils.endsWith(saltMac, msgMac, this.saltSize);
+      Asserts.isTrue(message.length >= GCM_NONCE_LENGTH + this.saltSize, "message is invalid.");
+      ArrayUtils.copy(message, nonce, salt);
+
+      key = toSecretKey(salt, "AES");
+      Cipher impl = getImpl();
+      impl.init(Cipher.DECRYPT_MODE, key, new GCMParameterSpec(GCM_TAG_LENGTH * 8, nonce));
+
+      return impl.doFinal(message, nonce.length + salt.length, message.length - nonce.length - salt.length);
 
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
@@ -106,14 +119,14 @@ public class PbeDigester extends PbeObject implements Digester {
     }
   }
 
-  public String getAlgorithm() {
+  public String getTransformation() {
     this.initialize();
-    return this.algorithm;
+    return this.transformation;
   }
 
-  public PbeDigester setAlgorithm(String algorithm) {
+  public PbeAesGcmEncryptor setTransformation(String transformation) {
     this.assertNotInitialized();
-    this.algorithm = algorithm;
+    this.transformation = transformation;
     return this;
   }
 
@@ -122,44 +135,44 @@ public class PbeDigester extends PbeObject implements Digester {
     return this.provider;
   }
 
-  public PbeDigester setProvider(String provider) {
+  public PbeAesGcmEncryptor setProvider(String provider) {
     this.assertNotInitialized();
     this.provider = provider;
     return this;
   }
 
   @Override
-  public PbeDigester setSaltSize(int saltSize) {
+  public PbeAesGcmEncryptor setSaltSize(int saltSize) {
     super.setSaltSize(saltSize);
     return this;
   }
 
   @Override
-  public PbeDigester setIterationCount(int iterationCount) {
+  public PbeAesGcmEncryptor setIterationCount(int iterationCount) {
     super.setIterationCount(iterationCount);
     return this;
   }
 
   @Override
-  public PbeDigester setKeySize(int keySize) {
+  public PbeAesGcmEncryptor setKeySize(int keySize) {
     super.setKeySize(keySize);
     return this;
   }
 
   @Override
-  public PbeDigester setPassword(char[] password) {
+  public PbeAesGcmEncryptor setPassword(char[] password) {
     super.setPassword(password);
     return this;
   }
 
   @Override
-  public PbeDigester setPassword(String passwordExpr) {
+  public PbeAesGcmEncryptor setPassword(String passwordExpr) {
     super.setPassword(passwordExpr);
     return this;
   }
 
   @Override
-  public PbeDigester setPbeSecretKeyGenerator(PbeSecretKeyGenerator pbeSecretKeyGenerator) {
+  public PbeAesGcmEncryptor setPbeSecretKeyGenerator(PbeSecretKeyGenerator pbeSecretKeyGenerator) {
     super.setPbeSecretKeyGenerator(pbeSecretKeyGenerator);
     return this;
   }

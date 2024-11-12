@@ -61,16 +61,14 @@ public abstract class PbeObject extends InitializeObject {
 
   @Override
   public void destroy() throws DestroyException {
-    if (this.password != null) {
-      CryptoUtils.clear(this.password);
-    }
+    CryptoUtils.clear(this.password);
   }
 
-  protected SecretKey buildSecretKey(final byte[] salt, final String algorithm) throws CryptoException {
-    byte[] key = this.pbeSecretKeyGenerator.generate(this.password, salt, this.iterationCount, this.keySize);
-    SecretKey secretKey = new SecretKeySpec(key, algorithm);
-    CryptoUtils.clear(key);
-    return secretKey;
+  protected SecretKey toSecretKey(final byte[] salt, final String algorithm) throws CryptoException {
+    byte[] kBytes = this.pbeSecretKeyGenerator.generate(this.password, salt, this.iterationCount, this.keySize);
+    SecretKey key = new SecretKeySpec(kBytes, algorithm);
+    CryptoUtils.clear(kBytes);
+    return key;
   }
 
   public PbeObject setSaltSize(int saltSize) {

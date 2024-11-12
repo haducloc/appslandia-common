@@ -21,35 +21,39 @@
 package com.appslandia.common.crypto;
 
 import java.security.GeneralSecurityException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.spec.AlgorithmParameterSpec;
+import java.security.SecureRandom;
+import java.util.Arrays;
+import java.util.Random;
 
 import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 
-import com.appslandia.common.base.DestroyException;
-import com.appslandia.common.base.InitializeObject;
+import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.RandomUtils;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class RsaEncryptor extends InitializeObject implements Encryptor {
+public class PbeAesCbcEncryptor extends PbeObject implements Encryptor {
+
   private String transformation, provider;
 
-  private PublicKey publicKey;
-  private PrivateKey privateKey;
-
-  private AlgorithmParameterSpec algParamSpec;
+  private static final class RandomHolder {
+    static final Random instance = new SecureRandom();
+  }
 
   @Override
   protected void init() throws Exception {
+    super.init();
     Asserts.notNull(this.transformation, "transformation is required.");
 
     CipherOps cipherOps = new CipherOps(this.transformation);
-    Asserts.isTrue(cipherOps.isAlgorithm("RSA"), "RSA algorithm is required.");
+    Asserts.isTrue(cipherOps.isAlgorithm("AES"), "AES algorithm is required.");
+    Asserts.isTrue(cipherOps.isMode("CBC"), "CBC mode is required.");
   }
 
   protected Cipher getImpl() throws GeneralSecurityException {
@@ -63,27 +67,26 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
   }
 
   @Override
-  public void destroy() throws DestroyException {
-    CryptoUtils.destroy(this.privateKey);
-  }
-
-  @Override
   public byte[] encrypt(byte[] message) throws CryptoException {
     this.initialize();
     Asserts.notNull(message, "message is required.");
-    Asserts.notNull(this.publicKey, "publicKey is required.");
 
+    SecretKey key = null;
     try {
+      byte[] salt = RandomUtils.nextBytes(this.saltSize, RandomHolder.instance);
+      key = toSecretKey(salt, "AES");
+
       Cipher impl = getImpl();
-      if (this.algParamSpec == null) {
-        impl.init(Cipher.ENCRYPT_MODE, this.publicKey);
-      } else {
-        impl.init(Cipher.ENCRYPT_MODE, this.publicKey, this.algParamSpec);
-      }
-      return impl.doFinal(message);
+      byte[] iv = RandomUtils.nextBytes(impl.getBlockSize(), RandomHolder.instance);
+      impl.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv));
+
+      byte[] encMsg = impl.doFinal(message);
+      return ArrayUtils.append(iv, salt, encMsg);
 
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
+    } finally {
+      CryptoUtils.destroy(key);
     }
   }
 
@@ -91,19 +94,25 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
   public byte[] decrypt(byte[] message) throws CryptoException {
     this.initialize();
     Asserts.notNull(message, "message is required.");
-    Asserts.notNull(this.privateKey, "privateKey is required.");
 
+    SecretKey key = null;
     try {
       Cipher impl = getImpl();
-      if (this.algParamSpec == null) {
-        impl.init(Cipher.DECRYPT_MODE, this.privateKey);
-      } else {
-        impl.init(Cipher.DECRYPT_MODE, this.privateKey, this.algParamSpec);
-      }
-      return impl.doFinal(message);
+      int blockSize = impl.getBlockSize();
+      Asserts.isTrue(message.length >= blockSize + this.saltSize, "message is invalid.");
+
+      byte[] iv = Arrays.copyOfRange(message, 0, blockSize);
+      byte[] salt = Arrays.copyOfRange(message, blockSize, blockSize + this.saltSize);
+
+      key = toSecretKey(salt, "AES");
+      impl.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
+
+      return impl.doFinal(message, blockSize + this.saltSize, message.length - blockSize - this.saltSize);
 
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
+    } finally {
+      CryptoUtils.destroy(key);
     }
   }
 
@@ -112,7 +121,7 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
     return this.transformation;
   }
 
-  public RsaEncryptor setTransformation(String transformation) {
+  public PbeAesCbcEncryptor setTransformation(String transformation) {
     this.assertNotInitialized();
     this.transformation = transformation;
     return this;
@@ -123,27 +132,45 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
     return this.provider;
   }
 
-  public RsaEncryptor setProvider(String provider) {
+  public PbeAesCbcEncryptor setProvider(String provider) {
     this.assertNotInitialized();
     this.provider = provider;
     return this;
   }
 
-  public RsaEncryptor setPrivateKey(PrivateKey privateKey) {
-    assertNotInitialized();
-    this.privateKey = privateKey;
+  @Override
+  public PbeAesCbcEncryptor setSaltSize(int saltSize) {
+    super.setSaltSize(saltSize);
     return this;
   }
 
-  public RsaEncryptor setPublicKey(PublicKey publicKey) {
-    assertNotInitialized();
-    this.publicKey = publicKey;
+  @Override
+  public PbeAesCbcEncryptor setIterationCount(int iterationCount) {
+    super.setIterationCount(iterationCount);
     return this;
   }
 
-  public RsaEncryptor setAlgParamSpec(AlgorithmParameterSpec algParamSpec) {
-    assertNotInitialized();
-    this.algParamSpec = algParamSpec;
+  @Override
+  public PbeAesCbcEncryptor setKeySize(int keySize) {
+    super.setKeySize(keySize);
+    return this;
+  }
+
+  @Override
+  public PbeAesCbcEncryptor setPassword(char[] password) {
+    super.setPassword(password);
+    return this;
+  }
+
+  @Override
+  public PbeAesCbcEncryptor setPassword(String passwordExpr) {
+    super.setPassword(passwordExpr);
+    return this;
+  }
+
+  @Override
+  public PbeAesCbcEncryptor setPbeSecretKeyGenerator(PbeSecretKeyGenerator pbeSecretKeyGenerator) {
+    super.setPbeSecretKeyGenerator(pbeSecretKeyGenerator);
     return this;
   }
 }

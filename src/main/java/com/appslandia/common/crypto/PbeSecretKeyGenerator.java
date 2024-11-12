@@ -39,8 +39,6 @@ public class PbeSecretKeyGenerator extends InitializeObject {
   public static final PbeSecretKeyGenerator PBKDF2_HMAC_SHA512 = new PbeSecretKeyGenerator("PBKDF2WithHmacSHA512");
 
   private String algorithm, provider;
-  private SecretKeyFactory secretKeyFactory;
-  final Object mutex = new Object();
 
   public PbeSecretKeyGenerator() {
   }
@@ -58,32 +56,32 @@ public class PbeSecretKeyGenerator extends InitializeObject {
   protected void init() throws Exception {
     // algorithm
     this.algorithm = ValueUtils.valueOrAlt(this.algorithm, "PBKDF2WithHmacSHA512");
+  }
 
-    // secretKeyFactory
+  protected SecretKeyFactory getImpl() throws GeneralSecurityException {
+    SecretKeyFactory impl = null;
     if (this.provider == null) {
-      this.secretKeyFactory = SecretKeyFactory.getInstance(this.algorithm);
+      impl = SecretKeyFactory.getInstance(this.algorithm);
     } else {
-      this.secretKeyFactory = SecretKeyFactory.getInstance(this.algorithm, this.provider);
+      impl = SecretKeyFactory.getInstance(this.algorithm, this.provider);
     }
+    return impl;
   }
 
   public byte[] generate(char[] password, byte[] salt, int iterationCount, int keySize) throws CryptoException {
     this.initialize();
-
     PBEKeySpec keySpec = new PBEKeySpec(password, salt, iterationCount, keySize * 8);
-    SecretKey secretkey = null;
     try {
-      synchronized (this.mutex) {
-        secretkey = this.secretKeyFactory.generateSecret(keySpec);
-      }
+      SecretKey key = this.getImpl().generateSecret(keySpec);
+      byte[] kBytes = key.getEncoded();
+      CryptoUtils.destroy(key);
+      return kBytes;
+
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     } finally {
       keySpec.clearPassword();
     }
-    byte[] key = secretkey.getEncoded();
-    CryptoUtils.destroy(secretkey);
-    return key;
   }
 
   public String getAlgorithm() {

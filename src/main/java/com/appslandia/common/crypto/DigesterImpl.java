@@ -20,6 +20,7 @@
 
 package com.appslandia.common.crypto;
 
+import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.util.Arrays;
 
@@ -37,9 +38,6 @@ public class DigesterImpl extends InitializeObject implements Digester {
 
   private String algorithm, provider;
 
-  private MessageDigest digest;
-  final Object mutex = new Object();
-
   public DigesterImpl() {
   }
 
@@ -55,13 +53,16 @@ public class DigesterImpl extends InitializeObject implements Digester {
   @Override
   protected void init() throws Exception {
     Asserts.notNull(this.algorithm, "algorithm is required.");
+  }
 
-    // MessageDigest
+  protected MessageDigest getImpl() throws GeneralSecurityException {
+    MessageDigest impl = null;
     if (this.provider == null) {
-      this.digest = MessageDigest.getInstance(this.algorithm);
+      impl = MessageDigest.getInstance(this.algorithm);
     } else {
-      this.digest = MessageDigest.getInstance(this.algorithm, this.provider);
+      impl = MessageDigest.getInstance(this.algorithm, this.provider);
     }
+    return impl;
   }
 
   @Override
@@ -69,8 +70,11 @@ public class DigesterImpl extends InitializeObject implements Digester {
     this.initialize();
     Asserts.notNull(message, "message is required.");
 
-    synchronized (this.mutex) {
-      return this.digest.digest(message);
+    try {
+      return this.getImpl().digest(message);
+
+    } catch (GeneralSecurityException ex) {
+      throw new CryptoException(ex.getMessage(), ex);
     }
   }
 
@@ -80,11 +84,13 @@ public class DigesterImpl extends InitializeObject implements Digester {
     Asserts.notNull(message, "message is required.");
     Asserts.notNull(hash, "hash is required.");
 
-    byte[] digest = null;
-    synchronized (this.mutex) {
-      digest = this.digest.digest(message);
+    try {
+      byte[] digest = this.getImpl().digest(message);
+      return Arrays.equals(hash, digest);
+
+    } catch (GeneralSecurityException ex) {
+      throw new CryptoException(ex.getMessage(), ex);
     }
-    return Arrays.equals(hash, digest);
   }
 
   public String getAlgorithm() {

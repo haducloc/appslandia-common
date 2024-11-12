@@ -32,65 +32,11 @@ import com.appslandia.common.base.ThreadSafeTester;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class PbeEncryptorTest {
+public class PbeAesGcmEncryptorTest {
 
   @Test
   public void test() {
-    PbeAesEncryptor impl = new PbeAesEncryptor();
-    impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
-    impl.setPassword("password".toCharArray());
-
-    try {
-      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-      byte[] encrypted = impl.encrypt(data);
-
-      byte[] decrypted = impl.decrypt(encrypted);
-      Assertions.assertArrayEquals(data, decrypted);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-  }
-
-  @Test
-  public void test_CBC() {
-    PbeAesEncryptor impl = new PbeAesEncryptor();
-    impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
-    impl.setPassword("password".toCharArray());
-
-    try {
-      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-      byte[] encrypted = impl.encrypt(data);
-
-      byte[] decrypted = impl.decrypt(encrypted);
-      Assertions.assertArrayEquals(data, decrypted);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-  }
-
-  @Test
-  public void test_ECB() {
-    PbeAesEncryptor impl = new PbeAesEncryptor();
-    impl.setTransformation("AES/ECB/PKCS5Padding").setKeySize(16);
-    impl.setPassword("password".toCharArray());
-
-    try {
-      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
-      byte[] encrypted = impl.encrypt(data);
-
-      byte[] decrypted = impl.decrypt(encrypted);
-      Assertions.assertArrayEquals(data, decrypted);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-  }
-
-  @Test
-  public void test_GCM() {
-    PbeAesEncryptor impl = new PbeAesEncryptor();
+    PbeAesGcmEncryptor impl = new PbeAesGcmEncryptor();
     impl.setTransformation("AES/GCM/NoPadding").setKeySize(16);
     impl.setPassword("password".toCharArray());
 
@@ -108,8 +54,8 @@ public class PbeEncryptorTest {
 
   @Test
   public void test_threadSafe() {
-    final PbeAesEncryptor impl = new PbeAesEncryptor();
-    impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
+    final PbeAesGcmEncryptor impl = new PbeAesGcmEncryptor();
+    impl.setTransformation("AES/GCM/NoPadding").setKeySize(16);
     impl.setPassword("password".toCharArray());
 
     new ThreadSafeTester() {

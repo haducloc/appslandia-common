@@ -20,7 +20,8 @@
 
 package com.appslandia.common.crypto;
 
-import java.util.function.Consumer;
+import java.security.GeneralSecurityException;
+import java.security.spec.AlgorithmParameterSpec;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -36,10 +37,7 @@ import com.appslandia.common.utils.Asserts;
 public class KeyGeneratorUtil extends InitializeObject {
 
   private String algorithm, provider;
-  private KeyGenerator keyGenerator;
-  final Object mutex = new Object();
-
-  private Consumer<KeyGenerator> algParamSpec;
+  private AlgorithmParameterSpec algParamSpec;
 
   public KeyGeneratorUtil() {
   }
@@ -56,23 +54,30 @@ public class KeyGeneratorUtil extends InitializeObject {
   @Override
   protected void init() throws Exception {
     Asserts.notNull(this.algorithm);
-
-    // KeyGenerator
-    if (this.provider == null) {
-      this.keyGenerator = KeyGenerator.getInstance(this.algorithm);
-    } else {
-      this.keyGenerator = KeyGenerator.getInstance(this.algorithm, this.provider);
-    }
-
-    // algParamSpec
-    if (this.algParamSpec != null) {
-      this.algParamSpec.accept(this.keyGenerator);
-    }
   }
 
-  public SecretKey generate() {
+  protected KeyGenerator getImpl() throws GeneralSecurityException {
+    KeyGenerator impl = null;
+    if (this.provider == null) {
+      impl = KeyGenerator.getInstance(this.algorithm);
+    } else {
+      impl = KeyGenerator.getInstance(this.algorithm, this.provider);
+    }
+    return impl;
+  }
+
+  public SecretKey generate() throws CryptoException {
     this.initialize();
-    return this.keyGenerator.generateKey();
+    try {
+      KeyGenerator impl = getImpl();
+      if (this.algParamSpec != null) {
+        impl.init(this.algParamSpec);
+      }
+      return impl.generateKey();
+
+    } catch (GeneralSecurityException ex) {
+      throw new CryptoException(ex);
+    }
   }
 
   public String getAlgorithm() {
@@ -97,7 +102,7 @@ public class KeyGeneratorUtil extends InitializeObject {
     return this;
   }
 
-  public KeyGeneratorUtil setAlgParamSpec(Consumer<KeyGenerator> algParamSpec) {
+  public KeyGeneratorUtil setAlgParamSpec(AlgorithmParameterSpec algParamSpec) {
     assertNotInitialized();
     this.algParamSpec = algParamSpec;
     return this;

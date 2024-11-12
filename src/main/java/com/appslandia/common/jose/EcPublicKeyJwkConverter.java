@@ -43,7 +43,7 @@ import com.appslandia.common.utils.STR;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> implements Cloneable {
+public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> {
 
   private String ecKeyFactoryProvider;
 
@@ -64,7 +64,7 @@ public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> implement
     this.initialize();
     Asserts.isTrue("EC".equals(key.getAlgorithm()));
 
-    // jwk
+    // JsonWebKey
     JsonWebKey jwk = new JsonWebKey();
     jwk.setKty(this.kty);
 
@@ -94,20 +94,19 @@ public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> implement
     String x = Asserts.notNull((String) jwk.get("x"), "x is required.");
     String y = Asserts.notNull((String) jwk.get("y"), "y is required.");
 
-    // algorithmParametersUtil
-    AlgorithmParametersUtil<ECParameterSpec> algorithmParametersUtil = this.algorithmParametersUtils
-        .computeIfAbsent(stdName, (name) -> {
-
+    // AlgorithmParametersUtil
+    AlgorithmParametersUtil<ECParameterSpec> paramSpecUtil = this.algorithmParametersUtils.computeIfAbsent(stdName,
+        (name) -> {
           AlgorithmParametersUtil<ECParameterSpec> impl = new AlgorithmParametersUtil<>("EC",
               this.ecKeyFactoryProvider);
-          impl.setParamSpecClass(ECParameterSpec.class);
+          impl.setParamSpec(ECParameterSpec.class);
           impl.setAlgParamSpec(new ECGenParameterSpec(name));
 
           return impl;
         });
 
-    // algorithmParametersUtil
-    ECParameterSpec ecSpec = algorithmParametersUtil.getParameterSpec();
+    // ECParameterSpec
+    ECParameterSpec ecSpec = paramSpecUtil.getParameterSpec();
 
     // ecPoint
     byte[] xBytes = JoseUtils.getJoseBase64().decode(x);
@@ -124,11 +123,6 @@ public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> implement
     assertNotInitialized();
     this.ecKeyFactoryProvider = ecKeyFactoryProvider;
     return this;
-  }
-
-  @Override
-  public EcPublicKeyJwkConverter clone() {
-    return new EcPublicKeyJwkConverter().setEcKeyFactoryProvider(this.ecKeyFactoryProvider);
   }
 
   protected String getCurveName(EllipticCurve curve) {

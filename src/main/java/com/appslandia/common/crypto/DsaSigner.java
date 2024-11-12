@@ -25,7 +25,6 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.spec.AlgorithmParameterSpec;
-import java.util.function.Function;
 
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
@@ -39,78 +38,47 @@ import com.appslandia.common.utils.Asserts;
 public class DsaSigner extends InitializeObject implements Digester {
   private String algorithm, provider;
 
-  private Signature sign;
-  private Signature ver;
-
   private PrivateKey privateKey;
   private PublicKey publicKey;
 
-  final Object sigMutex = new Object();
-  final Object verMutex = new Object();
-
-  private Function<String, AlgorithmParameterSpec> algParamSpec;
+  private AlgorithmParameterSpec algParamSpec;
 
   @Override
   protected void init() throws Exception {
     Asserts.notNull(this.algorithm, "algorithm is required.");
     Asserts.isTrue((this.privateKey != null) || (this.publicKey != null), "No key is provided.");
+  }
 
-    // algParamSpec
-    if (this.algParamSpec == null) {
-      this.algParamSpec = (alg) -> null;
+  protected Signature getImpl() throws GeneralSecurityException {
+    Signature impl = null;
+    if (this.provider == null) {
+      impl = Signature.getInstance(this.algorithm);
+    } else {
+      impl = Signature.getInstance(this.algorithm, this.provider);
     }
-
-    // Sign
-    if (this.privateKey != null) {
-      if (this.provider == null) {
-        this.sign = Signature.getInstance(this.algorithm);
-      } else {
-        this.sign = Signature.getInstance(this.algorithm, this.provider);
-      }
-
-      AlgorithmParameterSpec algParamSpec = this.algParamSpec.apply(this.algorithm);
-
-      if (algParamSpec != null) {
-        this.sign.setParameter(algParamSpec);
-      }
-      this.sign.initSign(this.privateKey);
-    }
-
-    // Verify
-    if (this.publicKey != null) {
-      if (this.provider == null) {
-        this.ver = Signature.getInstance(this.algorithm);
-      } else {
-        this.ver = Signature.getInstance(this.algorithm, this.provider);
-      }
-
-      AlgorithmParameterSpec algParamSpec = this.algParamSpec.apply(this.algorithm);
-
-      if (algParamSpec != null) {
-        this.ver.setParameter(algParamSpec);
-      }
-      this.ver.initVerify(this.publicKey);
-    }
+    return impl;
   }
 
   @Override
   public void destroy() throws DestroyException {
-    if (this.privateKey != null) {
-      CryptoUtils.destroy(this.privateKey);
-    }
+    CryptoUtils.destroy(this.privateKey);
   }
 
   @Override
   public byte[] digest(byte[] message) throws CryptoException {
     this.initialize();
     Asserts.notNull(message, "message is required.");
-    Asserts.notNull(this.sign, "privateKey is required.");
+    Asserts.notNull(this.privateKey, "privateKey is required.");
 
     try {
-      synchronized (this.sigMutex) {
-        this.sign.update(message);
-        return this.sign.sign();
+      Signature impl = getImpl();
+      if (this.algParamSpec != null) {
+        impl.setParameter(this.algParamSpec);
       }
+      impl.initSign(this.privateKey);
+      impl.update(message);
+      return impl.sign();
+
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     }
@@ -121,13 +89,17 @@ public class DsaSigner extends InitializeObject implements Digester {
     this.initialize();
     Asserts.notNull(message, "message is required.");
     Asserts.notNull(signature, "signature is required.");
-    Asserts.notNull(this.ver, "publicKey is required.");
+    Asserts.notNull(this.publicKey, "publicKey is required.");
 
     try {
-      synchronized (this.verMutex) {
-        this.ver.update(message);
-        return this.ver.verify(signature);
+      Signature impl = getImpl();
+      if (this.algParamSpec != null) {
+        impl.setParameter(this.algParamSpec);
       }
+      impl.initVerify(this.publicKey);
+      impl.update(message);
+      return impl.verify(signature);
+
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     }
@@ -167,7 +139,7 @@ public class DsaSigner extends InitializeObject implements Digester {
     return this;
   }
 
-  public DsaSigner setAlgParamSpec(Function<String, AlgorithmParameterSpec> algParamSpec) {
+  public DsaSigner setAlgParamSpec(AlgorithmParameterSpec algParamSpec) {
     assertNotInitialized();
     this.algParamSpec = algParamSpec;
     return this;

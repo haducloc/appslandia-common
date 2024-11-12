@@ -42,8 +42,6 @@ import com.appslandia.common.utils.IOUtils;
 public class KeyFactoryUtil extends InitializeObject {
 
   private String algorithm, provider;
-  private KeyFactory keyFactory;
-  final Object mutex = new Object();
 
   public KeyFactoryUtil() {
   }
@@ -61,23 +59,24 @@ public class KeyFactoryUtil extends InitializeObject {
   protected void init() throws Exception {
     // DiffieHellman, DSA, EC, EdDSA, Ed25519, Ed448, RSA, RSASSA-PSS, XDH, X25519,
     // X448, etc.
-
     Asserts.notNull(this.algorithm, "algorithm is required.");
+  }
 
-    // keyFactory
+  protected KeyFactory getImpl() throws GeneralSecurityException {
+    KeyFactory impl = null;
     if (this.provider == null) {
-      this.keyFactory = KeyFactory.getInstance(this.algorithm);
+      impl = KeyFactory.getInstance(this.algorithm);
     } else {
-      this.keyFactory = KeyFactory.getInstance(this.algorithm, this.provider);
+      impl = KeyFactory.getInstance(this.algorithm, this.provider);
     }
+    return impl;
   }
 
   public PrivateKey toPrivateKey(KeySpec keySpec) throws CryptoException {
     this.initialize();
     try {
-      synchronized (this.mutex) {
-        return this.keyFactory.generatePrivate(keySpec);
-      }
+      return this.getImpl().generatePrivate(keySpec);
+
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     }
@@ -86,26 +85,21 @@ public class KeyFactoryUtil extends InitializeObject {
   public PublicKey toPublicKey(KeySpec keySpec) throws CryptoException {
     this.initialize();
     try {
-      synchronized (this.mutex) {
-        return this.keyFactory.generatePublic(keySpec);
-      }
+      return this.getImpl().generatePublic(keySpec);
+
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     }
   }
 
   // PKCS#8/ASN.1 encoding is a standard format for encoding private key
-  // Abstract Syntax Notation One (ASN.1) is a standard interface description
-  // language for defining data structures that
-  // can be serialized and deserialized in a cross-platform way
 
   public PrivateKey toPrivateKey(String keyInPem) throws CryptoException {
     this.initialize();
     byte[] der = PKIUtils.toDerEncoded(keyInPem);
     try {
-      synchronized (this.mutex) {
-        return this.keyFactory.generatePrivate(new PKCS8EncodedKeySpec(der));
-      }
+      return this.getImpl().generatePrivate(new PKCS8EncodedKeySpec(der));
+
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     } finally {
@@ -117,9 +111,8 @@ public class KeyFactoryUtil extends InitializeObject {
     this.initialize();
     byte[] der = IOUtils.toByteArray(keyInDer);
     try {
-      synchronized (this.mutex) {
-        return this.keyFactory.generatePrivate(new PKCS8EncodedKeySpec(der));
-      }
+      return this.getImpl().generatePrivate(new PKCS8EncodedKeySpec(der));
+
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     } finally {
@@ -133,9 +126,8 @@ public class KeyFactoryUtil extends InitializeObject {
     this.initialize();
     byte[] der = PKIUtils.toDerEncoded(keyInPem);
     try {
-      synchronized (this.mutex) {
-        return this.keyFactory.generatePublic(new X509EncodedKeySpec(der));
-      }
+      return this.getImpl().generatePublic(new X509EncodedKeySpec(der));
+
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     }
@@ -144,9 +136,8 @@ public class KeyFactoryUtil extends InitializeObject {
   public PublicKey toPublicKey(InputStream keyInDer) throws IOException, CryptoException {
     this.initialize();
     try {
-      synchronized (this.mutex) {
-        return this.keyFactory.generatePublic(new X509EncodedKeySpec(IOUtils.toByteArray(keyInDer)));
-      }
+      return this.getImpl().generatePublic(new X509EncodedKeySpec(IOUtils.toByteArray(keyInDer)));
+
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     }
@@ -158,9 +149,8 @@ public class KeyFactoryUtil extends InitializeObject {
 
     byte[] der = key.getEncoded();
     try {
-      synchronized (this.mutex) {
-        return this.keyFactory.generatePrivate(new PKCS8EncodedKeySpec(der));
-      }
+      return this.getImpl().generatePrivate(new PKCS8EncodedKeySpec(der));
+
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     } finally {
@@ -173,9 +163,8 @@ public class KeyFactoryUtil extends InitializeObject {
     Asserts.isTrue("X.509".equals(key.getFormat()), "key is not X.509 format.");
 
     try {
-      synchronized (this.mutex) {
-        return this.keyFactory.generatePublic(new X509EncodedKeySpec(key.getEncoded()));
-      }
+      return this.getImpl().generatePublic(new X509EncodedKeySpec(key.getEncoded()));
+
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     }

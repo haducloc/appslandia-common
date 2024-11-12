@@ -21,9 +21,11 @@
 package com.appslandia.common.crypto;
 
 import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
 import javax.crypto.Mac;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 import com.appslandia.common.base.DestroyException;
@@ -40,28 +42,27 @@ import com.appslandia.common.utils.SYS;
 public class MacSigner extends InitializeObject implements Digester {
 
   private String algorithm, provider;
-  private Mac mac;
   private byte[] secret;
-
-  final Object mutex = new Object();
 
   @Override
   protected void init() throws Exception {
     Asserts.notNull(this.algorithm, "algorithm is required.");
     Asserts.notNull(this.secret, "secret is required.");
+  }
 
-    // MAC
+  protected Mac getImpl() throws GeneralSecurityException {
+    Mac impl = null;
     if (this.provider == null) {
-      this.mac = Mac.getInstance(this.algorithm);
+      impl = Mac.getInstance(this.algorithm);
     } else {
-      this.mac = Mac.getInstance(this.algorithm, this.provider);
+      impl = Mac.getInstance(this.algorithm, this.provider);
     }
-    this.mac.init(new SecretKeySpec(this.secret, this.algorithm));
-    CryptoUtils.clear(this.secret);
+    return impl;
   }
 
   @Override
   public void destroy() throws DestroyException {
+    CryptoUtils.clear(this.secret);
   }
 
   @Override
@@ -69,8 +70,16 @@ public class MacSigner extends InitializeObject implements Digester {
     this.initialize();
     Asserts.notNull(message, "message is required.");
 
-    synchronized (this.mutex) {
-      return this.mac.doFinal(message);
+    SecretKey key = new SecretKeySpec(this.secret, this.algorithm);
+    try {
+      Mac impl = getImpl();
+      impl.init(key);
+      return impl.doFinal(message);
+
+    } catch (GeneralSecurityException ex) {
+      throw new CryptoException(ex.getMessage(), ex);
+    } finally {
+      CryptoUtils.destroy(key);
     }
   }
 
@@ -80,11 +89,18 @@ public class MacSigner extends InitializeObject implements Digester {
     Asserts.notNull(message, "message is required.");
     Asserts.notNull(mac, "mac is required.");
 
-    byte[] msgMac = null;
-    synchronized (this.mutex) {
-      msgMac = this.mac.doFinal(message);
+    SecretKey key = new SecretKeySpec(this.secret, this.algorithm);
+    try {
+      Mac impl = getImpl();
+      impl.init(key);
+      byte[] msgMac = impl.doFinal(message);
+      return Arrays.equals(mac, msgMac);
+
+    } catch (GeneralSecurityException ex) {
+      throw new CryptoException(ex.getMessage(), ex);
+    } finally {
+      CryptoUtils.destroy(key);
     }
-    return Arrays.equals(mac, msgMac);
   }
 
   public String getAlgorithm() {

@@ -20,29 +20,67 @@
 
 package com.appslandia.common.crypto;
 
+import java.nio.charset.StandardCharsets;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import com.appslandia.common.base.ThreadSafeTester;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class TextEncryptorTest {
+public class PbeAesCbcEncryptorTest {
 
   @Test
   public void test() {
-    TextEncryptor impl = new TextEncryptor().setEncryptor(new PbeAesGcmEncryptor()
-        .setTransformation("AES/GCM/NoPadding").setKeySize(16).setPassword("password".toCharArray()));
+    PbeAesCbcEncryptor impl = new PbeAesCbcEncryptor();
+    impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
+    impl.setPassword("password".toCharArray());
 
     try {
-      String message = "data";
-      String encrypted = impl.encrypt(message);
-      String decrypted = impl.decrypt(encrypted);
+      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+      byte[] encrypted = impl.encrypt(data);
 
-      Assertions.assertEquals(message, decrypted);
+      byte[] decrypted = impl.decrypt(encrypted);
+      Assertions.assertArrayEquals(data, decrypted);
+
     } catch (Exception ex) {
       Assertions.fail(ex.getMessage());
     }
+  }
+
+  @Test
+  public void test_threadSafe() {
+    final PbeAesCbcEncryptor impl = new PbeAesCbcEncryptor();
+    impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
+    impl.setPassword("password".toCharArray());
+
+    new ThreadSafeTester() {
+
+      @Override
+      protected Runnable newTask() {
+        return new Runnable() {
+
+          @Override
+          public void run() {
+            try {
+              byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+              byte[] encrypted = impl.encrypt(data);
+
+              byte[] decrypted = impl.decrypt(encrypted);
+              Assertions.assertArrayEquals(data, decrypted);
+
+            } catch (Exception ex) {
+              Assertions.fail(ex.getMessage());
+            } finally {
+              doneTask();
+            }
+          }
+        };
+      }
+    }.execute();
   }
 }

@@ -38,8 +38,8 @@ public class SecureConfig extends SimpleConfig {
 
   final TextEncryptor textEncryptor;
 
-  public SecureConfig(char[] passwordExpr) {
-    this(passwordExpr, new HashMap<>());
+  public SecureConfig(char[] password) {
+    this(password, new HashMap<>());
   }
 
   public SecureConfig(char[] password, Map<String, String> newCfg) {
@@ -47,7 +47,7 @@ public class SecureConfig extends SimpleConfig {
 
     Asserts.notNull(password);
     this.textEncryptor = new TextEncryptor(
-        new PbeAesEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(32).setPassword(password));
+        new PbeAesGcmEncryptor().setTransformation("AES/GCM/NoPadding").setKeySize(32).setPassword(password));
   }
 
   public SecureConfig(String passwordExpr) {
@@ -59,7 +59,7 @@ public class SecureConfig extends SimpleConfig {
 
     Asserts.notNull(passwordExpr);
     this.textEncryptor = new TextEncryptor(
-        new PbeAesEncryptor().setTransformation("AES/CBC/PKCS5Padding").setKeySize(32).setPassword(passwordExpr));
+        new PbeAesGcmEncryptor().setTransformation("AES/GCM/NoPadding").setKeySize(32).setPassword(passwordExpr));
   }
 
   public void destroy() throws DestroyException {

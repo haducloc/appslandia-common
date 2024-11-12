@@ -35,11 +35,8 @@ import com.appslandia.common.utils.Asserts;
 public class AlgorithmParametersUtil<T extends AlgorithmParameterSpec> extends InitializeObject {
 
   private String algorithm, provider;
-  private AlgorithmParameters algorithmParameters;
-  private Class<T> paramSpecClass;
+  private Class<T> paramSpec;
   private AlgorithmParameterSpec algParamSpec;
-
-  final Object mutex = new Object();
 
   public AlgorithmParametersUtil() {
   }
@@ -56,25 +53,28 @@ public class AlgorithmParametersUtil<T extends AlgorithmParameterSpec> extends I
   @Override
   protected void init() throws Exception {
     Asserts.notNull(this.algorithm, "algorithm is required.");
-    Asserts.notNull(this.paramSpecClass, "paramSpecClass is required.");
-    Asserts.notNull(this.algParamSpec, "algParamSpec is required.");
+    Asserts.notNull(this.paramSpec, "paramSpec is required.");
+  }
 
-    // AlgorithmParameters
+  protected AlgorithmParameters getImpl() throws GeneralSecurityException {
+    AlgorithmParameters impl = null;
     if (this.provider == null) {
-      this.algorithmParameters = AlgorithmParameters.getInstance(this.algorithm);
+      impl = AlgorithmParameters.getInstance(this.algorithm);
     } else {
-      this.algorithmParameters = AlgorithmParameters.getInstance(this.algorithm, this.provider);
+      impl = AlgorithmParameters.getInstance(this.algorithm, this.provider);
     }
-
-    this.algorithmParameters.init(this.algParamSpec);
+    return impl;
   }
 
   public T getParameterSpec() throws CryptoException {
     this.initialize();
     try {
-      synchronized (this.mutex) {
-        return this.algorithmParameters.getParameterSpec(this.paramSpecClass);
+      AlgorithmParameters impl = getImpl();
+      if (this.algParamSpec != null) {
+        impl.init(this.algParamSpec);
       }
+      return impl.getParameterSpec(this.paramSpec);
+
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     }
@@ -102,9 +102,9 @@ public class AlgorithmParametersUtil<T extends AlgorithmParameterSpec> extends I
     return this;
   }
 
-  public AlgorithmParametersUtil<T> setParamSpecClass(Class<T> paramSpecClass) {
+  public AlgorithmParametersUtil<T> setParamSpec(Class<T> paramSpec) {
     assertNotInitialized();
-    this.paramSpecClass = paramSpecClass;
+    this.paramSpec = paramSpec;
     return this;
   }
 

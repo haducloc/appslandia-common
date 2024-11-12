@@ -40,8 +40,6 @@ public class CertificateFactoryUtil extends InitializeObject {
 
   private String type;
   private String provider;
-  private CertificateFactory certificateFactory;
-  final Object mutex = new Object();
 
   public CertificateFactoryUtil() {
   }
@@ -58,21 +56,24 @@ public class CertificateFactoryUtil extends InitializeObject {
   @Override
   protected void init() throws Exception {
     this.type = ValueUtils.valueOrAlt(this.type, "X.509");
+  }
 
+  protected CertificateFactory getImpl() throws GeneralSecurityException {
+    CertificateFactory impl = null;
     if (this.provider == null) {
-      this.certificateFactory = CertificateFactory.getInstance(this.type);
+      impl = CertificateFactory.getInstance(this.type);
     } else {
-      this.certificateFactory = CertificateFactory.getInstance(this.type, provider);
+      impl = CertificateFactory.getInstance(this.type, provider);
     }
+    return impl;
   }
 
   // X509/ASN.1 encoding is a standard format for encoding Certificate
   public X509Certificate toCertificate(InputStream certInDer) throws CryptoException {
     this.initialize();
     try {
-      synchronized (this.mutex) {
-        return (X509Certificate) this.certificateFactory.generateCertificate(certInDer);
-      }
+      return (X509Certificate) this.getImpl().generateCertificate(certInDer);
+
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     }
@@ -83,9 +84,8 @@ public class CertificateFactoryUtil extends InitializeObject {
     this.initialize();
     byte[] der = PKIUtils.toDerEncoded(certInPem);
     try {
-      synchronized (this.mutex) {
-        return (X509Certificate) this.certificateFactory.generateCertificate(new ByteArrayInputStream(der));
-      }
+      return (X509Certificate) this.getImpl().generateCertificate(new ByteArrayInputStream(der));
+
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     }

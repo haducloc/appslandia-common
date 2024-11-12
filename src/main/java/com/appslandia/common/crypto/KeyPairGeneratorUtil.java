@@ -20,9 +20,10 @@
 
 package com.appslandia.common.crypto;
 
+import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
-import java.util.function.Consumer;
+import java.security.spec.AlgorithmParameterSpec;
 
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.utils.Asserts;
@@ -35,10 +36,7 @@ import com.appslandia.common.utils.Asserts;
 public class KeyPairGeneratorUtil extends InitializeObject {
 
   private String algorithm, provider;
-  private KeyPairGenerator keyPairGenerator;
-  final Object mutex = new Object();
-
-  private Consumer<KeyPairGenerator> algParamSpec;
+  private AlgorithmParameterSpec algParamSpec;
 
   public KeyPairGeneratorUtil() {
   }
@@ -55,23 +53,30 @@ public class KeyPairGeneratorUtil extends InitializeObject {
   @Override
   protected void init() throws Exception {
     Asserts.notNull(this.algorithm);
-
-    // KeyPairGenerator
-    if (this.provider == null) {
-      this.keyPairGenerator = KeyPairGenerator.getInstance(this.algorithm);
-    } else {
-      this.keyPairGenerator = KeyPairGenerator.getInstance(this.algorithm, this.provider);
-    }
-
-    // algParamSpec
-    if (this.algParamSpec != null) {
-      this.algParamSpec.accept(this.keyPairGenerator);
-    }
   }
 
-  public KeyPair generate() {
+  protected KeyPairGenerator getImpl() throws GeneralSecurityException {
+    KeyPairGenerator impl = null;
+    if (this.provider == null) {
+      impl = KeyPairGenerator.getInstance(this.algorithm);
+    } else {
+      impl = KeyPairGenerator.getInstance(this.algorithm, this.provider);
+    }
+    return impl;
+  }
+
+  public KeyPair generate() throws CryptoException {
     this.initialize();
-    return this.keyPairGenerator.generateKeyPair();
+    try {
+      KeyPairGenerator impl = getImpl();
+      if (this.algParamSpec != null) {
+        impl.initialize(this.algParamSpec);
+      }
+      return impl.generateKeyPair();
+
+    } catch (GeneralSecurityException ex) {
+      throw new CryptoException(ex);
+    }
   }
 
   public String getAlgorithm() {
@@ -96,7 +101,7 @@ public class KeyPairGeneratorUtil extends InitializeObject {
     return this;
   }
 
-  public KeyPairGeneratorUtil setAlgParamSpec(Consumer<KeyPairGenerator> algParamSpec) {
+  public KeyPairGeneratorUtil setAlgParamSpec(AlgorithmParameterSpec algParamSpec) {
     assertNotInitialized();
     this.algParamSpec = algParamSpec;
     return this;

@@ -35,7 +35,7 @@ import com.appslandia.common.utils.Asserts;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class RSAPublicKeyJwkConverter extends JwkConverter<RSAPublicKey> implements Cloneable {
+public class RSAPublicKeyJwkConverter extends JwkConverter<RSAPublicKey> {
 
   private String rsaKeyFactoryProvider;
   private KeyFactoryUtil keyFactoryUtil;
@@ -54,7 +54,7 @@ public class RSAPublicKeyJwkConverter extends JwkConverter<RSAPublicKey> impleme
     this.initialize();
     Asserts.isTrue("RSA".equals(key.getAlgorithm()));
 
-    // jwk
+    // JsonWebKey
     JsonWebKey jwk = new JsonWebKey();
     jwk.setKty(this.kty);
 
@@ -88,10 +88,5 @@ public class RSAPublicKeyJwkConverter extends JwkConverter<RSAPublicKey> impleme
     assertNotInitialized();
     this.rsaKeyFactoryProvider = rsaKeyFactoryProvider;
     return this;
-  }
-
-  @Override
-  public RSAPublicKeyJwkConverter clone() {
-    return new RSAPublicKeyJwkConverter().setRsaKeyFactoryProvider(this.rsaKeyFactoryProvider);
   }
 }
