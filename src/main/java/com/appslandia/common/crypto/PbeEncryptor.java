@@ -22,7 +22,6 @@ package com.appslandia.common.crypto;
 
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
-import java.util.Arrays;
 import java.util.Random;
 
 import javax.crypto.Cipher;
@@ -39,15 +38,15 @@ import com.appslandia.common.utils.RandomUtils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class PbeIvEncryptor extends PbeObject implements Encryptor {
+public class PbeEncryptor extends PbeObject implements Encryptor {
 
-  private static final int GCM_TAG_SIZE = 16;
-  private static final int GCM_IV_SIZE = 12;
+  protected static final int GCM_TAG_SIZE = 16;
+  protected static final int GCM_IV_SIZE = 12;
 
-  private String transformation, provider;
+  protected String transformation, provider;
   private CipherOps cipherOps;
 
-  private static final class RandomHolder {
+  protected static final class RandomHolder {
     static final Random instance = new SecureRandom();
   }
 
@@ -57,7 +56,8 @@ public class PbeIvEncryptor extends PbeObject implements Encryptor {
     Asserts.notNull(this.transformation, "transformation is required.");
 
     this.cipherOps = new CipherOps(this.transformation);
-    Asserts.isTrue(this.cipherOps.isMode("CBC", "CFB", "OFB", "CTR", "GCM"), "CBC|CFB|OFB|CTR|GCM mode is required.");
+    Asserts.isTrue(this.cipherOps.isMode("CBC", "CFB", "OFB", "CTR", "ECB", "GCM"),
+        "CBC|CFB|OFB|CTR|ECB|GCM mode is required.");
   }
 
   protected Cipher getImpl() throws GeneralSecurityException {
@@ -71,6 +71,9 @@ public class PbeIvEncryptor extends PbeObject implements Encryptor {
   }
 
   protected int getIvSize(Cipher cipher) {
+    if (this.cipherOps.isMode("ECB")) {
+      return -1;
+    }
     if (this.cipherOps.isMode("GCM")) {
       return GCM_IV_SIZE;
     }
@@ -88,21 +91,31 @@ public class PbeIvEncryptor extends PbeObject implements Encryptor {
 
     SecretKey key = null;
     try {
+      Cipher impl = getImpl();
+      int ivSize = getIvSize(impl);
+      byte[] iv = null;
+
       byte[] salt = RandomUtils.nextBytes(this.saltSize, RandomHolder.instance);
       key = toSecretKey(salt, this.cipherOps.getAlgorithm());
 
-      Cipher impl = getImpl();
-      int ivSize = getIvSize(impl);
-      byte[] iv = RandomUtils.nextBytes(ivSize, RandomHolder.instance);
-
-      if (this.cipherOps.isMode("GCM")) {
-        impl.init(Cipher.ENCRYPT_MODE, key, new GCMParameterSpec(getTagSize() * 8, iv));
+      if (ivSize <= 0) {
+        impl.init(Cipher.ENCRYPT_MODE, key);
       } else {
-        impl.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv));
+        iv = RandomUtils.nextBytes(ivSize, RandomHolder.instance);
+
+        if (this.cipherOps.isMode("GCM")) {
+          impl.init(Cipher.ENCRYPT_MODE, key, new GCMParameterSpec(getTagSize() * 8, iv));
+        } else {
+          impl.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv));
+        }
       }
 
       byte[] encMsg = impl.doFinal(message);
-      return ArrayUtils.append(iv, salt, encMsg);
+      if (iv == null) {
+        return ArrayUtils.append(salt, encMsg);
+      } else {
+        return ArrayUtils.append(iv, salt, encMsg);
+      }
 
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
@@ -120,18 +133,32 @@ public class PbeIvEncryptor extends PbeObject implements Encryptor {
     try {
       Cipher impl = getImpl();
       int ivSize = getIvSize(impl);
-      Asserts.isTrue(message.length >= ivSize + this.saltSize, "message is invalid.");
+      byte[] iv = null;
+      byte[] salt = new byte[this.saltSize];
 
-      byte[] iv = Arrays.copyOfRange(message, 0, ivSize);
-      byte[] salt = Arrays.copyOfRange(message, ivSize, ivSize + this.saltSize);
+      if (ivSize <= 0) {
+        Asserts.isTrue(message.length >= this.saltSize, "message is invalid.");
+        ArrayUtils.copy(message, salt);
+      } else {
+        Asserts.isTrue(message.length >= ivSize + this.saltSize, "message is invalid.");
+        iv = new byte[ivSize];
+        ArrayUtils.copy(message, iv, salt);
+      }
       key = toSecretKey(salt, this.cipherOps.getAlgorithm());
 
-      if (this.cipherOps.isMode("GCM")) {
+      if (iv == null) {
+        impl.init(Cipher.DECRYPT_MODE, key);
+      } else if (this.cipherOps.isMode("GCM")) {
         impl.init(Cipher.DECRYPT_MODE, key, new GCMParameterSpec(getTagSize() * 8, iv));
       } else {
         impl.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
       }
-      return impl.doFinal(message, ivSize + this.saltSize, message.length - ivSize - this.saltSize);
+
+      if (iv == null) {
+        return impl.doFinal(message, this.saltSize, message.length - this.saltSize);
+      } else {
+        return impl.doFinal(message, ivSize + this.saltSize, message.length - ivSize - this.saltSize);
+      }
 
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
@@ -145,7 +172,7 @@ public class PbeIvEncryptor extends PbeObject implements Encryptor {
     return this.transformation;
   }
 
-  public PbeIvEncryptor setTransformation(String transformation) {
+  public PbeEncryptor setTransformation(String transformation) {
     this.assertNotInitialized();
     this.transformation = transformation;
     return this;
@@ -156,44 +183,44 @@ public class PbeIvEncryptor extends PbeObject implements Encryptor {
     return this.provider;
   }
 
-  public PbeIvEncryptor setProvider(String provider) {
+  public PbeEncryptor setProvider(String provider) {
     this.assertNotInitialized();
     this.provider = provider;
     return this;
   }
 
   @Override
-  public PbeIvEncryptor setSaltSize(int saltSize) {
+  public PbeEncryptor setSaltSize(int saltSize) {
     super.setSaltSize(saltSize);
     return this;
   }
 
   @Override
-  public PbeIvEncryptor setIterationCount(int iterationCount) {
+  public PbeEncryptor setIterationCount(int iterationCount) {
     super.setIterationCount(iterationCount);
     return this;
   }
 
   @Override
-  public PbeIvEncryptor setKeySize(int keySize) {
+  public PbeEncryptor setKeySize(int keySize) {
     super.setKeySize(keySize);
     return this;
   }
 
   @Override
-  public PbeIvEncryptor setPassword(char[] password) {
+  public PbeEncryptor setPassword(char[] password) {
     super.setPassword(password);
     return this;
   }
 
   @Override
-  public PbeIvEncryptor setPassword(String passwordExpr) {
+  public PbeEncryptor setPassword(String passwordExpr) {
     super.setPassword(passwordExpr);
     return this;
   }
 
   @Override
-  public PbeIvEncryptor setPbeSecretKeyGenerator(PbeSecretKeyGenerator pbeSecretKeyGenerator) {
+  public PbeEncryptor setPbeSecretKeyGenerator(PbeSecretKeyGenerator pbeSecretKeyGenerator) {
     super.setPbeSecretKeyGenerator(pbeSecretKeyGenerator);
     return this;
   }

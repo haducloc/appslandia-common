@@ -32,7 +32,7 @@ public class TextEncryptorTest {
 
   @Test
   public void test() {
-    TextEncryptor impl = new TextEncryptor().setEncryptor(new PbeIvEncryptor().setTransformation("AES/GCM/NoPadding")
+    TextEncryptor impl = new TextEncryptor().setEncryptor(new PbeEncryptor().setTransformation("AES/GCM/NoPadding")
         .setKeySize(16).setPassword("password".toCharArray()));
 
     try {
