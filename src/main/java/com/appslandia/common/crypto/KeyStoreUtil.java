@@ -20,6 +20,7 @@
 
 package com.appslandia.common.crypto;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,8 +52,13 @@ import com.appslandia.common.utils.SYS;
  */
 public class KeyStoreUtil extends InitializeObject {
 
+// Stores symmetric keys (e.g., AES, DES), private keys, and passwords with strong protection.
   public static final String TYPE_JCEKS = "JCEKS";
+
+// Stores private keys, public certificates, and certificate chains for SSL/TLS in Java applications.
   public static final String TYPE_JKS = "JKS";
+
+// Cross-platform format for storing private keys with associated public certificates and certificate chains.
   public static final String TYPE_PKCS12 = "PKCS12";
 
   private String type, provider;
@@ -96,6 +102,12 @@ public class KeyStoreUtil extends InitializeObject {
 
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
+    }
+  }
+
+  public void load(String fileName) throws CryptoException, IOException {
+    try (FileInputStream fis = new FileInputStream(fileName)) {
+      load(fis);
     }
   }
 
