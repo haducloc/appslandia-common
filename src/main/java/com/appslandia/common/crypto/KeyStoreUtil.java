@@ -81,11 +81,14 @@ public class KeyStoreUtil extends InitializeObject {
   protected void init() throws Exception {
     Asserts.notNull(this.type, "type is required.");
 
+    KeyStore impl;
     if (this.provider == null) {
-      this.impl = KeyStore.getInstance(this.type);
+      impl = KeyStore.getInstance(this.type);
     } else {
-      this.impl = KeyStore.getInstance(this.type, this.provider);
+      impl = KeyStore.getInstance(this.type, this.provider);
     }
+    impl.load(null, null);
+    this.impl = impl;
   }
 
   @Override
@@ -99,7 +102,6 @@ public class KeyStoreUtil extends InitializeObject {
 
     try {
       this.impl.load(in, this.password);
-
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     }
