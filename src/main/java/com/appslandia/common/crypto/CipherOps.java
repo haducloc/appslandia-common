@@ -20,6 +20,8 @@
 
 package com.appslandia.common.crypto;
 
+import java.util.Arrays;
+
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
 
@@ -46,8 +48,8 @@ public class CipherOps {
     this.padding = cipherOps[2];
   }
 
-  public boolean isMode(String mode) {
-    return this.mode.equalsIgnoreCase(mode);
+  public boolean isMode(String... modes) {
+    return Arrays.stream(modes).anyMatch(m -> this.mode.equalsIgnoreCase(m));
   }
 
   public boolean isAlgorithm(String algorithm) {

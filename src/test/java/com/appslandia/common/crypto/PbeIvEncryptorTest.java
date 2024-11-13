@@ -32,11 +32,29 @@ import com.appslandia.common.base.ThreadSafeTester;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class PbeAesGcmEncryptorTest {
+public class PbeIvEncryptorTest {
 
   @Test
   public void test() {
-    PbeAesGcmEncryptor impl = new PbeAesGcmEncryptor();
+    PbeIvEncryptor impl = new PbeIvEncryptor();
+    impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
+    impl.setPassword("password".toCharArray());
+
+    try {
+      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+      byte[] encrypted = impl.encrypt(data);
+
+      byte[] decrypted = impl.decrypt(encrypted);
+      Assertions.assertArrayEquals(data, decrypted);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
+
+  @Test
+  public void test_gcm() {
+    PbeIvEncryptor impl = new PbeIvEncryptor();
     impl.setTransformation("AES/GCM/NoPadding").setKeySize(16);
     impl.setPassword("password".toCharArray());
 
@@ -54,8 +72,8 @@ public class PbeAesGcmEncryptorTest {
 
   @Test
   public void test_threadSafe() {
-    final PbeAesGcmEncryptor impl = new PbeAesGcmEncryptor();
-    impl.setTransformation("AES/GCM/NoPadding").setKeySize(16);
+    final PbeIvEncryptor impl = new PbeIvEncryptor();
+    impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
     impl.setPassword("password".toCharArray());
 
     new ThreadSafeTester() {

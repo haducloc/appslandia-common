@@ -27,6 +27,7 @@ import java.util.Random;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 
 import com.appslandia.common.utils.ArrayUtils;
@@ -38,9 +39,13 @@ import com.appslandia.common.utils.RandomUtils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class PbeAesCbcEncryptor extends PbeObject implements Encryptor {
+public class PbeIvEncryptor extends PbeObject implements Encryptor {
+
+  private static final int GCM_IV_LENGTH = 12;
+  private static final int GCM_TAG_LENGTH = 128;
 
   private String transformation, provider;
+  private CipherOps cipherOps;
 
   private static final class RandomHolder {
     static final Random instance = new SecureRandom();
@@ -51,9 +56,8 @@ public class PbeAesCbcEncryptor extends PbeObject implements Encryptor {
     super.init();
     Asserts.notNull(this.transformation, "transformation is required.");
 
-    CipherOps cipherOps = new CipherOps(this.transformation);
-    Asserts.isTrue(cipherOps.isAlgorithm("AES"), "AES algorithm is required.");
-    Asserts.isTrue(cipherOps.isMode("CBC"), "CBC mode is required.");
+    this.cipherOps = new CipherOps(this.transformation);
+    Asserts.isTrue(this.cipherOps.isMode("CBC", "CFB", "OFB", "CTR", "GCM"), "CBC|CFB|OFB|CTR|GCM mode is required.");
   }
 
   protected Cipher getImpl() throws GeneralSecurityException {
@@ -66,6 +70,13 @@ public class PbeAesCbcEncryptor extends PbeObject implements Encryptor {
     return impl;
   }
 
+  protected int getIvSize(Cipher cipher) {
+    if (this.cipherOps.isMode("GCM")) {
+      return GCM_IV_LENGTH;
+    }
+    return cipher.getBlockSize();
+  }
+
   @Override
   public byte[] encrypt(byte[] message) throws CryptoException {
     this.initialize();
@@ -74,11 +85,17 @@ public class PbeAesCbcEncryptor extends PbeObject implements Encryptor {
     SecretKey key = null;
     try {
       byte[] salt = RandomUtils.nextBytes(this.saltSize, RandomHolder.instance);
-      key = toSecretKey(salt, "AES");
+      key = toSecretKey(salt, this.cipherOps.getAlgorithm());
 
       Cipher impl = getImpl();
-      byte[] iv = RandomUtils.nextBytes(impl.getBlockSize(), RandomHolder.instance);
-      impl.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv));
+      int ivSize = getIvSize(impl);
+      byte[] iv = RandomUtils.nextBytes(ivSize, RandomHolder.instance);
+
+      if (this.cipherOps.isMode("GCM")) {
+        impl.init(Cipher.ENCRYPT_MODE, key, new GCMParameterSpec(GCM_TAG_LENGTH, iv));
+      } else {
+        impl.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv));
+      }
 
       byte[] encMsg = impl.doFinal(message);
       return ArrayUtils.append(iv, salt, encMsg);
@@ -98,16 +115,19 @@ public class PbeAesCbcEncryptor extends PbeObject implements Encryptor {
     SecretKey key = null;
     try {
       Cipher impl = getImpl();
-      int blockSize = impl.getBlockSize();
-      Asserts.isTrue(message.length >= blockSize + this.saltSize, "message is invalid.");
+      int ivSize = getIvSize(impl);
+      Asserts.isTrue(message.length >= ivSize + this.saltSize, "message is invalid.");
 
-      byte[] iv = Arrays.copyOfRange(message, 0, blockSize);
-      byte[] salt = Arrays.copyOfRange(message, blockSize, blockSize + this.saltSize);
+      byte[] iv = Arrays.copyOfRange(message, 0, ivSize);
+      byte[] salt = Arrays.copyOfRange(message, ivSize, ivSize + this.saltSize);
+      key = toSecretKey(salt, this.cipherOps.getAlgorithm());
 
-      key = toSecretKey(salt, "AES");
-      impl.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
-
-      return impl.doFinal(message, blockSize + this.saltSize, message.length - blockSize - this.saltSize);
+      if (this.cipherOps.isMode("GCM")) {
+        impl.init(Cipher.DECRYPT_MODE, key, new GCMParameterSpec(GCM_TAG_LENGTH, iv));
+      } else {
+        impl.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
+      }
+      return impl.doFinal(message, ivSize + this.saltSize, message.length - ivSize - this.saltSize);
 
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
@@ -121,7 +141,7 @@ public class PbeAesCbcEncryptor extends PbeObject implements Encryptor {
     return this.transformation;
   }
 
-  public PbeAesCbcEncryptor setTransformation(String transformation) {
+  public PbeIvEncryptor setTransformation(String transformation) {
     this.assertNotInitialized();
     this.transformation = transformation;
     return this;
@@ -132,44 +152,44 @@ public class PbeAesCbcEncryptor extends PbeObject implements Encryptor {
     return this.provider;
   }
 
-  public PbeAesCbcEncryptor setProvider(String provider) {
+  public PbeIvEncryptor setProvider(String provider) {
     this.assertNotInitialized();
     this.provider = provider;
     return this;
   }
 
   @Override
-  public PbeAesCbcEncryptor setSaltSize(int saltSize) {
+  public PbeIvEncryptor setSaltSize(int saltSize) {
     super.setSaltSize(saltSize);
     return this;
   }
 
   @Override
-  public PbeAesCbcEncryptor setIterationCount(int iterationCount) {
+  public PbeIvEncryptor setIterationCount(int iterationCount) {
     super.setIterationCount(iterationCount);
     return this;
   }
 
   @Override
-  public PbeAesCbcEncryptor setKeySize(int keySize) {
+  public PbeIvEncryptor setKeySize(int keySize) {
     super.setKeySize(keySize);
     return this;
   }
 
   @Override
-  public PbeAesCbcEncryptor setPassword(char[] password) {
+  public PbeIvEncryptor setPassword(char[] password) {
     super.setPassword(password);
     return this;
   }
 
   @Override
-  public PbeAesCbcEncryptor setPassword(String passwordExpr) {
+  public PbeIvEncryptor setPassword(String passwordExpr) {
     super.setPassword(passwordExpr);
     return this;
   }
 
   @Override
-  public PbeAesCbcEncryptor setPbeSecretKeyGenerator(PbeSecretKeyGenerator pbeSecretKeyGenerator) {
+  public PbeIvEncryptor setPbeSecretKeyGenerator(PbeSecretKeyGenerator pbeSecretKeyGenerator) {
     super.setPbeSecretKeyGenerator(pbeSecretKeyGenerator);
     return this;
   }
