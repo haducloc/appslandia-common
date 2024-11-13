@@ -41,8 +41,8 @@ import com.appslandia.common.utils.RandomUtils;
  */
 public class PbeIvEncryptor extends PbeObject implements Encryptor {
 
-  private static final int GCM_IV_LENGTH = 12;
-  private static final int GCM_TAG_LENGTH = 128;
+  private static final int GCM_TAG_SIZE = 16;
+  private static final int GCM_IV_SIZE = 12;
 
   private String transformation, provider;
   private CipherOps cipherOps;
@@ -72,9 +72,13 @@ public class PbeIvEncryptor extends PbeObject implements Encryptor {
 
   protected int getIvSize(Cipher cipher) {
     if (this.cipherOps.isMode("GCM")) {
-      return GCM_IV_LENGTH;
+      return GCM_IV_SIZE;
     }
     return cipher.getBlockSize();
+  }
+
+  protected int getTagSize() {
+    return GCM_TAG_SIZE;
   }
 
   @Override
@@ -92,7 +96,7 @@ public class PbeIvEncryptor extends PbeObject implements Encryptor {
       byte[] iv = RandomUtils.nextBytes(ivSize, RandomHolder.instance);
 
       if (this.cipherOps.isMode("GCM")) {
-        impl.init(Cipher.ENCRYPT_MODE, key, new GCMParameterSpec(GCM_TAG_LENGTH, iv));
+        impl.init(Cipher.ENCRYPT_MODE, key, new GCMParameterSpec(getTagSize() * 8, iv));
       } else {
         impl.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv));
       }
@@ -123,7 +127,7 @@ public class PbeIvEncryptor extends PbeObject implements Encryptor {
       key = toSecretKey(salt, this.cipherOps.getAlgorithm());
 
       if (this.cipherOps.isMode("GCM")) {
-        impl.init(Cipher.DECRYPT_MODE, key, new GCMParameterSpec(GCM_TAG_LENGTH, iv));
+        impl.init(Cipher.DECRYPT_MODE, key, new GCMParameterSpec(getTagSize() * 8, iv));
       } else {
         impl.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
       }
