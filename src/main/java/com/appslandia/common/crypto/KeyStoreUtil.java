@@ -32,7 +32,6 @@ import java.security.KeyStore.Entry.Attribute;
 import java.security.KeyStore.ProtectionParameter;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Set;
@@ -43,7 +42,6 @@ import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ObjectUtils;
-import com.appslandia.common.utils.SYS;
 
 /**
  *
@@ -62,7 +60,6 @@ public class KeyStoreUtil extends InitializeObject {
   public static final String TYPE_PKCS12 = "PKCS12";
 
   private String type, provider;
-  private char[] password;
   private KeyStore impl;
 
   public KeyStoreUtil() {
@@ -93,40 +90,37 @@ public class KeyStoreUtil extends InitializeObject {
 
   @Override
   public void destroy() throws DestroyException {
-    CryptoUtils.clear(this.password);
   }
 
-  public void load(InputStream in) throws CryptoException, IOException {
+  public void load(InputStream in, char[] password) throws CryptoException, IOException {
     initialize();
-    Asserts.notNull(this.password);
 
     try {
-      this.impl.load(in, this.password);
+      this.impl.load(in, password);
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     }
   }
 
-  public void load(String fileName) throws CryptoException, IOException {
+  public void load(String fileName, char[] password) throws CryptoException, IOException {
     try (FileInputStream fis = new FileInputStream(fileName)) {
-      load(fis);
+      load(fis, password);
     }
   }
 
-  public void save(OutputStream out) throws CryptoException, IOException {
+  public void save(OutputStream out, char[] password) throws CryptoException, IOException {
     initialize();
-    Asserts.notNull(this.password);
 
     try {
-      this.impl.store(out, this.password);
+      this.impl.store(out, password);
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     }
   }
 
-  public void save(String fileName) throws CryptoException, IOException {
+  public void save(String fileName, char[] password) throws CryptoException, IOException {
     try (FileOutputStream fos = new FileOutputStream(fileName)) {
-      save(fos);
+      save(fos, password);
     }
   }
 
@@ -250,28 +244,6 @@ public class KeyStoreUtil extends InitializeObject {
   public KeyStoreUtil setProvider(String provider) {
     assertNotInitialized();
     this.provider = provider;
-    return this;
-  }
-
-  public KeyStoreUtil setPassword(char[] password) {
-    assertNotInitialized();
-    if (password != null) {
-      this.password = Arrays.copyOf(password, password.length);
-    }
-    return this;
-  }
-
-  public KeyStoreUtil setPassword(String passwordExpr) {
-    assertNotInitialized();
-
-    if (passwordExpr != null) {
-      String resolvedValue = SYS.resolve(passwordExpr);
-
-      if (resolvedValue == null) {
-        throw new IllegalArgumentException("Failed to resolve expression: " + passwordExpr);
-      }
-      this.password = resolvedValue.toCharArray();
-    }
     return this;
   }
 }
