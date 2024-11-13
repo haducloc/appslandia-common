@@ -62,6 +62,7 @@ public class DigesterImpl extends InitializeObject implements Digester {
     } else {
       impl = MessageDigest.getInstance(this.algorithm, this.provider);
     }
+    // impl.reset();
     return impl;
   }
 

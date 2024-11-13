@@ -57,6 +57,7 @@ public class MacSigner extends InitializeObject implements Digester {
     } else {
       impl = Mac.getInstance(this.algorithm, this.provider);
     }
+    // impl.reset();
     return impl;
   }
 
