@@ -99,7 +99,7 @@ public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> {
         (name) -> {
           AlgorithmParametersUtil<ECParameterSpec> impl = new AlgorithmParametersUtil<>("EC",
               this.ecKeyFactoryProvider);
-          impl.setParamSpec(ECParameterSpec.class);
+          impl.setParamSpecType(ECParameterSpec.class);
           impl.setAlgParamSpec(new ECGenParameterSpec(name));
 
           return impl;

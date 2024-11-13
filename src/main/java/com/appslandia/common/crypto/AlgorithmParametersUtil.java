@@ -35,7 +35,7 @@ import com.appslandia.common.utils.Asserts;
 public class AlgorithmParametersUtil<T extends AlgorithmParameterSpec> extends InitializeObject {
 
   private String algorithm, provider;
-  private Class<T> paramSpec;
+  private Class<T> paramSpecType;
   private AlgorithmParameterSpec algParamSpec;
 
   public AlgorithmParametersUtil() {
@@ -53,7 +53,7 @@ public class AlgorithmParametersUtil<T extends AlgorithmParameterSpec> extends I
   @Override
   protected void init() throws Exception {
     Asserts.notNull(this.algorithm, "algorithm is required.");
-    Asserts.notNull(this.paramSpec, "paramSpec is required.");
+    Asserts.notNull(this.paramSpecType, "paramSpecType is required.");
   }
 
   protected AlgorithmParameters getImpl() throws GeneralSecurityException {
@@ -73,7 +73,7 @@ public class AlgorithmParametersUtil<T extends AlgorithmParameterSpec> extends I
       if (this.algParamSpec != null) {
         impl.init(this.algParamSpec);
       }
-      return impl.getParameterSpec(this.paramSpec);
+      return impl.getParameterSpec(this.paramSpecType);
 
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
@@ -102,9 +102,9 @@ public class AlgorithmParametersUtil<T extends AlgorithmParameterSpec> extends I
     return this;
   }
 
-  public AlgorithmParametersUtil<T> setParamSpec(Class<T> paramSpec) {
+  public AlgorithmParametersUtil<T> setParamSpecType(Class<T> paramSpecType) {
     assertNotInitialized();
-    this.paramSpec = paramSpec;
+    this.paramSpecType = paramSpecType;
     return this;
   }
 
