@@ -86,12 +86,12 @@ public class PasswordDigester extends TextDigester {
     Asserts.notNull(password, "password is required.");
     Asserts.notNull(digested, "digested is required.");
 
-    byte[] dg = this.baseEncoder.decode(digested);
-    Asserts.isTrue(dg.length > this.saltSize, "digested is invalid.");
+    byte[] digestedBytes = this.baseEncoder.decode(digested);
+    Asserts.isTrue(digestedBytes.length > this.saltSize, "digested is invalid.");
 
     byte[] salt = new byte[this.saltSize];
-    byte[] secKey = new byte[dg.length - this.saltSize];
-    ArrayUtils.copy(dg, salt, secKey);
+    byte[] secKey = new byte[digestedBytes.length - this.saltSize];
+    ArrayUtils.copy(digestedBytes, salt, secKey);
 
     char[] pwdChars = password.toCharArray();
     try {
