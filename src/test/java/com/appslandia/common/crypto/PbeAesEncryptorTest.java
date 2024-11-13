@@ -32,11 +32,11 @@ import com.appslandia.common.base.ThreadSafeTester;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class PbeEncryptorTest {
+public class PbeAesEncryptorTest {
 
   @Test
-  public void test() {
-    PbeEncryptor impl = new PbeEncryptor();
+  public void test_CBC() {
+    PbeAesEncryptor impl = new PbeAesEncryptor();
     impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
     impl.setPassword("password".toCharArray());
 
@@ -51,10 +51,64 @@ public class PbeEncryptorTest {
       Assertions.fail(ex.getMessage());
     }
   }
-  
+
   @Test
-  public void test_ecb() {
-    PbeEncryptor impl = new PbeEncryptor();
+  public void test_CFB() {
+    PbeAesEncryptor impl = new PbeAesEncryptor();
+    impl.setTransformation("AES/CFB/PKCS5Padding").setKeySize(16);
+    impl.setPassword("password".toCharArray());
+
+    try {
+      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+      byte[] encrypted = impl.encrypt(data);
+
+      byte[] decrypted = impl.decrypt(encrypted);
+      Assertions.assertArrayEquals(data, decrypted);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
+
+  @Test
+  public void test_CTR() {
+    PbeAesEncryptor impl = new PbeAesEncryptor();
+    impl.setTransformation("AES/CTR/NoPadding").setKeySize(16);
+    impl.setPassword("password".toCharArray());
+
+    try {
+      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+      byte[] encrypted = impl.encrypt(data);
+
+      byte[] decrypted = impl.decrypt(encrypted);
+      Assertions.assertArrayEquals(data, decrypted);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
+
+  @Test
+  public void test_OFB() {
+    PbeAesEncryptor impl = new PbeAesEncryptor();
+    impl.setTransformation("AES/OFB/PKCS5Padding").setKeySize(16);
+    impl.setPassword("password".toCharArray());
+
+    try {
+      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+      byte[] encrypted = impl.encrypt(data);
+
+      byte[] decrypted = impl.decrypt(encrypted);
+      Assertions.assertArrayEquals(data, decrypted);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
+
+  @Test
+  public void test_ECB() {
+    PbeAesEncryptor impl = new PbeAesEncryptor();
     impl.setTransformation("AES/ECB/PKCS5Padding").setKeySize(16);
     impl.setPassword("password".toCharArray());
 
@@ -71,8 +125,8 @@ public class PbeEncryptorTest {
   }
 
   @Test
-  public void test_gcm() {
-    PbeEncryptor impl = new PbeEncryptor();
+  public void test_GCM() {
+    PbeAesEncryptor impl = new PbeAesEncryptor();
     impl.setTransformation("AES/GCM/NoPadding").setKeySize(16);
     impl.setPassword("password".toCharArray());
 
@@ -90,7 +144,7 @@ public class PbeEncryptorTest {
 
   @Test
   public void test_threadSafe() {
-    final PbeEncryptor impl = new PbeEncryptor();
+    final PbeAesEncryptor impl = new PbeAesEncryptor();
     impl.setTransformation("AES/CBC/PKCS5Padding").setKeySize(16);
     impl.setPassword("password".toCharArray());
 

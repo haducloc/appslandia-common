@@ -38,7 +38,7 @@ import com.appslandia.common.utils.RandomUtils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class PbeEncryptor extends PbeObject implements Encryptor {
+public class PbeAesEncryptor extends PbeObject implements Encryptor {
 
   protected static final int GCM_IV_SIZE = 12;
   protected static final int GCM_TAG_SIZE = 16;
@@ -52,12 +52,18 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
 
   @Override
   protected void init() throws Exception {
+    // Defaults
+    if (this.keySize == 0) {
+      this.keySize = 32;
+    }
     super.init();
-    Asserts.notNull(this.transformation, "transformation is required.");
 
+    Asserts.notNull(this.transformation, "transformation is required.");
     this.cipherOps = new CipherOps(this.transformation);
-    Asserts.isTrue(this.cipherOps.isMode("CBC", "CFB", "OFB", "CTR", "ECB", "GCM"),
-        "CBC|CFB|OFB|CTR|ECB|GCM mode is required.");
+
+    Asserts.isTrue(this.cipherOps.isAlgorithm("AES"), "AES algorithm is required.");
+    Asserts.isTrue(this.cipherOps.isMode("CBC", "CFB", "CTR", "OFB", "ECB", "GCM"),
+        "CBC|CFB|CTR|OFB|ECB|GCM mode is required.");
   }
 
   protected Cipher getImpl() throws GeneralSecurityException {
@@ -176,7 +182,7 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
     return this.transformation;
   }
 
-  public PbeEncryptor setTransformation(String transformation) {
+  public PbeAesEncryptor setTransformation(String transformation) {
     this.assertNotInitialized();
     this.transformation = transformation;
     return this;
@@ -187,44 +193,44 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
     return this.provider;
   }
 
-  public PbeEncryptor setProvider(String provider) {
+  public PbeAesEncryptor setProvider(String provider) {
     this.assertNotInitialized();
     this.provider = provider;
     return this;
   }
 
   @Override
-  public PbeEncryptor setSaltSize(int saltSize) {
+  public PbeAesEncryptor setSaltSize(int saltSize) {
     super.setSaltSize(saltSize);
     return this;
   }
 
   @Override
-  public PbeEncryptor setIterationCount(int iterationCount) {
+  public PbeAesEncryptor setIterationCount(int iterationCount) {
     super.setIterationCount(iterationCount);
     return this;
   }
 
   @Override
-  public PbeEncryptor setKeySize(int keySize) {
+  public PbeAesEncryptor setKeySize(int keySize) {
     super.setKeySize(keySize);
     return this;
   }
 
   @Override
-  public PbeEncryptor setPassword(char[] password) {
+  public PbeAesEncryptor setPassword(char[] password) {
     super.setPassword(password);
     return this;
   }
 
   @Override
-  public PbeEncryptor setPassword(String passwordExpr) {
+  public PbeAesEncryptor setPassword(String passwordExpr) {
     super.setPassword(passwordExpr);
     return this;
   }
 
   @Override
-  public PbeEncryptor setPbeSecretKeyGenerator(PbeSecretKeyGenerator pbeSecretKeyGenerator) {
+  public PbeAesEncryptor setPbeSecretKeyGenerator(PbeSecretKeyGenerator pbeSecretKeyGenerator) {
     super.setPbeSecretKeyGenerator(pbeSecretKeyGenerator);
     return this;
   }
