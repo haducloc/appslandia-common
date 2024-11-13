@@ -28,8 +28,6 @@ import java.security.spec.ECParameterSpec;
 import java.security.spec.ECPoint;
 import java.security.spec.ECPublicKeySpec;
 import java.security.spec.EllipticCurve;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import com.appslandia.common.crypto.AlgorithmParametersUtil;
 import com.appslandia.common.crypto.CryptoException;
@@ -46,8 +44,8 @@ import com.appslandia.common.utils.STR;
 public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> {
 
   private String ecKeyFactoryProvider;
+  private String ecAlgParamProvider;
 
-  final ConcurrentMap<String, AlgorithmParametersUtil<ECParameterSpec>> algorithmParametersUtils = new ConcurrentHashMap<>();
   private KeyFactoryUtil keyFactoryUtil;
 
   public EcPublicKeyJwkConverter() {
@@ -94,26 +92,18 @@ public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> {
     String x = Asserts.notNull((String) jwk.get("x"), "x is required.");
     String y = Asserts.notNull((String) jwk.get("y"), "y is required.");
 
-    // AlgorithmParametersUtil
-    AlgorithmParametersUtil<ECParameterSpec> paramSpecUtil = this.algorithmParametersUtils.computeIfAbsent(stdName,
-        (name) -> {
-          AlgorithmParametersUtil<ECParameterSpec> impl = new AlgorithmParametersUtil<>("EC",
-              this.ecKeyFactoryProvider);
-          impl.setParamSpecType(ECParameterSpec.class);
-          impl.setAlgParamSpec(new ECGenParameterSpec(name));
-
-          return impl;
-        });
-
-    // ECParameterSpec
-    ECParameterSpec ecSpec = paramSpecUtil.getParameterSpec();
-
     // ecPoint
     byte[] xBytes = JoseUtils.getJoseBase64().decode(x);
     byte[] yBytes = JoseUtils.getJoseBase64().decode(y);
-
     ECPoint ecPoint = new ECPoint(new BigInteger(xBytes), new BigInteger(yBytes));
-    ECPublicKeySpec pubKeySpec = new ECPublicKeySpec(ecPoint, ecSpec);
+
+    // ECParameterSpec
+    AlgorithmParametersUtil<ECParameterSpec> algParamUtil = new AlgorithmParametersUtil<>("EC",
+        this.ecAlgParamProvider);
+    algParamUtil.setAlgParamSpec(new ECGenParameterSpec(stdName));
+
+    ECParameterSpec ecParamSpec = algParamUtil.getParameterSpec(ECParameterSpec.class);
+    ECPublicKeySpec pubKeySpec = new ECPublicKeySpec(ecPoint, ecParamSpec);
 
     PublicKey pk = this.keyFactoryUtil.toPublicKey(pubKeySpec);
     return (ECPublicKey) pk;
@@ -122,6 +112,12 @@ public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> {
   public EcPublicKeyJwkConverter setEcKeyFactoryProvider(String ecKeyFactoryProvider) {
     assertNotInitialized();
     this.ecKeyFactoryProvider = ecKeyFactoryProvider;
+    return this;
+  }
+
+  public EcPublicKeyJwkConverter setEcAlgParamProvider(String ecAlgParamProvider) {
+    assertNotInitialized();
+    this.ecAlgParamProvider = ecAlgParamProvider;
     return this;
   }
 
