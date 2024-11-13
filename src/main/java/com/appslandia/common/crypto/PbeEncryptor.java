@@ -40,8 +40,8 @@ import com.appslandia.common.utils.RandomUtils;
  */
 public class PbeEncryptor extends PbeObject implements Encryptor {
 
-  protected static final int GCM_TAG_SIZE = 16;
   protected static final int GCM_IV_SIZE = 12;
+  protected static final int GCM_TAG_SIZE = 16;
 
   protected String transformation, provider;
   private CipherOps cipherOps;
@@ -75,9 +75,13 @@ public class PbeEncryptor extends PbeObject implements Encryptor {
       return -1;
     }
     if (this.cipherOps.isMode("GCM")) {
-      return GCM_IV_SIZE;
+      return getIvSize();
     }
     return cipher.getBlockSize();
+  }
+
+  protected int getIvSize() {
+    return GCM_IV_SIZE;
   }
 
   protected int getTagSize() {
