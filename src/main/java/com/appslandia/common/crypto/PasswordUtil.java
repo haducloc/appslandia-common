@@ -20,13 +20,12 @@
 
 package com.appslandia.common.crypto;
 
-import java.security.SecureRandom;
-import java.util.Random;
 import java.util.regex.Pattern;
 
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CharUtils;
 import com.appslandia.common.utils.RandomUtils;
+import com.appslandia.common.utils.SecureRand;
 
 /**
  *
@@ -51,16 +50,12 @@ public class PasswordUtil {
   private static final char[][] ALPHABET = new char[][] { ALPHABET_DIGITS, ALPHABET_LOWER, ALPHABET_UPPER,
       ALPHABET_SYMBOLS };
 
-  private static final class RandomHolder {
-    static final Random instance = new SecureRandom();
-  }
-
   public static char[] generatePassword(int minLength, int maxLength) {
     Asserts.isTrue(minLength <= maxLength, "minLength <= maxLength");
     Asserts.isTrue(minLength >= 8, "minLength >= 8");
 
-    int length = RandomUtils.nextInt(minLength, maxLength, RandomHolder.instance);
-    return CharUtils.randomChars(length, ALPHABET, RandomHolder.instance);
+    int length = RandomUtils.nextInt(minLength, maxLength, SecureRand.getInstance());
+    return CharUtils.randomChars(length, ALPHABET, SecureRand.getInstance());
   }
 
   public static boolean isValid(String password) {

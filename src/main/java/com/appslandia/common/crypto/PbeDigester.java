@@ -21,8 +21,6 @@
 package com.appslandia.common.crypto;
 
 import java.security.GeneralSecurityException;
-import java.security.SecureRandom;
-import java.util.Random;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
@@ -30,6 +28,7 @@ import javax.crypto.SecretKey;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.RandomUtils;
+import com.appslandia.common.utils.SecureRand;
 
 /**
  *
@@ -38,10 +37,6 @@ import com.appslandia.common.utils.RandomUtils;
  */
 public class PbeDigester extends PbeObject implements Digester {
   private String algorithm, provider;
-
-  private static final class RandomHolder {
-    static final Random instance = new SecureRandom();
-  }
 
   @Override
   protected void init() throws Exception {
@@ -65,7 +60,7 @@ public class PbeDigester extends PbeObject implements Digester {
     this.initialize();
     Asserts.notNull(message, "message is required.");
 
-    byte[] salt = RandomUtils.nextBytes(this.saltSize, RandomHolder.instance);
+    byte[] salt = RandomUtils.nextBytes(this.saltSize, SecureRand.getInstance());
     SecretKey key = toSecretKey(salt, this.algorithm);
     try {
       Mac impl = this.getImpl();

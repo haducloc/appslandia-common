@@ -21,8 +21,6 @@
 package com.appslandia.common.crypto;
 
 import java.security.GeneralSecurityException;
-import java.security.SecureRandom;
-import java.util.Random;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -35,6 +33,7 @@ import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.RandomUtils;
+import com.appslandia.common.utils.SecureRand;
 
 /**
  *
@@ -51,10 +50,6 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
 
   protected byte[] secretKey;
   protected SecretKey key;
-
-  protected static final class RandomHolder {
-    static final Random instance = new SecureRandom();
-  }
 
   @Override
   protected void init() throws Exception {
@@ -117,7 +112,7 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
       if (ivSize <= 0) {
         impl.init(Cipher.ENCRYPT_MODE, this.key);
       } else {
-        iv = RandomUtils.nextBytes(ivSize, RandomHolder.instance);
+        iv = RandomUtils.nextBytes(ivSize, SecureRand.getInstance());
 
         if (this.cipherOps.isMode("GCM")) {
           impl.init(Cipher.ENCRYPT_MODE, this.key, new GCMParameterSpec(getGcmTagSize() * 8, iv));

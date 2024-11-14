@@ -21,8 +21,6 @@
 package com.appslandia.common.crypto;
 
 import java.security.GeneralSecurityException;
-import java.security.SecureRandom;
-import java.util.Random;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -32,6 +30,7 @@ import javax.crypto.spec.IvParameterSpec;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.RandomUtils;
+import com.appslandia.common.utils.SecureRand;
 
 /**
  *
@@ -46,10 +45,6 @@ public class PbeAesEncryptor extends PbeObject implements Encryptor {
 
   protected String transformation, provider;
   private CipherOps cipherOps;
-
-  protected static final class RandomHolder {
-    static final Random instance = new SecureRandom();
-  }
 
   @Override
   protected void init() throws Exception {
@@ -105,13 +100,13 @@ public class PbeAesEncryptor extends PbeObject implements Encryptor {
       int ivSize = getIvSize(impl);
       byte[] iv = null;
 
-      byte[] salt = RandomUtils.nextBytes(this.saltSize, RandomHolder.instance);
+      byte[] salt = RandomUtils.nextBytes(this.saltSize, SecureRand.getInstance());
       key = toSecretKey(salt, this.cipherOps.getAlgorithm());
 
       if (ivSize <= 0) {
         impl.init(Cipher.ENCRYPT_MODE, key);
       } else {
-        iv = RandomUtils.nextBytes(ivSize, RandomHolder.instance);
+        iv = RandomUtils.nextBytes(ivSize, SecureRand.getInstance());
 
         if (this.cipherOps.isMode("GCM")) {
           impl.init(Cipher.ENCRYPT_MODE, key, new GCMParameterSpec(getGcmTagSize() * 8, iv));

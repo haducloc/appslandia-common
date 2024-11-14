@@ -20,12 +20,11 @@
 
 package com.appslandia.common.base;
 
-import java.security.SecureRandom;
-import java.util.Random;
 import java.util.regex.Pattern;
 
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CharUtils;
+import com.appslandia.common.utils.SecureRand;
 import com.appslandia.common.utils.ValueUtils;
 
 /**
@@ -46,10 +45,6 @@ public class WordsGenerator extends InitializeObject implements TextGenerator {
 
   private int length;
   private Alphabet alphabet;
-
-  private static final class RandomHolder {
-    static final Random instance = new SecureRandom();
-  }
 
   public enum Alphabet {
     DIGITS, AZ, AZ_UPPER, AZ_LOWER, DIGITS_AZ_UPPER, DIGITS_AZ_LOWER, DIGITS_AZ
@@ -85,7 +80,7 @@ public class WordsGenerator extends InitializeObject implements TextGenerator {
   }
 
   private String generate(char[][] sources) {
-    char[] rdChars = CharUtils.randomChars(this.length, sources, RandomHolder.instance);
+    char[] rdChars = CharUtils.randomChars(this.length, sources, SecureRand.getInstance());
     return new String(rdChars, 0, this.length);
   }
 

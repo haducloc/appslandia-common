@@ -21,7 +21,6 @@
 package com.appslandia.common.geo;
 
 import java.util.Locale;
-import java.util.Random;
 
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
@@ -97,14 +96,5 @@ public enum Direction {
     default:
       throw new IllegalArgumentException(STR.fmt("symbol '{}' is invalid.", symbol));
     }
-  }
-
-  private static final class RandomHolder {
-    static final Random instance = new Random();
-  }
-
-  public static Direction random() {
-    int ordinial = RandomHolder.instance.nextInt(4);
-    return DIRECTIONS[ordinial];
   }
 }

@@ -21,8 +21,6 @@
 package com.appslandia.common.crypto;
 
 import java.security.GeneralSecurityException;
-import java.security.SecureRandom;
-import java.util.Random;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -35,6 +33,7 @@ import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.RandomUtils;
+import com.appslandia.common.utils.SecureRand;
 
 /**
  *
@@ -50,10 +49,6 @@ public class ChaCha20Encryptor extends InitializeObject implements Encryptor {
 
   protected byte[] secretKey;
   protected SecretKey key;
-
-  protected static final class RandomHolder {
-    static final Random instance = new SecureRandom();
-  }
 
   @Override
   protected void init() throws Exception {
@@ -91,7 +86,7 @@ public class ChaCha20Encryptor extends InitializeObject implements Encryptor {
 
     try {
       Cipher impl = getImpl();
-      byte[] iv = RandomUtils.nextBytes(IV_SIZE, RandomHolder.instance);
+      byte[] iv = RandomUtils.nextBytes(IV_SIZE, SecureRand.getInstance());
 
       if (this.cipherOps.isAlgorithm("ChaCha20")) {
         impl.init(Cipher.ENCRYPT_MODE, key, new ChaCha20ParameterSpec(iv, 1));

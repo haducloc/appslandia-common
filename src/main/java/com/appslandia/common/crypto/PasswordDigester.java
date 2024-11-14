@@ -21,14 +21,13 @@
 package com.appslandia.common.crypto;
 
 import java.nio.charset.Charset;
-import java.security.SecureRandom;
 import java.util.Arrays;
-import java.util.Random;
 
 import com.appslandia.common.base.BaseEncoder;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.RandomUtils;
+import com.appslandia.common.utils.SecureRand;
 import com.appslandia.common.utils.ValueUtils;
 
 /**
@@ -43,10 +42,6 @@ public class PasswordDigester extends TextDigester {
   private int keySize;
 
   private PbeSecretKeyGenerator pbeSecretKeyGenerator;
-
-  private static final class RandomHolder {
-    static final Random instance = new SecureRandom();
-  }
 
   @Override
   protected void init() throws Exception {
@@ -67,7 +62,7 @@ public class PasswordDigester extends TextDigester {
     this.initialize();
     Asserts.notNull(password, "password is required.");
 
-    byte[] salt = RandomUtils.nextBytes(this.saltSize, RandomHolder.instance);
+    byte[] salt = RandomUtils.nextBytes(this.saltSize, SecureRand.getInstance());
     char[] pwdChars = password.toCharArray();
     try {
       byte[] secKey = this.pbeSecretKeyGenerator.generate(pwdChars, salt, this.iterationCount, this.keySize);

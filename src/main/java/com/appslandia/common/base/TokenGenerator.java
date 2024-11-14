@@ -20,13 +20,12 @@
 
 package com.appslandia.common.base;
 
-import java.security.SecureRandom;
-import java.util.Random;
 import java.util.regex.Pattern;
 
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.MathUtils;
 import com.appslandia.common.utils.RandomUtils;
+import com.appslandia.common.utils.SecureRand;
 
 /**
  *
@@ -38,10 +37,6 @@ public class TokenGenerator extends InitializeObject implements TextGenerator {
   private static final Pattern BASE64_URL_NP_PATTERN = Pattern.compile("[a-zA-Z\\d-_]+");
 
   private int length = 32;
-
-  private static final class RandomHolder {
-    static final Random instance = new SecureRandom();
-  }
 
   public TokenGenerator() {
   }
@@ -59,7 +54,7 @@ public class TokenGenerator extends InitializeObject implements TextGenerator {
   public String generate() {
     initialize();
     int len = MathUtils.toNearestMultipleOf(4, this.length);
-    byte[] bytes = RandomUtils.nextBytes((len * 3) / 4, RandomHolder.instance);
+    byte[] bytes = RandomUtils.nextBytes((len * 3) / 4, SecureRand.getInstance());
 
     String base64 = BaseEncoder.BASE64_URL_NP.encode(bytes);
     return (base64.length() == this.length) ? base64 : base64.substring(0, this.length);

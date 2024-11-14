@@ -21,8 +21,6 @@
 package com.appslandia.common.crypto;
 
 import java.security.GeneralSecurityException;
-import java.security.SecureRandom;
-import java.util.Random;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -32,6 +30,7 @@ import javax.crypto.spec.IvParameterSpec;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.RandomUtils;
+import com.appslandia.common.utils.SecureRand;
 
 /**
  *
@@ -45,10 +44,6 @@ public class PbeChaCha20Encryptor extends PbeObject implements Encryptor {
 
   protected String transformation, provider;
   private CipherOps cipherOps;
-
-  protected static final class RandomHolder {
-    static final Random instance = new SecureRandom();
-  }
 
   @Override
   protected void init() throws Exception {
@@ -79,11 +74,11 @@ public class PbeChaCha20Encryptor extends PbeObject implements Encryptor {
 
     SecretKey key = null;
     try {
-      byte[] salt = RandomUtils.nextBytes(this.saltSize, RandomHolder.instance);
+      byte[] salt = RandomUtils.nextBytes(this.saltSize, SecureRand.getInstance());
       key = toSecretKey(salt, this.cipherOps.getAlgorithm());
       Cipher impl = getImpl();
 
-      byte[] iv = RandomUtils.nextBytes(IV_SIZE, RandomHolder.instance);
+      byte[] iv = RandomUtils.nextBytes(IV_SIZE, SecureRand.getInstance());
       if (this.cipherOps.isAlgorithm("ChaCha20")) {
         impl.init(Cipher.ENCRYPT_MODE, key, new ChaCha20ParameterSpec(iv, 1));
       } else {
