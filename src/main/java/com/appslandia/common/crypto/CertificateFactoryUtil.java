@@ -83,12 +83,7 @@ public class CertificateFactoryUtil extends InitializeObject {
   public X509Certificate toCertificate(String certInPem) throws CryptoException {
     this.initialize();
     byte[] der = PKIUtils.toDerEncoded(certInPem);
-    try {
-      return (X509Certificate) this.getImpl().generateCertificate(new ByteArrayInputStream(der));
-
-    } catch (GeneralSecurityException ex) {
-      throw new CryptoException(ex);
-    }
+    return toCertificate(new ByteArrayInputStream(der));
   }
 
   public String getType() {
