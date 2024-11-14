@@ -32,11 +32,11 @@ import com.appslandia.common.base.ThreadSafeTester;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class ChaCha20EncryptorTest {
+public class PbeChaCha20EncryptorTest {
 
   @Test
   public void test() {
-    ChaCha20Encryptor impl = new ChaCha20Encryptor();
+    PbeChaCha20Encryptor impl = new PbeChaCha20Encryptor();
     impl.setTransformation("ChaCha20");
     impl.setPassword("password".toCharArray());
 
@@ -54,7 +54,7 @@ public class ChaCha20EncryptorTest {
   
   @Test
   public void test_Poly1305() {
-    ChaCha20Encryptor impl = new ChaCha20Encryptor();
+    PbeChaCha20Encryptor impl = new PbeChaCha20Encryptor();
     impl.setTransformation("ChaCha20-Poly1305");
     impl.setPassword("password".toCharArray());
 
@@ -72,7 +72,7 @@ public class ChaCha20EncryptorTest {
 
   @Test
   public void test_threadSafe() {
-    final ChaCha20Encryptor impl = new ChaCha20Encryptor();
+    final PbeChaCha20Encryptor impl = new PbeChaCha20Encryptor();
     impl.setTransformation("ChaCha20");
     impl.setPassword("password".toCharArray());
 

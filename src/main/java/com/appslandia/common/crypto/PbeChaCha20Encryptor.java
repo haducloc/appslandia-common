@@ -38,7 +38,7 @@ import com.appslandia.common.utils.RandomUtils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class ChaCha20Encryptor extends PbeObject implements Encryptor {
+public class PbeChaCha20Encryptor extends PbeObject implements Encryptor {
 
   protected static final int IV_SIZE = 12;
   protected static final int KEY_SIZE = 32;
@@ -135,7 +135,7 @@ public class ChaCha20Encryptor extends PbeObject implements Encryptor {
     return this.transformation;
   }
 
-  public ChaCha20Encryptor setTransformation(String transformation) {
+  public PbeChaCha20Encryptor setTransformation(String transformation) {
     this.assertNotInitialized();
     this.transformation = transformation;
     return this;
@@ -146,43 +146,43 @@ public class ChaCha20Encryptor extends PbeObject implements Encryptor {
     return this.provider;
   }
 
-  public ChaCha20Encryptor setProvider(String provider) {
+  public PbeChaCha20Encryptor setProvider(String provider) {
     this.assertNotInitialized();
     this.provider = provider;
     return this;
   }
 
   @Override
-  public ChaCha20Encryptor setSaltSize(int saltSize) {
+  public PbeChaCha20Encryptor setSaltSize(int saltSize) {
     super.setSaltSize(saltSize);
     return this;
   }
 
   @Override
-  public ChaCha20Encryptor setIterationCount(int iterationCount) {
+  public PbeChaCha20Encryptor setIterationCount(int iterationCount) {
     super.setIterationCount(iterationCount);
     return this;
   }
 
   @Override
-  public ChaCha20Encryptor setKeySize(int keySize) {
+  public PbeChaCha20Encryptor setKeySize(int keySize) {
     throw new UnsupportedOperationException("ChaCha20Encryptor.setKeySize(int keySize)");
   }
 
   @Override
-  public ChaCha20Encryptor setPassword(char[] password) {
+  public PbeChaCha20Encryptor setPassword(char[] password) {
     super.setPassword(password);
     return this;
   }
 
   @Override
-  public ChaCha20Encryptor setPassword(String passwordExpr) {
+  public PbeChaCha20Encryptor setPassword(String passwordExpr) {
     super.setPassword(passwordExpr);
     return this;
   }
 
   @Override
-  public ChaCha20Encryptor setPbeSecretKeyGenerator(PbeSecretKeyGenerator pbeSecretKeyGenerator) {
+  public PbeChaCha20Encryptor setPbeSecretKeyGenerator(PbeSecretKeyGenerator pbeSecretKeyGenerator) {
     super.setPbeSecretKeyGenerator(pbeSecretKeyGenerator);
     return this;
   }
