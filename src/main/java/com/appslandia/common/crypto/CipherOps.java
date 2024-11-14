@@ -21,6 +21,7 @@
 package com.appslandia.common.crypto;
 
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
@@ -40,16 +41,16 @@ public class CipherOps {
     Asserts.notNull(transformation);
 
     String[] cipherOps = transformation.split("/");
-    Asserts.isTrue(cipherOps.length == 3,
-        "The transformation is invalid. The algorithm, mode, and padding must be explicitly provided.");
+    Asserts.isTrue(cipherOps.length >= 1 && cipherOps.length <= 3, "transformation is invalid.");
 
     this.algorithm = cipherOps[0];
-    this.mode = cipherOps[1];
-    this.padding = cipherOps[2];
+    this.mode = (cipherOps.length >= 2) ? cipherOps[1] : null;
+    this.padding = (cipherOps.length == 3) ? cipherOps[2] : null;
   }
 
   public boolean isMode(String... modes) {
-    return Arrays.stream(modes).anyMatch(m -> this.mode.equalsIgnoreCase(m));
+    return Arrays.stream(modes).anyMatch(m -> m.equalsIgnoreCase(this.mode)
+        || Pattern.compile(m, Pattern.CASE_INSENSITIVE).matcher(this.mode).matches());
   }
 
   public boolean isAlgorithm(String algorithm) {
@@ -70,6 +71,12 @@ public class CipherOps {
 
   @Override
   public String toString() {
-    return STR.fmt("{}/{}/{}", this.algorithm, this.mode, this.padding);
+    if (this.padding != null) {
+      return STR.fmt("{}/{}/{}", this.algorithm, this.mode, this.padding);
+    }
+    if (this.mode != null) {
+      return STR.fmt("{}/{}", this.algorithm, this.mode);
+    }
+    return this.algorithm;
   }
 }

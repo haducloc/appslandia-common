@@ -36,8 +36,6 @@ import com.appslandia.common.utils.ValueUtils;
  */
 public class PbeSecretKeyGenerator extends InitializeObject {
 
-  public static final PbeSecretKeyGenerator PBKDF2_HMAC_SHA512 = new PbeSecretKeyGenerator("PBKDF2WithHmacSHA512");
-
   private String algorithm, provider;
 
   public PbeSecretKeyGenerator() {
@@ -54,8 +52,7 @@ public class PbeSecretKeyGenerator extends InitializeObject {
 
   @Override
   protected void init() throws Exception {
-    // algorithm
-    this.algorithm = ValueUtils.valueOrAlt(this.algorithm, "PBKDF2WithHmacSHA512");
+    this.algorithm = ValueUtils.valueOrAlt(this.algorithm, "PBKDF2WithHmacSHA256");
   }
 
   protected SecretKeyFactory getImpl() throws GeneralSecurityException {
