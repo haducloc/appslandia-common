@@ -21,24 +21,25 @@
 package com.appslandia.common.crypto;
 
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import com.appslandia.common.base.ThreadSafeTester;
+import com.appslandia.common.utils.RandomUtils;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class PbeChaCha20EncryptorTest {
+public class AesEncryptorTest {
 
   @Test
-  public void test() {
-    PbeChaCha20Encryptor impl = new PbeChaCha20Encryptor();
-    impl.setTransformation("ChaCha20");
-    impl.setPassword("password".toCharArray());
+  public void test_CBC() {
+    AesEncryptor impl = new AesEncryptor();
+    impl.setTransformation("AES/CBC/PKCS5Padding").setSecretKey(RandomUtils.nextBytes(16, ThreadLocalRandom.current()));
 
     try {
       byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -53,10 +54,77 @@ public class PbeChaCha20EncryptorTest {
   }
 
   @Test
-  public void test_Poly1305() {
-    PbeChaCha20Encryptor impl = new PbeChaCha20Encryptor();
-    impl.setTransformation("ChaCha20-Poly1305");
-    impl.setPassword("password".toCharArray());
+  public void test_CFB() {
+    AesEncryptor impl = new AesEncryptor();
+    impl.setTransformation("AES/CFB/PKCS5Padding").setSecretKey(RandomUtils.nextBytes(16, ThreadLocalRandom.current()));
+
+    try {
+      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+      byte[] encrypted = impl.encrypt(data);
+
+      byte[] decrypted = impl.decrypt(encrypted);
+      Assertions.assertArrayEquals(data, decrypted);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
+
+  @Test
+  public void test_CTR() {
+    AesEncryptor impl = new AesEncryptor();
+    impl.setTransformation("AES/CTR/NoPadding").setSecretKey(RandomUtils.nextBytes(16, ThreadLocalRandom.current()));
+
+    try {
+      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+      byte[] encrypted = impl.encrypt(data);
+
+      byte[] decrypted = impl.decrypt(encrypted);
+      Assertions.assertArrayEquals(data, decrypted);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
+
+  @Test
+  public void test_OFB() {
+    AesEncryptor impl = new AesEncryptor();
+    impl.setTransformation("AES/OFB/PKCS5Padding").setSecretKey(RandomUtils.nextBytes(16, ThreadLocalRandom.current()));
+
+    try {
+      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+      byte[] encrypted = impl.encrypt(data);
+
+      byte[] decrypted = impl.decrypt(encrypted);
+      Assertions.assertArrayEquals(data, decrypted);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
+
+  @Test
+  public void test_ECB() {
+    AesEncryptor impl = new AesEncryptor();
+    impl.setTransformation("AES/ECB/PKCS5Padding").setSecretKey(RandomUtils.nextBytes(16, ThreadLocalRandom.current()));
+
+    try {
+      byte[] data = "data".getBytes(StandardCharsets.UTF_8);
+      byte[] encrypted = impl.encrypt(data);
+
+      byte[] decrypted = impl.decrypt(encrypted);
+      Assertions.assertArrayEquals(data, decrypted);
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
+
+  @Test
+  public void test_GCM() {
+    AesEncryptor impl = new AesEncryptor();
+    impl.setTransformation("AES/GCM/NoPadding").setSecretKey(RandomUtils.nextBytes(16, ThreadLocalRandom.current()));
 
     try {
       byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -72,9 +140,8 @@ public class PbeChaCha20EncryptorTest {
 
   @Test
   public void test_threadSafe() {
-    final PbeChaCha20Encryptor impl = new PbeChaCha20Encryptor();
-    impl.setTransformation("ChaCha20");
-    impl.setPassword("password".toCharArray());
+    final AesEncryptor impl = new AesEncryptor();
+    impl.setTransformation("AES/CBC/PKCS5Padding").setSecretKey(RandomUtils.nextBytes(16, ThreadLocalRandom.current()));
 
     new ThreadSafeTester() {
 

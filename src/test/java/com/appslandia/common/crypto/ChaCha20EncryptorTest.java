@@ -21,24 +21,26 @@
 package com.appslandia.common.crypto;
 
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import com.appslandia.common.base.ThreadSafeTester;
+import com.appslandia.common.utils.RandomUtils;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class PbeChaCha20EncryptorTest {
+public class ChaCha20EncryptorTest {
 
   @Test
   public void test() {
-    PbeChaCha20Encryptor impl = new PbeChaCha20Encryptor();
+    ChaCha20Encryptor impl = new ChaCha20Encryptor();
+    impl.setSecretKey(RandomUtils.nextBytes(32, ThreadLocalRandom.current()));
     impl.setTransformation("ChaCha20");
-    impl.setPassword("password".toCharArray());
 
     try {
       byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -54,9 +56,9 @@ public class PbeChaCha20EncryptorTest {
 
   @Test
   public void test_Poly1305() {
-    PbeChaCha20Encryptor impl = new PbeChaCha20Encryptor();
+    ChaCha20Encryptor impl = new ChaCha20Encryptor();
+    impl.setSecretKey(RandomUtils.nextBytes(32, ThreadLocalRandom.current()));
     impl.setTransformation("ChaCha20-Poly1305");
-    impl.setPassword("password".toCharArray());
 
     try {
       byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -72,9 +74,9 @@ public class PbeChaCha20EncryptorTest {
 
   @Test
   public void test_threadSafe() {
-    final PbeChaCha20Encryptor impl = new PbeChaCha20Encryptor();
+    final ChaCha20Encryptor impl = new ChaCha20Encryptor();
+    impl.setSecretKey(RandomUtils.nextBytes(32, ThreadLocalRandom.current()));
     impl.setTransformation("ChaCha20");
-    impl.setPassword("password".toCharArray());
 
     new ThreadSafeTester() {
 
