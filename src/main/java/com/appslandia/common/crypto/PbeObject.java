@@ -64,7 +64,7 @@ public abstract class PbeObject extends InitializeObject {
     CryptoUtils.clear(this.password);
   }
 
-  protected SecretKey toSecretKey(final byte[] salt, final String algorithm) throws CryptoException {
+  protected SecretKey toSecretKey(byte[] salt, String algorithm) throws CryptoException {
     byte[] kBytes = this.pbeSecretKeyGenerator.generate(this.password, salt, this.iterationCount, this.keySize);
     SecretKey key = new SecretKeySpec(kBytes, algorithm);
     CryptoUtils.clear(kBytes);
