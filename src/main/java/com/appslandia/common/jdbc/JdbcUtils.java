@@ -169,6 +169,16 @@ public class JdbcUtils {
     return map;
   }
 
+  public static <V> Set<V> executeSet(ResultSetImpl rs, ResultSetMapper<V> valueMapper, Set<V> set)
+      throws SQLException {
+    while (rs.next()) {
+
+      V v = valueMapper.map(rs);
+      set.add(v);
+    }
+    return set;
+  }
+
   public static <T> List<T> executeList(ResultSetImpl rs, ResultSetMapper<T> mapper, List<T> list) throws SQLException {
     while (rs.next()) {
       T t = mapper.map(rs);
