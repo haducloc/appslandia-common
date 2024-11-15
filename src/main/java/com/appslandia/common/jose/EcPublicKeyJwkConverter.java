@@ -98,11 +98,10 @@ public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> {
     ECPoint ecPoint = new ECPoint(new BigInteger(xBytes), new BigInteger(yBytes));
 
     // ECParameterSpec
-    AlgorithmParametersUtil<ECParameterSpec> algParamUtil = new AlgorithmParametersUtil<>("EC",
-        this.ecAlgParamProvider);
-    algParamUtil.setAlgParamSpec(new ECGenParameterSpec(stdName));
+    AlgorithmParametersUtil specUtil = new AlgorithmParametersUtil("EC", this.ecAlgParamProvider);
+    specUtil.setAlgParamSpec(new ECGenParameterSpec(stdName));
 
-    ECParameterSpec ecParamSpec = algParamUtil.getParameterSpec(ECParameterSpec.class);
+    ECParameterSpec ecParamSpec = specUtil.getParameterSpec(ECParameterSpec.class);
     ECPublicKeySpec pubKeySpec = new ECPublicKeySpec(ecPoint, ecParamSpec);
 
     PublicKey pk = this.keyFactoryUtil.toPublicKey(pubKeySpec);

@@ -32,7 +32,7 @@ import com.appslandia.common.utils.Asserts;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class AlgorithmParametersUtil<T extends AlgorithmParameterSpec> extends InitializeObject {
+public class AlgorithmParametersUtil extends InitializeObject {
 
   protected String algorithm, provider;
   protected AlgorithmParameterSpec algParamSpec;
@@ -64,7 +64,7 @@ public class AlgorithmParametersUtil<T extends AlgorithmParameterSpec> extends I
     return impl;
   }
 
-  public T getParameterSpec(Class<T> paramSpec) throws CryptoException {
+  public <T extends AlgorithmParameterSpec> T getParameterSpec(Class<T> paramSpec) throws CryptoException {
     this.initialize();
     try {
       AlgorithmParameters impl = getImpl();
@@ -83,7 +83,7 @@ public class AlgorithmParametersUtil<T extends AlgorithmParameterSpec> extends I
     return this.algorithm;
   }
 
-  public AlgorithmParametersUtil<T> setAlgorithm(String algorithm) {
+  public AlgorithmParametersUtil setAlgorithm(String algorithm) {
     assertNotInitialized();
     this.algorithm = algorithm;
     return this;
@@ -94,13 +94,13 @@ public class AlgorithmParametersUtil<T extends AlgorithmParameterSpec> extends I
     return this.provider;
   }
 
-  public AlgorithmParametersUtil<T> setProvider(String provider) {
+  public AlgorithmParametersUtil setProvider(String provider) {
     assertNotInitialized();
     this.provider = provider;
     return this;
   }
 
-  public AlgorithmParametersUtil<T> setAlgParamSpec(AlgorithmParameterSpec algParamSpec) {
+  public AlgorithmParametersUtil setAlgParamSpec(AlgorithmParameterSpec algParamSpec) {
     assertNotInitialized();
     this.algParamSpec = algParamSpec;
     return this;
