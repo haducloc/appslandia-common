@@ -145,7 +145,9 @@ public class KeyFactoryUtil extends InitializeObject {
 
   public PrivateKey copy(PrivateKey key) throws CryptoException {
     this.initialize();
-    Asserts.isTrue("PKCS#8".equals(key.getFormat()), "The key is not in PKCS#8 format.");
+
+    Asserts.isTrue(this.algorithm.equalsIgnoreCase(key.getAlgorithm()));
+    Asserts.isTrue("PKCS#8".equalsIgnoreCase(key.getFormat()), "The key is not in PKCS#8 format.");
 
     byte[] der = key.getEncoded();
     try {
@@ -160,7 +162,9 @@ public class KeyFactoryUtil extends InitializeObject {
 
   public PublicKey copy(PublicKey key) throws CryptoException {
     this.initialize();
-    Asserts.isTrue("X.509".equals(key.getFormat()), "The key is not in X.509 format.");
+
+    Asserts.isTrue(this.algorithm.equalsIgnoreCase(key.getAlgorithm()));
+    Asserts.isTrue("X.509".equalsIgnoreCase(key.getFormat()), "The key is not in X.509 format.");
 
     try {
       return this.getImpl().generatePublic(new X509EncodedKeySpec(key.getEncoded()));
