@@ -95,7 +95,7 @@ public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> {
     // ecPoint
     byte[] xBytes = JoseUtils.getJoseBase64().decode(x);
     byte[] yBytes = JoseUtils.getJoseBase64().decode(y);
-    ECPoint ecPoint = new ECPoint(new BigInteger(xBytes), new BigInteger(yBytes));
+    ECPoint ecPoint = new ECPoint(new BigInteger(1, xBytes), new BigInteger(1, yBytes));
 
     // ECParameterSpec
     AlgorithmParametersUtil specUtil = new AlgorithmParametersUtil("EC", this.ecAlgParamProvider);
