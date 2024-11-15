@@ -112,10 +112,13 @@ public class PbeSecretKeyGenerator extends InitializeObject {
     this.initialize();
     PBEKeySpec keySpec = new PBEKeySpec(this.password, salt, this.iterationCount, this.keySize * 8);
     try {
-      SecretKey key = this.getImpl().generateSecret(keySpec);
-      byte[] kBytes = key.getEncoded();
-      CryptoUtils.destroy(key);
-      return new SecretKeySpec(kBytes, algorithm);
+      SecretKey secret = this.getImpl().generateSecret(keySpec);
+      byte[] kBytes = secret.getEncoded();
+      CryptoUtils.destroy(secret);
+
+      SecretKey key = new SecretKeySpec(kBytes, algorithm);
+      CryptoUtils.clear(kBytes);
+      return key;
 
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);

@@ -78,11 +78,11 @@ public class PasswordDigester extends TextDigester {
 
     try {
       PBEKeySpec keySpec = new PBEKeySpec(pwdChars, salt, this.iterationCount, this.keySize * 8);
-      SecretKey key = this.getImpl().generateSecret(keySpec);
+      SecretKey secret = this.getImpl().generateSecret(keySpec);
       keySpec.clearPassword();
 
-      byte[] storedHash = key.getEncoded();
-      CryptoUtils.destroy(key);
+      byte[] storedHash = secret.getEncoded();
+      CryptoUtils.destroy(secret);
       return this.baseEncoder.encode(ArrayUtils.append(salt, storedHash));
 
     } catch (GeneralSecurityException ex) {
