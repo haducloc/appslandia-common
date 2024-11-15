@@ -32,11 +32,11 @@ import com.appslandia.common.base.ThreadSafeTester;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class PbeDigesterTest {
+public class PbeMacSignerTest {
 
   @Test
   public void test() {
-    PbeDigester impl = new PbeDigester().setAlgorithm("HmacMD5");
+    PbeMacSigner impl = new PbeMacSigner().setAlgorithm("HmacMD5");
     impl.setPbeSecretKeyGenerator(new PbeSecretKeyGenerator().setKeySize(16).setPassword("password".toCharArray()));
 
     try {
@@ -52,7 +52,7 @@ public class PbeDigesterTest {
 
   @Test
   public void test_invalid() {
-    PbeDigester impl = new PbeDigester().setAlgorithm("HmacMD5");
+    PbeMacSigner impl = new PbeMacSigner().setAlgorithm("HmacMD5");
     impl.setPbeSecretKeyGenerator(new PbeSecretKeyGenerator().setKeySize(16).setPassword("password".toCharArray()));
 
     try {
@@ -68,7 +68,7 @@ public class PbeDigesterTest {
 
   @Test
   public void test_threadSafe() {
-    final PbeDigester impl = new PbeDigester().setAlgorithm("HmacMD5");
+    final PbeMacSigner impl = new PbeMacSigner().setAlgorithm("HmacMD5");
     impl.setPbeSecretKeyGenerator(new PbeSecretKeyGenerator().setKeySize(16).setPassword("password".toCharArray()));
 
     new ThreadSafeTester() {

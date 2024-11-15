@@ -37,7 +37,7 @@ import com.appslandia.common.utils.Asserts;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class PbeDigester extends InitializeObject implements Digester {
+public class PbeMacSigner extends InitializeObject implements Digester {
 
   protected String algorithm, provider;
   protected PbeSecretKeyGenerator pbeSecretKeyGenerator;
@@ -120,7 +120,7 @@ public class PbeDigester extends InitializeObject implements Digester {
     return this.algorithm;
   }
 
-  public PbeDigester setAlgorithm(String algorithm) {
+  public PbeMacSigner setAlgorithm(String algorithm) {
     this.assertNotInitialized();
     this.algorithm = algorithm;
     return this;
@@ -131,13 +131,13 @@ public class PbeDigester extends InitializeObject implements Digester {
     return this.provider;
   }
 
-  public PbeDigester setProvider(String provider) {
+  public PbeMacSigner setProvider(String provider) {
     this.assertNotInitialized();
     this.provider = provider;
     return this;
   }
 
-  public PbeDigester setPbeSecretKeyGenerator(PbeSecretKeyGenerator pbeSecretKeyGenerator) {
+  public PbeMacSigner setPbeSecretKeyGenerator(PbeSecretKeyGenerator pbeSecretKeyGenerator) {
     this.assertNotInitialized();
     this.pbeSecretKeyGenerator = pbeSecretKeyGenerator;
     return this;
