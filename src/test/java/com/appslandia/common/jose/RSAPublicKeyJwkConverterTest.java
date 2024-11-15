@@ -36,9 +36,9 @@ import org.junit.jupiter.api.Test;
 public class RSAPublicKeyJwkConverterTest {
 
   private static KeyPair generateRsaKeyPair() throws Exception {
-    KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-    generator.initialize(2048, new SecureRandom());
-    return generator.generateKeyPair();
+    KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+    keyPairGenerator.initialize(2048, new SecureRandom());
+    return keyPairGenerator.generateKeyPair();
   }
 
   @Test
@@ -48,7 +48,6 @@ public class RSAPublicKeyJwkConverterTest {
     try {
       KeyPair keyPair = generateRsaKeyPair();
       JsonWebKey key = converter.toJsonWebKey((RSAPublicKey) keyPair.getPublic());
-      System.out.println(key);
 
       Assertions.assertNotNull(key);
       Assertions.assertEquals("RSA", key.getString("kty"));

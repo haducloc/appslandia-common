@@ -43,9 +43,9 @@ public class RsaEncryptorTest {
   @BeforeEach
   public void initialize() {
     try {
-      KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-      generator.initialize(2048, new SecureRandom());
-      keyPair = generator.generateKeyPair();
+      KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+      keyPairGenerator.initialize(2048, new SecureRandom());
+      keyPair = keyPairGenerator.generateKeyPair();
     } catch (Exception ex) {
       Assertions.fail(ex.getMessage());
     }
