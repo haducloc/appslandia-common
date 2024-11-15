@@ -22,6 +22,8 @@ package com.appslandia.common.crypto;
 
 import java.util.Arrays;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import javax.security.auth.DestroyFailedException;
 import javax.security.auth.Destroyable;
 
@@ -85,6 +87,13 @@ public class CryptoUtils {
       } catch (DestroyFailedException ignored) {
       }
     }
+  }
+
+  public static SecretKey copy(SecretKey key) {
+    byte[] kByte = key.getEncoded();
+    SecretKey cp = new SecretKeySpec(kByte, key.getAlgorithm());
+    clear(kByte);
+    return cp;
   }
 
   private static final String ENC_BEGIN = "ENC(";
