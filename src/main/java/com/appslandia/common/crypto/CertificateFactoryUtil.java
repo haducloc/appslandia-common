@@ -38,8 +38,8 @@ public class CertificateFactoryUtil extends InitializeObject {
 
   public static final CertificateFactoryUtil X509 = new CertificateFactoryUtil("X.509");
 
-  private String type;
-  private String provider;
+  protected String type;
+  protected String provider;
 
   public CertificateFactoryUtil() {
   }

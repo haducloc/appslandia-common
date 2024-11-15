@@ -27,6 +27,9 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 
+import com.appslandia.common.base.DestroyException;
+import com.appslandia.common.base.InitializeObject;
+import com.appslandia.common.base.Out;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.RandomUtils;
@@ -37,28 +40,35 @@ import com.appslandia.common.utils.SecureRand;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class PbeAesEncryptor extends PbeObject implements Encryptor {
-
-  protected static final int GCM_IV_SIZE = 12;
-  protected static final int GCM_TAG_SIZE = 16;
-  protected static final int DEFAULT_KEY_SIZE = 32;
+public class PbeAesEncryptor extends InitializeObject implements Encryptor {
 
   protected String transformation, provider;
-  private CipherOps cipherOps;
+  protected CipherOps cipherOps;
+  protected GcmSpec gcmSpec;
+
+  protected PbeSecretKeyGenerator pbeSecretKeyGenerator;
 
   @Override
   protected void init() throws Exception {
-    if (this.keySize <= 0) {
-      this.keySize = DEFAULT_KEY_SIZE;
-    }
-    super.init();
-
     Asserts.notNull(this.transformation, "transformation is required.");
-    this.cipherOps = new CipherOps(this.transformation);
+    CipherOps cipherOps = new CipherOps(this.transformation);
 
-    Asserts.isTrue(this.cipherOps.isAlgorithm("AES"), "AES algorithm is required.");
-    Asserts.isTrue(this.cipherOps.isMode("CBC", "^CFB\\d*$", "CTR", "^OFB\\d*$", "ECB", "GCM"),
+    Asserts.isTrue(cipherOps.isAlgorithm("AES"), "AES algorithm is required.");
+    Asserts.isTrue(cipherOps.isMode("CBC", "^CFB\\d*$", "CTR", "^OFB\\d*$", "ECB", "GCM"),
         "CBC|CFB|CTR|OFB|ECB|GCM mode is required.");
+
+    if (cipherOps.isMode("GCM")) {
+      this.gcmSpec = new GcmSpec();
+    }
+    this.cipherOps = cipherOps;
+    Asserts.notNull(this.pbeSecretKeyGenerator, "pbeSecretKeyGenerator is required.");
+  }
+
+  @Override
+  public void destroy() throws DestroyException {
+    if (this.pbeSecretKeyGenerator != null) {
+      this.pbeSecretKeyGenerator.destroy();
+    }
   }
 
   protected Cipher getImpl() throws GeneralSecurityException {
@@ -76,17 +86,9 @@ public class PbeAesEncryptor extends PbeObject implements Encryptor {
       return -1;
     }
     if (this.cipherOps.isMode("GCM")) {
-      return getGcmIvSize();
+      return this.gcmSpec.getIvSize();
     }
     return cipher.getBlockSize();
-  }
-
-  protected int getGcmIvSize() {
-    return GCM_IV_SIZE;
-  }
-
-  protected int getGcmTagSize() {
-    return GCM_TAG_SIZE;
   }
 
   @Override
@@ -100,8 +102,8 @@ public class PbeAesEncryptor extends PbeObject implements Encryptor {
       int ivSize = getIvSize(impl);
       byte[] iv = null;
 
-      byte[] salt = RandomUtils.nextBytes(this.saltSize, SecureRand.getInstance());
-      key = toSecretKey(salt, this.cipherOps.getAlgorithm());
+      Out<byte[]> salt = new Out<>();
+      key = this.pbeSecretKeyGenerator.generate(this.cipherOps.getAlgorithm(), salt);
 
       if (ivSize <= 0) {
         impl.init(Cipher.ENCRYPT_MODE, key);
@@ -109,19 +111,18 @@ public class PbeAesEncryptor extends PbeObject implements Encryptor {
         iv = RandomUtils.nextBytes(ivSize, SecureRand.getInstance());
 
         if (this.cipherOps.isMode("GCM")) {
-          impl.init(Cipher.ENCRYPT_MODE, key, new GCMParameterSpec(getGcmTagSize() * 8, iv));
+          impl.init(Cipher.ENCRYPT_MODE, key, new GCMParameterSpec(this.gcmSpec.getTagSize() * 8, iv));
         } else {
           impl.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv));
         }
       }
 
-      byte[] encMsg = impl.doFinal(message);
+      byte[] storedMsg = impl.doFinal(message);
       if (iv == null) {
-        return ArrayUtils.append(salt, encMsg);
+        return ArrayUtils.append(salt.value, storedMsg);
       } else {
-        return ArrayUtils.append(iv, salt, encMsg);
+        return ArrayUtils.append(iv, salt.value, storedMsg);
       }
-
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     } finally {
@@ -137,34 +138,35 @@ public class PbeAesEncryptor extends PbeObject implements Encryptor {
     SecretKey key = null;
     try {
       Cipher impl = getImpl();
+      int saltSize = this.pbeSecretKeyGenerator.getSaltSize();
+      byte[] salt = new byte[saltSize];
+
       int ivSize = getIvSize(impl);
       byte[] iv = null;
-      byte[] salt = new byte[this.saltSize];
 
       if (ivSize <= 0) {
-        Asserts.isTrue(message.length >= this.saltSize, "message is invalid.");
+        Asserts.isTrue(message.length >= saltSize, "message is invalid.");
         ArrayUtils.copy(message, salt);
       } else {
-        Asserts.isTrue(message.length >= ivSize + this.saltSize, "message is invalid.");
+        Asserts.isTrue(message.length >= ivSize + saltSize, "message is invalid.");
         iv = new byte[ivSize];
         ArrayUtils.copy(message, iv, salt);
       }
-      key = toSecretKey(salt, this.cipherOps.getAlgorithm());
+      key = this.pbeSecretKeyGenerator.generate(this.cipherOps.getAlgorithm(), salt);
 
       if (iv == null) {
         impl.init(Cipher.DECRYPT_MODE, key);
       } else if (this.cipherOps.isMode("GCM")) {
-        impl.init(Cipher.DECRYPT_MODE, key, new GCMParameterSpec(getGcmTagSize() * 8, iv));
+        impl.init(Cipher.DECRYPT_MODE, key, new GCMParameterSpec(this.gcmSpec.getTagSize() * 8, iv));
       } else {
         impl.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
       }
 
       if (iv == null) {
-        return impl.doFinal(message, this.saltSize, message.length - this.saltSize);
+        return impl.doFinal(message, saltSize, message.length - saltSize);
       } else {
-        return impl.doFinal(message, ivSize + this.saltSize, message.length - ivSize - this.saltSize);
+        return impl.doFinal(message, ivSize + saltSize, message.length - ivSize - saltSize);
       }
-
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     } finally {
@@ -194,39 +196,9 @@ public class PbeAesEncryptor extends PbeObject implements Encryptor {
     return this;
   }
 
-  @Override
-  public PbeAesEncryptor setSaltSize(int saltSize) {
-    super.setSaltSize(saltSize);
-    return this;
-  }
-
-  @Override
-  public PbeAesEncryptor setIterationCount(int iterationCount) {
-    super.setIterationCount(iterationCount);
-    return this;
-  }
-
-  @Override
-  public PbeAesEncryptor setKeySize(int keySize) {
-    super.setKeySize(keySize);
-    return this;
-  }
-
-  @Override
-  public PbeAesEncryptor setPassword(char[] password) {
-    super.setPassword(password);
-    return this;
-  }
-
-  @Override
-  public PbeAesEncryptor setPassword(String passwordExpr) {
-    super.setPassword(passwordExpr);
-    return this;
-  }
-
-  @Override
   public PbeAesEncryptor setPbeSecretKeyGenerator(PbeSecretKeyGenerator pbeSecretKeyGenerator) {
-    super.setPbeSecretKeyGenerator(pbeSecretKeyGenerator);
+    this.assertNotInitialized();
+    this.pbeSecretKeyGenerator = pbeSecretKeyGenerator;
     return this;
   }
 }

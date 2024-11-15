@@ -21,7 +21,12 @@
 package com.appslandia.common.crypto;
 
 import java.nio.charset.Charset;
-import java.util.Arrays;
+import java.security.GeneralSecurityException;
+import java.security.MessageDigest;
+
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 
 import com.appslandia.common.base.BaseEncoder;
 import com.appslandia.common.utils.ArrayUtils;
@@ -37,24 +42,30 @@ import com.appslandia.common.utils.ValueUtils;
  */
 public class PasswordDigester extends TextDigester {
 
-  private int saltSize;
-  private int iterationCount;
-  private int keySize;
+  protected String algorithm, provider;
 
-  private PbeSecretKeyGenerator pbeSecretKeyGenerator;
+  protected Integer saltSize;
+  protected Integer iterationCount;
+  protected Integer keySize;
 
   @Override
   protected void init() throws Exception {
-    // baseEncoder
+    this.algorithm = ValueUtils.valueOrAlt(this.algorithm, CryptoUtils.DEFAULT_PBE_KEY_DERIVATION_ALGORITHM);
     this.baseEncoder = ValueUtils.valueOrAlt(this.baseEncoder, BaseEncoder.BASE64);
 
-    this.keySize = ValueUtils.valueOrMin(this.keySize, 32);
-    this.saltSize = ValueUtils.valueOrMin(this.saltSize, this.keySize);
-    this.iterationCount = ValueUtils.valueOrMin(this.iterationCount, CryptoUtils.DEFAULT_ITERATION_COUNT);
+    this.saltSize = ValueUtils.valueOrAlt(this.saltSize, CryptoUtils.DEFAULT_PBE_SALT_SIZE);
+    this.iterationCount = ValueUtils.valueOrAlt(this.iterationCount, CryptoUtils.DEFAULT_PBE_ITERATIONS);
+    this.keySize = ValueUtils.valueOrAlt(this.keySize, CryptoUtils.DEFAULT_PBE_KEY_SIZE);
+  }
 
-    if (this.pbeSecretKeyGenerator == null) {
-      this.pbeSecretKeyGenerator = new PbeSecretKeyGenerator();
+  protected SecretKeyFactory getImpl() throws GeneralSecurityException {
+    SecretKeyFactory impl = null;
+    if (this.provider == null) {
+      impl = SecretKeyFactory.getInstance(this.algorithm);
+    } else {
+      impl = SecretKeyFactory.getInstance(this.algorithm, this.provider);
     }
+    return impl;
   }
 
   @Override
@@ -64,12 +75,18 @@ public class PasswordDigester extends TextDigester {
 
     byte[] salt = RandomUtils.nextBytes(this.saltSize, SecureRand.getInstance());
     char[] pwdChars = password.toCharArray();
-    try {
-      byte[] secKey = this.pbeSecretKeyGenerator.generate(pwdChars, salt, this.iterationCount, this.keySize);
-      String digested = this.baseEncoder.encode(ArrayUtils.append(salt, secKey));
 
-      CryptoUtils.clear(secKey);
-      return digested;
+    try {
+      PBEKeySpec keySpec = new PBEKeySpec(pwdChars, salt, this.iterationCount, this.keySize * 8);
+      SecretKey key = this.getImpl().generateSecret(keySpec);
+      keySpec.clearPassword();
+
+      byte[] storedHash = key.getEncoded();
+      CryptoUtils.destroy(key);
+      return this.baseEncoder.encode(ArrayUtils.append(salt, storedHash));
+
+    } catch (GeneralSecurityException ex) {
+      throw new CryptoException(ex.getMessage(), ex);
     } finally {
       CryptoUtils.clear(pwdChars);
     }
@@ -85,43 +102,41 @@ public class PasswordDigester extends TextDigester {
     Asserts.isTrue(digestedBytes.length > this.saltSize, "digested is invalid.");
 
     byte[] salt = new byte[this.saltSize];
-    byte[] secKey = new byte[digestedBytes.length - this.saltSize];
-    ArrayUtils.copy(digestedBytes, salt, secKey);
+    byte[] storedHash = new byte[digestedBytes.length - this.saltSize];
+    ArrayUtils.copy(digestedBytes, salt, storedHash);
 
     char[] pwdChars = password.toCharArray();
     try {
-      byte[] computedSecKey = this.pbeSecretKeyGenerator.generate(pwdChars, salt, this.iterationCount, this.keySize);
-      boolean verified = Arrays.equals(computedSecKey, secKey);
-      CryptoUtils.clear(computedSecKey);
+      PBEKeySpec keySpec = new PBEKeySpec(pwdChars, salt, this.iterationCount, this.keySize * 8);
+      SecretKey key = this.getImpl().generateSecret(keySpec);
+      keySpec.clearPassword();
 
-      return verified;
+      byte[] computedHash = key.getEncoded();
+      CryptoUtils.destroy(key);
+      return MessageDigest.isEqual(storedHash, computedHash);
+
+    } catch (GeneralSecurityException ex) {
+      throw new CryptoException(ex.getMessage(), ex);
     } finally {
       CryptoUtils.clear(pwdChars);
-      CryptoUtils.clear(secKey);
     }
   }
 
-  public PasswordDigester setSaltSize(int saltSize) {
+  public PasswordDigester setSaltSize(Integer saltSize) {
     this.assertNotInitialized();
     this.saltSize = saltSize;
     return this;
   }
 
-  public PasswordDigester setIterationCount(int iterationCount) {
+  public PasswordDigester setIterationCount(Integer iterationCount) {
     this.assertNotInitialized();
     this.iterationCount = iterationCount;
     return this;
   }
 
-  public PasswordDigester setKeySize(int keySize) {
+  public PasswordDigester setKeySize(Integer keySize) {
     this.assertNotInitialized();
     this.keySize = keySize;
-    return this;
-  }
-
-  public PasswordDigester setPbeSecretKeyGenerator(PbeSecretKeyGenerator pbeSecretKeyGenerator) {
-    this.assertNotInitialized();
-    this.pbeSecretKeyGenerator = pbeSecretKeyGenerator;
     return this;
   }
 

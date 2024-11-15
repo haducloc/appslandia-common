@@ -27,6 +27,9 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.ChaCha20ParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 
+import com.appslandia.common.base.DestroyException;
+import com.appslandia.common.base.InitializeObject;
+import com.appslandia.common.base.Out;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.RandomUtils;
@@ -37,24 +40,33 @@ import com.appslandia.common.utils.SecureRand;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class PbeChaCha20Encryptor extends PbeObject implements Encryptor {
+public class PbeChaCha20Encryptor extends InitializeObject implements Encryptor {
 
   protected static final int IV_SIZE = 12;
-  protected static final int KEY_SIZE = 32;
 
   protected String transformation, provider;
-  private CipherOps cipherOps;
+  protected CipherOps cipherOps;
+
+  protected PbeSecretKeyGenerator pbeSecretKeyGenerator;
 
   @Override
   protected void init() throws Exception {
-    this.keySize = KEY_SIZE;
-    super.init();
-
     Asserts.notNull(this.transformation, "transformation is required.");
     this.cipherOps = new CipherOps(this.transformation);
 
     Asserts.isTrue(this.cipherOps.isAlgorithm("ChaCha20") || this.cipherOps.isAlgorithm("ChaCha20-Poly1305"),
         "ChaCha20|ChaCha20-Poly1305 algorithm is required.");
+
+    Asserts.notNull(this.pbeSecretKeyGenerator, "pbeSecretKeyGenerator is required.");
+    Asserts.isTrue(this.pbeSecretKeyGenerator.getKeySize() == 32,
+        "pbeSecretKeyGenerator.keySize must be 32 bytes when using ChaCha20 or ChaCha20-Poly1305.");
+  }
+
+  @Override
+  public void destroy() throws DestroyException {
+    if (this.pbeSecretKeyGenerator != null) {
+      this.pbeSecretKeyGenerator.destroy();
+    }
   }
 
   protected Cipher getImpl() throws GeneralSecurityException {
@@ -74,8 +86,8 @@ public class PbeChaCha20Encryptor extends PbeObject implements Encryptor {
 
     SecretKey key = null;
     try {
-      byte[] salt = RandomUtils.nextBytes(this.saltSize, SecureRand.getInstance());
-      key = toSecretKey(salt, this.cipherOps.getAlgorithm());
+      Out<byte[]> salt = new Out<>();
+      key = this.pbeSecretKeyGenerator.generate(this.cipherOps.getAlgorithm(), salt);
       Cipher impl = getImpl();
 
       byte[] iv = RandomUtils.nextBytes(IV_SIZE, SecureRand.getInstance());
@@ -85,8 +97,8 @@ public class PbeChaCha20Encryptor extends PbeObject implements Encryptor {
         impl.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv));
       }
 
-      byte[] encMsg = impl.doFinal(message);
-      return ArrayUtils.append(iv, salt, encMsg);
+      byte[] storedMsg = impl.doFinal(message);
+      return ArrayUtils.append(iv, salt.value, storedMsg);
 
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
@@ -102,13 +114,14 @@ public class PbeChaCha20Encryptor extends PbeObject implements Encryptor {
 
     SecretKey key = null;
     try {
-      Asserts.isTrue(message.length >= IV_SIZE + this.saltSize, "message is invalid.");
+      int saltSize = this.pbeSecretKeyGenerator.getSaltSize();
+      Asserts.isTrue(message.length >= IV_SIZE + saltSize, "message is invalid.");
 
       byte[] iv = new byte[IV_SIZE];
-      byte[] salt = new byte[this.saltSize];
+      byte[] salt = new byte[saltSize];
       ArrayUtils.copy(message, iv, salt);
 
-      key = toSecretKey(salt, this.cipherOps.getAlgorithm());
+      key = this.pbeSecretKeyGenerator.generate(this.cipherOps.getAlgorithm(), salt);
       Cipher impl = getImpl();
 
       if (this.cipherOps.isAlgorithm("ChaCha20")) {
@@ -116,7 +129,7 @@ public class PbeChaCha20Encryptor extends PbeObject implements Encryptor {
       } else {
         impl.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
       }
-      return impl.doFinal(message, IV_SIZE + this.saltSize, message.length - IV_SIZE - this.saltSize);
+      return impl.doFinal(message, IV_SIZE + saltSize, message.length - IV_SIZE - saltSize);
 
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
@@ -147,38 +160,9 @@ public class PbeChaCha20Encryptor extends PbeObject implements Encryptor {
     return this;
   }
 
-  @Override
-  public PbeChaCha20Encryptor setSaltSize(int saltSize) {
-    super.setSaltSize(saltSize);
-    return this;
-  }
-
-  @Override
-  public PbeChaCha20Encryptor setIterationCount(int iterationCount) {
-    super.setIterationCount(iterationCount);
-    return this;
-  }
-
-  @Override
-  public PbeChaCha20Encryptor setKeySize(int keySize) {
-    throw new UnsupportedOperationException("ChaCha20Encryptor.setKeySize(int keySize)");
-  }
-
-  @Override
-  public PbeChaCha20Encryptor setPassword(char[] password) {
-    super.setPassword(password);
-    return this;
-  }
-
-  @Override
-  public PbeChaCha20Encryptor setPassword(String passwordExpr) {
-    super.setPassword(passwordExpr);
-    return this;
-  }
-
-  @Override
   public PbeChaCha20Encryptor setPbeSecretKeyGenerator(PbeSecretKeyGenerator pbeSecretKeyGenerator) {
-    super.setPbeSecretKeyGenerator(pbeSecretKeyGenerator);
+    this.assertNotInitialized();
+    this.pbeSecretKeyGenerator = pbeSecretKeyGenerator;
     return this;
   }
 }

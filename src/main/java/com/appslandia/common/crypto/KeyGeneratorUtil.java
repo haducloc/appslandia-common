@@ -36,8 +36,8 @@ import com.appslandia.common.utils.Asserts;
  */
 public class KeyGeneratorUtil extends InitializeObject {
 
-  private String algorithm, provider;
-  private AlgorithmParameterSpec algParamSpec;
+  protected String algorithm, provider;
+  protected AlgorithmParameterSpec algParamSpec;
 
   public KeyGeneratorUtil() {
   }

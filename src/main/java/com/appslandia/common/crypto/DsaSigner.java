@@ -36,12 +36,12 @@ import com.appslandia.common.utils.Asserts;
  *
  */
 public class DsaSigner extends InitializeObject implements Digester {
-  private String algorithm, provider;
+  protected String algorithm, provider;
 
-  private PrivateKey privateKey;
-  private PublicKey publicKey;
+  protected PrivateKey privateKey;
+  protected PublicKey publicKey;
 
-  private AlgorithmParameterSpec algParamSpec;
+  protected AlgorithmParameterSpec algParamSpec;
 
   @Override
   protected void init() throws Exception {

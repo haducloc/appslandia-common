@@ -36,7 +36,7 @@ import com.appslandia.common.utils.Asserts;
  */
 public class SecureConfig extends SimpleConfig {
 
-  final TextEncryptor textEncryptor;
+  protected final TextEncryptor textEncryptor;
 
   public SecureConfig(char[] password) {
     this(password, new HashMap<>());
@@ -46,8 +46,8 @@ public class SecureConfig extends SimpleConfig {
     super(newCfg);
 
     Asserts.notNull(password);
-    this.textEncryptor = new TextEncryptor(
-        new PbeAesEncryptor().setTransformation("AES/GCM/NoPadding").setKeySize(32).setPassword(password));
+    this.textEncryptor = new TextEncryptor(new PbeAesEncryptor().setTransformation("AES/GCM/NoPadding")
+        .setPbeSecretKeyGenerator(new PbeSecretKeyGenerator().setPassword(password).setKeySize(32)));
   }
 
   public SecureConfig(String passwordExpr) {
@@ -58,8 +58,8 @@ public class SecureConfig extends SimpleConfig {
     super(newCfg);
 
     Asserts.notNull(passwordExpr);
-    this.textEncryptor = new TextEncryptor(
-        new PbeAesEncryptor().setTransformation("AES/GCM/NoPadding").setKeySize(32).setPassword(passwordExpr));
+    this.textEncryptor = new TextEncryptor(new PbeAesEncryptor().setTransformation("AES/GCM/NoPadding")
+        .setPbeSecretKeyGenerator(new PbeSecretKeyGenerator().setPassword(passwordExpr).setKeySize(32)));
   }
 
   public void destroy() throws DestroyException {

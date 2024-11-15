@@ -32,7 +32,10 @@ import javax.security.auth.Destroyable;
  */
 public class CryptoUtils {
 
-  public static final int DEFAULT_ITERATION_COUNT = 50_000;
+  public static final String DEFAULT_PBE_KEY_DERIVATION_ALGORITHM = "PBKDF2WithHmacSHA256";
+  public static final int DEFAULT_PBE_KEY_SIZE = 32;
+  public static final int DEFAULT_PBE_SALT_SIZE = 16;
+  public static final int DEFAULT_PBE_ITERATIONS = 100_000;
 
   public static void clear(char[] chars) {
     if (chars != null) {

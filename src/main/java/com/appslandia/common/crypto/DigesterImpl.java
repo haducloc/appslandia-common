@@ -22,7 +22,6 @@ package com.appslandia.common.crypto;
 
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
-import java.util.Arrays;
 
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.utils.Asserts;
@@ -36,7 +35,7 @@ public class DigesterImpl extends InitializeObject implements Digester {
 
   public static final DigesterImpl MD5 = new DigesterImpl("MD5");
 
-  private String algorithm, provider;
+  protected String algorithm, provider;
 
   public DigesterImpl() {
   }
@@ -86,8 +85,8 @@ public class DigesterImpl extends InitializeObject implements Digester {
     Asserts.notNull(hash, "hash is required.");
 
     try {
-      byte[] digest = this.getImpl().digest(message);
-      return Arrays.equals(hash, digest);
+      byte[] computedHash = this.getImpl().digest(message);
+      return MessageDigest.isEqual(hash, computedHash);
 
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex.getMessage(), ex);

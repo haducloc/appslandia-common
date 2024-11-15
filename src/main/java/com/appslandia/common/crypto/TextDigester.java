@@ -34,7 +34,7 @@ import com.appslandia.common.utils.ValueUtils;
  *
  */
 public class TextDigester extends TextBasedCrypto {
-  private Digester digester;
+  protected Digester digester;
 
   public TextDigester() {
   }

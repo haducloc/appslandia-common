@@ -21,28 +21,37 @@
 package com.appslandia.common.crypto;
 
 import java.security.GeneralSecurityException;
+import java.security.MessageDigest;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 
+import com.appslandia.common.base.DestroyException;
+import com.appslandia.common.base.InitializeObject;
+import com.appslandia.common.base.Out;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
-import com.appslandia.common.utils.RandomUtils;
-import com.appslandia.common.utils.SecureRand;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class PbeDigester extends PbeObject implements Digester {
-  private String algorithm, provider;
+public class PbeDigester extends InitializeObject implements Digester {
+
+  protected String algorithm, provider;
+  protected PbeSecretKeyGenerator pbeSecretKeyGenerator;
 
   @Override
   protected void init() throws Exception {
-    super.init();
-
     Asserts.notNull(this.algorithm, "algorithm is required.");
+  }
+
+  @Override
+  public void destroy() throws DestroyException {
+    if (this.pbeSecretKeyGenerator != null) {
+      this.pbeSecretKeyGenerator.destroy();
+    }
   }
 
   protected Mac getImpl() throws GeneralSecurityException {
@@ -60,14 +69,15 @@ public class PbeDigester extends PbeObject implements Digester {
     this.initialize();
     Asserts.notNull(message, "message is required.");
 
-    byte[] salt = RandomUtils.nextBytes(this.saltSize, SecureRand.getInstance());
-    SecretKey key = toSecretKey(salt, this.algorithm);
+    Out<byte[]> salt = new Out<>();
+    SecretKey key = null;
     try {
       Mac impl = this.getImpl();
+      key = this.pbeSecretKeyGenerator.generate(this.algorithm, salt);
       impl.init(key);
 
-      byte[] msgMac = impl.doFinal(message);
-      return ArrayUtils.append(salt, msgMac);
+      byte[] storedMac = impl.doFinal(message);
+      return ArrayUtils.append(salt.value, storedMac);
 
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
@@ -77,22 +87,26 @@ public class PbeDigester extends PbeObject implements Digester {
   }
 
   @Override
-  public boolean verify(byte[] message, byte[] saltMac) throws CryptoException {
+  public boolean verify(byte[] message, byte[] digested) throws CryptoException {
     this.initialize();
     Asserts.notNull(message, "message is required.");
-    Asserts.notNull(saltMac, "saltMac is required.");
-    Asserts.isTrue(saltMac.length >= this.saltSize, "saltMac is invalid.");
+    Asserts.notNull(digested, "digested is required.");
 
-    byte[] salt = new byte[this.saltSize];
-    ArrayUtils.copy(saltMac, salt);
-    SecretKey key = toSecretKey(salt, this.algorithm);
+    int saltSize = this.pbeSecretKeyGenerator.getSaltSize();
+    Asserts.isTrue(digested.length >= saltSize, "digested is invalid.");
 
+    byte[] salt = new byte[saltSize];
+    byte[] storedHash = new byte[digested.length - saltSize];
+    ArrayUtils.copy(digested, salt, storedHash);
+
+    SecretKey key = null;
     try {
       Mac impl = this.getImpl();
+      key = this.pbeSecretKeyGenerator.generate(this.algorithm, salt);
       impl.init(key);
 
-      byte[] msgMac = impl.doFinal(message);
-      return ArrayUtils.endsWith(saltMac, msgMac, this.saltSize);
+      byte[] computedMac = impl.doFinal(message);
+      return MessageDigest.isEqual(storedHash, computedMac);
 
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
@@ -123,39 +137,9 @@ public class PbeDigester extends PbeObject implements Digester {
     return this;
   }
 
-  @Override
-  public PbeDigester setSaltSize(int saltSize) {
-    super.setSaltSize(saltSize);
-    return this;
-  }
-
-  @Override
-  public PbeDigester setIterationCount(int iterationCount) {
-    super.setIterationCount(iterationCount);
-    return this;
-  }
-
-  @Override
-  public PbeDigester setKeySize(int keySize) {
-    super.setKeySize(keySize);
-    return this;
-  }
-
-  @Override
-  public PbeDigester setPassword(char[] password) {
-    super.setPassword(password);
-    return this;
-  }
-
-  @Override
-  public PbeDigester setPassword(String passwordExpr) {
-    super.setPassword(passwordExpr);
-    return this;
-  }
-
-  @Override
   public PbeDigester setPbeSecretKeyGenerator(PbeSecretKeyGenerator pbeSecretKeyGenerator) {
-    super.setPbeSecretKeyGenerator(pbeSecretKeyGenerator);
+    this.assertNotInitialized();
+    this.pbeSecretKeyGenerator = pbeSecretKeyGenerator;
     return this;
   }
 }

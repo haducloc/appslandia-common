@@ -37,7 +37,7 @@ public class PbeDigesterTest {
   @Test
   public void test() {
     PbeDigester impl = new PbeDigester().setAlgorithm("HmacMD5");
-    impl.setKeySize(16).setPassword("password".toCharArray());
+    impl.setPbeSecretKeyGenerator(new PbeSecretKeyGenerator().setKeySize(16).setPassword("password".toCharArray()));
 
     try {
       byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -53,7 +53,7 @@ public class PbeDigesterTest {
   @Test
   public void test_invalid() {
     PbeDigester impl = new PbeDigester().setAlgorithm("HmacMD5");
-    impl.setKeySize(16).setPassword("password".toCharArray());
+    impl.setPbeSecretKeyGenerator(new PbeSecretKeyGenerator().setKeySize(16).setPassword("password".toCharArray()));
 
     try {
       byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -69,7 +69,7 @@ public class PbeDigesterTest {
   @Test
   public void test_threadSafe() {
     final PbeDigester impl = new PbeDigester().setAlgorithm("HmacMD5");
-    impl.setKeySize(16).setPassword("password".toCharArray());
+    impl.setPbeSecretKeyGenerator(new PbeSecretKeyGenerator().setKeySize(16).setPassword("password".toCharArray()));
 
     new ThreadSafeTester() {
 

@@ -45,27 +45,28 @@ public class ChaCha20Encryptor extends InitializeObject implements Encryptor {
   protected static final int IV_SIZE = 12;
 
   protected String transformation, provider;
-  private CipherOps cipherOps;
+  protected CipherOps cipherOps;
 
-  protected byte[] secretKey;
+  protected byte[] secret;
   protected SecretKey key;
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.secretKey, "secretKey is required.");
+    Asserts.notNull(this.secret, "secret is required.");
     Asserts.notNull(this.transformation, "transformation is required.");
 
     this.cipherOps = new CipherOps(this.transformation);
 
     Asserts.isTrue(this.cipherOps.isAlgorithm("ChaCha20") || this.cipherOps.isAlgorithm("ChaCha20-Poly1305"),
         "ChaCha20|ChaCha20-Poly1305 algorithm is required.");
+    Asserts.isTrue(this.secret.length == 32, "secret must be 32 bytes when using ChaCha20 or ChaCha20-Poly1305.");
 
-    this.key = new SecretKeySpec(this.secretKey, this.cipherOps.getAlgorithm());
+    this.key = new SecretKeySpec(this.secret, this.cipherOps.getAlgorithm());
+    CryptoUtils.clear(this.secret);
   }
 
   @Override
   public void destroy() throws DestroyException {
-    CryptoUtils.clear(this.secretKey);
     CryptoUtils.destroy(this.key);
   }
 
@@ -89,13 +90,13 @@ public class ChaCha20Encryptor extends InitializeObject implements Encryptor {
       byte[] iv = RandomUtils.nextBytes(IV_SIZE, SecureRand.getInstance());
 
       if (this.cipherOps.isAlgorithm("ChaCha20")) {
-        impl.init(Cipher.ENCRYPT_MODE, key, new ChaCha20ParameterSpec(iv, 1));
+        impl.init(Cipher.ENCRYPT_MODE, this.key, new ChaCha20ParameterSpec(iv, 1));
       } else {
-        impl.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv));
+        impl.init(Cipher.ENCRYPT_MODE, this.key, new IvParameterSpec(iv));
       }
 
-      byte[] encMsg = impl.doFinal(message);
-      return ArrayUtils.append(iv, encMsg);
+      byte[] storedMsg = impl.doFinal(message);
+      return ArrayUtils.append(iv, storedMsg);
 
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
@@ -115,9 +116,9 @@ public class ChaCha20Encryptor extends InitializeObject implements Encryptor {
       Cipher impl = getImpl();
 
       if (this.cipherOps.isAlgorithm("ChaCha20")) {
-        impl.init(Cipher.DECRYPT_MODE, key, new ChaCha20ParameterSpec(iv, 1));
+        impl.init(Cipher.DECRYPT_MODE, this.key, new ChaCha20ParameterSpec(iv, 1));
       } else {
-        impl.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
+        impl.init(Cipher.DECRYPT_MODE, this.key, new IvParameterSpec(iv));
       }
       return impl.doFinal(message, IV_SIZE, message.length - IV_SIZE);
 
@@ -148,9 +149,11 @@ public class ChaCha20Encryptor extends InitializeObject implements Encryptor {
     return this;
   }
 
-  public ChaCha20Encryptor setSecretKey(byte[] secretKey) {
+  public ChaCha20Encryptor setSecret(byte[] secret) {
     this.assertNotInitialized();
-    this.secretKey = ArrayUtils.copy(secretKey);
+    if (secret != null) {
+      this.secret = ArrayUtils.copy(secret);
+    }
     return this;
   }
 }

@@ -34,7 +34,7 @@ import com.appslandia.common.utils.ValueUtils;
  *
  */
 public class TextEncryptor extends TextBasedCrypto {
-  private Encryptor encryptor;
+  protected Encryptor encryptor;
 
   public TextEncryptor() {
   }

@@ -64,7 +64,7 @@ public class PasswordDigesterTest {
 
   @Test
   public void test_threadSafe() {
-    final PasswordDigester impl = new PasswordDigester();
+    PasswordDigester impl = new PasswordDigester();
 
     new ThreadSafeTester() {
 

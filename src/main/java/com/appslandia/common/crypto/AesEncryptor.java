@@ -42,32 +42,35 @@ import com.appslandia.common.utils.SecureRand;
  */
 public class AesEncryptor extends InitializeObject implements Encryptor {
 
-  protected static final int GCM_IV_SIZE = 12;
-  protected static final int GCM_TAG_SIZE = 16;
-
   protected String transformation, provider;
-  private CipherOps cipherOps;
+  protected CipherOps cipherOps;
+  protected GcmSpec gcmSpec;
 
-  protected byte[] secretKey;
+  protected byte[] secret;
   protected SecretKey key;
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.secretKey, "secretKey is required.");
+    Asserts.notNull(this.secret, "secret is required.");
     Asserts.notNull(this.transformation, "transformation is required.");
 
-    this.cipherOps = new CipherOps(this.transformation);
+    CipherOps cipherOps = new CipherOps(this.transformation);
 
-    Asserts.isTrue(this.cipherOps.isAlgorithm("AES"), "AES algorithm is required.");
-    Asserts.isTrue(this.cipherOps.isMode("CBC", "^CFB\\d*$", "CTR", "^OFB\\d*$", "ECB", "GCM"),
+    Asserts.isTrue(cipherOps.isAlgorithm("AES"), "AES algorithm is required.");
+    Asserts.isTrue(cipherOps.isMode("CBC", "^CFB\\d*$", "CTR", "^OFB\\d*$", "ECB", "GCM"),
         "CBC|CFB|CTR|OFB|ECB|GCM mode is required.");
 
-    this.key = new SecretKeySpec(this.secretKey, this.cipherOps.getAlgorithm());
+    if (cipherOps.isMode("GCM")) {
+      this.gcmSpec = new GcmSpec();
+    }
+
+    this.key = new SecretKeySpec(this.secret, cipherOps.getAlgorithm());
+    CryptoUtils.clear(this.secret);
+    this.cipherOps = cipherOps;
   }
 
   @Override
   public void destroy() throws DestroyException {
-    CryptoUtils.clear(this.secretKey);
     CryptoUtils.destroy(this.key);
   }
 
@@ -86,17 +89,9 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
       return -1;
     }
     if (this.cipherOps.isMode("GCM")) {
-      return getGcmIvSize();
+      return this.gcmSpec.getIvSize();
     }
     return cipher.getBlockSize();
-  }
-
-  protected int getGcmIvSize() {
-    return GCM_IV_SIZE;
-  }
-
-  protected int getGcmTagSize() {
-    return GCM_TAG_SIZE;
   }
 
   @Override
@@ -115,19 +110,18 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
         iv = RandomUtils.nextBytes(ivSize, SecureRand.getInstance());
 
         if (this.cipherOps.isMode("GCM")) {
-          impl.init(Cipher.ENCRYPT_MODE, this.key, new GCMParameterSpec(getGcmTagSize() * 8, iv));
+          impl.init(Cipher.ENCRYPT_MODE, this.key, new GCMParameterSpec(this.gcmSpec.getTagSize() * 8, iv));
         } else {
           impl.init(Cipher.ENCRYPT_MODE, this.key, new IvParameterSpec(iv));
         }
       }
 
-      byte[] encMsg = impl.doFinal(message);
+      byte[] storedMsg = impl.doFinal(message);
       if (iv == null) {
-        return encMsg;
+        return storedMsg;
       } else {
-        return ArrayUtils.append(iv, encMsg);
+        return ArrayUtils.append(iv, storedMsg);
       }
-
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     }
@@ -152,7 +146,7 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
       if (iv == null) {
         impl.init(Cipher.DECRYPT_MODE, this.key);
       } else if (this.cipherOps.isMode("GCM")) {
-        impl.init(Cipher.DECRYPT_MODE, this.key, new GCMParameterSpec(getGcmTagSize() * 8, iv));
+        impl.init(Cipher.DECRYPT_MODE, this.key, new GCMParameterSpec(this.gcmSpec.getTagSize() * 8, iv));
       } else {
         impl.init(Cipher.DECRYPT_MODE, this.key, new IvParameterSpec(iv));
       }
@@ -162,7 +156,6 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
       } else {
         return impl.doFinal(message, ivSize, message.length - ivSize);
       }
-
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
     }
@@ -190,9 +183,11 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
     return this;
   }
 
-  public AesEncryptor setSecretKey(byte[] secretKey) {
+  public AesEncryptor setSecret(byte[] secret) {
     this.assertNotInitialized();
-    this.secretKey = ArrayUtils.copy(secretKey);
+    if (secret != null) {
+      this.secret = ArrayUtils.copy(secret);
+    }
     return this;
   }
 }

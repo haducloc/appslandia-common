@@ -50,17 +50,20 @@ import com.appslandia.common.utils.ObjectUtils;
  */
 public class KeyStoreUtil extends InitializeObject {
 
-// Stores symmetric keys (e.g., AES, DES), private keys, and passwords with strong protection.
+  // Stores symmetric keys (e.g., AES, DES), private keys, and passwords with
+  // strong protection.
   public static final String TYPE_JCEKS = "JCEKS";
 
-// Stores private keys, public certificates, and certificate chains for SSL/TLS in Java applications.
+  // Stores private keys, public certificates, and certificate chains for SSL/TLS
+  // in Java applications.
   public static final String TYPE_JKS = "JKS";
 
-// Cross-platform format for storing private keys with associated public certificates and certificate chains.
+  // Cross-platform format for storing private keys with associated public
+  // certificates and certificate chains.
   public static final String TYPE_PKCS12 = "PKCS12";
 
-  private String type, provider;
-  private KeyStore impl;
+  protected String type, provider;
+  protected KeyStore impl;
 
   public KeyStoreUtil() {
   }
@@ -90,6 +93,7 @@ public class KeyStoreUtil extends InitializeObject {
 
   @Override
   public void destroy() throws DestroyException {
+    // Reset the KeyStore?
   }
 
   public void load(InputStream in, char[] password) throws CryptoException, IOException {

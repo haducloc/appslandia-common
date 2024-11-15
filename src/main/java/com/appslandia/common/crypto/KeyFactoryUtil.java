@@ -41,7 +41,7 @@ import com.appslandia.common.utils.IOUtils;
  */
 public class KeyFactoryUtil extends InitializeObject {
 
-  private String algorithm, provider;
+  protected String algorithm, provider;
 
   public KeyFactoryUtil() {
   }
@@ -57,8 +57,8 @@ public class KeyFactoryUtil extends InitializeObject {
 
   @Override
   protected void init() throws Exception {
-    // DiffieHellman, DSA, EC, EdDSA, Ed25519, Ed448, RSA, RSASSA-PSS, XDH, X25519,
-    // X448, etc.
+    // DiffieHellman, DSA, EC, EdDSA, Ed25519, Ed448,
+    // RSA, RSASSA-PSS, XDH, X25519, X448, etc.
     Asserts.notNull(this.algorithm, "algorithm is required.");
   }
 
@@ -145,7 +145,7 @@ public class KeyFactoryUtil extends InitializeObject {
 
   public PrivateKey copy(PrivateKey key) throws CryptoException {
     this.initialize();
-    Asserts.isTrue("PKCS#8".equals(key.getFormat()), "key is not PKCS#8 format.");
+    Asserts.isTrue("PKCS#8".equals(key.getFormat()), "The key is not in PKCS#8 format.");
 
     byte[] der = key.getEncoded();
     try {
@@ -160,7 +160,7 @@ public class KeyFactoryUtil extends InitializeObject {
 
   public PublicKey copy(PublicKey key) throws CryptoException {
     this.initialize();
-    Asserts.isTrue("X.509".equals(key.getFormat()), "key is not X.509 format.");
+    Asserts.isTrue("X.509".equals(key.getFormat()), "The key is not in X.509 format.");
 
     try {
       return this.getImpl().generatePublic(new X509EncodedKeySpec(key.getEncoded()));

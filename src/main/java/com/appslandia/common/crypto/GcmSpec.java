@@ -20,29 +20,30 @@
 
 package com.appslandia.common.crypto;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class TextEncryptorTest {
+public class GcmSpec {
 
-  @Test
-  public void test() {
-    TextEncryptor impl = new TextEncryptor().setEncryptor(new PbeAesEncryptor().setTransformation("AES/GCM/NoPadding")
-        .setPbeSecretKeyGenerator(new PbeSecretKeyGenerator().setKeySize(32).setPassword("password".toCharArray())));
+  final int ivSize;
+  final int tagSize;
 
-    try {
-      String message = "data";
-      String encrypted = impl.encrypt(message);
-      String decrypted = impl.decrypt(encrypted);
+  public GcmSpec() {
+    this(12, 16);
+  }
 
-      Assertions.assertEquals(message, decrypted);
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
+  public GcmSpec(int ivSize, int tagSize) {
+    this.ivSize = ivSize;
+    this.tagSize = tagSize;
+  }
+
+  public int getIvSize() {
+    return this.ivSize;
+  }
+
+  public int getTagSize() {
+    return this.tagSize;
   }
 }

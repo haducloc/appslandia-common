@@ -37,12 +37,12 @@ import com.appslandia.common.utils.Asserts;
  *
  */
 public class RsaEncryptor extends InitializeObject implements Encryptor {
-  private String transformation, provider;
+  protected String transformation, provider;
 
-  private PublicKey publicKey;
-  private PrivateKey privateKey;
+  protected PublicKey publicKey;
+  protected PrivateKey privateKey;
 
-  private AlgorithmParameterSpec algParamSpec;
+  protected AlgorithmParameterSpec algParamSpec;
 
   @Override
   protected void init() throws Exception {

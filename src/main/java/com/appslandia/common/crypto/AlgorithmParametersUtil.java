@@ -34,8 +34,8 @@ import com.appslandia.common.utils.Asserts;
  */
 public class AlgorithmParametersUtil<T extends AlgorithmParameterSpec> extends InitializeObject {
 
-  private String algorithm, provider;
-  private AlgorithmParameterSpec algParamSpec;
+  protected String algorithm, provider;
+  protected AlgorithmParameterSpec algParamSpec;
 
   public AlgorithmParametersUtil() {
   }

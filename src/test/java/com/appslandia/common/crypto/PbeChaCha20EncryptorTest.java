@@ -38,7 +38,7 @@ public class PbeChaCha20EncryptorTest {
   public void test() {
     PbeChaCha20Encryptor impl = new PbeChaCha20Encryptor();
     impl.setTransformation("ChaCha20");
-    impl.setPassword("password".toCharArray());
+    impl.setPbeSecretKeyGenerator(new PbeSecretKeyGenerator().setKeySize(32).setPassword("password".toCharArray()));
 
     try {
       byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -56,7 +56,7 @@ public class PbeChaCha20EncryptorTest {
   public void test_Poly1305() {
     PbeChaCha20Encryptor impl = new PbeChaCha20Encryptor();
     impl.setTransformation("ChaCha20-Poly1305");
-    impl.setPassword("password".toCharArray());
+    impl.setPbeSecretKeyGenerator(new PbeSecretKeyGenerator().setKeySize(32).setPassword("password".toCharArray()));
 
     try {
       byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -74,7 +74,7 @@ public class PbeChaCha20EncryptorTest {
   public void test_threadSafe() {
     final PbeChaCha20Encryptor impl = new PbeChaCha20Encryptor();
     impl.setTransformation("ChaCha20");
-    impl.setPassword("password".toCharArray());
+    impl.setPbeSecretKeyGenerator(new PbeSecretKeyGenerator().setKeySize(32).setPassword("password".toCharArray()));
 
     new ThreadSafeTester() {
 
