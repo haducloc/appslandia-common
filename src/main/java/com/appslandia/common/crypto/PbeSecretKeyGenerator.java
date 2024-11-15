@@ -87,21 +87,6 @@ public class PbeSecretKeyGenerator extends InitializeObject {
     return impl;
   }
 
-  public int getSaltSize() {
-    this.initialize();
-    return this.saltSize;
-  }
-
-  public int getIterationCount() {
-    this.initialize();
-    return this.iterationCount;
-  }
-
-  public int getKeySize() {
-    this.initialize();
-    return this.keySize;
-  }
-
   public SecretKey generate(String algorithm, Out<byte[]> salt) throws CryptoException {
     this.initialize();
     salt.value = RandomUtils.nextBytes(this.saltSize, SecureRand.getInstance());
@@ -149,16 +134,31 @@ public class PbeSecretKeyGenerator extends InitializeObject {
     return this;
   }
 
+  public int getSaltSize() {
+    this.initialize();
+    return this.saltSize;
+  }
+
   public PbeSecretKeyGenerator setSaltSize(Integer saltSize) {
     this.assertNotInitialized();
     this.saltSize = saltSize;
     return this;
   }
 
+  public int getIterationCount() {
+    this.initialize();
+    return this.iterationCount;
+  }
+
   public PbeSecretKeyGenerator setIterationCount(Integer iterationCount) {
     this.assertNotInitialized();
     this.iterationCount = iterationCount;
     return this;
+  }
+
+  public int getKeySize() {
+    this.initialize();
+    return this.keySize;
   }
 
   public PbeSecretKeyGenerator setKeySize(Integer keySize) {
