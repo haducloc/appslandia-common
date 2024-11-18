@@ -52,14 +52,16 @@ public class PbeChaCha20Encryptor extends InitializeObject implements Encryptor 
   @Override
   protected void init() throws Exception {
     Asserts.notNull(this.transformation, "transformation is required.");
-    this.cipherOps = new CipherOps(this.transformation);
+    CipherOps cipherOps = new CipherOps(this.transformation);
 
-    Asserts.isTrue(this.cipherOps.isAlgorithm("ChaCha20") || this.cipherOps.isAlgorithm("ChaCha20-Poly1305"),
+    Asserts.isTrue(cipherOps.isAlgorithm("ChaCha20") || cipherOps.isAlgorithm("ChaCha20-Poly1305"),
         "ChaCha20|ChaCha20-Poly1305 algorithm is required.");
 
     Asserts.notNull(this.pbeSecretKeyGenerator, "pbeSecretKeyGenerator is required.");
     Asserts.isTrue(this.pbeSecretKeyGenerator.getKeySize() == 32,
         "pbeSecretKeyGenerator.keySize must be 32 bytes when using ChaCha20 or ChaCha20-Poly1305.");
+
+    this.cipherOps = cipherOps;
   }
 
   @Override

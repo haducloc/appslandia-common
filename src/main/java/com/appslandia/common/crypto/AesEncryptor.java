@@ -26,7 +26,6 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
@@ -45,27 +44,24 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
   protected String transformation, provider;
   protected CipherOps cipherOps;
   protected GcmSpec gcmSpec;
-
-  protected byte[] secret;
   protected SecretKey key;
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.secret, "secret is required.");
+    Asserts.notNull(this.key, "key is required.");
     Asserts.notNull(this.transformation, "transformation is required.");
-
     CipherOps cipherOps = new CipherOps(this.transformation);
 
     Asserts.isTrue(cipherOps.isAlgorithm("AES"), "AES algorithm is required.");
     Asserts.isTrue(cipherOps.isMode("CBC", "^CFB\\d*$", "CTR", "^OFB\\d*$", "ECB", "GCM"),
         "CBC|CFB|CTR|OFB|ECB|GCM mode is required.");
 
+    Asserts.isTrue(cipherOps.getAlgorithm().equalsIgnoreCase(this.key.getAlgorithm()),
+        "this.key.getAlgorithm() is unmatched.");
+
     if (cipherOps.isMode("GCM")) {
       this.gcmSpec = new GcmSpec();
     }
-
-    this.key = new SecretKeySpec(this.secret, cipherOps.getAlgorithm());
-    CryptoUtils.clear(this.secret);
     this.cipherOps = cipherOps;
   }
 
@@ -183,10 +179,10 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
     return this;
   }
 
-  public AesEncryptor setSecret(byte[] secret) {
+  public AesEncryptor setKey(SecretKey key) {
     this.assertNotInitialized();
-    if (secret != null) {
-      this.secret = ArrayUtils.copy(secret);
+    if (key != null) {
+      this.key = CryptoUtils.copy(key);
     }
     return this;
   }

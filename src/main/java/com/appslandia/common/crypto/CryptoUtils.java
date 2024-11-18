@@ -27,6 +27,9 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.security.auth.DestroyFailedException;
 import javax.security.auth.Destroyable;
 
+import com.appslandia.common.utils.RandomUtils;
+import com.appslandia.common.utils.SecureRand;
+
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
@@ -91,9 +94,16 @@ public class CryptoUtils {
 
   public static SecretKey copy(SecretKey key) {
     byte[] kByte = key.getEncoded();
-    SecretKey cp = new SecretKeySpec(kByte, key.getAlgorithm());
+    SecretKey cKey = new SecretKeySpec(kByte, key.getAlgorithm());
     clear(kByte);
-    return cp;
+    return cKey;
+  }
+
+  public static SecretKey randSecretKey(String algorithm, int keySize) {
+    byte[] kByte = RandomUtils.nextBytes(keySize, SecureRand.getInstance());
+    SecretKey key = new SecretKeySpec(kByte, algorithm);
+    clear(kByte);
+    return key;
   }
 
   private static final String ENC_BEGIN = "ENC(";

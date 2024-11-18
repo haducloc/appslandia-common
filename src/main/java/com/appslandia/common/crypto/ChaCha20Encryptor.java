@@ -26,7 +26,6 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.ChaCha20ParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
@@ -46,23 +45,21 @@ public class ChaCha20Encryptor extends InitializeObject implements Encryptor {
 
   protected String transformation, provider;
   protected CipherOps cipherOps;
-
-  protected byte[] secret;
   protected SecretKey key;
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.secret, "secret is required.");
+    Asserts.notNull(this.key, "key is required.");
     Asserts.notNull(this.transformation, "transformation is required.");
+    CipherOps cipherOps = new CipherOps(this.transformation);
 
-    this.cipherOps = new CipherOps(this.transformation);
-
-    Asserts.isTrue(this.cipherOps.isAlgorithm("ChaCha20") || this.cipherOps.isAlgorithm("ChaCha20-Poly1305"),
+    Asserts.isTrue(cipherOps.isAlgorithm("ChaCha20") || cipherOps.isAlgorithm("ChaCha20-Poly1305"),
         "ChaCha20|ChaCha20-Poly1305 algorithm is required.");
-    Asserts.isTrue(this.secret.length == 32, "secret must be 32 bytes when using ChaCha20 or ChaCha20-Poly1305.");
 
-    this.key = new SecretKeySpec(this.secret, this.cipherOps.getAlgorithm());
-    CryptoUtils.clear(this.secret);
+    Asserts.isTrue(cipherOps.getAlgorithm().equalsIgnoreCase(this.key.getAlgorithm()),
+        "this.key.getAlgorithm() is unmatched.");
+
+    this.cipherOps = cipherOps;
   }
 
   @Override
@@ -149,10 +146,10 @@ public class ChaCha20Encryptor extends InitializeObject implements Encryptor {
     return this;
   }
 
-  public ChaCha20Encryptor setSecret(byte[] secret) {
+  public ChaCha20Encryptor setKey(SecretKey key) {
     this.assertNotInitialized();
-    if (secret != null) {
-      this.secret = ArrayUtils.copy(secret);
+    if (key != null) {
+      this.key = CryptoUtils.copy(key);
     }
     return this;
   }

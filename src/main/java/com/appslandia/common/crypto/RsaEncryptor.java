@@ -131,13 +131,17 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 
   public RsaEncryptor setPrivateKey(PrivateKey privateKey) {
     assertNotInitialized();
-    this.privateKey = privateKey;
+    if (privateKey != null) {
+      this.privateKey = new KeyFactoryUtil(privateKey.getAlgorithm()).copy(privateKey);
+    }
     return this;
   }
 
   public RsaEncryptor setPublicKey(PublicKey publicKey) {
     assertNotInitialized();
-    this.publicKey = publicKey;
+    if (publicKey != null) {
+      this.publicKey = new KeyFactoryUtil(publicKey.getAlgorithm()).copy(publicKey);
+    }
     return this;
   }
 
