@@ -26,10 +26,12 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -174,7 +176,7 @@ public class ConnectionImpl implements Connection {
 
   public <K, V> Map<K, V> executeMap(String sql, ResultSetMapper<K> keyMapper, ResultSetMapper<V> valueMapper)
       throws java.sql.SQLException {
-    return executeMap(sql, keyMapper, valueMapper, new LinkedHashMap<>());
+    return executeMap(sql, keyMapper, valueMapper, new HashMap<>());
   }
 
   public <K, V> Map<K, V> executeMap(String sql, ResultSetMapper<K> keyMapper, ResultSetMapper<V> valueMapper,
@@ -189,7 +191,7 @@ public class ConnectionImpl implements Connection {
 
   public <K, V> Map<K, V> executeMap(String pQuery, Object[] params, ResultSetMapper<K> keyMapper,
       ResultSetMapper<V> valueMapper) throws java.sql.SQLException {
-    return executeMap(pQuery, params, keyMapper, valueMapper, new LinkedHashMap<>());
+    return executeMap(pQuery, params, keyMapper, valueMapper, new HashMap<>());
   }
 
   public <K, V> Map<K, V> executeMap(String pQuery, Object[] params, ResultSetMapper<K> keyMapper,
@@ -199,7 +201,7 @@ public class ConnectionImpl implements Connection {
 
   public <K, V> Map<K, V> executeMap(String pQuery, Map<String, Object> params, ResultSetMapper<K> keyMapper,
       ResultSetMapper<V> valueMapper) throws java.sql.SQLException {
-    return executeMap(pQuery, params, keyMapper, valueMapper, new LinkedHashMap<>());
+    return executeMap(pQuery, params, keyMapper, valueMapper, new HashMap<>());
   }
 
   public <K, V> Map<K, V> executeMap(String pQuery, Map<String, Object> params, ResultSetMapper<K> keyMapper,
@@ -215,21 +217,35 @@ public class ConnectionImpl implements Connection {
     }
   }
 
-  public <T> List<T> executeList(String sql, ResultSetMapper<T> mapper) throws java.sql.SQLException {
+  public <V> Set<V> executeSet(String sql, ResultSetMapper<V> valueMapper) throws java.sql.SQLException {
+    return executeSet(sql, valueMapper, new HashSet<>());
+  }
+
+  public <V> Set<V> executeSet(String sql, ResultSetMapper<V> valueMapper, Set<V> set) throws java.sql.SQLException {
     try (Statement stat = this.conn.createStatement()) {
       try (ResultSetImpl rs = new ResultSetImpl(stat.executeQuery(sql))) {
 
-        return JdbcUtils.executeList(rs, mapper, new LinkedList<>());
+        return JdbcUtils.executeSet(rs, valueMapper, set);
       }
     }
   }
 
-  public <T> List<T> executeList(String pQuery, Object[] params, ResultSetMapper<T> mapper)
+  public <V> Set<V> executeSet(String pQuery, Object[] params, ResultSetMapper<V> valueMapper)
       throws java.sql.SQLException {
-    return executeList(pQuery, JdbcUtils.toParameters(params), mapper);
+    return executeSet(pQuery, params, valueMapper, new HashSet<>());
   }
 
-  public <T> List<T> executeList(String pQuery, Map<String, Object> params, ResultSetMapper<T> mapper)
+  public <V> Set<V> executeSet(String pQuery, Object[] params, ResultSetMapper<V> valueMapper, Set<V> set)
+      throws java.sql.SQLException {
+    return executeSet(pQuery, JdbcUtils.toParameters(params), valueMapper, set);
+  }
+
+  public <V> Set<V> executeSet(String pQuery, Map<String, Object> params, ResultSetMapper<V> valueMapper)
+      throws java.sql.SQLException {
+    return executeSet(pQuery, params, valueMapper, new HashSet<>());
+  }
+
+  public <V> Set<V> executeSet(String pQuery, Map<String, Object> params, ResultSetMapper<V> valueMapper, Set<V> set)
       throws java.sql.SQLException {
     SqlQuery query = new SqlQuery(pQuery);
     try (StatementImpl stat = prepareStatement(query)) {
@@ -237,7 +253,48 @@ public class ConnectionImpl implements Connection {
         JdbcUtils.setParameters(stat, query, params);
       }
       try (ResultSetImpl rs = stat.executeQuery()) {
-        return JdbcUtils.executeList(rs, mapper, new LinkedList<>());
+        return JdbcUtils.executeSet(rs, valueMapper, set);
+      }
+    }
+  }
+
+  public <T> List<T> executeList(String sql, ResultSetMapper<T> mapper) throws java.sql.SQLException {
+    return executeList(sql, mapper, new ArrayList<>());
+  }
+
+  public <T> List<T> executeList(String sql, ResultSetMapper<T> mapper, List<T> list) throws java.sql.SQLException {
+    try (Statement stat = this.conn.createStatement()) {
+      try (ResultSetImpl rs = new ResultSetImpl(stat.executeQuery(sql))) {
+
+        return JdbcUtils.executeList(rs, mapper, list);
+      }
+    }
+  }
+
+  public <T> List<T> executeList(String pQuery, Object[] params, ResultSetMapper<T> mapper)
+      throws java.sql.SQLException {
+    return executeList(pQuery, params, mapper, new ArrayList<>());
+  }
+
+  public <T> List<T> executeList(String pQuery, Object[] params, ResultSetMapper<T> mapper, List<T> list)
+      throws java.sql.SQLException {
+    return executeList(pQuery, JdbcUtils.toParameters(params), mapper, list);
+  }
+
+  public <T> List<T> executeList(String pQuery, Map<String, Object> params, ResultSetMapper<T> mapper)
+      throws java.sql.SQLException {
+    return executeList(pQuery, params, mapper, new ArrayList<>());
+  }
+
+  public <T> List<T> executeList(String pQuery, Map<String, Object> params, ResultSetMapper<T> mapper, List<T> list)
+      throws java.sql.SQLException {
+    SqlQuery query = new SqlQuery(pQuery);
+    try (StatementImpl stat = prepareStatement(query)) {
+      if (params != null) {
+        JdbcUtils.setParameters(stat, query, params);
+      }
+      try (ResultSetImpl rs = stat.executeQuery()) {
+        return JdbcUtils.executeList(rs, mapper, list);
       }
     }
   }

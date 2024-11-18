@@ -23,7 +23,7 @@ package com.appslandia.common.data;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -294,24 +294,38 @@ public class RecordContext extends DbContext {
   // Record utilities
 
   public List<DataRecord> executeList(String sql) throws java.sql.SQLException {
+    return executeList(sql, new ArrayList<>());
+  }
+
+  public List<DataRecord> executeList(String sql, List<DataRecord> list) throws java.sql.SQLException {
     try (Statement stat = this.conn.createStatement()) {
       try (ResultSetImpl rs = new ResultSetImpl(stat.executeQuery(sql))) {
 
-        return JdbcUtils.executeList(rs, r -> RecordUtils.toRecord(r), new LinkedList<>());
+        return JdbcUtils.executeList(rs, r -> RecordUtils.toRecord(r), list);
       }
     }
   }
 
   public List<DataRecord> executeList(String pQuery, Object... params) throws java.sql.SQLException {
-    return executeList(pQuery, JdbcUtils.toParameters(params));
+    return executeList(pQuery, params, new ArrayList<>());
+  }
+
+  public List<DataRecord> executeList(String pQuery, Object[] params, List<DataRecord> list)
+      throws java.sql.SQLException {
+    return executeList(pQuery, JdbcUtils.toParameters(params), list);
   }
 
   public List<DataRecord> executeList(String pQuery, Map<String, Object> params) throws java.sql.SQLException {
+    return executeList(pQuery, params, new ArrayList<>());
+  }
+
+  public List<DataRecord> executeList(String pQuery, Map<String, Object> params, List<DataRecord> list)
+      throws java.sql.SQLException {
     StatementImpl stat = prepareStatement(pQuery, params);
 
     try (ResultSetImpl rs = stat.executeQuery()) {
 
-      return JdbcUtils.executeList(rs, r -> RecordUtils.toRecord(r), new LinkedList<>());
+      return JdbcUtils.executeList(rs, r -> RecordUtils.toRecord(r), list);
     }
   }
 

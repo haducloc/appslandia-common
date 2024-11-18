@@ -23,7 +23,6 @@ package com.appslandia.common.jdbc;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -73,7 +72,7 @@ public class SqlQuery extends InitializeObject implements Serializable {
     Asserts.isTrue(maxLength > 0, "maxLength is required.");
 
     if (this.arrayLens == null) {
-      this.arrayLens = new CaseInsensitiveMap<>(new LinkedHashMap<>());
+      this.arrayLens = new CaseInsensitiveMap<>();
     }
     this.arrayLens.put(parameterName, maxLength);
     return this;
@@ -81,8 +80,8 @@ public class SqlQuery extends InitializeObject implements Serializable {
 
   private void translateQuery() {
     StringBuilder sb = new StringBuilder(this.pQuery);
-    Map<String, List<Integer>> indexesMap = new CaseInsensitiveMap<>(new LinkedHashMap<>());
-    Map<String, Integer> paramsMap = new CaseInsensitiveMap<>(new LinkedHashMap<>());
+    Map<String, List<Integer>> indexesMap = new CaseInsensitiveMap<>();
+    Map<String, Integer> paramsMap = new CaseInsensitiveMap<>();
 
     int start = 0;
     int index = 0;

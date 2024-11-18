@@ -22,7 +22,7 @@ package com.appslandia.common.data;
 
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.appslandia.common.base.InitializeObject;
@@ -89,7 +89,7 @@ public class AnnotationModel extends InitializeObject {
     Asserts.notNull(value);
 
     if (this.properties == null) {
-      this.properties = new LinkedHashMap<>();
+      this.properties = new HashMap<>();
     }
     this.properties.put(property, value);
   }

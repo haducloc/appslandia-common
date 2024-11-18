@@ -35,7 +35,7 @@ import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -113,7 +113,7 @@ public final class RecordUtils {
     }
 
     // Keys
-    Set<String> keys = new LinkedHashSet<>();
+    Set<String> keys = new HashSet<>();
     try (ResultSet rs = metaData.getPrimaryKeys(catalog, schema, tableName)) {
       while (rs.next()) {
         keys.add(rs.getString("COLUMN_NAME").toLowerCase(Locale.ENGLISH));

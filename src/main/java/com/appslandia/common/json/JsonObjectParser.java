@@ -20,9 +20,10 @@
 
 package com.appslandia.common.json;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -43,7 +44,7 @@ public class JsonObjectParser extends InitializeObject {
 
   static final String ROOT_PATH = "";
 
-  final Map<String, Function<Object, Object>> valueConverters = new LinkedHashMap<>();
+  final Map<String, Function<Object, Object>> valueConverters = new HashMap<>();
   final Map<String, Pattern> pathPatterns = new ConcurrentHashMap<>();
 
   private JsonValueConverter jsonValueConverter;
@@ -153,7 +154,7 @@ public class JsonObjectParser extends InitializeObject {
     Iterator<?> childElements = this.jsonValueConverter.asJsonArray(element, asResult.set(false));
     if (Boolean.TRUE.equals(asResult.value)) {
 
-      List<Object> list = new LinkedList<>();
+      List<Object> list = new ArrayList<>();
       int idx = 0;
 
       while (childElements.hasNext()) {

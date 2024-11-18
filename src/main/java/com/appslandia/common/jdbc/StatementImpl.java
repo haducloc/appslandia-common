@@ -31,8 +31,12 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ObjectUtils;
@@ -110,6 +114,11 @@ public class StatementImpl implements PreparedStatement {
 
   // Execute utilities
 
+  public <K, V> Map<K, V> executeMap(ResultSetMapper<K> keyMapper, ResultSetMapper<V> valueMapper)
+      throws java.sql.SQLException {
+    return executeMap(keyMapper, valueMapper, new HashMap<>());
+  }
+
   public <K, V> Map<K, V> executeMap(ResultSetMapper<K> keyMapper, ResultSetMapper<V> valueMapper, Map<K, V> map)
       throws java.sql.SQLException {
     try (ResultSetImpl rs = executeQuery()) {
@@ -117,9 +126,19 @@ public class StatementImpl implements PreparedStatement {
     }
   }
 
+  public <K, V> Map<K, V> executeMap(Object[] params, ResultSetMapper<K> keyMapper, ResultSetMapper<V> valueMapper)
+      throws java.sql.SQLException {
+    return executeMap(params, keyMapper, valueMapper, new HashMap<>());
+  }
+
   public <K, V> Map<K, V> executeMap(Object[] params, ResultSetMapper<K> keyMapper, ResultSetMapper<V> valueMapper,
       Map<K, V> map) throws java.sql.SQLException {
     return executeMap(JdbcUtils.toParameters(params), keyMapper, valueMapper, map);
+  }
+
+  public <K, V> Map<K, V> executeMap(Map<String, Object> params, ResultSetMapper<K> keyMapper,
+      ResultSetMapper<V> valueMapper) throws java.sql.SQLException {
+    return executeMap(params, keyMapper, valueMapper, new HashMap<>());
   }
 
   public <K, V> Map<K, V> executeMap(Map<String, Object> params, ResultSetMapper<K> keyMapper,
@@ -132,15 +151,59 @@ public class StatementImpl implements PreparedStatement {
     }
   }
 
+  public <T> Set<T> executeSet(ResultSetMapper<T> mapper) throws java.sql.SQLException {
+    return executeSet(mapper, new HashSet<>());
+  }
+
+  public <T> Set<T> executeSet(ResultSetMapper<T> mapper, Set<T> set) throws java.sql.SQLException {
+    try (ResultSetImpl rs = executeQuery()) {
+      return JdbcUtils.executeSet(rs, mapper, set);
+    }
+  }
+
+  public <T> Set<T> executeSet(Object[] params, ResultSetMapper<T> mapper) throws java.sql.SQLException {
+    return executeSet(params, mapper, new HashSet<>());
+  }
+
+  public <T> Set<T> executeSet(Object[] params, ResultSetMapper<T> mapper, Set<T> set) throws java.sql.SQLException {
+    return executeSet(JdbcUtils.toParameters(params), mapper, set);
+  }
+
+  public <T> Set<T> executeSet(Map<String, Object> params, ResultSetMapper<T> mapper) throws java.sql.SQLException {
+    return executeSet(params, mapper, new HashSet<>());
+  }
+
+  public <T> Set<T> executeSet(Map<String, Object> params, ResultSetMapper<T> mapper, Set<T> set)
+      throws java.sql.SQLException {
+    if (params != null) {
+      JdbcUtils.setParameters(this, getPQuery(), params);
+    }
+    try (ResultSetImpl rs = executeQuery()) {
+      return JdbcUtils.executeSet(rs, mapper, set);
+    }
+  }
+
+  public <T> List<T> executeList(ResultSetMapper<T> mapper) throws java.sql.SQLException {
+    return executeList(mapper, new ArrayList<>());
+  }
+
   public <T> List<T> executeList(ResultSetMapper<T> mapper, List<T> list) throws java.sql.SQLException {
     try (ResultSetImpl rs = executeQuery()) {
       return JdbcUtils.executeList(rs, mapper, list);
     }
   }
 
+  public <T> List<T> executeList(Object[] params, ResultSetMapper<T> mapper) throws java.sql.SQLException {
+    return executeList(params, mapper, new ArrayList<>());
+  }
+
   public <T> List<T> executeList(Object[] params, ResultSetMapper<T> mapper, List<T> list)
       throws java.sql.SQLException {
     return executeList(JdbcUtils.toParameters(params), mapper, list);
+  }
+
+  public <T> List<T> executeList(Map<String, Object> params, ResultSetMapper<T> mapper) throws java.sql.SQLException {
+    return executeList(params, mapper, new ArrayList<>());
   }
 
   public <T> List<T> executeList(Map<String, Object> params, ResultSetMapper<T> mapper, List<T> list)

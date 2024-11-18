@@ -27,9 +27,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -53,7 +53,7 @@ import jakarta.inject.Inject;
  */
 public class ObjectFactory extends InitializeObject {
 
-  final List<ObjectInstance> instances = new LinkedList<>();
+  final List<ObjectInstance> instances = new ArrayList<>();
 
   @Override
   protected void init() throws Exception {
@@ -324,7 +324,7 @@ public class ObjectFactory extends InitializeObject {
   }
 
   private List<ObjectInstance> getObjectInsts(Class<?> type, Annotation[] qualifiers) {
-    List<ObjectInstance> insts = new LinkedList<>();
+    List<ObjectInstance> insts = new ArrayList<>();
     for (ObjectInstance inst : this.instances) {
 
       if ((inst.definition.hasType(type) || (type == Object.class))
