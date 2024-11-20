@@ -22,6 +22,7 @@ package com.appslandia.common.crypto;
 
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
+import java.security.spec.AlgorithmParameterSpec;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
@@ -40,6 +41,7 @@ import com.appslandia.common.utils.Asserts;
 public class PbeMacSigner extends InitializeObject implements Digester {
 
   protected String algorithm, provider;
+  protected AlgorithmParameterSpec algParamSpec;
   protected PbeSecretKeyGenerator pbeSecretKeyGenerator;
 
   @Override
@@ -74,7 +76,11 @@ public class PbeMacSigner extends InitializeObject implements Digester {
     try {
       Mac impl = this.getImpl();
       key = this.pbeSecretKeyGenerator.generate(this.algorithm, salt);
-      impl.init(key);
+      if (this.algParamSpec == null) {
+        impl.init(key);
+      } else {
+        impl.init(key, this.algParamSpec);
+      }
 
       byte[] storedMac = impl.doFinal(message);
       return ArrayUtils.append(salt.value, storedMac);
@@ -103,7 +109,11 @@ public class PbeMacSigner extends InitializeObject implements Digester {
     try {
       Mac impl = this.getImpl();
       key = this.pbeSecretKeyGenerator.generate(this.algorithm, salt);
-      impl.init(key);
+      if (this.algParamSpec == null) {
+        impl.init(key);
+      } else {
+        impl.init(key, this.algParamSpec);
+      }
 
       byte[] computedMac = impl.doFinal(message);
       return MessageDigest.isEqual(storedHash, computedMac);
@@ -140,6 +150,12 @@ public class PbeMacSigner extends InitializeObject implements Digester {
   public PbeMacSigner setPbeSecretKeyGenerator(PbeSecretKeyGenerator pbeSecretKeyGenerator) {
     this.assertNotInitialized();
     this.pbeSecretKeyGenerator = pbeSecretKeyGenerator;
+    return this;
+  }
+
+  public PbeMacSigner setAlgParamSpec(AlgorithmParameterSpec algParamSpec) {
+    assertNotInitialized();
+    this.algParamSpec = algParamSpec;
     return this;
   }
 }
