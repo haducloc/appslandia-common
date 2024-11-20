@@ -23,6 +23,7 @@ package com.appslandia.common.crypto;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
+import java.security.spec.AlgorithmParameterSpec;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
@@ -42,6 +43,7 @@ public class MacSigner extends InitializeObject implements Digester {
 
   protected String algorithm, provider;
   protected byte[] secret;
+  protected AlgorithmParameterSpec algParamSpec;
 
   @Override
   protected void init() throws Exception {
@@ -73,7 +75,11 @@ public class MacSigner extends InitializeObject implements Digester {
     SecretKey key = new DSecretKey(this.secret, this.algorithm);
     try {
       Mac impl = getImpl();
-      impl.init(key);
+      if (this.algParamSpec == null) {
+        impl.init(key);
+      } else {
+        impl.init(key, this.algParamSpec);
+      }
       return impl.doFinal(message);
 
     } catch (GeneralSecurityException ex) {
@@ -92,6 +98,11 @@ public class MacSigner extends InitializeObject implements Digester {
     SecretKey key = new DSecretKey(this.secret, this.algorithm);
     try {
       Mac impl = getImpl();
+      if (this.algParamSpec == null) {
+        impl.init(key);
+      } else {
+        impl.init(key, this.algParamSpec);
+      }
       impl.init(key);
 
       byte[] computedMac = impl.doFinal(message);
@@ -145,6 +156,12 @@ public class MacSigner extends InitializeObject implements Digester {
       }
       this.secret = resolvedValue.getBytes(StandardCharsets.UTF_8);
     }
+    return this;
+  }
+
+  public MacSigner setAlgParamSpec(AlgorithmParameterSpec algParamSpec) {
+    assertNotInitialized();
+    this.algParamSpec = algParamSpec;
     return this;
   }
 }
