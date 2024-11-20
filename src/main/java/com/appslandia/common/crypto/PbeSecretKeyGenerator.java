@@ -31,9 +31,7 @@ import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
 import com.appslandia.common.utils.Asserts;
-import com.appslandia.common.utils.RandomUtils;
 import com.appslandia.common.utils.SYS;
-import com.appslandia.common.utils.SecureRand;
 import com.appslandia.common.utils.ValueUtils;
 
 /**
@@ -88,7 +86,7 @@ public class PbeSecretKeyGenerator extends InitializeObject {
 
   public SecretKey generate(String algorithm, Out<byte[]> salt) throws CryptoException {
     this.initialize();
-    salt.value = RandomUtils.nextBytes(this.saltSize, SecureRand.getInstance());
+    salt.value = CryptoUtils.randomBytes(this.saltSize);
     return generate(algorithm, salt.value);
   }
 

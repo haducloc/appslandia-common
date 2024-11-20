@@ -26,8 +26,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import com.appslandia.common.base.ThreadSafeTester;
-import com.appslandia.common.utils.RandomUtils;
-import com.appslandia.common.utils.SecureRand;
 
 /**
  *
@@ -39,7 +37,7 @@ public class ChaCha20EncryptorTest {
   @Test
   public void test() {
     ChaCha20Encryptor impl = new ChaCha20Encryptor();
-    impl.setSecret(RandomUtils.nextBytes(32, SecureRand.getInstance()));
+    impl.setSecret(CryptoUtils.randomBytes(32));
     impl.setTransformation("ChaCha20");
 
     try {
@@ -57,7 +55,7 @@ public class ChaCha20EncryptorTest {
   @Test
   public void test_Poly1305() {
     ChaCha20Encryptor impl = new ChaCha20Encryptor();
-    impl.setSecret(RandomUtils.nextBytes(32, SecureRand.getInstance()));
+    impl.setSecret(CryptoUtils.randomBytes(32));
     impl.setTransformation("ChaCha20-Poly1305");
 
     try {
@@ -75,7 +73,7 @@ public class ChaCha20EncryptorTest {
   @Test
   public void test_threadSafe() {
     final ChaCha20Encryptor impl = new ChaCha20Encryptor();
-    impl.setSecret(RandomUtils.nextBytes(32, SecureRand.getInstance()));
+    impl.setSecret(CryptoUtils.randomBytes(32));
     impl.setTransformation("ChaCha20");
 
     new ThreadSafeTester() {

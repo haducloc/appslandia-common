@@ -98,7 +98,7 @@ public class CryptoUtils {
     return cKey;
   }
 
-  public static byte[] randomSecret(int size) {
+  public static byte[] randomBytes(int size) {
     return RandomUtils.nextBytes(size, SecureRand.getInstance());
   }
 

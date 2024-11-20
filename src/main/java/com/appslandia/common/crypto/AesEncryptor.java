@@ -31,8 +31,6 @@ import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
-import com.appslandia.common.utils.RandomUtils;
-import com.appslandia.common.utils.SecureRand;
 
 /**
  *
@@ -103,7 +101,7 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
       if (ivSize <= 0) {
         impl.init(Cipher.ENCRYPT_MODE, key);
       } else {
-        iv = RandomUtils.nextBytes(ivSize, SecureRand.getInstance());
+        iv = CryptoUtils.randomBytes(ivSize);
 
         if (this.cipherOps.isMode("GCM")) {
           impl.init(Cipher.ENCRYPT_MODE, key, new GCMParameterSpec(this.gcmSpec.getTagSize() * 8, iv));

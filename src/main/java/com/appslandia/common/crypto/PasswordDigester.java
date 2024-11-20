@@ -31,8 +31,6 @@ import javax.crypto.spec.PBEKeySpec;
 import com.appslandia.common.base.BaseEncoder;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
-import com.appslandia.common.utils.RandomUtils;
-import com.appslandia.common.utils.SecureRand;
 import com.appslandia.common.utils.ValueUtils;
 
 /**
@@ -73,7 +71,7 @@ public class PasswordDigester extends TextDigester {
     this.initialize();
     Asserts.notNull(password, "password is required.");
 
-    byte[] salt = RandomUtils.nextBytes(this.saltSize, SecureRand.getInstance());
+    byte[] salt = CryptoUtils.randomBytes(this.saltSize);
     char[] pwdChars = password.toCharArray();
 
     try {

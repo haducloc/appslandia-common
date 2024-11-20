@@ -32,8 +32,6 @@ import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
-import com.appslandia.common.utils.RandomUtils;
-import com.appslandia.common.utils.SecureRand;
 
 /**
  *
@@ -90,9 +88,10 @@ public class PbeChaCha20Encryptor extends InitializeObject implements Encryptor 
     try {
       Out<byte[]> salt = new Out<>();
       key = this.pbeSecretKeyGenerator.generate(this.cipherOps.getAlgorithm(), salt);
-      Cipher impl = getImpl();
 
-      byte[] iv = RandomUtils.nextBytes(IV_SIZE, SecureRand.getInstance());
+      Cipher impl = getImpl();
+      byte[] iv = CryptoUtils.randomBytes(IV_SIZE);
+
       if (this.cipherOps.isAlgorithm("ChaCha20")) {
         impl.init(Cipher.ENCRYPT_MODE, key, new ChaCha20ParameterSpec(iv, 1));
       } else {
