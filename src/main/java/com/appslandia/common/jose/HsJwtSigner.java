@@ -61,8 +61,8 @@ public class HsJwtSigner extends HsJwsSigner<JwtPayload> {
   }
 
   @Override
-  public HsJwtSigner setSecret(String secretOrEnv) {
-    super.setSecret(secretOrEnv);
+  public HsJwtSigner setSecret(String secretExpr) {
+    super.setSecret(secretExpr);
     return this;
   }
 

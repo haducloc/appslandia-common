@@ -26,7 +26,6 @@ import java.util.Arrays;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
 
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
@@ -101,7 +100,7 @@ public class PbeSecretKeyGenerator extends InitializeObject {
       byte[] kBytes = secret.getEncoded();
       CryptoUtils.destroy(secret);
 
-      SecretKey key = new SecretKeySpec(kBytes, algorithm);
+      SecretKey key = new DSecretKey(kBytes, algorithm);
       CryptoUtils.clear(kBytes);
       return key;
 

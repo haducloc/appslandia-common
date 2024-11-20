@@ -60,8 +60,8 @@ public class HsJwsSigner<P> {
     return this;
   }
 
-  public HsJwsSigner<P> setSecret(String secretOrEnv) {
-    this.signer.setSecret(secretOrEnv);
+  public HsJwsSigner<P> setSecret(String secretExpr) {
+    this.signer.setSecret(secretExpr);
     return this;
   }
 

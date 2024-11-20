@@ -129,13 +129,17 @@ public class DsaSigner extends InitializeObject implements Digester {
 
   public DsaSigner setPrivateKey(PrivateKey privateKey) {
     assertNotInitialized();
-    this.privateKey = privateKey;
+    if (privateKey != null) {
+      this.privateKey = new KeyFactoryUtil(privateKey.getAlgorithm()).copy(privateKey);
+    }
     return this;
   }
 
   public DsaSigner setPublicKey(PublicKey publicKey) {
     assertNotInitialized();
-    this.publicKey = publicKey;
+    if (publicKey != null) {
+      this.publicKey = new KeyFactoryUtil(publicKey.getAlgorithm()).copy(publicKey);
+    }
     return this;
   }
 

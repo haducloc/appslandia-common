@@ -26,6 +26,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import com.appslandia.common.base.ThreadSafeTester;
+import com.appslandia.common.utils.RandomUtils;
+import com.appslandia.common.utils.SecureRand;
 
 /**
  *
@@ -37,7 +39,7 @@ public class AesEncryptorTest {
   @Test
   public void test_CBC() {
     AesEncryptor impl = new AesEncryptor();
-    impl.setTransformation("AES/CBC/PKCS5Padding").setKey(CryptoUtils.randSecretKey("AES", 16));
+    impl.setTransformation("AES/CBC/PKCS5Padding").setSecret(RandomUtils.nextBytes(16, SecureRand.getInstance()));
 
     try {
       byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -54,7 +56,7 @@ public class AesEncryptorTest {
   @Test
   public void test_CFB() {
     AesEncryptor impl = new AesEncryptor();
-    impl.setTransformation("AES/CFB/PKCS5Padding").setKey(CryptoUtils.randSecretKey("AES", 16));
+    impl.setTransformation("AES/CFB/PKCS5Padding").setSecret(RandomUtils.nextBytes(16, SecureRand.getInstance()));
 
     try {
       byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -71,7 +73,7 @@ public class AesEncryptorTest {
   @Test
   public void test_CTR() {
     AesEncryptor impl = new AesEncryptor();
-    impl.setTransformation("AES/CTR/NoPadding").setKey(CryptoUtils.randSecretKey("AES", 16));
+    impl.setTransformation("AES/CTR/NoPadding").setSecret(RandomUtils.nextBytes(16, SecureRand.getInstance()));
 
     try {
       byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -88,7 +90,7 @@ public class AesEncryptorTest {
   @Test
   public void test_OFB() {
     AesEncryptor impl = new AesEncryptor();
-    impl.setTransformation("AES/OFB/PKCS5Padding").setKey(CryptoUtils.randSecretKey("AES", 16));
+    impl.setTransformation("AES/OFB/PKCS5Padding").setSecret(RandomUtils.nextBytes(16, SecureRand.getInstance()));
 
     try {
       byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -105,7 +107,7 @@ public class AesEncryptorTest {
   @Test
   public void test_ECB() {
     AesEncryptor impl = new AesEncryptor();
-    impl.setTransformation("AES/ECB/PKCS5Padding").setKey(CryptoUtils.randSecretKey("AES", 16));
+    impl.setTransformation("AES/ECB/PKCS5Padding").setSecret(RandomUtils.nextBytes(16, SecureRand.getInstance()));
 
     try {
       byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -122,7 +124,7 @@ public class AesEncryptorTest {
   @Test
   public void test_GCM() {
     AesEncryptor impl = new AesEncryptor();
-    impl.setTransformation("AES/GCM/NoPadding").setKey(CryptoUtils.randSecretKey("AES", 16));
+    impl.setTransformation("AES/GCM/NoPadding").setSecret(RandomUtils.nextBytes(16, SecureRand.getInstance()));
 
     try {
       byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -139,7 +141,7 @@ public class AesEncryptorTest {
   @Test
   public void test_threadSafe() {
     final AesEncryptor impl = new AesEncryptor();
-    impl.setTransformation("AES/CBC/PKCS5Padding").setKey(CryptoUtils.randSecretKey("AES", 16));
+    impl.setTransformation("AES/CBC/PKCS5Padding").setSecret(RandomUtils.nextBytes(16, SecureRand.getInstance()));
 
     new ThreadSafeTester() {
 

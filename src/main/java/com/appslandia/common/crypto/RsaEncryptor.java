@@ -50,6 +50,13 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
 
     CipherOps cipherOps = new CipherOps(this.transformation);
     Asserts.isTrue(cipherOps.isAlgorithm("RSA"), "RSA algorithm is required.");
+
+    if (this.privateKey != null) {
+      Asserts.isTrue("RSA".equalsIgnoreCase(this.privateKey.getAlgorithm()), "The privateKey.algorithm must be RSA.");
+    }
+    if (this.publicKey != null) {
+      Asserts.isTrue("RSA".equalsIgnoreCase(this.publicKey.getAlgorithm()), "The publicKey.algorithm must be RSA.");
+    }
   }
 
   protected Cipher getImpl() throws GeneralSecurityException {
