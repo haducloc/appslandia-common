@@ -60,8 +60,7 @@ public class DSecretKey implements SecretKey, KeySpec {
   }
 
   public DSecretKey(Key sourceKey) {
-    this(Asserts.notNull(sourceKey.getEncoded(), "The sourceKey must support encoding."), sourceKey.getFormat(),
-        sourceKey.getAlgorithm());
+    this(Asserts.notNull(sourceKey.getEncoded()), sourceKey.getFormat(), sourceKey.getAlgorithm());
   }
 
   @Override

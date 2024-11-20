@@ -151,6 +151,7 @@ public class KeyFactoryUtil extends InitializeObject {
 
     byte[] der = key.getEncoded();
     try {
+      Asserts.notNull(der);
       return this.getImpl().generatePrivate(new PKCS8EncodedKeySpec(der));
 
     } catch (GeneralSecurityException ex) {
@@ -166,8 +167,10 @@ public class KeyFactoryUtil extends InitializeObject {
     Asserts.isTrue(this.algorithm.equalsIgnoreCase(key.getAlgorithm()));
     Asserts.isTrue("X.509".equalsIgnoreCase(key.getFormat()), "The key is not in X.509 format.");
 
+    byte[] der = key.getEncoded();
+    Asserts.notNull(der);
     try {
-      return this.getImpl().generatePublic(new X509EncodedKeySpec(key.getEncoded()));
+      return this.getImpl().generatePublic(new X509EncodedKeySpec(der));
 
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);

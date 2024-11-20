@@ -116,11 +116,19 @@ public class PKIUtils {
   }
 
   public static String toPemEncoded(PublicKey key) {
-    return toPemEncoded(key.getEncoded(), toPemLabel(key));
+    byte[] kBytes = key.getEncoded();
+    Asserts.notNull(kBytes);
+    return toPemEncoded(kBytes, toPemLabel(key));
   }
 
   public static String toPemEncoded(PrivateKey key) {
-    return toPemEncoded(key.getEncoded(), toPemLabel(key));
+    byte[] kBytes = key.getEncoded();
+    try {
+      Asserts.notNull(kBytes);
+      return toPemEncoded(kBytes, toPemLabel(key));
+    } finally {
+      CryptoUtils.clear(kBytes);
+    }
   }
 
   public static String toPemLabel(Certificate cert) {
