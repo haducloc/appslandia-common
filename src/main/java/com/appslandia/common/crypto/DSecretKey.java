@@ -59,9 +59,9 @@ public class DSecretKey implements SecretKey, KeySpec {
     this.algorithm = algorithm;
   }
 
-  public DSecretKey(Key keyToCopy) {
-    this(Asserts.notNull(keyToCopy.getEncoded(), "The keyToCopy must support encoding."), keyToCopy.getFormat(),
-        keyToCopy.getAlgorithm());
+  public DSecretKey(Key sourceKey) {
+    this(Asserts.notNull(sourceKey.getEncoded(), "The sourceKey must support encoding."), sourceKey.getFormat(),
+        sourceKey.getAlgorithm());
   }
 
   @Override
