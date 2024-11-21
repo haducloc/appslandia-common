@@ -34,6 +34,9 @@ import com.appslandia.common.utils.Asserts;
  */
 public class AlgorithmParametersUtil extends InitializeObject {
 
+  // AES, ChaCha20-Poly1305, DSA, EC, GCM, OAEP
+  // PBEWith<prf>And<encryption>
+  // PBEWith<digest>And<encryption>
   protected String algorithm, provider;
   protected AlgorithmParameterSpec algParamSpec;
 

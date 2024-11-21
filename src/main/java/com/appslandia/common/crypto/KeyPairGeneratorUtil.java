@@ -35,7 +35,11 @@ import com.appslandia.common.utils.Asserts;
  */
 public class KeyPairGeneratorUtil extends InitializeObject {
 
+  // DiffieHellman, DSA, EC, EdDSA, Ed25519, Ed448,
+  // RSA, RSASSA-PSS, XDH, X25519, X448, etc.
   protected String algorithm, provider;
+
+  protected Integer keySize;
   protected AlgorithmParameterSpec algParamSpec;
 
   public KeyPairGeneratorUtil() {
@@ -69,7 +73,10 @@ public class KeyPairGeneratorUtil extends InitializeObject {
     this.initialize();
     try {
       KeyPairGenerator impl = getImpl();
-      if (this.algParamSpec != null) {
+
+      if (this.keySize != null) {
+        impl.initialize(this.keySize * 8);
+      } else if (this.algParamSpec != null) {
         impl.initialize(this.algParamSpec);
       }
       return impl.generateKeyPair();
@@ -98,6 +105,12 @@ public class KeyPairGeneratorUtil extends InitializeObject {
   public KeyPairGeneratorUtil setProvider(String provider) {
     this.assertNotInitialized();
     this.provider = provider;
+    return this;
+  }
+
+  public KeyPairGeneratorUtil setKeySize(Integer keySize) {
+    assertNotInitialized();
+    this.keySize = keySize;
     return this;
   }
 

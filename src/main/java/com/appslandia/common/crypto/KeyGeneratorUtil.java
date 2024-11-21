@@ -36,7 +36,9 @@ import com.appslandia.common.utils.Asserts;
  */
 public class KeyGeneratorUtil extends InitializeObject {
 
+  // AES, ChaCha20, HmacXXX
   protected String algorithm, provider;
+  protected Integer keySize;
   protected AlgorithmParameterSpec algParamSpec;
 
   public KeyGeneratorUtil() {
@@ -70,7 +72,10 @@ public class KeyGeneratorUtil extends InitializeObject {
     this.initialize();
     try {
       KeyGenerator impl = getImpl();
-      if (this.algParamSpec != null) {
+
+      if (this.keySize != null) {
+        impl.init(this.keySize * 8);
+      } else if (this.algParamSpec != null) {
         impl.init(this.algParamSpec);
       }
       return impl.generateKey();
@@ -99,6 +104,12 @@ public class KeyGeneratorUtil extends InitializeObject {
   public KeyGeneratorUtil setProvider(String provider) {
     this.assertNotInitialized();
     this.provider = provider;
+    return this;
+  }
+
+  public KeyGeneratorUtil setKeySize(Integer keySize) {
+    assertNotInitialized();
+    this.keySize = keySize;
     return this;
   }
 

@@ -41,6 +41,8 @@ import com.appslandia.common.utils.IOUtils;
  */
 public class KeyFactoryUtil extends InitializeObject {
 
+  // DiffieHellman, DSA, EC, EdDSA, Ed25519, Ed448,
+  // RSA, RSASSA-PSS, XDH, X25519, X448, etc.
   protected String algorithm, provider;
 
   public KeyFactoryUtil() {
@@ -57,8 +59,6 @@ public class KeyFactoryUtil extends InitializeObject {
 
   @Override
   protected void init() throws Exception {
-    // DiffieHellman, DSA, EC, EdDSA, Ed25519, Ed448,
-    // RSA, RSASSA-PSS, XDH, X25519, X448, etc.
     Asserts.notNull(this.algorithm, "algorithm is required.");
   }
 
