@@ -84,27 +84,6 @@ public class PbeSecretGen extends InitializeObject {
     return impl;
   }
 
-  public byte[] generate(Out<byte[]> genSalt) throws CryptoException {
-    this.initialize();
-    genSalt.value = CryptoUtils.randomBytes(this.saltSize);
-    return generate(genSalt.value);
-  }
-
-  public byte[] generate(byte[] salt) throws CryptoException {
-    this.initialize();
-
-    PBEKeySpec keySpec = new PBEKeySpec(this.password, salt, this.iterationCount, this.keySize * 8);
-    try {
-      SecretKey secret = this.getImpl().generateSecret(keySpec);
-      return secret.getEncoded();
-
-    } catch (GeneralSecurityException ex) {
-      throw new CryptoException(ex);
-    } finally {
-      keySpec.clearPassword();
-    }
-  }
-
   public SecretKey generate(String algorithm, Out<byte[]> genSalt) throws CryptoException {
     this.initialize();
     genSalt.value = CryptoUtils.randomBytes(this.saltSize);
