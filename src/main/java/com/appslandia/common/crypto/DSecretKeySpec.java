@@ -59,7 +59,11 @@ public class DSecretKeySpec implements SecretKey, KeySpec {
   }
 
   public DSecretKeySpec(SecretKey sourceKey) {
-    this(Asserts.notNull(sourceKey.getEncoded()), sourceKey.getFormat(), sourceKey.getAlgorithm());
+    Asserts.notNull(sourceKey);
+
+    this.key = sourceKey.getEncoded();
+    this.format = sourceKey.getFormat();
+    this.algorithm = sourceKey.getAlgorithm();
   }
 
   @Override
