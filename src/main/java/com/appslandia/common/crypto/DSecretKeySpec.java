@@ -20,7 +20,6 @@
 
 package com.appslandia.common.crypto;
 
-import java.security.Key;
 import java.security.MessageDigest;
 import java.security.spec.KeySpec;
 import java.util.Locale;
@@ -59,7 +58,7 @@ public class DSecretKeySpec implements SecretKey, KeySpec {
     this.algorithm = algorithm;
   }
 
-  public DSecretKeySpec(Key sourceKey) {
+  public DSecretKeySpec(SecretKey sourceKey) {
     this(Asserts.notNull(sourceKey.getEncoded()), sourceKey.getFormat(), sourceKey.getAlgorithm());
   }
 
@@ -114,17 +113,16 @@ public class DSecretKeySpec implements SecretKey, KeySpec {
     if (!(obj instanceof SecretKey)) {
       return false;
     }
-    String thatAlg = ((SecretKey) obj).getAlgorithm();
+    SecretKey that = (SecretKey) obj;
 
-    if (!(this.algorithm.equalsIgnoreCase(thatAlg)
-        || (this.algorithm.equalsIgnoreCase("TripleDES") && thatAlg.equalsIgnoreCase("DESede"))
-        || (this.algorithm.equalsIgnoreCase("DESede") && thatAlg.equalsIgnoreCase("TripleDES")))) {
+    if (!(this.algorithm.equalsIgnoreCase(that.getAlgorithm())
+        || (this.algorithm.equalsIgnoreCase("TripleDES") && that.getAlgorithm().equalsIgnoreCase("DESede"))
+        || (this.algorithm.equalsIgnoreCase("DESede") && that.getAlgorithm().equalsIgnoreCase("TripleDES")))) {
       return false;
     }
 
-    byte[] thatKey = ((SecretKey) obj).getEncoded();
+    byte[] thatKey = that.getEncoded();
     boolean eq = MessageDigest.isEqual(this.key, thatKey);
-
     CryptoUtils.clear(thatKey);
     return eq;
   }

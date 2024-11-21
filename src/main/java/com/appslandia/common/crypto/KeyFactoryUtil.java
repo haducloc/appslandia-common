@@ -120,6 +120,16 @@ public class KeyFactoryUtil extends InitializeObject {
     }
   }
 
+  public PrivateKey toPrivateKey(byte[] keyInDer) throws CryptoException {
+    this.initialize();
+    try {
+      return this.getImpl().generatePrivate(new PKCS8EncodedKeySpec(keyInDer));
+
+    } catch (GeneralSecurityException ex) {
+      throw new CryptoException(ex);
+    }
+  }
+
   // X509/ASN.1 encoding is a standard format for encoding public key
 
   public PublicKey toPublicKey(String keyInPem) throws CryptoException {
