@@ -72,7 +72,7 @@ public class MacSigner extends InitializeObject implements Digester {
     this.initialize();
     Asserts.notNull(message, "message is required.");
 
-    SecretKey key = new DSecretKey(this.secret, this.algorithm);
+    SecretKey key = new DSecretKeySpec(this.secret, this.algorithm);
     try {
       Mac impl = getImpl();
       if (this.algParamSpec == null) {
@@ -95,7 +95,7 @@ public class MacSigner extends InitializeObject implements Digester {
     Asserts.notNull(message, "message is required.");
     Asserts.notNull(mac, "mac is required.");
 
-    SecretKey key = new DSecretKey(this.secret, this.algorithm);
+    SecretKey key = new DSecretKeySpec(this.secret, this.algorithm);
     try {
       Mac impl = getImpl();
       if (this.algParamSpec == null) {

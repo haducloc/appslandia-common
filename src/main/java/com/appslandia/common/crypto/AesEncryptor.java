@@ -92,7 +92,7 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
     this.initialize();
     Asserts.notNull(message, "message is required.");
 
-    SecretKey key = new DSecretKey(this.secret, this.cipherOps.getAlgorithm());
+    SecretKey key = new DSecretKeySpec(this.secret, this.cipherOps.getAlgorithm());
     try {
       Cipher impl = getImpl();
       int ivSize = getIvSize(impl);
@@ -128,7 +128,7 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
     this.initialize();
     Asserts.notNull(message, "message is required.");
 
-    SecretKey key = new DSecretKey(this.secret, this.cipherOps.getAlgorithm());
+    SecretKey key = new DSecretKeySpec(this.secret, this.cipherOps.getAlgorithm());
     try {
       Cipher impl = getImpl();
       int ivSize = getIvSize(impl);

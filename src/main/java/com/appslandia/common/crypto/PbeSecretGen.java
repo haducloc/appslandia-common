@@ -120,7 +120,7 @@ public class PbeSecretGen extends InitializeObject {
       byte[] kBytes = secret.getEncoded();
       CryptoUtils.destroy(secret);
 
-      SecretKey key = new DSecretKey(kBytes, algorithm);
+      SecretKey key = new DSecretKeySpec(kBytes, algorithm);
       CryptoUtils.clear(kBytes);
       return key;
 

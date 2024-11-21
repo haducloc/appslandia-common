@@ -79,7 +79,7 @@ public class ChaCha20Encryptor extends InitializeObject implements Encryptor {
     this.initialize();
     Asserts.notNull(message, "message is required.");
 
-    SecretKey key = new DSecretKey(this.secret, this.cipherOps.getAlgorithm());
+    SecretKey key = new DSecretKeySpec(this.secret, this.cipherOps.getAlgorithm());
     try {
       Cipher impl = getImpl();
       byte[] iv = CryptoUtils.randomBytes(IV_SIZE);
@@ -106,7 +106,7 @@ public class ChaCha20Encryptor extends InitializeObject implements Encryptor {
     Asserts.notNull(message, "message is required.");
     Asserts.isTrue(message.length >= IV_SIZE, "message is invalid.");
 
-    SecretKey key = new DSecretKey(this.secret, this.cipherOps.getAlgorithm());
+    SecretKey key = new DSecretKeySpec(this.secret, this.cipherOps.getAlgorithm());
     try {
       byte[] iv = new byte[IV_SIZE];
       ArrayUtils.copy(message, iv);

@@ -36,7 +36,7 @@ import com.appslandia.common.utils.Asserts;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class DSecretKey implements SecretKey, KeySpec {
+public class DSecretKeySpec implements SecretKey, KeySpec {
   private static final long serialVersionUID = 1L;
 
   final byte[] key;
@@ -45,11 +45,11 @@ public class DSecretKey implements SecretKey, KeySpec {
 
   final AtomicBoolean destroyed = new AtomicBoolean(false);
 
-  public DSecretKey(byte[] key, String algorithm) {
+  public DSecretKeySpec(byte[] key, String algorithm) {
     this(key, "RAW", algorithm);
   }
 
-  public DSecretKey(byte[] key, String format, String algorithm) {
+  public DSecretKeySpec(byte[] key, String format, String algorithm) {
     Asserts.notNull(key);
     Asserts.notNull(format);
     Asserts.notNull(algorithm);
@@ -59,7 +59,7 @@ public class DSecretKey implements SecretKey, KeySpec {
     this.algorithm = algorithm;
   }
 
-  public DSecretKey(Key sourceKey) {
+  public DSecretKeySpec(Key sourceKey) {
     this(Asserts.notNull(sourceKey.getEncoded()), sourceKey.getFormat(), sourceKey.getAlgorithm());
   }
 

@@ -93,7 +93,7 @@ public class CryptoUtils {
 
   public static SecretKey copy(SecretKey key) {
     byte[] kByte = key.getEncoded();
-    SecretKey cKey = new DSecretKey(kByte, key.getAlgorithm());
+    SecretKey cKey = new DSecretKeySpec(kByte, key.getAlgorithm());
     clear(kByte);
     return cKey;
   }
