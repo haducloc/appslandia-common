@@ -33,7 +33,7 @@ public class TextEncryptorTest {
   @Test
   public void test() {
     TextEncryptor impl = new TextEncryptor().setEncryptor(new PbeAesEncryptor().setTransformation("AES/GCM/NoPadding")
-        .setPbeSecretKeyGenerator(new PbeSecretKeyGenerator().setKeySize(32).setPassword("password".toCharArray())));
+        .setPbeSecretGen(new PbeSecretGen().setKeySize(32).setPassword("password".toCharArray())));
 
     try {
       String message = "data";

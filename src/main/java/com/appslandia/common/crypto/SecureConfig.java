@@ -47,7 +47,7 @@ public class SecureConfig extends SimpleConfig {
 
     Asserts.notNull(password);
     this.textEncryptor = new TextEncryptor(new PbeAesEncryptor().setTransformation("AES/GCM/NoPadding")
-        .setPbeSecretKeyGenerator(new PbeSecretKeyGenerator().setPassword(password).setKeySize(32)));
+        .setPbeSecretGen(new PbeSecretGen().setPassword(password).setKeySize(32)));
   }
 
   public SecureConfig(String passwordExpr) {
@@ -59,7 +59,7 @@ public class SecureConfig extends SimpleConfig {
 
     Asserts.notNull(passwordExpr);
     this.textEncryptor = new TextEncryptor(new PbeAesEncryptor().setTransformation("AES/GCM/NoPadding")
-        .setPbeSecretKeyGenerator(new PbeSecretKeyGenerator().setPassword(passwordExpr).setKeySize(32)));
+        .setPbeSecretGen(new PbeSecretGen().setPassword(passwordExpr).setKeySize(32)));
   }
 
   public void destroy() throws DestroyException {

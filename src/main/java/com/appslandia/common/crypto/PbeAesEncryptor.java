@@ -44,7 +44,7 @@ public class PbeAesEncryptor extends InitializeObject implements Encryptor {
   protected CipherOps cipherOps;
   protected GcmSpec gcmSpec;
 
-  protected PbeSecretKeyGenerator pbeSecretKeyGenerator;
+  protected PbeSecretGen pbeSecretGen;
 
   @Override
   protected void init() throws Exception {
@@ -59,13 +59,13 @@ public class PbeAesEncryptor extends InitializeObject implements Encryptor {
       this.gcmSpec = new GcmSpec();
     }
     this.cipherOps = cipherOps;
-    Asserts.notNull(this.pbeSecretKeyGenerator, "pbeSecretKeyGenerator is required.");
+    Asserts.notNull(this.pbeSecretGen, "pbeSecretGen is required.");
   }
 
   @Override
   public void destroy() throws DestroyException {
-    if (this.pbeSecretKeyGenerator != null) {
-      this.pbeSecretKeyGenerator.destroy();
+    if (this.pbeSecretGen != null) {
+      this.pbeSecretGen.destroy();
     }
   }
 
@@ -101,7 +101,7 @@ public class PbeAesEncryptor extends InitializeObject implements Encryptor {
       byte[] iv = null;
 
       Out<byte[]> salt = new Out<>();
-      key = this.pbeSecretKeyGenerator.generate(this.cipherOps.getAlgorithm(), salt);
+      key = this.pbeSecretGen.generate(this.cipherOps.getAlgorithm(), salt);
 
       if (ivSize <= 0) {
         impl.init(Cipher.ENCRYPT_MODE, key);
@@ -136,7 +136,7 @@ public class PbeAesEncryptor extends InitializeObject implements Encryptor {
     SecretKey key = null;
     try {
       Cipher impl = getImpl();
-      int saltSize = this.pbeSecretKeyGenerator.getSaltSize();
+      int saltSize = this.pbeSecretGen.getSaltSize();
       byte[] salt = new byte[saltSize];
 
       int ivSize = getIvSize(impl);
@@ -150,7 +150,7 @@ public class PbeAesEncryptor extends InitializeObject implements Encryptor {
         iv = new byte[ivSize];
         ArrayUtils.copy(message, iv, salt);
       }
-      key = this.pbeSecretKeyGenerator.generate(this.cipherOps.getAlgorithm(), salt);
+      key = this.pbeSecretGen.generate(this.cipherOps.getAlgorithm(), salt);
 
       if (iv == null) {
         impl.init(Cipher.DECRYPT_MODE, key);
@@ -194,9 +194,9 @@ public class PbeAesEncryptor extends InitializeObject implements Encryptor {
     return this;
   }
 
-  public PbeAesEncryptor setPbeSecretKeyGenerator(PbeSecretKeyGenerator pbeSecretKeyGenerator) {
+  public PbeAesEncryptor setPbeSecretGen(PbeSecretGen pbeSecretGen) {
     this.assertNotInitialized();
-    this.pbeSecretKeyGenerator = pbeSecretKeyGenerator;
+    this.pbeSecretGen = pbeSecretGen;
     return this;
   }
 }

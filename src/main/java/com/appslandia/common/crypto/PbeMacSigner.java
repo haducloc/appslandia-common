@@ -42,7 +42,7 @@ public class PbeMacSigner extends InitializeObject implements Digester {
 
   protected String algorithm, provider;
   protected AlgorithmParameterSpec algParamSpec;
-  protected PbeSecretKeyGenerator pbeSecretKeyGenerator;
+  protected PbeSecretGen pbeSecretGen;
 
   @Override
   protected void init() throws Exception {
@@ -51,8 +51,8 @@ public class PbeMacSigner extends InitializeObject implements Digester {
 
   @Override
   public void destroy() throws DestroyException {
-    if (this.pbeSecretKeyGenerator != null) {
-      this.pbeSecretKeyGenerator.destroy();
+    if (this.pbeSecretGen != null) {
+      this.pbeSecretGen.destroy();
     }
   }
 
@@ -75,7 +75,7 @@ public class PbeMacSigner extends InitializeObject implements Digester {
     SecretKey key = null;
     try {
       Mac impl = this.getImpl();
-      key = this.pbeSecretKeyGenerator.generate(this.algorithm, salt);
+      key = this.pbeSecretGen.generate(this.algorithm, salt);
       if (this.algParamSpec == null) {
         impl.init(key);
       } else {
@@ -98,7 +98,7 @@ public class PbeMacSigner extends InitializeObject implements Digester {
     Asserts.notNull(message, "message is required.");
     Asserts.notNull(digested, "digested is required.");
 
-    int saltSize = this.pbeSecretKeyGenerator.getSaltSize();
+    int saltSize = this.pbeSecretGen.getSaltSize();
     Asserts.isTrue(digested.length >= saltSize, "digested is invalid.");
 
     byte[] salt = new byte[saltSize];
@@ -108,7 +108,7 @@ public class PbeMacSigner extends InitializeObject implements Digester {
     SecretKey key = null;
     try {
       Mac impl = this.getImpl();
-      key = this.pbeSecretKeyGenerator.generate(this.algorithm, salt);
+      key = this.pbeSecretGen.generate(this.algorithm, salt);
       if (this.algParamSpec == null) {
         impl.init(key);
       } else {
@@ -147,9 +147,9 @@ public class PbeMacSigner extends InitializeObject implements Digester {
     return this;
   }
 
-  public PbeMacSigner setPbeSecretKeyGenerator(PbeSecretKeyGenerator pbeSecretKeyGenerator) {
+  public PbeMacSigner setPbeSecretGen(PbeSecretGen pbeSecretGen) {
     this.assertNotInitialized();
-    this.pbeSecretKeyGenerator = pbeSecretKeyGenerator;
+    this.pbeSecretGen = pbeSecretGen;
     return this;
   }
 

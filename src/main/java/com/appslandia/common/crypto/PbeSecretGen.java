@@ -39,7 +39,7 @@ import com.appslandia.common.utils.ValueUtils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class PbeSecretKeyGenerator extends InitializeObject {
+public class PbeSecretGen extends InitializeObject {
   protected String algorithm, provider;
 
   protected char[] password;
@@ -47,14 +47,14 @@ public class PbeSecretKeyGenerator extends InitializeObject {
   protected Integer iterationCount;
   protected Integer keySize;
 
-  public PbeSecretKeyGenerator() {
+  public PbeSecretGen() {
   }
 
-  public PbeSecretKeyGenerator(String algorithm) {
+  public PbeSecretGen(String algorithm) {
     this.algorithm = algorithm;
   }
 
-  public PbeSecretKeyGenerator(String algorithm, String provider) {
+  public PbeSecretGen(String algorithm, String provider) {
     this.algorithm = algorithm;
     this.provider = provider;
   }
@@ -136,7 +136,7 @@ public class PbeSecretKeyGenerator extends InitializeObject {
     return this.algorithm;
   }
 
-  public PbeSecretKeyGenerator setAlgorithm(String algorithm) {
+  public PbeSecretGen setAlgorithm(String algorithm) {
     this.assertNotInitialized();
     this.algorithm = algorithm;
     return this;
@@ -147,7 +147,7 @@ public class PbeSecretKeyGenerator extends InitializeObject {
     return this.provider;
   }
 
-  public PbeSecretKeyGenerator setProvider(String provider) {
+  public PbeSecretGen setProvider(String provider) {
     this.assertNotInitialized();
     this.provider = provider;
     return this;
@@ -158,7 +158,7 @@ public class PbeSecretKeyGenerator extends InitializeObject {
     return this.saltSize;
   }
 
-  public PbeSecretKeyGenerator setSaltSize(Integer saltSize) {
+  public PbeSecretGen setSaltSize(Integer saltSize) {
     this.assertNotInitialized();
     this.saltSize = saltSize;
     return this;
@@ -169,7 +169,7 @@ public class PbeSecretKeyGenerator extends InitializeObject {
     return this.iterationCount;
   }
 
-  public PbeSecretKeyGenerator setIterationCount(Integer iterationCount) {
+  public PbeSecretGen setIterationCount(Integer iterationCount) {
     this.assertNotInitialized();
     this.iterationCount = iterationCount;
     return this;
@@ -180,13 +180,13 @@ public class PbeSecretKeyGenerator extends InitializeObject {
     return this.keySize;
   }
 
-  public PbeSecretKeyGenerator setKeySize(Integer keySize) {
+  public PbeSecretGen setKeySize(Integer keySize) {
     this.assertNotInitialized();
     this.keySize = keySize;
     return this;
   }
 
-  public PbeSecretKeyGenerator setPassword(char[] password) {
+  public PbeSecretGen setPassword(char[] password) {
     this.assertNotInitialized();
     if (password != null) {
       this.password = Arrays.copyOf(password, password.length);
@@ -194,7 +194,7 @@ public class PbeSecretKeyGenerator extends InitializeObject {
     return this;
   }
 
-  public PbeSecretKeyGenerator setPassword(String passwordExpr) {
+  public PbeSecretGen setPassword(String passwordExpr) {
     this.assertNotInitialized();
 
     if (passwordExpr != null) {

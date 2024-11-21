@@ -38,7 +38,7 @@ public class PbeAesEncryptorTest {
   public void test_CBC() {
     PbeAesEncryptor impl = new PbeAesEncryptor();
     impl.setTransformation("AES/CBC/PKCS5Padding");
-    impl.setPbeSecretKeyGenerator(new PbeSecretKeyGenerator().setKeySize(16).setPassword("password".toCharArray()));
+    impl.setPbeSecretGen(new PbeSecretGen().setKeySize(16).setPassword("password".toCharArray()));
 
     try {
       byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -56,7 +56,7 @@ public class PbeAesEncryptorTest {
   public void test_CFB() {
     PbeAesEncryptor impl = new PbeAesEncryptor();
     impl.setTransformation("AES/CFB/PKCS5Padding");
-    impl.setPbeSecretKeyGenerator(new PbeSecretKeyGenerator().setKeySize(16).setPassword("password".toCharArray()));
+    impl.setPbeSecretGen(new PbeSecretGen().setKeySize(16).setPassword("password".toCharArray()));
 
     try {
       byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -74,7 +74,7 @@ public class PbeAesEncryptorTest {
   public void test_CTR() {
     PbeAesEncryptor impl = new PbeAesEncryptor();
     impl.setTransformation("AES/CTR/NoPadding");
-    impl.setPbeSecretKeyGenerator(new PbeSecretKeyGenerator().setKeySize(16).setPassword("password".toCharArray()));
+    impl.setPbeSecretGen(new PbeSecretGen().setKeySize(16).setPassword("password".toCharArray()));
 
     try {
       byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -92,7 +92,7 @@ public class PbeAesEncryptorTest {
   public void test_OFB() {
     PbeAesEncryptor impl = new PbeAesEncryptor();
     impl.setTransformation("AES/OFB/PKCS5Padding");
-    impl.setPbeSecretKeyGenerator(new PbeSecretKeyGenerator().setKeySize(16).setPassword("password".toCharArray()));
+    impl.setPbeSecretGen(new PbeSecretGen().setKeySize(16).setPassword("password".toCharArray()));
 
     try {
       byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -110,7 +110,7 @@ public class PbeAesEncryptorTest {
   public void test_ECB() {
     PbeAesEncryptor impl = new PbeAesEncryptor();
     impl.setTransformation("AES/ECB/PKCS5Padding");
-    impl.setPbeSecretKeyGenerator(new PbeSecretKeyGenerator().setKeySize(16).setPassword("password".toCharArray()));
+    impl.setPbeSecretGen(new PbeSecretGen().setKeySize(16).setPassword("password".toCharArray()));
 
     try {
       byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -128,7 +128,7 @@ public class PbeAesEncryptorTest {
   public void test_GCM() {
     PbeAesEncryptor impl = new PbeAesEncryptor();
     impl.setTransformation("AES/GCM/NoPadding");
-    impl.setPbeSecretKeyGenerator(new PbeSecretKeyGenerator().setKeySize(16).setPassword("password".toCharArray()));
+    impl.setPbeSecretGen(new PbeSecretGen().setKeySize(16).setPassword("password".toCharArray()));
 
     try {
       byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -146,7 +146,7 @@ public class PbeAesEncryptorTest {
   public void test_threadSafe() {
     final PbeAesEncryptor impl = new PbeAesEncryptor();
     impl.setTransformation("AES/CBC/PKCS5Padding");
-    impl.setPbeSecretKeyGenerator(new PbeSecretKeyGenerator().setKeySize(16).setPassword("password".toCharArray()));
+    impl.setPbeSecretGen(new PbeSecretGen().setKeySize(16).setPassword("password".toCharArray()));
 
     new ThreadSafeTester() {
 

@@ -37,7 +37,7 @@ public class PbeMacSignerTest {
   @Test
   public void test() {
     PbeMacSigner impl = new PbeMacSigner().setAlgorithm("HmacMD5");
-    impl.setPbeSecretKeyGenerator(new PbeSecretKeyGenerator().setKeySize(16).setPassword("password".toCharArray()));
+    impl.setPbeSecretGen(new PbeSecretGen().setKeySize(16).setPassword("password".toCharArray()));
 
     try {
       byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -53,7 +53,7 @@ public class PbeMacSignerTest {
   @Test
   public void test_invalid() {
     PbeMacSigner impl = new PbeMacSigner().setAlgorithm("HmacMD5");
-    impl.setPbeSecretKeyGenerator(new PbeSecretKeyGenerator().setKeySize(16).setPassword("password".toCharArray()));
+    impl.setPbeSecretGen(new PbeSecretGen().setKeySize(16).setPassword("password".toCharArray()));
 
     try {
       byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -69,7 +69,7 @@ public class PbeMacSignerTest {
   @Test
   public void test_threadSafe() {
     final PbeMacSigner impl = new PbeMacSigner().setAlgorithm("HmacMD5");
-    impl.setPbeSecretKeyGenerator(new PbeSecretKeyGenerator().setKeySize(16).setPassword("password".toCharArray()));
+    impl.setPbeSecretGen(new PbeSecretGen().setKeySize(16).setPassword("password".toCharArray()));
 
     new ThreadSafeTester() {
 
