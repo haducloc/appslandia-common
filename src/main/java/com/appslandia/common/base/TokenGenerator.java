@@ -22,10 +22,9 @@ package com.appslandia.common.base;
 
 import java.util.regex.Pattern;
 
+import com.appslandia.common.crypto.CryptoUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.MathUtils;
-import com.appslandia.common.utils.RandomUtils;
-import com.appslandia.common.utils.SecureRand;
 
 /**
  *
@@ -54,9 +53,9 @@ public class TokenGenerator extends InitializeObject implements TextGenerator {
   public String generate() {
     initialize();
     int len = MathUtils.toNearestMultipleOf(4, this.length);
-    byte[] bytes = RandomUtils.nextBytes((len * 3) / 4, SecureRand.getInstance());
+    byte[] rBytes = CryptoUtils.randomBytes((len * 3) / 4);
 
-    String base64 = BaseEncoder.BASE64_URL_NP.encode(bytes);
+    String base64 = BaseEncoder.BASE64_URL_NP.encode(rBytes);
     return (base64.length() == this.length) ? base64 : base64.substring(0, this.length);
   }
 
