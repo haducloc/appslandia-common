@@ -21,14 +21,10 @@
 package com.appslandia.common.crypto;
 
 import java.nio.charset.Charset;
-import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-
 import com.appslandia.common.base.BaseEncoder;
+import com.appslandia.common.base.Out;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ValueUtils;
@@ -56,37 +52,21 @@ public class PasswordDigester extends TextDigester {
     this.keySize = ValueUtils.valueOrAlt(this.keySize, CryptoUtils.DEFAULT_PBE_KEY_SIZE);
   }
 
-  protected SecretKeyFactory getImpl() throws GeneralSecurityException {
-    SecretKeyFactory impl = null;
-    if (this.provider == null) {
-      impl = SecretKeyFactory.getInstance(this.algorithm);
-    } else {
-      impl = SecretKeyFactory.getInstance(this.algorithm, this.provider);
-    }
-    return impl;
-  }
-
   @Override
   public String digest(String password) throws CryptoException {
     this.initialize();
     Asserts.notNull(password, "password is required.");
 
-    byte[] salt = CryptoUtils.randomBytes(this.saltSize);
+    Out<byte[]> salt = new Out<>();
     char[] pwdChars = password.toCharArray();
-    PBEKeySpec keySpec = new PBEKeySpec(pwdChars, salt, this.iterationCount, this.keySize * 8);
-
     try {
-      SecretKey secret = this.getImpl().generateSecret(keySpec);
-      byte[] storedHash = secret.getEncoded();
-      CryptoUtils.destroy(secret);
+      byte[] storedHash = new PbeSecretKeyGenerator(this.algorithm, this.provider).setPassword(pwdChars)
+          .setSaltSize(this.saltSize).setIterationCount(this.iterationCount).setKeySize(this.keySize).generate(salt);
 
-      return this.baseEncoder.encode(ArrayUtils.append(salt, storedHash));
+      return this.baseEncoder.encode(ArrayUtils.append(salt.value, storedHash));
 
-    } catch (GeneralSecurityException ex) {
-      throw new CryptoException(ex.getMessage(), ex);
     } finally {
       CryptoUtils.clear(pwdChars);
-      keySpec.clearPassword();
     }
   }
 
@@ -96,25 +76,19 @@ public class PasswordDigester extends TextDigester {
     Asserts.notNull(password, "password is required.");
     Asserts.notNull(digested, "digested is required.");
 
-    byte[] digestedBytes = this.baseEncoder.decode(digested);
-    Asserts.isTrue(digestedBytes.length > this.saltSize, "digested is invalid.");
+    byte[] dBytes = this.baseEncoder.decode(digested);
+    Asserts.isTrue(dBytes.length > this.saltSize, "digested is invalid.");
 
     byte[] salt = new byte[this.saltSize];
-    byte[] storedHash = new byte[digestedBytes.length - this.saltSize];
-    ArrayUtils.copy(digestedBytes, salt, storedHash);
+    byte[] storedHash = new byte[dBytes.length - this.saltSize];
+    ArrayUtils.copy(dBytes, salt, storedHash);
 
     char[] pwdChars = password.toCharArray();
     try {
-      PBEKeySpec keySpec = new PBEKeySpec(pwdChars, salt, this.iterationCount, this.keySize * 8);
-      SecretKey key = this.getImpl().generateSecret(keySpec);
-      keySpec.clearPassword();
+      byte[] computedHash = new PbeSecretKeyGenerator(this.algorithm, this.provider).setPassword(pwdChars)
+          .setSaltSize(this.saltSize).setIterationCount(this.iterationCount).setKeySize(this.keySize).generate(salt);
 
-      byte[] computedHash = key.getEncoded();
-      CryptoUtils.destroy(key);
-      return MessageDigest.isEqual(storedHash, computedHash);
-
-    } catch (GeneralSecurityException ex) {
-      throw new CryptoException(ex.getMessage(), ex);
+      return MessageDigest.isEqual(computedHash, storedHash);
     } finally {
       CryptoUtils.clear(pwdChars);
     }
