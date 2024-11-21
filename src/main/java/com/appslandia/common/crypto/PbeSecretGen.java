@@ -84,10 +84,10 @@ public class PbeSecretGen extends InitializeObject {
     return impl;
   }
 
-  public byte[] generate(Out<byte[]> salt) throws CryptoException {
+  public byte[] generate(Out<byte[]> genSalt) throws CryptoException {
     this.initialize();
-    salt.value = CryptoUtils.randomBytes(this.saltSize);
-    return generate(salt.value);
+    genSalt.value = CryptoUtils.randomBytes(this.saltSize);
+    return generate(genSalt.value);
   }
 
   public byte[] generate(byte[] salt) throws CryptoException {
@@ -105,10 +105,10 @@ public class PbeSecretGen extends InitializeObject {
     }
   }
 
-  public SecretKey generate(String algorithm, Out<byte[]> salt) throws CryptoException {
+  public SecretKey generate(String algorithm, Out<byte[]> genSalt) throws CryptoException {
     this.initialize();
-    salt.value = CryptoUtils.randomBytes(this.saltSize);
-    return generate(algorithm, salt.value);
+    genSalt.value = CryptoUtils.randomBytes(this.saltSize);
+    return generate(algorithm, genSalt.value);
   }
 
   public SecretKey generate(String algorithm, byte[] salt) throws CryptoException {
