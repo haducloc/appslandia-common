@@ -59,13 +59,12 @@ public class ChaCha20Encryptor extends InitializeObject implements Encryptor {
     Asserts.isTrue(cipherOps.isAlgorithm("ChaCha20") || cipherOps.isAlgorithm("ChaCha20-Poly1305"),
         "ChaCha20|ChaCha20-Poly1305 algorithm is required.");
 
-    if (this.secret != null) {
+    if (this.secretKey != null) {
+      Asserts.isTrue(cipherOps.getAlgorithm().equalsIgnoreCase(this.secretKey.getAlgorithm()));
+    } else {
       this.secretKey = new DSecretKeySpec(this.secret, cipherOps.getAlgorithm());
       CryptoUtils.clear(this.secret);
       this.secret = null;
-
-    } else {
-      Asserts.isTrue(cipherOps.getAlgorithm().equalsIgnoreCase(this.secretKey.getAlgorithm()));
     }
     this.cipherOps = cipherOps;
   }

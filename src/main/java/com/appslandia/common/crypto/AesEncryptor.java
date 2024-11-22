@@ -63,13 +63,12 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
       this.gcmSpec = new GcmSpec();
     }
 
-    if (this.secret != null) {
+    if (this.secretKey != null) {
+      Asserts.isTrue(cipherOps.getAlgorithm().equalsIgnoreCase(this.secretKey.getAlgorithm()));
+    } else {
       this.secretKey = new DSecretKeySpec(this.secret, cipherOps.getAlgorithm());
       CryptoUtils.clear(this.secret);
       this.secret = null;
-
-    } else {
-      Asserts.isTrue(cipherOps.getAlgorithm().equalsIgnoreCase(this.secretKey.getAlgorithm()));
     }
     this.cipherOps = cipherOps;
   }

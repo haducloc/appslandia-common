@@ -52,13 +52,12 @@ public class MacSigner extends InitializeObject implements Digester {
     Asserts.notNull(this.algorithm, "algorithm is required.");
     Asserts.isTrue(this.secret != null || this.secretKey != null, "secret|secretKey is required.");
 
-    if (this.secret != null) {
+    if (this.secretKey != null) {
+      Asserts.isTrue(this.algorithm.equalsIgnoreCase(this.secretKey.getAlgorithm()));
+    } else {
       this.secretKey = new DSecretKeySpec(this.secret, this.algorithm);
       CryptoUtils.clear(this.secret);
       this.secret = null;
-
-    } else {
-      Asserts.isTrue(this.algorithm.equalsIgnoreCase(this.secretKey.getAlgorithm()));
     }
   }
 
