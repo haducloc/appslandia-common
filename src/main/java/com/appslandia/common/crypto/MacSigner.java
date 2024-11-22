@@ -43,12 +43,23 @@ public class MacSigner extends InitializeObject implements Digester {
 
   protected String algorithm, provider;
   protected byte[] secret;
+  protected SecretKey secretKey;
+
   protected AlgorithmParameterSpec algParamSpec;
 
   @Override
   protected void init() throws Exception {
     Asserts.notNull(this.algorithm, "algorithm is required.");
-    Asserts.notNull(this.secret, "secret is required.");
+    Asserts.isTrue(this.secret != null || this.secretKey != null, "secret|secretKey is required.");
+
+    if (this.secret != null) {
+      this.secretKey = new DSecretKeySpec(this.secret, this.algorithm);
+      CryptoUtils.clear(this.secret);
+      this.secret = null;
+
+    } else {
+      Asserts.isTrue(this.algorithm.equalsIgnoreCase(this.secretKey.getAlgorithm()));
+    }
   }
 
   protected Mac getImpl() throws GeneralSecurityException {
@@ -64,7 +75,7 @@ public class MacSigner extends InitializeObject implements Digester {
 
   @Override
   public void destroy() throws DestroyException {
-    CryptoUtils.clear(this.secret);
+    CryptoUtils.destroy(this.secretKey);
   }
 
   @Override
@@ -72,20 +83,17 @@ public class MacSigner extends InitializeObject implements Digester {
     this.initialize();
     Asserts.notNull(message, "message is required.");
 
-    SecretKey key = new DSecretKeySpec(this.secret, this.algorithm);
     try {
       Mac impl = getImpl();
       if (this.algParamSpec == null) {
-        impl.init(key);
+        impl.init(this.secretKey);
       } else {
-        impl.init(key, this.algParamSpec);
+        impl.init(this.secretKey, this.algParamSpec);
       }
       return impl.doFinal(message);
 
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex.getMessage(), ex);
-    } finally {
-      CryptoUtils.destroy(key);
     }
   }
 
@@ -95,23 +103,19 @@ public class MacSigner extends InitializeObject implements Digester {
     Asserts.notNull(message, "message is required.");
     Asserts.notNull(mac, "mac is required.");
 
-    SecretKey key = new DSecretKeySpec(this.secret, this.algorithm);
     try {
       Mac impl = getImpl();
       if (this.algParamSpec == null) {
-        impl.init(key);
+        impl.init(this.secretKey);
       } else {
-        impl.init(key, this.algParamSpec);
+        impl.init(this.secretKey, this.algParamSpec);
       }
-      impl.init(key);
 
       byte[] computedMac = impl.doFinal(message);
       return MessageDigest.isEqual(mac, computedMac);
 
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex.getMessage(), ex);
-    } finally {
-      CryptoUtils.destroy(key);
     }
   }
 
@@ -155,6 +159,14 @@ public class MacSigner extends InitializeObject implements Digester {
         throw new IllegalArgumentException("Failed to resolve expression: " + secretExpr);
       }
       this.secret = resolvedValue.getBytes(StandardCharsets.UTF_8);
+    }
+    return this;
+  }
+
+  public MacSigner setSecretKey(SecretKey secretKey) {
+    this.assertNotInitialized();
+    if (secretKey != null) {
+      this.secretKey = CryptoUtils.copy(secretKey);
     }
     return this;
   }

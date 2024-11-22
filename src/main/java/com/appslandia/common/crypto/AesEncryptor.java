@@ -41,6 +41,7 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
 
   protected String transformation, provider;
   protected byte[] secret;
+  protected SecretKey secretKey;
 
   protected CipherOps cipherOps;
   protected GcmSpec gcmSpec;
@@ -48,7 +49,7 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
   @Override
   protected void init() throws Exception {
     Asserts.notNull(this.transformation, "transformation is required.");
-    Asserts.notNull(this.secret, "secret is required.");
+    Asserts.isTrue(this.secret != null || this.secretKey != null, "secret|secretKey is required.");
 
     CipherOps cipherOps = new CipherOps(this.transformation);
 
@@ -59,12 +60,21 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
     if (cipherOps.isMode("GCM")) {
       this.gcmSpec = new GcmSpec();
     }
+
+    if (this.secret != null) {
+      this.secretKey = new DSecretKeySpec(this.secret, cipherOps.getAlgorithm());
+      CryptoUtils.clear(this.secret);
+      this.secret = null;
+
+    } else {
+      Asserts.isTrue(cipherOps.getAlgorithm().equalsIgnoreCase(this.secretKey.getAlgorithm()));
+    }
     this.cipherOps = cipherOps;
   }
 
   @Override
   public void destroy() throws DestroyException {
-    CryptoUtils.clear(this.secret);
+    CryptoUtils.destroy(this.secretKey);
   }
 
   protected Cipher getImpl() throws GeneralSecurityException {
@@ -92,21 +102,20 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
     this.initialize();
     Asserts.notNull(message, "message is required.");
 
-    SecretKey key = new DSecretKeySpec(this.secret, this.cipherOps.getAlgorithm());
     try {
       Cipher impl = getImpl();
       int ivSize = getIvSize(impl);
       byte[] iv = null;
 
       if (ivSize <= 0) {
-        impl.init(Cipher.ENCRYPT_MODE, key);
+        impl.init(Cipher.ENCRYPT_MODE, this.secretKey);
       } else {
         iv = CryptoUtils.randomBytes(ivSize);
 
         if (this.cipherOps.isMode("GCM")) {
-          impl.init(Cipher.ENCRYPT_MODE, key, new GCMParameterSpec(this.gcmSpec.getTagSize() * 8, iv));
+          impl.init(Cipher.ENCRYPT_MODE, this.secretKey, new GCMParameterSpec(this.gcmSpec.getTagSize() * 8, iv));
         } else {
-          impl.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv));
+          impl.init(Cipher.ENCRYPT_MODE, this.secretKey, new IvParameterSpec(iv));
         }
       }
 
@@ -118,8 +127,6 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
       }
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
-    } finally {
-      CryptoUtils.destroy(key);
     }
   }
 
@@ -128,7 +135,6 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
     this.initialize();
     Asserts.notNull(message, "message is required.");
 
-    SecretKey key = new DSecretKeySpec(this.secret, this.cipherOps.getAlgorithm());
     try {
       Cipher impl = getImpl();
       int ivSize = getIvSize(impl);
@@ -141,11 +147,11 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
       }
 
       if (iv == null) {
-        impl.init(Cipher.DECRYPT_MODE, key);
+        impl.init(Cipher.DECRYPT_MODE, this.secretKey);
       } else if (this.cipherOps.isMode("GCM")) {
-        impl.init(Cipher.DECRYPT_MODE, key, new GCMParameterSpec(this.gcmSpec.getTagSize() * 8, iv));
+        impl.init(Cipher.DECRYPT_MODE, this.secretKey, new GCMParameterSpec(this.gcmSpec.getTagSize() * 8, iv));
       } else {
-        impl.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
+        impl.init(Cipher.DECRYPT_MODE, this.secretKey, new IvParameterSpec(iv));
       }
 
       if (iv == null) {
@@ -155,8 +161,6 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
       }
     } catch (GeneralSecurityException ex) {
       throw new CryptoException(ex);
-    } finally {
-      CryptoUtils.destroy(key);
     }
   }
 
@@ -186,6 +190,14 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
     this.assertNotInitialized();
     if (secret != null) {
       this.secret = ArrayUtils.copy(secret);
+    }
+    return this;
+  }
+
+  public AesEncryptor setSecretKey(SecretKey secretKey) {
+    this.assertNotInitialized();
+    if (secretKey != null) {
+      this.secretKey = CryptoUtils.copy(secretKey);
     }
     return this;
   }
