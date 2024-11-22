@@ -20,6 +20,7 @@
 
 package com.appslandia.common.crypto;
 
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 
 import javax.crypto.Cipher;
@@ -31,6 +32,7 @@ import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.SYS;
 
 /**
  *
@@ -190,6 +192,20 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
     this.assertNotInitialized();
     if (secret != null) {
       this.secret = ArrayUtils.copy(secret);
+    }
+    return this;
+  }
+
+  public AesEncryptor setSecret(String secretExpr) {
+    this.assertNotInitialized();
+
+    if (secretExpr != null) {
+      String resolvedValue = SYS.resolve(secretExpr);
+
+      if (resolvedValue == null) {
+        throw new IllegalArgumentException("Failed to resolve expression: " + secretExpr);
+      }
+      this.secret = resolvedValue.getBytes(StandardCharsets.UTF_8);
     }
     return this;
   }
