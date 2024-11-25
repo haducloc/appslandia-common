@@ -91,13 +91,13 @@ try (ConnectionImpl conn = new ConnectionImpl(javax.sql.DataSource)) {
 }
 ```
 
-### THE BEST JDBC Utilities
+### The Best JDBC Utilities
 
 ```java
 try (ConnectionImpl conn = new ConnectionImpl(javax.sql.DataSource)) {
   // conn.executeUpdate, executeScalar, executeSingle, 
   // conn.executeQuery, executeList, executeSet, executeMap
-  // conn.executeSteam, etc. 
+  // conn.executeStream, etc. 
 }
 ```
 
