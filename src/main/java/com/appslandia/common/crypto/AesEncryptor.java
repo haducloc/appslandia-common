@@ -42,18 +42,17 @@ import com.appslandia.common.utils.SYS;
 public class AesEncryptor extends InitializeObject implements Encryptor {
 
   protected String transformation, provider;
-  protected byte[] secret;
   protected SecretKey secretKey;
 
-  protected CipherOps cipherOps;
   protected GcmSpec gcmSpec;
+  protected CipherOps cipherOps;
 
   @Override
   protected void init() throws Exception {
     Asserts.notNull(this.transformation, "transformation is required.");
-    Asserts.isTrue(this.secret != null || this.secretKey != null, "secret|secretKey is required.");
+    Asserts.notNull(this.secretKey, "secretKey is required.");
 
-    CipherOps cipherOps = new CipherOps(this.transformation);
+    CipherOps cipherOps = this.cipherOps;
 
     Asserts.isTrue(cipherOps.isAlgorithm("AES"), "AES algorithm is required.");
     Asserts.isTrue(cipherOps.isMode("CBC", "^CFB\\d*$", "CTR", "^OFB\\d*$", "ECB", "GCM"),
@@ -62,15 +61,6 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
     if (cipherOps.isMode("GCM")) {
       this.gcmSpec = new GcmSpec();
     }
-
-    if (this.secretKey != null) {
-      Asserts.isTrue(cipherOps.getAlgorithm().equalsIgnoreCase(this.secretKey.getAlgorithm()));
-    } else {
-      this.secretKey = new DSecretKeySpec(this.secret, cipherOps.getAlgorithm());
-      CryptoUtils.clear(this.secret);
-      this.secret = null;
-    }
-    this.cipherOps = cipherOps;
   }
 
   @Override
@@ -172,7 +162,11 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
 
   public AesEncryptor setTransformation(String transformation) {
     this.assertNotInitialized();
-    this.transformation = transformation;
+
+    if (transformation != null) {
+      this.cipherOps = new CipherOps(transformation);
+      this.transformation = transformation;
+    }
     return this;
   }
 
@@ -187,14 +181,27 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
     return this;
   }
 
+  /**
+   * Please make sure the transformation is set before setting the secret.
+   * 
+   * @param secret
+   * @return
+   */
   public AesEncryptor setSecret(byte[] secret) {
     this.assertNotInitialized();
     if (secret != null) {
-      this.secret = ArrayUtils.copy(secret);
+      this.secretKey = new DSecretKeySpec(secret, Asserts.notNull(this.cipherOps).getAlgorithm());
     }
     return this;
   }
 
+  /**
+   * Please make sure the transformation is set before setting the secret
+   * expression.
+   * 
+   * @param secretExpr
+   * @return
+   */
   public AesEncryptor setSecret(String secretExpr) {
     this.assertNotInitialized();
 
@@ -204,14 +211,22 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
       if (resolvedValue == null) {
         throw new IllegalArgumentException("Failed to resolve expression: " + secretExpr);
       }
-      this.secret = resolvedValue.getBytes(StandardCharsets.UTF_8);
+      setSecret(resolvedValue.getBytes(StandardCharsets.UTF_8));
     }
     return this;
   }
 
+  /**
+   * Please make sure the transformation is set before setting the secret key.
+   * 
+   * @param secretKey
+   * @return
+   */
   public AesEncryptor setSecretKey(SecretKey secretKey) {
     this.assertNotInitialized();
     if (secretKey != null) {
+      Asserts.isTrue(Asserts.notNull(this.cipherOps).isAlgorithm(secretKey.getAlgorithm()));
+
       this.secretKey = CryptoUtils.copy(secretKey);
     }
     return this;

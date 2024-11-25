@@ -30,7 +30,6 @@ import javax.crypto.SecretKey;
 
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.SYS;
 
@@ -42,23 +41,14 @@ import com.appslandia.common.utils.SYS;
 public class MacSigner extends InitializeObject implements Digester {
 
   protected String algorithm, provider;
-  protected byte[] secret;
-  protected SecretKey secretKey;
-
   protected AlgorithmParameterSpec algParamSpec;
+
+  protected SecretKey secretKey;
 
   @Override
   protected void init() throws Exception {
     Asserts.notNull(this.algorithm, "algorithm is required.");
-    Asserts.isTrue(this.secret != null || this.secretKey != null, "secret|secretKey is required.");
-
-    if (this.secretKey != null) {
-      Asserts.isTrue(this.algorithm.equalsIgnoreCase(this.secretKey.getAlgorithm()));
-    } else {
-      this.secretKey = new DSecretKeySpec(this.secret, this.algorithm);
-      CryptoUtils.clear(this.secret);
-      this.secret = null;
-    }
+    Asserts.notNull(this.secretKey, "secretKey is required.");
   }
 
   protected Mac getImpl() throws GeneralSecurityException {
@@ -140,14 +130,32 @@ public class MacSigner extends InitializeObject implements Digester {
     return this;
   }
 
+  public MacSigner setAlgParamSpec(AlgorithmParameterSpec algParamSpec) {
+    assertNotInitialized();
+    this.algParamSpec = algParamSpec;
+    return this;
+  }
+
+  /**
+   * Please make sure the algorithm is set before setting the secret.
+   * 
+   * @param secret
+   * @return
+   */
   public MacSigner setSecret(byte[] secret) {
     this.assertNotInitialized();
     if (secret != null) {
-      this.secret = ArrayUtils.copy(secret);
+      this.secretKey = new DSecretKeySpec(secret, Asserts.notNull(this.algorithm));
     }
     return this;
   }
 
+  /**
+   * Please make sure the algorithm is set before setting the secret expression.
+   * 
+   * @param secretExpr
+   * @return
+   */
   public MacSigner setSecret(String secretExpr) {
     this.assertNotInitialized();
 
@@ -157,22 +165,24 @@ public class MacSigner extends InitializeObject implements Digester {
       if (resolvedValue == null) {
         throw new IllegalArgumentException("Failed to resolve expression: " + secretExpr);
       }
-      this.secret = resolvedValue.getBytes(StandardCharsets.UTF_8);
+      setSecret(resolvedValue.getBytes(StandardCharsets.UTF_8));
     }
     return this;
   }
 
+  /**
+   * Please make sure the algorithm is set before setting the secret key.
+   * 
+   * @param secretKey
+   * @return
+   */
   public MacSigner setSecretKey(SecretKey secretKey) {
     this.assertNotInitialized();
     if (secretKey != null) {
+      Asserts.isTrue(Asserts.notNull(this.algorithm).equalsIgnoreCase(secretKey.getAlgorithm()));
+
       this.secretKey = CryptoUtils.copy(secretKey);
     }
-    return this;
-  }
-
-  public MacSigner setAlgParamSpec(AlgorithmParameterSpec algParamSpec) {
-    assertNotInitialized();
-    this.algParamSpec = algParamSpec;
     return this;
   }
 }

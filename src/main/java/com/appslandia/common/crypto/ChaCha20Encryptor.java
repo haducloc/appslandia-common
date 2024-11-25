@@ -44,7 +44,6 @@ public class ChaCha20Encryptor extends InitializeObject implements Encryptor {
   protected static final int IV_SIZE = 12;
 
   protected String transformation, provider;
-  protected byte[] secret;
   protected SecretKey secretKey;
 
   protected CipherOps cipherOps;
@@ -52,21 +51,12 @@ public class ChaCha20Encryptor extends InitializeObject implements Encryptor {
   @Override
   protected void init() throws Exception {
     Asserts.notNull(this.transformation, "transformation is required.");
-    Asserts.isTrue(this.secret != null || this.secretKey != null, "secret|secretKey is required.");
+    Asserts.notNull(this.secretKey, "secretKey is required.");
 
-    CipherOps cipherOps = new CipherOps(this.transformation);
+    CipherOps cipherOps = this.cipherOps;
 
     Asserts.isTrue(cipherOps.isAlgorithm("ChaCha20") || cipherOps.isAlgorithm("ChaCha20-Poly1305"),
         "ChaCha20|ChaCha20-Poly1305 algorithm is required.");
-
-    if (this.secretKey != null) {
-      Asserts.isTrue(cipherOps.getAlgorithm().equalsIgnoreCase(this.secretKey.getAlgorithm()));
-    } else {
-      this.secretKey = new DSecretKeySpec(this.secret, cipherOps.getAlgorithm());
-      CryptoUtils.clear(this.secret);
-      this.secret = null;
-    }
-    this.cipherOps = cipherOps;
   }
 
   @Override
@@ -137,7 +127,10 @@ public class ChaCha20Encryptor extends InitializeObject implements Encryptor {
 
   public ChaCha20Encryptor setTransformation(String transformation) {
     this.assertNotInitialized();
-    this.transformation = transformation;
+    if (transformation != null) {
+      this.cipherOps = new CipherOps(transformation);
+      this.transformation = transformation;
+    }
     return this;
   }
 
@@ -152,14 +145,27 @@ public class ChaCha20Encryptor extends InitializeObject implements Encryptor {
     return this;
   }
 
+  /**
+   * Please make sure the transformation is set before setting the secret.
+   * 
+   * @param secret
+   * @return
+   */
   public ChaCha20Encryptor setSecret(byte[] secret) {
     this.assertNotInitialized();
     if (secret != null) {
-      this.secret = ArrayUtils.copy(secret);
+      this.secretKey = new DSecretKeySpec(secret, Asserts.notNull(this.cipherOps).getAlgorithm());
     }
     return this;
   }
 
+  /**
+   * Please make sure the transformation is set before setting the secret
+   * expression.
+   * 
+   * @param secretExpr
+   * @return
+   */
   public ChaCha20Encryptor setSecret(String secretExpr) {
     this.assertNotInitialized();
 
@@ -169,14 +175,22 @@ public class ChaCha20Encryptor extends InitializeObject implements Encryptor {
       if (resolvedValue == null) {
         throw new IllegalArgumentException("Failed to resolve expression: " + secretExpr);
       }
-      this.secret = resolvedValue.getBytes(StandardCharsets.UTF_8);
+      setSecret(resolvedValue.getBytes(StandardCharsets.UTF_8));
     }
     return this;
   }
 
+  /**
+   * Please make sure the transformation is set before setting the secret key.
+   * 
+   * @param secretKey
+   * @return
+   */
   public ChaCha20Encryptor setSecretKey(SecretKey secretKey) {
     this.assertNotInitialized();
     if (secretKey != null) {
+      Asserts.isTrue(Asserts.notNull(this.cipherOps).isAlgorithm(secretKey.getAlgorithm()));
+
       this.secretKey = CryptoUtils.copy(secretKey);
     }
     return this;
