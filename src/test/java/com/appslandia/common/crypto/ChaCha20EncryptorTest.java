@@ -38,7 +38,7 @@ public class ChaCha20EncryptorTest {
   public void test() {
     ChaCha20Encryptor impl = new ChaCha20Encryptor();
     impl.setTransformation("ChaCha20");
-    impl.setSecret(CryptoUtils.randomBytes(32));    
+    impl.setSecret(CryptoUtils.randomBytes(32));
 
     try {
       byte[] data = "data".getBytes(StandardCharsets.UTF_8);
@@ -57,7 +57,7 @@ public class ChaCha20EncryptorTest {
     ChaCha20Encryptor impl = new ChaCha20Encryptor();
     impl.setTransformation("ChaCha20-Poly1305");
     impl.setSecret(CryptoUtils.randomBytes(32));
-    
+
     try {
       byte[] data = "data".getBytes(StandardCharsets.UTF_8);
       byte[] encrypted = impl.encrypt(data);
@@ -75,7 +75,7 @@ public class ChaCha20EncryptorTest {
     final ChaCha20Encryptor impl = new ChaCha20Encryptor();
     impl.setTransformation("ChaCha20");
     impl.setSecret(CryptoUtils.randomBytes(32));
-    
+
     new ThreadSafeTester() {
 
       @Override

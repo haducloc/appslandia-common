@@ -23,7 +23,6 @@ package com.appslandia.common.crypto;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.SimpleConfig;
@@ -113,13 +112,5 @@ public class SecureConfig extends SimpleConfig {
     Asserts.notNull(value);
 
     return sets(key, value.toPlainString());
-  }
-
-  public Properties toClearProperties() {
-    Properties props = new Properties(this.cfg.size());
-    for (String key : this.cfg.keySet()) {
-      props.put(key, getString(key));
-    }
-    return props;
   }
 }

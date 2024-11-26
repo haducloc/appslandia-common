@@ -21,7 +21,9 @@
 package com.appslandia.common.mail;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
@@ -34,7 +36,6 @@ import com.appslandia.common.utils.ExceptionUtils;
 import jakarta.mail.MessagingException;
 import jakarta.mail.Session;
 import jakarta.mail.Transport;
-import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.MimeMessage;
 
 /**
@@ -51,17 +52,21 @@ public class SmtpMailer extends InitializeObject {
   protected void init() throws Exception {
     Asserts.notNull(this.config, "config is required.");
 
-    this.session = Session.getInstance(this.config.toClearProperties());
+    this.session = Session.getInstance(createMailProps());
   }
 
-  public MailerMessage newMessage() throws AddressException {
-    MailerMessage msg = new MailerMessage();
+  protected Properties createMailProps() {
+    Properties props = new Properties();
+    Iterator<String> iter = this.config.getKeys();
 
-    String msgFrom = this.config.getString("mail.smtp.msg.from");
-    if (msgFrom != null) {
-      msg.from(msgFrom);
+    while (iter.hasNext()) {
+      String key = iter.next();
+
+      if (key.startsWith("mail.")) {
+        props.put(key, this.config.getString(key));
+      }
     }
-    return msg;
+    return props;
   }
 
   public void send(MailerMessage message) throws MessagingException {
@@ -122,10 +127,13 @@ public class SmtpMailer extends InitializeObject {
    * <ul>
    * <li>mail.smtp.host=smtp.example.com</li>
    * <li>mail.smtp.port=587</li>
-   * <li>mail.smtp.username=your-email@example.com</li>
+   * <li>mail.smtp.user=your-email@example.com</li>
    * <li>mail.smtp.password=your-email-password</li>
    * <li>mail.smtp.auth=true</li>
    * <li>mail.smtp.starttls.enable=true</li>
+   * <li>mail.smtp.ssl.trust=smtp.example.com</li>
+   * <li>mail.from=no-reply@example.com</li>
+   * <li>mail.debug=false</li>
    * 
    * <li>mail.smtp.debug.enabled=true</li>
    * <li>mail.smtp.debug.to_emails=to-email@example.com</li>

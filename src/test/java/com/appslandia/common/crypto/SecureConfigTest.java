@@ -20,8 +20,6 @@
 
 package com.appslandia.common.crypto;
 
-import java.util.Properties;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -46,15 +44,5 @@ public class SecureConfigTest {
     config.sets("config", "secret");
 
     Assertions.assertEquals("secret", config.getString("config"));
-  }
-
-  @Test
-  public void test_toProperties() {
-    SecureConfig config = new SecureConfig("password".toCharArray());
-    config.sets("config", "secret");
-
-    // Properties
-    Properties props = config.toClearProperties();
-    Assertions.assertEquals("secret", props.getProperty("config"));
   }
 }
