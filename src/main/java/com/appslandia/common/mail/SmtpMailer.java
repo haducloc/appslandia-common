@@ -84,13 +84,10 @@ public class SmtpMailer extends InitializeObject {
       String password = this.config.getString("mail.smtp.password");
       transport.connect(user, password);
 
-      String debugToEmails = null;
-      if (this.config.getBool("mail.smtp.debug.enabled", true)) {
-        debugToEmails = this.config.getStringReq("mail.smtp.debug.to_emails");
-      }
+      String toEmails = this.config.getString("mail.to_emails");
 
       for (MailerMessage mailerMessage : messages) {
-        MimeMessage message = mailerMessage.toMimeMessage(this, debugToEmails);
+        MimeMessage message = mailerMessage.toMimeMessage(this, toEmails);
         message.saveChanges();
 
         transport.sendMessage(message, message.getAllRecipients());
@@ -135,9 +132,7 @@ public class SmtpMailer extends InitializeObject {
    * <li>mail.smtp.ssl.trust=smtp.example.com</li>
    * <li>mail.from=no-reply@example.com</li>
    * <li>mail.debug=false</li>
-   * 
-   * <li>mail.smtp.debug.enabled=true</li>
-   * <li>mail.smtp.debug.to_emails=to-email@example.com</li>
+   * <li>mail.to_emails=to-email@example.com</li>
    * </ul>
    * 
    * @param config

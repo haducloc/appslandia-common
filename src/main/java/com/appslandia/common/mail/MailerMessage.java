@@ -165,7 +165,7 @@ public class MailerMessage {
     mailer.send(this);
   }
 
-  public MimeMessage toMimeMessage(SmtpMailer mailer, String debugToEmails) throws MessagingException {
+  public MimeMessage toMimeMessage(SmtpMailer mailer, String toEmails) throws MessagingException {
     MimeMessage msg = new MimeMessage(mailer.session);
 
     // Sender
@@ -188,9 +188,9 @@ public class MailerMessage {
       msg.setReplyTo(this.replyTo.toArray(new Address[this.replyTo.size()]));
     }
 
-    // debugToEmails?
-    if (debugToEmails != null) {
-      msg.addRecipients(RecipientType.TO, InternetAddress.parse(debugToEmails));
+    // toEmails?
+    if (toEmails != null) {
+      msg.addRecipients(RecipientType.TO, InternetAddress.parse(toEmails));
     } else {
       // Recipients
       if (this.to != null) {
