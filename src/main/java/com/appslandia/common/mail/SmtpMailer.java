@@ -21,6 +21,7 @@
 package com.appslandia.common.mail;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -98,7 +99,7 @@ public class SmtpMailer extends InitializeObject {
   }
 
   public void sendAsync(MailerMessage message, Executor executor, Consumer<Exception> errorHandler) {
-    sendAsync(CollectionUtils.toList(new ArrayList<>(1), message), executor, errorHandler);
+    sendAsync(Arrays.asList(message), executor, errorHandler);
   }
 
   public void sendAsync(List<MailerMessage> messages, Executor executor, Consumer<Exception> errorHandler) {
