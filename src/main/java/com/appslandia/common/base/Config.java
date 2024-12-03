@@ -23,6 +23,8 @@ package com.appslandia.common.base;
 import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import com.appslandia.common.utils.ParseUtils;
@@ -42,6 +44,23 @@ public interface Config {
   Iterator<String> getKeys();
 
   String getString(String key);
+
+  default public Properties toProperties(Function<String, Boolean> keyFilter) {
+    Properties props = new Properties();
+    apply(keyFilter, key -> props.put(key, getString(key)));
+    return props;
+  }
+
+  default public void apply(Function<String, Boolean> keyFilter, Consumer<String> keyConsumer) {
+    Iterator<String> iter = getKeys();
+    while (iter.hasNext()) {
+      String key = iter.next();
+
+      if (keyFilter.apply(key)) {
+        keyConsumer.accept(key);
+      }
+    }
+  }
 
   default public String getString(String key, String ifNull) {
     String value = getString(key);

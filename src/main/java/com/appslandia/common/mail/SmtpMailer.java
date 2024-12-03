@@ -22,9 +22,7 @@ package com.appslandia.common.mail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
@@ -53,21 +51,7 @@ public class SmtpMailer extends InitializeObject {
   protected void init() throws Exception {
     Asserts.notNull(this.config, "config is required.");
 
-    this.session = Session.getInstance(createMailProps());
-  }
-
-  protected Properties createMailProps() {
-    Properties props = new Properties();
-    Iterator<String> iter = this.config.getKeys();
-
-    while (iter.hasNext()) {
-      String key = iter.next();
-
-      if (key.startsWith("mail.")) {
-        props.put(key, this.config.getString(key));
-      }
-    }
-    return props;
+    this.session = Session.getInstance(this.config.toProperties(key -> key.startsWith("mail.")));
   }
 
   public void send(MailerMessage message) throws MessagingException {
