@@ -20,7 +20,10 @@
 
 package com.appslandia.common.utils;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 import com.appslandia.common.base.InitializeObject;
 
@@ -128,19 +131,64 @@ public class TextTransform extends InitializeObject {
   // The Quick Brown Fox Jumps Over the Lazy Dog
 
   class TitleTransform implements CaseTransform {
+
+    private static final Set<String> EXCLUDED_WORDS;
+
+    static {
+      Set<String> excluded = new HashSet<>();
+
+      excluded.add("a");
+      excluded.add("an");
+      excluded.add("and");
+      excluded.add("as");
+      excluded.add("at");
+      excluded.add("but");
+      excluded.add("by");
+      excluded.add("for");
+      excluded.add("if");
+      excluded.add("in");
+      excluded.add("nor");
+      excluded.add("of");
+      excluded.add("on");
+      excluded.add("or");
+      excluded.add("so");
+      excluded.add("the");
+      excluded.add("to");
+      excluded.add("up");
+      excluded.add("yet");
+      excluded.add("with");
+
+      EXCLUDED_WORDS = Collections.unmodifiableSet(excluded);
+    }
+
     @Override
     public String doTransform(String str) {
       String[] words = str.split("\\s+");
       StringBuilder result = new StringBuilder(str.length());
 
       for (String word : words) {
+        if (result.length() == 0) {
+          word = StringUtils.firstUpperCase(word, locale);
+        } else {
+
+          if (EXCLUDED_WORDS.contains(word.toLowerCase(locale))) {
+            word = word.toLowerCase(locale);
+          } else {
+            word = StringUtils.firstUpperCase(word, locale);
+          }
+        }
+
         if (wordTransform != null) {
           word = wordTransform.doTransform(word);
         }
         if (word == null)
           continue;
 
-        result.append(StringUtils.firstUpperCase(word, locale));
+        if (result.length() == 0) {
+          result.append(word);
+        } else {
+          result.append(" ").append(word);
+        }
       }
       return result.length() > 0 ? result.toString() : null;
     }
@@ -149,17 +197,22 @@ public class TextTransform extends InitializeObject {
   class UpperTransform implements CaseTransform {
     @Override
     public String doTransform(String str) {
-      String[] words = str.split("\\s+");
+      String[] words = str.toUpperCase(locale).split("\\s+");
       StringBuilder result = new StringBuilder(str.length());
 
       for (String word : words) {
+
         if (wordTransform != null) {
           word = wordTransform.doTransform(word);
         }
         if (word == null)
           continue;
 
-        result.append(word.toUpperCase(locale)).append(" ");
+        if (result.length() == 0) {
+          result.append(word);
+        } else {
+          result.append(" ").append(word);
+        }
       }
       return result.length() > 0 ? result.toString().trim() : null;
     }
@@ -168,17 +221,22 @@ public class TextTransform extends InitializeObject {
   class LowerTransform implements CaseTransform {
     @Override
     public String doTransform(String str) {
-      String[] words = str.split("\\s+");
+      String[] words = str.toLowerCase(locale).split("\\s+");
       StringBuilder result = new StringBuilder(str.length());
 
       for (String word : words) {
+
         if (wordTransform != null) {
           word = wordTransform.doTransform(word);
         }
         if (word == null)
           continue;
 
-        result.append(word.toLowerCase(locale)).append(" ");
+        if (result.length() == 0) {
+          result.append(word);
+        } else {
+          result.append(" ").append(word);
+        }
       }
       return result.length() > 0 ? result.toString().trim() : null;
     }
@@ -193,17 +251,17 @@ public class TextTransform extends InitializeObject {
       StringBuilder result = new StringBuilder(str.length());
 
       for (String word : words) {
+        if (result.length() > 0) {
+          word = StringUtils.firstUpperCase(word, locale);
+        }
+
         if (wordTransform != null) {
           word = wordTransform.doTransform(word);
         }
         if (word == null)
           continue;
 
-        if (result.length() == 0) {
-          result.append(word);
-        } else {
-          result.append(StringUtils.firstUpperCase(word, locale));
-        }
+        result.append(word);
       }
       return result.length() > 0 ? result.toString() : null;
     }
@@ -218,13 +276,15 @@ public class TextTransform extends InitializeObject {
       StringBuilder result = new StringBuilder(str.length());
 
       for (String word : words) {
+        word = StringUtils.firstUpperCase(word, locale);
+
         if (wordTransform != null) {
           word = wordTransform.doTransform(word);
         }
         if (word == null)
           continue;
 
-        result.append(StringUtils.firstUpperCase(word, locale));
+        result.append(word);
       }
       return result.length() > 0 ? result.toString() : null;
     }
@@ -235,19 +295,24 @@ public class TextTransform extends InitializeObject {
   class SnakeTransform implements CaseTransform {
     @Override
     public String doTransform(String str) {
-      String[] words = str.split("\\s+");
+      String[] words = str.toLowerCase(locale).split("\\s+");
       StringBuilder result = new StringBuilder(str.length());
 
       for (String word : words) {
+
         if (wordTransform != null) {
           word = wordTransform.doTransform(word);
         }
         if (word == null)
           continue;
 
-        result.append(word.toLowerCase(locale)).append("_");
+        if (result.length() == 0) {
+          result.append(word);
+        } else {
+          result.append("_").append(word);
+        }
       }
-      return result.length() > 0 ? result.toString().substring(0, result.length() - 1) : null;
+      return result.length() > 0 ? result.toString() : null;
     }
   }
 
@@ -256,19 +321,24 @@ public class TextTransform extends InitializeObject {
   class ScreamingSnakeTransform implements CaseTransform {
     @Override
     public String doTransform(String str) {
-      String[] words = str.split("\\s+");
+      String[] words = str.toUpperCase(locale).split("\\s+");
       StringBuilder result = new StringBuilder(str.length());
 
       for (String word : words) {
+
         if (wordTransform != null) {
           word = wordTransform.doTransform(word);
         }
         if (word == null)
           continue;
 
-        result.append(word.toUpperCase(locale)).append("_");
+        if (result.length() == 0) {
+          result.append(word);
+        } else {
+          result.append("_").append(word);
+        }
       }
-      return result.length() > 0 ? result.toString().substring(0, result.length() - 1) : null;
+      return result.length() > 0 ? result.toString() : null;
     }
   }
 
@@ -277,19 +347,24 @@ public class TextTransform extends InitializeObject {
   class KebabTransform implements CaseTransform {
     @Override
     public String doTransform(String str) {
-      String[] words = str.split("\\s+");
+      String[] words = str.toLowerCase(locale).split("\\s+");
       StringBuilder result = new StringBuilder(str.length());
 
       for (String word : words) {
+
         if (wordTransform != null) {
           word = wordTransform.doTransform(word);
         }
         if (word == null)
           continue;
 
-        result.append(word.toLowerCase(locale)).append("-");
+        if (result.length() == 0) {
+          result.append(word);
+        } else {
+          result.append("-").append(word);
+        }
       }
-      return result.length() > 0 ? result.toString().substring(0, result.length() - 1) : null;
+      return result.length() > 0 ? result.toString() : null;
     }
   }
 
@@ -298,17 +373,23 @@ public class TextTransform extends InitializeObject {
   class TrainTransform implements CaseTransform {
     @Override
     public String doTransform(String str) {
-      String[] words = str.split("\\s+");
+      String[] words = str.toLowerCase(locale).split("\\s+");
       StringBuilder result = new StringBuilder(str.length());
 
       for (String word : words) {
+        word = StringUtils.firstUpperCase(word, locale);
+
         if (wordTransform != null) {
           word = wordTransform.doTransform(word);
         }
         if (word == null)
           continue;
 
-        result.append(StringUtils.firstUpperCase(word, locale));
+        if (result.length() == 0) {
+          result.append(word);
+        } else {
+          result.append("-").append(word);
+        }
       }
       return result.length() > 0 ? result.toString() : null;
     }
