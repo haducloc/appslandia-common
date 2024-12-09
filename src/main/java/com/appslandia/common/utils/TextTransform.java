@@ -167,7 +167,7 @@ public class TextTransform extends InitializeObject {
       StringBuilder result = new StringBuilder(str.length());
 
       for (String word : words) {
-        if (!isAllUpperCase(word)) {
+        if (!word.equals(word.toUpperCase(locale))) {
 
           if (result.length() == 0) {
             word = StringUtils.firstUpperCase(word);
@@ -254,7 +254,7 @@ public class TextTransform extends InitializeObject {
       StringBuilder result = new StringBuilder(str.length());
 
       for (String word : words) {
-        if (!isAllUpperCase(word)) {
+        if (!word.equals(word.toUpperCase(locale))) {
 
           if (result.length() > 0) {
             word = word.toLowerCase(locale);
@@ -284,7 +284,7 @@ public class TextTransform extends InitializeObject {
 
       for (String word : words) {
 
-        if (!isAllUpperCase(word)) {
+        if (!word.equals(word.toUpperCase(locale))) {
           word = word.toLowerCase(locale);
           word = StringUtils.firstUpperCase(word);
         }
@@ -388,7 +388,7 @@ public class TextTransform extends InitializeObject {
       StringBuilder result = new StringBuilder(str.length());
 
       for (String word : words) {
-        if (!isAllUpperCase(word)) {
+        if (!word.equals(word.toUpperCase(locale))) {
 
           word = word.toLowerCase(locale);
           word = StringUtils.firstUpperCase(word);
@@ -408,10 +408,5 @@ public class TextTransform extends InitializeObject {
       }
       return result.length() > 0 ? result.toString() : null;
     }
-  }
-
-  boolean isAllUpperCase(String word) {
-    String ucWord = word.toUpperCase(locale);
-    return word.equals(ucWord);
   }
 }
