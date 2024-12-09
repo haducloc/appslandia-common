@@ -56,19 +56,22 @@ public class TextTransform extends InitializeObject {
     return transform.doTransform(str);
   }
 
-  public void setCaseType(CaseType caseType) {
+  public TextTransform setCaseType(CaseType caseType) {
     assertNotInitialized();
     this.caseType = caseType;
+    return this;
   }
 
-  public void setLocale(Locale locale) {
+  public TextTransform setLocale(Locale locale) {
     assertNotInitialized();
     this.locale = locale;
+    return this;
   }
 
-  public void setWordTransform(WordTransform wordTransform) {
+  public TextTransform setWordTransform(WordTransform wordTransform) {
     assertNotInitialized();
     this.wordTransform = wordTransform;
+    return this;
   }
 
   protected CaseTransform getTransform(CaseType caseType) {
