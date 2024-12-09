@@ -167,14 +167,17 @@ public class TextTransform extends InitializeObject {
       StringBuilder result = new StringBuilder(str.length());
 
       for (String word : words) {
-        if (result.length() == 0) {
-          word = StringUtils.firstUpperCase(word, locale);
-        } else {
+        if (!isAllUpperCase(word)) {
 
-          if (EXCLUDED_WORDS.contains(word.toLowerCase(locale))) {
-            word = word.toLowerCase(locale);
+          if (result.length() == 0) {
+            word = StringUtils.firstUpperCase(word);
           } else {
-            word = StringUtils.firstUpperCase(word, locale);
+
+            if (EXCLUDED_WORDS.contains(word.toLowerCase(locale))) {
+              word = word.toLowerCase(locale);
+            } else {
+              word = StringUtils.firstUpperCase(word);
+            }
           }
         }
 
@@ -247,12 +250,16 @@ public class TextTransform extends InitializeObject {
   class CamelTransform implements CaseTransform {
     @Override
     public String doTransform(String str) {
-      String[] words = str.toLowerCase(locale).split("\\s+");
+      String[] words = str.split("\\s+");
       StringBuilder result = new StringBuilder(str.length());
 
       for (String word : words) {
-        if (result.length() > 0) {
-          word = StringUtils.firstUpperCase(word, locale);
+        if (!isAllUpperCase(word)) {
+
+          if (result.length() > 0) {
+            word = word.toLowerCase(locale);
+            word = StringUtils.firstUpperCase(word);
+          }
         }
 
         if (wordTransform != null) {
@@ -272,11 +279,15 @@ public class TextTransform extends InitializeObject {
   class PascalTransform implements CaseTransform {
     @Override
     public String doTransform(String str) {
-      String[] words = str.toLowerCase(locale).split("\\s+");
+      String[] words = str.split("\\s+");
       StringBuilder result = new StringBuilder(str.length());
 
       for (String word : words) {
-        word = StringUtils.firstUpperCase(word, locale);
+
+        if (!isAllUpperCase(word)) {
+          word = word.toLowerCase(locale);
+          word = StringUtils.firstUpperCase(word);
+        }
 
         if (wordTransform != null) {
           word = wordTransform.doTransform(word);
@@ -373,11 +384,15 @@ public class TextTransform extends InitializeObject {
   class TrainTransform implements CaseTransform {
     @Override
     public String doTransform(String str) {
-      String[] words = str.toLowerCase(locale).split("\\s+");
+      String[] words = str.split("\\s+");
       StringBuilder result = new StringBuilder(str.length());
 
       for (String word : words) {
-        word = StringUtils.firstUpperCase(word, locale);
+        if (!isAllUpperCase(word)) {
+
+          word = word.toLowerCase(locale);
+          word = StringUtils.firstUpperCase(word);
+        }
 
         if (wordTransform != null) {
           word = wordTransform.doTransform(word);
@@ -393,5 +408,10 @@ public class TextTransform extends InitializeObject {
       }
       return result.length() > 0 ? result.toString() : null;
     }
+  }
+
+  boolean isAllUpperCase(String word) {
+    String ucWord = word.toUpperCase(locale);
+    return word.equals(ucWord);
   }
 }
