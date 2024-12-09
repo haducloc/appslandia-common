@@ -170,13 +170,13 @@ public class TextTransform extends InitializeObject {
         if (!word.equals(word.toUpperCase(locale))) {
 
           if (result.length() == 0) {
-            word = StringUtils.firstUpperCase(word);
+            word = StringUtils.firstUpperCase(word, locale);
           } else {
 
             if (EXCLUDED_WORDS.contains(word.toLowerCase(locale))) {
               word = word.toLowerCase(locale);
             } else {
-              word = StringUtils.firstUpperCase(word);
+              word = StringUtils.firstUpperCase(word, locale);
             }
           }
         }
@@ -258,7 +258,7 @@ public class TextTransform extends InitializeObject {
 
           if (result.length() > 0) {
             word = word.toLowerCase(locale);
-            word = StringUtils.firstUpperCase(word);
+            word = StringUtils.firstUpperCase(word, locale);
           }
         }
 
@@ -286,7 +286,7 @@ public class TextTransform extends InitializeObject {
 
         if (!word.equals(word.toUpperCase(locale))) {
           word = word.toLowerCase(locale);
-          word = StringUtils.firstUpperCase(word);
+          word = StringUtils.firstUpperCase(word, locale);
         }
 
         if (wordTransform != null) {
@@ -391,7 +391,7 @@ public class TextTransform extends InitializeObject {
         if (!word.equals(word.toUpperCase(locale))) {
 
           word = word.toLowerCase(locale);
-          word = StringUtils.firstUpperCase(word);
+          word = StringUtils.firstUpperCase(word, locale);
         }
 
         if (wordTransform != null) {
