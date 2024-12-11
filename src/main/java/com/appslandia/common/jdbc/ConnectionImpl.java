@@ -111,16 +111,19 @@ public class ConnectionImpl implements Connection {
 
   // Update Utilities
 
-  public int dropTable(String tableName) throws java.sql.SQLException {
-    return executeUpdate(STR.fmt("DROP TABLE IF EXISTS {}", this.getDbDialect().quoteIdentifier(tableName)));
+  public void dropTables(DbDangerousAction action, String... tableNames) throws java.sql.SQLException {
+    Asserts.isTrue(action == DbDangerousAction.CONFIRM_DANGEROUS_ACTION,
+        "DbDangerousAction.CONFIRM_DANGEROUS_ACTION is required.");
+
+    for (String tableName : tableNames) {
+      executeUpdate(STR.fmt("DROP TABLE IF EXISTS {}", this.getDbDialect().quoteIdentifier(tableName)));
+    }
   }
 
-  public int truncateTable(String tableName) throws java.sql.SQLException {
-    return executeUpdate(STR.fmt("TRUNCATE TABLE {}", this.getDbDialect().quoteIdentifier(tableName)));
-  }
-
-  public int backupTable(String originalTable) throws java.sql.SQLException {
-    return backupTable(originalTable, null);
+  public void backupTables(String... tableNames) throws java.sql.SQLException {
+    for (String tableName : tableNames) {
+      backupTable(tableName, null);
+    }
   }
 
   public int backupTable(String originalTable, String backupTable) throws java.sql.SQLException {
@@ -135,6 +138,15 @@ public class ConnectionImpl implements Connection {
     }
     return executeUpdate(STR.fmt("CREATE TABLE {} AS SELECT * FROM {}", dbDialect.quoteIdentifier(backupTable),
         dbDialect.quoteIdentifier(originalTable)));
+  }
+
+  public void truncateTables(DbDangerousAction action, String... tableNames) throws java.sql.SQLException {
+    Asserts.isTrue(action == DbDangerousAction.CONFIRM_DANGEROUS_ACTION,
+        "DbDangerousAction.CONFIRM_DANGEROUS_ACTION is required.");
+
+    for (String tableName : tableNames) {
+      executeUpdate(STR.fmt("TRUNCATE TABLE {}", this.getDbDialect().quoteIdentifier(tableName)));
+    }
   }
 
   public int executeUpdate(String sql) throws java.sql.SQLException {

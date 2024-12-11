@@ -105,20 +105,20 @@ public class DbContext implements AutoCloseable {
     }
   }
 
-  public int dropTable(String tableName) throws java.sql.SQLException {
-    return this.conn.dropTable(tableName);
+  public void dropTables(DbDangerousAction action, String... tableNames) throws java.sql.SQLException {
+    this.conn.dropTables(action, tableNames);
   }
 
-  public int truncateTable(String tableName) throws java.sql.SQLException {
-    return this.conn.truncateTable(tableName);
-  }
-
-  public int backupTable(String originalTable) throws java.sql.SQLException {
-    return this.conn.backupTable(originalTable);
+  public void backupTables(String... tableNames) throws java.sql.SQLException {
+    this.conn.backupTables(tableNames);
   }
 
   public int backupTable(String originalTable, String backupTable) throws java.sql.SQLException {
     return this.conn.backupTable(originalTable, backupTable);
+  }
+
+  public void truncateTables(DbDangerousAction action, String... tableNames) throws java.sql.SQLException {
+    this.conn.truncateTables(action, tableNames);
   }
 
   // Execute Utilities
