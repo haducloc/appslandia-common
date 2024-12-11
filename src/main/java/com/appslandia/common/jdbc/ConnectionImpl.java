@@ -158,6 +158,14 @@ public class ConnectionImpl implements Connection {
     }
   }
 
+  public String getTableNames(boolean tablePkIdentityOnly) throws java.sql.SQLException {
+    return JdbcUtils.getTableNames(this, null, null, tablePkIdentityOnly);
+  }
+
+  public String getColumnNames(String tableName) throws java.sql.SQLException {
+    return JdbcUtils.getColumnNames(this, null, null, tableName);
+  }
+
   public int executeUpdate(String sql) throws java.sql.SQLException {
     try (Statement stat = this.conn.createStatement()) {
       return stat.executeUpdate(sql);
@@ -190,7 +198,7 @@ public class ConnectionImpl implements Connection {
 
     try (Statement stat = this.conn.createStatement()) {
       try (ResultSet rs = stat.executeQuery(sql)) {
-        return JdbcUtils.getDistinctValues(rs, tableName, columnLabel);
+        return JdbcUtils.getDistinctValues(rs, columnLabel);
       }
     }
   }

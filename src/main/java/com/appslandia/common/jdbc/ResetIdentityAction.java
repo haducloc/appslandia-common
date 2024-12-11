@@ -47,7 +47,7 @@ public interface ResetIdentityAction {
 
     @Override
     public boolean resetIdentity(ConnectionImpl conn, String tableName) throws java.sql.SQLException {
-      String idPk = JdbcUtils.getIdentityPK(conn, null, null, tableName);
+      String idPk = JdbcUtils.getPkIdentity(conn, null, null, tableName);
       if (idPk == null) {
         return false;
       }
@@ -55,8 +55,12 @@ public interface ResetIdentityAction {
       DbDialect dbDialect = conn.getDbDialect();
       String quotedTable = dbDialect.quoteIdentifier(tableName);
 
-      long curMaxPk = conn
+      Long curMaxPk = conn
           .executeScalar(STR.fmt("SELECT MAX({}) FROM {}", dbDialect.quoteIdentifier(idPk), quotedTable), Long.class);
+
+      if (curMaxPk == null) {
+        curMaxPk = 0L;
+      }
 
       conn.executeUpdate(STR.fmt("DBCC CHECKIDENT ('{}', RESEED, {})", quotedTable, curMaxPk));
       return true;

@@ -125,6 +125,14 @@ public class DbContext implements AutoCloseable {
     this.conn.resetIdentity(action, tableNames);
   }
 
+  public String getTableNames(boolean tablePkIdentityOnly) throws java.sql.SQLException {
+    return this.conn.getTableNames(tablePkIdentityOnly);
+  }
+
+  public String getColumnNames(String tableName) throws java.sql.SQLException {
+    return this.conn.getColumnNames(tableName);
+  }
+
   // Execute Utilities
 
   public String getDistinctValues(String tableName, String columnLabel) throws java.sql.SQLException {

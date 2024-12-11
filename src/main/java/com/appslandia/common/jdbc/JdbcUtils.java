@@ -77,7 +77,82 @@ public class JdbcUtils {
     return Collections.unmodifiableList(cols);
   }
 
-  public static String getIdentityPK(ConnectionImpl conn, String catalog, String schema, String tableName)
+  public static String getColumnNames(ConnectionImpl conn, String catalog, String schema, String tableName)
+      throws SQLException {
+    Asserts.notNull(conn);
+
+    List<String> columns = new ArrayList<>();
+    try (ResultSet rs = conn.getMetaData().getColumns(catalog, schema, tableName, null)) {
+      while (rs.next()) {
+
+        String columnName = rs.getString("COLUMN_NAME");
+        columns.add(columnName);
+      }
+    }
+    return columns.stream().map(c -> "\"" + c + "\"").collect(Collectors.joining(", "));
+  }
+
+  public static String getTableNames(ConnectionImpl conn, String catalog, String schema, boolean tablePkIdentityOnly)
+      throws SQLException {
+    Asserts.notNull(conn);
+    StringBuilder result = new StringBuilder();
+
+    // DatabaseMetaData
+    DatabaseMetaData metaData = conn.getMetaData();
+
+    // Table
+    TreeSet<String> tables = new TreeSet<>();
+
+    // Get all tables in the schema
+    try (ResultSet rs = metaData.getTables(catalog, schema, null, new String[] { "TABLE" })) {
+      while (rs.next()) {
+        String tname = rs.getString("TABLE_NAME");
+        tables.add(tname);
+      }
+    }
+
+    for (String tableName : tables) {
+
+      // Keys
+      Set<String> keys = new HashSet<>();
+      try (ResultSet rs = metaData.getPrimaryKeys(catalog, schema, tableName)) {
+        while (rs.next()) {
+          keys.add(rs.getString("COLUMN_NAME").toLowerCase(Locale.ENGLISH));
+        }
+      }
+
+      if (tablePkIdentityOnly && keys.size() != 1) {
+        continue;
+      }
+
+      // IS_AUTOINCREMENT
+      boolean isPkIncr = false;
+      try (ResultSet rs = metaData.getColumns(catalog, schema, tableName, null)) {
+        while (rs.next()) {
+
+          String columnName = rs.getString("COLUMN_NAME");
+          boolean isKey = keys.contains(columnName.toLowerCase(Locale.ENGLISH));
+          boolean autoIncr = "YES".equals(rs.getString("IS_AUTOINCREMENT"));
+
+          if (isKey && autoIncr) {
+            isPkIncr = true;
+          }
+        }
+      }
+
+      if (tablePkIdentityOnly && !isPkIncr) {
+        continue;
+      }
+
+      if (result.length() > 0) {
+        result.append(", ");
+      }
+      result.append("\"").append(tableName).append("\"");
+    }
+    return result.toString();
+  }
+
+  public static String getPkIdentity(ConnectionImpl conn, String catalog, String schema, String tableName)
       throws SQLException {
     Asserts.notNull(conn);
     Asserts.notNull(tableName);
@@ -174,7 +249,7 @@ public class JdbcUtils {
 
   // Execute ResultSets
 
-  public static String getDistinctValues(ResultSet rs, String tableName, String columnLabel) throws SQLException {
+  public static String getDistinctValues(ResultSet rs, String columnLabel) throws SQLException {
     Set<String> values = new TreeSet<>();
     boolean tooMany = false;
 

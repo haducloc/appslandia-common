@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
@@ -363,11 +362,6 @@ public class RecordContext extends DbContext {
         throw new UncheckedSQLException(ex);
       }
     });
-  }
-
-  public String getColumnNames(String tableName) throws UncheckedSQLException {
-    Table table = getTable(tableName);
-    return table.getColumns().stream().map(c -> c.getName()).collect(Collectors.joining(", "));
   }
 
   public String getColumnSetters(String tableName) throws UncheckedSQLException {
