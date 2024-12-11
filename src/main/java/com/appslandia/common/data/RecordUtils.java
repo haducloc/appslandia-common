@@ -243,12 +243,12 @@ public final class RecordUtils {
     Asserts.notNull(tableName);
 
     // All Uppers
-    if (tableName.equals(tableName.toUpperCase(Locale.ENGLISH))) {
+    if (tableName.chars().allMatch(c -> Character.isUpperCase(c))) {
       return StringUtils.firstUpperCase(tableName.toLowerCase(Locale.ENGLISH), Locale.ENGLISH);
     }
 
     // All Lowers
-    if (tableName.equals(tableName.toLowerCase(Locale.ENGLISH))) {
+    if (tableName.chars().allMatch(c -> Character.isLowerCase(c))) {
       return StringUtils.firstUpperCase(tableName, Locale.ENGLISH);
     }
 

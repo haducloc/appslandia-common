@@ -192,12 +192,12 @@ public class JdbcUtils {
     Asserts.notNull(dbColumnName);
 
     // All Uppers
-    if (dbColumnName.equals(dbColumnName.toUpperCase(Locale.ENGLISH))) {
+    if (dbColumnName.chars().allMatch(c -> Character.isUpperCase(c))) {
       return dbColumnName.toLowerCase(Locale.ENGLISH);
     }
 
     // All Lowers
-    if (dbColumnName.equals(dbColumnName.toLowerCase(Locale.ENGLISH))) {
+    if (dbColumnName.chars().allMatch(c -> Character.isLowerCase(c))) {
       return dbColumnName;
     }
 
