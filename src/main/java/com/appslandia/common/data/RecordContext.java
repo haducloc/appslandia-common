@@ -364,24 +364,34 @@ public class RecordContext extends DbContext {
     });
   }
 
-  public String getColumnSetters(String tableName) throws UncheckedSQLException {
+  public String getRecordSetters(String tableName) throws UncheckedSQLException {
     Table table = getTable(tableName);
     TextBuilder setters = new TextBuilder();
 
-    setters.append("// ").append(tableName).appendln();
-    setters.append("var dataRecord = new DataRecord();").appendln();
+    setters.append("// ").append(table.getEntityClassName()).appendln();
+    setters.append("var dr = new DataRecord();").appendln().appendln();
 
     for (Column col : table.getColumns()) {
 
       String code = null;
       if (col.isNullable()) {
-        code = STR.fmt("dataRecord.set(\"{}\", {});", col.getName(), "NULLABLE");
+        code = STR.fmt("dr.set(\"{}\", {});", col.getName(), null);
+
+      } else if (col.isKeyIncr()) {
+        code = STR.fmt("dr.set(\"{}\", {});", col.getName(), "PK_INCR");
+
+      } else if (col.isKey()) {
+        code = STR.fmt("dr.set(\"{}\", {});", col.getName(), "PK");
+
+      } else if (col.getColumnType() == ColumnType.NON_KEY_GEN) {
+        code = STR.fmt("dr.set(\"{}\", {});", col.getName(), "GEN");
+
       } else {
-        code = STR.fmt("dataRecord.set(\"{}\", {});", col.getName(), "REQUIRED");
+        code = STR.fmt("dr.set(\"{}\", {});", col.getName(), "REQ");
       }
       setters.append(code).appendln();
 
-      if ((col.getPosition() + 1) % 5 == 0) {
+      if ((col.getPosition()) % 5 == 0) {
         setters.appendln();
       }
     }
