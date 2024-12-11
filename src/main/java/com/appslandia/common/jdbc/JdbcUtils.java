@@ -25,12 +25,14 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -73,6 +75,42 @@ public class JdbcUtils {
       cols.add(new ResultSetColumn(col, md.getColumnLabel(col), md.getColumnType(col)));
     }
     return Collections.unmodifiableList(cols);
+  }
+
+  public static String getIdentityPK(ConnectionImpl conn, String catalog, String schema, String tableName)
+      throws SQLException {
+    Asserts.notNull(conn);
+    Asserts.notNull(tableName);
+
+    // DatabaseMetaData
+    DatabaseMetaData metaData = conn.getMetaData();
+
+    // Keys
+    Set<String> keys = new HashSet<>();
+    try (ResultSet rs = metaData.getPrimaryKeys(catalog, schema, tableName)) {
+      while (rs.next()) {
+        keys.add(rs.getString("COLUMN_NAME").toLowerCase(Locale.ENGLISH));
+      }
+    }
+
+    if (keys.size() != 1) {
+      return null;
+    }
+
+    // Columns
+    try (ResultSet rs = metaData.getColumns(catalog, schema, tableName, null)) {
+      while (rs.next()) {
+
+        String columnName = rs.getString("COLUMN_NAME");
+        boolean isKey = keys.contains(columnName.toLowerCase(Locale.ENGLISH));
+        boolean autoIncr = "YES".equals(rs.getString("IS_AUTOINCREMENT"));
+
+        if (isKey) {
+          return autoIncr ? columnName : null;
+        }
+      }
+    }
+    return null;
   }
 
   public static String toFieldName(String dbColumnName) {

@@ -24,6 +24,7 @@ import java.io.Serializable;
 
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.ValueUtils;
 
 /**
  *
@@ -36,12 +37,16 @@ public class DbDialect extends InitializeObject implements Serializable {
   private DbType type;
   private Character idQuoteChar;
   private SqlLikeEscaper likeEscaper;
+  private ResetIdentityAction resetIdentityAction;
 
   @Override
   protected void init() throws Exception {
     Asserts.notNull(this.type);
     Asserts.notNull(this.idQuoteChar);
     Asserts.notNull(this.likeEscaper);
+
+    this.resetIdentityAction = ValueUtils.valueOrAlt(this.resetIdentityAction,
+        ResetIdentityAction.UnimplementedResetIdentityAction.INSTANCE);
   }
 
   public DbType getType() {
@@ -77,6 +82,17 @@ public class DbDialect extends InitializeObject implements Serializable {
     return this;
   }
 
+  public ResetIdentityAction getResetIdentityAction() {
+    this.initialize();
+    return this.resetIdentityAction;
+  }
+
+  public DbDialect setResetIdentityAction(ResetIdentityAction resetIdentityAction) {
+    this.assertNotInitialized();
+    this.resetIdentityAction = resetIdentityAction;
+    return this;
+  }
+
   public String quoteIdentifier(String identifier) {
     this.initialize();
     return this.idQuoteChar + identifier + this.idQuoteChar;
@@ -92,6 +108,11 @@ public class DbDialect extends InitializeObject implements Serializable {
     return this.likeEscaper.toLikePattern(value, likeType);
   }
 
+  public boolean resetIdentity(ConnectionImpl conn, String tableName) throws java.sql.SQLException {
+    this.initialize();
+    return this.resetIdentityAction.resetIdentity(conn, tableName);
+  }
+
   public static final DbDialect DIALECT_POSTGRESQL = new DbDialect().setType(DbType.POSTGRESQL).setIdQuoteChar('"')
       .setLikeEscaper(new SqlLikeEscaper('\\'));
 
@@ -102,7 +123,8 @@ public class DbDialect extends InitializeObject implements Serializable {
       .setLikeEscaper(new SqlLikeEscaper('\\'));
 
   public static final DbDialect DIALECT_MSSQL = new DbDialect().setType(DbType.MSSQL).setIdQuoteChar('"')
-      .setLikeEscaper(new SqlLikeEscaper('\\'));
+      .setLikeEscaper(new SqlLikeEscaper('\\'))
+      .setResetIdentityAction(new ResetIdentityAction.MSSQLResetIdentityAction());
 
   public static final DbDialect DIALECT_SQLITE = new DbDialect().setType(DbType.SQLITE).setIdQuoteChar('"')
       .setLikeEscaper(new SqlLikeEscaper('\\'));

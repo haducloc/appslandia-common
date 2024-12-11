@@ -140,12 +140,21 @@ public class ConnectionImpl implements Connection {
         dbDialect.quoteIdentifier(originalTable)));
   }
 
-  public void truncateTables(DbDangerousAction action, String... tableNames) throws java.sql.SQLException {
+  public void truncTables(DbDangerousAction action, String... tableNames) throws java.sql.SQLException {
     Asserts.isTrue(action == DbDangerousAction.CONFIRM_DANGEROUS_ACTION,
         "DbDangerousAction.CONFIRM_DANGEROUS_ACTION is required.");
 
     for (String tableName : tableNames) {
       executeUpdate(STR.fmt("TRUNCATE TABLE {}", this.getDbDialect().quoteIdentifier(tableName)));
+    }
+  }
+
+  public void resetIdentity(DbDangerousAction action, String... tableNames) throws java.sql.SQLException {
+    Asserts.isTrue(action == DbDangerousAction.CONFIRM_DANGEROUS_ACTION,
+        "DbDangerousAction.CONFIRM_DANGEROUS_ACTION is required.");
+
+    for (String tableName : tableNames) {
+      this.getDbDialect().resetIdentity(this, tableName);
     }
   }
 
