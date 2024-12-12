@@ -37,6 +37,7 @@ import java.util.Set;
 
 import javax.sql.DataSource;
 
+import com.appslandia.common.base.DangerTaskConfirm;
 import com.appslandia.common.utils.Asserts;
 
 /**
@@ -105,8 +106,8 @@ public class DbContext implements AutoCloseable {
     }
   }
 
-  public void dropTables(DbDangerousAction action, String... tableNames) throws java.sql.SQLException {
-    this.conn.dropTables(action, tableNames);
+  public void dropTables(DangerTaskConfirm taskConfirm, String... tableNames) throws java.sql.SQLException {
+    this.conn.dropTables(taskConfirm, tableNames);
   }
 
   public void backupTables(String... tableNames) throws java.sql.SQLException {
@@ -117,8 +118,8 @@ public class DbContext implements AutoCloseable {
     return this.conn.backupTable(originalTable, backupTable);
   }
 
-  public void truncTables(DbDangerousAction action, String... tableNames) throws java.sql.SQLException {
-    this.conn.truncTables(action, tableNames);
+  public void truncTables(DangerTaskConfirm taskConfirm, String... tableNames) throws java.sql.SQLException {
+    this.conn.truncTables(taskConfirm, tableNames);
   }
 
   public void resetIdentity(String... tableNames) throws java.sql.SQLException {

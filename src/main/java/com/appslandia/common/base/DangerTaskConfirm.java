@@ -18,13 +18,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.jdbc;
+package com.appslandia.common.base;
 
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public enum DbDangerousAction {
-  CONFIRM_DANGEROUS_ACTION
+public enum DangerTaskConfirm {
+
+  DANGER_TASK_CONFIRMED
 }

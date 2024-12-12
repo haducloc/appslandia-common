@@ -41,6 +41,7 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
+import com.appslandia.common.base.DangerTaskConfirm;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.data.Column;
 import com.appslandia.common.data.DataRecord;
@@ -68,7 +69,7 @@ public class CsvImporter extends InitializeObject {
   private String tableName;
   private CsvProcessor csvProcessor;
 
-  private boolean enableInserts = true;
+  private DangerTaskConfirm taskConfirm;
   private CsvDebugger csvDebugger;
   final Map<Integer, String> mappedColumns = new TreeMap<>();
 
@@ -115,6 +116,10 @@ public class CsvImporter extends InitializeObject {
     }
   }
 
+  protected boolean isTaskConfirmed() {
+    return this.taskConfirm == DangerTaskConfirm.DANGER_TASK_CONFIRMED;
+  }
+
   public int execute() throws Exception {
     initialize();
 
@@ -123,7 +128,7 @@ public class CsvImporter extends InitializeObject {
 
       try {
         // Transactional
-        if (!this.enableInserts) {
+        if (isTaskConfirmed()) {
           ctx.setTransactional(true);
         }
 
@@ -152,7 +157,7 @@ public class CsvImporter extends InitializeObject {
           }
 
           // Insert the record (batch)
-          if (!this.enableInserts) {
+          if (isTaskConfirmed()) {
             ctx.insert(table.getName(), dataRecord, true);
           }
 
@@ -161,19 +166,19 @@ public class CsvImporter extends InitializeObject {
           // executeBatch markers
           if (inserts > 0 && inserts % 100 == 0) {
 
-            if (!this.enableInserts) {
+            if (isTaskConfirmed()) {
               ctx.executeBatch();
             }
           }
         });
 
         // last executeBatch
-        if (!this.enableInserts) {
+        if (isTaskConfirmed()) {
           ctx.executeBatch();
         }
 
         // Commit all batches
-        if (!this.enableInserts) {
+        if (isTaskConfirmed()) {
           ctx.commit();
         }
 
@@ -182,7 +187,7 @@ public class CsvImporter extends InitializeObject {
       } catch (Exception ex) {
 
         // Rollback
-        if (this.enableInserts) {
+        if (isTaskConfirmed()) {
           ctx.rollback();
         }
         throw ex;
@@ -326,9 +331,9 @@ public class CsvImporter extends InitializeObject {
     return this;
   }
 
-  public CsvImporter setEnableInserts(boolean enableInserts) {
+  public CsvImporter setTaskConfirm(DangerTaskConfirm taskConfirm) {
     assertNotInitialized();
-    this.enableInserts = enableInserts;
+    this.taskConfirm = taskConfirm;
     return this;
   }
 

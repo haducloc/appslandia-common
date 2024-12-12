@@ -38,6 +38,7 @@ import java.util.concurrent.ConcurrentMap;
 import javax.sql.DataSource;
 
 import com.appslandia.common.base.AssertException;
+import com.appslandia.common.base.DangerTaskConfirm;
 import com.appslandia.common.threading.ThreadLocalStorage;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ObjectUtils;
@@ -111,9 +112,8 @@ public class ConnectionImpl implements Connection {
 
   // Update Utilities
 
-  public void dropTables(DbDangerousAction action, String... tableNames) throws java.sql.SQLException {
-    Asserts.isTrue(action == DbDangerousAction.CONFIRM_DANGEROUS_ACTION,
-        "DbDangerousAction.CONFIRM_DANGEROUS_ACTION is required.");
+  public void dropTables(DangerTaskConfirm taskConfirm, String... tableNames) throws java.sql.SQLException {
+    Asserts.isTrue(taskConfirm == DangerTaskConfirm.DANGER_TASK_CONFIRMED);
 
     for (String tableName : tableNames) {
       executeUpdate(STR.fmt("DROP TABLE IF EXISTS {}", this.getDbDialect().quoteIdentifier(tableName)));
@@ -140,9 +140,8 @@ public class ConnectionImpl implements Connection {
         dbDialect.quoteIdentifier(originalTable)));
   }
 
-  public void truncTables(DbDangerousAction action, String... tableNames) throws java.sql.SQLException {
-    Asserts.isTrue(action == DbDangerousAction.CONFIRM_DANGEROUS_ACTION,
-        "DbDangerousAction.CONFIRM_DANGEROUS_ACTION is required.");
+  public void truncTables(DangerTaskConfirm taskConfirm, String... tableNames) throws java.sql.SQLException {
+    Asserts.isTrue(taskConfirm == DangerTaskConfirm.DANGER_TASK_CONFIRMED);
 
     for (String tableName : tableNames) {
       executeUpdate(STR.fmt("TRUNCATE TABLE {}", this.getDbDialect().quoteIdentifier(tableName)));
