@@ -20,6 +20,7 @@
 
 package com.appslandia.common.jdbc;
 
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
 
 /**
@@ -63,6 +64,58 @@ public interface ResetIdentityAction {
       }
 
       conn.executeUpdate(STR.fmt("DBCC CHECKIDENT ('{}', RESEED, {})", quotedTable, curMaxPk));
+      return true;
+    }
+  }
+
+  public static class MySQLResetIdentityAction implements ResetIdentityAction {
+
+    @Override
+    public boolean resetIdentity(ConnectionImpl conn, String tableName) throws java.sql.SQLException {
+      String idPk = JdbcUtils.getPkIdentity(conn, null, null, tableName);
+      if (idPk == null) {
+        return false;
+      }
+
+      DbDialect dbDialect = conn.getDbDialect();
+      String quotedTable = dbDialect.quoteIdentifier(tableName);
+
+      Long curMaxPk = conn
+          .executeScalar(STR.fmt("SELECT MAX({}) FROM {}", dbDialect.quoteIdentifier(idPk), quotedTable), Long.class);
+
+      if (curMaxPk == null) {
+        curMaxPk = 0L;
+      }
+
+      conn.executeUpdate(STR.fmt("ALTER TABLE {} AUTO_INCREMENT = {}", quotedTable, curMaxPk + 1));
+      return true;
+    }
+  }
+
+  public static class PostgreSQLResetIdentityAction implements ResetIdentityAction {
+
+    @Override
+    public boolean resetIdentity(ConnectionImpl conn, String tableName) throws java.sql.SQLException {
+      String idPk = JdbcUtils.getPkIdentity(conn, null, null, tableName);
+      if (idPk == null) {
+        return false;
+      }
+
+      DbDialect dbDialect = conn.getDbDialect();
+      String quotedTable = dbDialect.quoteIdentifier(tableName);
+
+      String seqName = conn.executeScalar(STR.fmt("SELECT pg_get_serial_sequence('{}', '{}') AS sequence_name",
+          quotedTable, dbDialect.quoteIdentifier(idPk)), String.class);
+      Asserts.notNull(seqName);
+
+      Long curMaxPk = conn
+          .executeScalar(STR.fmt("SELECT MAX({}) FROM {}", dbDialect.quoteIdentifier(idPk), quotedTable), Long.class);
+
+      if (curMaxPk == null) {
+        curMaxPk = 0L;
+      }
+
+      conn.executeUpdate(STR.fmt("SELECT setval('{}', {}, false)", dbDialect.quoteIdentifier(seqName), curMaxPk + 1));
       return true;
     }
   }

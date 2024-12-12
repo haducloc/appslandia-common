@@ -114,13 +114,16 @@ public class DbDialect extends InitializeObject implements Serializable {
   }
 
   public static final DbDialect DIALECT_POSTGRESQL = new DbDialect().setType(DbType.POSTGRESQL).setIdQuoteChar('"')
-      .setLikeEscaper(new SqlLikeEscaper('\\'));
+      .setLikeEscaper(new SqlLikeEscaper('\\'))
+      .setResetIdentityAction(new ResetIdentityAction.PostgreSQLResetIdentityAction());
 
   public static final DbDialect DIALECT_MYSQL = new DbDialect().setType(DbType.MYSQL).setIdQuoteChar('`')
-      .setLikeEscaper(new SqlLikeEscaper('\\'));
+      .setLikeEscaper(new SqlLikeEscaper('\\'))
+      .setResetIdentityAction(new ResetIdentityAction.MySQLResetIdentityAction());
 
   public static final DbDialect DIALECT_MARIADB = new DbDialect().setType(DbType.MARIADB).setIdQuoteChar('`')
-      .setLikeEscaper(new SqlLikeEscaper('\\'));
+      .setLikeEscaper(new SqlLikeEscaper('\\'))
+      .setResetIdentityAction(new ResetIdentityAction.MySQLResetIdentityAction());
 
   public static final DbDialect DIALECT_MSSQL = new DbDialect().setType(DbType.MSSQL).setIdQuoteChar('"')
       .setLikeEscaper(new SqlLikeEscaper('\\'))
