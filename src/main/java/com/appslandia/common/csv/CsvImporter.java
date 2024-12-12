@@ -181,7 +181,6 @@ public class CsvImporter extends InitializeObject {
         if (isTaskConfirmed()) {
           ctx.commit();
         }
-
         return counter.get();
 
       } catch (Exception ex) {
