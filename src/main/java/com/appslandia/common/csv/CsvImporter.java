@@ -62,6 +62,7 @@ public class CsvImporter extends InitializeObject {
 
   private BufferedReader csvInput;
   private boolean closeStream;
+
   private boolean csvHeader;
   private ConnectionImpl connection;
   private String tableName;
