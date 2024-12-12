@@ -45,8 +45,7 @@ public class DbDialect extends InitializeObject implements Serializable {
     Asserts.notNull(this.idQuoteChar);
     Asserts.notNull(this.likeEscaper);
 
-    this.resetIdentityAction = ValueUtils.valueOrAlt(this.resetIdentityAction,
-        ResetIdentityAction.UnimplementedResetIdentityAction.INSTANCE);
+    this.resetIdentityAction = ValueUtils.valueOrAlt(this.resetIdentityAction, ResetIdentityAction.UNIMPLEMENTED);
   }
 
   public DbType getType() {

@@ -20,6 +20,8 @@
 
 package com.appslandia.common.jdbc;
 
+import java.sql.SQLException;
+
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
 
@@ -33,16 +35,14 @@ public interface ResetIdentityAction {
 
   boolean resetIdentity(ConnectionImpl conn, String tableName) throws java.sql.SQLException;
 
-  public static class UnimplementedResetIdentityAction implements ResetIdentityAction {
-
-    public static final UnimplementedResetIdentityAction INSTANCE = new UnimplementedResetIdentityAction();
+  public static final ResetIdentityAction UNIMPLEMENTED = new ResetIdentityAction() {
 
     @Override
-    public boolean resetIdentity(ConnectionImpl conn, String tableName) throws java.sql.SQLException {
+    public boolean resetIdentity(ConnectionImpl conn, String tableName) throws SQLException {
       throw new UnsupportedOperationException(
           "The method resetIdentity() is not implemented for the database type: " + conn.getDbDialect().getType());
     }
-  }
+  };
 
   public static class MSSQLResetIdentityAction implements ResetIdentityAction {
 
