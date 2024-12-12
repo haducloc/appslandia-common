@@ -121,8 +121,8 @@ public class DbContext implements AutoCloseable {
     this.conn.truncTables(action, tableNames);
   }
 
-  public void resetIdentity(DbDangerousAction action, String... tableNames) throws java.sql.SQLException {
-    this.conn.resetIdentity(action, tableNames);
+  public void resetIdentity(String... tableNames) throws java.sql.SQLException {
+    this.conn.resetIdentity(tableNames);
   }
 
   public String getTableNames(boolean tablePkIdentityOnly) throws java.sql.SQLException {

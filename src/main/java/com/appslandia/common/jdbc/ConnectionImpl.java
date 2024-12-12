@@ -149,10 +149,7 @@ public class ConnectionImpl implements Connection {
     }
   }
 
-  public void resetIdentity(DbDangerousAction action, String... tableNames) throws java.sql.SQLException {
-    Asserts.isTrue(action == DbDangerousAction.CONFIRM_DANGEROUS_ACTION,
-        "DbDangerousAction.CONFIRM_DANGEROUS_ACTION is required.");
-
+  public void resetIdentity(String... tableNames) throws java.sql.SQLException {
     for (String tableName : tableNames) {
       this.getDbDialect().resetIdentity(this, tableName);
     }
