@@ -166,10 +166,7 @@ public class TemporalPatterns extends InitializeObject {
     for (String isoDtPattern : isoDtPatterns) {
       dtPatterns.add(isoDtPattern);
       dtPatterns.add(ISO_PATTERNS.get(isoDtPattern));
-
-      if (this.language != null) {
-        dtPatterns.add(this.language.getTemporalPattern(isoDtPattern));
-      }
+      dtPatterns.add(this.language.getTemporalPattern(isoDtPattern));
     }
     return Collections.unmodifiableSet(dtPatterns);
   }
