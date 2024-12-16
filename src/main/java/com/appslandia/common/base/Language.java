@@ -53,10 +53,8 @@ public class Language extends InitializeObject {
     if (this.id == null) {
       this.id = this.locale.getLanguage();
     }
-    // datePattern
-    String datePattern = DatePatternParser.getDefault().toInputDatePattern(this.locale);
-
     Map<String, String> patterns = new HashMap<>();
+    String datePattern = DatePatternParser.getDefault().toInputDatePattern(this.locale);
 
     patterns.put(DateUtils.ISO8601_DATE, datePattern);
     patterns.put(DateUtils.ISO8601_YEAR_MONTH, parseYearMonthPattern(datePattern));
