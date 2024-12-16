@@ -137,6 +137,14 @@ public class TemporalPatterns extends InitializeObject {
     return this;
   }
 
+  public TemporalPatterns setLocale(Locale locale) {
+    assertNotInitialized();
+    if (locale != null) {
+      this.language = new Language().setLocale(locale).initialize();
+    }
+    return this;
+  }
+
   public Collection<String> getDatePatterns() {
     initialize();
     return this.datePatterns;
