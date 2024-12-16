@@ -36,6 +36,7 @@ import com.appslandia.common.base.InitializeException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Language;
 import com.appslandia.common.base.Out;
+import com.appslandia.common.base.TemporalPatterns;
 import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.StringUtils;
 
@@ -62,23 +63,23 @@ public class CsvProcessor extends InitializeObject {
   @Override
   protected void init() throws Exception {
     if (this.datePattern == null) {
-      this.datePattern = CsvUtils.getCsvDtPattern(DateUtils.ISO8601_DATE);
+      this.datePattern = TemporalPatterns.getCsvIsoPattern(DateUtils.ISO8601_DATE);
     }
 
     if (this.timePattern == null) {
-      this.timePattern = CsvUtils.getCsvDtPattern(DateUtils.ISO8601_TIME_S);
+      this.timePattern = TemporalPatterns.getCsvIsoPattern(DateUtils.ISO8601_TIME_S);
     }
 
     if (this.dateTimePattern == null) {
-      this.dateTimePattern = CsvUtils.getCsvDtPattern(DateUtils.ISO8601_DATETIME_S);
+      this.dateTimePattern = TemporalPatterns.getCsvIsoPattern(DateUtils.ISO8601_DATETIME_S);
     }
 
     if (this.offsetTimePattern == null) {
-      this.offsetTimePattern = CsvUtils.getCsvDtPattern(DateUtils.ISO8601_TIMEZ_S);
+      this.offsetTimePattern = TemporalPatterns.getCsvIsoPattern(DateUtils.ISO8601_TIMEZ_S);
     }
 
     if (this.offsetDateTimePattern == null) {
-      this.offsetDateTimePattern = CsvUtils.getCsvDtPattern(DateUtils.ISO8601_DATETIMEZ_S);
+      this.offsetDateTimePattern = TemporalPatterns.getCsvIsoPattern(DateUtils.ISO8601_DATETIMEZ_S);
     }
   }
 

@@ -20,9 +20,6 @@
 
 package com.appslandia.common.utils;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.DateTimeException;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -40,11 +37,8 @@ import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
 import java.util.Collection;
 import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -448,94 +442,6 @@ public class DateUtils {
     default:
       throw new Error();
     }
-  }
-
-  public static String toDatePattern(Locale locale) {
-    DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, locale);
-    String isoDate = null;
-    try {
-      isoDate = df.format(new SimpleDateFormat(ISO8601_DATE).parse("3333-11-22"));
-    } catch (ParseException ex) {
-      throw new Error(ex);
-    }
-
-    Set<Character> letters = new LinkedHashSet<>();
-    Character separator = null;
-
-    for (int i = 0; i < isoDate.length(); i++) {
-      char ch = isoDate.charAt(i);
-
-      if (ch == '1') {
-        letters.add('M');
-      } else if (ch == '2') {
-        letters.add('d');
-      } else if (ch == '3') {
-        letters.add('y');
-      } else {
-        if (separator == null) {
-          if (ch == '-' || ch == '/' || ch == '.') {
-            separator = ch;
-          }
-        }
-      }
-    }
-
-    // If separator known & letters are yMd
-    if ((separator != null) && (letters.size() == 3)) {
-
-      StringBuilder datePt = new StringBuilder(10);
-
-      for (Character ch : letters) {
-        if (datePt.length() > 0) {
-          datePt.append(separator);
-        }
-        datePt.append(ch);
-        datePt.append(ch);
-
-        if (ch.equals('y')) {
-          datePt.append(ch);
-          datePt.append(ch);
-        }
-      }
-      return datePt.toString();
-    }
-    return null;
-  }
-
-  public static boolean isInputDatePatternValid(String datePattern) {
-    Asserts.notNull(datePattern);
-
-    if (datePattern.length() != 10) {
-      return false;
-    }
-    if (!datePattern.contains("dd") || !datePattern.contains("MM") || !datePattern.contains("yyyy")) {
-      return false;
-    }
-
-    // separators
-    HashMap<Character, Integer> separators = new HashMap<>(2);
-    char sep = 0;
-
-    for (int i = 0; i < datePattern.length(); i++) {
-      char c = datePattern.charAt(i);
-
-      if (c != 'd' && c != 'M' && c != 'y') {
-        separators.compute(c, (k, v) -> v != null ? v + 1 : 1);
-
-        sep = c;
-      }
-    }
-
-    if (separators.size() != 1) {
-      return false;
-    }
-    if (separators.get(sep) != 2) {
-      return false;
-    }
-    if (sep != '-' && sep != '/' && sep != '.') {
-      return false;
-    }
-    return true;
   }
 
   public static final Collection<String> ISO8601_PATTERNS_TIME = CollectionUtils.unmodifiableSet(new TreeSet<>(),

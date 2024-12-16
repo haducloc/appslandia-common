@@ -26,6 +26,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.DatePatternParser;
 import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.STR;
 
@@ -53,18 +54,9 @@ public class Language extends InitializeObject {
       this.id = this.locale.getLanguage();
     }
 
-    String datePattern = this.temporalPatterns.get(DateUtils.ISO8601_DATE);
-    if (datePattern != null) {
-      Asserts.isTrue(DateUtils.isInputDatePatternValid(datePattern),
-          STR.fmt("The datePattern is invalid: '{}'.", datePattern));
-    }
-
-    if (datePattern == null) {
-      datePattern = DateUtils.toDatePattern(this.locale);
-      Asserts.notNull(datePattern, STR.fmt("Couldn't determine datePattern for the locale '{}'.", this.locale));
-
-      this.temporalPatterns.put(DateUtils.ISO8601_DATE, datePattern);
-    }
+    // datePattern
+    String datePattern = DatePatternParser.getDefault().toInputDatePattern(this.locale);
+    this.temporalPatterns.put(DateUtils.ISO8601_DATE, datePattern);
 
     // Other patterns
     this.temporalPatterns.put(DateUtils.ISO8601_YEAR_MONTH, parseYearMonthPattern(datePattern));
@@ -159,12 +151,6 @@ public class Language extends InitializeObject {
   public String getTemporalPattern(String isoPattern) {
     this.initialize();
     return Asserts.notNull(this.temporalPatterns.get(isoPattern));
-  }
-
-  public Language setDatePattern(String datePattern) {
-    this.assertNotInitialized();
-    this.temporalPatterns.put(DateUtils.ISO8601_DATE, datePattern);
-    return this;
   }
 
   public String getAttribute(String name) {

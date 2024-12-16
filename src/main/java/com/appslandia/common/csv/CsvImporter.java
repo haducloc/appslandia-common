@@ -34,7 +34,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
-import java.util.Collection;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.TreeMap;
@@ -43,6 +42,7 @@ import java.util.stream.IntStream;
 
 import com.appslandia.common.base.DangerTaskConfirm;
 import com.appslandia.common.base.InitializeObject;
+import com.appslandia.common.base.TemporalPatterns;
 import com.appslandia.common.data.Column;
 import com.appslandia.common.data.DataRecord;
 import com.appslandia.common.data.RecordContext;
@@ -73,13 +73,7 @@ public class CsvImporter extends InitializeObject {
   private CsvDebugger csvDebugger;
   final Map<Integer, String> mappedColumns = new TreeMap<>();
 
-  private Collection<String> datePatterns;
-  private Collection<String> timePatterns;
-  private Collection<String> dateTimePatterns;
-
-  private Collection<String> offsetTimePatterns;
-  private Collection<String> offsetDateTimePatterns;
-
+  private TemporalPatterns temporalPatterns;
   final Map<Integer, CsvToDbConverter> converters = new TreeMap<>();
 
   @Override
@@ -93,26 +87,8 @@ public class CsvImporter extends InitializeObject {
     if (this.csvProcessor == null) {
       this.csvProcessor = CsvProcessor.INSTANCE;
     }
-
-    // Default patterns
-    if (this.datePatterns == null) {
-      this.datePatterns = CsvUtils.PATTERNS_DATE;
-    }
-
-    if (this.timePatterns == null) {
-      this.timePatterns = CsvUtils.PATTERNS_TIME;
-    }
-
-    if (this.dateTimePatterns == null) {
-      this.dateTimePatterns = CsvUtils.PATTERNS_DATETIME;
-    }
-
-    if (this.offsetTimePatterns == null) {
-      this.offsetTimePatterns = CsvUtils.PATTERNS_TIMEZ;
-    }
-
-    if (this.offsetDateTimePatterns == null) {
-      this.offsetDateTimePatterns = CsvUtils.PATTERNS_DATETIMEZ;
+    if (this.temporalPatterns == null) {
+      this.temporalPatterns = TemporalPatterns.DEFAULT.initialize();
     }
   }
 
@@ -256,21 +232,21 @@ public class CsvImporter extends InitializeObject {
       return csv.getDecimalReq(csvIdx);
     }
 
-    // Temporals
+    // Temporal Types
     if (type == LocalDate.class) {
-      return csv.getLocalDate(csvIdx, this.datePatterns);
+      return csv.getLocalDate(csvIdx, this.temporalPatterns);
     }
     if (type == LocalTime.class) {
-      return csv.getLocalTime(csvIdx, this.timePatterns);
+      return csv.getLocalTime(csvIdx, this.temporalPatterns);
     }
     if (type == LocalDateTime.class) {
-      return csv.getLocalDateTime(csvIdx, this.dateTimePatterns);
+      return csv.getLocalDateTime(csvIdx, this.temporalPatterns);
     }
     if (type == OffsetTime.class) {
-      return csv.getOffsetTime(csvIdx, this.offsetTimePatterns);
+      return csv.getOffsetTime(csvIdx, this.temporalPatterns);
     }
     if (type == OffsetDateTime.class) {
-      return csv.getOffsetDateTime(csvIdx, this.offsetDateTimePatterns);
+      return csv.getOffsetDateTime(csvIdx, this.temporalPatterns);
     }
 
     // SQLXML
@@ -342,33 +318,9 @@ public class CsvImporter extends InitializeObject {
     return this;
   }
 
-  public CsvImporter setDatePatterns(Collection<String> datePatterns) {
+  public CsvImporter setTemporalPatterns(TemporalPatterns temporalPatterns) {
     assertNotInitialized();
-    this.datePatterns = datePatterns;
-    return this;
-  }
-
-  public CsvImporter setTimePatterns(Collection<String> timePatterns) {
-    assertNotInitialized();
-    this.timePatterns = timePatterns;
-    return this;
-  }
-
-  public CsvImporter setDateTimePatterns(Collection<String> dateTimePatterns) {
-    assertNotInitialized();
-    this.dateTimePatterns = dateTimePatterns;
-    return this;
-  }
-
-  public CsvImporter setOffsetTimePatterns(Collection<String> offsetTimePatterns) {
-    assertNotInitialized();
-    this.offsetTimePatterns = offsetTimePatterns;
-    return this;
-  }
-
-  public CsvImporter setOffsetDateTimePatterns(Collection<String> offsetDateTimePatterns) {
-    assertNotInitialized();
-    this.offsetDateTimePatterns = offsetDateTimePatterns;
+    this.temporalPatterns = temporalPatterns;
     return this;
   }
 
