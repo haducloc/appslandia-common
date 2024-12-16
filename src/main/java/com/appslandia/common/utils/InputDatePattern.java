@@ -35,42 +35,42 @@ import com.appslandia.common.base.AssertException;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public abstract class DatePatternParser {
+public abstract class InputDatePattern {
 
-  private static volatile DatePatternParser __default;
+  private static volatile InputDatePattern __default;
   private static final Object MUTEX = new Object();
 
-  public static DatePatternParser getDefault() {
-    DatePatternParser obj = __default;
+  public static InputDatePattern getDefault() {
+    InputDatePattern obj = __default;
     if (obj == null) {
       synchronized (MUTEX) {
         if ((obj = __default) == null) {
-          __default = obj = new Default();
+          __default = obj = new DefaultInputDatePattern();
         }
       }
     }
     return obj;
   }
 
-  public static void setDefault(DatePatternParser impl) {
+  public static void setDefault(InputDatePattern impl) {
     Asserts.isNull(__default, "DatePatternParser.__default must be null.");
     __default = impl;
   }
 
-  public String toInputDatePattern(Locale locale) {
-    String pattern = parseInputDatePattern(locale);
+  public String parse(Locale locale) {
+    String pattern = doParse(locale);
     if (!isInputDatePattern(pattern)) {
       throw new AssertException("The input date pattern is invalid: " + pattern);
     }
     return pattern;
   }
 
-  protected abstract String parseInputDatePattern(Locale locale);
+  protected abstract String doParse(Locale locale);
 
-  public static class Default extends DatePatternParser {
+  public static class DefaultInputDatePattern extends InputDatePattern {
 
     @Override
-    protected String parseInputDatePattern(Locale locale) {
+    protected String doParse(Locale locale) {
       // isoDate
       String isoDate = null;
       try {

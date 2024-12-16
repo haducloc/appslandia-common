@@ -26,7 +26,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.appslandia.common.utils.Asserts;
-import com.appslandia.common.utils.DatePatternParser;
+import com.appslandia.common.utils.InputDatePattern;
 import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.STR;
 
@@ -54,7 +54,7 @@ public class Language extends InitializeObject {
       this.id = this.locale.getLanguage();
     }
     Map<String, String> patterns = new HashMap<>();
-    String datePattern = DatePatternParser.getDefault().toInputDatePattern(this.locale);
+    String datePattern = InputDatePattern.getDefault().parse(this.locale);
 
     patterns.put(DateUtils.ISO8601_DATE, datePattern);
     patterns.put(DateUtils.ISO8601_YEAR_MONTH, parseYearMonthPattern(datePattern));
