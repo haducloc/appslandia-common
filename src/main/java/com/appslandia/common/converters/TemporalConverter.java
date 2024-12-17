@@ -21,9 +21,13 @@
 package com.appslandia.common.converters;
 
 import java.time.temporal.Temporal;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import com.appslandia.common.base.FormatProvider;
+import com.appslandia.common.base.Language;
 import com.appslandia.common.base.TemporalFormatException;
+import com.appslandia.common.base.TemporalPatterns;
 import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.StringUtils;
 
@@ -65,5 +69,13 @@ public abstract class TemporalConverter<T extends Temporal> implements Converter
     } catch (TemporalFormatException ex) {
       throw toParsingError(str, getTargetType().getName());
     }
+  }
+
+  private static final class TemporalPatternsHolder {
+    private static final ConcurrentMap<Language, TemporalPatterns> PATTERNS = new ConcurrentHashMap<>();
+  }
+
+  public static TemporalPatterns getTemporalPatterns(Language language) {
+    return TemporalPatternsHolder.PATTERNS.computeIfAbsent(language, p -> new TemporalPatterns().setLanguage(p));
   }
 }

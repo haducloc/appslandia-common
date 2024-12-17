@@ -23,11 +23,11 @@ package com.appslandia.common.base;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.DateUtils;
@@ -112,12 +112,12 @@ public class TemporalPatterns extends InitializeObject {
       this.language = new Language().setLocale(Locale.getDefault()).initialize();
     }
 
-    this.datePatterns = toDtPatterns(new TreeSet<>(), Arrays.asList(DateUtils.ISO8601_DATE));
-    this.timePatterns = toDtPatterns(new TreeSet<>(), DateUtils.ISO8601_PATTERNS_TIME);
-    this.dateTimePatterns = toDtPatterns(new TreeSet<>(), DateUtils.ISO8601_PATTERNS_DATETIME);
+    this.datePatterns = toDtPatterns(new LinkedHashSet<>(), Arrays.asList(DateUtils.ISO8601_DATE));
+    this.timePatterns = toDtPatterns(new LinkedHashSet<>(), DateUtils.ISO8601_PATTERNS_TIME);
+    this.dateTimePatterns = toDtPatterns(new LinkedHashSet<>(), DateUtils.ISO8601_PATTERNS_DATETIME);
 
-    this.offsetTimePatterns = toDtPatterns(new TreeSet<>(), DateUtils.ISO8601_PATTERNS_TIMEZ);
-    this.offsetDateTimePatterns = toDtPatterns(new TreeSet<>(), DateUtils.ISO8601_PATTERNS_DATETIMEZ);
+    this.offsetTimePatterns = toDtPatterns(new LinkedHashSet<>(), DateUtils.ISO8601_PATTERNS_TIMEZ);
+    this.offsetDateTimePatterns = toDtPatterns(new LinkedHashSet<>(), DateUtils.ISO8601_PATTERNS_DATETIMEZ);
   }
 
   @Override

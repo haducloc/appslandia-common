@@ -25,6 +25,7 @@ import java.time.OffsetDateTime;
 import com.appslandia.common.base.FormatProvider;
 import com.appslandia.common.base.TemporalFormatException;
 import com.appslandia.common.utils.DateUtils;
+import com.appslandia.common.utils.ParseUtils;
 
 /**
  *
@@ -55,6 +56,7 @@ public class OffsetDateTimeConverter extends TemporalConverter<OffsetDateTime> {
 
   @Override
   protected OffsetDateTime doParse(String str, FormatProvider formatProvider) throws TemporalFormatException {
-    return DateUtils.parseOffsetDateTime(str);
+    return ParseUtils.parseOffsetDateTime(str,
+        getTemporalPatterns(formatProvider.getLanguage()).getOffsetDateTimePatterns());
   }
 }

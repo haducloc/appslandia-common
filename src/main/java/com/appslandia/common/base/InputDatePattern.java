@@ -18,7 +18,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package com.appslandia.common.utils;
+package com.appslandia.common.base;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -28,7 +28,8 @@ import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import com.appslandia.common.base.AssertException;
+import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.DateUtils;
 
 /**
  *
