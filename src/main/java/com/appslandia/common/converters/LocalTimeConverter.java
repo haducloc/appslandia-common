@@ -25,7 +25,6 @@ import java.time.format.DateTimeParseException;
 import java.util.Collection;
 
 import com.appslandia.common.base.FormatProvider;
-import com.appslandia.common.base.TemporalFormatException;
 import com.appslandia.common.utils.DateUtils;
 
 /**
@@ -56,11 +55,11 @@ public class LocalTimeConverter extends TemporalConverter<LocalTime> {
   }
 
   @Override
-  protected LocalTime doParse(String str, FormatProvider formatProvider) throws TemporalFormatException {
+  protected LocalTime doParse(String str, FormatProvider formatProvider) {
     return parse(str, getTemporalPatterns(formatProvider.getLanguage()).getTimePatterns());
   }
 
-  private LocalTime parse(String value, Collection<String> patterns) throws TemporalFormatException {
+  private LocalTime parse(String value, Collection<String> patterns) {
     for (String pattern : patterns) {
       if (pattern.length() != value.length()) {
         continue;

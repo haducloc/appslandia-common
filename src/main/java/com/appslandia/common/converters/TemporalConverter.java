@@ -43,6 +43,13 @@ public abstract class TemporalConverter<T extends Temporal> implements Converter
     this.isoPattern = isoPattern;
   }
 
+  /**
+   * Return null if the given string fails to parse.
+   * 
+   * @param str
+   * @param formatProvider
+   * @return
+   */
   protected abstract T doParse(String str, FormatProvider formatProvider);
 
   @Override

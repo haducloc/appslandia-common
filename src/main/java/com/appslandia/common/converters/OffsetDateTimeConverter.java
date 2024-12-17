@@ -59,7 +59,6 @@ public class OffsetDateTimeConverter extends TemporalConverter<OffsetDateTime> {
     try {
       return ParseUtils.parseOffsetDateTime(str,
           getTemporalPatterns(formatProvider.getLanguage()).getOffsetDateTimePatterns());
-
     } catch (TemporalFormatException ex) {
       return null;
     }
