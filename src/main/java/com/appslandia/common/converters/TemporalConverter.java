@@ -26,7 +26,6 @@ import java.util.concurrent.ConcurrentMap;
 
 import com.appslandia.common.base.FormatProvider;
 import com.appslandia.common.base.Language;
-import com.appslandia.common.base.TemporalFormatException;
 import com.appslandia.common.base.TemporalPatterns;
 import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.StringUtils;
@@ -44,7 +43,7 @@ public abstract class TemporalConverter<T extends Temporal> implements Converter
     this.isoPattern = isoPattern;
   }
 
-  protected abstract T doParse(String str, FormatProvider formatProvider) throws TemporalFormatException;
+  protected abstract T doParse(String str, FormatProvider formatProvider);
 
   @Override
   public String format(T obj, FormatProvider formatProvider, boolean localize) {
@@ -64,11 +63,11 @@ public abstract class TemporalConverter<T extends Temporal> implements Converter
     if (str == null) {
       return null;
     }
-    try {
-      return doParse(str, formatProvider);
-    } catch (TemporalFormatException ex) {
+    T t = doParse(str, formatProvider);
+    if (t == null) {
       throw toParsingError(str, getTargetType().getName());
     }
+    return t;
   }
 
   private static final class TemporalPatternsHolder {

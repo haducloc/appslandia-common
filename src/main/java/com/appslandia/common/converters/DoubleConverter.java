@@ -83,7 +83,7 @@ public class DoubleConverter extends NumberConverter<Double> {
     try {
       return ParseUtils.parseDouble(str);
     } catch (NumberFormatException ex) {
-      throw toParsingError(str, getTargetType().getName());
     }
+    throw toParsingError(str, getTargetType().getName());
   }
 }

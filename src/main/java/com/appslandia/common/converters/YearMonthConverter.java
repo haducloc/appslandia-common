@@ -50,7 +50,11 @@ public class YearMonthConverter extends TemporalConverter<YearMonth> {
   }
 
   @Override
-  protected YearMonth doParse(String str, FormatProvider formatProvider) throws TemporalFormatException {
-    return DateUtils.parseYearMonth(str);
+  protected YearMonth doParse(String str, FormatProvider formatProvider) {
+    try {
+      return DateUtils.parseYearMonth(str);
+    } catch (TemporalFormatException ex) {
+      return null;
+    }
   }
 }

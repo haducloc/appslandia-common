@@ -335,7 +335,13 @@ public class ParseUtils {
       BiFunction<String, String, T> exceptionalConverter) throws TemporalFormatException {
     Asserts.hasElements(patterns);
 
+    boolean valueHasT = value.indexOf('T') >= 0;
     for (String pattern : patterns) {
+
+      boolean patternHasT = pattern.indexOf('T') >= 0;
+      if (valueHasT != patternHasT) {
+        continue;
+      }
       try {
         return exceptionalConverter.apply(value, pattern);
       } catch (Exception ex) {

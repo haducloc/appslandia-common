@@ -60,9 +60,8 @@ public class EnumConverter<T extends Enum<T>> implements Converter<T> {
     }
     try {
       return Enum.valueOf(this.type, str.toUpperCase(Locale.ENGLISH));
-
     } catch (IllegalArgumentException ex) {
-      throw toParsingError(str, getTargetType().getName());
     }
+    throw toParsingError(str, getTargetType().getName());
   }
 }

@@ -60,7 +60,7 @@ public class ShortConverter extends NumberConverter<Short> {
     try {
       return ParseUtils.parseShort(str);
     } catch (NumberFormatException ex) {
-      throw toParsingError(str, getTargetType().getName());
     }
+    throw toParsingError(str, getTargetType().getName());
   }
 }

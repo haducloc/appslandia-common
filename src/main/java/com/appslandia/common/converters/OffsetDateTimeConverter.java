@@ -55,8 +55,13 @@ public class OffsetDateTimeConverter extends TemporalConverter<OffsetDateTime> {
   }
 
   @Override
-  protected OffsetDateTime doParse(String str, FormatProvider formatProvider) throws TemporalFormatException {
-    return ParseUtils.parseOffsetDateTime(str,
-        getTemporalPatterns(formatProvider.getLanguage()).getOffsetDateTimePatterns());
+  protected OffsetDateTime doParse(String str, FormatProvider formatProvider) {
+    try {
+      return ParseUtils.parseOffsetDateTime(str,
+          getTemporalPatterns(formatProvider.getLanguage()).getOffsetDateTimePatterns());
+
+    } catch (TemporalFormatException ex) {
+      return null;
+    }
   }
 }

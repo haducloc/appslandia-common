@@ -83,7 +83,7 @@ public class BigDecimalConverter extends NumberConverter<BigDecimal> {
     try {
       return new BigDecimal(str);
     } catch (NumberFormatException ex) {
-      throw toParsingError(str, getTargetType().getName());
     }
+    throw toParsingError(str, getTargetType().getName());
   }
 }

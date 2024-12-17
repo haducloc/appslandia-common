@@ -60,7 +60,7 @@ public class IntegerConverter extends NumberConverter<Integer> {
     try {
       return ParseUtils.parseInt(str);
     } catch (NumberFormatException ex) {
-      throw toParsingError(str, getTargetType().getName());
     }
+    throw toParsingError(str, getTargetType().getName());
   }
 }

@@ -83,7 +83,7 @@ public class FloatConverter extends NumberConverter<Float> {
     try {
       return ParseUtils.parseFloat(str);
     } catch (NumberFormatException ex) {
-      throw toParsingError(str, getTargetType().getName());
     }
+    throw toParsingError(str, getTargetType().getName());
   }
 }
