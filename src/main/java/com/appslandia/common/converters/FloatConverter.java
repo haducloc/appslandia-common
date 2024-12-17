@@ -24,6 +24,8 @@ import java.math.RoundingMode;
 import java.text.NumberFormat;
 
 import com.appslandia.common.base.FormatProvider;
+import com.appslandia.common.utils.DecimalUtils;
+import com.appslandia.common.utils.NaNOrInfinityException;
 import com.appslandia.common.utils.ParseUtils;
 import com.appslandia.common.utils.StringUtils;
 
@@ -82,8 +84,21 @@ public class FloatConverter extends NumberConverter<Float> {
     }
     try {
       return ParseUtils.parseFloat(str);
+
+    } catch (NaNOrInfinityException ex) {
+      throw toParsingError(str, getTargetType().getName());
     } catch (NumberFormatException ex) {
     }
-    throw toParsingError(str, getTargetType().getName());
+
+    Number val = parseNumber(str, formatProvider.getNumberParser());
+    if (val == null) {
+      throw toParsingError(str, getTargetType().getName());
+    }
+
+    double dVal = val.doubleValue();
+    if (!DecimalUtils.isFloatRange(dVal)) {
+      throw toParsingError(str, getTargetType().getName());
+    }
+    return (float) dVal;
   }
 }

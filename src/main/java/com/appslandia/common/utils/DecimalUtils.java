@@ -31,31 +31,21 @@ import java.math.RoundingMode;
 public class DecimalUtils {
 
   public static double round(double value, int scale, RoundingMode roundingMode) {
-    try {
-      double roundedValue = (new BigDecimal(Double.toString(value)).setScale(scale, roundingMode)).doubleValue();
-      return fixSign(roundedValue, value);
-
-    } catch (NumberFormatException ex) {
-      if (Double.isInfinite(value)) {
-        return value;
-      } else {
-        return Double.NaN;
-      }
+    if (Double.isNaN(value) || Double.isInfinite(value)) {
+      return value;
     }
+    BigDecimal bd = new BigDecimal(Double.toString(value));
+    double roundedValue = bd.setScale(scale, roundingMode).doubleValue();
+    return fixSign(roundedValue, value);
   }
 
   public static float round(float value, int scale, RoundingMode roundingMode) {
-    try {
-      float roundedValue = (new BigDecimal(Float.toString(value)).setScale(scale, roundingMode)).floatValue();
-      return fixSign(roundedValue, value);
-
-    } catch (NumberFormatException ex) {
-      if (Float.isInfinite(value)) {
-        return value;
-      } else {
-        return Float.NaN;
-      }
+    if (Float.isNaN(value) || Float.isInfinite(value)) {
+      return value;
     }
+    BigDecimal bd = new BigDecimal(Float.toString(value));
+    float roundedValue = bd.setScale(scale, roundingMode).floatValue();
+    return fixSign(roundedValue, value);
   }
 
   public static double fixSign(double roundedValue, double value) {
@@ -92,5 +82,14 @@ public class DecimalUtils {
       return true;
     }
     return false;
+  }
+
+  public static boolean isFloatRange(double value) {
+    double posDouble = (value >= 0d) ? value : (value * -1d);
+
+    if (posDouble != 0d && (posDouble < Float.MIN_VALUE || posDouble > Float.MAX_VALUE)) {
+      return false;
+    }
+    return true;
   }
 }
