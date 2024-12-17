@@ -76,6 +76,6 @@ public abstract class TemporalConverter<T extends Temporal> implements Converter
   }
 
   public static TemporalPatterns getTemporalPatterns(Language language) {
-    return TemporalPatternsHolder.PATTERNS.computeIfAbsent(language, p -> new TemporalPatterns().setLanguage(p));
+    return TemporalPatternsHolder.PATTERNS.computeIfAbsent(language, l -> new TemporalPatterns().setLanguage(l));
   }
 }
