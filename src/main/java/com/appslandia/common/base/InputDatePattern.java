@@ -54,7 +54,7 @@ public abstract class InputDatePattern {
   }
 
   public static void setDefault(InputDatePattern impl) {
-    Asserts.isNull(__default, "DatePatternParser.__default must be null.");
+    Asserts.isNull(__default, "InputDatePattern.__default must be null.");
     __default = impl;
   }
 
