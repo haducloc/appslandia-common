@@ -24,8 +24,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import com.appslandia.common.base.AssertException;
-
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
@@ -35,162 +33,162 @@ public class Asserts {
 
   public static void isTrue(boolean expression) {
     if (!expression) {
-      throw new AssertException("The expression must be true.");
+      throw new IllegalStateException("The expression must be true.");
     }
   }
 
   public static void isTrue(boolean expression, String errorMessage) {
     if (!expression) {
-      throw new AssertException(errorMessage);
+      throw new IllegalStateException(errorMessage);
     }
   }
 
   public static void isTrue(boolean expression, Supplier<String> errorMessage) {
     if (!expression) {
-      throw new AssertException(errorMessage.get());
+      throw new IllegalStateException(errorMessage.get());
     }
   }
 
   public static <T> T notNull(T obj) {
     if (obj == null) {
-      throw new AssertException("The obj must not be null.");
+      throw new IllegalStateException("The obj must not be null.");
     }
     return obj;
   }
 
   public static <T> T notNull(T obj, String errorMessage) {
     if (obj == null) {
-      throw new AssertException(errorMessage);
+      throw new IllegalStateException(errorMessage);
     }
     return obj;
   }
 
   public static <T> T notNull(T obj, Supplier<String> errorMessage) {
     if (obj == null) {
-      throw new AssertException(errorMessage.get());
+      throw new IllegalStateException(errorMessage.get());
     }
     return obj;
   }
 
   public static String notBlank(String str) {
     if ((str == null) || str.isBlank()) {
-      throw new IllegalArgumentException("The str must not be null or blank.");
+      throw new IllegalStateException("The str must not be null or blank.");
     }
     return str;
   }
 
   public static String notBlank(String str, String errorMessage) {
     if ((str == null) || str.isBlank()) {
-      throw new IllegalArgumentException(errorMessage);
+      throw new IllegalStateException(errorMessage);
     }
     return str;
   }
 
   public static String notBlank(String str, Supplier<String> errorMessage) {
     if ((str == null) || str.isBlank()) {
-      throw new IllegalArgumentException(errorMessage.get());
+      throw new IllegalStateException(errorMessage.get());
     }
     return str;
   }
 
   public static void isNull(Object obj) {
     if (obj != null) {
-      throw new AssertException("The obj must be null.");
+      throw new IllegalStateException("The obj must be null.");
     }
   }
 
   public static void isNull(Object obj, String errorMessage) {
     if (obj != null) {
-      throw new AssertException(errorMessage);
+      throw new IllegalStateException(errorMessage);
     }
   }
 
   public static void isNull(Object obj, Supplier<String> errorMessage) {
     if (obj != null) {
-      throw new AssertException(errorMessage.get());
+      throw new IllegalStateException(errorMessage.get());
     }
   }
 
   public static int[] hasElements(int[] array) {
     if ((array == null) || (array.length == 0)) {
-      throw new AssertException("The array must have elements.");
+      throw new IllegalStateException("The array must have elements.");
     }
     return array;
   }
 
   public static int[] hasElements(int[] array, String errorMessage) {
     if ((array == null) || (array.length == 0)) {
-      throw new AssertException(errorMessage);
+      throw new IllegalStateException(errorMessage);
     }
     return array;
   }
 
   public static int[] hasElements(int[] array, Supplier<String> errorMessage) {
     if ((array == null) || (array.length == 0)) {
-      throw new AssertException(errorMessage.get());
+      throw new IllegalStateException(errorMessage.get());
     }
     return array;
   }
 
   public static <T> T[] hasElements(T[] array) {
     if ((array == null) || (array.length == 0)) {
-      throw new AssertException("The array must have elements.");
+      throw new IllegalStateException("The array must have elements.");
     }
     return array;
   }
 
   public static <T> T[] hasElements(T[] array, String errorMessage) {
     if ((array == null) || (array.length == 0)) {
-      throw new AssertException(errorMessage);
+      throw new IllegalStateException(errorMessage);
     }
     return array;
   }
 
   public static <T> T[] hasElements(T[] array, Supplier<String> errorMessage) {
     if ((array == null) || (array.length == 0)) {
-      throw new AssertException(errorMessage.get());
+      throw new IllegalStateException(errorMessage.get());
     }
     return array;
   }
 
   public static <T extends Collection<?>> T hasElements(T collection) {
     if ((collection == null) || (collection.size() == 0)) {
-      throw new AssertException("The collection must have elements.");
+      throw new IllegalStateException("The collection must have elements.");
     }
     return collection;
   }
 
   public static <T extends Collection<?>> T hasElements(T collection, String errorMessage) {
     if ((collection == null) || (collection.size() == 0)) {
-      throw new AssertException(errorMessage);
+      throw new IllegalStateException(errorMessage);
     }
     return collection;
   }
 
   public static <T extends Collection<?>> T hasElements(T collection, Supplier<String> errorMessage) {
     if ((collection == null) || (collection.size() == 0)) {
-      throw new AssertException(errorMessage.get());
+      throw new IllegalStateException(errorMessage.get());
     }
     return collection;
   }
 
   public static <M extends Map<?, ?>> M hasEntries(M map) {
     if ((map == null) || (map.size() == 0)) {
-      throw new AssertException("The map must have entries.");
+      throw new IllegalStateException("The map must have entries.");
     }
     return map;
   }
 
   public static <M extends Map<?, ?>> M hasEntries(M map, String errorMessage) {
     if ((map == null) || (map.size() == 0)) {
-      throw new AssertException(errorMessage);
+      throw new IllegalStateException(errorMessage);
     }
     return map;
   }
 
   public static <M extends Map<?, ?>> M hasEntries(M map, Supplier<String> errorMessage) {
     if ((map == null) || (map.size() == 0)) {
-      throw new AssertException(errorMessage.get());
+      throw new IllegalStateException(errorMessage.get());
     }
     return map;
   }
