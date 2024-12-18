@@ -152,42 +152,42 @@ public class Asserts {
   }
 
   public static <T extends Collection<?>> T hasElements(T collection) {
-    if ((collection == null) || (collection.size() == 0)) {
+    if ((collection == null) || (collection.isEmpty())) {
       throw new IllegalStateException("The collection must have elements.");
     }
     return collection;
   }
 
   public static <T extends Collection<?>> T hasElements(T collection, String errorMessage) {
-    if ((collection == null) || (collection.size() == 0)) {
+    if ((collection == null) || (collection.isEmpty())) {
       throw new IllegalStateException(errorMessage);
     }
     return collection;
   }
 
   public static <T extends Collection<?>> T hasElements(T collection, Supplier<String> errorMessage) {
-    if ((collection == null) || (collection.size() == 0)) {
+    if ((collection == null) || (collection.isEmpty())) {
       throw new IllegalStateException(errorMessage.get());
     }
     return collection;
   }
 
   public static <M extends Map<?, ?>> M hasEntries(M map) {
-    if ((map == null) || (map.size() == 0)) {
+    if ((map == null) || (map.isEmpty())) {
       throw new IllegalStateException("The map must have entries.");
     }
     return map;
   }
 
   public static <M extends Map<?, ?>> M hasEntries(M map, String errorMessage) {
-    if ((map == null) || (map.size() == 0)) {
+    if ((map == null) || (map.isEmpty())) {
       throw new IllegalStateException(errorMessage);
     }
     return map;
   }
 
   public static <M extends Map<?, ?>> M hasEntries(M map, Supplier<String> errorMessage) {
-    if ((map == null) || (map.size() == 0)) {
+    if ((map == null) || (map.isEmpty())) {
       throw new IllegalStateException(errorMessage.get());
     }
     return map;

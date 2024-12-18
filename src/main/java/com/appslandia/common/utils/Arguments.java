@@ -152,42 +152,42 @@ public class Arguments {
   }
 
   public static <T extends Collection<?>> T hasElements(T collection) {
-    if ((collection == null) || (collection.size() == 0)) {
+    if ((collection == null) || (collection.isEmpty())) {
       throw new IllegalArgumentException("The collection must have elements.");
     }
     return collection;
   }
 
   public static <T extends Collection<?>> T hasElements(T collection, String errorMessage) {
-    if ((collection == null) || (collection.size() == 0)) {
+    if ((collection == null) || (collection.isEmpty())) {
       throw new IllegalArgumentException(errorMessage);
     }
     return collection;
   }
 
   public static <T extends Collection<?>> T hasElements(T collection, Supplier<String> errorMessage) {
-    if ((collection == null) || (collection.size() == 0)) {
+    if ((collection == null) || (collection.isEmpty())) {
       throw new IllegalArgumentException(errorMessage.get());
     }
     return collection;
   }
 
   public static <M extends Map<?, ?>> M hasEntries(M map) {
-    if ((map == null) || (map.size() == 0)) {
+    if ((map == null) || (map.isEmpty())) {
       throw new IllegalArgumentException("The map must have entries.");
     }
     return map;
   }
 
   public static <M extends Map<?, ?>> M hasEntries(M map, String errorMessage) {
-    if ((map == null) || (map.size() == 0)) {
+    if ((map == null) || (map.isEmpty())) {
       throw new IllegalArgumentException(errorMessage);
     }
     return map;
   }
 
   public static <M extends Map<?, ?>> M hasEntries(M map, Supplier<String> errorMessage) {
-    if ((map == null) || (map.size() == 0)) {
+    if ((map == null) || (map.isEmpty())) {
       throw new IllegalArgumentException(errorMessage.get());
     }
     return map;
