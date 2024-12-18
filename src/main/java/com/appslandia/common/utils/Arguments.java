@@ -51,7 +51,7 @@ public class Arguments {
 
   public static <T> T notNull(T obj) {
     if (obj == null) {
-      throw new IllegalArgumentException("The obj must be not null.");
+      throw new IllegalArgumentException("The obj must not be null.");
     }
     return obj;
   }
@@ -68,6 +68,27 @@ public class Arguments {
       throw new IllegalArgumentException(errorMessage.get());
     }
     return obj;
+  }
+
+  public static String notBlank(String str) {
+    if ((str == null) || str.isBlank()) {
+      throw new IllegalArgumentException("The str must not be null or blank.");
+    }
+    return str;
+  }
+
+  public static String notBlank(String str, String errorMessage) {
+    if ((str == null) || str.isBlank()) {
+      throw new IllegalArgumentException(errorMessage);
+    }
+    return str;
+  }
+
+  public static String notBlank(String str, Supplier<String> errorMessage) {
+    if ((str == null) || str.isBlank()) {
+      throw new IllegalArgumentException(errorMessage.get());
+    }
+    return str;
   }
 
   public static void isNull(Object obj) {
