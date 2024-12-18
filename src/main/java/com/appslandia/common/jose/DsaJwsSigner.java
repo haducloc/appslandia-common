@@ -26,6 +26,7 @@ import java.security.spec.AlgorithmParameterSpec;
 
 import com.appslandia.common.crypto.DsaSigner;
 import com.appslandia.common.json.JsonProcessor;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 
 /**
@@ -80,7 +81,7 @@ public class DsaJwsSigner<P> {
   }
 
   public JwsSigner<P> build() {
-    Asserts.notNull(this.jsonProcessor);
+    Arguments.notNull(this.jsonProcessor);
     return new JwsSigner<>(this.payloadClass).setJsonProcessor(this.jsonProcessor).setSigner(this.signer)
         .setAlg(this.alg).setKid(this.kid).initialize();
   }

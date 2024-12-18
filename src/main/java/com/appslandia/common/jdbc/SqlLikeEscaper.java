@@ -22,7 +22,7 @@ package com.appslandia.common.jdbc;
 
 import java.io.Serializable;
 
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.StringUtils;
 
 /**
@@ -72,7 +72,7 @@ public class SqlLikeEscaper implements Serializable {
   }
 
   public String toLikePattern(String value, LikeType likeType) {
-    Asserts.notNull(likeType);
+    Arguments.notNull(likeType);
 
     if (StringUtils.isNullOrEmpty(value)) {
       return value;

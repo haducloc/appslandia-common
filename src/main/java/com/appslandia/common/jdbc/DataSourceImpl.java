@@ -39,7 +39,7 @@ import javax.sql.DataSource;
 
 import com.appslandia.common.base.InitializeException;
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.ObjectUtils;
 import com.appslandia.common.utils.StringUtils;
 
@@ -56,7 +56,7 @@ public class DataSourceImpl extends InitializeObject implements DataSource {
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.url, "url is required.");
+    Arguments.notNull(this.url, "url is required.");
   }
 
   @Override

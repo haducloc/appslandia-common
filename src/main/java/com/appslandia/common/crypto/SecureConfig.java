@@ -26,6 +26,7 @@ import java.util.Map;
 
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.SimpleConfig;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 
 /**
@@ -79,8 +80,8 @@ public class SecureConfig extends SimpleConfig {
   }
 
   public SecureConfig sets(String key, String value) throws CryptoException {
-    Asserts.notNull(key);
-    Asserts.notNull(value);
+    Arguments.notNull(key);
+    Arguments.notNull(value);
     value = value.strip();
 
     this.cfg.put(key, CryptoUtils.markEncValue(this.textEncryptor.encrypt(value)));
@@ -88,28 +89,28 @@ public class SecureConfig extends SimpleConfig {
   }
 
   public SecureConfig sets(String key, boolean value) throws CryptoException {
-    Asserts.notNull(key);
+    Arguments.notNull(key);
     return sets(key, Boolean.toString(value));
   }
 
   public SecureConfig sets(String key, int value) throws CryptoException {
-    Asserts.notNull(key);
+    Arguments.notNull(key);
     return sets(key, Integer.toString(value));
   }
 
   public SecureConfig sets(String key, long value) throws CryptoException {
-    Asserts.notNull(key);
+    Arguments.notNull(key);
     return sets(key, Long.toString(value));
   }
 
   public SecureConfig sets(String key, double value) throws CryptoException {
-    Asserts.notNull(key);
+    Arguments.notNull(key);
     return sets(key, Double.toString(value));
   }
 
   public SecureConfig sets(String key, BigDecimal value) throws CryptoException {
-    Asserts.notNull(key);
-    Asserts.notNull(value);
+    Arguments.notNull(key);
+    Arguments.notNull(value);
 
     return sets(key, value.toPlainString());
   }

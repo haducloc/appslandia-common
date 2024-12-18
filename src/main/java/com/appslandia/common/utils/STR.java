@@ -85,7 +85,7 @@ public class STR {
   }
 
   public static void format(String str, BiFunction<String, String, Object> parameters, StringBuilder out) {
-    Asserts.notNull(str);
+    Arguments.notNull(str);
 
     // {paramName}
     Matcher matcher = PARAM_HOLDER_PATTERN.matcher(str);
@@ -154,7 +154,7 @@ public class STR {
   }
 
   public static StringFormat compile(String str) {
-    Asserts.notNull(str);
+    Arguments.notNull(str);
 
     int outLen = 0;
     List<StringFormat.Chunk> chunks = new ArrayList<>();

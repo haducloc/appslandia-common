@@ -38,7 +38,7 @@ public class FileNameUtils {
   private static final Pattern VALID_EXTENSION_PATTERN = Pattern.compile("[a-z\\d]+", Pattern.CASE_INSENSITIVE);
 
   private static boolean isValidFileName(String fileName) {
-    Asserts.notNull(fileName);
+    Arguments.notNull(fileName);
 
     int lastDotIndex = fileName.lastIndexOf('.');
     if (lastDotIndex <= 0 || lastDotIndex == fileName.length() - 1) {
@@ -71,7 +71,7 @@ public class FileNameUtils {
   }
 
   public static String toFileName(String fileName, Object extra) {
-    Asserts.notNull(fileName);
+    Arguments.notNull(fileName);
 
     if (!isValidFileName(fileName)) {
       return null;
@@ -88,7 +88,7 @@ public class FileNameUtils {
   }
 
   public static String toNewFileName(String oldFileName, String newNameNoExt) {
-    Asserts.notNull(oldFileName);
+    Arguments.notNull(oldFileName);
 
     if (!isValidFileName(oldFileName)) {
       return null;

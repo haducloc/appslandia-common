@@ -40,6 +40,7 @@ import javax.sql.DataSource;
 import com.appslandia.common.base.AssertException;
 import com.appslandia.common.base.DangerTaskConfirm;
 import com.appslandia.common.threading.ThreadLocalStorage;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ObjectUtils;
 import com.appslandia.common.utils.STR;
@@ -113,7 +114,7 @@ public class ConnectionImpl implements Connection {
   // Update Utilities
 
   public void dropTables(DangerTaskConfirm taskConfirm, String... tableNames) throws java.sql.SQLException {
-    Asserts.isTrue(taskConfirm == DangerTaskConfirm.DANGER_TASK_CONFIRMED);
+    Arguments.isTrue(taskConfirm == DangerTaskConfirm.DANGER_TASK_CONFIRMED);
 
     for (String tableName : tableNames) {
       executeUpdate(STR.fmt("DROP TABLE IF EXISTS {}", this.getDbDialect().quoteIdentifier(tableName)));
@@ -141,7 +142,7 @@ public class ConnectionImpl implements Connection {
   }
 
   public void truncTables(DangerTaskConfirm taskConfirm, String... tableNames) throws java.sql.SQLException {
-    Asserts.isTrue(taskConfirm == DangerTaskConfirm.DANGER_TASK_CONFIRMED);
+    Arguments.isTrue(taskConfirm == DangerTaskConfirm.DANGER_TASK_CONFIRMED);
 
     for (String tableName : tableNames) {
       executeUpdate(STR.fmt("TRUNCATE TABLE {}", this.getDbDialect().quoteIdentifier(tableName)));
@@ -185,8 +186,8 @@ public class ConnectionImpl implements Connection {
   // Execute utilities
 
   public String getDistinctValues(String tableName, String columnLabel) throws java.sql.SQLException {
-    Asserts.notNull(tableName);
-    Asserts.notNull(columnLabel);
+    Arguments.notNull(tableName);
+    Arguments.notNull(columnLabel);
 
     DbDialect dbDialect = this.getDbDialect();
     String sql = STR.fmt("SELECT DISTINCT {} FROM {}", dbDialect.quoteIdentifier(columnLabel),

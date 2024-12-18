@@ -30,7 +30,7 @@ import javax.crypto.spec.PBEKeySpec;
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.SYS;
 import com.appslandia.common.utils.ValueUtils;
 
@@ -61,7 +61,7 @@ public class PbeSecretGen extends InitializeObject {
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.password, "password is required.");
+    Arguments.notNull(this.password, "password is required.");
 
     this.algorithm = ValueUtils.valueOrAlt(this.algorithm, CryptoUtils.DEFAULT_PBE_KEY_DERIVATION_ALGORITHM);
     this.saltSize = ValueUtils.valueOrAlt(this.saltSize, CryptoUtils.DEFAULT_PBE_SALT_SIZE);

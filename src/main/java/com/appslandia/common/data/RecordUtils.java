@@ -47,6 +47,7 @@ import com.appslandia.common.jdbc.ConnectionImpl;
 import com.appslandia.common.jdbc.ResultSetColumn;
 import com.appslandia.common.jdbc.ResultSetImpl;
 import com.appslandia.common.jdbc.SqlTypeMapper;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.ReflectionException;
@@ -64,8 +65,8 @@ public final class RecordUtils {
 
   public static Table loadTable(ConnectionImpl conn, String catalog, String schema, String tableName,
       Consumer<Column> columnInit) throws SQLException {
-    Asserts.notNull(conn);
-    Asserts.notNull(tableName);
+    Arguments.notNull(conn);
+    Arguments.notNull(tableName);
 
     // DatabaseMetaData
     DatabaseMetaData metaData = conn.getMetaData();
@@ -225,8 +226,8 @@ public final class RecordUtils {
   }
 
   public static Key toKey(Table table, Object pk) {
-    Asserts.notNull(pk);
-    Asserts.isTrue(PK_JAVA_TYPES.contains(pk.getClass()), "pk is invalid.");
+    Arguments.notNull(pk);
+    Arguments.isTrue(PK_JAVA_TYPES.contains(pk.getClass()), "pk is invalid.");
 
     Column keyColumn = table.getSingleKey();
     Asserts.notNull(keyColumn, "table is invalid.");
@@ -240,7 +241,7 @@ public final class RecordUtils {
       OffsetDateTime.class, OffsetTime.class);
 
   public static String toEntityClassName(String tableName) {
-    Asserts.notNull(tableName);
+    Arguments.notNull(tableName);
 
     // All Uppers
     if (tableName.chars().allMatch(c -> Character.isUpperCase(c))) {

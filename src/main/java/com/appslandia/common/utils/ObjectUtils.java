@@ -82,7 +82,7 @@ public class ObjectUtils {
   }
 
   public static String asString(Object array) {
-    Asserts.isTrue((array == null) || array.getClass().isArray());
+    Arguments.isTrue((array == null) || array.getClass().isArray());
 
     if (array == null) {
       return NULL_STR;

@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import com.appslandia.common.base.Params;
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 
 import jakarta.persistence.CacheRetrieveMode;
 import jakarta.persistence.CacheStoreMode;
@@ -79,7 +79,7 @@ public class JpaHints {
   }
 
   public static void setHintMapper(HintMapper impl) {
-    Asserts.isNull(__hintMapper, "JpaHints.__hintMapper must be null.");
+    Arguments.isNull(__hintMapper, "JpaHints.__hintMapper must be null.");
 
     if (__hintMapper == null) {
       synchronized (MUTEX) {

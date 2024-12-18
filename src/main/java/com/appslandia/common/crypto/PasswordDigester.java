@@ -29,6 +29,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
 import com.appslandia.common.base.BaseEncoder;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ValueUtils;
@@ -69,7 +70,7 @@ public class PasswordDigester extends TextDigester {
   @Override
   public String digest(String password) throws CryptoException {
     this.initialize();
-    Asserts.notNull(password, "password is required.");
+    Arguments.notNull(password, "password is required.");
 
     byte[] salt = CryptoUtils.randomBytes(this.saltSize);
     char[] pwdChars = password.toCharArray();
@@ -93,8 +94,8 @@ public class PasswordDigester extends TextDigester {
   @Override
   public boolean verify(String password, String digested) throws CryptoException {
     this.initialize();
-    Asserts.notNull(password, "password is required.");
-    Asserts.notNull(digested, "digested is required.");
+    Arguments.notNull(password, "password is required.");
+    Arguments.notNull(digested, "digested is required.");
 
     byte[] dBytes = this.baseEncoder.decode(digested);
     Asserts.isTrue(dBytes.length > this.saltSize, "digested is invalid.");

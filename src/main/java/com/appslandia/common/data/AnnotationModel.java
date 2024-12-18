@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.validators.DigitOnly;
 import com.appslandia.common.validators.Email;
@@ -63,7 +63,7 @@ public class AnnotationModel extends InitializeObject {
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.annotationType);
+    Arguments.notNull(this.annotationType);
 
     this.properties = CollectionUtils.unmodifiable(this.properties);
   }
@@ -85,8 +85,8 @@ public class AnnotationModel extends InitializeObject {
   }
 
   protected void addProperty(String property, Object value) {
-    Asserts.notNull(property);
-    Asserts.notNull(value);
+    Arguments.notNull(property);
+    Arguments.notNull(value);
 
     if (this.properties == null) {
       this.properties = new HashMap<>();

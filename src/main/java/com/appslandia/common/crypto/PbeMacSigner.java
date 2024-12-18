@@ -30,6 +30,7 @@ import javax.crypto.SecretKey;
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 
@@ -46,7 +47,7 @@ public class PbeMacSigner extends InitializeObject implements Digester {
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.algorithm, "algorithm is required.");
+    Arguments.notNull(this.algorithm, "algorithm is required.");
   }
 
   @Override
@@ -69,7 +70,7 @@ public class PbeMacSigner extends InitializeObject implements Digester {
   @Override
   public byte[] digest(byte[] message) throws CryptoException {
     this.initialize();
-    Asserts.notNull(message, "message is required.");
+    Arguments.notNull(message, "message is required.");
 
     Out<byte[]> salt = new Out<>();
     SecretKey key = null;
@@ -95,8 +96,8 @@ public class PbeMacSigner extends InitializeObject implements Digester {
   @Override
   public boolean verify(byte[] message, byte[] digested) throws CryptoException {
     this.initialize();
-    Asserts.notNull(message, "message is required.");
-    Asserts.notNull(digested, "digested is required.");
+    Arguments.notNull(message, "message is required.");
+    Arguments.notNull(digested, "digested is required.");
 
     int saltSize = this.pbeSecretGen.getSaltSize();
     Asserts.isTrue(digested.length >= saltSize, "digested is invalid.");

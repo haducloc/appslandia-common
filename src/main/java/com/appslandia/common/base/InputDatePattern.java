@@ -28,7 +28,7 @@ import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.DateUtils;
 
 /**
@@ -54,7 +54,7 @@ public abstract class InputDatePattern {
   }
 
   public static void setDefault(InputDatePattern impl) {
-    Asserts.isNull(__default, "InputDatePattern.__default must be null.");
+    Arguments.isNull(__default, "InputDatePattern.__default must be null.");
     __default = impl;
   }
 
@@ -126,7 +126,7 @@ public abstract class InputDatePattern {
   }
 
   private static boolean isInputDatePattern(String datePattern) {
-    Asserts.notNull(datePattern);
+    Arguments.notNull(datePattern);
 
     if (datePattern.length() != 10) {
       return false;

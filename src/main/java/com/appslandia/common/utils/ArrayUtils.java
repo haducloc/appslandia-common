@@ -270,7 +270,7 @@ public class ArrayUtils {
   }
 
   public static int min(int[] arr) {
-    Asserts.notNull(arr);
+    Arguments.notNull(arr);
     if (arr.length == 0) {
       throw new NoSuchElementException("arr is empty.");
     }
@@ -282,7 +282,7 @@ public class ArrayUtils {
   }
 
   public static int max(int[] arr) {
-    Asserts.notNull(arr);
+    Arguments.notNull(arr);
     if (arr.length == 0) {
       throw new NoSuchElementException("arr is empty.");
     }
@@ -323,8 +323,8 @@ public class ArrayUtils {
     int i = 0;
 
     public ArrayObjIterator(Object array) {
-      Asserts.notNull(array);
-      Asserts.isTrue(array.getClass().isArray());
+      Arguments.notNull(array);
+      Arguments.isTrue(array.getClass().isArray());
 
       this.array = array;
       this.len = Array.getLength(array);
@@ -345,8 +345,8 @@ public class ArrayUtils {
     final Object array;
 
     public ArrayObjIterable(Object array) {
-      Asserts.notNull(array);
-      Asserts.isTrue(array.getClass().isArray());
+      Arguments.notNull(array);
+      Arguments.isTrue(array.getClass().isArray());
 
       this.array = array;
     }

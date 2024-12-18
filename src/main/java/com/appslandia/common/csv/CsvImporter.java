@@ -49,6 +49,7 @@ import com.appslandia.common.data.RecordContext;
 import com.appslandia.common.data.Table;
 import com.appslandia.common.jdbc.ConnectionImpl;
 import com.appslandia.common.jdbc.JdbcParam;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.IOUtils;
 import com.appslandia.common.utils.STR;
@@ -78,8 +79,8 @@ public class CsvImporter extends InitializeObject {
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.tableName);
-    Asserts.notNull(this.csvInput);
+    Arguments.notNull(this.tableName);
+    Arguments.notNull(this.csvInput);
 
     if (this.connection == null) {
       this.connection = ConnectionImpl.getCurrent();

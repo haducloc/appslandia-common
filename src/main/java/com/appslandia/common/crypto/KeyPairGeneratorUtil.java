@@ -26,7 +26,7 @@ import java.security.KeyPairGenerator;
 import java.security.spec.AlgorithmParameterSpec;
 
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 
 /**
  *
@@ -56,7 +56,7 @@ public class KeyPairGeneratorUtil extends InitializeObject {
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.algorithm);
+    Arguments.notNull(this.algorithm);
   }
 
   protected KeyPairGenerator getImpl() throws GeneralSecurityException {

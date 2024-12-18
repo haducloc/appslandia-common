@@ -23,7 +23,7 @@ package com.appslandia.common.base;
 import java.io.Serializable;
 import java.util.regex.Pattern;
 
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.STR;
 
@@ -65,7 +65,7 @@ public class RateLimit implements Serializable {
       Pattern.CASE_INSENSITIVE);
 
   public static RateLimit parse(String rateLimit) {
-    Asserts.notNull(rateLimit);
+    Arguments.notNull(rateLimit);
 
     if (!RATE_LIMIT_PATTERN.matcher(rateLimit).matches()) {
       throw new IllegalArgumentException(STR.fmt("rateLimit '{}' is invalid.", rateLimit));

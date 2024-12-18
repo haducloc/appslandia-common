@@ -164,7 +164,7 @@ public class SYS {
   }
 
   public static String resolve(String expr) {
-    Asserts.notNull(expr);
+    Arguments.notNull(expr);
 
     if (!VARS_PATTERN.matcher(expr).matches()) {
       throw new IllegalArgumentException("Invalid expression: " + expr);

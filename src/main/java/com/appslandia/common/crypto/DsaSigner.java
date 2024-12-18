@@ -28,7 +28,7 @@ import java.security.spec.AlgorithmParameterSpec;
 
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 
 /**
  *
@@ -45,8 +45,8 @@ public class DsaSigner extends InitializeObject implements Digester {
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.algorithm, "algorithm is required.");
-    Asserts.isTrue((this.privateKey != null) || (this.publicKey != null), "No key is provided.");
+    Arguments.notNull(this.algorithm, "algorithm is required.");
+    Arguments.isTrue((this.privateKey != null) || (this.publicKey != null), "No key is provided.");
   }
 
   protected Signature getImpl() throws GeneralSecurityException {
@@ -67,8 +67,8 @@ public class DsaSigner extends InitializeObject implements Digester {
   @Override
   public byte[] digest(byte[] message) throws CryptoException {
     this.initialize();
-    Asserts.notNull(message, "message is required.");
-    Asserts.notNull(this.privateKey, "privateKey is required.");
+    Arguments.notNull(message, "message is required.");
+    Arguments.notNull(this.privateKey, "privateKey is required.");
 
     try {
       Signature impl = getImpl();
@@ -87,9 +87,9 @@ public class DsaSigner extends InitializeObject implements Digester {
   @Override
   public boolean verify(byte[] message, byte[] signature) throws CryptoException {
     this.initialize();
-    Asserts.notNull(message, "message is required.");
-    Asserts.notNull(signature, "signature is required.");
-    Asserts.notNull(this.publicKey, "publicKey is required.");
+    Arguments.notNull(message, "message is required.");
+    Arguments.notNull(signature, "signature is required.");
+    Arguments.notNull(this.publicKey, "publicKey is required.");
 
     try {
       Signature impl = getImpl();

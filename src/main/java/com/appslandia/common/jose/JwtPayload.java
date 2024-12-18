@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.ObjectUtils;
 
 /**
@@ -52,7 +52,7 @@ public class JwtPayload extends JoseMapObject {
   }
 
   public boolean hasAudience(String checkingAudience) {
-    Asserts.notNull(checkingAudience);
+    Arguments.notNull(checkingAudience);
 
     List<String> aud = getAud();
     if (aud == null) {

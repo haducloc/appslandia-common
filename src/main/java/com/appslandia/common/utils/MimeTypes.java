@@ -69,13 +69,13 @@ public class MimeTypes {
   public static final String APP_FORM_URLENCODED = "application/x-www-form-urlencoded";
 
   public static String probeContentType(String fileName) {
-    Asserts.notNull(fileName);
+    Arguments.notNull(fileName);
 
     return probeContentType(Paths.get(fileName));
   }
 
   public static String probeContentType(Path filePath) {
-    Asserts.notNull(filePath);
+    Arguments.notNull(filePath);
 
     try {
       String ct = Files.probeContentType(filePath);

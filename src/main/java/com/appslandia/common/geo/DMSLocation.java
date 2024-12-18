@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
 import com.appslandia.common.utils.SplitUtils;
@@ -40,8 +41,8 @@ public class DMSLocation implements Serializable {
   public final GeoDMS y;
 
   public DMSLocation(double longitudeX, double latitudeY) {
-    Asserts.isTrue(longitudeX >= -180.0 && longitudeX <= 180.0, "longitudeX is invalid.");
-    Asserts.isTrue(latitudeY >= -90.0 && latitudeY <= 90.0, "latitudeY is invalid.");
+    Arguments.isTrue(longitudeX >= -180.0 && longitudeX <= 180.0, "longitudeX is invalid.");
+    Arguments.isTrue(latitudeY >= -90.0 && latitudeY <= 90.0, "latitudeY is invalid.");
 
     this.x = GeoDMS.toLongDMS(longitudeX);
     this.y = GeoDMS.toLatDMS(latitudeY);
@@ -89,8 +90,8 @@ public class DMSLocation implements Serializable {
       STR.fmt("{}\\s*,\\s*{}", GeoDMS.DMS_PATTERN.pattern(), GeoDMS.DMS_PATTERN.pattern()), Pattern.CASE_INSENSITIVE);
 
   public static DMSLocation toDMSLocation(String dmsLocation) {
-    Asserts.notNull(dmsLocation);
-    Asserts.isTrue(DMS_LOCATION_PATTERN.matcher(dmsLocation).matches(),
+    Arguments.notNull(dmsLocation);
+    Arguments.isTrue(DMS_LOCATION_PATTERN.matcher(dmsLocation).matches(),
         () -> STR.fmt("dmsLocation {} is invalid.", dmsLocation));
 
     String[] geoDmss = SplitUtils.splitByComma(dmsLocation);

@@ -41,6 +41,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.IOUtils;
@@ -79,7 +80,7 @@ public class JdbcUtils {
 
   public static String getColumnNames(ConnectionImpl conn, String catalog, String schema, String tableName)
       throws SQLException {
-    Asserts.notNull(conn);
+    Arguments.notNull(conn);
 
     List<String> columns = new ArrayList<>();
     try (ResultSet rs = conn.getMetaData().getColumns(catalog, schema, tableName, null)) {
@@ -94,7 +95,7 @@ public class JdbcUtils {
 
   public static String getTableNames(ConnectionImpl conn, String catalog, String schema, boolean tablePkIdentityOnly)
       throws SQLException {
-    Asserts.notNull(conn);
+    Arguments.notNull(conn);
     StringBuilder result = new StringBuilder();
 
     // DatabaseMetaData
@@ -154,8 +155,8 @@ public class JdbcUtils {
 
   public static String getPkIdentity(ConnectionImpl conn, String catalog, String schema, String tableName)
       throws SQLException {
-    Asserts.notNull(conn);
-    Asserts.notNull(tableName);
+    Arguments.notNull(conn);
+    Arguments.notNull(tableName);
 
     // DatabaseMetaData
     DatabaseMetaData metaData = conn.getMetaData();
@@ -189,7 +190,7 @@ public class JdbcUtils {
   }
 
   public static String toFieldName(String dbColumnName) {
-    Asserts.notNull(dbColumnName);
+    Arguments.notNull(dbColumnName);
 
     // All Uppers
     if (dbColumnName.chars().allMatch(c -> Character.isUpperCase(c))) {

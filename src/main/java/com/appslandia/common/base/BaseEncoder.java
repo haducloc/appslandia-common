@@ -23,7 +23,7 @@ package com.appslandia.common.base;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 
 /**
  * 
@@ -36,7 +36,7 @@ public enum BaseEncoder {
   BASE64, BASE64_NP, BASE64_URL, BASE64_URL_NP, BASE64_MIME, BASE64_MIME_NP;
 
   public String encode(byte[] message) {
-    Asserts.notNull(message);
+    Arguments.notNull(message);
     switch (this) {
 
     case BASE64:
@@ -59,7 +59,7 @@ public enum BaseEncoder {
   }
 
   public byte[] decode(String encoded) {
-    Asserts.notNull(encoded);
+    Arguments.notNull(encoded);
     switch (this) {
 
     case BASE64:

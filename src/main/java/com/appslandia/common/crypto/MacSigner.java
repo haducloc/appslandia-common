@@ -30,6 +30,7 @@ import javax.crypto.SecretKey;
 
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.SYS;
 
@@ -47,8 +48,8 @@ public class MacSigner extends InitializeObject implements Digester {
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.algorithm, "algorithm is required.");
-    Asserts.notNull(this.secretKey, "secretKey is required.");
+    Arguments.notNull(this.algorithm, "algorithm is required.");
+    Arguments.notNull(this.secretKey, "secretKey is required.");
   }
 
   protected Mac getImpl() throws GeneralSecurityException {
@@ -70,7 +71,7 @@ public class MacSigner extends InitializeObject implements Digester {
   @Override
   public byte[] digest(byte[] message) throws CryptoException {
     this.initialize();
-    Asserts.notNull(message, "message is required.");
+    Arguments.notNull(message, "message is required.");
 
     try {
       Mac impl = getImpl();
@@ -89,8 +90,8 @@ public class MacSigner extends InitializeObject implements Digester {
   @Override
   public boolean verify(byte[] message, byte[] mac) throws CryptoException {
     this.initialize();
-    Asserts.notNull(message, "message is required.");
-    Asserts.notNull(mac, "mac is required.");
+    Arguments.notNull(message, "message is required.");
+    Arguments.notNull(mac, "mac is required.");
 
     try {
       Mac impl = getImpl();

@@ -29,7 +29,7 @@ import javax.sql.DataSource;
 
 import com.appslandia.common.base.TextBuilder;
 import com.appslandia.common.jdbc.ConnectionImpl;
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.STR;
 
 /**
@@ -40,8 +40,8 @@ import com.appslandia.common.utils.STR;
 public class DbComparer {
 
   public static String compare(DataSource ds1, DataSource ds2) throws SQLException {
-    Asserts.notNull(ds1);
-    Asserts.notNull(ds2);
+    Arguments.notNull(ds1);
+    Arguments.notNull(ds2);
 
     try (RecordContext rc1 = new RecordContext(ds1); RecordContext rc2 = new RecordContext(ds2)) {
 

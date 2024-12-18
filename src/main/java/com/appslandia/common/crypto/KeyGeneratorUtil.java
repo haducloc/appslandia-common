@@ -27,7 +27,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 
 /**
  *
@@ -55,7 +55,7 @@ public class KeyGeneratorUtil extends InitializeObject {
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.algorithm);
+    Arguments.notNull(this.algorithm);
   }
 
   protected KeyGenerator getImpl() throws GeneralSecurityException {

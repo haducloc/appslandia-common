@@ -25,7 +25,7 @@ import java.nio.charset.StandardCharsets;
 
 import com.appslandia.common.base.BaseEncoder;
 import com.appslandia.common.base.DestroyException;
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.ValueUtils;
 
 /**
@@ -45,7 +45,7 @@ public class TextDigester extends TextBasedCrypto {
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.digester, "digester is required.");
+    Arguments.notNull(this.digester, "digester is required.");
 
     this.textCharset = ValueUtils.valueOrAlt(this.textCharset, StandardCharsets.UTF_8);
     this.baseEncoder = ValueUtils.valueOrAlt(this.baseEncoder, BaseEncoder.BASE64);
@@ -60,15 +60,15 @@ public class TextDigester extends TextBasedCrypto {
 
   public String digest(String message) throws CryptoException {
     this.initialize();
-    Asserts.notNull(message, "message is required.");
+    Arguments.notNull(message, "message is required.");
 
     return this.baseEncoder.encode(this.digester.digest(message.getBytes(this.textCharset)));
   }
 
   public boolean verify(String message, String digested) throws CryptoException {
     this.initialize();
-    Asserts.notNull(message, "message is required.");
-    Asserts.notNull(digested, "digested is required.");
+    Arguments.notNull(message, "message is required.");
+    Arguments.notNull(digested, "digested is required.");
 
     return this.digester.verify(message.getBytes(this.textCharset), this.baseEncoder.decode(digested));
   }

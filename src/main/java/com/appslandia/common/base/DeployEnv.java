@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
 import com.appslandia.common.utils.SYS;
@@ -112,7 +113,7 @@ public class DeployEnv {
   }
 
   public static void setCurrent(DeployEnv env) {
-    Asserts.isNull(env, "DeployEnv.__current must be null.");
+    Arguments.isNull(env, "DeployEnv.__current must be null.");
 
     if (__current == null) {
       synchronized (MUTEX) {
@@ -125,7 +126,7 @@ public class DeployEnv {
   }
 
   public static void setCurrent(String env) {
-    Asserts.notNull(env);
+    Arguments.notNull(env);
     setCurrent(toDeployEnv(env));
   }
 

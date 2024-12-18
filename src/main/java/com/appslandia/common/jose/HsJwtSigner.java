@@ -24,7 +24,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import com.appslandia.common.json.JsonProcessor;
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.CollectionUtils;
 
 /**
@@ -91,7 +91,7 @@ public class HsJwtSigner extends HsJwsSigner<JwtPayload> {
 
   @Override
   public JwtSigner build() {
-    Asserts.notNull(this.jsonProcessor);
+    Arguments.notNull(this.jsonProcessor);
     JwtSigner impl = new JwtSigner().setJsonProcessor(this.jsonProcessor).setSigner(this.signer).setAlg(this.alg)
         .setKid(this.kid).setLeewaySec(this.leewaySec).setIss(this.iss);
 

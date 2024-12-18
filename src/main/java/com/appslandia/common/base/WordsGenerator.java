@@ -22,7 +22,7 @@ package com.appslandia.common.base;
 
 import java.util.regex.Pattern;
 
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.CharUtils;
 import com.appslandia.common.utils.SecureRand;
 import com.appslandia.common.utils.ValueUtils;
@@ -52,7 +52,7 @@ public class WordsGenerator extends InitializeObject implements TextGenerator {
 
   @Override
   protected void init() throws Exception {
-    Asserts.isTrue(this.length > 0, "length is required.");
+    Arguments.isTrue(this.length > 0, "length is required.");
     this.alphabet = ValueUtils.valueOrAlt(this.alphabet, Alphabet.DIGITS_AZ);
   }
 
@@ -86,7 +86,7 @@ public class WordsGenerator extends InitializeObject implements TextGenerator {
 
   @Override
   public boolean verify(String value) {
-    Asserts.notNull(value);
+    Arguments.notNull(value);
     if (value.length() != this.length) {
       return false;
     }

@@ -24,7 +24,7 @@ import java.util.Date;
 import java.util.regex.Pattern;
 
 import com.appslandia.common.base.BaseEncoder;
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 
 /**
  *
@@ -36,7 +36,7 @@ public class JoseUtils {
   private static final Pattern JOSE_SEP_PATTERN = Pattern.compile("\\.");
 
   public static String[] parseJws(String token) {
-    Asserts.notNull(token);
+    Arguments.notNull(token);
     String[] parts = JOSE_SEP_PATTERN.split(token);
 
     if (parts.length == 2) {

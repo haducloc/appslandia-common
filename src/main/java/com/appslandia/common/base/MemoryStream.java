@@ -29,7 +29,7 @@ import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.ObjectUtils;
 import com.appslandia.common.utils.STR;
 
@@ -52,7 +52,7 @@ public class MemoryStream extends OutputStream implements Serializable {
   }
 
   public MemoryStream(int blockSize) {
-    Asserts.isTrue(blockSize > 0);
+    Arguments.isTrue(blockSize > 0);
 
     this.blockSize = blockSize;
     this.nodeList = new NodeList(new Node(new byte[this.blockSize], 0));

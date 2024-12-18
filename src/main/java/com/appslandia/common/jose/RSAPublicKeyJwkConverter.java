@@ -28,6 +28,7 @@ import java.security.spec.RSAPublicKeySpec;
 import com.appslandia.common.crypto.CryptoException;
 import com.appslandia.common.crypto.CryptoUtils;
 import com.appslandia.common.crypto.KeyFactoryUtil;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 
 /**
@@ -52,7 +53,7 @@ public class RSAPublicKeyJwkConverter extends JwkConverter<RSAPublicKey> {
   @Override
   public JsonWebKey toJsonWebKey(RSAPublicKey key) {
     this.initialize();
-    Asserts.isTrue("RSA".equals(key.getAlgorithm()));
+    Arguments.isTrue("RSA".equals(key.getAlgorithm()));
 
     // JsonWebKey
     JsonWebKey jwk = new JsonWebKey();
@@ -70,7 +71,7 @@ public class RSAPublicKeyJwkConverter extends JwkConverter<RSAPublicKey> {
   @Override
   public RSAPublicKey fromJsonWebKey(JsonWebKey jwk) throws CryptoException {
     this.initialize();
-    Asserts.isTrue(this.kty.equals(kty), "kty doesn't match.");
+    Arguments.isTrue(this.kty.equals(kty), "kty doesn't match.");
 
     String n = Asserts.notNull((String) jwk.get("n"), "n is required.");
     String e = Asserts.notNull((String) jwk.get("e"), "e is required.");

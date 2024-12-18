@@ -23,7 +23,7 @@ package com.appslandia.common.base;
 import java.util.regex.Pattern;
 
 import com.appslandia.common.crypto.CryptoUtils;
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.MathUtils;
 
 /**
@@ -46,7 +46,7 @@ public class TokenGenerator extends InitializeObject implements TextGenerator {
 
   @Override
   protected void init() throws Exception {
-    Asserts.isTrue(this.length > 0, "length is required.");
+    Arguments.isTrue(this.length > 0, "length is required.");
   }
 
   @Override
@@ -62,7 +62,7 @@ public class TokenGenerator extends InitializeObject implements TextGenerator {
   @Override
   public boolean verify(String value) {
     initialize();
-    Asserts.notNull(value);
+    Arguments.notNull(value);
     if (value.length() != this.length) {
       return false;
     }

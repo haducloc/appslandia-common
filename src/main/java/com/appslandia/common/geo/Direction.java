@@ -22,7 +22,7 @@ package com.appslandia.common.geo;
 
 import java.util.Locale;
 
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.STR;
 
 /**
@@ -81,7 +81,7 @@ public enum Direction {
   }
 
   public static Direction parseValue(String symbol) {
-    Asserts.notNull(symbol);
+    Arguments.notNull(symbol);
     symbol = symbol.toUpperCase(Locale.ENGLISH);
 
     switch (symbol) {

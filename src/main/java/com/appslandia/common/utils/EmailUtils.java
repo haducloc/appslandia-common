@@ -47,7 +47,7 @@ public class EmailUtils {
   }
 
   public static InternetAddress parseAddress(String email, String person) throws AddressException {
-    Asserts.notNull(email);
+    Arguments.notNull(email);
 
     InternetAddress address = new InternetAddress(email);
     if (person != null) {
@@ -61,7 +61,7 @@ public class EmailUtils {
   }
 
   public static String toPersonEmail(String email, String person) {
-    Asserts.notNull(email);
+    Arguments.notNull(email);
     if (person == null) {
       return email;
     }

@@ -23,7 +23,7 @@ package com.appslandia.common.jdbc;
 import java.io.Serializable;
 
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.ValueUtils;
 
 /**
@@ -41,9 +41,9 @@ public class DbDialect extends InitializeObject implements Serializable {
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.type);
-    Asserts.notNull(this.idQuoteChar);
-    Asserts.notNull(this.likeEscaper);
+    Arguments.notNull(this.type);
+    Arguments.notNull(this.idQuoteChar);
+    Arguments.notNull(this.likeEscaper);
 
     this.resetIdentityAction = ValueUtils.valueOrAlt(this.resetIdentityAction, ResetIdentityAction.UNIMPLEMENTED);
   }

@@ -100,7 +100,7 @@ public class ValueUtils {
   }
 
   public static Integer valueOrNull(Integer checkValue, int[] validValues) {
-    Asserts.isTrue((validValues != null) && (validValues.length > 0));
+    Arguments.isTrue((validValues != null) && (validValues.length > 0));
 
     if (checkValue == null) {
       return null;

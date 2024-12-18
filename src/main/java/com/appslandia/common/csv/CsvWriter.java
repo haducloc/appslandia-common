@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.lang.reflect.RecordComponent;
 import java.util.Arrays;
 
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.IOUtils;
 import com.appslandia.common.utils.ReflectionException;
@@ -153,7 +154,7 @@ public class CsvWriter implements AutoCloseable {
   }
 
   public CsvWriter outModel(Object model, String... fieldNames) throws IOException {
-    Asserts.notNull(model);
+    Arguments.notNull(model);
 
     // propDescs
     PropertyDescriptor[] propDescs = null;

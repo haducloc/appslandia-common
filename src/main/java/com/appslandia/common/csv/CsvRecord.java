@@ -37,6 +37,7 @@ import com.appslandia.common.base.AssertException;
 import com.appslandia.common.base.BoolFormatException;
 import com.appslandia.common.base.TemporalFormatException;
 import com.appslandia.common.base.TemporalPatterns;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.ParseUtils;
@@ -460,7 +461,7 @@ public class CsvRecord {
   }
 
   private CsvRecord setTemporal(int index, Temporal value, String pattern) {
-    Asserts.notNull(pattern);
+    Arguments.notNull(pattern);
     return set(index, (value != null) ? DateUtils.getFormatter(pattern).format(value) : null);
   }
 

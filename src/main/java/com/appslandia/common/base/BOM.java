@@ -23,7 +23,7 @@ package com.appslandia.common.base;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 
 /**
  * 
@@ -75,8 +75,8 @@ public enum BOM {
   }
 
   public static BOM parse(byte[] bom, int c) {
-    Asserts.isTrue(bom.length == 4);
-    Asserts.isTrue(c <= 4);
+    Arguments.isTrue(bom.length == 4);
+    Arguments.isTrue(c <= 4);
 
     if (c == 4) {
       if (BOM.UTF_32BE.matches(bom)) {

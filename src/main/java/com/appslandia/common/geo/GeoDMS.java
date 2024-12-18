@@ -25,6 +25,7 @@ import java.math.RoundingMode;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.DecimalUtils;
 import com.appslandia.common.utils.STR;
@@ -121,12 +122,12 @@ public class GeoDMS implements Serializable {
   }
 
   public static GeoDMS toLatDMS(double latitude) {
-    Asserts.isTrue(latitude >= -90.0 && latitude <= 90.0, "latitude is invalid.");
+    Arguments.isTrue(latitude >= -90.0 && latitude <= 90.0, "latitude is invalid.");
     return new GeoDMS(Math.abs(latitude), Double.compare(latitude, 0.0) >= 0 ? Direction.NORTH : Direction.SOUTH);
   }
 
   public static GeoDMS toLongDMS(double longitude) {
-    Asserts.isTrue(longitude >= -180.0 && longitude <= 180.0, "longitude is invalid.");
+    Arguments.isTrue(longitude >= -180.0 && longitude <= 180.0, "longitude is invalid.");
     return new GeoDMS(Math.abs(longitude), Double.compare(longitude, 0.0) >= 0 ? Direction.EAST : Direction.WEST);
   }
 
@@ -135,8 +136,8 @@ public class GeoDMS implements Serializable {
   static final Pattern DMS_SYMBOLS = Pattern.compile("(°|'|\")");
 
   public static GeoDMS toGeoDMS(String dms) {
-    Asserts.notNull(dms);
-    Asserts.isTrue(DMS_PATTERN.matcher(dms).matches(), () -> STR.fmt("dms {} is invalid.", dms));
+    Arguments.notNull(dms);
+    Arguments.isTrue(DMS_PATTERN.matcher(dms).matches(), () -> STR.fmt("dms {} is invalid.", dms));
 
     String[] items = DMS_SYMBOLS.split(dms);
 

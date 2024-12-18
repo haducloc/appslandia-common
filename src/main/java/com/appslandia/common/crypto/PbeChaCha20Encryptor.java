@@ -30,6 +30,7 @@ import javax.crypto.spec.IvParameterSpec;
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 
@@ -49,7 +50,7 @@ public class PbeChaCha20Encryptor extends InitializeObject implements Encryptor 
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.transformation, "transformation is required.");
+    Arguments.notNull(this.transformation, "transformation is required.");
     CipherOps cipherOps = new CipherOps(this.transformation);
 
     Asserts.isTrue(cipherOps.isAlgorithm("ChaCha20") || cipherOps.isAlgorithm("ChaCha20-Poly1305"),
@@ -82,7 +83,7 @@ public class PbeChaCha20Encryptor extends InitializeObject implements Encryptor 
   @Override
   public byte[] encrypt(byte[] message) throws CryptoException {
     this.initialize();
-    Asserts.notNull(message, "message is required.");
+    Arguments.notNull(message, "message is required.");
 
     SecretKey key = null;
     try {
@@ -111,7 +112,7 @@ public class PbeChaCha20Encryptor extends InitializeObject implements Encryptor 
   @Override
   public byte[] decrypt(byte[] message) throws CryptoException {
     this.initialize();
-    Asserts.notNull(message, "message is required.");
+    Arguments.notNull(message, "message is required.");
 
     SecretKey key = null;
     try {

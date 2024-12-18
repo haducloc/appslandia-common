@@ -23,7 +23,7 @@ package com.appslandia.common.factory;
 import java.lang.reflect.Method;
 
 import com.appslandia.common.base.DestroyException;
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.ReflectionException;
 import com.appslandia.common.utils.ReflectionUtils;
 
@@ -37,7 +37,7 @@ import jakarta.annotation.PreDestroy;
 public class ObjectFactoryUtils {
 
   public static void preDestroy(Object obj) throws DestroyException {
-    Asserts.notNull(obj);
+    Arguments.notNull(obj);
 
     ReflectionUtils.traverse(obj.getClass(), new ReflectionUtils.MethodHandler() {
 

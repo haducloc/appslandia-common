@@ -20,7 +20,7 @@
 
 package com.appslandia.common.jdbc;
 
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.StringUtils;
 
 /**
@@ -53,7 +53,7 @@ public enum DbType {
   }
 
   public static DbType parseDbType(String jdbcUrl) {
-    Asserts.notNull(jdbcUrl);
+    Arguments.notNull(jdbcUrl);
 
     for (DbType dbType : DbType.values()) {
       if (StringUtils.startsWith(jdbcUrl, dbType.urlPrefix)) {

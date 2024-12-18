@@ -34,6 +34,7 @@ import com.appslandia.common.crypto.DsaSigner;
 import com.appslandia.common.crypto.MacSigner;
 import com.appslandia.common.json.JsonException;
 import com.appslandia.common.json.JsonProcessor;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ObjectUtils;
 import com.appslandia.common.utils.STR;
@@ -86,8 +87,8 @@ public class JwsSigner<P> extends InitializeObject {
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.type, "type is required.");
-    Asserts.notNull(this.jsonProcessor, "jsonProcessor is required.");
+    Arguments.notNull(this.type, "type is required.");
+    Arguments.notNull(this.jsonProcessor, "jsonProcessor is required.");
 
     if (this.signer != null) {
       Asserts.notNull(this.alg, "alg is required.");
@@ -135,9 +136,9 @@ public class JwsSigner<P> extends InitializeObject {
 
   public String sign(JwsToken<P> token) throws CryptoException, JwsSignatureException, JsonException {
     this.initialize();
-    Asserts.notNull(token);
-    Asserts.notNull(token.getHeader());
-    Asserts.notNull(token.getPayload());
+    Arguments.notNull(token);
+    Arguments.notNull(token.getHeader());
+    Arguments.notNull(token.getPayload());
 
     // defaultVerifiers
     this.defaultVerifiers.forEach((verifier) -> verifier.verify(token));
@@ -166,13 +167,13 @@ public class JwsSigner<P> extends InitializeObject {
 
   public void verify(JwsToken<P> token) throws CryptoException, JwsSignatureException {
     this.initialize();
-    Asserts.notNull(token);
-    Asserts.notNull(token.getHeader());
-    Asserts.notNull(token.getPayload());
+    Arguments.notNull(token);
+    Arguments.notNull(token.getHeader());
+    Arguments.notNull(token.getPayload());
 
-    Asserts.notNull(token.getHeaderPart());
-    Asserts.notNull(token.getPayloadPart());
-    Asserts.notNull(token.getSignaturePart());
+    Arguments.notNull(token.getHeaderPart());
+    Arguments.notNull(token.getPayloadPart());
+    Arguments.notNull(token.getSignaturePart());
 
     // defaultVerifiers
     this.defaultVerifiers.forEach((verifier) -> verifier.verify(token));
@@ -188,7 +189,7 @@ public class JwsSigner<P> extends InitializeObject {
 
   public JwsToken<P> parse(String token) throws JsonException {
     this.initialize();
-    Asserts.notNull(token);
+    Arguments.notNull(token);
 
     String[] parts = JoseUtils.parseJws(token);
     Asserts.notNull(parts, () -> STR.fmt("The token '{}' is invalid format.", token));

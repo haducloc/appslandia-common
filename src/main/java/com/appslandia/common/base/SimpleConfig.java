@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 
 /**
  *
@@ -58,58 +58,58 @@ public class SimpleConfig implements Config {
 
   @Override
   public String getString(String key) {
-    Asserts.notNull(key);
+    Arguments.notNull(key);
 
     return this.cfg.get(key);
   }
 
   public SimpleConfig putIfAbsent(String key, String value) {
-    Asserts.notNull(key);
-    Asserts.notNull(value);
+    Arguments.notNull(key);
+    Arguments.notNull(value);
 
     this.cfg.putIfAbsent(key, value.strip());
     return this;
   }
 
   public SimpleConfig set(String key, String value) {
-    Asserts.notNull(key);
-    Asserts.notNull(value);
+    Arguments.notNull(key);
+    Arguments.notNull(value);
 
     this.cfg.put(key, value.strip());
     return this;
   }
 
   public SimpleConfig set(String key, boolean value) {
-    Asserts.notNull(key);
+    Arguments.notNull(key);
 
     this.cfg.put(key, Boolean.toString(value));
     return this;
   }
 
   public SimpleConfig set(String key, int value) {
-    Asserts.notNull(key);
+    Arguments.notNull(key);
 
     this.cfg.put(key, Integer.toString(value));
     return this;
   }
 
   public SimpleConfig set(String key, long value) {
-    Asserts.notNull(key);
+    Arguments.notNull(key);
 
     this.cfg.put(key, Long.toString(value));
     return this;
   }
 
   public SimpleConfig set(String key, double value) {
-    Asserts.notNull(key);
+    Arguments.notNull(key);
 
     this.cfg.put(key, Double.toString(value));
     return this;
   }
 
   public SimpleConfig set(String key, BigDecimal value) {
-    Asserts.notNull(key);
-    Asserts.notNull(value);
+    Arguments.notNull(key);
+    Arguments.notNull(value);
 
     this.cfg.put(key, value.toPlainString());
     return this;

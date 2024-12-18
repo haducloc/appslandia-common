@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.ObjectUtils;
 
 /**
@@ -52,7 +52,7 @@ public class JsonObjectParser extends InitializeObject {
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.jsonValueConverter);
+    Arguments.notNull(this.jsonValueConverter);
   }
 
   public <F, V> JsonObjectParser setValueConverter(String[] pathOrPatterns, Function<F, V> converter) {
@@ -85,7 +85,7 @@ public class JsonObjectParser extends InitializeObject {
 
   public Object parse(Object rootElement) {
     this.initialize();
-    Asserts.notNull(rootElement);
+    Arguments.notNull(rootElement);
 
     Object rootObj = parseValue(rootElement, new StringBuilder(), new Out<>());
 

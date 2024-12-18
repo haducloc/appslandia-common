@@ -42,7 +42,7 @@ import com.appslandia.common.base.TemporalFormatException;
 public class ParseUtils {
 
   public static boolean parseBool(String value) throws BoolFormatException {
-    Asserts.notNull(value);
+    Arguments.notNull(value);
     if (isTrueValue(value)) {
       return true;
     }
@@ -53,27 +53,27 @@ public class ParseUtils {
   }
 
   public static byte parseByte(String value) throws NumberFormatException {
-    Asserts.notNull(value);
+    Arguments.notNull(value);
     return Byte.parseByte(value);
   }
 
   public static short parseShort(String value) throws NumberFormatException {
-    Asserts.notNull(value);
+    Arguments.notNull(value);
     return Short.parseShort(value);
   }
 
   public static int parseInt(String value) throws NumberFormatException {
-    Asserts.notNull(value);
+    Arguments.notNull(value);
     return Integer.parseInt(value);
   }
 
   public static long parseLong(String value) throws NumberFormatException {
-    Asserts.notNull(value);
+    Arguments.notNull(value);
     return Long.parseLong(value);
   }
 
   public static float parseFloat(String value) throws NumberFormatException, NaNOrInfinityException {
-    Asserts.notNull(value);
+    Arguments.notNull(value);
     float val = Float.parseFloat(value);
     if (!Float.isFinite(val)) {
 
@@ -84,7 +84,7 @@ public class ParseUtils {
   }
 
   public static double parseDouble(String value) throws NumberFormatException, NaNOrInfinityException {
-    Asserts.notNull(value);
+    Arguments.notNull(value);
     double val = Double.parseDouble(value);
     if (!Double.isFinite(val)) {
 

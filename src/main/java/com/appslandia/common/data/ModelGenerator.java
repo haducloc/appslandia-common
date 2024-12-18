@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.models.EntityBase;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
 import com.appslandia.common.utils.StringUtils;
@@ -161,7 +162,7 @@ public class ModelGenerator extends InitializeObject {
 
   public Class<?> generateEntityClass(Table table) throws Exception {
     initialize();
-    Asserts.notNull(table);
+    Arguments.notNull(table);
 
     Class<?> embeddedIdClass = null;
 
@@ -281,7 +282,7 @@ public class ModelGenerator extends InitializeObject {
 
   public Class<?> generateModelClass(String modelClassName, List<Column> columns) throws Exception {
     initialize();
-    Asserts.notNull(columns);
+    Arguments.notNull(columns);
 
     String fullClass = this.classPackage != null ? this.classPackage + "." + modelClassName : modelClassName;
 

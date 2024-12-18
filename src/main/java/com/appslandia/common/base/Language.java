@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.STR;
@@ -47,7 +48,7 @@ public class Language extends InitializeObject {
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.locale, "locale is required.");
+    Arguments.notNull(this.locale, "locale is required.");
 
     if (this.id == null) {
       this.id = this.locale.getLanguage();
@@ -190,7 +191,7 @@ public class Language extends InitializeObject {
   }
 
   public static void setDefault(Language impl) {
-    Asserts.isNull(__default, "Language.__default must be null.");
+    Arguments.isNull(__default, "Language.__default must be null.");
     __default = impl;
   }
 

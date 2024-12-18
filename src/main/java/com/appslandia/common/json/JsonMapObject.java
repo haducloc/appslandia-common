@@ -34,6 +34,7 @@ import java.util.function.Function;
 
 import com.appslandia.common.base.MapWrapper;
 import com.appslandia.common.base.Unsupported;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.ObjectUtils;
@@ -56,7 +57,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
   }
 
   public JsonMapObject set(String key, Object value) {
-    Asserts.notNull(key);
+    Arguments.notNull(key);
     validateValue(value);
 
     super.put(key, value);
@@ -357,7 +358,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
 
   @Override
   public Object putIfAbsent(String key, Object value) {
-    Asserts.notNull(key);
+    Arguments.notNull(key);
     validateValue(value);
 
     return super.putIfAbsent(key, value);
@@ -365,7 +366,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
 
   @Override
   public Object put(String key, Object value) {
-    Asserts.notNull(key);
+    Arguments.notNull(key);
     validateValue(value);
 
     return super.put(key, value);

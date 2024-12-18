@@ -38,8 +38,8 @@ public class BytesSizeUtils {
   }
 
   public static long translateToBytes(String sizeAmt, boolean base10) {
-    Asserts.notNull(sizeAmt, "sizeAmt is required.");
-    Asserts.isTrue(BYTES_SIZE_PATTERN.matcher(sizeAmt).matches(), () -> STR.fmt("sizeAmt '{}' is invalid.", sizeAmt));
+    Arguments.notNull(sizeAmt, "sizeAmt is required.");
+    Arguments.isTrue(BYTES_SIZE_PATTERN.matcher(sizeAmt).matches(), () -> STR.fmt("sizeAmt '{}' is invalid.", sizeAmt));
 
     double result = 0L;
     int i = 0;

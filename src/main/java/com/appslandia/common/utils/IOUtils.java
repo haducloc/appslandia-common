@@ -122,7 +122,7 @@ public class IOUtils {
   }
 
   public static BufferedReader readerBOM(InputStream is, String altEncoding) throws IOException {
-    Asserts.notNull(altEncoding);
+    Arguments.notNull(altEncoding);
     var bomIS = new BOMInputStream(is);
     return new BufferedReader(
         new InputStreamReader(bomIS, (bomIS.getBOM() != null) ? bomIS.getBOM().getEncoding() : altEncoding));
@@ -133,27 +133,27 @@ public class IOUtils {
   }
 
   public static BufferedWriter writerBOM(OutputStream os, String encoding) throws IOException {
-    Asserts.notNull(encoding);
+    Arguments.notNull(encoding);
     return new BufferedWriter(new OutputStreamWriter(new BOMOutputStream(os, encoding), encoding));
   }
 
   public static BufferedReader reader(String inputFile, String encoding) throws IOException {
-    Asserts.notNull(encoding);
+    Arguments.notNull(encoding);
     return reader(new FileInputStream(inputFile), encoding);
   }
 
   public static BufferedReader reader(InputStream is, String encoding) throws IOException {
-    Asserts.notNull(encoding);
+    Arguments.notNull(encoding);
     return new BufferedReader(new InputStreamReader(is, encoding));
   }
 
   public static BufferedWriter writer(String outputFile, String encoding) throws IOException {
-    Asserts.notNull(encoding);
+    Arguments.notNull(encoding);
     return writer(new FileOutputStream(outputFile), encoding);
   }
 
   public static BufferedWriter writer(OutputStream os, String encoding) throws IOException {
-    Asserts.notNull(encoding);
+    Arguments.notNull(encoding);
     return new BufferedWriter(new OutputStreamWriter(os, encoding));
   }
 

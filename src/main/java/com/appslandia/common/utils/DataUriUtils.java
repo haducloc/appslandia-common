@@ -69,7 +69,7 @@ public class DataUriUtils {
   }
 
   public static boolean isDataUri(String input) {
-    Asserts.notNull(input);
+    Arguments.notNull(input);
     return input.startsWith("data:") && input.contains(",");
   }
 }

@@ -22,6 +22,7 @@ package com.appslandia.common.factory;
 
 import java.util.function.Function;
 
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 
 /**
@@ -68,7 +69,7 @@ public class ObjectInstance {
   }
 
   public boolean destroy(Object impl) {
-    Asserts.notNull(impl);
+    Arguments.notNull(impl);
 
     if (impl == this.singleton) {
       // SINGLETON

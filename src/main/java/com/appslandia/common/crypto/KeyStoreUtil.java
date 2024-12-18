@@ -40,7 +40,7 @@ import javax.crypto.SecretKey;
 
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.ObjectUtils;
 
 /**
@@ -79,7 +79,7 @@ public class KeyStoreUtil extends InitializeObject {
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.type, "type is required.");
+    Arguments.notNull(this.type, "type is required.");
 
     KeyStore impl;
     if (this.provider == null) {

@@ -29,6 +29,7 @@ import com.appslandia.common.base.TextBuilder;
 import com.appslandia.common.base.ToStringBuilder.TSIdHash;
 import com.appslandia.common.jdbc.DbDialect;
 import com.appslandia.common.jdbc.SqlQuery;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
 
@@ -66,8 +67,8 @@ public class Table extends InitializeObject implements Serializable {
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.tableName, "tableName is required.");
-    Asserts.notNull(this.dbDialect, "dbDialect is required.");
+    Arguments.notNull(this.tableName, "tableName is required.");
+    Arguments.notNull(this.dbDialect, "dbDialect is required.");
 
     if (this.qTableName == null) {
       this.qTableName = this.tableName;

@@ -28,7 +28,7 @@ import java.util.function.Consumer;
 
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.crypto.SecureConfig;
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.ExceptionUtils;
 
@@ -49,7 +49,7 @@ public class SmtpMailer extends InitializeObject {
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.config, "config is required.");
+    Arguments.notNull(this.config, "config is required.");
 
     this.session = Session.getInstance(this.config.toProperties(key -> key.startsWith("mail.")));
   }
@@ -60,7 +60,7 @@ public class SmtpMailer extends InitializeObject {
 
   public void send(List<MailerMessage> messages) throws MessagingException {
     initialize();
-    Asserts.notNull(messages);
+    Arguments.notNull(messages);
 
     try (Transport transport = this.session.getTransport("smtp")) {
 
@@ -85,8 +85,8 @@ public class SmtpMailer extends InitializeObject {
 
   public void sendAsync(List<MailerMessage> messages, Executor executor, Consumer<Exception> errorHandler) {
     initialize();
-    Asserts.notNull(messages);
-    Asserts.notNull(executor);
+    Arguments.notNull(messages);
+    Arguments.notNull(executor);
 
     executor.execute(new Runnable() {
 

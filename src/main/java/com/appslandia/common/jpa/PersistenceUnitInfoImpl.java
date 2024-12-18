@@ -28,7 +28,7 @@ import java.util.Properties;
 import javax.sql.DataSource;
 
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 
 import jakarta.persistence.SharedCacheMode;
 import jakarta.persistence.ValidationMode;
@@ -67,9 +67,9 @@ public class PersistenceUnitInfoImpl extends InitializeObject implements Persist
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.unitName);
-    Asserts.notNull(this.providerClassName);
-    Asserts.notNull(this.transactionType);
+    Arguments.notNull(this.unitName);
+    Arguments.notNull(this.providerClassName);
+    Arguments.notNull(this.transactionType);
   }
 
   @Override

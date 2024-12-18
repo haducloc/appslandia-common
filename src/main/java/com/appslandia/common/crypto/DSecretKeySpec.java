@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.crypto.SecretKey;
 import javax.security.auth.DestroyFailedException;
 
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 
 /**
  *
@@ -49,9 +49,9 @@ public class DSecretKeySpec implements SecretKey, KeySpec {
   }
 
   public DSecretKeySpec(byte[] key, String format, String algorithm) {
-    Asserts.notNull(key);
-    Asserts.notNull(format);
-    Asserts.notNull(algorithm);
+    Arguments.notNull(key);
+    Arguments.notNull(format);
+    Arguments.notNull(algorithm);
 
     this.key = key.clone();
     this.format = format;
@@ -59,7 +59,7 @@ public class DSecretKeySpec implements SecretKey, KeySpec {
   }
 
   public DSecretKeySpec(SecretKey sourceKey) {
-    Asserts.notNull(sourceKey);
+    Arguments.notNull(sourceKey);
 
     this.key = sourceKey.getEncoded();
     this.format = sourceKey.getFormat();

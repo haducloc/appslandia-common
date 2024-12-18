@@ -33,6 +33,7 @@ import com.appslandia.common.crypto.AlgorithmParametersUtil;
 import com.appslandia.common.crypto.CryptoException;
 import com.appslandia.common.crypto.CryptoUtils;
 import com.appslandia.common.crypto.KeyFactoryUtil;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
 
@@ -60,7 +61,7 @@ public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> {
   @Override
   public JsonWebKey toJsonWebKey(ECPublicKey key) {
     this.initialize();
-    Asserts.isTrue("EC".equals(key.getAlgorithm()));
+    Arguments.isTrue("EC".equals(key.getAlgorithm()));
 
     // JsonWebKey
     JsonWebKey jwk = new JsonWebKey();
@@ -84,7 +85,7 @@ public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> {
   @Override
   public ECPublicKey fromJsonWebKey(JsonWebKey jwk) throws CryptoException {
     this.initialize();
-    Asserts.isTrue(this.kty.equals(kty), "kty doesn't match.");
+    Arguments.isTrue(this.kty.equals(kty), "kty doesn't match.");
 
     String curve = Asserts.notNull((String) jwk.get("crv"), "crv is required.");
     String stdName = getStdName(curve);

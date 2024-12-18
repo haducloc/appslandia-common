@@ -25,7 +25,7 @@ import java.security.GeneralSecurityException;
 import java.security.spec.AlgorithmParameterSpec;
 
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 
 /**
  *
@@ -54,7 +54,7 @@ public class AlgorithmParametersUtil extends InitializeObject {
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.algorithm, "algorithm is required.");
+    Arguments.notNull(this.algorithm, "algorithm is required.");
   }
 
   protected AlgorithmParameters getImpl() throws GeneralSecurityException {

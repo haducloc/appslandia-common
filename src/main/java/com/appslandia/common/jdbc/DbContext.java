@@ -38,6 +38,7 @@ import java.util.Set;
 import javax.sql.DataSource;
 
 import com.appslandia.common.base.DangerTaskConfirm;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 
 /**
@@ -355,7 +356,7 @@ public class DbContext implements AutoCloseable {
   }
 
   protected void doBatch(String action) throws java.sql.SQLException {
-    Asserts.isTrue("execute".equals(action) || "clear".equals(action));
+    Arguments.isTrue("execute".equals(action) || "clear".equals(action));
 
     for (String pQuery : this.batchedPQueries) {
       StatementImpl stat = Asserts.notNull(this.stats.get(pQuery));

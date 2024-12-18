@@ -23,6 +23,7 @@ package com.appslandia.common.crypto;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
 
@@ -38,7 +39,7 @@ public class CipherOps {
   final String padding;
 
   public CipherOps(String transformation) {
-    Asserts.notNull(transformation);
+    Arguments.notNull(transformation);
 
     String[] cipherOps = transformation.split("/");
     Asserts.isTrue(cipherOps.length >= 1 && cipherOps.length <= 3, "transformation is invalid.");

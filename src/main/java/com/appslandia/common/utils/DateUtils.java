@@ -140,7 +140,7 @@ public class DateUtils {
 
   // yyyyMMdd
   public static Integer toWeekID(LocalDate ld, Locale locale) {
-    Asserts.notNull(locale);
+    Arguments.notNull(locale);
     if (ld == null) {
       return null;
     }
@@ -334,7 +334,7 @@ public class DateUtils {
   }
 
   public static LocalDate firstDayOfWeek(LocalDate ld, Locale locale) {
-    Asserts.notNull(locale);
+    Arguments.notNull(locale);
     if (ld == null) {
       return null;
     }
@@ -343,7 +343,7 @@ public class DateUtils {
   }
 
   public static LocalDate lastDayOfWeek(LocalDate ld, Locale locale) {
-    Asserts.notNull(locale);
+    Arguments.notNull(locale);
     if (ld == null) {
       return null;
     }
@@ -355,8 +355,8 @@ public class DateUtils {
       Pattern.CASE_INSENSITIVE);
 
   public static long translateToMs(String temporalAmt) {
-    Asserts.notNull(temporalAmt, "temporalAmt is required.");
-    Asserts.isTrue(TEMPORAL_AMT_PATTERN.matcher(temporalAmt).matches(),
+    Arguments.notNull(temporalAmt, "temporalAmt is required.");
+    Arguments.isTrue(TEMPORAL_AMT_PATTERN.matcher(temporalAmt).matches(),
         () -> STR.fmt("temporalAmt '{}' is invalid.", temporalAmt));
 
     double result = 0l;

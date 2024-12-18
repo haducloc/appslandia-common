@@ -24,7 +24,7 @@ import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 
 import com.appslandia.common.base.InitializeObject;
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 
 /**
  *
@@ -51,7 +51,7 @@ public class DigesterImpl extends InitializeObject implements Digester {
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.algorithm, "algorithm is required.");
+    Arguments.notNull(this.algorithm, "algorithm is required.");
   }
 
   protected MessageDigest getImpl() throws GeneralSecurityException {
@@ -68,7 +68,7 @@ public class DigesterImpl extends InitializeObject implements Digester {
   @Override
   public byte[] digest(byte[] message) throws CryptoException {
     this.initialize();
-    Asserts.notNull(message, "message is required.");
+    Arguments.notNull(message, "message is required.");
 
     try {
       return this.getImpl().digest(message);
@@ -81,8 +81,8 @@ public class DigesterImpl extends InitializeObject implements Digester {
   @Override
   public boolean verify(byte[] message, byte[] hash) throws CryptoException {
     this.initialize();
-    Asserts.notNull(message, "message is required.");
-    Asserts.notNull(hash, "hash is required.");
+    Arguments.notNull(message, "message is required.");
+    Arguments.notNull(hash, "hash is required.");
 
     try {
       byte[] computedHash = this.getImpl().digest(message);

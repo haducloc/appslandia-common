@@ -25,6 +25,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 
 /**
@@ -39,8 +40,8 @@ public class GeoLocation implements Serializable {
   public final double y;
 
   public GeoLocation(double longitudeX, double latitudeY) {
-    Asserts.isTrue(longitudeX >= -180.0 && longitudeX <= 180.0, "longitudeX is invalid.");
-    Asserts.isTrue(latitudeY >= -90.0 && latitudeY <= 90.0, "latitudeY is invalid.");
+    Arguments.isTrue(longitudeX >= -180.0 && longitudeX <= 180.0, "longitudeX is invalid.");
+    Arguments.isTrue(latitudeY >= -90.0 && latitudeY <= 90.0, "latitudeY is invalid.");
 
     this.x = longitudeX;
     this.y = latitudeY;
@@ -59,8 +60,8 @@ public class GeoLocation implements Serializable {
   }
 
   public GeoLocation move(Direction direction, double distance, DistanceUnit unit) {
-    Asserts.notNull(direction);
-    Asserts.notNull(unit);
+    Arguments.notNull(direction);
+    Arguments.notNull(unit);
 
     double perdegLong = 360.0 / GeoUtils.POLAR_CIRCUMFERENCE_MILES;
     double perdegLat = 360.0 / (Math.cos(Math.toRadians(this.y)) * GeoUtils.EQUATOR_CIRCUMFERENCE_MILES);

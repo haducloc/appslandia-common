@@ -35,7 +35,7 @@ import com.appslandia.common.base.InitializeException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.MemoryStream;
 import com.appslandia.common.base.StringWriter;
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.ObjectUtils;
 import com.appslandia.common.utils.ReflectionUtils;
 
@@ -97,7 +97,7 @@ public abstract class JsonProcessor extends InitializeObject {
   }
 
   public static void setDefault(JsonProcessor impl) {
-    Asserts.isNull(__default, "JsonProcessor.__default must be null.");
+    Arguments.isNull(__default, "JsonProcessor.__default must be null.");
 
     if (__default == null) {
       synchronized (MUTEX) {
@@ -112,7 +112,7 @@ public abstract class JsonProcessor extends InitializeObject {
   private static Supplier<JsonProcessor> __provider;
 
   public static void setProvider(Supplier<JsonProcessor> impl) {
-    Asserts.isNull(__default, "JsonProcessor.__default must be null.");
+    Arguments.isNull(__default, "JsonProcessor.__default must be null.");
 
     if (__default == null) {
       synchronized (MUTEX) {

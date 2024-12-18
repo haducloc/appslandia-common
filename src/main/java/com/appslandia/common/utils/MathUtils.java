@@ -28,7 +28,7 @@ package com.appslandia.common.utils;
 public class MathUtils {
 
   public static int digitCount(long n) {
-    Asserts.isTrue(n >= 0);
+    Arguments.isTrue(n >= 0);
 
     if (n == 0) {
       return 1;
@@ -44,8 +44,8 @@ public class MathUtils {
   }
 
   public static int toNearestMultipleOf(int number, int minBound) {
-    Asserts.isTrue(minBound >= 0);
-    Asserts.isTrue(number > 0);
+    Arguments.isTrue(minBound >= 0);
+    Arguments.isTrue(number > 0);
 
     return ((minBound + number - 1) / number) * number;
   }
@@ -85,7 +85,7 @@ public class MathUtils {
   }
 
   public static byte[] toByteArray(int begin, int end) {
-    Asserts.isTrue(begin <= end);
+    Arguments.isTrue(begin <= end);
 
     byte[] byteArray = new byte[end - begin + 1];
     for (int i = begin; i <= end; i++) {

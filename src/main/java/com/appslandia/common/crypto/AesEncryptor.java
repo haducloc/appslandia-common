@@ -30,6 +30,7 @@ import javax.crypto.spec.IvParameterSpec;
 
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.SYS;
@@ -49,8 +50,8 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.transformation, "transformation is required.");
-    Asserts.notNull(this.secretKey, "secretKey is required.");
+    Arguments.notNull(this.transformation, "transformation is required.");
+    Arguments.notNull(this.secretKey, "secretKey is required.");
 
     CipherOps cipherOps = this.cipherOps;
 
@@ -91,7 +92,7 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
   @Override
   public byte[] encrypt(byte[] message) throws CryptoException {
     this.initialize();
-    Asserts.notNull(message, "message is required.");
+    Arguments.notNull(message, "message is required.");
 
     try {
       Cipher impl = getImpl();
@@ -124,7 +125,7 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
   @Override
   public byte[] decrypt(byte[] message) throws CryptoException {
     this.initialize();
-    Asserts.notNull(message, "message is required.");
+    Arguments.notNull(message, "message is required.");
 
     try {
       Cipher impl = getImpl();

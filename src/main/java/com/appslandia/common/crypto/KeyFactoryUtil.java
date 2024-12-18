@@ -31,6 +31,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 import com.appslandia.common.base.InitializeObject;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.IOUtils;
 
@@ -59,7 +60,7 @@ public class KeyFactoryUtil extends InitializeObject {
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.algorithm, "algorithm is required.");
+    Arguments.notNull(this.algorithm, "algorithm is required.");
   }
 
   protected KeyFactory getImpl() throws GeneralSecurityException {
@@ -156,8 +157,8 @@ public class KeyFactoryUtil extends InitializeObject {
   public PrivateKey copy(PrivateKey key) throws CryptoException {
     this.initialize();
 
-    Asserts.isTrue(this.algorithm.equalsIgnoreCase(key.getAlgorithm()));
-    Asserts.isTrue("PKCS#8".equalsIgnoreCase(key.getFormat()), "The key is not in PKCS#8 format.");
+    Arguments.isTrue(this.algorithm.equalsIgnoreCase(key.getAlgorithm()));
+    Arguments.isTrue("PKCS#8".equalsIgnoreCase(key.getFormat()), "The key is not in PKCS#8 format.");
 
     byte[] der = key.getEncoded();
     try {
@@ -174,8 +175,8 @@ public class KeyFactoryUtil extends InitializeObject {
   public PublicKey copy(PublicKey key) throws CryptoException {
     this.initialize();
 
-    Asserts.isTrue(this.algorithm.equalsIgnoreCase(key.getAlgorithm()));
-    Asserts.isTrue("X.509".equalsIgnoreCase(key.getFormat()), "The key is not in X.509 format.");
+    Arguments.isTrue(this.algorithm.equalsIgnoreCase(key.getAlgorithm()));
+    Arguments.isTrue("X.509".equalsIgnoreCase(key.getFormat()), "The key is not in X.509 format.");
 
     byte[] der = key.getEncoded();
     Asserts.notNull(der);

@@ -28,7 +28,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 
 /**
  *
@@ -61,7 +61,7 @@ public class SecurityProviderApp {
   }
 
   public static void querySecurityProviders(String serviceType, String algorithmPattern) {
-    Asserts.notNull(serviceType);
+    Arguments.notNull(serviceType);
 
     System.out.println(String.format("***** Java Runtime Version: %s *****", Runtime.version().toString()));
     System.out.println(String.format("***** Installed Security Providers for Service Type %s *****", serviceType));

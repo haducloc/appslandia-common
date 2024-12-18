@@ -23,6 +23,7 @@ package com.appslandia.common.validators;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 
 /**
@@ -37,7 +38,7 @@ public abstract class ModelValidator<T> {
   private static final Map<String, ModelValidator<?>> VALIDATORS = new HashMap<String, ModelValidator<?>>();
 
   public static void addValidator(String key, ModelValidator<?> modelValidator) {
-    Asserts.isTrue(!VALIDATORS.containsKey(key));
+    Arguments.isTrue(!VALIDATORS.containsKey(key));
     VALIDATORS.put(key, modelValidator);
   }
 

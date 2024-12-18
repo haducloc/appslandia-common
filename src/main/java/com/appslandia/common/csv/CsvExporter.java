@@ -31,6 +31,7 @@ import com.appslandia.common.base.Out;
 import com.appslandia.common.data.RecordContext;
 import com.appslandia.common.jdbc.ConnectionImpl;
 import com.appslandia.common.jdbc.ResultSetColumn;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.IOUtils;
 
@@ -54,8 +55,8 @@ public class CsvExporter extends InitializeObject {
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.pQuery);
-    Asserts.notNull(this.csvOutput);
+    Arguments.notNull(this.pQuery);
+    Arguments.notNull(this.csvOutput);
 
     if (this.connection == null) {
       this.connection = ConnectionImpl.getCurrent();

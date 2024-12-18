@@ -30,6 +30,7 @@ import javax.crypto.spec.IvParameterSpec;
 
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.ArrayUtils;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.SYS;
@@ -50,8 +51,8 @@ public class ChaCha20Encryptor extends InitializeObject implements Encryptor {
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.transformation, "transformation is required.");
-    Asserts.notNull(this.secretKey, "secretKey is required.");
+    Arguments.notNull(this.transformation, "transformation is required.");
+    Arguments.notNull(this.secretKey, "secretKey is required.");
 
     CipherOps cipherOps = this.cipherOps;
 
@@ -77,7 +78,7 @@ public class ChaCha20Encryptor extends InitializeObject implements Encryptor {
   @Override
   public byte[] encrypt(byte[] message) throws CryptoException {
     this.initialize();
-    Asserts.notNull(message, "message is required.");
+    Arguments.notNull(message, "message is required.");
 
     try {
       Cipher impl = getImpl();
@@ -100,8 +101,8 @@ public class ChaCha20Encryptor extends InitializeObject implements Encryptor {
   @Override
   public byte[] decrypt(byte[] message) throws CryptoException {
     this.initialize();
-    Asserts.notNull(message, "message is required.");
-    Asserts.isTrue(message.length >= IV_SIZE, "message is invalid.");
+    Arguments.notNull(message, "message is required.");
+    Arguments.isTrue(message.length >= IV_SIZE, "message is invalid.");
 
     try {
       byte[] iv = new byte[IV_SIZE];

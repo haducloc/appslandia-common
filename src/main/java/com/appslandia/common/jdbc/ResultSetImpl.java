@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Locale;
 
 import com.appslandia.common.base.AssertException;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.NormalizeUtils;
 import com.appslandia.common.utils.ObjectUtils;
@@ -51,7 +52,7 @@ public class ResultSetImpl implements ResultSet {
   protected List<ResultSetColumn> columns;
 
   public ResultSetImpl(ResultSet rs) {
-    Asserts.isTrue(!(rs instanceof ResultSetImpl));
+    Arguments.isTrue(!(rs instanceof ResultSetImpl));
     this.rs = Asserts.notNull(rs);
   }
 
@@ -63,7 +64,7 @@ public class ResultSetImpl implements ResultSet {
   }
 
   public String valuesAsID(String... columnLabels) throws UncheckedSQLException {
-    Asserts.hasElements(columnLabels);
+    Arguments.hasElements(columnLabels);
 
     Object[] values = Arrays.stream(columnLabels).map(columnLabel -> {
       try {
