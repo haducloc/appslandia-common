@@ -29,7 +29,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
-import java.util.regex.Pattern;
 
 import com.appslandia.common.base.InitializeObject;
 
@@ -71,53 +70,15 @@ public class SourceCodeBrFixer extends InitializeObject {
         .forEach(scPath -> processFile(scPath, seq));
   }
 
-  static String pattern = "^(public|private|protected)?\\s*(static\\s+)?[^\s]+\\s+[^\s]+\\s*\\(\\s*([^\s]+\\s+[^\s]+(\\s*,\\s*[^\s]+\\s+[^\s]+)*)?\\s*\\)(\\s+throws\\s+[^\s]+(\\s*,\\s*[^\s]+)*)?\\s*\\{$";
-
   private void processFile(Path scPath, AtomicInteger seq) {
     try {
       String unixPath = FileNameUtils.toUnixPath(scPath.toString());
       System.out.println(STR.fmt("[{}] Handling {}", seq.incrementAndGet(), unixPath));
 
       List<String> lines = Files.readAllLines(scPath, StandardCharsets.UTF_8);
+      List<String> strippedLines = lines.stream().map(l -> l.stripTrailing()).toList();
 
-      Pattern p = Pattern.compile(pattern);
-
-      int i = 0;
-      while (true) {
-        if (i == lines.size()) {
-          break;
-        }
-        String line_i = lines.get(i).strip();
-
-        if (p.matcher(line_i).matches()) {
-          int j = i + 1;
-          while (true) {
-            if (j == lines.size()) {
-              break;
-            }
-
-            String line_j = lines.get(j).strip();
-            if (line_j.isEmpty() || line_j.equals("initialize();") || line_j.equals("this.initialize();")
-                || line_j.equals("super.initialize();")) {
-              j++;
-            } else if (line_j.startsWith("Asserts.")) {
-              lines.set(j, "Arguments." + line_j.substring(8));
-              j++;
-            } else {
-              break;
-            }
-          }
-          i = j + 1;
-        } else {
-          i++;
-        }
-      }
-
-      if (!lines.get(lines.size() - 1).strip().isEmpty()) {
-        lines.add(System.lineSeparator());
-      }
-
-      String linesAsStr = String.join(System.lineSeparator(), lines);
+      String linesAsStr = String.join(System.lineSeparator(), strippedLines);
       Files.write(scPath, linesAsStr.getBytes(StandardCharsets.UTF_8));
 
     } catch (IOException ex) {
@@ -129,8 +90,8 @@ public class SourceCodeBrFixer extends InitializeObject {
     try {
       SourceCodeBrFixer fixer = new SourceCodeBrFixer();
 
-      fixer.setSourceDir("C:\\Workspace2\\javaProjects\\appslandia-common");
-      fixer.setSrcExt(fn -> fn.endsWith(".java") && !fn.contains("SourceCodeBrFixer"));
+      fixer.setSourceDir("// TODO");
+      fixer.setSrcExt(fn -> fn.endsWith(".cs") || fn.endsWith(".cshtml"));
       fixer.execute();
 
     } catch (Exception ex) {
