@@ -49,6 +49,12 @@ public class Arguments {
     }
   }
 
+  public static void isTrue(boolean expression, String messageTemplate, Object... templateArgs) {
+    if (!expression) {
+      throw new IllegalArgumentException(STR.fmt(messageTemplate, templateArgs));
+    }
+  }
+
   public static <T> T notNull(T obj) {
     if (obj == null) {
       throw new IllegalArgumentException("The obj must not be null.");
@@ -70,25 +76,39 @@ public class Arguments {
     return obj;
   }
 
-  public static String notBlank(String str) {
+  public static <T> T notNull(T obj, String messageTemplate, Object... templateArgs) {
+    if (obj == null) {
+      throw new IllegalArgumentException(STR.fmt(messageTemplate, templateArgs));
+    }
+    return obj;
+  }
+
+  public static String notNullOrBlank(String str) {
     if ((str == null) || str.isBlank()) {
       throw new IllegalArgumentException("The str must not be null or blank.");
     }
-    return str;
+    return str.strip();
   }
 
-  public static String notBlank(String str, String errorMessage) {
+  public static String notNullOrBlank(String str, String errorMessage) {
     if ((str == null) || str.isBlank()) {
       throw new IllegalArgumentException(errorMessage);
     }
-    return str;
+    return str.strip();
   }
 
-  public static String notBlank(String str, Supplier<String> errorMessage) {
+  public static String notNullOrBlank(String str, Supplier<String> errorMessage) {
     if ((str == null) || str.isBlank()) {
       throw new IllegalArgumentException(errorMessage.get());
     }
-    return str;
+    return str.strip();
+  }
+
+  public static String notNullOrBlank(String str, String messageTemplate, Object... templateArgs) {
+    if ((str == null) || str.isBlank()) {
+      throw new IllegalArgumentException(STR.fmt(messageTemplate, templateArgs));
+    }
+    return str.strip();
   }
 
   public static void isNull(Object obj) {
@@ -109,6 +129,12 @@ public class Arguments {
     }
   }
 
+  public static void isNull(Object obj, String messageTemplate, Object... templateArgs) {
+    if (obj != null) {
+      throw new IllegalArgumentException(STR.fmt(messageTemplate, templateArgs));
+    }
+  }
+
   public static int[] hasElements(int[] array) {
     if ((array == null) || (array.length == 0)) {
       throw new IllegalArgumentException("The array must have elements.");
@@ -126,6 +152,13 @@ public class Arguments {
   public static int[] hasElements(int[] array, Supplier<String> errorMessage) {
     if ((array == null) || (array.length == 0)) {
       throw new IllegalArgumentException(errorMessage.get());
+    }
+    return array;
+  }
+
+  public static int[] hasElements(int[] array, String messageTemplate, Object... templateArgs) {
+    if ((array == null) || (array.length == 0)) {
+      throw new IllegalArgumentException(STR.fmt(messageTemplate, templateArgs));
     }
     return array;
   }
@@ -151,6 +184,13 @@ public class Arguments {
     return array;
   }
 
+  public static <T> T[] hasElements(T[] array, String messageTemplate, Object... templateArgs) {
+    if ((array == null) || (array.length == 0)) {
+      throw new IllegalArgumentException(STR.fmt(messageTemplate, templateArgs));
+    }
+    return array;
+  }
+
   public static <T extends Collection<?>> T hasElements(T collection) {
     if ((collection == null) || (collection.isEmpty())) {
       throw new IllegalArgumentException("The collection must have elements.");
@@ -172,6 +212,13 @@ public class Arguments {
     return collection;
   }
 
+  public static <T extends Collection<?>> T hasElements(T collection, String messageTemplate, Object... templateArgs) {
+    if ((collection == null) || (collection.isEmpty())) {
+      throw new IllegalArgumentException(STR.fmt(messageTemplate, templateArgs));
+    }
+    return collection;
+  }
+
   public static <M extends Map<?, ?>> M hasEntries(M map) {
     if ((map == null) || (map.isEmpty())) {
       throw new IllegalArgumentException("The map must have entries.");
@@ -189,6 +236,13 @@ public class Arguments {
   public static <M extends Map<?, ?>> M hasEntries(M map, Supplier<String> errorMessage) {
     if ((map == null) || (map.isEmpty())) {
       throw new IllegalArgumentException(errorMessage.get());
+    }
+    return map;
+  }
+
+  public static <M extends Map<?, ?>> M hasEntries(M map, String messageTemplate, Object... templateArgs) {
+    if ((map == null) || (map.isEmpty())) {
+      throw new IllegalArgumentException(STR.fmt(messageTemplate, templateArgs));
     }
     return map;
   }
