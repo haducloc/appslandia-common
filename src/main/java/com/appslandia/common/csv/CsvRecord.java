@@ -33,7 +33,6 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.appslandia.common.base.AssertException;
 import com.appslandia.common.base.BoolFormatException;
 import com.appslandia.common.base.TemporalFormatException;
 import com.appslandia.common.base.TemporalPatterns;
@@ -77,7 +76,7 @@ public class CsvRecord {
   public String getStringReq(int index) {
     String value = getString(index);
     if (value == null) {
-      throw new AssertException(STR.fmt("No value found for the given index '{}'.", index));
+      throw new IllegalStateException(STR.fmt("No value found for the given index '{}'.", index));
     }
     return value;
   }

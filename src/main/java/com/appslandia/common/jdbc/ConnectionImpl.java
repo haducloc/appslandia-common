@@ -37,11 +37,9 @@ import java.util.concurrent.ConcurrentMap;
 
 import javax.sql.DataSource;
 
-import com.appslandia.common.base.AssertException;
 import com.appslandia.common.base.DangerTaskConfirm;
 import com.appslandia.common.threading.ThreadLocalStorage;
 import com.appslandia.common.utils.Arguments;
-import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ObjectUtils;
 import com.appslandia.common.utils.STR;
 
@@ -786,9 +784,12 @@ public class ConnectionImpl implements Connection {
 
   private static final ThreadLocalStorage<ConnectionImpl> CONNECTION_HOLDER = new ThreadLocalStorage<>();
 
-  public static ConnectionImpl getCurrent() throws AssertException {
+  public static ConnectionImpl getCurrent() {
     ConnectionImpl conn = CONNECTION_HOLDER.get();
-    return Asserts.notNull(conn, "No connection found in the current thread.");
+    if (conn == null) {
+      throw new IllegalStateException("No connection found in the current thread.");
+    }
+    return conn;
   }
 
   public static boolean hasCurrent() {

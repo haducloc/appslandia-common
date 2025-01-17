@@ -36,8 +36,6 @@ import java.time.OffsetTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.appslandia.common.base.AssertException;
-
 public class DataRecordTest {
 
   private DataRecord dataRecord;
@@ -61,7 +59,7 @@ public class DataRecordTest {
 
   @Test
   public void testGetReqValueMissingThrowsException() {
-    assertThrows(AssertException.class, () -> dataRecord.getReq("missingColumn"));
+    assertThrows(IllegalStateException.class, () -> dataRecord.getReq("missingColumn"));
   }
 
   @Test
@@ -78,7 +76,7 @@ public class DataRecordTest {
 
   @Test
   public void testGetStringReqMissingThrowsException() {
-    assertThrows(AssertException.class, () -> dataRecord.getStringReq("missingColumn"));
+    assertThrows(IllegalStateException.class, () -> dataRecord.getStringReq("missingColumn"));
   }
 
   @Test
@@ -117,7 +115,7 @@ public class DataRecordTest {
 
   @Test
   public void testGetRequiredValueThrowsException() {
-    assertThrows(AssertException.class, () -> dataRecord.getInt("missingInt"));
+    assertThrows(IllegalStateException.class, () -> dataRecord.getInt("missingInt"));
   }
 
   @Test
@@ -128,7 +126,7 @@ public class DataRecordTest {
 
   @Test
   public void testGetBoolReqThrowsException() {
-    assertThrows(AssertException.class, () -> dataRecord.getBool("missingBool"));
+    assertThrows(IllegalStateException.class, () -> dataRecord.getBool("missingBool"));
   }
 
   @Test
@@ -139,7 +137,7 @@ public class DataRecordTest {
 
   @Test
   public void testGetByteReqThrowsException() {
-    assertThrows(AssertException.class, () -> dataRecord.getByte("missingByte"));
+    assertThrows(IllegalStateException.class, () -> dataRecord.getByte("missingByte"));
   }
 
   @Test
@@ -150,7 +148,7 @@ public class DataRecordTest {
 
   @Test
   public void testGetShortReqThrowsException() {
-    assertThrows(AssertException.class, () -> dataRecord.getShort("missingShort"));
+    assertThrows(IllegalStateException.class, () -> dataRecord.getShort("missingShort"));
   }
 
   @Test
@@ -161,7 +159,7 @@ public class DataRecordTest {
 
   @Test
   public void testGetLongReqThrowsException() {
-    assertThrows(AssertException.class, () -> dataRecord.getLong("missingLong"));
+    assertThrows(IllegalStateException.class, () -> dataRecord.getLong("missingLong"));
   }
 
   @Test
@@ -172,7 +170,7 @@ public class DataRecordTest {
 
   @Test
   public void testGetFloatReqThrowsException() {
-    assertThrows(AssertException.class, () -> dataRecord.getFloat("missingFloat"));
+    assertThrows(IllegalStateException.class, () -> dataRecord.getFloat("missingFloat"));
   }
 
   @Test
@@ -183,7 +181,7 @@ public class DataRecordTest {
 
   @Test
   public void testGetDecimalReqThrowsException() {
-    assertThrows(AssertException.class, () -> dataRecord.getDecimalReq("missingDecimal"));
+    assertThrows(IllegalStateException.class, () -> dataRecord.getDecimalReq("missingDecimal"));
   }
 
   @Test

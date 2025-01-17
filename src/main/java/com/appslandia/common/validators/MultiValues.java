@@ -27,7 +27,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Arrays;
 
-import com.appslandia.common.base.AssertException;
 import com.appslandia.common.utils.STR;
 import com.appslandia.common.utils.SplitUtils;
 import com.appslandia.common.utils.SplittingBehavior;
@@ -61,32 +60,25 @@ public @interface MultiValues {
 
   Class<?> type() default String.class;
 
-  public static class MultiValuesValidator {
-
-    public static void validate(MultiValues obj) throws AssertException {
-      if ((obj.type() != String.class) && (obj.type() != int.class)) {
-
-        throw new AssertException(STR.fmt("The given {} is invalid. type must be String.class|int.class", obj));
-      }
-    }
-  }
-
   public static class ConstraintValidatorImpl implements ConstraintValidator<MultiValues, String> {
 
     private String[] validValues;
 
     @Override
     public void initialize(MultiValues annotation) {
+      if ((annotation.type() != String.class) && (annotation.type() != int.class)) {
+        throw new IllegalStateException(
+            STR.fmt("The given {} is invalid. type must be String.class|int.class", annotation));
+      }
+
       String[] values = annotation.value();
       if (values.length == 0) {
         values = Arrays.stream(annotation.ints()).mapToObj(v -> Integer.toString(v)).toArray(String[]::new);
       }
       if (values.length == 0) {
-        throw new AssertException(STR.fmt("The given {} is invalid. value or ints is required.", annotation));
+        throw new IllegalStateException(STR.fmt("The given {} is invalid. value or ints is required.", annotation));
       }
       this.validValues = values;
-
-      MultiValuesValidator.validate(annotation);
     }
 
     @Override

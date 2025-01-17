@@ -33,7 +33,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import com.appslandia.common.base.AssertException;
 import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.NormalizeUtils;
@@ -201,7 +200,7 @@ public class ResultSetImpl implements ResultSet {
 
   private void assertNotNull(String columnLabel) throws java.sql.SQLException {
     if (this.rs.wasNull()) {
-      throw new AssertException(STR.fmt("Null value found under the label '{}'.", columnLabel));
+      throw new IllegalStateException(STR.fmt("Null value found under the label '{}'.", columnLabel));
     }
   }
 

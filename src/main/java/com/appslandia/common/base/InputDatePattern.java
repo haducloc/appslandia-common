@@ -30,6 +30,7 @@ import java.util.Set;
 
 import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.DateUtils;
+import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -60,8 +61,8 @@ public abstract class InputDatePattern {
 
   public String parse(Locale locale) {
     String pattern = doParse(locale);
-    if (!isInputDatePattern(pattern)) {
-      throw new AssertException("The input date pattern is invalid: " + pattern);
+    if (pattern == null) {
+      throw new IllegalStateException(STR.fmt("Failed to parse the date pattern for the specified locale: {}", locale));
     }
     return pattern;
   }
@@ -121,11 +122,11 @@ public abstract class InputDatePattern {
         }
         return datePt.toString();
       }
-      throw new AssertException("Failed to parse the date pattern for the specified locale: " + locale);
+      return null;
     }
   }
 
-  private static boolean isInputDatePattern(String datePattern) {
+  static boolean isInputDatePattern(String datePattern) {
     Arguments.notNull(datePattern);
 
     if (datePattern.length() != 10) {

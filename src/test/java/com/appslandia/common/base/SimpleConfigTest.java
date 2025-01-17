@@ -53,7 +53,7 @@ public class SimpleConfigTest {
     SimpleConfig config = new SimpleConfig();
     config.set("key1", "value1");
     Assertions.assertEquals("value1", config.getStringReq("key1"));
-    Assertions.assertThrows(AssertException.class, () -> config.getStringReq(NON_EXISTENT_KEY));
+    Assertions.assertThrows(IllegalStateException.class, () -> config.getStringReq(NON_EXISTENT_KEY));
   }
 
   @Test
@@ -77,7 +77,7 @@ public class SimpleConfigTest {
     SimpleConfig config = new SimpleConfig();
     config.set("key1", "true");
     Assertions.assertTrue(config.getBool("key1"));
-    Assertions.assertThrows(AssertException.class, () -> config.getBool(NON_EXISTENT_KEY));
+    Assertions.assertThrows(IllegalStateException.class, () -> config.getBool(NON_EXISTENT_KEY));
   }
 
   @Test
@@ -93,7 +93,7 @@ public class SimpleConfigTest {
     SimpleConfig config = new SimpleConfig();
     config.set("key1", "42");
     Assertions.assertEquals(42, config.getInt("key1"));
-    Assertions.assertThrows(AssertException.class, () -> config.getInt(NON_EXISTENT_KEY));
+    Assertions.assertThrows(IllegalStateException.class, () -> config.getInt(NON_EXISTENT_KEY));
   }
 
   @Test
@@ -109,7 +109,7 @@ public class SimpleConfigTest {
     SimpleConfig config = new SimpleConfig();
     config.set("key1", "123456789012345");
     Assertions.assertEquals(123456789012345L, config.getLong("key1"));
-    Assertions.assertThrows(AssertException.class, () -> config.getLong(NON_EXISTENT_KEY));
+    Assertions.assertThrows(IllegalStateException.class, () -> config.getLong(NON_EXISTENT_KEY));
   }
 
   @Test
@@ -125,7 +125,7 @@ public class SimpleConfigTest {
     SimpleConfig config = new SimpleConfig();
     config.set("key1", "3.14");
     Assertions.assertEquals(3.14, config.getDouble("key1"));
-    Assertions.assertThrows(AssertException.class, () -> config.getDouble(NON_EXISTENT_KEY));
+    Assertions.assertThrows(IllegalStateException.class, () -> config.getDouble(NON_EXISTENT_KEY));
   }
 
   @Test

@@ -22,7 +22,6 @@ package com.appslandia.common.utils;
 
 import java.util.regex.Pattern;
 
-import com.appslandia.common.base.AssertException;
 import com.appslandia.common.base.BoolFormatException;
 
 /**
@@ -47,7 +46,7 @@ public class SYS {
   public static String getPropReq(String key) {
     String value = getProp(key);
     if (value == null) {
-      throw new AssertException(STR.fmt("No value found for the given property '{}'.", key));
+      throw new IllegalStateException(STR.fmt("No value found for the given property '{}'.", key));
     }
     return value;
   }
@@ -107,7 +106,7 @@ public class SYS {
   public static String getEnvReq(String key) {
     String value = getEnv(key);
     if (value == null) {
-      throw new AssertException(STR.fmt("No value found for the given env '{}'.", key));
+      throw new IllegalStateException(STR.fmt("No value found for the given env '{}'.", key));
     }
     return value;
   }

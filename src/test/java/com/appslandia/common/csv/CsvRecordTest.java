@@ -39,8 +39,6 @@ import java.util.function.Function;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.appslandia.common.base.AssertException;
-
 public class CsvRecordTest {
 
   private CsvRecord csvRecord;
@@ -76,7 +74,7 @@ public class CsvRecordTest {
 
   @Test
   public void testGetStringReqThrowsException() {
-    assertThrows(AssertException.class, () -> csvRecord.getStringReq(4));
+    assertThrows(IllegalStateException.class, () -> csvRecord.getStringReq(4));
   }
 
   @Test

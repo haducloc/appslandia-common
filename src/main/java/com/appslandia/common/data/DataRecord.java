@@ -30,7 +30,6 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 
-import com.appslandia.common.base.AssertException;
 import com.appslandia.common.base.CaseInsensitiveMap;
 import com.appslandia.common.utils.STR;
 import com.appslandia.common.utils.StringUtils;
@@ -55,7 +54,7 @@ public class DataRecord extends CaseInsensitiveMap<Object> {
   public Object getReq(String columnLabel) {
     Object value = super.get(columnLabel);
     if (value == null) {
-      throw new AssertException(STR.fmt("No value found for the given label '{}'.", columnLabel));
+      throw new IllegalStateException(STR.fmt("No value found for the given label '{}'.", columnLabel));
     }
     return value;
   }

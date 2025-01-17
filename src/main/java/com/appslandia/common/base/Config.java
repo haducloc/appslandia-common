@@ -70,7 +70,7 @@ public interface Config {
   default public String getStringReq(String key) {
     String value = getString(key);
     if (value == null) {
-      throw new AssertException(STR.fmt("No value found for the given key '{}'.", key));
+      throw new IllegalStateException(STR.fmt("No value found for the given key '{}'.", key));
     }
     return value;
   }

@@ -27,7 +27,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Arrays;
 
-import com.appslandia.common.base.AssertException;
 import com.appslandia.common.utils.STR;
 
 import jakarta.validation.Constraint;
@@ -68,7 +67,7 @@ public @interface ValidValues {
         values = Arrays.stream(annotation.ints()).mapToObj(v -> Integer.toString(v)).toArray(String[]::new);
       }
       if (values.length == 0) {
-        throw new AssertException(STR.fmt("The given {} is invalid. value or ints is required.", annotation));
+        throw new IllegalStateException(STR.fmt("The given {} is invalid. value or ints is required.", annotation));
       }
       this.validValues = values;
     }

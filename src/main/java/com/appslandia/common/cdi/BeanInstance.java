@@ -22,8 +22,6 @@ package com.appslandia.common.cdi;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.appslandia.common.base.AssertException;
-
 import jakarta.enterprise.context.spi.CreationalContext;
 import jakarta.enterprise.inject.Instance;
 
@@ -66,7 +64,7 @@ public class BeanInstance<T> {
 
   public T get() {
     if (this.destroyed.get()) {
-      throw new AssertException("The instance is already destroyed.");
+      throw new IllegalStateException("The instance is already destroyed.");
     }
     return this.obj;
   }
