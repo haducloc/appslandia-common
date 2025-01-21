@@ -51,7 +51,7 @@ public abstract class TaskScheduler {
 
   public boolean cancel(String taskId) {
     ScheduledTask scheduledTask = this.scheduledTasks.remove(taskId);
-    if (taskId == null) {
+    if (scheduledTask == null) {
       throw new IllegalArgumentException(STR.fmt("The given taskId {} is invalid.", taskId));
     }
     return scheduledTask.future.cancel(scheduledTask.attributes.mayInterruptIfRunningOnCancel());
