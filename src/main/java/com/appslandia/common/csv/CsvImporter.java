@@ -62,7 +62,6 @@ import com.appslandia.common.utils.TypeUtils;
  */
 public class CsvImporter extends InitializeObject {
 
-  private boolean csvHeader;
   private ConnectionImpl connection;
   private String tableName;
   private CsvProcessor csvProcessor;
@@ -93,14 +92,14 @@ public class CsvImporter extends InitializeObject {
     return this.taskConfirm == DangerTaskConfirm.DANGER_TASK_CONFIRMED;
   }
 
-  public int execute(String csvFileLocation) throws Exception {
+  public int execute(String csvFileLocation, boolean csvHeader) throws Exception {
     this.initialize();
     try (BufferedReader in = IOUtils.readerBOM(csvFileLocation, StandardCharsets.UTF_8.name())) {
-      return execute(in);
+      return execute(in, csvHeader);
     }
   }
 
-  public int execute(BufferedReader csvInput) throws Exception {
+  public int execute(BufferedReader csvInput, boolean csvHeader) throws Exception {
     this.initialize();
 
     try (RecordContext ctx = new RecordContext(this.connection)) {
@@ -117,7 +116,7 @@ public class CsvImporter extends InitializeObject {
         this.csvProcessor.parse(csvInput, (idx, csvRecord) -> {
           Asserts.isTrue(table.getColumns().size() == csvRecord.length(), "Column count mismatch.");
 
-          if (this.csvHeader) {
+          if (csvHeader) {
             if (idx == 0) {
               return;
             }
@@ -264,12 +263,6 @@ public class CsvImporter extends InitializeObject {
       }
     }
     throw new IllegalArgumentException(STR.fmt("Failed to convert value for the column {}.", column.toString()));
-  }
-
-  public CsvImporter setCsvHeader(boolean csvHeader) {
-    assertNotInitialized();
-    this.csvHeader = csvHeader;
-    return this;
   }
 
   public CsvImporter setConnection(ConnectionImpl connection) {
