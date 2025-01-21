@@ -20,7 +20,7 @@
 
 package com.appslandia.common.caching;
 
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 
 /**
  *
@@ -33,8 +33,7 @@ public interface AppCacheManager {
 
   default <K, V> AppCache<K, V> getRequiredCache(String cacheName) {
     AppCache<K, V> cache = getCache(cacheName);
-
-    return Asserts.notNull(cache);
+    return Arguments.notNull(cache);
   }
 
   boolean clearCache(String cacheName);

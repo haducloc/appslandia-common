@@ -44,7 +44,7 @@ public class DeployEnv {
   final String name;
 
   private DeployEnv(String name) {
-    this.name = Asserts.notNull(name);
+    this.name = Arguments.notNull(name);
   }
 
   public boolean isStagingOrProduction() {
@@ -113,7 +113,7 @@ public class DeployEnv {
   }
 
   public static void setCurrent(DeployEnv env) {
-    Arguments.isNull(env, "DeployEnv.__current must be null.");
+    Asserts.isNull(env, "DeployEnv.__current must be null.");
 
     if (__current == null) {
       synchronized (MUTEX) {

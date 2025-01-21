@@ -32,7 +32,6 @@ import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
 import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.ArrayUtils;
-import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -52,12 +51,10 @@ public class PbeChaCha20Encryptor extends InitializeObject implements Encryptor 
   protected void init() throws Exception {
     Arguments.notNull(this.transformation, "transformation is required.");
     CipherOps cipherOps = new CipherOps(this.transformation);
-
-    Asserts.isTrue(cipherOps.isAlgorithm("ChaCha20") || cipherOps.isAlgorithm("ChaCha20-Poly1305"),
+    Arguments.isTrue(cipherOps.isAlgorithm("ChaCha20") || cipherOps.isAlgorithm("ChaCha20-Poly1305"),
         "ChaCha20|ChaCha20-Poly1305 algorithm is required.");
-
-    Asserts.notNull(this.pbeSecretGen, "pbeSecretGen is required.");
-    Asserts.isTrue(this.pbeSecretGen.getKeySize() == 32,
+    Arguments.notNull(this.pbeSecretGen, "pbeSecretGen is required.");
+    Arguments.isTrue(this.pbeSecretGen.getKeySize() == 32,
         "pbeSecretGen.keySize must be 32 bytes when using ChaCha20 or ChaCha20-Poly1305.");
 
     this.cipherOps = cipherOps;
@@ -117,7 +114,7 @@ public class PbeChaCha20Encryptor extends InitializeObject implements Encryptor 
     SecretKey key = null;
     try {
       int saltSize = this.pbeSecretGen.getSaltSize();
-      Asserts.isTrue(message.length >= IV_SIZE + saltSize, "message is invalid.");
+      Arguments.isTrue(message.length >= IV_SIZE + saltSize, "message is invalid.");
 
       byte[] iv = new byte[IV_SIZE];
       byte[] salt = new byte[saltSize];

@@ -30,7 +30,6 @@ import javax.crypto.Cipher;
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.utils.Arguments;
-import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -50,13 +49,13 @@ public class RsaEncryptor extends InitializeObject implements Encryptor {
     Arguments.notNull(this.transformation, "transformation is required.");
 
     CipherOps cipherOps = new CipherOps(this.transformation);
-    Asserts.isTrue(cipherOps.isAlgorithm("RSA"), "RSA algorithm is required.");
+    Arguments.isTrue(cipherOps.isAlgorithm("RSA"), "RSA algorithm is required.");
 
     if (this.privateKey != null) {
-      Asserts.isTrue("RSA".equalsIgnoreCase(this.privateKey.getAlgorithm()), "The privateKey.algorithm must be RSA.");
+      Arguments.isTrue("RSA".equalsIgnoreCase(this.privateKey.getAlgorithm()), "The privateKey.algorithm must be RSA.");
     }
     if (this.publicKey != null) {
-      Asserts.isTrue("RSA".equalsIgnoreCase(this.publicKey.getAlgorithm()), "The publicKey.algorithm must be RSA.");
+      Arguments.isTrue("RSA".equalsIgnoreCase(this.publicKey.getAlgorithm()), "The publicKey.algorithm must be RSA.");
     }
   }
 

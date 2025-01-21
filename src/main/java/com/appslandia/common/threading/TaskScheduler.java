@@ -27,7 +27,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.STR;
 
 public abstract class TaskScheduler {
 
@@ -51,8 +51,9 @@ public abstract class TaskScheduler {
 
   public boolean cancel(String taskId) {
     ScheduledTask scheduledTask = this.scheduledTasks.remove(taskId);
-    Asserts.notNull(scheduledTask);
-
+    if (taskId == null) {
+      throw new IllegalArgumentException(STR.fmt("The given taskId {} is invalid.", taskId));
+    }
     return scheduledTask.future.cancel(scheduledTask.attributes.mayInterruptIfRunningOnCancel());
   }
 

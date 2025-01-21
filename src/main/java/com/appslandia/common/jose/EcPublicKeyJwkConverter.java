@@ -34,7 +34,6 @@ import com.appslandia.common.crypto.CryptoException;
 import com.appslandia.common.crypto.CryptoUtils;
 import com.appslandia.common.crypto.KeyFactoryUtil;
 import com.appslandia.common.utils.Arguments;
-import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
 
 /**
@@ -87,11 +86,11 @@ public class EcPublicKeyJwkConverter extends JwkConverter<ECPublicKey> {
     this.initialize();
     Arguments.isTrue(this.kty.equals(kty), "kty doesn't match.");
 
-    String curve = Asserts.notNull((String) jwk.get("crv"), "crv is required.");
+    String curve = Arguments.notNull((String) jwk.get("crv"), "crv is required.");
     String stdName = getStdName(curve);
 
-    String x = Asserts.notNull((String) jwk.get("x"), "x is required.");
-    String y = Asserts.notNull((String) jwk.get("y"), "y is required.");
+    String x = Arguments.notNull((String) jwk.get("x"), "x is required.");
+    String y = Arguments.notNull((String) jwk.get("y"), "y is required.");
 
     // ecPoint
     byte[] xBytes = JoseUtils.getJoseBase64().decode(x);

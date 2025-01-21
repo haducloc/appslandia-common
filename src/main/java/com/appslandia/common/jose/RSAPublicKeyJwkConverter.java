@@ -29,7 +29,6 @@ import com.appslandia.common.crypto.CryptoException;
 import com.appslandia.common.crypto.CryptoUtils;
 import com.appslandia.common.crypto.KeyFactoryUtil;
 import com.appslandia.common.utils.Arguments;
-import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -73,8 +72,8 @@ public class RSAPublicKeyJwkConverter extends JwkConverter<RSAPublicKey> {
     this.initialize();
     Arguments.isTrue(this.kty.equals(kty), "kty doesn't match.");
 
-    String n = Asserts.notNull((String) jwk.get("n"), "n is required.");
-    String e = Asserts.notNull((String) jwk.get("e"), "e is required.");
+    String n = Arguments.notNull((String) jwk.get("n"), "n is required.");
+    String e = Arguments.notNull((String) jwk.get("e"), "e is required.");
 
     byte[] nBytes = JoseUtils.getJoseBase64().decode(n);
     byte[] eBytes = JoseUtils.getJoseBase64().decode(e);

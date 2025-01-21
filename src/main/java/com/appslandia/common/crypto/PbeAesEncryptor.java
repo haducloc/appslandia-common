@@ -32,7 +32,6 @@ import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
 import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.ArrayUtils;
-import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -51,16 +50,15 @@ public class PbeAesEncryptor extends InitializeObject implements Encryptor {
   protected void init() throws Exception {
     Arguments.notNull(this.transformation, "transformation is required.");
     CipherOps cipherOps = new CipherOps(this.transformation);
-
-    Asserts.isTrue(cipherOps.isAlgorithm("AES"), "AES algorithm is required.");
-    Asserts.isTrue(cipherOps.isMode("CBC", "^CFB\\d*$", "CTR", "^OFB\\d*$", "ECB", "GCM"),
+    Arguments.isTrue(cipherOps.isAlgorithm("AES"), "AES algorithm is required.");
+    Arguments.isTrue(cipherOps.isMode("CBC", "^CFB\\d*$", "CTR", "^OFB\\d*$", "ECB", "GCM"),
         "CBC|CFB|CTR|OFB|ECB|GCM mode is required.");
 
     if (cipherOps.isMode("GCM")) {
       this.gcmSpec = new GcmSpec();
     }
     this.cipherOps = cipherOps;
-    Asserts.notNull(this.pbeSecretGen, "pbeSecretGen is required.");
+    Arguments.notNull(this.pbeSecretGen, "pbeSecretGen is required.");
   }
 
   @Override
@@ -144,10 +142,10 @@ public class PbeAesEncryptor extends InitializeObject implements Encryptor {
       byte[] iv = null;
 
       if (ivSize <= 0) {
-        Asserts.isTrue(message.length >= saltSize, "message is invalid.");
+        Arguments.isTrue(message.length >= saltSize, "message is invalid.");
         ArrayUtils.copy(message, salt);
       } else {
-        Asserts.isTrue(message.length >= ivSize + saltSize, "message is invalid.");
+        Arguments.isTrue(message.length >= ivSize + saltSize, "message is invalid.");
         iv = new byte[ivSize];
         ArrayUtils.copy(message, iv, salt);
       }

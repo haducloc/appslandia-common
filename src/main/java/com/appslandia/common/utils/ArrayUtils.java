@@ -181,8 +181,8 @@ public class ArrayUtils {
   }
 
   public static <T> T[][] toMatrix(T[] arr, int columns, BiFunction<Integer, Integer, T[][]> matrixCreator) {
-    Asserts.notNull(arr);
-    Asserts.isTrue(columns > 0);
+    Arguments.notNull(arr);
+    Arguments.isTrue(columns > 0);
 
     int len = arr.length;
     if (len == 0) {
@@ -208,7 +208,7 @@ public class ArrayUtils {
     if (arr == null) {
       return null;
     }
-    Asserts.isTrue(arr.getClass().isArray());
+    Arguments.isTrue(arr.getClass().isArray());
 
     Class<?> elementType = arr.getClass().getComponentType();
     if (!elementType.isPrimitive()) {
@@ -240,7 +240,7 @@ public class ArrayUtils {
     if (arr == null) {
       return null;
     }
-    Asserts.isTrue(arr.getClass().isArray());
+    Arguments.isTrue(arr.getClass().isArray());
 
     int len = Array.getLength(arr);
     List<Object> list = new ArrayList<>(len);
@@ -294,7 +294,7 @@ public class ArrayUtils {
   }
 
   public static <T> T min(T[] arr, Comparator<T> comparator) {
-    Asserts.notNull(arr);
+    Arguments.notNull(arr);
     if (arr.length == 0) {
       throw new NoSuchElementException("arr is empty.");
     }
@@ -306,7 +306,7 @@ public class ArrayUtils {
   }
 
   public static <T> T max(T[] arr, Comparator<T> comparator) {
-    Asserts.notNull(arr);
+    Arguments.notNull(arr);
     if (arr.length == 0) {
       throw new NoSuchElementException("arr is empty.");
     }
@@ -362,7 +362,7 @@ public class ArrayUtils {
     int i = 0;
 
     public ArrayIterator(T[] array) {
-      this.array = Asserts.notNull(array);
+      this.array = Arguments.notNull(array);
     }
 
     @Override
@@ -380,7 +380,7 @@ public class ArrayUtils {
     private T[] array;
 
     public ArrayIterable(T[] array) {
-      this.array = Asserts.notNull(array);
+      this.array = Arguments.notNull(array);
     }
 
     @Override

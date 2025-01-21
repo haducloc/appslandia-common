@@ -35,6 +35,7 @@ import java.util.Set;
 
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.InitializeObject;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.ObjectUtils;
@@ -149,9 +150,8 @@ public class ObjectFactory extends InitializeObject {
   protected ObjectFactory register(Class<?>[] types, ObjectProducer<?> producer, ObjectScope scope,
       Annotation[] qualifiers) {
     assertNotInitialized();
-
-    Asserts.notNull(types);
-    Asserts.notNull(producer);
+    Arguments.notNull(types);
+    Arguments.notNull(producer);
 
     if (scope == null) {
       scope = AnnotationUtils.parseScope(producer);
@@ -188,8 +188,8 @@ public class ObjectFactory extends InitializeObject {
 
   protected ObjectFactory register(Class<?>[] types, Class<?> implClass, ObjectScope scope, Annotation[] qualifiers) {
     assertNotInitialized();
-    Asserts.notNull(types);
-    Asserts.notNull(implClass);
+    Arguments.notNull(types);
+    Arguments.notNull(implClass);
 
     Set<Class<?>> expTypes = CollectionUtils.toSet(types);
     expTypes.add(implClass);
@@ -211,8 +211,8 @@ public class ObjectFactory extends InitializeObject {
 
   public ObjectFactory unregister(Class<?> type, Annotation... qualifiers) {
     assertNotInitialized();
-    Asserts.notNull(type);
-    Asserts.notNull(qualifiers);
+    Arguments.notNull(type);
+    Arguments.notNull(qualifiers);
 
     Iterator<ObjectInstance> iter = this.instances.iterator();
     while (iter.hasNext()) {
@@ -227,7 +227,7 @@ public class ObjectFactory extends InitializeObject {
   }
 
   public <T> ObjectFactory unregister(Class<T> type, Class<? extends T> implClass) {
-    Asserts.notNull(implClass);
+    Arguments.notNull(implClass);
     return unregister(type, AnnotationUtils.parseQualifiers(implClass));
   }
 
@@ -238,7 +238,7 @@ public class ObjectFactory extends InitializeObject {
 
   public ObjectFactory inject(final Object obj) {
     initialize();
-    Asserts.notNull(obj);
+    Arguments.notNull(obj);
 
     new InjectTraverser() {
 
@@ -353,8 +353,8 @@ public class ObjectFactory extends InitializeObject {
 
   public <T, I extends T> I getObject(Class<T> type, Annotation... qualifiers) {
     initialize();
-    Asserts.notNull(type);
-    Asserts.notNull(qualifiers);
+    Arguments.notNull(type);
+    Arguments.notNull(qualifiers);
 
     if (ObjectFactory.class.isAssignableFrom(type)) {
       return ObjectUtils.cast(this);
@@ -370,7 +370,7 @@ public class ObjectFactory extends InitializeObject {
 
   public <T> T postConstruct(T obj) {
     initialize();
-    Asserts.notNull(obj);
+    Arguments.notNull(obj);
 
     ReflectionUtils.traverse(obj.getClass(), new ReflectionUtils.MethodHandler() {
 

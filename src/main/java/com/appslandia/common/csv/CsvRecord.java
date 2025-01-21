@@ -37,7 +37,6 @@ import com.appslandia.common.base.BoolFormatException;
 import com.appslandia.common.base.TemporalFormatException;
 import com.appslandia.common.base.TemporalPatterns;
 import com.appslandia.common.utils.Arguments;
-import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.ParseUtils;
 import com.appslandia.common.utils.STR;
@@ -53,12 +52,12 @@ public class CsvRecord {
   final String[] values;
 
   public CsvRecord(String[] fieldValues) {
-    this.values = Asserts.notNull(fieldValues);
+    this.values = Arguments.notNull(fieldValues);
   }
 
   public void applyProcessor(Function<String, String> processor, int... indexes) {
-    Asserts.notNull(processor);
-    Asserts.hasElements(indexes);
+    Arguments.notNull(processor);
+    Arguments.hasElements(indexes);
 
     for (int i : indexes) {
       Objects.checkIndex(i, this.values.length);

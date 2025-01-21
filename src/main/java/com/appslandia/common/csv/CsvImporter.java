@@ -112,7 +112,7 @@ public class CsvImporter extends InitializeObject {
         final AtomicInteger counter = new AtomicInteger(0);
 
         this.csvProcessor.parse(this.csvInput, (idx, csvRecord) -> {
-          Asserts.isTrue(table.getColumns().size() == csvRecord.length(), "Unmatched column count.");
+          Asserts.isTrue(table.getColumns().size() == csvRecord.length(), "Column count mismatch.");
 
           if (this.csvHeader) {
             if (idx == 0) {
@@ -327,7 +327,7 @@ public class CsvImporter extends InitializeObject {
 
   public CsvImporter setCsvToDbConverter(int csvIndex, CsvToDbConverter converter) {
     assertNotInitialized();
-    Asserts.notNull(converter);
+    Arguments.notNull(converter);
 
     this.converters.put(csvIndex, converter);
     return this;

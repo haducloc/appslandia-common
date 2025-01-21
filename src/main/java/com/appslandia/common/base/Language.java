@@ -141,7 +141,11 @@ public class Language extends InitializeObject {
 
   public String getTemporalPattern(String isoPattern) {
     this.initialize();
-    return Asserts.notNull(this.temporalPatterns.get(isoPattern));
+    String pattern = this.temporalPatterns.get(isoPattern);
+    if (pattern == null) {
+      throw new IllegalArgumentException(STR.fmt("The given isoPattern '{}' is invalid or unsupported."));
+    }
+    return pattern;
   }
 
   public String getAttribute(String name) {
@@ -191,7 +195,7 @@ public class Language extends InitializeObject {
   }
 
   public static void setDefault(Language impl) {
-    Arguments.isNull(__default, "Language.__default must be null.");
+    Asserts.isNull(__default, "Language.__default must be null.");
     __default = impl;
   }
 

@@ -32,7 +32,6 @@ import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
 import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.ArrayUtils;
-import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -100,7 +99,7 @@ public class PbeMacSigner extends InitializeObject implements Digester {
     Arguments.notNull(digested, "digested is required.");
 
     int saltSize = this.pbeSecretGen.getSaltSize();
-    Asserts.isTrue(digested.length >= saltSize, "digested is invalid.");
+    Arguments.isTrue(digested.length >= saltSize, "digested is invalid.");
 
     byte[] salt = new byte[saltSize];
     byte[] storedHash = new byte[digested.length - saltSize];

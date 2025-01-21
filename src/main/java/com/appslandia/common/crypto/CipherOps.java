@@ -24,7 +24,6 @@ import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import com.appslandia.common.utils.Arguments;
-import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
 
 /**
@@ -42,7 +41,7 @@ public class CipherOps {
     Arguments.notNull(transformation);
 
     String[] cipherOps = transformation.split("/");
-    Asserts.isTrue(cipherOps.length >= 1 && cipherOps.length <= 3, "transformation is invalid.");
+    Arguments.isTrue(cipherOps.length >= 1 && cipherOps.length <= 3, "transformation is invalid.");
 
     this.algorithm = cipherOps[0];
     this.mode = (cipherOps.length >= 2) ? cipherOps[1] : null;

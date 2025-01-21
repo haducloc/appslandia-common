@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.STR;
 
@@ -180,6 +179,10 @@ public class TemporalPatterns extends InitializeObject {
   }
 
   public static String getCsvIsoPattern(String isoPattern) {
-    return Asserts.notNull(ISO_PATTERNS.get(isoPattern), "The given isoPattern is invalid.");
+    String pattern = ISO_PATTERNS.get(isoPattern);
+    if (pattern == null) {
+      throw new IllegalArgumentException(STR.fmt("The given isoPattern '{}' is invalid or unsupported."));
+    }
+    return pattern;
   }
 }

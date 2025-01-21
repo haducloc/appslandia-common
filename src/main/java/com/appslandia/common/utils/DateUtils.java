@@ -406,7 +406,7 @@ public class DateUtils {
   }
 
   public static Map<TimeUnit, Long> parseUnits(long duration, TimeUnit unit, TimeUnit highUnit, TimeUnit lowUnit) {
-    Asserts.isTrue(highUnit.compareTo(lowUnit) >= 0, "highUnit must be gte lowUnit.");
+    Arguments.isTrue(highUnit.compareTo(lowUnit) >= 0);
     Map<TimeUnit, Long> res = new EnumMap<>(TimeUnit.class);
 
     duration = lowUnit.convert(duration, unit);

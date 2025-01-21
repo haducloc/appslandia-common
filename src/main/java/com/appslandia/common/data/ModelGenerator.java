@@ -69,9 +69,7 @@ public class ModelGenerator extends InitializeObject {
 
   @Override
   protected void init() throws Exception {
-    if (this.classPath != null) {
-      Asserts.isTrue(this.classPath.isDirectory());
-    }
+    Arguments.isTrue((this.classPath == null) || this.classPath.isDirectory());
   }
 
   public ModelGenerator setClassLoader(ClassLoader classLoader) {

@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.appslandia.common.utils.Arguments;
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -45,6 +45,9 @@ public abstract class ModelValidator<T> {
   @SuppressWarnings("unchecked")
   public static <T> ModelValidator<T> getValidator(String key) {
     ModelValidator<T> validator = (ModelValidator<T>) VALIDATORS.get(key);
-    return Asserts.notNull(validator);
+    if (validator == null) {
+      throw new IllegalArgumentException(STR.fmt("The given key '{}' is invalid.", key));
+    }
+    return validator;
   }
 }

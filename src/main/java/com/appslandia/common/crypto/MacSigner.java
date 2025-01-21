@@ -146,7 +146,8 @@ public class MacSigner extends InitializeObject implements Digester {
   public MacSigner setSecret(byte[] secret) {
     this.assertNotInitialized();
     if (secret != null) {
-      this.secretKey = new DSecretKeySpec(secret, Asserts.notNull(this.algorithm));
+      Asserts.notNull(this.algorithm);
+      this.secretKey = new DSecretKeySpec(secret, this.algorithm);
     }
     return this;
   }
@@ -180,7 +181,8 @@ public class MacSigner extends InitializeObject implements Digester {
   public MacSigner setSecretKey(SecretKey secretKey) {
     this.assertNotInitialized();
     if (secretKey != null) {
-      Asserts.isTrue(Asserts.notNull(this.algorithm).equalsIgnoreCase(secretKey.getAlgorithm()));
+      Asserts.notNull(this.algorithm);
+      Arguments.isTrue(this.algorithm.equalsIgnoreCase(secretKey.getAlgorithm()));
 
       this.secretKey = CryptoUtils.copy(secretKey);
     }

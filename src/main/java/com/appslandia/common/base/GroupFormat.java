@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.STR;
 
 /**
@@ -48,7 +48,7 @@ public class GroupFormat {
   }
 
   public GroupFormat(String format, boolean validate) {
-    this.format = Asserts.notNull(format, "format is required.");
+    this.format = Arguments.notNull(format, "format is required.");
     this.validate = validate;
 
     this.parseFormat(format);
@@ -89,7 +89,7 @@ public class GroupFormat {
         outputLength += chunk.length();
       }
     }
-    Asserts.isTrue(!groups.isEmpty(), () -> STR.fmt("The format '{}' is invalid.", format));
+    Arguments.hasElements(groups, () -> STR.fmt("The format '{}' is invalid.", format));
 
     this.groups = groups.toArray(new Group[groups.size()]);
     this.inputLength = inputLength;

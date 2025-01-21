@@ -285,7 +285,7 @@ public class ParseUtils {
 
   private static <T> T doParseTemporal(String value, Class<T> targetClass, String[] patterns,
       BiFunction<String, String, T> exceptionalConverter) throws TemporalFormatException {
-    Asserts.hasElements(patterns);
+    Arguments.hasElements(patterns);
 
     for (String pattern : patterns) {
       try {
@@ -345,7 +345,7 @@ public class ParseUtils {
 
   private static <T> T doParseTemporal(String value, Class<T> targetClass, Collection<String> patterns,
       BiFunction<String, String, T> exceptionalConverter) throws TemporalFormatException {
-    Asserts.hasElements(patterns);
+    Arguments.hasElements(patterns);
 
     boolean valueHasT = value.indexOf('T') >= 0;
     for (String pattern : patterns) {

@@ -28,7 +28,7 @@ import java.security.cert.CertificateEncodingException;
 
 import com.appslandia.common.base.BaseEncoder;
 import com.appslandia.common.base.StringWriter;
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 
 /**
  *
@@ -90,7 +90,7 @@ public class PKIUtils {
         valid = false;
       }
     }
-    Asserts.isTrue(valid, "The pem is invalid.");
+    Arguments.isTrue(valid, "The pem is invalid.");
 
     return pem.substring(0, idx).strip();
   }
@@ -117,14 +117,14 @@ public class PKIUtils {
 
   public static String toPemEncoded(PublicKey key) {
     byte[] kBytes = key.getEncoded();
-    Asserts.notNull(kBytes);
+    Arguments.notNull(kBytes);
     return toPemEncoded(kBytes, toPemLabel(key));
   }
 
   public static String toPemEncoded(PrivateKey key) {
     byte[] kBytes = key.getEncoded();
+    Arguments.notNull(kBytes);
     try {
-      Asserts.notNull(kBytes);
       return toPemEncoded(kBytes, toPemLabel(key));
     } finally {
       CryptoUtils.clear(kBytes);

@@ -27,7 +27,6 @@ import java.util.Map;
 import com.appslandia.common.base.DestroyException;
 import com.appslandia.common.base.SimpleConfig;
 import com.appslandia.common.utils.Arguments;
-import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -44,8 +43,7 @@ public class SecureConfig extends SimpleConfig {
 
   public SecureConfig(char[] password, Map<String, String> newCfg) {
     super(newCfg);
-
-    Asserts.notNull(password);
+    Arguments.notNull(password);
     this.textEncryptor = new TextEncryptor(new PbeAesEncryptor().setTransformation("AES/GCM/NoPadding")
         .setPbeSecretGen(new PbeSecretGen().setPassword(password).setKeySize(32)));
   }
@@ -56,8 +54,7 @@ public class SecureConfig extends SimpleConfig {
 
   public SecureConfig(String passwordExpr, Map<String, String> newCfg) {
     super(newCfg);
-
-    Asserts.notNull(passwordExpr);
+    Arguments.notNull(passwordExpr);
     this.textEncryptor = new TextEncryptor(new PbeAesEncryptor().setTransformation("AES/GCM/NoPadding")
         .setPbeSecretGen(new PbeSecretGen().setPassword(passwordExpr).setKeySize(32)));
   }

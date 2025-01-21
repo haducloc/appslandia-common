@@ -35,7 +35,6 @@ import java.util.function.Function;
 import com.appslandia.common.base.MapWrapper;
 import com.appslandia.common.base.Unsupported;
 import com.appslandia.common.utils.Arguments;
-import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.ObjectUtils;
 import com.appslandia.common.utils.STR;
@@ -66,7 +65,10 @@ public class JsonMapObject extends MapWrapper<String, Object> {
 
   public Object getReq(String key) {
     Object value = this.get(key);
-    return Asserts.notNull(value, "The value is required.");
+    if (value == null) {
+      throw new IllegalStateException("The value is required.");
+    }
+    return value;
   }
 
   public JsonMapObject getJsonMapReq(String key) {
@@ -344,7 +346,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
       return;
     }
     map.forEach((key, value) -> {
-      Asserts.isTrue(key instanceof String, "Unsupported JSON key type: " + ObjectUtils.getClass(key));
+      Arguments.isTrue(key instanceof String, "Unsupported JSON key type: " + ObjectUtils.getClass(key));
 
       validateValue(value);
     });
@@ -375,7 +377,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
   @Override
   public void putAll(Map<? extends String, ? extends Object> m) {
     for (Entry<? extends String, ? extends Object> entry : m.entrySet()) {
-      Asserts.isTrue(entry.getKey() instanceof String,
+      Arguments.isTrue(entry.getKey() instanceof String,
           "Unsupported JSON key type: " + ObjectUtils.getClass(entry.getKey()));
 
       validateValue(entry.getValue());

@@ -32,7 +32,6 @@ import com.appslandia.common.data.RecordContext;
 import com.appslandia.common.jdbc.ConnectionImpl;
 import com.appslandia.common.jdbc.ResultSetColumn;
 import com.appslandia.common.utils.Arguments;
-import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.IOUtils;
 
 /**
@@ -157,7 +156,7 @@ public class CsvExporter extends InitializeObject {
 
   public CsvExporter setDbToCsvConverter(String columnLabel, DbToCsvConverter converter) {
     assertNotInitialized();
-    Asserts.notNull(converter);
+    Arguments.notNull(converter);
 
     this.converters.put(columnLabel, converter);
     return this;

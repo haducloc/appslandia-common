@@ -38,7 +38,7 @@ public class Out<T> {
 
   public T get() {
     if (this.value == null) {
-      throw new IllegalStateException("The value must not be null.");
+      throw new IllegalStateException("The value is required.");
     }
     return this.value;
   }

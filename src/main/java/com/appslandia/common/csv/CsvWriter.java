@@ -121,7 +121,7 @@ public class CsvWriter implements AutoCloseable {
   }
 
   public <T extends Record> CsvWriter outRecord(T record, String... fieldNames) throws IOException {
-    Asserts.notNull(record);
+    Arguments.notNull(record);
 
     // recordFields
     RecordComponent[] recordFields = record.getClass().getRecordComponents();

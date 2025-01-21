@@ -22,7 +22,7 @@ package com.appslandia.common.jose;
 
 import java.io.Serializable;
 
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 
 /**
  *
@@ -40,8 +40,8 @@ public class JwsToken<P> implements Serializable {
   final String signaturePart;
 
   public JwsToken(JoseHeader header, P payload) {
-    this.header = Asserts.notNull(header);
-    this.payload = Asserts.notNull(payload);
+    this.header = Arguments.notNull(header);
+    this.payload = Arguments.notNull(payload);
 
     this.headerPart = null;
     this.payloadPart = null;
@@ -49,12 +49,12 @@ public class JwsToken<P> implements Serializable {
   }
 
   public JwsToken(JoseHeader header, P payload, String headerPart, String payloadPart, String signaturePart) {
-    this.header = Asserts.notNull(header);
-    this.payload = Asserts.notNull(payload);
+    this.header = Arguments.notNull(header);
+    this.payload = Arguments.notNull(payload);
 
-    this.headerPart = Asserts.notNull(headerPart);
-    this.payloadPart = Asserts.notNull(payloadPart);
-    this.signaturePart = Asserts.notNull(signaturePart);
+    this.headerPart = Arguments.notNull(headerPart);
+    this.payloadPart = Arguments.notNull(payloadPart);
+    this.signaturePart = Arguments.notNull(signaturePart);
   }
 
   public JoseHeader getHeader() {

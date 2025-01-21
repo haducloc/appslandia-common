@@ -53,7 +53,6 @@ import java.util.TreeSet;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ExceptionUtils;
 import com.appslandia.common.utils.ObjectUtils;
@@ -83,8 +82,6 @@ public class ToStringBuilder {
   public static class TSPolicy {
 
     public boolean tsIdHash(Field field, Object value) {
-      Arguments.notNull(value);
-
       if (field != null) {
         if (field.getAnnotation(TSIdHash.class) != null) {
           return true;

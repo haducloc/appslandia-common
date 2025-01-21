@@ -26,6 +26,7 @@ import com.appslandia.common.jdbc.DbDialect;
 import com.appslandia.common.jdbc.JdbcUtils;
 import com.appslandia.common.jdbc.LikeType;
 import com.appslandia.common.jdbc.SqlQuery;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ObjectUtils;
 
@@ -126,7 +127,7 @@ public class TypedQueryImpl<X> implements TypedQuery<X> {
 
   protected TypedQueryImpl<X> setLikeAny(String parameterName, String[] values, LikeType likeType) {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
-    Asserts.isTrue(values.length <= arrayLen);
+    Arguments.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setParameter(SqlQuery.toParamName(parameterName, i),
@@ -140,7 +141,7 @@ public class TypedQueryImpl<X> implements TypedQuery<X> {
 
   public TypedQueryImpl<X> setObjectArray(String parameterName, Object... values) {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
-    Asserts.isTrue(values.length <= arrayLen);
+    Arguments.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setParameter(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -150,7 +151,7 @@ public class TypedQueryImpl<X> implements TypedQuery<X> {
 
   public TypedQueryImpl<X> setDateArray(String parameterName, TemporalType temporalType, java.util.Date... values) {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
-    Asserts.isTrue(values.length <= arrayLen);
+    Arguments.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setParameter(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null, temporalType);

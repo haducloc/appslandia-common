@@ -30,7 +30,6 @@ import com.appslandia.common.base.ToStringBuilder.TSIdHash;
 import com.appslandia.common.jdbc.DbDialect;
 import com.appslandia.common.jdbc.SqlQuery;
 import com.appslandia.common.utils.Arguments;
-import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
 
 /**
@@ -73,8 +72,7 @@ public class Table extends InitializeObject implements Serializable {
     if (this.qTableName == null) {
       this.qTableName = this.tableName;
     }
-
-    Asserts.hasElements(this.columns, "columns are required.");
+    Arguments.hasElements(this.columns, "columns are required.");
     this.entityClassName = RecordUtils.toEntityClassName(this.tableName);
 
     // Validate key

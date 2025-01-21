@@ -31,7 +31,6 @@ import javax.crypto.spec.PBEKeySpec;
 import com.appslandia.common.base.BaseEncoder;
 import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.ArrayUtils;
-import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ValueUtils;
 
 /**
@@ -98,7 +97,7 @@ public class PasswordDigester extends TextDigester {
     Arguments.notNull(digested, "digested is required.");
 
     byte[] dBytes = this.baseEncoder.decode(digested);
-    Asserts.isTrue(dBytes.length > this.saltSize, "digested is invalid.");
+    Arguments.isTrue(dBytes.length > this.saltSize, "digested is invalid.");
 
     byte[] salt = new byte[this.saltSize];
     byte[] storedHash = new byte[dBytes.length - this.saltSize];

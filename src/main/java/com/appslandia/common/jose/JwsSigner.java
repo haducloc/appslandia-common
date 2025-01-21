@@ -35,7 +35,6 @@ import com.appslandia.common.crypto.MacSigner;
 import com.appslandia.common.json.JsonException;
 import com.appslandia.common.json.JsonProcessor;
 import com.appslandia.common.utils.Arguments;
-import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ObjectUtils;
 import com.appslandia.common.utils.STR;
 
@@ -91,7 +90,7 @@ public class JwsSigner<P> extends InitializeObject {
     Arguments.notNull(this.jsonProcessor, "jsonProcessor is required.");
 
     if (this.signer != null) {
-      Asserts.notNull(this.alg, "alg is required.");
+      Arguments.notNull(this.alg, "alg is required.");
     } else {
       this.alg = JWT_NONE_ALG;
     }
@@ -170,7 +169,6 @@ public class JwsSigner<P> extends InitializeObject {
     Arguments.notNull(token);
     Arguments.notNull(token.getHeader());
     Arguments.notNull(token.getPayload());
-
     Arguments.notNull(token.getHeaderPart());
     Arguments.notNull(token.getPayloadPart());
     Arguments.notNull(token.getSignaturePart());
@@ -192,7 +190,7 @@ public class JwsSigner<P> extends InitializeObject {
     Arguments.notNull(token);
 
     String[] parts = JoseUtils.parseJws(token);
-    Asserts.notNull(parts, () -> STR.fmt("The token '{}' is invalid format.", token));
+    Arguments.notNull(parts, () -> STR.fmt("The token '{}' is invalid format.", token));
 
     // Header
     String headerJson = new String(JoseUtils.getJoseBase64().decode(parts[0]), StandardCharsets.UTF_8);

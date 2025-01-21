@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.ObjectUtils;
 
@@ -385,7 +386,7 @@ public class StatementImpl implements PreparedStatement {
 
   protected void setLikeAny(String parameterName, String[] values, LikeType likeType) throws java.sql.SQLException {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
-    Asserts.isTrue(values.length <= arrayLen);
+    Arguments.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setString(SqlQuery.toParamName(parameterName, i),
@@ -407,7 +408,7 @@ public class StatementImpl implements PreparedStatement {
 
   protected void setNLikeAny(String parameterName, String[] values, LikeType likeType) throws java.sql.SQLException {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
-    Asserts.isTrue(values.length <= arrayLen);
+    Arguments.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setNString(SqlQuery.toParamName(parameterName, i),
@@ -420,7 +421,7 @@ public class StatementImpl implements PreparedStatement {
 
   public void setStringArray(String parameterName, String... values) throws java.sql.SQLException {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
-    Asserts.isTrue(values.length <= arrayLen);
+    Arguments.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setString(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -429,7 +430,7 @@ public class StatementImpl implements PreparedStatement {
 
   public void setNStringArray(String parameterName, String... values) throws java.sql.SQLException {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
-    Asserts.isTrue(values.length <= arrayLen);
+    Arguments.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setNString(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -438,7 +439,7 @@ public class StatementImpl implements PreparedStatement {
 
   public void setBoolArray(String parameterName, Boolean... values) throws java.sql.SQLException {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
-    Asserts.isTrue(values.length <= arrayLen);
+    Arguments.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setBooleanOpt(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -447,7 +448,7 @@ public class StatementImpl implements PreparedStatement {
 
   public void setByteArray(String parameterName, Byte... values) throws java.sql.SQLException {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
-    Asserts.isTrue(values.length <= arrayLen);
+    Arguments.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setByteOpt(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -456,7 +457,7 @@ public class StatementImpl implements PreparedStatement {
 
   public void setShortArray(String parameterName, Short... values) throws java.sql.SQLException {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
-    Asserts.isTrue(values.length <= arrayLen);
+    Arguments.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setShortOpt(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -465,7 +466,7 @@ public class StatementImpl implements PreparedStatement {
 
   public void setIntArray(String parameterName, Integer... values) throws java.sql.SQLException {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
-    Asserts.isTrue(values.length <= arrayLen);
+    Arguments.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setIntOpt(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -474,7 +475,7 @@ public class StatementImpl implements PreparedStatement {
 
   public void setLongArray(String parameterName, Long... values) throws java.sql.SQLException {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
-    Asserts.isTrue(values.length <= arrayLen);
+    Arguments.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setLongOpt(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -483,7 +484,7 @@ public class StatementImpl implements PreparedStatement {
 
   public void setFloatArray(String parameterName, Float... values) throws java.sql.SQLException {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
-    Asserts.isTrue(values.length <= arrayLen);
+    Arguments.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setFloatOpt(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -492,7 +493,7 @@ public class StatementImpl implements PreparedStatement {
 
   public void setDoubleArray(String parameterName, Double... values) throws java.sql.SQLException {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
-    Asserts.isTrue(values.length <= arrayLen);
+    Arguments.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setDoubleOpt(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -501,7 +502,7 @@ public class StatementImpl implements PreparedStatement {
 
   public void setDecimalArray(String parameterName, java.math.BigDecimal... values) throws java.sql.SQLException {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
-    Asserts.isTrue(values.length <= arrayLen);
+    Arguments.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setDecimal(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -510,7 +511,7 @@ public class StatementImpl implements PreparedStatement {
 
   public void setDateArray(String parameterName, java.sql.Date... values) throws java.sql.SQLException {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
-    Asserts.isTrue(values.length <= arrayLen);
+    Arguments.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setDate(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -519,7 +520,7 @@ public class StatementImpl implements PreparedStatement {
 
   public void setTimestampArray(String parameterName, java.sql.Timestamp... values) throws java.sql.SQLException {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
-    Asserts.isTrue(values.length <= arrayLen);
+    Arguments.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setTimestamp(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -528,7 +529,7 @@ public class StatementImpl implements PreparedStatement {
 
   public void setTimeArray(String parameterName, java.sql.Time... values) throws java.sql.SQLException {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
-    Asserts.isTrue(values.length <= arrayLen);
+    Arguments.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setTime(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -537,7 +538,7 @@ public class StatementImpl implements PreparedStatement {
 
   public void setLocalDateArray(String parameterName, LocalDate... values) throws java.sql.SQLException {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
-    Asserts.isTrue(values.length <= arrayLen);
+    Arguments.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setLocalDate(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -546,7 +547,7 @@ public class StatementImpl implements PreparedStatement {
 
   public void setLocalDateTimeArray(String parameterName, LocalDateTime... values) throws java.sql.SQLException {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
-    Asserts.isTrue(values.length <= arrayLen);
+    Arguments.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setLocalDateTime(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -555,7 +556,7 @@ public class StatementImpl implements PreparedStatement {
 
   public void setLocalTimeArray(String parameterName, LocalTime... values) throws java.sql.SQLException {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
-    Asserts.isTrue(values.length <= arrayLen);
+    Arguments.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setLocalTime(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -564,7 +565,7 @@ public class StatementImpl implements PreparedStatement {
 
   public void setOffsetDateTimeArray(String parameterName, OffsetDateTime... values) throws java.sql.SQLException {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
-    Asserts.isTrue(values.length <= arrayLen);
+    Arguments.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setOffsetDateTime(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -573,7 +574,7 @@ public class StatementImpl implements PreparedStatement {
 
   public void setOffsetTimeArray(String parameterName, OffsetTime... values) throws java.sql.SQLException {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
-    Asserts.isTrue(values.length <= arrayLen);
+    Arguments.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setOffsetTime(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);
@@ -582,7 +583,7 @@ public class StatementImpl implements PreparedStatement {
 
   public void setObjectArray(String parameterName, Object... values) throws java.sql.SQLException {
     int arrayLen = this.getPQuery().getArrayLen(parameterName);
-    Asserts.isTrue(values.length <= arrayLen);
+    Arguments.isTrue(values.length <= arrayLen);
 
     for (int i = 0; i < arrayLen; i++) {
       setObject(SqlQuery.toParamName(parameterName, i), (i < values.length) ? values[i] : null);

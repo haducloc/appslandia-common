@@ -23,7 +23,6 @@ package com.appslandia.common.jose;
 import com.appslandia.common.crypto.MacSigner;
 import com.appslandia.common.json.JsonProcessor;
 import com.appslandia.common.utils.Arguments;
-import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -41,9 +40,9 @@ public class HsJwsSigner<P> {
   protected MacSigner signer;
 
   public HsJwsSigner(String jwsAlgorithm, String macAlgorithm, Class<P> payloadClass) {
-    this.alg = Asserts.notNull(jwsAlgorithm);
-    this.signer = new MacSigner().setAlgorithm(Asserts.notNull(macAlgorithm));
-    this.payloadClass = Asserts.notNull(payloadClass);
+    this.alg = Arguments.notNull(jwsAlgorithm);
+    this.signer = new MacSigner().setAlgorithm(Arguments.notNull(macAlgorithm));
+    this.payloadClass = Arguments.notNull(payloadClass);
   }
 
   public HsJwsSigner<P> setMacProvider(String macProvider) {

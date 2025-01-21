@@ -44,8 +44,8 @@ public class SourceCodeBrFixer extends InitializeObject {
 
   @Override
   protected void init() throws Exception {
-    Asserts.notNull(this.sourceDir);
-    Asserts.notNull(this.srcExt);
+    Arguments.notNull(this.sourceDir);
+    Arguments.notNull(this.srcExt);
   }
 
   public SourceCodeBrFixer setSourceDir(String sourceDir) {

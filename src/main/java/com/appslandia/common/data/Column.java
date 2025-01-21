@@ -28,7 +28,6 @@ import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.jdbc.JdbcUtils;
 import com.appslandia.common.jdbc.SqlQuery;
 import com.appslandia.common.utils.Arguments;
-import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.STR;
 import com.appslandia.common.utils.TypeUtils;
@@ -73,9 +72,8 @@ public class Column extends InitializeObject implements Serializable {
     if (this.qName == null) {
       this.qName = this.name;
     }
-
-    Asserts.notNull(this.sqlType, "sqlType is required.");
-    Asserts.notNull(this.javaType, "javaType is required.");
+    Arguments.notNull(this.sqlType, "sqlType is required.");
+    Arguments.notNull(this.javaType, "javaType is required.");
 
     this.fieldName = JdbcUtils.toFieldName(this.name);
 

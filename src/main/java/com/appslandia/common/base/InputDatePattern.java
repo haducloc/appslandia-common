@@ -29,6 +29,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import com.appslandia.common.utils.Arguments;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.DateUtils;
 import com.appslandia.common.utils.STR;
 
@@ -55,14 +56,15 @@ public abstract class InputDatePattern {
   }
 
   public static void setDefault(InputDatePattern impl) {
-    Arguments.isNull(__default, "InputDatePattern.__default must be null.");
+    Asserts.isNull(__default, "InputDatePattern.__default must be null.");
     __default = impl;
   }
 
   public String parse(Locale locale) {
     String pattern = doParse(locale);
     if (pattern == null) {
-      throw new IllegalStateException(STR.fmt("Failed to parse the date pattern for the specified locale: {}", locale));
+      throw new IllegalArgumentException(
+          STR.fmt("Failed to parse the date pattern for the specified locale: {}", locale));
     }
     return pattern;
   }

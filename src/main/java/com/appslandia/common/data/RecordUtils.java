@@ -226,13 +226,12 @@ public final class RecordUtils {
   }
 
   public static Key toKey(Table table, Object pk) {
+    Arguments.notNull(table);
     Arguments.notNull(pk);
+    Arguments.notNull(table.getSingleKey(), "table is invalid.");
     Arguments.isTrue(PK_JAVA_TYPES.contains(pk.getClass()), "pk is invalid.");
 
-    Column keyColumn = table.getSingleKey();
-    Asserts.notNull(keyColumn, "table is invalid.");
-
-    return new Key().set(keyColumn.getName(), pk);
+    return new Key().set(table.getSingleKey().getName(), pk);
   }
 
   private static final Set<Class<?>> PK_JAVA_TYPES = CollectionUtils.unmodifiableSet(Byte.class, Short.class,

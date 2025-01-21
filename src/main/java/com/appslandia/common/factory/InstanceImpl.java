@@ -28,7 +28,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.CollectionUtils;
 import com.appslandia.common.utils.ObjectUtils;
 import com.appslandia.common.utils.STR;
@@ -111,7 +111,7 @@ public class InstanceImpl<T> implements Instance<T> {
 
   @Override
   public <U extends T> Instance<U> select(Class<U> subtype, Annotation... qualifiers) {
-    Asserts.notNull(subtype);
+    Arguments.notNull(subtype);
 
     if ((this.type == subtype) && (qualifiers.length == 0)) {
       return ObjectUtils.cast(this);

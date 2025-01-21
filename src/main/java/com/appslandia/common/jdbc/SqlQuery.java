@@ -70,7 +70,7 @@ public class SqlQuery extends InitializeObject implements Serializable {
 
   public SqlQuery arrayLen(String parameterName, int maxLength) {
     assertNotInitialized();
-    Asserts.isTrue(maxLength > 0, "maxLength is required.");
+    Arguments.isTrue(maxLength > 0, "maxLength is required.");
 
     if (this.arrayLens == null) {
       this.arrayLens = new CaseInsensitiveMap<>();
@@ -216,7 +216,7 @@ public class SqlQuery extends InitializeObject implements Serializable {
     initialize();
     List<Integer> indexes = this.indexesMap.get(parameterName);
 
-    return Asserts.notNull(indexes, () -> STR.fmt("Parameter '{}' is not found.", parameterName));
+    return Arguments.notNull(indexes, () -> STR.fmt("Parameter '{}' is not found.", parameterName));
   }
 
   public boolean isArrayParam(String parameterName) {
@@ -228,7 +228,7 @@ public class SqlQuery extends InitializeObject implements Serializable {
     initialize();
     Integer len = this.paramsMap.get(parameterName);
 
-    return Asserts.notNull(len, () -> STR.fmt("Array parameter '{}' is not found.", parameterName));
+    return Arguments.notNull(len, () -> STR.fmt("Array parameter '{}' is not found.", parameterName));
   }
 
   public static boolean isContext(StringBuilder sb, int paramIdx, String context, Out<Integer> fieldIdx,

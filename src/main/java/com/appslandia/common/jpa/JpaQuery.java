@@ -30,7 +30,6 @@ import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
 import com.appslandia.common.jdbc.SqlQuery;
 import com.appslandia.common.utils.Arguments;
-import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
 
 /**
@@ -65,7 +64,7 @@ public class JpaQuery extends InitializeObject implements Serializable {
 
   public JpaQuery arrayLen(String parameterName, int maxLength) {
     assertNotInitialized();
-    Asserts.isTrue(maxLength > 0, "maxLength is required.");
+    Arguments.isTrue(maxLength > 0, "maxLength is required.");
 
     if (this.arrayLens == null) {
       this.arrayLens = new CaseInsensitiveMap<>();
@@ -114,7 +113,7 @@ public class JpaQuery extends InitializeObject implements Serializable {
       Integer arrayLen = (this.arrayLens != null) ? this.arrayLens.get(paramName.value) : null;
 
       if (arrayLen != null) {
-        Asserts.isTrue(isArrayParam, () -> STR.fmt("Array parameter '{}' is required.", paramName));
+        Arguments.isTrue(isArrayParam, () -> STR.fmt("Array parameter '{}' is required.", paramName));
       } else {
         arrayLen = SqlQuery.DEFAULT_ARRAY_MAX_LENGTH;
       }
@@ -198,7 +197,9 @@ public class JpaQuery extends InitializeObject implements Serializable {
   public int getArrayLen(String parameterName) {
     initialize();
     Integer len = this.paramsMap.get(parameterName);
-
-    return Asserts.notNull(len, () -> STR.fmt("Array parameter '{}' is not found.", parameterName));
+    if (len == null) {
+      throw new IllegalArgumentException(STR.fmt("Array parameter '{}' is not found.", parameterName));
+    }
+    return len;
   }
 }

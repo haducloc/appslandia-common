@@ -156,13 +156,12 @@ public class KeyFactoryUtil extends InitializeObject {
 
   public PrivateKey copy(PrivateKey key) throws CryptoException {
     this.initialize();
-
     Arguments.isTrue(this.algorithm.equalsIgnoreCase(key.getAlgorithm()));
     Arguments.isTrue("PKCS#8".equalsIgnoreCase(key.getFormat()), "The key is not in PKCS#8 format.");
 
     byte[] der = key.getEncoded();
+    Asserts.notNull(der);
     try {
-      Asserts.notNull(der);
       return this.getImpl().generatePrivate(new PKCS8EncodedKeySpec(der));
 
     } catch (GeneralSecurityException ex) {
@@ -174,7 +173,6 @@ public class KeyFactoryUtil extends InitializeObject {
 
   public PublicKey copy(PublicKey key) throws CryptoException {
     this.initialize();
-
     Arguments.isTrue(this.algorithm.equalsIgnoreCase(key.getAlgorithm()));
     Arguments.isTrue("X.509".equalsIgnoreCase(key.getFormat()), "The key is not in X.509 format.");
 

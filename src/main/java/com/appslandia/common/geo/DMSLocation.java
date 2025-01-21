@@ -25,7 +25,6 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 import com.appslandia.common.utils.Arguments;
-import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
 import com.appslandia.common.utils.SplitUtils;
 
@@ -99,7 +98,7 @@ public class DMSLocation implements Serializable {
     GeoDMS dms1 = GeoDMS.toGeoDMS(geoDmss[0]);
     GeoDMS dms2 = GeoDMS.toGeoDMS(geoDmss[1]);
 
-    Asserts.isTrue(!(dms1.isLatitude() && dms2.isLatitude()) && !(dms1.isLongitude() && dms2.isLongitude()),
+    Arguments.isTrue(!(dms1.isLatitude() && dms2.isLatitude()) && !(dms1.isLongitude() && dms2.isLongitude()),
         () -> STR.fmt("dmsLocation {} is invalid.", dmsLocation));
 
     return dms1.isLatitude() ? new DMSLocation(dms2, dms1) : new DMSLocation(dms1, dms2);

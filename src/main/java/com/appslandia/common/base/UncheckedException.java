@@ -20,7 +20,7 @@
 
 package com.appslandia.common.base;
 
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 
 /**
  *
@@ -32,8 +32,7 @@ public class UncheckedException extends RuntimeException {
 
   public UncheckedException(Throwable throwable) {
     super(throwable);
-
-    Asserts.isTrue(!(throwable instanceof RuntimeException),
+    Arguments.isTrue(!(throwable instanceof RuntimeException),
         "The throwable must be java.lang.Error or check exception.");
   }
 }

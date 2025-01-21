@@ -34,7 +34,6 @@ import java.util.List;
 import java.util.Locale;
 
 import com.appslandia.common.utils.Arguments;
-import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.NormalizeUtils;
 import com.appslandia.common.utils.ObjectUtils;
 import com.appslandia.common.utils.STR;
@@ -52,7 +51,7 @@ public class ResultSetImpl implements ResultSet {
 
   public ResultSetImpl(ResultSet rs) {
     Arguments.isTrue(!(rs instanceof ResultSetImpl));
-    this.rs = Asserts.notNull(rs);
+    this.rs = Arguments.notNull(rs);
   }
 
   public List<ResultSetColumn> getColumns() throws java.sql.SQLException {

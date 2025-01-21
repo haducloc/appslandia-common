@@ -20,7 +20,7 @@
 
 package com.appslandia.common.threading;
 
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 
 /**
  *
@@ -32,7 +32,7 @@ public abstract class Task<T extends TaskAttributes> implements Runnable {
   protected final T attributes;
 
   public Task(T attributes) {
-    this.attributes = Asserts.notNull(attributes);
+    this.attributes = Arguments.notNull(attributes);
   }
 
   @Override

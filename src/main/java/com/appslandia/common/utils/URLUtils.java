@@ -100,8 +100,7 @@ public class URLUtils {
       if (uri.getScheme() != null) {
         sb.append(uri.getScheme()).append("://").append(uri.getRawAuthority());
       }
-
-      Asserts.notNull(uri.getRawPath());
+      Arguments.notNull(uri.getRawPath());
       sb.append(uri.getRawPath());
 
       boolean addedQuest = false;

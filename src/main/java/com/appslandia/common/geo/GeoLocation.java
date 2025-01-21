@@ -26,7 +26,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.appslandia.common.utils.Arguments;
-import com.appslandia.common.utils.Asserts;
 
 /**
  *
@@ -84,11 +83,9 @@ public class GeoLocation implements Serializable {
   }
 
   public double distanceTo(GeoLocation to, DistanceUnit unit) {
-    // Ensure 'to' and 'unit' are not null
-    Asserts.notNull(to);
-    Asserts.notNull(unit);
+    Arguments.notNull(to);
+    Arguments.notNull(unit);
 
-    // Convert latitude and longitude to radians
     double radLat1 = Math.toRadians(this.y);
     double radLat2 = Math.toRadians(to.y);
     double radLon1 = Math.toRadians(this.x);
@@ -98,10 +95,7 @@ public class GeoLocation implements Serializable {
     double h = Math.sin((radLat2 - radLat1) / 2) * Math.sin((radLat2 - radLat1) / 2)
         + Math.cos(radLat1) * Math.cos(radLat2) * Math.sin((radLon2 - radLon1) / 2) * Math.sin((radLon2 - radLon1) / 2);
 
-    // Calculate the great-circle distance in meters
     double distanceInMeters = 2 * GeoUtils.EARTH_RADIUS_METER * Math.asin(Math.sqrt(h));
-
-    // Convert distance to the desired unit
     return unit.convert(distanceInMeters, DistanceUnit.METER);
   }
 

@@ -30,7 +30,7 @@ import com.appslandia.common.crypto.DsaSigner;
 import com.appslandia.common.crypto.MacSigner;
 import com.appslandia.common.json.JsonException;
 import com.appslandia.common.json.JsonProcessor;
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.CollectionUtils;
 
 /**
@@ -51,8 +51,7 @@ public class JwtSigner extends JwsSigner<JwtPayload> {
   @Override
   protected void init() throws Exception {
     super.init();
-
-    Asserts.isTrue(this.leewaySec >= 0);
+    Arguments.isTrue(this.leewaySec >= 0);
 
     // iss
     this.defaultVerifiers.add((token) -> {

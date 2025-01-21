@@ -88,7 +88,7 @@ public class ValueUtils {
   }
 
   public static <T> T valueOrNull(T checkValue, T[] validValues) {
-    Asserts.hasElements(validValues);
+    Arguments.hasElements(validValues);
 
     if (checkValue == null) {
       return null;

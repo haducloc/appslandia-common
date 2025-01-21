@@ -55,8 +55,7 @@ public class ChaCha20Encryptor extends InitializeObject implements Encryptor {
     Arguments.notNull(this.secretKey, "secretKey is required.");
 
     CipherOps cipherOps = this.cipherOps;
-
-    Asserts.isTrue(cipherOps.isAlgorithm("ChaCha20") || cipherOps.isAlgorithm("ChaCha20-Poly1305"),
+    Arguments.isTrue(cipherOps.isAlgorithm("ChaCha20") || cipherOps.isAlgorithm("ChaCha20-Poly1305"),
         "ChaCha20|ChaCha20-Poly1305 algorithm is required.");
   }
 
@@ -155,7 +154,8 @@ public class ChaCha20Encryptor extends InitializeObject implements Encryptor {
   public ChaCha20Encryptor setSecret(byte[] secret) {
     this.assertNotInitialized();
     if (secret != null) {
-      this.secretKey = new DSecretKeySpec(secret, Asserts.notNull(this.cipherOps).getAlgorithm());
+      Asserts.notNull(this.cipherOps);
+      this.secretKey = new DSecretKeySpec(secret, this.cipherOps.getAlgorithm());
     }
     return this;
   }
@@ -190,7 +190,8 @@ public class ChaCha20Encryptor extends InitializeObject implements Encryptor {
   public ChaCha20Encryptor setSecretKey(SecretKey secretKey) {
     this.assertNotInitialized();
     if (secretKey != null) {
-      Asserts.isTrue(Asserts.notNull(this.cipherOps).isAlgorithm(secretKey.getAlgorithm()));
+      Asserts.notNull(this.cipherOps);
+      Arguments.isTrue(this.cipherOps.isAlgorithm(secretKey.getAlgorithm()));
 
       this.secretKey = CryptoUtils.copy(secretKey);
     }

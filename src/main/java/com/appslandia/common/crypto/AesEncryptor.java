@@ -54,9 +54,8 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
     Arguments.notNull(this.secretKey, "secretKey is required.");
 
     CipherOps cipherOps = this.cipherOps;
-
-    Asserts.isTrue(cipherOps.isAlgorithm("AES"), "AES algorithm is required.");
-    Asserts.isTrue(cipherOps.isMode("CBC", "^CFB\\d*$", "CTR", "^OFB\\d*$", "ECB", "GCM"),
+    Arguments.isTrue(cipherOps.isAlgorithm("AES"), "AES algorithm is required.");
+    Arguments.isTrue(cipherOps.isMode("CBC", "^CFB\\d*$", "CTR", "^OFB\\d*$", "ECB", "GCM"),
         "CBC|CFB|CTR|OFB|ECB|GCM mode is required.");
 
     if (cipherOps.isMode("GCM")) {
@@ -133,7 +132,7 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
       byte[] iv = null;
 
       if (ivSize > 0) {
-        Asserts.isTrue(message.length >= ivSize, "message is invalid.");
+        Arguments.isTrue(message.length >= ivSize, "message is invalid.");
         iv = new byte[ivSize];
         ArrayUtils.copy(message, iv);
       }
@@ -191,7 +190,8 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
   public AesEncryptor setSecret(byte[] secret) {
     this.assertNotInitialized();
     if (secret != null) {
-      this.secretKey = new DSecretKeySpec(secret, Asserts.notNull(this.cipherOps).getAlgorithm());
+      Asserts.notNull(this.cipherOps);
+      this.secretKey = new DSecretKeySpec(secret, this.cipherOps.getAlgorithm());
     }
     return this;
   }
@@ -226,7 +226,8 @@ public class AesEncryptor extends InitializeObject implements Encryptor {
   public AesEncryptor setSecretKey(SecretKey secretKey) {
     this.assertNotInitialized();
     if (secretKey != null) {
-      Asserts.isTrue(Asserts.notNull(this.cipherOps).isAlgorithm(secretKey.getAlgorithm()));
+      Asserts.notNull(this.cipherOps);
+      Arguments.isTrue(this.cipherOps.isAlgorithm(secretKey.getAlgorithm()));
 
       this.secretKey = CryptoUtils.copy(secretKey);
     }

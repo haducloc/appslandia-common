@@ -26,7 +26,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
 
-import com.appslandia.common.utils.Asserts;
+import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.EmailUtils;
 import com.appslandia.common.utils.MimeTypes;
 
@@ -133,13 +133,13 @@ public class MailerMessage {
   }
 
   public MailerMessage content(Multipart content) {
-    this.content = Asserts.notNull(content);
+    this.content = Arguments.notNull(content);
     return this;
   }
 
   public MailerMessage content(Object content, String type) {
-    this.content = Asserts.notNull(content);
-    this.contentType = Asserts.notNull(type);
+    this.content = Arguments.notNull(content);
+    this.contentType = Arguments.notNull(type);
     return this;
   }
 
