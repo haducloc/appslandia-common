@@ -45,7 +45,7 @@ public class StringFormat {
         Object paramValue = parameters.apply(chunk.text, chunk.expr);
 
         if (paramValue == STR.MISSED_VALUE) {
-          throw new IllegalArgumentException(STR.fmt("The parameter {} must be passed.", chunk.expr));
+          throw new IllegalArgumentException(STR.fmt("The parameter '{}' must be passed.", chunk.expr));
         }
 
         String valueAsStr = String.valueOf(paramValue);
