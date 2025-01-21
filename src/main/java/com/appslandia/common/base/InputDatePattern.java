@@ -66,6 +66,7 @@ public abstract class InputDatePattern {
       throw new IllegalArgumentException(
           STR.fmt("Failed to parse the date pattern for the specified locale: {}", locale));
     }
+    Asserts.isTrue(isInputDatePattern(pattern));
     return pattern;
   }
 
