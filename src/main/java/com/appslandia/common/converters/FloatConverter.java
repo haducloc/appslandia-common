@@ -25,7 +25,7 @@ import java.text.NumberFormat;
 
 import com.appslandia.common.base.FormatProvider;
 import com.appslandia.common.utils.DecimalUtils;
-import com.appslandia.common.utils.NaNOrInfinityException;
+import com.appslandia.common.utils.NaNInfinityException;
 import com.appslandia.common.utils.ParseUtils;
 import com.appslandia.common.utils.StringUtils;
 
@@ -85,7 +85,7 @@ public class FloatConverter extends NumberConverter<Float> {
     try {
       return ParseUtils.parseFloat(str);
 
-    } catch (NaNOrInfinityException ex) {
+    } catch (NaNInfinityException ex) {
       throw toParsingError(str, getTargetType().getName());
     } catch (NumberFormatException ex) {
     }

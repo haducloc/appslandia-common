@@ -25,10 +25,10 @@ package com.appslandia.common.utils;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public class NaNOrInfinityException extends IllegalArgumentException {
+public class NaNInfinityException extends IllegalArgumentException {
   private static final long serialVersionUID = 1L;
 
-  public NaNOrInfinityException(String message) {
+  public NaNInfinityException(String message) {
     super(message);
   }
 }

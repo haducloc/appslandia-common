@@ -72,23 +72,23 @@ public class ParseUtils {
     return Long.parseLong(value);
   }
 
-  public static float parseFloat(String value) throws NumberFormatException, NaNOrInfinityException {
+  public static float parseFloat(String value) throws NumberFormatException, NaNInfinityException {
     Arguments.notNull(value);
     float val = Float.parseFloat(value);
     if (!Float.isFinite(val)) {
 
-      throw new NaNOrInfinityException(
+      throw new NaNInfinityException(
           STR.fmt("Failed to convert '{}' into a finite float. Value is NaN or Infinity.", value));
     }
     return val;
   }
 
-  public static double parseDouble(String value) throws NumberFormatException, NaNOrInfinityException {
+  public static double parseDouble(String value) throws NumberFormatException, NaNInfinityException {
     Arguments.notNull(value);
     double val = Double.parseDouble(value);
     if (!Double.isFinite(val)) {
 
-      throw new NaNOrInfinityException(
+      throw new NaNInfinityException(
           STR.fmt("Failed to convert '{}' into a finite double. Value is NaN or Infinity.", value));
     }
     return val;
