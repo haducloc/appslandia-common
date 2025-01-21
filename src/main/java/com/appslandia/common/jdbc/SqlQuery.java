@@ -33,7 +33,6 @@ import com.appslandia.common.base.Out;
 import com.appslandia.common.base.ToStringBuilder;
 import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
-import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -121,8 +120,7 @@ public class SqlQuery extends InitializeObject implements Serializable {
       Integer arrayLen = (this.arrayLens != null) ? this.arrayLens.get(paramName.value) : null;
 
       if (arrayLen != null) {
-        Asserts.isTrue(isArrayParam, () -> STR.fmt("Array parameter '{}' is required.", paramName));
-
+        Asserts.isTrue(isArrayParam, "Array parameter '{}' is required.", paramName);
       } else {
         arrayLen = DEFAULT_ARRAY_MAX_LENGTH;
       }
@@ -215,8 +213,7 @@ public class SqlQuery extends InitializeObject implements Serializable {
   public List<Integer> getIndexes(String parameterName) {
     initialize();
     List<Integer> indexes = this.indexesMap.get(parameterName);
-
-    return Arguments.notNull(indexes, () -> STR.fmt("Parameter '{}' is not found.", parameterName));
+    return Arguments.notNull(indexes, "Parameter '{}' is not found.", parameterName);
   }
 
   public boolean isArrayParam(String parameterName) {
@@ -227,8 +224,7 @@ public class SqlQuery extends InitializeObject implements Serializable {
   public int getArrayLen(String parameterName) {
     initialize();
     Integer len = this.paramsMap.get(parameterName);
-
-    return Arguments.notNull(len, () -> STR.fmt("Array parameter '{}' is not found.", parameterName));
+    return Arguments.notNull(len, "Array parameter '{}' is not found.", parameterName);
   }
 
   public static boolean isContext(StringBuilder sb, int paramIdx, String context, Out<Integer> fieldIdx,

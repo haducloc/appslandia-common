@@ -50,7 +50,7 @@ public class CharUtils {
 
       char from = range.charAt(0);
       char to = range.charAt(2);
-      Arguments.isTrue(from <= to, () -> STR.fmt("invalid charRanges expression '{}'.", charRanges));
+      Arguments.isTrue(from <= to, "charRanges '{}' is invalid.", charRanges);
 
       char[] newChars = new char[to - from + 1];
       for (int i = 0; i < newChars.length; i++) {

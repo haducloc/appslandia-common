@@ -22,7 +22,6 @@ package com.appslandia.common.utils;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.function.Supplier;
 
 /**
  *
@@ -40,12 +39,6 @@ public class Asserts {
   public static void isTrue(boolean expression, String errorMessage) {
     if (!expression) {
       throw new IllegalStateException(errorMessage);
-    }
-  }
-
-  public static void isTrue(boolean expression, Supplier<String> errorMessage) {
-    if (!expression) {
-      throw new IllegalStateException(errorMessage.get());
     }
   }
 
@@ -69,13 +62,6 @@ public class Asserts {
     return obj;
   }
 
-  public static <T> T notNull(T obj, Supplier<String> errorMessage) {
-    if (obj == null) {
-      throw new IllegalStateException(errorMessage.get());
-    }
-    return obj;
-  }
-
   public static <T> T notNull(T obj, String messageTemplate, Object... templateArgs) {
     if (obj == null) {
       throw new IllegalStateException(STR.fmt(messageTemplate, templateArgs));
@@ -83,28 +69,21 @@ public class Asserts {
     return obj;
   }
 
-  public static String notNullOrBlank(String str) {
+  public static String notBlank(String str) {
     if ((str == null) || str.isBlank()) {
       throw new IllegalStateException("The str must not be null or blank.");
     }
     return str.strip();
   }
 
-  public static String notNullOrBlank(String str, String errorMessage) {
+  public static String notBlank(String str, String errorMessage) {
     if ((str == null) || str.isBlank()) {
       throw new IllegalStateException(errorMessage);
     }
     return str.strip();
   }
 
-  public static String notNullOrBlank(String str, Supplier<String> errorMessage) {
-    if ((str == null) || str.isBlank()) {
-      throw new IllegalStateException(errorMessage.get());
-    }
-    return str.strip();
-  }
-
-  public static String notNullOrBlank(String str, String messageTemplate, Object... templateArgs) {
+  public static String notBlank(String str, String messageTemplate, Object... templateArgs) {
     if ((str == null) || str.isBlank()) {
       throw new IllegalStateException(STR.fmt(messageTemplate, templateArgs));
     }
@@ -120,12 +99,6 @@ public class Asserts {
   public static void isNull(Object obj, String errorMessage) {
     if (obj != null) {
       throw new IllegalStateException(errorMessage);
-    }
-  }
-
-  public static void isNull(Object obj, Supplier<String> errorMessage) {
-    if (obj != null) {
-      throw new IllegalStateException(errorMessage.get());
     }
   }
 
@@ -145,13 +118,6 @@ public class Asserts {
   public static int[] hasElements(int[] array, String errorMessage) {
     if ((array == null) || (array.length == 0)) {
       throw new IllegalStateException(errorMessage);
-    }
-    return array;
-  }
-
-  public static int[] hasElements(int[] array, Supplier<String> errorMessage) {
-    if ((array == null) || (array.length == 0)) {
-      throw new IllegalStateException(errorMessage.get());
     }
     return array;
   }
@@ -177,13 +143,6 @@ public class Asserts {
     return array;
   }
 
-  public static <T> T[] hasElements(T[] array, Supplier<String> errorMessage) {
-    if ((array == null) || (array.length == 0)) {
-      throw new IllegalStateException(errorMessage.get());
-    }
-    return array;
-  }
-
   public static <T> T[] hasElements(T[] array, String messageTemplate, Object... templateArgs) {
     if ((array == null) || (array.length == 0)) {
       throw new IllegalStateException(STR.fmt(messageTemplate, templateArgs));
@@ -205,13 +164,6 @@ public class Asserts {
     return collection;
   }
 
-  public static <T extends Collection<?>> T hasElements(T collection, Supplier<String> errorMessage) {
-    if ((collection == null) || (collection.isEmpty())) {
-      throw new IllegalStateException(errorMessage.get());
-    }
-    return collection;
-  }
-
   public static <T extends Collection<?>> T hasElements(T collection, String messageTemplate, Object... templateArgs) {
     if ((collection == null) || (collection.isEmpty())) {
       throw new IllegalStateException(STR.fmt(messageTemplate, templateArgs));
@@ -229,13 +181,6 @@ public class Asserts {
   public static <M extends Map<?, ?>> M hasEntries(M map, String errorMessage) {
     if ((map == null) || (map.isEmpty())) {
       throw new IllegalStateException(errorMessage);
-    }
-    return map;
-  }
-
-  public static <M extends Map<?, ?>> M hasEntries(M map, Supplier<String> errorMessage) {
-    if ((map == null) || (map.isEmpty())) {
-      throw new IllegalStateException(errorMessage.get());
     }
     return map;
   }

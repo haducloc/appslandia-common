@@ -356,8 +356,7 @@ public class DateUtils {
 
   public static long translateToMs(String temporalAmt) {
     Arguments.notNull(temporalAmt, "temporalAmt is required.");
-    Arguments.isTrue(TEMPORAL_AMT_PATTERN.matcher(temporalAmt).matches(),
-        () -> STR.fmt("temporalAmt '{}' is invalid.", temporalAmt));
+    Arguments.isTrue(TEMPORAL_AMT_PATTERN.matcher(temporalAmt).matches(), "temporalAmt '{}' is invalid.", temporalAmt);
 
     double result = 0l;
     int i = 0;

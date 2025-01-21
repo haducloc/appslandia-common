@@ -90,8 +90,7 @@ public class DMSLocation implements Serializable {
 
   public static DMSLocation toDMSLocation(String dmsLocation) {
     Arguments.notNull(dmsLocation);
-    Arguments.isTrue(DMS_LOCATION_PATTERN.matcher(dmsLocation).matches(),
-        () -> STR.fmt("dmsLocation {} is invalid.", dmsLocation));
+    Arguments.isTrue(DMS_LOCATION_PATTERN.matcher(dmsLocation).matches(), "dmsLocation {} is invalid.", dmsLocation);
 
     String[] geoDmss = SplitUtils.splitByComma(dmsLocation);
 
@@ -99,7 +98,7 @@ public class DMSLocation implements Serializable {
     GeoDMS dms2 = GeoDMS.toGeoDMS(geoDmss[1]);
 
     Arguments.isTrue(!(dms1.isLatitude() && dms2.isLatitude()) && !(dms1.isLongitude() && dms2.isLongitude()),
-        () -> STR.fmt("dmsLocation {} is invalid.", dmsLocation));
+        "dmsLocation {} is invalid.", dmsLocation);
 
     return dms1.isLatitude() ? new DMSLocation(dms2, dms1) : new DMSLocation(dms1, dms2);
   }

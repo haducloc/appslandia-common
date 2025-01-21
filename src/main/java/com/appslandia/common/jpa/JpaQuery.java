@@ -30,6 +30,7 @@ import com.appslandia.common.base.InitializeObject;
 import com.appslandia.common.base.Out;
 import com.appslandia.common.jdbc.SqlQuery;
 import com.appslandia.common.utils.Arguments;
+import com.appslandia.common.utils.Asserts;
 import com.appslandia.common.utils.STR;
 
 /**
@@ -113,7 +114,7 @@ public class JpaQuery extends InitializeObject implements Serializable {
       Integer arrayLen = (this.arrayLens != null) ? this.arrayLens.get(paramName.value) : null;
 
       if (arrayLen != null) {
-        Arguments.isTrue(isArrayParam, () -> STR.fmt("Array parameter '{}' is required.", paramName));
+        Asserts.isTrue(isArrayParam, "Array parameter '{}' is required.", paramName);
       } else {
         arrayLen = SqlQuery.DEFAULT_ARRAY_MAX_LENGTH;
       }

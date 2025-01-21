@@ -89,7 +89,7 @@ public class GroupFormat {
         outputLength += chunk.length();
       }
     }
-    Arguments.hasElements(groups, () -> STR.fmt("The format '{}' is invalid.", format));
+    Arguments.hasElements(groups, "The format '{}' is invalid.", format);
 
     this.groups = groups.toArray(new Group[groups.size()]);
     this.inputLength = inputLength;

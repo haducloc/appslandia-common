@@ -36,7 +36,6 @@ import com.appslandia.common.json.JsonException;
 import com.appslandia.common.json.JsonProcessor;
 import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.ObjectUtils;
-import com.appslandia.common.utils.STR;
 
 /**
  *
@@ -190,7 +189,7 @@ public class JwsSigner<P> extends InitializeObject {
     Arguments.notNull(token);
 
     String[] parts = JoseUtils.parseJws(token);
-    Arguments.notNull(parts, () -> STR.fmt("The token '{}' is invalid format.", token));
+    Arguments.notNull(parts, "The token '{}' is invalid format.", token);
 
     // Header
     String headerJson = new String(JoseUtils.getJoseBase64().decode(parts[0]), StandardCharsets.UTF_8);

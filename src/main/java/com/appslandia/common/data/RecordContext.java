@@ -83,7 +83,7 @@ public class RecordContext extends DbContext {
         Object val = dataRecord.get(column.getName());
 
         if (!column.isNullable()) {
-          Asserts.notNull(val, () -> STR.fmt("The column value '{}' is required.", column.getName()));
+          Asserts.notNull(val, "The value of column '{}' is required.", column.getName());
         }
         stat.setObject(column.getName(), new JdbcParam(val, column.getSqlType(), column.getScaleOrLength()));
       }
@@ -132,8 +132,7 @@ public class RecordContext extends DbContext {
     // Table
     Table table = getTable(tableName);
     String pQuery = table.getUpdateQuery().getPQuery();
-    Asserts.isTrue(!pQuery.isEmpty(),
-        () -> STR.fmt("The table {} has no key. The update() operation is unsupported.", table.getTableName()));
+    Asserts.isTrue(!pQuery.isEmpty(), "The table {} has no key. The update() is unsupported.", table.getTableName());
 
     // StatementImpl
     StatementImpl stat = this.stats.get(pQuery);
@@ -148,7 +147,7 @@ public class RecordContext extends DbContext {
         Object val = dataRecord.get(column.getName());
 
         if (!column.isNullable()) {
-          Asserts.notNull(val, () -> STR.fmt("The column value '{}' is required.", column.getName()));
+          Asserts.notNull(val, "The value of column '{}' is required.", column.getName());
         }
         stat.setObject(column.getName(), new JdbcParam(val, column.getSqlType(), column.getScaleOrLength()));
       }
@@ -196,7 +195,7 @@ public class RecordContext extends DbContext {
       if ((table.getKeysCount() == 0) || column.isKey()) {
         Object val = key.get(column.getName());
         if (column.isKey()) {
-          Asserts.notNull(val, () -> STR.fmt("The column value '{}' is required.", column.getName()));
+          Asserts.notNull(val, "The value of column '{}' is required.", column.getName());
         }
         stat.setObject(column.getName(), new JdbcParam(val, column.getSqlType(), column.getScaleOrLength()));
       }
@@ -240,7 +239,7 @@ public class RecordContext extends DbContext {
       if ((table.getKeysCount() == 0) || column.isKey()) {
         Object val = key.get(column.getName());
         if (column.isKey()) {
-          Asserts.notNull(val, () -> STR.fmt("The column value '{}' is required.", column.getName()));
+          Asserts.notNull(val, "The value of column '{}' is required.", column.getName());
         }
         stat.setObject(column.getName(), new JdbcParam(val, column.getSqlType(), column.getScaleOrLength()));
       }
@@ -275,7 +274,7 @@ public class RecordContext extends DbContext {
       if ((table.getKeysCount() == 0) || column.isKey()) {
         Object val = key.get(column.getName());
         if (column.isKey()) {
-          Asserts.notNull(val, () -> STR.fmt("The column value '{}' is required.", column.getName()));
+          Asserts.notNull(val, "The value of column '{}' is required.", column.getName());
         }
         stat.setObject(column.getName(), new JdbcParam(val, column.getSqlType(), column.getScaleOrLength()));
       }

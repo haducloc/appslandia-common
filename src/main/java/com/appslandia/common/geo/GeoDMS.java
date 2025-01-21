@@ -136,7 +136,7 @@ public class GeoDMS implements Serializable {
 
   public static GeoDMS toGeoDMS(String dms) {
     Arguments.notNull(dms);
-    Arguments.isTrue(DMS_PATTERN.matcher(dms).matches(), () -> STR.fmt("dms {} is invalid.", dms));
+    Arguments.isTrue(DMS_PATTERN.matcher(dms).matches(), "dms {} is invalid.", dms);
     String[] items = DMS_SYMBOLS.split(dms);
 
     int degrees = Integer.parseInt(items[0].strip());
@@ -150,8 +150,7 @@ public class GeoDMS implements Serializable {
     boolean invalidDms2 = (direction.isY() & (degrees == 90 && (minutes != 0 || seconds != 0.0)))
         || (direction.isX() & (degrees == 180 && (minutes != 0 || seconds != 0.0)));
 
-    Arguments.isTrue(!invalidDms1 && !invalidDms2, () -> STR.fmt("dms {} is invalid.", dms));
-
+    Arguments.isTrue(!invalidDms1 && !invalidDms2, "dms {} is invalid.", dms);
     return new GeoDMS(degrees, minutes, seconds, direction);
   }
 }
