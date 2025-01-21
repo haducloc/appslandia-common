@@ -48,11 +48,11 @@ import com.appslandia.common.utils.Asserts;
  */
 public class DbContext implements AutoCloseable {
 
-  final protected ConnectionImpl conn;
-  final protected boolean bakAutoCommit;
-  final protected boolean internalConn;
+  protected final ConnectionImpl conn;
+  protected final boolean bakAutoCommit;
+  protected final boolean internalConn;
 
-  final protected Map<String, StatementImpl> stats = new LinkedHashMap<>();
+  protected final Map<String, StatementImpl> stats = new LinkedHashMap<>();
   final Set<String> batchedPQueries = new LinkedHashSet<>();
 
   public DbContext() throws java.sql.SQLException {
