@@ -186,14 +186,13 @@ try (ConnectionImpl conn = new ConnectionImpl(javax.sql.DataSource)) {
 
   CsvExporter exporter = new CsvExporter();
   exporter.setConnection(conn);
-  exporter.setCsvOutput("output.csv", "UTF-8");
 
   // Set query and parameters
   exporter.setPQuery("SELECT * FROM User WHERE type=:type");
   exporter.setPQueryParams(new Params().set("type", 1));
 
   // Export CSV
-  exporter.execute();
+  exporter.execute("output.csv");
 }
 ```
 
