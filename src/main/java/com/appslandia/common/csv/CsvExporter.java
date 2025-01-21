@@ -21,7 +21,7 @@
 package com.appslandia.common.csv;
 
 import java.io.BufferedWriter;
-import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -41,21 +41,16 @@ import com.appslandia.common.utils.IOUtils;
  */
 public class CsvExporter extends InitializeObject {
 
-  private BufferedWriter csvOutput;
-  private boolean closeStream;
-
   private ConnectionImpl connection;
   private String pQuery;
   private Map<String, Object> pQueryParams;
 
   private CsvProcessor csvProcessor;
-
   final Map<String, DbToCsvConverter> converters = new CaseInsensitiveMap<>();
 
   @Override
   protected void init() throws Exception {
     Arguments.notNull(this.pQuery);
-    Arguments.notNull(this.csvOutput);
 
     if (this.connection == null) {
       this.connection = ConnectionImpl.getCurrent();
@@ -65,8 +60,15 @@ public class CsvExporter extends InitializeObject {
     }
   }
 
-  public int execute() throws Exception {
-    initialize();
+  public int execute(String csvFileLocation) throws Exception {
+    this.initialize();
+    try (BufferedWriter out = IOUtils.writerBOM(csvFileLocation, StandardCharsets.UTF_8.name())) {
+      return execute(out);
+    }
+  }
+
+  public int execute(BufferedWriter csvOutput) throws Exception {
+    this.initialize();
 
     AtomicInteger counter = new AtomicInteger(0);
     try (RecordContext ctx = new RecordContext(this.connection)) {
@@ -79,12 +81,12 @@ public class CsvExporter extends InitializeObject {
 
           for (ResultSetColumn column : rs.getColumns()) {
             if (column.getIndex() > 1) {
-              this.csvOutput.write(this.csvProcessor.getSeparator());
+              csvOutput.write(this.csvProcessor.getSeparator());
             }
-            this.csvOutput.write(this.csvProcessor.escape(column.getName()));
+            csvOutput.write(this.csvProcessor.escape(column.getName()));
           }
 
-          this.csvOutput.newLine();
+          csvOutput.newLine();
           writeHeader.value = true;
         }
 
@@ -98,36 +100,16 @@ public class CsvExporter extends InitializeObject {
           }
 
           if (column.getIndex() > 1) {
-            this.csvOutput.write(this.csvProcessor.getSeparator());
+            csvOutput.write(this.csvProcessor.getSeparator());
           }
-          this.csvOutput.write(this.csvProcessor.escape(value));
+          csvOutput.write(this.csvProcessor.escape(value));
 
         }
-        this.csvOutput.newLine();
+        csvOutput.newLine();
       });
-
-      this.csvOutput.flush();
-    } finally {
-      if (this.closeStream) {
-        this.csvOutput.close();
-      }
+      csvOutput.flush();
     }
     return counter.get();
-  }
-
-  public CsvExporter setCsvOutput(String csvLocation, String encoding) throws IOException {
-    return setCsvOutput(IOUtils.writerBOM(csvLocation, encoding), true);
-  }
-
-  public CsvExporter setCsvOutput(BufferedWriter csvOutput) {
-    return setCsvOutput(csvOutput, false);
-  }
-
-  public CsvExporter setCsvOutput(BufferedWriter csvOutput, boolean closeStream) {
-    assertNotInitialized();
-    this.csvOutput = csvOutput;
-    this.closeStream = closeStream;
-    return this;
   }
 
   public CsvExporter setConnection(ConnectionImpl connection) {

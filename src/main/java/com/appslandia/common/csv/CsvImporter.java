@@ -21,13 +21,13 @@
 package com.appslandia.common.csv;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLXML;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -62,9 +62,6 @@ import com.appslandia.common.utils.TypeUtils;
  */
 public class CsvImporter extends InitializeObject {
 
-  private BufferedReader csvInput;
-  private boolean closeStream;
-
   private boolean csvHeader;
   private ConnectionImpl connection;
   private String tableName;
@@ -80,7 +77,6 @@ public class CsvImporter extends InitializeObject {
   @Override
   protected void init() throws Exception {
     Arguments.notNull(this.tableName);
-    Arguments.notNull(this.csvInput);
 
     if (this.connection == null) {
       this.connection = ConnectionImpl.getCurrent();
@@ -97,8 +93,15 @@ public class CsvImporter extends InitializeObject {
     return this.taskConfirm == DangerTaskConfirm.DANGER_TASK_CONFIRMED;
   }
 
-  public int execute() throws Exception {
-    initialize();
+  public int execute(String csvFileLocation) throws Exception {
+    this.initialize();
+    try (BufferedReader in = IOUtils.readerBOM(csvFileLocation, StandardCharsets.UTF_8.name())) {
+      return execute(in);
+    }
+  }
+
+  public int execute(BufferedReader csvInput) throws Exception {
+    this.initialize();
 
     try (RecordContext ctx = new RecordContext(this.connection)) {
       Table table = ctx.getTable(this.tableName);
@@ -111,7 +114,7 @@ public class CsvImporter extends InitializeObject {
 
         final AtomicInteger counter = new AtomicInteger(0);
 
-        this.csvProcessor.parse(this.csvInput, (idx, csvRecord) -> {
+        this.csvProcessor.parse(csvInput, (idx, csvRecord) -> {
           Asserts.isTrue(table.getColumns().size() == csvRecord.length(), "Column count mismatch.");
 
           if (this.csvHeader) {
@@ -154,7 +157,7 @@ public class CsvImporter extends InitializeObject {
           ctx.executeBatch();
         }
 
-        // Commit all batches
+        // Commit
         if (isTaskConfirmed()) {
           ctx.commit();
         }
@@ -167,11 +170,6 @@ public class CsvImporter extends InitializeObject {
           ctx.rollback();
         }
         throw ex;
-
-      } finally {
-        if (this.closeStream) {
-          this.csvInput.close();
-        }
       }
     }
   }
@@ -266,21 +264,6 @@ public class CsvImporter extends InitializeObject {
       }
     }
     throw new IllegalArgumentException(STR.fmt("Failed to convert value for the column {}.", column.toString()));
-  }
-
-  public CsvImporter setCsvInput(String csvLocation, String altEncoding) throws IOException {
-    return setCsvInput(IOUtils.readerBOM(csvLocation, altEncoding), true);
-  }
-
-  public CsvImporter setCsvInput(BufferedReader csvInput) {
-    return setCsvInput(csvInput, false);
-  }
-
-  public CsvImporter setCsvInput(BufferedReader csvInput, boolean closeStream) {
-    assertNotInitialized();
-    this.csvInput = csvInput;
-    this.closeStream = closeStream;
-    return this;
   }
 
   public CsvImporter setCsvHeader(boolean csvHeader) {
