@@ -20,8 +20,6 @@
 
 package com.appslandia.common.caching;
 
-import com.appslandia.common.utils.Arguments;
-
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
@@ -29,12 +27,7 @@ import com.appslandia.common.utils.Arguments;
  */
 public interface AppCacheManager {
 
-  <K, V> AppCache<K, V> getCache(String cacheName);
-
-  default <K, V> AppCache<K, V> getRequiredCache(String cacheName) {
-    AppCache<K, V> cache = getCache(cacheName);
-    return Arguments.notNull(cache);
-  }
+  <K, V> AppCache<K, V> getCache(String cacheName) throws IllegalArgumentException;
 
   boolean clearCache(String cacheName);
 

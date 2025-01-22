@@ -23,6 +23,8 @@ package com.appslandia.common.caching;
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 
+import com.appslandia.common.utils.STR;
+
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
@@ -37,9 +39,12 @@ public class JCacheManager implements AppCacheManager {
   }
 
   @Override
-  public <K, V> AppCache<K, V> getCache(String cacheName) {
+  public <K, V> AppCache<K, V> getCache(String cacheName) throws IllegalArgumentException {
     Cache<K, V> cache = this.cacheManager.getCache(cacheName);
-    return (cache != null) ? new JCache<>(cache) : null;
+    if (cache == null) {
+      throw new IllegalArgumentException(STR.fmt("The cacheName '{}' is invalid.", cacheName));
+    }
+    return new JCache<>(cache);
   }
 
   @Override
