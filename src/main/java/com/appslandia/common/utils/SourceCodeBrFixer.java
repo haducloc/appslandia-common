@@ -28,6 +28,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import com.appslandia.common.base.InitializeObject;
@@ -41,6 +42,7 @@ public class SourceCodeBrFixer extends InitializeObject {
 
   private String sourceDir;
   private Function<String, Boolean> srcExt;
+  private Consumer<List<String>> srcTransformer;
 
   @Override
   protected void init() throws Exception {
@@ -60,9 +62,14 @@ public class SourceCodeBrFixer extends InitializeObject {
     return this;
   }
 
+  public SourceCodeBrFixer setSrcTransformer(Consumer<List<String>> srcTransformer) {
+    assertNotInitialized();
+    this.srcTransformer = srcTransformer;
+    return this;
+  }
+
   public void execute() throws IOException {
     this.initialize();
-
     final AtomicInteger seq = new AtomicInteger();
 
     Files.walk(Paths.get(this.sourceDir)).filter(Files::isRegularFile)
@@ -76,9 +83,15 @@ public class SourceCodeBrFixer extends InitializeObject {
       System.out.println(STR.fmt("[{}] Handling {}", seq.incrementAndGet(), unixPath));
 
       List<String> lines = Files.readAllLines(scPath, StandardCharsets.UTF_8);
-      List<String> strippedLines = lines.stream().map(l -> l.stripTrailing()).toList();
+      lines = lines.stream().map(l -> l.stripTrailing()).toList();
 
-      String linesAsStr = String.join(System.lineSeparator(), strippedLines);
+      if (this.srcTransformer != null) {
+        this.srcTransformer.accept(lines);
+      }
+
+      lines.add(System.lineSeparator());
+      String linesAsStr = String.join(System.lineSeparator(), lines);
+
       Files.write(scPath, linesAsStr.getBytes(StandardCharsets.UTF_8));
 
     } catch (IOException ex) {
@@ -90,8 +103,8 @@ public class SourceCodeBrFixer extends InitializeObject {
     try {
       SourceCodeBrFixer fixer = new SourceCodeBrFixer();
 
-      fixer.setSourceDir("// TODO");
-      fixer.setSrcExt(fn -> fn.endsWith(".cs") || fn.endsWith(".cshtml"));
+      fixer.setSourceDir("SRC");
+      fixer.setSrcExt(fn -> fn.endsWith(".java"));
       fixer.execute();
 
     } catch (Exception ex) {
