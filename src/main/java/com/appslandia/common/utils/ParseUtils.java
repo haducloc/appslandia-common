@@ -94,9 +94,12 @@ public class ParseUtils {
     return val;
   }
 
-  public static <T extends Enum<T>> T parseEnum(String enumName, Class<T> enumType) throws IllegalArgumentException {
-    Arguments.notNull(enumName);
-    return Enum.valueOf(enumType, enumName);
+  public static <T extends Enum<T>> T parseEnumReq(String enumValue, Class<T> enumType)
+      throws IllegalArgumentException {
+    Arguments.notNull(enumValue);
+    Arguments.notNull(enumType);
+
+    return Enum.valueOf(enumType, enumValue);
   }
 
   public static boolean parseBool(String value, boolean ifNullOrInvalid) {
@@ -187,8 +190,8 @@ public class ParseUtils {
     }
   }
 
-  public static <T extends Enum<T>> T parseEnumOpt(String enumName, Class<T> enumType, T ifNullOrInvalid) {
-    return (enumName != null) ? parseValue(enumName, ifNullOrInvalid, val -> Enum.valueOf(enumType, val))
+  public static <T extends Enum<T>> T parseEnumOpt(String enumValue, Class<T> enumType, T ifNullOrInvalid) {
+    return (enumValue != null) ? parseValue(enumValue, ifNullOrInvalid, val -> Enum.valueOf(enumType, val))
         : ifNullOrInvalid;
   }
 

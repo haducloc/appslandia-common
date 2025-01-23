@@ -186,6 +186,11 @@ public class CsvRecord {
     return (value != null) ? ParseUtils.parseDecimalOpt(value, ifNullOrInvalid) : ifNullOrInvalid;
   }
 
+  public <T extends Enum<T>> T getEnumOpt(int index, Class<T> enumType, T ifNullOrInvalid) {
+    String value = getString(index);
+    return (value != null) ? ParseUtils.parseEnumOpt(value, enumType, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
   // Required Values
 
   public boolean getBool(int index) throws BoolFormatException {
@@ -226,6 +231,11 @@ public class CsvRecord {
   public BigDecimal getDecimalReq(int index) throws NumberFormatException {
     String value = getStringReq(index);
     return new BigDecimal(value);
+  }
+
+  public <T extends Enum<T>> T getEnumReq(int index, Class<T> enumType) throws IllegalArgumentException {
+    String value = getStringReq(index);
+    return ParseUtils.parseEnumReq(value, enumType);
   }
 
   // Required Values, ifNullOrInvalid
