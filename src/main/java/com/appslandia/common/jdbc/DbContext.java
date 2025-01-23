@@ -55,6 +55,12 @@ public class DbContext implements AutoCloseable {
   protected final Map<String, StatementImpl> stats = new LinkedHashMap<>();
   final Set<String> batchedPQueries = new LinkedHashSet<>();
 
+  /**
+   * Constructs a DbContext using the current SQL connection provided by
+   * {@link com.appslandia.common.jdbc.ConnectionImpl#getCurrent()} as the
+   * underlying connection.
+   * 
+   */
   public DbContext() throws java.sql.SQLException {
     this(ConnectionImpl.getCurrent());
   }

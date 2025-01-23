@@ -41,6 +41,11 @@ public class FormatProviderImpl implements FormatProvider {
 
   protected ProviderMap<NumberFormatKey, DecimalFormat> decimalFormats;
 
+  /**
+   * Constructs a FormatProviderImpl using the default language provided by
+   * {@link com.appslandia.common.base.Language#getDefault()} as the underlying
+   * language.
+   */
   public FormatProviderImpl() {
     this(Language.getDefault());
   }

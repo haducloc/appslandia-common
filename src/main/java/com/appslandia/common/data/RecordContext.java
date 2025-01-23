@@ -49,6 +49,12 @@ import com.appslandia.common.utils.STR;
  */
 public class RecordContext extends DbContext {
 
+  /**
+   * Constructs a RecordContext using the current SQL connection provided by
+   * {@link com.appslandia.common.jdbc.ConnectionImpl#getCurrent()} as the
+   * underlying connection.
+   * 
+   */
   public RecordContext() throws java.sql.SQLException {
     super();
   }
