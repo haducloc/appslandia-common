@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
+import java.time.temporal.Temporal;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -337,8 +338,7 @@ public class JsonMapObject extends MapWrapper<String, Object> {
 
   protected boolean isBasicType(Class<?> type) {
     return (type == String.class) || Number.class.isAssignableFrom(type) || (type == Boolean.class)
-        || (type == LocalDate.class) || (type == LocalTime.class) || (type == LocalDateTime.class)
-        || (type == OffsetTime.class) || (type == OffsetDateTime.class);
+        || (Enum.class.isAssignableFrom(type)) || Temporal.class.isAssignableFrom(type);
   }
 
   private void validateMap(Map<?, ?> map) {
