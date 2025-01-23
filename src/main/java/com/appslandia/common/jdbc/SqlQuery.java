@@ -51,6 +51,14 @@ public class SqlQuery extends InitializeObject implements Serializable {
   private transient String translatedQuery;
   private transient Map<String, List<Integer>> indexesMap;
 
+  /**
+   * Constructs an instance of SqlQuery with a given SQL query string. This
+   * constructor supports native SQL with parameterized queries, where parameters
+   * are prefixed with a colon (':'). For array parameters, use the syntax 'IN
+   * :parameters' or 'LIKE_ANY :parameters'.
+   * 
+   * @param pQuery The SQL query string with parameters prefixed by ':'.
+   */
   public SqlQuery(String pQuery) {
     this.pQuery = pQuery;
   }

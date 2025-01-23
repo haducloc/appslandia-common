@@ -216,26 +216,26 @@ public class JdbcUtils {
 
   public static void setParameters(StatementImpl stat, SqlQuery pQuery, Map<String, Object> params)
       throws SQLException {
-    for (Map.Entry<String, Integer> np : pQuery.getParamsMap().entrySet()) {
-      Asserts.isTrue(params.containsKey(np.getKey()), "The parameter '{}' is required.", np.getKey());
+    for (Map.Entry<String, Integer> pe : pQuery.getParamsMap().entrySet()) {
+      Asserts.isTrue(params.containsKey(pe.getKey()), "The parameter '{}' is required.", pe.getKey());
 
       // Non-array parameter
-      if (np.getValue() == null) {
-        stat.setObject(np.getKey(), params.get(np.getKey()));
+      if (pe.getValue() == null) {
+        stat.setObject(pe.getKey(), params.get(pe.getKey()));
 
       } else {
         // Array Parameter
-        Object pv = params.get(np.getKey());
-        Asserts.notNull(pv, "The array parameter '{}' is required.", np.getKey());
+        Object pv = params.get(pe.getKey());
+        Asserts.notNull(pv, "The array parameter '{}' is required.", pe.getKey());
 
         boolean isArray = pv.getClass().isArray();
         boolean isCollection = !isArray && Collection.class.isAssignableFrom(pv.getClass());
 
         Asserts.isTrue(isArray || isCollection, "The array parameter '{}' must be an array or collection.",
-            np.getKey());
+            pe.getKey());
 
         Object[] values = isArray ? ArrayUtils.toArray(pv) : ((Collection<?>) pv).toArray();
-        stat.setObjectArray(np.getKey(), values);
+        stat.setObjectArray(pe.getKey(), values);
       }
     }
   }

@@ -47,6 +47,14 @@ public class JpaQuery extends InitializeObject implements Serializable {
   private transient Map<String, Integer> paramsMap;
   private transient String translatedQuery;
 
+  /**
+   * Constructs an instance of JpaQuery with the specified JPQL query string. This
+   * constructor supports JPQL with parameterized queries, where parameters are
+   * prefixed with a colon (':'). For array parameters, use the syntax 'IN
+   * :parameters' or 'LIKE_ANY :parameters'.
+   * 
+   * @param pQuery The JPQL query string, with parameters prefixed by ':'.
+   */
   public JpaQuery(String pQuery) {
     this.pQuery = pQuery;
   }
