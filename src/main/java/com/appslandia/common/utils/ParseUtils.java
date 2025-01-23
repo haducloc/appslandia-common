@@ -94,6 +94,11 @@ public class ParseUtils {
     return val;
   }
 
+  public static <T extends Enum<T>> T parseEnum(String enumName, Class<T> enumType) throws IllegalArgumentException {
+    Arguments.notNull(enumName);
+    return Enum.valueOf(enumType, enumName);
+  }
+
   public static boolean parseBool(String value, boolean ifNullOrInvalid) {
     if (value == null) {
       return ifNullOrInvalid;
@@ -180,6 +185,11 @@ public class ParseUtils {
     } catch (NumberFormatException ex) {
       return new BigDecimal(Double.toString(ifNullOrInvalid));
     }
+  }
+
+  public static <T extends Enum<T>> T parseEnumOpt(String enumName, Class<T> enumType, T ifNullOrInvalid) {
+    return (enumName != null) ? parseValue(enumName, ifNullOrInvalid, val -> Enum.valueOf(enumType, val))
+        : ifNullOrInvalid;
   }
 
   public static Boolean parseBoolOpt(String value, Boolean ifNullOrInvalid) {
