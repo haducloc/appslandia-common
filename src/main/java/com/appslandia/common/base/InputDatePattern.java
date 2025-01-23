@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import com.appslandia.common.utils.Arguments;
 import com.appslandia.common.utils.Asserts;
@@ -48,7 +49,7 @@ public abstract class InputDatePattern {
     if (obj == null) {
       synchronized (MUTEX) {
         if ((obj = __default) == null) {
-          __default = obj = new DefaultInputDatePattern();
+          __default = obj = initInputDatePattern();
         }
       }
     }
@@ -58,6 +59,28 @@ public abstract class InputDatePattern {
   public static void setDefault(InputDatePattern impl) {
     Asserts.isNull(__default, "InputDatePattern.__default must be null.");
     __default = impl;
+  }
+
+  private static Supplier<InputDatePattern> __provider;
+
+  public static void setProvider(Supplier<InputDatePattern> impl) {
+    Asserts.isNull(__default, "InputDatePattern.__default must be null.");
+
+    if (__default == null) {
+      synchronized (MUTEX) {
+        if (__default == null) {
+          __provider = impl;
+          return;
+        }
+      }
+    }
+  }
+
+  private static InputDatePattern initInputDatePattern() {
+    if (__provider != null) {
+      return __provider.get();
+    }
+    return new DefaultInputDatePattern();
   }
 
   public String parse(Locale locale) {
