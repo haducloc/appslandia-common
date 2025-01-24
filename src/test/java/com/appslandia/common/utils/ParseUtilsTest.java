@@ -20,6 +20,12 @@
 
 package com.appslandia.common.utils;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -28,8 +34,10 @@ import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.YearMonth;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import com.appslandia.common.base.BoolFormatException;
+import com.appslandia.common.base.TemporalFormatException;
 
 /**
  *
@@ -38,280 +46,260 @@ import org.junit.jupiter.api.Test;
  */
 public class ParseUtilsTest {
 
+  // Boolean Parsing
+
   @Test
-  public void test_parseBool() {
-    try {
-      boolean val = ParseUtils.parseBool("true");
-      Assertions.assertTrue(val);
-
-      val = ParseUtils.parseBool("false");
-      Assertions.assertFalse(val);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-    Assertions.assertTrue(ParseUtils.parseBool("invalid", true));
+  void testParseBool_valid() {
+    assertTrue(ParseUtils.parseBool("true"));
+    assertFalse(ParseUtils.parseBool("false"));
   }
 
   @Test
-  public void test_parseByte() {
-    try {
-      byte val = ParseUtils.parseByte("42");
-      Assertions.assertEquals(42, val);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-    Assertions.assertEquals((byte) 0, ParseUtils.parseByte("invalid", (byte) 0));
+  void testParseBool_invalid() {
+    assertThrows(BoolFormatException.class, () -> ParseUtils.parseBool("invalid"));
   }
 
   @Test
-  public void test_parseShort() {
-    try {
-      short val = ParseUtils.parseShort("42");
-      Assertions.assertEquals(42, val);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-    Assertions.assertEquals((short) 0, ParseUtils.parseShort("invalid", (short) 0));
+  void testParseBool_withDefault() {
+    assertTrue(ParseUtils.parseBool("true", false));
+    assertFalse(ParseUtils.parseBool(null, false));
+    assertFalse(ParseUtils.parseBool("invalid", false));
   }
 
   @Test
-  public void test_parseInt() {
-    try {
-      int val = ParseUtils.parseInt("42");
-      Assertions.assertEquals(42, val);
+  void testParseBoolOpt() {
+    assertTrue(ParseUtils.parseBoolOpt("true"));
+    assertNull(ParseUtils.parseBoolOpt(null));
+    assertThrows(BoolFormatException.class, () -> ParseUtils.parseBoolOpt("invalid"));
+  }
 
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-    Assertions.assertEquals(0, ParseUtils.parseInt("invalid", 0));
+  // Byte Parsing
+
+  @Test
+  void testParseByte_valid() {
+    assertEquals((byte) 123, ParseUtils.parseByte("123"));
   }
 
   @Test
-  public void test_parseLong() {
-    try {
-      long val = ParseUtils.parseLong("42");
-      Assertions.assertEquals(42, val);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-    Assertions.assertEquals(0L, ParseUtils.parseLong("invalid", 0L));
+  void testParseByte_invalid() {
+    assertThrows(NumberFormatException.class, () -> ParseUtils.parseByte("invalid"));
   }
 
   @Test
-  public void test_parseFloat() {
-    try {
-      float val = ParseUtils.parseFloat("3.14");
-      Assertions.assertEquals(3.14f, val);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-    Assertions.assertEquals(0.0f, ParseUtils.parseFloat("invalid", 0.0f));
+  void testParseByte_withDefault() {
+    assertEquals((byte) 123, ParseUtils.parseByte("123", (byte) 0));
+    assertEquals((byte) 0, ParseUtils.parseByte(null, (byte) 0));
+    assertEquals((byte) 0, ParseUtils.parseByte("invalid", (byte) 0));
   }
 
   @Test
-  public void test_parseDouble() {
-    try {
-      double val = ParseUtils.parseDouble("3.14");
-      Assertions.assertEquals(3.14, val);
+  void testParseByteOpt() {
+    assertEquals((byte) 123, ParseUtils.parseByteOpt("123"));
+    assertNull(ParseUtils.parseByteOpt(null));
+    assertThrows(NumberFormatException.class, () -> ParseUtils.parseByteOpt("invalid"));
+  }
 
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-    Assertions.assertEquals(0.0, ParseUtils.parseDouble("invalid", 0.0));
+  // Short Parsing
+
+  @Test
+  void testParseShort_valid() {
+    assertEquals((short) 123, ParseUtils.parseShort("123"));
   }
 
   @Test
-  public void test_parseBool_ifNullOrInvalid() {
-    Assertions.assertFalse(ParseUtils.parseBool(null, false));
-    Assertions.assertTrue(ParseUtils.parseBool("true", false));
-    Assertions.assertFalse(ParseUtils.parseBool("false", true));
-    Assertions.assertFalse(ParseUtils.parseBool("invalid", false));
+  void testParseShort_invalid() {
+    assertThrows(NumberFormatException.class, () -> ParseUtils.parseShort("invalid"));
   }
 
   @Test
-  public void test_parseByte_ifNullOrInvalid() {
-    Assertions.assertEquals(0, ParseUtils.parseByte(null, (byte) 0));
-    Assertions.assertEquals(123, ParseUtils.parseByte("123", (byte) 0));
-    Assertions.assertEquals(-123, ParseUtils.parseByte("-123", (byte) 0));
-    Assertions.assertEquals(0, ParseUtils.parseByte("invalid", (byte) 0));
+  void testParseShort_withDefault() {
+    assertEquals((short) 123, ParseUtils.parseShort("123", (short) 0));
+    assertEquals((short) 0, ParseUtils.parseShort(null, (short) 0));
+    assertEquals((short) 0, ParseUtils.parseShort("invalid", (short) 0));
   }
 
   @Test
-  public void test_parseShort_ifNullOrInvalid() {
-    Assertions.assertEquals(0, ParseUtils.parseShort(null, (short) 0));
-    Assertions.assertEquals(12345, ParseUtils.parseShort("12345", (short) 0));
-    Assertions.assertEquals(-12345, ParseUtils.parseShort("-12345", (short) 0));
-    Assertions.assertEquals(0, ParseUtils.parseShort("invalid", (short) 0));
+  void testParseShortOpt() {
+    assertEquals((short) 123, ParseUtils.parseShortOpt("123"));
+    assertNull(ParseUtils.parseShortOpt(null));
+    assertThrows(NumberFormatException.class, () -> ParseUtils.parseShortOpt("invalid"));
+  }
+
+  // Integer Parsing
+
+  @Test
+  void testParseInt_valid() {
+    assertEquals(123, ParseUtils.parseInt("123"));
   }
 
   @Test
-  public void test_parseInt_ifNullOrInvalid() {
-    Assertions.assertEquals(0, ParseUtils.parseInt(null, 0));
-    Assertions.assertEquals(123456, ParseUtils.parseInt("123456", 0));
-    Assertions.assertEquals(-123456, ParseUtils.parseInt("-123456", 0));
-    Assertions.assertEquals(0, ParseUtils.parseInt("invalid", 0));
+  void testParseInt_invalid() {
+    assertThrows(NumberFormatException.class, () -> ParseUtils.parseInt("invalid"));
   }
 
   @Test
-  public void test_parseLong_ifNullOrInvalid() {
-    Assertions.assertEquals(0L, ParseUtils.parseLong(null, 0L));
-    Assertions.assertEquals(1234567890L, ParseUtils.parseLong("1234567890", 0L));
-    Assertions.assertEquals(-1234567890L, ParseUtils.parseLong("-1234567890", 0L));
-    Assertions.assertEquals(0L, ParseUtils.parseLong("invalid", 0L));
+  void testParseInt_withDefault() {
+    assertEquals(123, ParseUtils.parseInt("123", 0));
+    assertEquals(0, ParseUtils.parseInt(null, 0));
+    assertEquals(0, ParseUtils.parseInt("invalid", 0));
   }
 
   @Test
-  public void test_parseFloat_ifNullOrInvalid() {
-    Assertions.assertEquals(0.0f, ParseUtils.parseFloat(null, 0.0f));
-    Assertions.assertEquals(123.456f, ParseUtils.parseFloat("123.456", 0.0f));
-    Assertions.assertEquals(-123.456f, ParseUtils.parseFloat("-123.456", 0.0f));
-    Assertions.assertEquals(0.0f, ParseUtils.parseFloat("invalid", 0.0f));
+  void testParseIntOpt() {
+    assertEquals(123, ParseUtils.parseIntOpt("123"));
+    assertNull(ParseUtils.parseIntOpt(null));
+    assertThrows(NumberFormatException.class, () -> ParseUtils.parseIntOpt("invalid"));
+  }
+
+  // Long Parsing
+
+  @Test
+  void testParseLong_valid() {
+    assertEquals(123L, ParseUtils.parseLong("123"));
   }
 
   @Test
-  public void test_parseDouble_ifNullOrInvalid() {
-    Assertions.assertEquals(0.0, ParseUtils.parseDouble(null, 0.0));
-    Assertions.assertEquals(123.456, ParseUtils.parseDouble("123.456", 0.0));
-    Assertions.assertEquals(-123.456, ParseUtils.parseDouble("-123.456", 0.0));
-    Assertions.assertEquals(0.0, ParseUtils.parseDouble("invalid", 0.0));
+  void testParseLong_invalid() {
+    assertThrows(NumberFormatException.class, () -> ParseUtils.parseLong("invalid"));
   }
 
   @Test
-  public void test_parseDecimal_ifNullOrInvalid() {
-    Assertions.assertEquals(new BigDecimal("0.0"), ParseUtils.parseDecimal(null, 0.0d));
-    Assertions.assertEquals(new BigDecimal("123.456"), ParseUtils.parseDecimal("123.456", 0.0d));
-    Assertions.assertEquals(new BigDecimal("-123.456"), ParseUtils.parseDecimal("-123.456", 0.0d));
-    Assertions.assertEquals(new BigDecimal("0.0"), ParseUtils.parseDecimal("invalid", 0.0d));
+  void testParseLong_withDefault() {
+    assertEquals(123L, ParseUtils.parseLong("123", 0L));
+    assertEquals(0L, ParseUtils.parseLong(null, 0L));
+    assertEquals(0L, ParseUtils.parseLong("invalid", 0L));
   }
 
   @Test
-  public void test_parseLocalDate() {
-    try {
-      LocalDate val = ParseUtils.parseLocalDate("2024-05-29", DateUtils.ISO8601_DATE);
-      Assertions.assertEquals(LocalDate.parse("2024-05-29"), val);
+  void testParseLongOpt() {
+    assertEquals(123L, ParseUtils.parseLongOpt("123"));
+    assertNull(ParseUtils.parseLongOpt(null));
+    assertThrows(NumberFormatException.class, () -> ParseUtils.parseLongOpt("invalid"));
+  }
 
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-    try {
-      LocalDate val = ParseUtils.parseLocalDate(null, DateUtils.ISO8601_DATE);
-      Assertions.assertNull(val);
+  // Float Parsing
 
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
+  @Test
+  void testParseFloat_valid() {
+    assertEquals(1.23f, ParseUtils.parseFloat("1.23"));
   }
 
   @Test
-  public void test_parseLocalTime() {
-    try {
-      LocalTime val = ParseUtils.parseLocalTime("12:30:45", DateUtils.ISO8601_TIME_S);
-      Assertions.assertEquals(LocalTime.parse("12:30:45"), val);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-    try {
-      LocalTime val = ParseUtils.parseLocalTime(null, DateUtils.ISO8601_TIME_S);
-      Assertions.assertNull(val);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
+  void testParseFloat_invalid() {
+    assertThrows(NumberFormatException.class, () -> ParseUtils.parseFloat("invalid"));
   }
 
   @Test
-  public void test_parseLocalDateTime() {
-    try {
-      LocalDateTime val = ParseUtils.parseLocalDateTime("2024-05-29T12:30:45", DateUtils.ISO8601_DATETIME_S);
-      Assertions.assertEquals(LocalDateTime.parse("2024-05-29T12:30:45"), val);
+  void testParseFloat_withDefault() {
+    assertEquals(1.23f, ParseUtils.parseFloat("1.23", 0f));
+    assertEquals(0f, ParseUtils.parseFloat(null, 0f));
+    assertEquals(0f, ParseUtils.parseFloat("invalid", 0f));
+  }
 
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-    try {
-      LocalDateTime val = ParseUtils.parseLocalDateTime(null, DateUtils.ISO8601_DATETIME_S);
-      Assertions.assertNull(val);
+  // Double Parsing
 
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
+  @Test
+  void testParseDouble_valid() {
+    assertEquals(1.23, ParseUtils.parseDouble("1.23"));
   }
 
   @Test
-  public void test_parseOffsetDateTime() {
-    try {
-      OffsetDateTime val = ParseUtils.parseOffsetDateTime("2024-05-29T12:30:45Z", DateUtils.ISO8601_DATETIMEZ_S);
-      Assertions.assertEquals(OffsetDateTime.parse("2024-05-29T12:30:45Z"), val);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-    try {
-      OffsetDateTime val = ParseUtils.parseOffsetDateTime(null, DateUtils.ISO8601_DATETIMEZ_S);
-      Assertions.assertNull(val);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
+  void testParseDouble_invalid() {
+    assertThrows(NumberFormatException.class, () -> ParseUtils.parseDouble("invalid"));
   }
 
   @Test
-  public void test_parseOffsetTime() {
-    try {
-      OffsetTime val = ParseUtils.parseOffsetTime("12:30:45+01:00", DateUtils.ISO8601_TIMEZ_S);
-      Assertions.assertEquals(OffsetTime.parse("12:30:45+01:00"), val);
+  void testParseDouble_withDefault() {
+    assertEquals(1.23, ParseUtils.parseDouble("1.23", 0.0));
+    assertEquals(0.0, ParseUtils.parseDouble(null, 0.0));
+    assertEquals(0.0, ParseUtils.parseDouble("invalid", 0.0));
+  }
 
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-    try {
-      OffsetTime val = ParseUtils.parseOffsetTime(null, DateUtils.ISO8601_TIMEZ_S);
-      Assertions.assertNull(val);
+  // BigDecimal Parsing
 
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
+  @Test
+  void testParseDecimal_valid() {
+    assertEquals(new BigDecimal("1.23"), ParseUtils.parseDecimal("1.23"));
   }
 
   @Test
-  public void test_parseYearMonth() {
-    try {
-      YearMonth val = ParseUtils.parseYearMonth("2024-05", DateUtils.ISO8601_YEAR_MONTH);
-      Assertions.assertEquals(YearMonth.parse("2024-05"), val);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
-    try {
-      YearMonth val = ParseUtils.parseYearMonth(null, DateUtils.ISO8601_YEAR_MONTH);
-      Assertions.assertNull(val);
-
-    } catch (Exception ex) {
-      Assertions.fail(ex.getMessage());
-    }
+  void testParseDecimal_invalid() {
+    assertThrows(NumberFormatException.class, () -> ParseUtils.parseDecimal("invalid"));
   }
 
   @Test
-  public void test_isTrueValue() {
-    Assertions.assertTrue(ParseUtils.isTrueValue("true"));
-    Assertions.assertTrue(ParseUtils.isTrueValue("t"));
-    Assertions.assertTrue(ParseUtils.isTrueValue("yes"));
-    Assertions.assertTrue(ParseUtils.isTrueValue("y"));
-    Assertions.assertTrue(ParseUtils.isTrueValue("1"));
+  void testParseDecimal_withDefault() {
+    assertEquals(new BigDecimal("1.23"), ParseUtils.parseDecimal("1.23", 0.0));
+    assertEquals(new BigDecimal("0.0"), ParseUtils.parseDecimal(null, 0.0));
+    assertEquals(new BigDecimal("0.0"), ParseUtils.parseDecimal("invalid", 0.0));
+  }
+
+  // ENUM Parsing
+
+  enum TestEnum {
+    VALUE1, VALUE2
   }
 
   @Test
-  public void test_isFalseValue() {
-    Assertions.assertTrue(ParseUtils.isFalseValue("false"));
-    Assertions.assertTrue(ParseUtils.isFalseValue("f"));
-    Assertions.assertTrue(ParseUtils.isFalseValue("no"));
-    Assertions.assertTrue(ParseUtils.isFalseValue("n"));
-    Assertions.assertTrue(ParseUtils.isFalseValue("0"));
+  void testParseEnum_valid() {
+    assertEquals(TestEnum.VALUE1, ParseUtils.parseEnum("VALUE1", TestEnum.class));
+  }
+
+  @Test
+  void testParseEnum_invalid() {
+    assertThrows(IllegalArgumentException.class, () -> ParseUtils.parseEnum("INVALID", TestEnum.class));
+  }
+
+  @Test
+  void testParseEnum_withDefault() {
+    assertEquals(TestEnum.VALUE1, ParseUtils.parseEnum("VALUE1", TestEnum.class, TestEnum.VALUE2));
+    assertEquals(TestEnum.VALUE2, ParseUtils.parseEnum("INVALID", TestEnum.class, TestEnum.VALUE2));
+  }
+
+  // Temporal Parsing
+
+  @Test
+  void testParseLocalDate() {
+    assertEquals(LocalDate.of(2023, 1, 1), ParseUtils.parseLocalDate("2023-01-01", "yyyy-MM-dd"));
+    assertNull(ParseUtils.parseLocalDate(null, "yyyy-MM-dd"));
+    assertThrows(TemporalFormatException.class, () -> ParseUtils.parseLocalDate("invalid", "yyyy-MM-dd"));
+  }
+
+  @Test
+  void testParseLocalTime() {
+    assertEquals(LocalTime.of(12, 30), ParseUtils.parseLocalTime("12:30", "HH:mm"));
+    assertNull(ParseUtils.parseLocalTime(null, "HH:mm"));
+    assertThrows(TemporalFormatException.class, () -> ParseUtils.parseLocalTime("invalid", "HH:mm"));
+  }
+
+  @Test
+  void testParseLocalDateTime() {
+    assertEquals(LocalDateTime.of(2023, 1, 1, 12, 30),
+        ParseUtils.parseLocalDateTime("2023-01-01T12:30", "yyyy-MM-dd'T'HH:mm"));
+    assertNull(ParseUtils.parseLocalDateTime(null, "yyyy-MM-dd'T'HH:mm"));
+    assertThrows(TemporalFormatException.class, () -> ParseUtils.parseLocalDateTime("invalid", "yyyy-MM-dd'T'HH:mm"));
+  }
+
+  @Test
+  void testParseOffsetTime() {
+    assertEquals(OffsetTime.parse("12:30+01:00"), ParseUtils.parseOffsetTime("12:30+01:00", "HH:mmXXX"));
+    assertNull(ParseUtils.parseOffsetTime(null, "HH:mmXXX"));
+    assertThrows(TemporalFormatException.class, () -> ParseUtils.parseOffsetTime("invalid", "HH:mmXXX"));
+  }
+
+  @Test
+  void testParseOffsetDateTime() {
+    assertEquals(OffsetDateTime.parse("2023-01-01T12:30+01:00"),
+        ParseUtils.parseOffsetDateTime("2023-01-01T12:30+01:00", "yyyy-MM-dd'T'HH:mmXXX"));
+    assertNull(ParseUtils.parseOffsetDateTime(null, "yyyy-MM-dd'T'HH:mmXXX"));
+    assertThrows(TemporalFormatException.class,
+        () -> ParseUtils.parseOffsetDateTime("invalid", "yyyy-MM-dd'T'HH:mmXXX"));
+  }
+
+  @Test
+  void testParseYearMonth() {
+    assertEquals(YearMonth.of(2023, 1), ParseUtils.parseYearMonth("2023-01", "yyyy-MM"));
+    assertNull(ParseUtils.parseYearMonth(null, "yyyy-MM"));
+    assertThrows(TemporalFormatException.class, () -> ParseUtils.parseYearMonth("invalid", "yyyy-MM"));
   }
 }

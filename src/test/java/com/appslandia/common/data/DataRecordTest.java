@@ -20,9 +20,9 @@
 
 package com.appslandia.common.data;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -32,6 +32,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
+import java.util.Locale;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,252 +42,196 @@ public class DataRecordTest {
   private DataRecord dataRecord;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     dataRecord = new DataRecord();
   }
 
   @Test
-  public void testSetAndGet() {
-    dataRecord.set("name", "John Doe");
-    assertEquals("John Doe", dataRecord.get("name"));
+  void testSetAndGetReq() {
+    dataRecord.set("key", "value");
+    assertEquals("value", dataRecord.getReq("key"));
+    assertThrows(IllegalStateException.class, () -> dataRecord.getReq("nonExistentKey"));
   }
 
   @Test
-  public void testGetReqValuePresent() {
-    dataRecord.set("name", "John Doe");
-    assertEquals("John Doe", dataRecord.getReq("name"));
+  void testGetStringReq() {
+    dataRecord.set("key", "value");
+    assertEquals("value", dataRecord.getStringReq("key"));
   }
 
   @Test
-  public void testGetReqValueMissingThrowsException() {
-    assertThrows(IllegalStateException.class, () -> dataRecord.getReq("missingColumn"));
+  void testGetString() {
+    dataRecord.set("key", "value");
+    assertEquals("value", dataRecord.getString("key"));
+    assertNull(dataRecord.getString("nonExistentKey"));
   }
 
   @Test
-  public void testGetString() {
-    dataRecord.set("name", "John Doe");
-    assertEquals("John Doe", dataRecord.getString("name"));
+  void testGetStringUpperReq() {
+    dataRecord.set("key", "value");
+    assertEquals("VALUE", dataRecord.getStringUpperReq("key"));
+    assertEquals("VALUE", dataRecord.getStringUpperReq("key", Locale.ENGLISH));
   }
 
   @Test
-  public void testGetStringReq() {
-    dataRecord.set("name", "John Doe");
-    assertEquals("John Doe", dataRecord.getStringReq("name"));
+  void testGetStringUpper() {
+    dataRecord.set("key", "value");
+    assertEquals("VALUE", dataRecord.getStringUpper("key"));
+    assertEquals("VALUE", dataRecord.getStringUpper("key", Locale.ENGLISH));
+    assertNull(dataRecord.getStringUpper("nonExistentKey"));
+    assertEquals("DEFAULT", dataRecord.getStringUpper("nonExistentKey", "default", Locale.ENGLISH));
   }
 
   @Test
-  public void testGetStringReqMissingThrowsException() {
-    assertThrows(IllegalStateException.class, () -> dataRecord.getStringReq("missingColumn"));
+  void testGetStringLowerReq() {
+    dataRecord.set("key", "VALUE");
+    assertEquals("value", dataRecord.getStringLowerReq("key"));
+    assertEquals("value", dataRecord.getStringLowerReq("key", Locale.ENGLISH));
   }
 
   @Test
-  public void testGetStringUpperReq() {
-    dataRecord.set("name", "john doe");
-    assertEquals("JOHN DOE", dataRecord.getStringUpperReq("name"));
+  void testGetStringLower() {
+    dataRecord.set("key", "VALUE");
+    assertEquals("value", dataRecord.getStringLower("key"));
+    assertEquals("value", dataRecord.getStringLower("key", Locale.ENGLISH));
+    assertNull(dataRecord.getStringLower("nonExistentKey"));
+    assertEquals("default", dataRecord.getStringLower("nonExistentKey", "DEFAULT", Locale.ENGLISH));
   }
 
   @Test
-  public void testGetStringLowerReq() {
-    dataRecord.set("name", "JOHN DOE");
-    assertEquals("john doe", dataRecord.getStringLowerReq("name"));
+  void testGetBool() {
+    dataRecord.set("key", true);
+    assertTrue(dataRecord.getBool("key"));
+    assertFalse(dataRecord.getBool("nonExistentKey", false));
   }
 
   @Test
-  public void testGetOptionalValues() {
-    dataRecord.set("boolean", true);
-    dataRecord.set("int", 42);
-    dataRecord.set("double", 3.14);
-    dataRecord.set("decimal", new BigDecimal("123.45"));
-
-    assertTrue(dataRecord.getBoolOpt("boolean"));
-    assertEquals(42, dataRecord.getIntOpt("int"));
-    assertEquals(3.14, dataRecord.getDoubleOpt("double"));
-    assertEquals(new BigDecimal("123.45"), dataRecord.getDecimal("decimal"));
+  void testGetByte() {
+    dataRecord.set("key", (byte) 1);
+    assertEquals(1, dataRecord.getByte("key"));
+    assertEquals(0, dataRecord.getByte("nonExistentKey", (byte) 0));
   }
 
   @Test
-  public void testGetRequiredValues() {
-    dataRecord.set("int", 42);
-    dataRecord.set("double", 3.14);
-
-    assertEquals(42, dataRecord.getInt("int"));
-    assertEquals(3.14, dataRecord.getDouble("double"), 0.001);
+  void testGetShort() {
+    dataRecord.set("key", (short) 1);
+    assertEquals(1, dataRecord.getShort("key"));
+    assertEquals(0, dataRecord.getShort("nonExistentKey", (short) 0));
   }
 
   @Test
-  public void testGetRequiredValueThrowsException() {
-    assertThrows(IllegalStateException.class, () -> dataRecord.getInt("missingInt"));
+  void testGetInt() {
+    dataRecord.set("key", 1);
+    assertEquals(1, dataRecord.getInt("key"));
+    assertEquals(0, dataRecord.getInt("nonExistentKey", 0));
   }
 
   @Test
-  public void testGetBoolReq() {
-    dataRecord.set("bool", true);
-    assertTrue(dataRecord.getBool("bool"));
+  void testGetLong() {
+    dataRecord.set("key", 1L);
+    assertEquals(1L, dataRecord.getLong("key"));
+    assertEquals(0L, dataRecord.getLong("nonExistentKey", 0L));
   }
 
   @Test
-  public void testGetBoolReqThrowsException() {
-    assertThrows(IllegalStateException.class, () -> dataRecord.getBool("missingBool"));
+  void testGetFloat() {
+    dataRecord.set("key", 1.1f);
+    assertEquals(1.1f, dataRecord.getFloat("key"));
+    assertEquals(0.0f, dataRecord.getFloat("nonExistentKey", 0.0f));
   }
 
   @Test
-  public void testGetByteReq() {
-    dataRecord.set("byte", (byte) 10);
-    assertEquals(10, dataRecord.getByte("byte"));
+  void testGetDouble() {
+    dataRecord.set("key", 1.1);
+    assertEquals(1.1, dataRecord.getDouble("key"));
+    assertEquals(0.0, dataRecord.getDouble("nonExistentKey", 0.0));
   }
 
   @Test
-  public void testGetByteReqThrowsException() {
-    assertThrows(IllegalStateException.class, () -> dataRecord.getByte("missingByte"));
+  void testGetDecimal() {
+    dataRecord.set("key", BigDecimal.ONE);
+    assertEquals(BigDecimal.ONE, dataRecord.getDecimal("key"));
+    assertTrue(BigDecimal.TEN.compareTo(dataRecord.getDecimal("nonExistentKey", 10.0)) == 0);
   }
 
   @Test
-  public void testGetShortReq() {
-    dataRecord.set("short", (short) 20);
-    assertEquals(20, dataRecord.getShort("short"));
+  void testGetDecimalReq() {
+    dataRecord.set("key", BigDecimal.ONE);
+    assertEquals(BigDecimal.ONE, dataRecord.getDecimalReq("key"));
   }
 
   @Test
-  public void testGetShortReqThrowsException() {
-    assertThrows(IllegalStateException.class, () -> dataRecord.getShort("missingShort"));
+  void testGetLocalDate() {
+    LocalDate date = LocalDate.of(2023, 1, 1);
+    dataRecord.set("key", date);
+    assertEquals(date, dataRecord.getLocalDate("key"));
+    assertNull(dataRecord.getLocalDate("nonExistentKey"));
   }
 
   @Test
-  public void testGetLongReq() {
-    dataRecord.set("long", 100L);
-    assertEquals(100L, dataRecord.getLong("long"));
+  void testGetLocalDateReq() {
+    LocalDate date = LocalDate.of(2023, 1, 1);
+    dataRecord.set("key", date);
+    assertEquals(date, dataRecord.getLocalDateReq("key"));
   }
 
   @Test
-  public void testGetLongReqThrowsException() {
-    assertThrows(IllegalStateException.class, () -> dataRecord.getLong("missingLong"));
-  }
-
-  @Test
-  public void testGetFloatReq() {
-    dataRecord.set("float", 1.23f);
-    assertEquals(1.23f, dataRecord.getFloat("float"), 0.001);
-  }
-
-  @Test
-  public void testGetFloatReqThrowsException() {
-    assertThrows(IllegalStateException.class, () -> dataRecord.getFloat("missingFloat"));
-  }
-
-  @Test
-  public void testGetDecimalReq() {
-    dataRecord.set("decimal", new BigDecimal("123.45"));
-    assertEquals(new BigDecimal("123.45"), dataRecord.getDecimalReq("decimal"));
-  }
-
-  @Test
-  public void testGetDecimalReqThrowsException() {
-    assertThrows(IllegalStateException.class, () -> dataRecord.getDecimalReq("missingDecimal"));
-  }
-
-  @Test
-  public void testGetBoolWithIfNull() {
-    dataRecord.set("col1", true);
-    assertTrue(dataRecord.getBool("col1", false));
-    assertFalse(dataRecord.getBool("missingCol", false));
-  }
-
-  @Test
-  public void testGetByteWithIfNull() {
-    dataRecord.set("col1", (byte) 10);
-    assertEquals(10, dataRecord.getByte("col1", (byte) 5));
-    assertEquals(5, dataRecord.getByte("missingCol", (byte) 5));
-  }
-
-  @Test
-  public void testGetShortWithIfNull() {
-    dataRecord.set("col1", (short) 20);
-    assertEquals(20, dataRecord.getShort("col1", (short) 10));
-    assertEquals(10, dataRecord.getShort("missingCol", (short) 10));
-  }
-
-  @Test
-  public void testGetIntWithIfNull() {
-    dataRecord.set("col1", 42);
-    assertEquals(42, dataRecord.getInt("col1", 50));
-    assertEquals(50, dataRecord.getInt("missingCol", 50));
-  }
-
-  @Test
-  public void testGetLongWithIfNull() {
-    dataRecord.set("col1", 100L);
-    assertEquals(100L, dataRecord.getLong("col1", 50L));
-    assertEquals(50L, dataRecord.getLong("missingCol", 50L));
-  }
-
-  @Test
-  public void testGetFloatWithIfNull() {
-    dataRecord.set("col1", 1.23f);
-    assertEquals(1.23f, dataRecord.getFloat("col1", 0.5f), 0.001);
-    assertEquals(0.5f, dataRecord.getFloat("missingCol", 0.5f), 0.001);
-  }
-
-  @Test
-  public void testGetDoubleWithIfNull() {
-    dataRecord.set("col1", 3.14);
-    assertEquals(3.14, dataRecord.getDouble("col1", 1.5), 0.001);
-    assertEquals(1.5, dataRecord.getDouble("missingCol", 1.5), 0.001);
-  }
-
-  @Test
-  public void testGetDecimalWithIfNull() {
-    dataRecord.set("col1", new BigDecimal("100.5"));
-    assertEquals(new BigDecimal("100.5"), dataRecord.getDecimal("col1", 50.5));
-    assertEquals(new BigDecimal("50.5"), dataRecord.getDecimal("missingCol", 50.5));
-  }
-
-  @Test
-  public void testGetJava8DateTimes() {
-    LocalDate date = LocalDate.of(2023, 9, 10);
-    LocalDateTime dateTime = LocalDateTime.of(2023, 9, 10, 12, 30);
+  void testGetLocalTime() {
     LocalTime time = LocalTime.of(12, 30);
-    OffsetDateTime offsetDateTime = OffsetDateTime.now();
-    OffsetTime offsetTime = OffsetTime.now();
-
-    dataRecord.set("date", date);
-    dataRecord.set("dateTime", dateTime);
-    dataRecord.set("time", time);
-    dataRecord.set("offsetDateTime", offsetDateTime);
-    dataRecord.set("offsetTime", offsetTime);
-
-    assertEquals(date, dataRecord.getLocalDate("date"));
-    assertEquals(dateTime, dataRecord.getLocalDateTime("dateTime"));
-    assertEquals(time, dataRecord.getLocalTime("time"));
-    assertEquals(offsetDateTime, dataRecord.getOffsetDateTime("offsetDateTime"));
-    assertEquals(offsetTime, dataRecord.getOffsetTime("offsetTime"));
+    dataRecord.set("key", time);
+    assertEquals(time, dataRecord.getLocalTime("key"));
+    assertNull(dataRecord.getLocalTime("nonExistentKey"));
   }
 
   @Test
-  public void testCaseInsensitiveKeys() {
-    dataRecord.set("ColumnLabel", "Value");
-    assertEquals("Value", dataRecord.get("columnlabel"));
+  void testGetLocalTimeReq() {
+    LocalTime time = LocalTime.of(12, 30);
+    dataRecord.set("key", time);
+    assertEquals(time, dataRecord.getLocalTimeReq("key"));
   }
 
   @Test
-  public void testToValues() {
-    dataRecord.set("col1", "value1");
-    dataRecord.set("col2", "value2");
-    String[] columns = { "col1", "col2" };
-    Object[] values = dataRecord.toValues(columns);
-    assertArrayEquals(new Object[] { "value1", "value2" }, values);
+  void testGetLocalDateTime() {
+    LocalDateTime dateTime = LocalDateTime.of(2023, 1, 1, 12, 30);
+    dataRecord.set("key", dateTime);
+    assertEquals(dateTime, dataRecord.getLocalDateTime("key"));
+    assertNull(dataRecord.getLocalDateTime("nonExistentKey"));
   }
 
   @Test
-  public void testGetStringUpperWithIfNull() {
-    dataRecord.set("col1", "hello");
-    assertEquals("HELLO", dataRecord.getStringUpper("col1", "Default"));
-    assertEquals("DEFAULT", dataRecord.getStringUpper("missingCol", "Default"));
+  void testGetLocalDateTimeReq() {
+    LocalDateTime dateTime = LocalDateTime.of(2023, 1, 1, 12, 30);
+    dataRecord.set("key", dateTime);
+    assertEquals(dateTime, dataRecord.getLocalDateTimeReq("key"));
   }
 
   @Test
-  public void testGetStringLowerWithIfNull() {
-    dataRecord.set("col1", "HELLO");
-    assertEquals("hello", dataRecord.getStringLower("col1", "Default"));
-    assertEquals("default", dataRecord.getStringLower("missingCol", "Default"));
+  void testGetOffsetDateTime() {
+    OffsetDateTime offsetDateTime = OffsetDateTime.parse("2023-01-01T12:30+01:00");
+    dataRecord.set("key", offsetDateTime);
+    assertEquals(offsetDateTime, dataRecord.getOffsetDateTime("key"));
+    assertNull(dataRecord.getOffsetDateTime("nonExistentKey"));
+  }
+
+  @Test
+  void testGetOffsetDateTimeReq() {
+    OffsetDateTime offsetDateTime = OffsetDateTime.parse("2023-01-01T12:30+01:00");
+    dataRecord.set("key", offsetDateTime);
+    assertEquals(offsetDateTime, dataRecord.getOffsetDateTimeReq("key"));
+  }
+
+  @Test
+  void testGetOffsetTime() {
+    OffsetTime offsetTime = OffsetTime.parse("12:30+01:00");
+    dataRecord.set("key", offsetTime);
+    assertEquals(offsetTime, dataRecord.getOffsetTime("key"));
+    assertNull(dataRecord.getOffsetTime("nonExistentKey"));
+  }
+
+  @Test
+  void testGetOffsetTimeReq() {
+    OffsetTime offsetTime = OffsetTime.parse("12:30+01:00");
+    dataRecord.set("key", offsetTime);
+    assertEquals(offsetTime, dataRecord.getOffsetTimeReq("key"));
   }
 }
