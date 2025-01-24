@@ -52,56 +52,6 @@ public class ParseUtils {
     throw new BoolFormatException(value);
   }
 
-  public static byte parseByte(String value) throws NumberFormatException {
-    Arguments.notNull(value);
-    return Byte.parseByte(value);
-  }
-
-  public static short parseShort(String value) throws NumberFormatException {
-    Arguments.notNull(value);
-    return Short.parseShort(value);
-  }
-
-  public static int parseInt(String value) throws NumberFormatException {
-    Arguments.notNull(value);
-    return Integer.parseInt(value);
-  }
-
-  public static long parseLong(String value) throws NumberFormatException {
-    Arguments.notNull(value);
-    return Long.parseLong(value);
-  }
-
-  public static float parseFloat(String value) throws NumberFormatException, NaNInfinityException {
-    Arguments.notNull(value);
-    float val = Float.parseFloat(value);
-    if (!Float.isFinite(val)) {
-
-      throw new NaNInfinityException(
-          STR.fmt("Failed to convert '{}' into a finite float. Value is NaN or Infinity.", value));
-    }
-    return val;
-  }
-
-  public static double parseDouble(String value) throws NumberFormatException, NaNInfinityException {
-    Arguments.notNull(value);
-    double val = Double.parseDouble(value);
-    if (!Double.isFinite(val)) {
-
-      throw new NaNInfinityException(
-          STR.fmt("Failed to convert '{}' into a finite double. Value is NaN or Infinity.", value));
-    }
-    return val;
-  }
-
-  public static <T extends Enum<T>> T parseEnumReq(String enumValue, Class<T> enumType)
-      throws IllegalArgumentException {
-    Arguments.notNull(enumValue);
-    Arguments.notNull(enumType);
-
-    return Enum.valueOf(enumType, enumValue);
-  }
-
   public static boolean parseBool(String value, boolean ifNullOrInvalid) {
     if (value == null) {
       return ifNullOrInvalid;
@@ -111,6 +61,19 @@ public class ParseUtils {
     } catch (BoolFormatException ex) {
       return ifNullOrInvalid;
     }
+  }
+
+  public static Boolean parseBoolOpt(String value) throws BoolFormatException {
+    return (value != null) ? parseBool(value) : null;
+  }
+
+  public static Boolean parseBoolOpt(String value, Boolean ifNullOrInvalid) {
+    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseBool(val)) : ifNullOrInvalid;
+  }
+
+  public static byte parseByte(String value) throws NumberFormatException {
+    Arguments.notNull(value);
+    return Byte.parseByte(value);
   }
 
   public static byte parseByte(String value, byte ifNullOrInvalid) {
@@ -124,6 +87,19 @@ public class ParseUtils {
     }
   }
 
+  public static Byte parseByteOpt(String value) throws NumberFormatException {
+    return (value != null) ? parseByte(value) : null;
+  }
+
+  public static Byte parseByteOpt(String value, Byte ifNullOrInvalid) {
+    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseByte(val)) : ifNullOrInvalid;
+  }
+
+  public static short parseShort(String value) throws NumberFormatException {
+    Arguments.notNull(value);
+    return Short.parseShort(value);
+  }
+
   public static short parseShort(String value, short ifNullOrInvalid) {
     if (value == null) {
       return ifNullOrInvalid;
@@ -133,6 +109,19 @@ public class ParseUtils {
     } catch (NumberFormatException ex) {
       return ifNullOrInvalid;
     }
+  }
+
+  public static Short parseShortOpt(String value) throws NumberFormatException {
+    return (value != null) ? parseShort(value) : null;
+  }
+
+  public static Short parseShortOpt(String value, Short ifNullOrInvalid) {
+    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseShort(val)) : ifNullOrInvalid;
+  }
+
+  public static int parseInt(String value) throws NumberFormatException {
+    Arguments.notNull(value);
+    return Integer.parseInt(value);
   }
 
   public static int parseInt(String value, int ifNullOrInvalid) {
@@ -146,6 +135,19 @@ public class ParseUtils {
     }
   }
 
+  public static Integer parseIntOpt(String value) throws NumberFormatException {
+    return (value != null) ? parseInt(value) : null;
+  }
+
+  public static Integer parseIntOpt(String value, Integer ifNullOrInvalid) {
+    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseInt(val)) : ifNullOrInvalid;
+  }
+
+  public static long parseLong(String value) throws NumberFormatException {
+    Arguments.notNull(value);
+    return Long.parseLong(value);
+  }
+
   public static long parseLong(String value, long ifNullOrInvalid) {
     if (value == null) {
       return ifNullOrInvalid;
@@ -155,6 +157,24 @@ public class ParseUtils {
     } catch (NumberFormatException ex) {
       return ifNullOrInvalid;
     }
+  }
+
+  public static Long parseLongOpt(String value) throws NumberFormatException {
+    return (value != null) ? parseLong(value) : null;
+  }
+
+  public static Long parseLongOpt(String value, Long ifNullOrInvalid) {
+    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseLong(val)) : ifNullOrInvalid;
+  }
+
+  public static float parseFloat(String value) throws NumberFormatException, NaNInfinityException {
+    Arguments.notNull(value);
+    float val = Float.parseFloat(value);
+    if (!Float.isFinite(val)) {
+      throw new NaNInfinityException(
+          STR.fmt("Failed to convert '{}' into a finite float. Value is NaN or Infinity.", value));
+    }
+    return val;
   }
 
   public static float parseFloat(String value, float ifNullOrInvalid) {
@@ -168,6 +188,24 @@ public class ParseUtils {
     }
   }
 
+  public static Float parseFloatOpt(String value) throws NumberFormatException, NaNInfinityException {
+    return (value != null) ? parseFloat(value) : null;
+  }
+
+  public static Float parseFloatOpt(String value, Float ifNullOrInvalid) {
+    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseFloat(val)) : ifNullOrInvalid;
+  }
+
+  public static double parseDouble(String value) throws NumberFormatException, NaNInfinityException {
+    Arguments.notNull(value);
+    double val = Double.parseDouble(value);
+    if (!Double.isFinite(val)) {
+      throw new NaNInfinityException(
+          STR.fmt("Failed to convert '{}' into a finite double. Value is NaN or Infinity.", value));
+    }
+    return val;
+  }
+
   public static double parseDouble(String value, double ifNullOrInvalid) {
     if (value == null) {
       return ifNullOrInvalid;
@@ -177,6 +215,14 @@ public class ParseUtils {
     } catch (NumberFormatException ex) {
       return ifNullOrInvalid;
     }
+  }
+
+  public static Double parseDoubleOpt(String value) throws NumberFormatException, NaNInfinityException {
+    return (value != null) ? parseDouble(value) : null;
+  }
+
+  public static Double parseDoubleOpt(String value, Double ifNullOrInvalid) {
+    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseDouble(val)) : ifNullOrInvalid;
   }
 
   public static BigDecimal parseDecimal(String value, double ifNullOrInvalid) {
@@ -190,41 +236,22 @@ public class ParseUtils {
     }
   }
 
-  public static <T extends Enum<T>> T parseEnumOpt(String enumValue, Class<T> enumType, T ifNullOrInvalid) {
+  public static BigDecimal parseDecimal(String value) throws NumberFormatException {
+    return (value != null) ? new BigDecimal(value) : null;
+  }
+
+  public static BigDecimal parseDecimal(String value, BigDecimal ifNullOrInvalid) {
+    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> new BigDecimal(val)) : ifNullOrInvalid;
+  }
+
+  public static <T extends Enum<T>> T parseEnum(String enumValue, Class<T> enumType) throws IllegalArgumentException {
+    Arguments.notNull(enumType);
+    return (enumValue != null) ? Enum.valueOf(enumType, enumValue) : null;
+  }
+
+  public static <T extends Enum<T>> T parseEnum(String enumValue, Class<T> enumType, T ifNullOrInvalid) {
     return (enumValue != null) ? parseValue(enumValue, ifNullOrInvalid, val -> Enum.valueOf(enumType, val))
         : ifNullOrInvalid;
-  }
-
-  public static Boolean parseBoolOpt(String value, Boolean ifNullOrInvalid) {
-    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseBool(val)) : ifNullOrInvalid;
-  }
-
-  public static Byte parseByteOpt(String value, Byte ifNullOrInvalid) {
-    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseByte(val)) : ifNullOrInvalid;
-  }
-
-  public static Short parseShortOpt(String value, Short ifNullOrInvalid) {
-    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseShort(val)) : ifNullOrInvalid;
-  }
-
-  public static Integer parseIntOpt(String value, Integer ifNullOrInvalid) {
-    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseInt(val)) : ifNullOrInvalid;
-  }
-
-  public static Long parseLongOpt(String value, Long ifNullOrInvalid) {
-    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseLong(val)) : ifNullOrInvalid;
-  }
-
-  public static Float parseFloatOpt(String value, Float ifNullOrInvalid) {
-    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseFloat(val)) : ifNullOrInvalid;
-  }
-
-  public static Double parseDoubleOpt(String value, Double ifNullOrInvalid) {
-    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseDouble(val)) : ifNullOrInvalid;
-  }
-
-  public static BigDecimal parseDecimalOpt(String value, BigDecimal ifNullOrInvalid) {
-    return (value != null) ? parseValue(value, ifNullOrInvalid, val -> new BigDecimal(val)) : ifNullOrInvalid;
   }
 
   public static <T> T parseValue(String value, Function<String, T> exceptionalConverter) {
@@ -244,12 +271,12 @@ public class ParseUtils {
 
   public static boolean isTrueValue(String value) {
     return "true".equalsIgnoreCase(value) || "t".equalsIgnoreCase(value) || "yes".equalsIgnoreCase(value)
-        || "y".equalsIgnoreCase(value) || "1".equalsIgnoreCase(value);
+        || "y".equalsIgnoreCase(value) || "1".equals(value);
   }
 
   public static boolean isFalseValue(String value) {
     return "false".equalsIgnoreCase(value) || "f".equalsIgnoreCase(value) || "no".equalsIgnoreCase(value)
-        || "n".equalsIgnoreCase(value) || "0".equalsIgnoreCase(value);
+        || "n".equalsIgnoreCase(value) || "0".equals(value);
   }
 
   public static LocalDate parseLocalDate(String value, String... patterns) throws TemporalFormatException {
@@ -259,7 +286,21 @@ public class ParseUtils {
     return doParseTemporal(value, LocalDate.class, patterns, (v, p) -> LocalDate.parse(v, DateUtils.getFormatter(p)));
   }
 
+  public static LocalDate parseLocalDate(String value, Collection<String> patterns) throws TemporalFormatException {
+    if (value == null) {
+      return null;
+    }
+    return doParseTemporal(value, LocalDate.class, patterns, (v, p) -> LocalDate.parse(v, DateUtils.getFormatter(p)));
+  }
+
   public static LocalTime parseLocalTime(String value, String... patterns) throws TemporalFormatException {
+    if (value == null) {
+      return null;
+    }
+    return doParseTemporal(value, LocalTime.class, patterns, (v, p) -> LocalTime.parse(v, DateUtils.getFormatter(p)));
+  }
+
+  public static LocalTime parseLocalTime(String value, Collection<String> patterns) throws TemporalFormatException {
     if (value == null) {
       return null;
     }
@@ -274,6 +315,15 @@ public class ParseUtils {
         (v, p) -> LocalDateTime.parse(v, DateUtils.getFormatter(p)));
   }
 
+  public static LocalDateTime parseLocalDateTime(String value, Collection<String> patterns)
+      throws TemporalFormatException {
+    if (value == null) {
+      return null;
+    }
+    return doParseTemporal(value, LocalDateTime.class, patterns,
+        (v, p) -> LocalDateTime.parse(v, DateUtils.getFormatter(p)));
+  }
+
   public static YearMonth parseYearMonth(String value, String... patterns) throws TemporalFormatException {
     if (value == null) {
       return null;
@@ -281,7 +331,21 @@ public class ParseUtils {
     return doParseTemporal(value, YearMonth.class, patterns, (v, p) -> YearMonth.parse(v, DateUtils.getFormatter(p)));
   }
 
+  public static YearMonth parseYearMonth(String value, Collection<String> patterns) throws TemporalFormatException {
+    if (value == null) {
+      return null;
+    }
+    return doParseTemporal(value, YearMonth.class, patterns, (v, p) -> YearMonth.parse(v, DateUtils.getFormatter(p)));
+  }
+
   public static OffsetTime parseOffsetTime(String value, String... patterns) throws TemporalFormatException {
+    if (value == null) {
+      return null;
+    }
+    return doParseTemporal(value, OffsetTime.class, patterns, (v, p) -> OffsetTime.parse(v, DateUtils.getFormatter(p)));
+  }
+
+  public static OffsetTime parseOffsetTime(String value, Collection<String> patterns) throws TemporalFormatException {
     if (value == null) {
       return null;
     }
@@ -296,57 +360,6 @@ public class ParseUtils {
         (v, p) -> OffsetDateTime.parse(v, DateUtils.getFormatter(p)));
   }
 
-  private static <T> T doParseTemporal(String value, Class<T> targetClass, String[] patterns,
-      BiFunction<String, String, T> exceptionalConverter) throws TemporalFormatException {
-    Arguments.hasElements(patterns);
-
-    for (String pattern : patterns) {
-      try {
-        return exceptionalConverter.apply(value, pattern);
-      } catch (Exception ex) {
-        // ignore
-      }
-    }
-    throw new TemporalFormatException(STR.fmt("Failed to parse {} from '{}'.", targetClass, value));
-  }
-
-  public static LocalDate parseLocalDate(String value, Collection<String> patterns) throws TemporalFormatException {
-    if (value == null) {
-      return null;
-    }
-    return doParseTemporal(value, LocalDate.class, patterns, (v, p) -> LocalDate.parse(v, DateUtils.getFormatter(p)));
-  }
-
-  public static LocalTime parseLocalTime(String value, Collection<String> patterns) throws TemporalFormatException {
-    if (value == null) {
-      return null;
-    }
-    return doParseTemporal(value, LocalTime.class, patterns, (v, p) -> LocalTime.parse(v, DateUtils.getFormatter(p)));
-  }
-
-  public static LocalDateTime parseLocalDateTime(String value, Collection<String> patterns)
-      throws TemporalFormatException {
-    if (value == null) {
-      return null;
-    }
-    return doParseTemporal(value, LocalDateTime.class, patterns,
-        (v, p) -> LocalDateTime.parse(v, DateUtils.getFormatter(p)));
-  }
-
-  public static YearMonth parseYearMonth(String value, Collection<String> patterns) throws TemporalFormatException {
-    if (value == null) {
-      return null;
-    }
-    return doParseTemporal(value, YearMonth.class, patterns, (v, p) -> YearMonth.parse(v, DateUtils.getFormatter(p)));
-  }
-
-  public static OffsetTime parseOffsetTime(String value, Collection<String> patterns) throws TemporalFormatException {
-    if (value == null) {
-      return null;
-    }
-    return doParseTemporal(value, OffsetTime.class, patterns, (v, p) -> OffsetTime.parse(v, DateUtils.getFormatter(p)));
-  }
-
   public static OffsetDateTime parseOffsetDateTime(String value, Collection<String> patterns)
       throws TemporalFormatException {
     if (value == null) {
@@ -356,9 +369,14 @@ public class ParseUtils {
         (v, p) -> OffsetDateTime.parse(v, DateUtils.getFormatter(p)));
   }
 
-  private static <T> T doParseTemporal(String value, Class<T> targetClass, Collection<String> patterns,
+  private static <T> T doParseTemporal(String value, Class<T> targetClass, String[] patterns,
       BiFunction<String, String, T> exceptionalConverter) throws TemporalFormatException {
-    Arguments.hasElements(patterns);
+
+    return doParseTemporal(value, targetClass, new ArrayUtils.ArrayIterable<>(patterns), exceptionalConverter);
+  }
+
+  private static <T> T doParseTemporal(String value, Class<T> targetClass, Iterable<String> patterns,
+      BiFunction<String, String, T> exceptionalConverter) throws TemporalFormatException {
 
     boolean valueHasT = value.indexOf('T') >= 0;
     for (String pattern : patterns) {
