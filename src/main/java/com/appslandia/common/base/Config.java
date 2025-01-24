@@ -62,6 +62,8 @@ public interface Config {
     }
   }
 
+  // Strings
+
   default public String getString(String key, String ifNull) {
     String value = getString(key);
     return (value != null) ? value : ifNull;
@@ -84,29 +86,11 @@ public interface Config {
     return (value != null) ? SplitUtils.splitByComma(value, behavior) : StringUtils.EMPTY_ARRAY;
   }
 
+  // Primitives & Wrappers
+
   default public boolean getBool(String key) throws BoolFormatException {
     String value = getStringReq(key);
     return ParseUtils.parseBool(value);
-  }
-
-  default public int getInt(String key) throws NumberFormatException {
-    String value = getStringReq(key);
-    return ParseUtils.parseInt(value);
-  }
-
-  default public long getLong(String key) throws NumberFormatException {
-    String value = getStringReq(key);
-    return ParseUtils.parseLong(value);
-  }
-
-  default public double getDouble(String key) throws NumberFormatException {
-    String value = getStringReq(key);
-    return ParseUtils.parseDouble(value);
-  }
-
-  default public BigDecimal getDecimalReq(String key) throws NumberFormatException {
-    String value = getStringReq(key);
-    return new BigDecimal(value);
   }
 
   default public boolean getBool(String key, boolean ifNullOrInvalid) {
@@ -114,9 +98,19 @@ public interface Config {
     return (value != null) ? ParseUtils.parseBool(value, ifNullOrInvalid) : ifNullOrInvalid;
   }
 
+  default public int getInt(String key) throws NumberFormatException {
+    String value = getStringReq(key);
+    return ParseUtils.parseInt(value);
+  }
+
   default public int getInt(String key, int ifNullOrInvalid) {
     String value = getString(key);
     return (value != null) ? ParseUtils.parseInt(value, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
+  default public long getLong(String key) throws NumberFormatException {
+    String value = getStringReq(key);
+    return ParseUtils.parseLong(value);
   }
 
   default public long getLong(String key, long ifNullOrInvalid) {
@@ -124,9 +118,21 @@ public interface Config {
     return (value != null) ? ParseUtils.parseLong(value, ifNullOrInvalid) : ifNullOrInvalid;
   }
 
+  default public double getDouble(String key) throws NumberFormatException {
+    String value = getStringReq(key);
+    return ParseUtils.parseDouble(value);
+  }
+
   default public double getDouble(String key, double ifNullOrInvalid) {
     String value = getString(key);
     return (value != null) ? ParseUtils.parseDouble(value, ifNullOrInvalid) : ifNullOrInvalid;
+  }
+
+  // Decimal
+
+  default public BigDecimal getDecimalReq(String key) throws NumberFormatException {
+    String value = getStringReq(key);
+    return new BigDecimal(value);
   }
 
   default public BigDecimal getDecimal(String key, double ifNullOrInvalid) {
