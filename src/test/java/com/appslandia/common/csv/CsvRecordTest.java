@@ -165,8 +165,8 @@ public class CsvRecordTest {
   }
 
   @Test
-  public void testGetDecimalOpt() {
-    assertEquals(new BigDecimal("1.23"), csvRecord.getDecimalOpt(3, BigDecimal.ZERO));
+  public void testGetDecimal() {
+    assertEquals(new BigDecimal("1.23"), csvRecord.getDecimal(3, BigDecimal.ZERO));
   }
 
   @Test

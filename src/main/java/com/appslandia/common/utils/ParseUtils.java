@@ -225,6 +225,10 @@ public class ParseUtils {
     return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseDouble(val)) : ifNullOrInvalid;
   }
 
+  public static BigDecimal parseDecimal(String value) throws NumberFormatException {
+    return (value != null) ? new BigDecimal(value) : null;
+  }
+
   public static BigDecimal parseDecimal(String value, double ifNullOrInvalid) {
     if (value == null) {
       return new BigDecimal(Double.toString(ifNullOrInvalid));
@@ -234,10 +238,6 @@ public class ParseUtils {
     } catch (NumberFormatException ex) {
       return new BigDecimal(Double.toString(ifNullOrInvalid));
     }
-  }
-
-  public static BigDecimal parseDecimal(String value) throws NumberFormatException {
-    return (value != null) ? new BigDecimal(value) : null;
   }
 
   public static BigDecimal parseDecimal(String value, BigDecimal ifNullOrInvalid) {
