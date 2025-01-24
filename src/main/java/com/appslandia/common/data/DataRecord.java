@@ -123,45 +123,24 @@ public class DataRecord extends CaseInsensitiveMap<Object> {
     return (value != null) ? value.toLowerCase(locale) : StringUtils.toLowerCase(ifNull, locale);
   }
 
-  // Optional Values
+  // Primitives & Wrappers
 
   public Boolean getBoolOpt(String columnLabel) {
     return (Boolean) super.get(columnLabel);
   }
 
-  public Byte getByteOpt(String columnLabel) {
-    return (Byte) super.get(columnLabel);
-  }
-
-  public Short getShortOpt(String columnLabel) {
-    return (Short) super.get(columnLabel);
-  }
-
-  public Integer getIntOpt(String columnLabel) {
-    return (Integer) super.get(columnLabel);
-  }
-
-  public Long getLongOpt(String columnLabel) {
-    return (Long) super.get(columnLabel);
-  }
-
-  public Float getFloatOpt(String columnLabel) {
-    return (Float) super.get(columnLabel);
-  }
-
-  public Double getDoubleOpt(String columnLabel) {
-    return (Double) super.get(columnLabel);
-  }
-
-  public BigDecimal getDecimal(String columnLabel) {
-    return (BigDecimal) super.get(columnLabel);
-  }
-
-  // Required Values
-
   public boolean getBool(String columnLabel) {
     Object value = getReq(columnLabel);
     return (boolean) value;
+  }
+
+  public boolean getBool(String columnLabel, boolean ifNull) {
+    Object value = get(columnLabel);
+    return (value != null) ? (boolean) value : ifNull;
+  }
+
+  public Byte getByteOpt(String columnLabel) {
+    return (Byte) super.get(columnLabel);
   }
 
   public byte getByte(String columnLabel) {
@@ -169,46 +148,18 @@ public class DataRecord extends CaseInsensitiveMap<Object> {
     return (byte) value;
   }
 
-  public short getShort(String columnLabel) {
-    Object value = getReq(columnLabel);
-    return (short) value;
-  }
-
-  public int getInt(String columnLabel) {
-    Object value = getReq(columnLabel);
-    return (int) value;
-  }
-
-  public long getLong(String columnLabel) {
-    Object value = getReq(columnLabel);
-    return (long) value;
-  }
-
-  public float getFloat(String columnLabel) {
-    Object value = getReq(columnLabel);
-    return (float) value;
-  }
-
-  public double getDouble(String columnLabel) {
-    Object value = getReq(columnLabel);
-    return (double) value;
-  }
-
-  public BigDecimal getDecimalReq(String columnLabel) {
-    Object value = getReq(columnLabel);
-    return (BigDecimal) value;
-  }
-
-  // Required Values, ifNull
-
-  public boolean getBool(String columnLabel, boolean ifNull) {
-    Object value = get(columnLabel);
-    return (value != null) ? (boolean) value : ifNull;
-  }
-
   public byte getByte(String columnLabel, byte ifNull) {
     Object value = get(columnLabel);
     return (value != null) ? (byte) value : ifNull;
+  }
+
+  public Short getShortOpt(String columnLabel) {
+    return (Short) super.get(columnLabel);
+  }
+
+  public short getShort(String columnLabel) {
+    Object value = getReq(columnLabel);
+    return (short) value;
   }
 
   public short getShort(String columnLabel, short ifNull) {
@@ -216,9 +167,27 @@ public class DataRecord extends CaseInsensitiveMap<Object> {
     return (value != null) ? (short) value : ifNull;
   }
 
+  public Integer getIntOpt(String columnLabel) {
+    return (Integer) super.get(columnLabel);
+  }
+
+  public int getInt(String columnLabel) {
+    Object value = getReq(columnLabel);
+    return (int) value;
+  }
+
   public int getInt(String columnLabel, int ifNull) {
     Object value = get(columnLabel);
     return (value != null) ? (int) value : ifNull;
+  }
+
+  public Long getLongOpt(String columnLabel) {
+    return (Long) super.get(columnLabel);
+  }
+
+  public long getLong(String columnLabel) {
+    Object value = getReq(columnLabel);
+    return (long) value;
   }
 
   public long getLong(String columnLabel, long ifNull) {
@@ -226,14 +195,43 @@ public class DataRecord extends CaseInsensitiveMap<Object> {
     return (value != null) ? (long) value : ifNull;
   }
 
+  public Float getFloatOpt(String columnLabel) {
+    return (Float) super.get(columnLabel);
+  }
+
+  public float getFloat(String columnLabel) {
+    Object value = getReq(columnLabel);
+    return (float) value;
+  }
+
   public float getFloat(String columnLabel, float ifNull) {
     Object value = get(columnLabel);
     return (value != null) ? (float) value : ifNull;
   }
 
+  public Double getDoubleOpt(String columnLabel) {
+    return (Double) super.get(columnLabel);
+  }
+
+  public double getDouble(String columnLabel) {
+    Object value = getReq(columnLabel);
+    return (double) value;
+  }
+
   public double getDouble(String columnLabel, double ifNull) {
     Object value = get(columnLabel);
     return (value != null) ? (double) value : ifNull;
+  }
+
+  // Decimal
+
+  public BigDecimal getDecimal(String columnLabel) {
+    return (BigDecimal) super.get(columnLabel);
+  }
+
+  public BigDecimal getDecimalReq(String columnLabel) {
+    Object value = getReq(columnLabel);
+    return (BigDecimal) value;
   }
 
   public BigDecimal getDecimal(String columnLabel, double ifNull) {
