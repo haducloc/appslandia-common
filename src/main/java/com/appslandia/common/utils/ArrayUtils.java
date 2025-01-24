@@ -317,12 +317,12 @@ public class ArrayUtils {
     return m;
   }
 
-  public static class ArrayObjIterator implements Iterator<Object> {
+  public static class ArrayIteratorObj implements Iterator<Object> {
     final Object array;
     final int len;
     int i = 0;
 
-    public ArrayObjIterator(Object array) {
+    public ArrayIteratorObj(Object array) {
       Arguments.notNull(array);
       Arguments.isTrue(array.getClass().isArray());
 
@@ -341,10 +341,10 @@ public class ArrayUtils {
     }
   }
 
-  public static class ArrayObjIterable implements Iterable<Object> {
+  public static class ArrayIterableObj implements Iterable<Object> {
     final Object array;
 
-    public ArrayObjIterable(Object array) {
+    public ArrayIterableObj(Object array) {
       Arguments.notNull(array);
       Arguments.isTrue(array.getClass().isArray());
 
@@ -353,7 +353,7 @@ public class ArrayUtils {
 
     @Override
     public Iterator<Object> iterator() {
-      return new ArrayObjIterator(this.array);
+      return new ArrayIteratorObj(this.array);
     }
   }
 
