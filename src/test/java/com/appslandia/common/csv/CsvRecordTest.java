@@ -130,42 +130,42 @@ public class CsvRecordTest {
   }
 
   @Test
-  public void testGetBoolOpt() {
-    assertTrue(csvRecord.getBoolOpt(2, false));
+  public void testGetBool_ifNullOrInvalid() {
+    assertTrue(csvRecord.getBool(2, false));
   }
 
   @Test
-  public void testGetByteOpt() {
-    assertEquals(Byte.valueOf((byte) 123), csvRecord.getByteOpt(1, (byte) 0));
+  public void testGetByte_ifNullOrInvalid() {
+    assertEquals(Byte.valueOf((byte) 123), csvRecord.getByte(1, (byte) 0));
   }
 
   @Test
-  public void testGetShortOpt() {
-    assertEquals(Short.valueOf((short) 123), csvRecord.getShortOpt(1, (short) 0));
+  public void testGetShort_ifNullOrInvalid() {
+    assertEquals(Short.valueOf((short) 123), csvRecord.getShort(1, (short) 0));
   }
 
   @Test
-  public void testGetIntOpt() {
-    assertEquals(Integer.valueOf(123), csvRecord.getIntOpt(1, 0));
+  public void testGetInt_ifNullOrInvalid() {
+    assertEquals(Integer.valueOf(123), csvRecord.getInt(1, 0));
   }
 
   @Test
-  public void testGetLongOpt() {
-    assertEquals(Long.valueOf(123), csvRecord.getLongOpt(1, 0L));
+  public void testGetLong_ifNullOrInvalid() {
+    assertEquals(Long.valueOf(123), csvRecord.getLong(1, 0L));
   }
 
   @Test
-  public void testGetFloatOpt() {
-    assertEquals(Float.valueOf(1.23f), csvRecord.getFloatOpt(3, 0f));
+  public void testGetFloat_ifNullOrInvalid() {
+    assertEquals(Float.valueOf(1.23f), csvRecord.getFloat(3, 0f));
   }
 
   @Test
-  public void testGetDoubleOpt() {
-    assertEquals(Double.valueOf(1.23), csvRecord.getDoubleOpt(3, 0.0));
+  public void testGetDouble_ifNullOrInvalid() {
+    assertEquals(Double.valueOf(1.23), csvRecord.getDouble(3, 0.0));
   }
 
   @Test
-  public void testGetDecimal() {
+  public void testGetDecimal_ifNullOrInvalid() {
     assertEquals(new BigDecimal("1.23"), csvRecord.getDecimal(3, BigDecimal.ZERO));
   }
 

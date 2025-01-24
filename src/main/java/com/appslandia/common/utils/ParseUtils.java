@@ -67,7 +67,7 @@ public class ParseUtils {
     return (value != null) ? parseBool(value) : null;
   }
 
-  public static Boolean parseBoolOpt(String value, Boolean ifNullOrInvalid) {
+  public static Boolean parseBool(String value, Boolean ifNullOrInvalid) {
     return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseBool(val)) : ifNullOrInvalid;
   }
 
@@ -91,7 +91,7 @@ public class ParseUtils {
     return (value != null) ? parseByte(value) : null;
   }
 
-  public static Byte parseByteOpt(String value, Byte ifNullOrInvalid) {
+  public static Byte parseByte(String value, Byte ifNullOrInvalid) {
     return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseByte(val)) : ifNullOrInvalid;
   }
 
@@ -115,7 +115,7 @@ public class ParseUtils {
     return (value != null) ? parseShort(value) : null;
   }
 
-  public static Short parseShortOpt(String value, Short ifNullOrInvalid) {
+  public static Short parseShort(String value, Short ifNullOrInvalid) {
     return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseShort(val)) : ifNullOrInvalid;
   }
 
@@ -139,7 +139,7 @@ public class ParseUtils {
     return (value != null) ? parseInt(value) : null;
   }
 
-  public static Integer parseIntOpt(String value, Integer ifNullOrInvalid) {
+  public static Integer parseInt(String value, Integer ifNullOrInvalid) {
     return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseInt(val)) : ifNullOrInvalid;
   }
 
@@ -163,7 +163,7 @@ public class ParseUtils {
     return (value != null) ? parseLong(value) : null;
   }
 
-  public static Long parseLongOpt(String value, Long ifNullOrInvalid) {
+  public static Long parseLong(String value, Long ifNullOrInvalid) {
     return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseLong(val)) : ifNullOrInvalid;
   }
 
@@ -192,7 +192,7 @@ public class ParseUtils {
     return (value != null) ? parseFloat(value) : null;
   }
 
-  public static Float parseFloatOpt(String value, Float ifNullOrInvalid) {
+  public static Float parseFloat(String value, Float ifNullOrInvalid) {
     return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseFloat(val)) : ifNullOrInvalid;
   }
 
@@ -221,7 +221,7 @@ public class ParseUtils {
     return (value != null) ? parseDouble(value) : null;
   }
 
-  public static Double parseDoubleOpt(String value, Double ifNullOrInvalid) {
+  public static Double parseDouble(String value, Double ifNullOrInvalid) {
     return (value != null) ? parseValue(value, ifNullOrInvalid, val -> parseDouble(val)) : ifNullOrInvalid;
   }
 
