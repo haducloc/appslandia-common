@@ -295,7 +295,7 @@ public class ResultSetImpl implements ResultSet {
     return value;
   }
 
-  // Java 8 Date/Times
+  // Temporal
 
   public LocalDate getLocalDateReq(String columnLabel) throws java.sql.SQLException {
     return getObjectReq(columnLabel, LocalDate.class);

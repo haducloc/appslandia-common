@@ -337,7 +337,7 @@ public class CsvRecord {
     return (value != null) ? ParseUtils.parseValue(value, ifNullOrInvalid, exceptionalConverter) : ifNullOrInvalid;
   }
 
-  // Temporal Types
+  // Temporal
 
   public LocalDate getLocalDateReq(int index) throws TemporalFormatException {
     return getLocalDateReq(index, TemporalPatterns.DEFAULT);

@@ -239,7 +239,7 @@ public class DataRecord extends CaseInsensitiveMap<Object> {
     return (value != null) ? (BigDecimal) value : new BigDecimal(Double.toString(ifNull));
   }
 
-  // Java 8 Date/Times
+  // Temporal
 
   public LocalDate getLocalDateReq(String columnLabel) {
     Object value = getReq(columnLabel);
