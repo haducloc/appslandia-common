@@ -25,7 +25,7 @@ package com.appslandia.common.models;
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
  *
  */
-public interface LocalSupport {
+public interface LocalIdSupport {
 
   Integer getLocalId();
 
