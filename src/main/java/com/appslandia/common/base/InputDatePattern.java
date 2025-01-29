@@ -114,8 +114,9 @@ public abstract class InputDatePattern {
 
       for (int i = 0; i < isoDate.length(); i++) {
         char ch = isoDate.charAt(i);
-
-        if (ch == '1') {
+        if (ch == ' ') {
+          continue;
+        } else if (ch == '1') {
           letters.add('M');
         } else if (ch == '2') {
           letters.add('d');
