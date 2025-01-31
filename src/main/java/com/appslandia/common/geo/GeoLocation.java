@@ -62,40 +62,67 @@ public class GeoLocation implements Serializable {
     Arguments.notNull(direction);
     Arguments.notNull(unit);
 
-    double perdegLong = 360.0 / GeoUtils.POLAR_CIRCUMFERENCE_MILES;
-    double perdegLat = 360.0 / (Math.cos(Math.toRadians(this.y)) * GeoUtils.EQUATOR_CIRCUMFERENCE_MILES);
+    double perdegLat = 360.0 / GeoUtils.POLAR_CIRCUMFERENCE_MILES;
+    double perdegLong = 360.0 / (Math.cos(Math.toRadians(this.y)) * GeoUtils.EQUATOR_CIRCUMFERENCE_MILES);
+
+    double distanceInDegreesLat = DistanceUnit.MILE.convert(distance, unit) * perdegLat;
+    double distanceInDegreesLon = DistanceUnit.MILE.convert(distance, unit) * perdegLong;
+
+    double newLat = this.y;
+    double newLon = this.x;
 
     switch (direction) {
     case NORTH:
-      return new GeoLocation(this.x, this.y + DistanceUnit.MILE.convert(distance, unit) * perdegLong);
-
+      newLat += distanceInDegreesLat;
+      break;
     case SOUTH:
-      return new GeoLocation(this.x, this.y - DistanceUnit.MILE.convert(distance, unit) * perdegLong);
-
+      newLat -= distanceInDegreesLat;
+      break;
     case EAST:
-      return new GeoLocation(this.x + DistanceUnit.MILE.convert(distance, unit) * perdegLat, this.y);
-
+      newLon += distanceInDegreesLon;
+      break;
     case WEST:
-      return new GeoLocation(this.x - DistanceUnit.MILE.convert(distance, unit) * perdegLat, this.y);
+      newLon -= distanceInDegreesLon;
+      break;
     default:
       throw new Error();
     }
+
+    // Ensure latitude remains within valid bounds
+    newLat = Math.max(-90.0, Math.min(90.0, newLat));
+
+    // Normalize longitude to be within [-180, 180]
+    if (newLon > 180.0) {
+      newLon -= 360.0;
+    } else if (newLon < -180.0) {
+      newLon += 360.0;
+    }
+    return new GeoLocation(newLon, newLat);
   }
 
   public double distanceTo(GeoLocation to, DistanceUnit unit) {
     Arguments.notNull(to);
     Arguments.notNull(unit);
 
+    if (Double.compare(this.x, to.x) == 0 && Double.compare(this.y, to.y) == 0) {
+      return 0.0;
+    }
+
     double radLat1 = Math.toRadians(this.y);
     double radLat2 = Math.toRadians(to.y);
     double radLon1 = Math.toRadians(this.x);
     double radLon2 = Math.toRadians(to.x);
 
-    // HaversineFormula: https://en.wikipedia.org/wiki/Haversine_formula
-    double h = Math.sin((radLat2 - radLat1) / 2) * Math.sin((radLat2 - radLat1) / 2)
-        + Math.cos(radLat1) * Math.cos(radLat2) * Math.sin((radLon2 - radLon1) / 2) * Math.sin((radLon2 - radLon1) / 2);
+    double deltaLat = radLat2 - radLat1;
+    double deltaLon = radLon2 - radLon1;
 
-    double distanceInMeters = 2 * GeoUtils.EARTH_RADIUS_METER * Math.asin(Math.sqrt(h));
+    double sinDeltaLat = Math.sin(deltaLat / 2);
+    double sinDeltaLon = Math.sin(deltaLon / 2);
+
+    // HaversineFormula: https://en.wikipedia.org/wiki/Haversine_formula
+    double h = sinDeltaLat * sinDeltaLat + Math.cos(radLat1) * Math.cos(radLat2) * sinDeltaLon * sinDeltaLon;
+
+    double distanceInMeters = 2 * GeoUtils.EARTH_RADIUS_METER * Math.asin(Math.min(1.0, Math.sqrt(h)));
     return unit.convert(distanceInMeters, DistanceUnit.METER);
   }
 
