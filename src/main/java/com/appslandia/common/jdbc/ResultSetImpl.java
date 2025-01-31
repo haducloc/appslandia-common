@@ -76,23 +76,17 @@ public class ResultSetImpl implements ResultSet {
     return NormalizeUtils.valuesAsID(values);
   }
 
-  private void assertNotNull(String columnLabel) throws java.sql.SQLException {
-    if (this.rs.wasNull()) {
-      throw new IllegalStateException(STR.fmt("Null value found under the label '{}'.", columnLabel));
-    }
-  }
-
-  private void assertNotNull(Object value, String columnLabel) throws java.sql.SQLException {
-    if (value == null) {
-      throw new IllegalStateException(STR.fmt("Null value found under the label '{}'.", columnLabel));
-    }
+  protected IllegalStateException assertNotNull(String columnLabel) {
+    return new IllegalStateException(STR.fmt("Null value found under the label '{}'.", columnLabel));
   }
 
   // Strings
 
   public String getStringReq(String columnLabel) throws java.sql.SQLException {
     String value = this.rs.getString(columnLabel);
-    assertNotNull(value, columnLabel);
+    if (value == null) {
+      throw assertNotNull(columnLabel);
+    }
     return value;
   }
 
@@ -103,7 +97,9 @@ public class ResultSetImpl implements ResultSet {
 
   public String getNStringReq(String columnLabel) throws java.sql.SQLException {
     String value = this.rs.getNString(columnLabel);
-    assertNotNull(value, columnLabel);
+    if (value == null) {
+      throw assertNotNull(columnLabel);
+    }
     return value;
   }
 
@@ -180,7 +176,9 @@ public class ResultSetImpl implements ResultSet {
 
   public boolean getBoolReq(String columnLabel) throws java.sql.SQLException {
     boolean value = this.rs.getBoolean(columnLabel);
-    assertNotNull(columnLabel);
+    if (this.rs.wasNull()) {
+      throw assertNotNull(columnLabel);
+    }
     return value;
   }
 
@@ -196,7 +194,9 @@ public class ResultSetImpl implements ResultSet {
 
   public byte getByteReq(String columnLabel) throws java.sql.SQLException {
     byte value = this.rs.getByte(columnLabel);
-    assertNotNull(columnLabel);
+    if (this.rs.wasNull()) {
+      throw assertNotNull(columnLabel);
+    }
     return value;
   }
 
@@ -212,7 +212,9 @@ public class ResultSetImpl implements ResultSet {
 
   public short getShortReq(String columnLabel) throws java.sql.SQLException {
     short value = this.rs.getShort(columnLabel);
-    assertNotNull(columnLabel);
+    if (this.rs.wasNull()) {
+      throw assertNotNull(columnLabel);
+    }
     return value;
   }
 
@@ -228,7 +230,9 @@ public class ResultSetImpl implements ResultSet {
 
   public int getIntReq(String columnLabel) throws java.sql.SQLException {
     int value = this.rs.getInt(columnLabel);
-    assertNotNull(columnLabel);
+    if (this.rs.wasNull()) {
+      throw assertNotNull(columnLabel);
+    }
     return value;
   }
 
@@ -244,7 +248,9 @@ public class ResultSetImpl implements ResultSet {
 
   public long getLongReq(String columnLabel) throws java.sql.SQLException {
     long value = this.rs.getLong(columnLabel);
-    assertNotNull(columnLabel);
+    if (this.rs.wasNull()) {
+      throw assertNotNull(columnLabel);
+    }
     return value;
   }
 
@@ -260,7 +266,9 @@ public class ResultSetImpl implements ResultSet {
 
   public float getFloatReq(String columnLabel) throws java.sql.SQLException {
     float value = this.rs.getFloat(columnLabel);
-    assertNotNull(columnLabel);
+    if (this.rs.wasNull()) {
+      throw assertNotNull(columnLabel);
+    }
     return value;
   }
 
@@ -276,7 +284,9 @@ public class ResultSetImpl implements ResultSet {
 
   public double getDoubleReq(String columnLabel) throws java.sql.SQLException {
     double value = this.rs.getDouble(columnLabel);
-    assertNotNull(columnLabel);
+    if (this.rs.wasNull()) {
+      throw assertNotNull(columnLabel);
+    }
     return value;
   }
 
@@ -284,7 +294,9 @@ public class ResultSetImpl implements ResultSet {
 
   public BigDecimal getDecimalReq(String columnLabel) throws java.sql.SQLException {
     BigDecimal value = this.rs.getBigDecimal(columnLabel);
-    assertNotNull(columnLabel);
+    if (value == null) {
+      throw assertNotNull(columnLabel);
+    }
     return value;
   }
 
@@ -297,7 +309,9 @@ public class ResultSetImpl implements ResultSet {
 
   public <T> T getObjectReq(String columnLabel, Class<T> type) throws java.sql.SQLException {
     T value = this.rs.getObject(columnLabel, type);
-    assertNotNull(value, columnLabel);
+    if (value == null) {
+      throw assertNotNull(columnLabel);
+    }
     return value;
   }
 
