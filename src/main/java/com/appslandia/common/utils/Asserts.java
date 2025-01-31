@@ -90,6 +90,42 @@ public class Asserts {
     return str.strip();
   }
 
+  public static void isFinite(float number) {
+    if (!Float.isFinite(number)) {
+      throw new IllegalStateException("The number must be finite.");
+    }
+  }
+
+  public static void isFinite(float number, String errorMessage) {
+    if (!Float.isFinite(number)) {
+      throw new IllegalStateException(errorMessage);
+    }
+  }
+
+  public static void isFinite(float number, String messageTemplate, Object... templateArgs) {
+    if (!Float.isFinite(number)) {
+      throw new IllegalStateException(STR.fmt(messageTemplate, templateArgs));
+    }
+  }
+
+  public static void isFinite(double number) {
+    if (!Double.isFinite(number)) {
+      throw new IllegalStateException("The number must be finite.");
+    }
+  }
+
+  public static void isFinite(double number, String errorMessage) {
+    if (!Double.isFinite(number)) {
+      throw new IllegalStateException(errorMessage);
+    }
+  }
+
+  public static void isFinite(double number, String messageTemplate, Object... templateArgs) {
+    if (!Double.isFinite(number)) {
+      throw new IllegalStateException(STR.fmt(messageTemplate, templateArgs));
+    }
+  }
+
   public static void isNull(Object obj) {
     if (obj != null) {
       throw new IllegalStateException("The obj must be null.");
