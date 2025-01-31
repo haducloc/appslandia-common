@@ -82,11 +82,17 @@ public class ResultSetImpl implements ResultSet {
     }
   }
 
+  private void assertNotNull(Object value, String columnLabel) throws java.sql.SQLException {
+    if (value == null) {
+      throw new IllegalStateException(STR.fmt("Null value found under the label '{}'.", columnLabel));
+    }
+  }
+
   // Strings
 
   public String getStringReq(String columnLabel) throws java.sql.SQLException {
     String value = this.rs.getString(columnLabel);
-    assertNotNull(columnLabel);
+    assertNotNull(value, columnLabel);
     return value;
   }
 
@@ -97,7 +103,7 @@ public class ResultSetImpl implements ResultSet {
 
   public String getNStringReq(String columnLabel) throws java.sql.SQLException {
     String value = this.rs.getNString(columnLabel);
-    assertNotNull(columnLabel);
+    assertNotNull(value, columnLabel);
     return value;
   }
 
@@ -291,7 +297,7 @@ public class ResultSetImpl implements ResultSet {
 
   public <T> T getObjectReq(String columnLabel, Class<T> type) throws java.sql.SQLException {
     T value = this.rs.getObject(columnLabel, type);
-    assertNotNull(columnLabel);
+    assertNotNull(value, columnLabel);
     return value;
   }
 
