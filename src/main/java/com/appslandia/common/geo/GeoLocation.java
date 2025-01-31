@@ -63,7 +63,11 @@ public class GeoLocation implements Serializable {
     Arguments.notNull(unit);
 
     double perdegLat = 360.0 / GeoUtils.POLAR_CIRCUMFERENCE_MILES;
-    double perdegLong = 360.0 / (Math.cos(Math.toRadians(this.y)) * GeoUtils.EQUATOR_CIRCUMFERENCE_MILES);
+    double cosLat = Math.cos(Math.toRadians(this.y));
+    if (Math.abs(cosLat) < 1e-10) {
+      cosLat = 1e-10;
+    }
+    double perdegLong = 360.0 / (cosLat * GeoUtils.EQUATOR_CIRCUMFERENCE_MILES);
 
     double distanceInDegreesLat = DistanceUnit.MILE.convert(distance, unit) * perdegLat;
     double distanceInDegreesLon = DistanceUnit.MILE.convert(distance, unit) * perdegLong;
