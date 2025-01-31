@@ -104,7 +104,7 @@ public class GeoLocation implements Serializable {
     Arguments.notNull(to);
     Arguments.notNull(unit);
 
-    if (Double.compare(this.x, to.x) == 0 && Double.compare(this.y, to.y) == 0) {
+    if (this.x == to.x && this.y == to.y) {
       return 0.0;
     }
 
