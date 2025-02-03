@@ -169,13 +169,28 @@ public class InstanceImpl<T> implements Instance<T> {
 
   @Override
   public Iterable<? extends Handle<T>> handles() {
-    throw new UnsupportedOperationException();
+    List<Handle<T>> handles = new ArrayList<>();
+
+    for (int idx = 0; idx < this.instances.size(); idx++) {
+      handles.add(new HandleImpl(idx));
+    }
+    return handles;
   }
 
-  class HandleImpl implements Handle<T> {
+  private class HandleImpl implements Handle<T> {
+
+    final Integer index;
 
     private volatile T instance;
-    private Object mutex = new Object();
+    final Object mutex = new Object();
+
+    public HandleImpl() {
+      this(null);
+    }
+
+    public HandleImpl(Integer index) {
+      this.index = index;
+    }
 
     @Override
     public T get() {
@@ -183,7 +198,12 @@ public class InstanceImpl<T> implements Instance<T> {
       if (obj == null) {
         synchronized (mutex) {
           if ((obj = this.instance) == null) {
-            this.instance = obj = InstanceImpl.this.get();
+            if (this.index == null) {
+              this.instance = obj = InstanceImpl.this.get();
+            } else {
+              ObjectInstance objInst = InstanceImpl.this.instances.get(this.index);
+              this.instance = obj = ObjectUtils.cast(objInst.getInstance());
+            }
           }
         }
       }
@@ -196,6 +216,7 @@ public class InstanceImpl<T> implements Instance<T> {
     }
 
     // Should be invoked once
+
     @Override
     public void destroy() {
       T obj = this.instance;
