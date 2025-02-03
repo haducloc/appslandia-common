@@ -20,6 +20,7 @@
 
 package com.appslandia.common.factory;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.jupiter.api.Assertions;
@@ -27,6 +28,7 @@ import org.junit.jupiter.api.Test;
 
 import com.appslandia.common.base.ThreadSafeTester;
 
+import jakarta.annotation.PreDestroy;
 import jakarta.inject.Inject;
 
 /**
@@ -124,6 +126,22 @@ public class ObjectFactoryTest {
   }
 
   @Test
+  public void test_destroy() {
+    try {
+      ObjectFactory factory = new ObjectFactory();
+      factory.register(TestDao.class, TestDao.class);
+      factory.getObject(TestDao.class);
+
+      TestDao.destroyCalled.set(false);
+      factory.destroy();
+      Assertions.assertTrue(TestDao.destroyCalled.get());
+
+    } catch (Exception ex) {
+      Assertions.fail(ex.getMessage());
+    }
+  }
+
+  @Test
   public void test_producer() {
     try {
       ObjectFactory factory = new ObjectFactory();
@@ -208,6 +226,13 @@ public class ObjectFactoryTest {
   }
 
   static class TestDao {
+
+    static final AtomicBoolean destroyCalled = new AtomicBoolean(false);
+
+    @PreDestroy
+    protected void destroy() {
+      destroyCalled.set(true);
+    }
   }
 
   static class TestDaoImpl extends TestDao {

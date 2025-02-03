@@ -110,6 +110,28 @@ public class ObjectFactoryInstanceTest {
     }
   }
 
+  @Test
+  public void test_getHandle() {
+    try {
+      ObjectFactory factory = new ObjectFactory();
+      factory.register(TestDao.class, TestDao.class);
+      factory.register(TestDao.class, TestDao1.class);
+      factory.register(TestDao.class, TestDao21.class);
+      factory.register(TestDao.class, TestDao22.class);
+      factory.register(TestService.class, TestService.class);
+
+      TestService service = factory.getObject(TestService.class);
+      Assertions.assertNotNull(service.testDaos);
+
+      InstanceImpl<TestDao> sub = ObjectUtils.cast(service.testDaos.select());
+      Instance.Handle<TestDao> handle = sub.getHandle();
+      handle.destroy();
+
+    } catch (Exception ex) {
+      Assertions.fail();
+    }
+  }
+
   static class TestService {
 
     @Inject

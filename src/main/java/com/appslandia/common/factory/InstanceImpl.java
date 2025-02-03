@@ -34,6 +34,7 @@ import com.appslandia.common.utils.ObjectUtils;
 import com.appslandia.common.utils.STR;
 
 import jakarta.enterprise.inject.Instance;
+import jakarta.enterprise.inject.spi.Bean;
 import jakarta.enterprise.util.TypeLiteral;
 
 /**
@@ -163,11 +164,48 @@ public class InstanceImpl<T> implements Instance<T> {
 
   @Override
   public Handle<T> getHandle() {
-    throw new UnsupportedOperationException();
+    return new HandleImpl();
   }
 
   @Override
   public Iterable<? extends Handle<T>> handles() {
     throw new UnsupportedOperationException();
+  }
+
+  class HandleImpl implements Handle<T> {
+
+    private volatile T instance;
+    private Object mutex = new Object();
+
+    @Override
+    public T get() {
+      T obj = this.instance;
+      if (obj == null) {
+        synchronized (mutex) {
+          if ((obj = this.instance) == null) {
+            this.instance = obj = InstanceImpl.this.get();
+          }
+        }
+      }
+      return obj;
+    }
+
+    @Override
+    public Bean<T> getBean() {
+      throw new UnsupportedOperationException();
+    }
+
+    // Should be invoked once
+    @Override
+    public void destroy() {
+      T obj = this.instance;
+      if (obj != null) {
+        InstanceImpl.this.destroy(obj);
+      }
+    }
+
+    @Override
+    public void close() {
+    }
   }
 }
