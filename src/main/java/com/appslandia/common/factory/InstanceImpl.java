@@ -23,6 +23,7 @@ package com.appslandia.common.factory;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -174,7 +175,7 @@ public class InstanceImpl<T> implements Instance<T> {
     for (int idx = 0; idx < this.instances.size(); idx++) {
       handles.add(new HandleImpl(idx));
     }
-    return handles;
+    return Collections.unmodifiableList(handles);
   }
 
   private class HandleImpl implements Handle<T> {
