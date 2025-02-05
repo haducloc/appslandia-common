@@ -51,7 +51,7 @@ import com.appslandia.common.base.StringWriter;
  */
 public class IOUtils {
 
-  private static final int DEFAULT_BUFFER_SIZE = 8192;
+  private static final int DEFAULT_BUFFER_SIZE = 4096;
 
   public static int copy(InputStream is, OutputStream os) throws IOException {
     int count = 0;
