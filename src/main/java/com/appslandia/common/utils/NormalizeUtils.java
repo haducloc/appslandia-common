@@ -45,7 +45,7 @@ public class NormalizeUtils {
     decomposedCharacterConverter = converter;
   }
 
-  private static final Pattern STRIP_ACCENTS_PATTERN = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+  private static final Pattern STRIP_ACCENTS_PATTERN = Pattern.compile("\\p{M}+");
 
   public static String unaccent(String str) {
     if (str == null) {
