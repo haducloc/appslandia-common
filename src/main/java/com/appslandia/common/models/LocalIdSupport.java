@@ -20,6 +20,10 @@
 
 package com.appslandia.common.models;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
  *
  * @author <a href="mailto:haducloc13@gmail.com">Loc Ha</a>
@@ -30,4 +34,22 @@ public interface LocalIdSupport {
   Integer getLocalId();
 
   void setLocalId(Integer localId);
+
+  public static void assignLocalIds(List<? extends LocalIdSupport> subModels) {
+    for (int idx = 0; idx < subModels.size(); idx++) {
+      subModels.get(idx).setLocalId(idx);
+    }
+  }
+
+  public static void assertLocalIds(List<? extends LocalIdSupport> subModels) {
+    Set<Integer> ids = new HashSet<>();
+    for (LocalIdSupport rec : subModels) {
+      Integer localId = rec.getLocalId();
+
+      if (localId == null || !ids.add(localId)) {
+        throw new IllegalStateException(localId == null ? "The LocalIdSupport.getLocalId() must be not null."
+            : "The LocalIdSupport.getLocalId() must be unique.");
+      }
+    }
+  }
 }
