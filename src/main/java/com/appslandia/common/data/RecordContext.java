@@ -137,8 +137,6 @@ public class RecordContext extends DbContext {
   public int update(String tableName, DataRecord dataRecord, boolean addBatch) throws java.sql.SQLException {
     // Table
     Table table = getTable(tableName);
-    Asserts.isTrue(table.getKeysCount() > 0, "The table {} has no key. The update() is unsupported.",
-        table.getTableName());
     String pQuery = table.getUpdateQuery().getPQuery();
 
     // StatementImpl

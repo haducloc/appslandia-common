@@ -146,9 +146,6 @@ public class Table extends InitializeObject implements Serializable {
   }
 
   protected String buildUpdateQuery() {
-    if (this.keysCount == 0) {
-      return "";
-    }
     TextBuilder sb = new TextBuilder().append("UPDATE ").append(this.qTableName);
     sb.append(" SET ");
 
