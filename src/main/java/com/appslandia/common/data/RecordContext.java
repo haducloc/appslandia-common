@@ -137,6 +137,7 @@ public class RecordContext extends DbContext {
   public int update(String tableName, DataRecord dataRecord, boolean addBatch) throws java.sql.SQLException {
     // Table
     Table table = getTable(tableName);
+    Asserts.isTrue(table.hasKeys(), "update() is unsupported on the table '{}'. Reason: no keys.", tableName);
     String pQuery = table.getUpdateQuery().getPQuery();
 
     // StatementImpl
@@ -186,6 +187,7 @@ public class RecordContext extends DbContext {
   public int delete(String tableName, Key key, boolean addBatch) throws java.sql.SQLException {
     // Table
     Table table = getTable(tableName);
+    Asserts.isTrue(table.hasKeys(), "delete() is unsupported on the table '{}'. Reason: no keys.", tableName);
     String pQuery = table.getDeleteQuery().getPQuery();
 
     // StatementImpl
@@ -230,6 +232,7 @@ public class RecordContext extends DbContext {
   public DataRecord getRecord(String tableName, Key key) throws java.sql.SQLException {
     // Table
     Table table = getTable(tableName);
+    Asserts.isTrue(table.hasKeys(), "getRecord() is unsupported on the table '{}'. Reason: no keys.", tableName);
     String pQuery = table.getGetQuery().getPQuery();
 
     // StatementImpl
@@ -265,6 +268,7 @@ public class RecordContext extends DbContext {
   public boolean exists(String tableName, Key key) throws java.sql.SQLException {
     // Table
     Table table = getTable(tableName);
+    Asserts.isTrue(table.hasKeys(), "exists() is unsupported on the table '{}'. Reason: no keys.", tableName);
     String pQuery = table.getExistsQuery().getPQuery();
 
     // StatementImpl
