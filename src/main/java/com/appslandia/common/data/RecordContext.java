@@ -197,7 +197,7 @@ public class RecordContext extends DbContext {
 
     // Parameters
     for (Column column : table.getColumns()) {
-      if ((table.getKeysCount() == 0) || column.isKey()) {
+      if (!table.hasKeys() || column.isKey()) {
         Object val = key.get(column.getName());
         if (column.isKey()) {
           Asserts.notNull(val, "The value of column '{}' is required.", column.getName());
@@ -241,7 +241,7 @@ public class RecordContext extends DbContext {
 
     // Parameters
     for (Column column : table.getColumns()) {
-      if ((table.getKeysCount() == 0) || column.isKey()) {
+      if (!table.hasKeys() || column.isKey()) {
         Object val = key.get(column.getName());
         if (column.isKey()) {
           Asserts.notNull(val, "The value of column '{}' is required.", column.getName());
@@ -276,7 +276,7 @@ public class RecordContext extends DbContext {
 
     // Parameters
     for (Column column : table.getColumns()) {
-      if ((table.getKeysCount() == 0) || column.isKey()) {
+      if (!table.hasKeys() || column.isKey()) {
         Object val = key.get(column.getName());
         if (column.isKey()) {
           Asserts.notNull(val, "The value of column '{}' is required.", column.getName());

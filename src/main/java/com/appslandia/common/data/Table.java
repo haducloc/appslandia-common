@@ -107,6 +107,11 @@ public class Table extends InitializeObject implements Serializable {
     return this.singleKey;
   }
 
+  public boolean hasKeys() {
+    initialize();
+    return this.keysCount > 0;
+  }
+
   protected String buildInsertQuery() {
     TextBuilder sb = new TextBuilder().append("INSERT INTO ").append(this.qTableName);
     sb.append(" (");
@@ -291,11 +296,6 @@ public class Table extends InitializeObject implements Serializable {
   public String getEntityClassName() {
     initialize();
     return this.entityClassName;
-  }
-
-  public int getKeysCount() {
-    initialize();
-    return this.keysCount;
   }
 
   public Column getSingleKey() {
