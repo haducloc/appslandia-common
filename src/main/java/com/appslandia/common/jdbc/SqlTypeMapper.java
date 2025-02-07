@@ -60,12 +60,12 @@ public class SqlTypeMapper {
     map.put(Types.CHAR, String.class);
     map.put(Types.VARCHAR, String.class);
     map.put(Types.LONGVARCHAR, String.class);
-    map.put(Types.CLOB, java.io.Reader.class);
+    map.put(Types.CLOB, String.class);
 
     map.put(Types.NCHAR, String.class);
     map.put(Types.NVARCHAR, String.class);
     map.put(Types.LONGNVARCHAR, String.class);
-    map.put(Types.NCLOB, java.io.Reader.class);
+    map.put(Types.NCLOB, String.class);
 
     map.put(Types.DATE, LocalDate.class);
     map.put(Types.TIME, LocalTime.class);
@@ -76,7 +76,7 @@ public class SqlTypeMapper {
     map.put(Types.BINARY, byte[].class);
     map.put(Types.VARBINARY, byte[].class);
     map.put(Types.LONGVARBINARY, byte[].class);
-    map.put(Types.BLOB, java.io.InputStream.class);
+    map.put(Types.BLOB, byte[].class);
 
     map.put(Types.SQLXML, String.class);
     map.put(Types.DATALINK, URL.class);
