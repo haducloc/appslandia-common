@@ -33,13 +33,11 @@ import com.appslandia.common.threading.BlockingQueuePool;
  */
 public class ByteBlockPool {
 
-  final int poolSize;
   final int blockSize;
 
   private final BlockingQueuePool<byte[]> pool;
 
   public ByteBlockPool(int poolSize, int blockSize, boolean resetOnRelease) {
-    this.poolSize = poolSize;
     this.blockSize = blockSize;
 
     this.pool = new BlockingQueuePool<>(() -> new byte[blockSize], b -> {

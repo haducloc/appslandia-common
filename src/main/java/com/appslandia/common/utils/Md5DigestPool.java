@@ -35,8 +35,6 @@ import com.appslandia.common.threading.BlockingQueuePool;
  */
 public class Md5DigestPool {
 
-  final int poolSize;
-
   private final BlockingQueuePool<MessageDigest> pool;
 
   public Md5DigestPool() {
@@ -44,7 +42,6 @@ public class Md5DigestPool {
   }
 
   public Md5DigestPool(int poolSize) {
-    this.poolSize = poolSize;
     this.pool = new BlockingQueuePool<>(() -> md5(), md5 -> md5.reset(), poolSize);
   }
 

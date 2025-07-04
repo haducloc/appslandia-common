@@ -35,8 +35,6 @@ import jakarta.el.ELProcessor;
  */
 public class ElProcessorPool {
 
-  final int poolSize;
-
   private final BlockingQueuePool<ELProcessor> pool;
 
   public ElProcessorPool() {
@@ -44,7 +42,6 @@ public class ElProcessorPool {
   }
 
   public ElProcessorPool(int poolSize) {
-    this.poolSize = poolSize;
     this.pool = new BlockingQueuePool<>(() -> initELProcessor(), null, poolSize);
   }
 
