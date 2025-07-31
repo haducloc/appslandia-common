@@ -161,7 +161,7 @@ public class JsonObjectParser extends InitializeObject {
         Object childElement = childElements.next();
 
         var len = path.length();
-        path.append("[" + (idx++) + "]");
+        path.append("[").append(idx++).append("]");
 
         var parsedVal = parseValue(childElement, path, asResult.set(false));
         parsedVal = convertValue(parsedVal, path.toString());
