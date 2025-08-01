@@ -33,7 +33,7 @@ import com.appslandia.common.utils.StringUtils;
  * @author Loc Ha
  *
  */
-@Target(value = { ElementType.TYPE, ElementType.METHOD, ElementType.FIELD })
+@Target(value = { ElementType.FIELD })
 @Retention(value = RetentionPolicy.RUNTIME)
 @Documented
 public @interface ConstDesc {
