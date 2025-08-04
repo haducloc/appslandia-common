@@ -94,36 +94,42 @@ public class URLUtils {
   }
 
   public static String toUrl(String url, Map<String, Object> moreParameters) {
-    if (moreParameters == null) {
+    if (moreParameters == null || moreParameters.isEmpty()) {
       return url;
     }
     try {
       var uri = new URI(url);
       var sb = new StringBuilder(url.length() + moreParameters.size() * 16);
 
+      // Scheme
       if (uri.getScheme() != null) {
-        sb.append(uri.getScheme()).append("://").append(uri.getRawAuthority());
+        sb.append(uri.getScheme()).append("://");
       }
-      Arguments.notNull(uri.getRawPath());
-      sb.append(uri.getRawPath());
 
-      var addedQuest = false;
-      if (uri.getRawQuery() != null) {
+      // Authority
+      if (uri.getRawAuthority() != null) {
+        sb.append(uri.getRawAuthority());
+      }
+
+      // Path
+      if (uri.getRawPath() != null) {
+        sb.append(uri.getRawPath());
+      }
+
+      var hasQuery = false;
+      if ((uri.getRawQuery() != null) && !uri.getRawQuery().isEmpty()) {
         sb.append('?').append(uri.getRawQuery());
 
-        addedQuest = true;
+        hasQuery = true;
       }
 
       for (Map.Entry<String, Object> param : moreParameters.entrySet()) {
         if (param.getValue() == null) {
           continue;
         }
-        if (!addedQuest) {
-          sb.append('?');
-          addedQuest = true;
-        } else {
-          sb.append('&');
-        }
+        sb.append(hasQuery ? '&' : '?');
+        hasQuery = true;
+
         addQueryParam(sb, param.getKey(), param.getValue());
       }
 
