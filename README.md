@@ -24,7 +24,7 @@
 <dependency>
   <groupId>com.appslandia</groupId>
   <artifactId>appslandia-common</artifactId>
-  <version>19.41.0</version>
+  <version>19.42.0</version>
 </dependency>
 ```
 
@@ -32,7 +32,7 @@
 
 ```groovy
 dependencies {
-  compile 'com.appslandia:appslandia-common:19.41.0'
+  compile 'com.appslandia:appslandia-common:19.42.0'
 }
 ```
 
