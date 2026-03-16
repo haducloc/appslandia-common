@@ -30,7 +30,7 @@
 		<version.yasson>3.0.4</version.yasson>
 		<version.h2>2.4.240</version.h2>
 		<version.hibernate-core>7.2.4.Final</version.hibernate-core>
-		<version.junit-jupiter-api>6.1.0-M1</version.junit-jupiter-api>
+		<version.junit-jupiter>6.1.0-M1</version.junit-jupiter>
 	</properties>
 	<licenses>
 		<license>
@@ -225,7 +225,7 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
-			<version>${version.junit-jupiter-api}</version>
+			<version>${version.junit-jupiter}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
