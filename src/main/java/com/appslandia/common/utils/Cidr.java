@@ -110,6 +110,10 @@ public class Cidr {
     }
 
     var addr = NetUtils.toIpAddress(ipPart);
+    if (addr == null) {
+      throw new IllegalArgumentException("The IP address in the CIDR must be valid.");
+    }
+
     var ipBytes = addr.getAddress();
     var isIpv4 = (ipBytes.length == 4);
 
