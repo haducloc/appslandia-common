@@ -46,7 +46,7 @@ public class EmailUtils {
     if (email == null) {
       return true;
     }
-    return EMAIL_PATTERN.matcher(email.trim()).matches();
+    return EMAIL_PATTERN.matcher(email.strip()).matches();
   }
 
   public static boolean isValidEmails(String emails) {

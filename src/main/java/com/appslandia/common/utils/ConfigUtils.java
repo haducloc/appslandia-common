@@ -44,8 +44,8 @@ public class ConfigUtils {
       return null;
     }
 
-    var key = pair.substring(0, idx).trim();
-    var value = pair.substring(idx + 1).trim();
+    var key = pair.substring(0, idx).strip();
+    var value = pair.substring(idx + 1).strip();
 
     if (key.isEmpty()) {
       return null;
