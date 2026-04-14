@@ -42,20 +42,26 @@ public class PasswordUtil {
   private static final Pattern PASSWORD_PATTERN = Pattern
       .compile("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$@&#!?*%:+-]).{8,128}$");
 
-  private static final char[] ALPHABET_DIGITS = CharUtils.toCharRanges("0-9");
-  private static final char[] ALPHABET_LOWER = CharUtils.toCharRanges("a-z");
-  private static final char[] ALPHABET_UPPER = CharUtils.toCharRanges("A-Z");
-  private static final char[] ALPHABET_SYMBOLS = "$@&#!?*%:+-".toCharArray();
+  private static final char[] GROUP_DIGITS = CharUtils.toCharRanges("0-9");
+  private static final char[] GROUP_LOWER = CharUtils.toCharRanges("a-z");
+  private static final char[] GROUP_UPPER = CharUtils.toCharRanges("A-Z");
+  private static final char[] GROUP_SYMBOLS = "$@&#!?*%:+-".toCharArray();
 
-  private static final char[][] ALPHABET = new char[][] { ALPHABET_DIGITS, ALPHABET_LOWER, ALPHABET_UPPER,
-      ALPHABET_SYMBOLS };
+  private static final char[][] PWD_GROUPS = new char[][] { GROUP_DIGITS, GROUP_LOWER, GROUP_UPPER, GROUP_SYMBOLS };
 
   public static char[] generatePassword(int minLength, int maxLength) {
+    Arguments.isTrue(minLength >= 8, "minLength must be >= 8");
     Arguments.isTrue(minLength <= maxLength, "minLength <= maxLength");
-    Arguments.isTrue(minLength >= 8, "minLength >= 8");
 
     var length = RandomUtils.nextInt(minLength, maxLength, SecureRand.getInstance());
-    return CharUtils.randomChars(length, ALPHABET, SecureRand.getInstance());
+    return CharUtils.randomChars(length, PWD_GROUPS, SecureRand.getInstance());
+  }
+
+  private static final char[][] CODE_GROUPS = new char[][] { GROUP_DIGITS, GROUP_UPPER };
+
+  public static char[] generateCode(int length) {
+    Arguments.isTrue(length >= 4, "length must be >= 4");
+    return CharUtils.randomChars(length, CODE_GROUPS, SecureRand.getInstance());
   }
 
   public static boolean isValid(String password) {
