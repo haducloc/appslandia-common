@@ -65,6 +65,13 @@ public class URLEncoding {
 	// @formatter:on
   }
 
+  // Non-ASCII (Unicode) text inside HTTP header parameters
+  static final BitSet RFC5987_NOT_ENCODED;
+
+  static {
+    RFC5987_NOT_ENCODED = new BitMap(256).on("a-zA-Z0-9").on('-', '.', '_', '~').off(' ');
+  }
+
   public static String encodeParam(String s) {
     if (s == null) {
       return null;
@@ -98,6 +105,13 @@ public class URLEncoding {
       return null;
     }
     return decode(s, EncodeType.URL_PATH);
+  }
+
+  public static String encodeRFC5987(String s) {
+    if (s == null) {
+      return null;
+    }
+    return encode(s, RFC5987_NOT_ENCODED);
   }
 
   static String encode(String s, BitSet notEncoding) {
