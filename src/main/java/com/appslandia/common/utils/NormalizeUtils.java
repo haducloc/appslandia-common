@@ -75,17 +75,21 @@ public class NormalizeUtils {
     return StringUtils.toLowerCase(str, Locale.ROOT);
   }
 
-  private static final Pattern SP2_PATTERN = Pattern.compile("( ){2,}");
-  private static final Pattern CRLF_PATTERN = Pattern.compile("\r\n");
-  private static final Pattern LF3_PATTERN = Pattern.compile("(\n\\s*){3,}");
+  private static final Pattern SP2_PATTERN = Pattern.compile(" {2,}");
+  private static final Pattern CRLF_PATTERN = Pattern.compile("\r?\n");
+  private static final Pattern CRLF3_PATTERN = Pattern.compile("(\r?\n\\s*){3,}");
+
+  private static final String LINE_SEP1 = System.lineSeparator();
+  private static final String LINE_SEP2 = System.lineSeparator().repeat(2);
 
   public static String normalizeText(String text) {
     if (text == null) {
       return null;
     }
     text = normalize(text, " ", SP2_PATTERN);
-    text = normalize(text, "\n", CRLF_PATTERN);
-    text = normalize(text, "\n\n", LF3_PATTERN);
+    text = normalize(text, LINE_SEP1, CRLF_PATTERN);
+    text = normalize(text, LINE_SEP2, CRLF3_PATTERN);
+
     return text;
   }
 
@@ -98,13 +102,11 @@ public class NormalizeUtils {
     return normalize(str, " ", WTSP_PATTERN);
   }
 
-  private static final Pattern CR_OPT_LF_PATTERN = Pattern.compile("\r?\n");
-
   public static String normalizeHtml(String html) {
     if (html == null) {
       return null;
     }
-    html = normalize(html, "", CR_OPT_LF_PATTERN);
+    html = normalize(html, "", CRLF_PATTERN);
     return html;
   }
 
@@ -131,6 +133,15 @@ public class NormalizeUtils {
     return normalize(str, "", NON_DIGITS_PATTERN);
   }
 
+  private static final Pattern NON_ASCII_PATTERN = Pattern.compile("[^\\x20-\\x7E]");
+
+  public static String normalizeAscii(String str, String replaceBy) {
+    if (str == null) {
+      return null;
+    }
+    return normalize(str, replaceBy, NON_ASCII_PATTERN);
+  }
+
   public static String normalize(String str, String replBy, Pattern... replPatterns) {
     Arguments.notNull(replBy);
 
@@ -143,30 +154,6 @@ public class NormalizeUtils {
       str = p.matcher(str).replaceAll(repl);
     }
     return StringUtils.trimToNull(str);
-  }
-
-  public static String toName(String name) {
-    if (name == null) {
-      return null;
-    }
-    name = normalizeString(name);
-    if (name == null) {
-      return null;
-    }
-
-    var result = new StringBuilder();
-    var capitalizeNext = true;
-
-    for (char c : name.toCharArray()) {
-      if (Character.isLetter(c)) {
-        result.append(capitalizeNext ? Character.toTitleCase(c) : Character.toLowerCase(c));
-        capitalizeNext = false;
-      } else {
-        result.append(c);
-        capitalizeNext = (c == ' ' || c == '-' || c == '\'');
-      }
-    }
-    return result.toString();
   }
 
   public static String stringAsID(String str) {
