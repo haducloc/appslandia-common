@@ -110,17 +110,11 @@ public class CaseInsensitiveSet implements Set<String>, Serializable {
 
   @Override
   public boolean retainAll(Collection<?> c) {
-    Set<String> normalized = new HashSet<>();
-    for (Object e : c) {
-      if (e instanceof String s) {
-        normalized.add(toValue(s));
-      }
-    }
-
     var modified = false;
     var it = elements.iterator();
     while (it.hasNext()) {
-      if (!normalized.contains(it.next())) {
+      var e = it.next();
+      if (!c.contains(e)) {
         it.remove();
         modified = true;
       }
