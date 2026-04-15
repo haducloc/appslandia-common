@@ -389,7 +389,7 @@ public class DateUtils {
       case "s" -> result += TimeUnit.MILLISECONDS.convert(1, TimeUnit.SECONDS) * amt;
       default -> result += amt;
       }
-      ;
+
       i = k;
     }
     return (long) Math.ceil(result);

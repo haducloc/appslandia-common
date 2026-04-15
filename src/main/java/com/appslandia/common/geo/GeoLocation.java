@@ -81,7 +81,6 @@ public class GeoLocation implements Serializable {
     case WEST -> newLon -= distanceInDegreesLon;
     default -> throw new Error();
     }
-    ;
 
     // Ensure latitude remains within valid bounds
     newLat = Math.max(-90.0, Math.min(90.0, newLat));
