@@ -39,16 +39,6 @@ public class ProviderMap<K, V> extends HashMap<K, V> {
     this.factory = factory;
   }
 
-  public ProviderMap(Function<K, V> factory, int initialCapacity) {
-    super(initialCapacity);
-    this.factory = factory;
-  }
-
-  public ProviderMap(Function<K, V> factory, int initialCapacity, float loadFactor) {
-    super(initialCapacity, loadFactor);
-    this.factory = factory;
-  }
-
   @SuppressWarnings("unchecked")
   @Override
   public V get(Object key) {
