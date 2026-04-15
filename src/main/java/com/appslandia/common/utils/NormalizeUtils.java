@@ -116,7 +116,7 @@ public class NormalizeUtils {
     return normalize(str, " ", WS1_PATTERN);
   }
 
-  private static final Pattern CRLF1_PATTERN = Pattern.compile("(\r?\n){1,}");
+  private static final Pattern CRLF1_PATTERN = Pattern.compile("(\r?\n)+");
 
   public static String normalizeHtml(String html) {
     if (html == null) {
