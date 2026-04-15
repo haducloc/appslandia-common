@@ -104,11 +104,7 @@ public class MapWrapper<K, V> implements Map<K, V>, Serializable {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof Map)) {
-      return false;
-    }
-    Map<?, ?> that = (Map<?, ?>) o;
-    return map.equals(that);
+    return map.equals(o);
   }
 
   @Override
