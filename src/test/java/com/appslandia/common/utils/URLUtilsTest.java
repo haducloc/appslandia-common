@@ -22,7 +22,6 @@ package com.appslandia.common.utils;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.Assertions;
@@ -39,7 +38,7 @@ public class URLUtilsTest {
 
   @Test
   public void test_toQueryParams() {
-    Map<String, Object> params = new Params(new LinkedHashMap<>()).set("p1", "val1").set("p2", "val 2").set("p3", null);
+    Map<String, Object> params = new Params().set("p1", "val1").set("p2", "val 2").set("p3", null);
     var queryString = URLUtils.toQueryParams(params);
 
     Assertions.assertEquals("p1=val1&p2=val+2", queryString);
@@ -47,8 +46,7 @@ public class URLUtilsTest {
 
   @Test
   public void test_toQueryParams_array() {
-    Map<String, Object> params = new Params(new LinkedHashMap<>()).set("p1", new String[] { "val1", null }).set("p2",
-        "val2");
+    Map<String, Object> params = new Params().set("p1", new String[] { "val1", null }).set("p2", "val2");
     var queryString = URLUtils.toQueryParams(params);
 
     Assertions.assertEquals("p1=val1&p2=val2", queryString);
@@ -56,7 +54,7 @@ public class URLUtilsTest {
 
   @Test
   public void test_parseParams() {
-    Map<String, Object> params = new Params(new LinkedHashMap<>()).set("p1", "val1").set("p2", "val 2").set("p3", null);
+    Map<String, Object> params = new Params().set("p1", "val1").set("p2", "val 2").set("p3", null);
     var queryString = URLUtils.toQueryParams(params);
 
     var decodedMap = URLUtils.parseParams(queryString, new HashMap<>());
@@ -67,8 +65,8 @@ public class URLUtilsTest {
 
   @Test
   public void test_parseParams_array() {
-    Map<String, Object> params = new Params(new LinkedHashMap<>()).set("p1", new String[] { "val11", "val 12", null })
-        .set("p2", new String[] { "val21", null, "val 22" });
+    Map<String, Object> params = new Params().set("p1", new String[] { "val11", "val 12", null }).set("p2",
+        new String[] { "val21", null, "val 22" });
     var queryString = URLUtils.toQueryParams(params);
 
     var decodedMap = URLUtils.parseParams(queryString, new HashMap<>());

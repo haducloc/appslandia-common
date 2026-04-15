@@ -21,7 +21,6 @@
 package com.appslandia.common.base;
 
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  *
@@ -33,10 +32,6 @@ public class Params extends MapWrapper<String, Object> {
 
   public Params() {
     super(new LinkedHashMap<>());
-  }
-
-  public Params(Map<String, Object> map) {
-    super(map);
   }
 
   public Params set(String key, Object value) {
