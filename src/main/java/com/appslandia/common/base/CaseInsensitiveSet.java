@@ -114,12 +114,21 @@ public class CaseInsensitiveSet implements Set<String>, Serializable {
     var it = elements.iterator();
     while (it.hasNext()) {
       var e = it.next();
-      if (!c.contains(e)) {
+      if (!containsIn(c, e)) {
         it.remove();
         modified = true;
       }
     }
     return modified;
+  }
+
+  static boolean containsIn(Collection<?> c, String value) {
+    for (Object e : c) {
+      if ((e instanceof String s) && toValue(s).equals(value)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @Override
