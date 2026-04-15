@@ -43,8 +43,8 @@ public class CaseInsensitiveMap<V> implements Map<String, V>, Serializable {
     this(new HashMap<>());
   }
 
-  public CaseInsensitiveMap(Map<String, V> innerMap) {
-    map = innerMap;
+  public CaseInsensitiveMap(Map<String, V> backingMap) {
+    map = backingMap;
   }
 
   @Override

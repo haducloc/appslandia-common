@@ -35,8 +35,8 @@ public class MapWrapper<K, V> implements Map<K, V>, Serializable {
 
   protected final Map<K, V> map;
 
-  public MapWrapper(Map<K, V> map) {
-    this.map = map;
+  public MapWrapper(Map<K, V> backingMap) {
+    this.map = backingMap;
   }
 
   @Override

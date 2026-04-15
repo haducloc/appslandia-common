@@ -43,8 +43,8 @@ public class CaseInsensitiveSet implements Set<String>, Serializable {
     this(new HashSet<>());
   }
 
-  public CaseInsensitiveSet(Set<String> newSet) {
-    this.elements = newSet;
+  public CaseInsensitiveSet(Set<String> backingSet) {
+    this.elements = backingSet;
   }
 
   @Override
