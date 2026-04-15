@@ -96,17 +96,17 @@ public class CaseInsensitiveMap<V> implements Map<String, V>, Serializable {
 
   @Override
   public Set<String> keySet() {
-    return java.util.Collections.unmodifiableSet(map.keySet());
+    return map.keySet();
   }
 
   @Override
   public Collection<V> values() {
-    return java.util.Collections.unmodifiableCollection(map.values());
+    return map.values();
   }
 
   @Override
   public Set<Entry<String, V>> entrySet() {
-    return java.util.Collections.unmodifiableSet(map.entrySet());
+    return map.entrySet();
   }
 
   @Override
@@ -114,11 +114,7 @@ public class CaseInsensitiveMap<V> implements Map<String, V>, Serializable {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof Map)) {
-      return false;
-    }
-    Map<?, ?> that = (Map<?, ?>) o;
-    return map.equals(that);
+    return map.equals(o);
   }
 
   @Override

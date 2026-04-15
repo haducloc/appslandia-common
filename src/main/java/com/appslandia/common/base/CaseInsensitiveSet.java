@@ -44,7 +44,7 @@ public class CaseInsensitiveSet implements Set<String>, Serializable {
   }
 
   public CaseInsensitiveSet(Set<String> newSet) {
-    elements = newSet;
+    this.elements = newSet;
   }
 
   @Override
@@ -110,11 +110,17 @@ public class CaseInsensitiveSet implements Set<String>, Serializable {
 
   @Override
   public boolean retainAll(Collection<?> c) {
+    Set<String> normalized = new HashSet<>();
+    for (Object e : c) {
+      if (e instanceof String s) {
+        normalized.add(toValue(s));
+      }
+    }
+
     var modified = false;
     var it = elements.iterator();
     while (it.hasNext()) {
-      var e = it.next();
-      if (!c.contains(e)) {
+      if (!normalized.contains(it.next())) {
         it.remove();
         modified = true;
       }
@@ -143,11 +149,7 @@ public class CaseInsensitiveSet implements Set<String>, Serializable {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof Set)) {
-      return false;
-    }
-    Set<?> that = (Set<?>) o;
-    return elements.equals(that);
+    return elements.equals(o);
   }
 
   @Override
