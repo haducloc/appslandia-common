@@ -1,0 +1,129 @@
+// Licensed under the MIT License.
+// See LICENSE file in the project root for details.
+
+package com.appslandia.common.csv;
+
+import java.io.BufferedWriter;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import com.appslandia.common.base.CaseInsensitiveMap;
+import com.appslandia.common.base.InitializingObject;
+import com.appslandia.common.base.Out;
+import com.appslandia.common.data.RecordContext;
+import com.appslandia.common.jdbc.ConnectionImpl;
+import com.appslandia.common.jdbc.ResultSetColumn;
+import com.appslandia.common.utils.Arguments;
+import com.appslandia.common.utils.IOUtils;
+
+/**
+ *
+ * @author Loc Ha
+ *
+ */
+public class CsvExporter extends InitializingObject {
+
+  private ConnectionImpl connection;
+  private String pQuery;
+  private Map<String, Object> pQueryParams;
+
+  private CsvProcessor csvProcessor;
+  final Map<String, DbToCsvConverter> converters = new CaseInsensitiveMap<>();
+
+  @Override
+  protected void init() throws Exception {
+    Arguments.notNull(pQuery);
+
+    if (connection == null) {
+      connection = ConnectionImpl.getCurrent();
+    }
+    if (csvProcessor == null) {
+      csvProcessor = CsvProcessor.INSTANCE;
+    }
+  }
+
+  public int execute(String csvFileLocation) throws Exception {
+    initialize();
+    try (var out = IOUtils.writerBOM(csvFileLocation, StandardCharsets.UTF_8.name())) {
+      return execute(out);
+    }
+  }
+
+  public int execute(BufferedWriter csvOutput) throws Exception {
+    initialize();
+
+    var counter = new AtomicInteger(0);
+    try (var ctx = new RecordContext(connection)) {
+
+      var writeHeader = new Out<Boolean>();
+      ctx.executeQuery(pQuery, pQueryParams, rs -> {
+
+        // CSV Header
+        if (writeHeader.value == null) {
+
+          for (ResultSetColumn column : rs.getColumns()) {
+            if (column.getIndex() > 1) {
+              csvOutput.write(csvProcessor.getSeparator());
+            }
+            csvOutput.write(csvProcessor.escape(column.getName()));
+          }
+
+          csvOutput.newLine();
+          writeHeader.value = true;
+        }
+
+        // CSV Record
+        for (ResultSetColumn column : rs.getColumns()) {
+          var value = rs.getObject(column.getIndex());
+
+          var converter = converters.get(column.getName());
+          if (converter != null) {
+            value = converter.apply(value);
+          }
+
+          if (column.getIndex() > 1) {
+            csvOutput.write(csvProcessor.getSeparator());
+          }
+          csvOutput.write(csvProcessor.escape(value));
+
+        }
+        csvOutput.newLine();
+      });
+      csvOutput.flush();
+    }
+    return counter.get();
+  }
+
+  public CsvExporter setConnection(ConnectionImpl connection) {
+    assertNotInitialized();
+    this.connection = connection;
+    return this;
+  }
+
+  public CsvExporter setPQuery(String pQuery) {
+    assertNotInitialized();
+    this.pQuery = pQuery;
+    return this;
+  }
+
+  public CsvExporter setPQueryParams(Map<String, Object> pQueryParams) {
+    assertNotInitialized();
+    this.pQueryParams = pQueryParams;
+    return this;
+  }
+
+  public CsvExporter setCsvProcessor(CsvProcessor csvProcessor) {
+    assertNotInitialized();
+    this.csvProcessor = csvProcessor;
+    return this;
+  }
+
+  public CsvExporter setDbToCsvConverter(String columnLabel, DbToCsvConverter converter) {
+    assertNotInitialized();
+    Arguments.notNull(converter);
+
+    converters.put(columnLabel, converter);
+    return this;
+  }
+}
